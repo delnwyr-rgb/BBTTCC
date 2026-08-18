@@ -1,0 +1,76 @@
+{
+  "name": "Industrial Sabotage",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_industrial_sabotage.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p>A little sand in exactly the right gearbox and their whole fiscal quarter goes sideways. Patient cruelty. I adore it.</p><p><b>Target loses 1 Economy OP per turn for 3 turns.</b></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "industrial-sabotage",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "industrial_sabotage",
+      "meta": {
+        "tier": 2,
+        "rarity": "rare",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "raidTypes": [
+          "violence"
+        ],
+        "engine": "violence"
+      }
+    }
+  },
+  "_id": "bPJNP8YViD2W7LTw",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 1900000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1771977107845,
+    "modifiedTime": 1779731339477,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS"
+  },
+  "_key": "!items!bPJNP8YViD2W7LTw"
+}

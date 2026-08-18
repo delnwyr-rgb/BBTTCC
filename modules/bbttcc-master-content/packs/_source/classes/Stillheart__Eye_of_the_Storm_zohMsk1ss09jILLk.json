@@ -1,0 +1,248 @@
+{
+  "_id": "zohMsk1ss09jILLk",
+  "name": "Stillheart: Eye of the Storm",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_single_eye.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2 data-start=\"5250\" data-end=\"5284\">Level 18 — <strong data-start=\"5264\" data-end=\"5284\">Eye of the Storm</strong></h2><p data-start=\"5286\" data-end=\"5313\">You become the still point.</p><h3 data-start=\"5315\" data-end=\"5337\">Once per Soma Break</h3><p data-start=\"5338\" data-end=\"5370\">For 1 minute, in a 4 squares radius:</p><ul data-start=\"5371\" data-end=\"5501\"><li data-start=\"5371\" data-end=\"5413\"><p data-start=\"5373\" data-end=\"5413\">Burn does not increase for you or allies</p></li><li data-start=\"5414\" data-end=\"5462\"><p data-start=\"5416\" data-end=\"5462\">Fear, charm, and morale effects are suppressed</p></li><li data-start=\"5463\" data-end=\"5501\"><p data-start=\"5465\" data-end=\"5501\">Ongoing emotional effects are paused</p></li></ul><p data-start=\"5503\" data-end=\"5525\">After the effect ends:</p><ul data-start=\"5526\" data-end=\"5547\"><li data-start=\"5526\" data-end=\"5547\"><p data-start=\"5528\" data-end=\"5547\">You gain <strong data-start=\"5537\" data-end=\"5547\">1 Burn</strong></p></li></ul><p data-start=\"5549\" data-end=\"5601\">Violence happens around you.<br data-start=\"5577\" data-end=\"5580\" />It does not take you.</p>",
+      "chat": ""
+    },
+    "identifier": "stillheart_eye_of_the_storm",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 18
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "stillheart_eye_of_the_storm",
+      "burn": {
+        "delta": 1,
+        "_taggedBy": "bbttcc-burn-batch-tagger",
+        "_ts": 1770856292852,
+        "_from": "Stillheart: Eye of the Storm"
+      }
+    },
+    "autoanimations": {
+      "id": "5907dea2-7e8e-43a7-8f13-9005be5752e8",
+      "label": "Stillheart: Eye of the Storm",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "loop",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "Tp2149safpsn0Bmg",
+  "sort": 125000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459909023,
+    "modifiedTime": 1782167240832,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!zohMsk1ss09jILLk"
+}

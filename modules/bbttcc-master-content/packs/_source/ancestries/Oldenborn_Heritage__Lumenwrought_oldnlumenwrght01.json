@@ -1,0 +1,83 @@
+{
+  "_id": "oldnlumenwrght01",
+  "name": "Oldenborn Heritage: Lumenwrought",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Ember_Lumenwrought_3.png",
+  "system": {
+    "category": "heritage",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Oldenborn Heritage.</strong> The branch that lit up from inside. Festival-spirit, glamour-spirit, the ancestor that taught the people to call something beautiful before they had a word for sacred.</p><p><em>“The world remembered old names. You answered—and you were lit by the answering.”</em></p><p><strong>Lumenwrought.</strong> You are the place-soul that learned to wear a mask of light. Folks call you elf, sylph, faerie, depending on what scares them prettier than it scares them honestly. You are the first reason a candle is holy.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Fey).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>PRE (Presence)</strong>—expressed primarily through Tier powers.</p></li><li><p><strong>Glamourcast.</strong> You can shed dim light in a 1 square radius at will, and snuff it out the same way. Your light is the colour of one specific moment in your past—the GM and you decide which.</p></li></ul>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "oldnlumenad0001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.VCDspGrzcx0FkfEj",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Lumenwrought Tier I",
+        "hint": "Gain your Lumenwrought Tier I lineage power (Glamourfield)."
+      }
+    ],
+    "identifier": "oldenborn_lumenwrought_heritage",
+    "requirements": "Oldenborn",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "oldenborn",
+      "lineage": "Lumenwrought",
+      "version": "2.0.0",
+      "date": "2026-04-18"
+    }
+  },
+  "folder": "8lnQFXfSvlVrEqA2",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776543000000,
+    "modifiedTime": 1782167240134,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 150000,
+  "_key": "!items!oldnlumenwrght01"
+}

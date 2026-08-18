@@ -1,0 +1,67 @@
+{
+  "name": "Hearthfield",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_hearth_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“Anywhere you set the anvil down becomes a home.”</em></p><p>When you lead or host a <strong>a Soma Break</strong>, you can shape the space around you into a temporary hearth.</p><ul><li>Each ally who spends one or more Body dice to heal during that rest regains an additional <strong>1d6 Integrity</strong>.</li><li>If the rest occurs in a reclaimed ruin, hex under your faction’s control, or within sight of a banner, sigil, or emblem you forged, the GM may allow the bonus to increase to <strong>2d6</strong> for particularly on-theme scenes.</li></ul><p><em>There are campfires, and there are places people tell stories about years later. You build the second kind.</em></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-bound-light-hearthfield",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 10, Forge of Bound Light",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "JaASOItbL0tB8Z9y",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_boundlight",
+      "featureKey": "hearthfield"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996551,
+    "modifiedTime": 1781116133835,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "H6jNG9wVe4Dy2pAA",
+  "sort": 50000,
+  "_key": "!items!H6jNG9wVe4Dy2pAA"
+}

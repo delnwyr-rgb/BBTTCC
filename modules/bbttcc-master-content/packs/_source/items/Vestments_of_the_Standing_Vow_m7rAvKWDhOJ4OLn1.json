@@ -1,0 +1,99 @@
+{
+  "name": "Vestments of the Standing Vow",
+  "type": "armor",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "guardBonus": 2,
+    "evasionBonus": 1,
+    "resolveBonus": 3,
+    "resistances": [
+      "qliphothic"
+    ],
+    "armorSkill": "warding",
+    "equipped": false,
+    "tags": [
+      "warding",
+      "vestment",
+      "ceremonial",
+      "attunement"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Formal warding vestments worn when a Steward swears an oath meant to outlast them. Vow-bone toggles, a hem weighted with witness-glass beads that click once for every promise kept. While the vow stands, no one else's word can move the wearer off it.</p><p><b>Standing Vow.</b> Resists qliphothic. The wearer cannot be compelled while attuned.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Guard +2, Evasion +1, Resolve +3</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Immune to:</strong> Compelled</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 675 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "The vow stands whether you do or not.",
+          "origin": "given",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Formal warding vestments worn when a Steward swears an oath meant to outlast them. Vow-bone toggles, a hem weighted with witness-glass beads that click once for every promise kept. While the vow stands, no one else's word can move the wearer off it.</p><p><b>Standing Vow.</b> Resists qliphothic. The wearer cannot be compelled while attuned.</p>",
+          "materialOf": [
+            "witness-glass",
+            "vow-bone",
+            "sept-wool"
+          ],
+          "price": {
+            "marks": 675,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII armor × 1.50",
+            "bound": "attuned",
+            "saleBack": 270
+          }
+        }
+      },
+      "grants": {
+        "resistances": [
+          {
+            "type": "qliphothic"
+          }
+        ],
+        "conditionImmunities": [
+          "compelled"
+        ]
+      }
+    }
+  },
+  "folder": "gD1WklJiuS6Vg2p3",
+  "_id": "m7rAvKWDhOJ4OLn1",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782150391745,
+    "modifiedTime": 1782160020991,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!m7rAvKWDhOJ4OLn1"
+}

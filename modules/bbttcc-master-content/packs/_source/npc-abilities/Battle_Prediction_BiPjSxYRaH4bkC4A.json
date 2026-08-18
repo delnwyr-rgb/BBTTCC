@@ -1,0 +1,81 @@
+{
+  "name": "Battle Prediction",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_plans_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [
+      "seed-bestiary-attacks",
+      "tier-iii",
+      "role-hardened",
+      "passive"
+    ],
+    "description": {
+      "value": "<p>At the start of each round, the GM declares one attack form the battlemind is anticipating (melee / ranged / save-based / manifestation). All incoming attacks of that form have reroll-the-highest this round.</p><p><em>It does not see the future. It has already simulated the present 8,000 times.</em></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "frame": "trait"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Pre-Fall Battlemind"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "sort": 0,
+  "_id": "BiPjSxYRaH4bkC4A",
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": null,
+    "modifiedTime": null,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!BiPjSxYRaH4bkC4A"
+}

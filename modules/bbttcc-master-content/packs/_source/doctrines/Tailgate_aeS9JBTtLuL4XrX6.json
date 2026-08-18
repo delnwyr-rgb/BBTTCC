@@ -1,0 +1,62 @@
+{
+  "name": "Tailgate",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_ghostly_runner_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Stroll in right behind the patrol like you absolutely belong here. Confidence is a master key. Confidence is also, regrettably, loud.</p><p><b>+2 progress; +1 alarm (risk).</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "tailgate",
+      "meta": {
+        "tier": 2,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "intrigue",
+        "layer": "tactical",
+        "costBand": "light",
+        "raidTypes": [
+          "infiltration_alarm"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "intrigue": 1
+        },
+        "authoredSprint": "3a"
+      },
+      "effects": {
+        "text": "Slip past behind a patrol: +2 progress, +1 alarm (risk)."
+      }
+    }
+  },
+  "_id": "aeS9JBTtLuL4XrX6",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 4706250,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778965786768,
+    "modifiedTime": 1780163525601,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!aeS9JBTtLuL4XrX6"
+}

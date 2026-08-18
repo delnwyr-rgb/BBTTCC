@@ -1,0 +1,431 @@
+{
+  "name": "RAIDGAUNTLET · Arena",
+  "width": 3000,
+  "height": 2000,
+  "padding": 0,
+  "grid": {
+    "type": 1,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 1,
+    "color": "#000000",
+    "alpha": 0.2,
+    "distance": 1,
+    "units": "m"
+  },
+  "_id": "AEJiuhUZif7OOMed",
+  "active": false,
+  "navigation": true,
+  "navOrder": 0,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-TJ74TPkn1PLNo_2WfU_2lQ.webp",
+  "shiftX": 0,
+  "shiftY": 0,
+  "initial": {
+    "x": null,
+    "y": null,
+    "scale": null
+  },
+  "initialLevel": "defaultLevel0000",
+  "tokenVision": true,
+  "fog": {
+    "mode": 1,
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    }
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": false,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "drawings": [
+    {
+      "shape": {
+        "type": "r",
+        "width": 300,
+        "height": 300,
+        "radius": null,
+        "points": []
+      },
+      "x": 2200,
+      "y": 800,
+      "fillType": 1,
+      "fillColor": "#7a2222",
+      "fillAlpha": 0.3,
+      "strokeColor": "#cc4444",
+      "flags": {
+        "bbttcc-territory": {
+          "name": "RAIDGAUNTLET · Besieged Hex",
+          "factionId": "p8n5sPDOpmflFG0J",
+          "modifiers": [
+            "Fortified",
+            "Hostile Population",
+            "Damaged Infrastructure"
+          ],
+          "terrain": {
+            "key": "plains"
+          },
+          "holdings": {
+            "rigIds": [
+              "EAzsSwFeihI9Fejj"
+            ],
+            "bossIds": []
+          },
+          "structureActorIds": [
+            "EAzsSwFeihI9Fejj"
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          },
+          "modifierHistory": {
+            "Hostile Population": {
+              "addedTs": 1781056402822,
+              "addedTurn": 32,
+              "addedBy": "p8n5sPDOpmflFG0J",
+              "source": {
+                "activity": "loyalty_unrest",
+                "factionId": "p8n5sPDOpmflFG0J"
+              },
+              "removedTs": null
+            },
+            "Damaged Infrastructure": {
+              "addedTs": 1781562196366,
+              "addedTurn": 34,
+              "addedBy": "p8n5sPDOpmflFG0J",
+              "source": {
+                "activity": "loyalty_unrest_infra",
+                "factionId": "p8n5sPDOpmflFG0J"
+              },
+              "removedTs": null
+            }
+          },
+          "improvements": [
+            {
+              "id": "zJELpd0lsiXh19vo",
+              "ts": 1781056402940,
+              "turn": 32,
+              "kind": "modifier_added",
+              "label": "Modifier added: Hostile Population",
+              "description": "Hostile Population — −25% production, −2 loyalty",
+              "source": {
+                "activity": "loyalty_unrest",
+                "factionId": "p8n5sPDOpmflFG0J"
+              },
+              "before": null,
+              "after": null,
+              "reversible": true,
+              "dedupeKey": "unrest:t5e5jzY7F9RjvMv3:1781056402822"
+            },
+            {
+              "id": "YjFkkppiiSHRLJI2",
+              "ts": 1781562196422,
+              "turn": 34,
+              "kind": "modifier_added",
+              "label": "Modifier added: Damaged Infrastructure",
+              "description": "Damaged Infrastructure — −25% production",
+              "source": {
+                "activity": "loyalty_unrest_infra",
+                "factionId": "p8n5sPDOpmflFG0J"
+              },
+              "before": null,
+              "after": null,
+              "reversible": true,
+              "dedupeKey": "infra:t5e5jzY7F9RjvMv3:1781562196366"
+            }
+          ]
+        }
+      },
+      "_id": "t5e5jzY7F9RjvMv3",
+      "author": "bytUGWIOqq9eT7Or",
+      "elevation": 0,
+      "levels": [],
+      "sort": 0,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "strokeWidth": 8,
+      "strokeAlpha": 1,
+      "texture": null,
+      "fontFamily": "",
+      "fontSize": 48,
+      "textColor": "#ffffff",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!AEJiuhUZif7OOMed.t5e5jzY7F9RjvMv3"
+    }
+  ],
+  "tokens": [],
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "Level",
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/gauntlet_2.png",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!AEJiuhUZif7OOMed.defaultLevel0000"
+    }
+  ],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [],
+  "walls": [],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "folder": "JCPy84JuWlbDotW6",
+  "sort": 150000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "gauntletManifest": {
+        "attackerId": "KC2wQHE0qLy0HFG8",
+        "leadId": "KC2wQHE0qLy0HFG8",
+        "supporterIds": [
+          "aDtKEGHJpmh7dDcM",
+          "OWONoLmXK1A5vmPi"
+        ],
+        "defenderId": "p8n5sPDOpmflFG0J",
+        "relationsSet": true,
+        "tierProbes": {
+          "1": "J1PEoKx5mVUsrGTl",
+          "2": "HJN8kL1S67Z2x506",
+          "3": "DySSEe4V9IHOQX2n",
+          "4": "bmi32F92peIrxofY"
+        },
+        "heroIds": [
+          "ciiSaLTAicDDQ0uP",
+          "njM8AQk6rs3TjtoF",
+          "S5huF5c5CmddHu3n",
+          "uLgqYI0M2dfvPe28",
+          "TRPM2kAxxKY2Wp38",
+          "gPn10MuWtNrhljhy",
+          "xwoYbxxqHbUp4gpV",
+          "B076sebwI95MZRKx",
+          "3u6xNKCQVomqJzhO",
+          "6IDAXNK1lCBjfrY0",
+          "5h00X2KYolqc6Rer",
+          "4av8LzRxPDkYuUZ6",
+          "6YvpcxPKbt12zWRl",
+          "MUBiFvNI1tN5E4CL",
+          "WoZFQNABrUmoS66a",
+          "flyHZOuK9ijkYvKx",
+          "BOWf4bOtH6vh9AIq",
+          "olAdAG8qg0ulgnTj",
+          "Vyu9vmTZRdnQCLtf",
+          "IQ1oOPGZRg26ROVI",
+          "AlK7H5FscHfCf7Cw",
+          "AtZSHjCxhLrJlYy0",
+          "nGQ1AMtEpZd4KnZK",
+          "l0Mp2L6UodHIvXce",
+          "0WmtZHjrO2WcRLik",
+          "TZKWA7A8kuVA6VI3",
+          "OuFV1K8tiTWFQYd4",
+          "WsJsRGIJKaRIVPF3"
+        ],
+        "stewardIds": [
+          "njM8AQk6rs3TjtoF",
+          "S5huF5c5CmddHu3n",
+          "uLgqYI0M2dfvPe28",
+          "TRPM2kAxxKY2Wp38",
+          "gPn10MuWtNrhljhy",
+          "xwoYbxxqHbUp4gpV",
+          "B076sebwI95MZRKx",
+          "3u6xNKCQVomqJzhO",
+          "6IDAXNK1lCBjfrY0",
+          "5h00X2KYolqc6Rer",
+          "4av8LzRxPDkYuUZ6",
+          "6YvpcxPKbt12zWRl",
+          "MUBiFvNI1tN5E4CL",
+          "WoZFQNABrUmoS66a",
+          "flyHZOuK9ijkYvKx",
+          "BOWf4bOtH6vh9AIq",
+          "olAdAG8qg0ulgnTj",
+          "Vyu9vmTZRdnQCLtf",
+          "IQ1oOPGZRg26ROVI",
+          "AlK7H5FscHfCf7Cw",
+          "AtZSHjCxhLrJlYy0",
+          "nGQ1AMtEpZd4KnZK",
+          "l0Mp2L6UodHIvXce",
+          "0WmtZHjrO2WcRLik",
+          "TZKWA7A8kuVA6VI3",
+          "OuFV1K8tiTWFQYd4",
+          "WsJsRGIJKaRIVPF3"
+        ],
+        "classBearerId": "ciiSaLTAicDDQ0uP",
+        "sceneId": "AEJiuhUZif7OOMed",
+        "hexUuid": "Scene.AEJiuhUZif7OOMed.Drawing.t5e5jzY7F9RjvMv3",
+        "wallActorId": "EAzsSwFeihI9Fejj",
+        "targetTokenId": "okJVvnnVMjzYwCDk",
+        "allyTokenId": "8Fop7vkYRDgi84vy",
+        "heroTokenIds": [
+          "sCVDIsk5z4FdROr1",
+          "fb50TQYhdfUyBz2l",
+          "gzOHvLsJ8nQSMbcu",
+          "53OeIwqOD1ctvrBC"
+        ],
+        "scenarios": {
+          "infiltration": "ok",
+          "social": "ok",
+          "violence": "no-headless-api (runner fires via maneuver path)",
+          "siege": "seeded-active"
+        },
+        "grants": {
+          "crews": [
+            "Mercenary Band",
+            "Peacekeeper Corps",
+            "Covert Ops Cell",
+            "Cultural Ambassadors",
+            "Diplomatic Envoys",
+            "Survivors/Militia",
+            "Abyssal Cartographers",
+            "Ashbound Survivors",
+            "Gridbreakers",
+            "Ironbound Ascendants",
+            "Storm Wardens",
+            "Verdant Stalkers"
+          ],
+          "occult": [
+            "Kabbalist",
+            "Alchemist",
+            "Tarot Mage",
+            "Gnostic",
+            "Goetic Summoner",
+            "Rosicrucian",
+            "Biomancer/Fleshcrafter",
+            "Exorcist/Purifier",
+            "Prophet/Oracle",
+            "Shaman"
+          ],
+          "classes": [
+            "Bulwark",
+            "Cosmic Linguist",
+            "Shadow Courier",
+            "Pactkeeper",
+            "Wyrdlens Adept",
+            "Aurablade",
+            "Dreamwalker",
+            "Harmony Marshal",
+            "Soul-Smith"
+          ]
+        },
+        "errors": [],
+        "rosterClassesDetected": [
+          "Aurablade",
+          "Bulwark",
+          "Cosmic Linguist",
+          "Dreamwalker",
+          "Harmony Marshal",
+          "Pactkeeper",
+          "Shadow Courier",
+          "Soul-Smith",
+          "Wyrdlens Adept"
+        ],
+        "spongeActorId": "oHQIAcMFjo1yJtfN",
+        "allyActorId": "bGSieIaOM3FFLQkL",
+        "builtAt": "2026-06-07T23:21:01.310Z"
+      },
+      "tableau": {
+        "enabled": false,
+        "frontY": 800,
+        "backY": 200,
+        "minScale": 0.25,
+        "maxScale": 1,
+        "curve": 1.8,
+        "zSortByY": true
+      }
+    },
+    "wall-height": {
+      "advancedVision": true
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982530600,
+    "modifiedTime": 1783982530600,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "navName": "",
+  "_key": "!scenes!AEJiuhUZif7OOMed",
+  "templates": []
+}

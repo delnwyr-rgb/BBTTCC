@@ -1,0 +1,248 @@
+{
+  "_id": "QBioiHJ2FkGqTYGi",
+  "name": "Oldenborn (Stormborn Nomad): Weatherwise",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_weatherwise.png",
+  "system": {
+    "category": "feature",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 2,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“The sky is a language. You were the first to learn the punctuation.”</em></p>\n<p><strong>Weatherwise.</strong> You always know the upcoming weather for the next 12 hours within 1 mile, even underground. You reroll the lowest die on checks against weather effects (extreme cold, extreme heat, wind, lightning).</p>\n<p><strong>Wind-Read (1/Soma Break).</strong> When you would take lightning, thunder, or thermal damage, you may use your reaction to halve it. The wind shifts as you do.</p>\n<p><strong>Ash-Walker.</strong> You ignore difficult terrain caused by snow, ash, dust, sand, or shifting earth.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "oldenborn-stormborn-weatherwise",
+    "requirements": "Oldenborn (Stormborn Nomad)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "oldenborn",
+      "feature": "weatherwise",
+      "lineage": "Stormborn Nomad",
+      "tierLevel": 0,
+      "version": "2.0.0",
+      "date": "2026-04-18"
+    },
+    "autoanimations": {
+      "id": "2c7756cc-b240-44f2-8281-d8cdc566c8ca",
+      "label": "Oldenborn (Stormborn Nomad): Weatherwise",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "intro",
+          "color": "yellow",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "s4JLtG8OuVuIzQpi",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776543000000,
+    "modifiedTime": 1782167240126,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 200000,
+  "_key": "!items!QBioiHJ2FkGqTYGi"
+}

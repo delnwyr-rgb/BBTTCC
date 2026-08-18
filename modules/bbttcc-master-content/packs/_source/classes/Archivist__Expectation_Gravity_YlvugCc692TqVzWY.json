@@ -1,0 +1,66 @@
+{
+  "name": "Archivist: Expectation Gravity",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_jump_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"3709\" data-end=\"3723\"><em data-start=\"3709\" data-end=\"3723\">(10th Level)</em></p><p data-start=\"3725\" data-end=\"3748\"><em data-start=\"3725\" data-end=\"3748\">“Lore has weight.”</em></p><p data-start=\"3750\" data-end=\"3868\">When a creature knowingly violates a relevant Precedent, you may allow the accumulated weight of record to press down.</p><p data-start=\"3870\" data-end=\"3895\">Effects (GM adjudicated):</p><ul data-start=\"3896\" data-end=\"4004\"><li data-start=\"3896\" data-end=\"3919\"><p data-start=\"3898\" data-end=\"3919\">Impose roll 3d10 keep lowest 2</p></li><li data-start=\"3920\" data-end=\"3948\"><p data-start=\"3922\" data-end=\"3948\">Apply psychic hesitation</p></li><li data-start=\"3949\" data-end=\"3976\"><p data-start=\"3951\" data-end=\"3976\">Levy a minor action tax</p></li><li data-start=\"3977\" data-end=\"4004\"><p data-start=\"3979\" data-end=\"4004\">Increase narrative risk</p></li></ul><p data-start=\"4006\" data-end=\"4075\">You are not attacking them.<br data-start=\"4033\" data-end=\"4036\" />You are letting the past assert itself.</p><h3 data-start=\"4077\" data-end=\"4085\">Cost</h3><p data-start=\"4086\" data-end=\"4151\">Free reaction when applicable (unless layered with Civic Charge).</p><h3 data-start=\"4153\" data-end=\"4165\">Pushback</h3><p data-start=\"4166\" data-end=\"4278\">If you punish deviation too often, <strong data-start=\"4201\" data-end=\"4227\">exceptions proliferate</strong>. High Administrative Pressure makes canon brittle.</p><p data-start=\"4280\" data-end=\"4317\"></p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "identifier": "archivist_expectation_gravity",
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 10
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "folder": "eNi1uCWJUfkKDdUU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776481562687,
+    "modifiedTime": 1782167240823,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "YlvugCc692TqVzWY",
+  "sort": 175000,
+  "_key": "!items!YlvugCc692TqVzWY"
+}

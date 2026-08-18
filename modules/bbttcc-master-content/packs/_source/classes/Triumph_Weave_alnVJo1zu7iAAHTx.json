@@ -1,0 +1,298 @@
+{
+  "name": "Triumph Weave",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wave_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You can stitch courage into the air itself.”</em></p><p>When you or an ally you can see within <strong>6 squares</strong> succeeds on an attack roll, defense check, or attribute check by <strong>5 or more</strong>, you can use your <strong>reaction</strong> to declare a surge of momentum.</p><ul><li>Allies of your choice within <strong>3 squares</strong> gain <strong>temporary Integrity equal to your tier</strong>.</li><li>Those allies also gain a <strong>+2 squares bonus</strong> to their speed until the end of their next turn.</li><li>The next <strong>Diplomacy (Presence)</strong> or <strong>Intimidation (Presence)</strong> check made by any one of the affected creatures before the end of the scene has <strong>advantage</strong>.</li></ul><p>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</p><p><strong>OP Echo.</strong> If a Triumph Weave directly helps resolve a conflict without lethal force, your faction gains <strong>+1 Diplomacy OP</strong> for the next strategic turn.</p>",
+      "chat": ""
+    },
+    "activities": {
+      "triumphWeave": {
+        "type": "utility",
+        "activation": {
+          "type": "reaction",
+          "condition": "When you or an ally within 30 ft succeeds on a roll by 5 or more.",
+          "override": false
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "range": {
+          "value": "30",
+          "units": "ft",
+          "override": false
+        },
+        "description": {},
+        "_id": "wxpad2vOnXo7hswj",
+        "sort": 0,
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "@prof"
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-victory-triumph-weave",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 14, Forge of Victory",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "dsO4fBFdVXDt6vRA",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_victory",
+      "featureKey": "triumph_weave"
+    },
+    "autoanimations": {
+      "id": "643c75ab-2525-4898-98ac-b30395ad6d8a",
+      "label": "Triumph Weave",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "intro",
+          "color": "yellow",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459996552,
+    "modifiedTime": 1782167240824,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "alnVJo1zu7iAAHTx",
+  "sort": 400000,
+  "_key": "!items!alnVJo1zu7iAAHTx"
+}

@@ -1,0 +1,71 @@
+{
+  "_id": "1AIGgkb9HQ4ZY9iY",
+  "name": "Void Edge: Silence of Will",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_void_edge_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2 data-start=\"6310\" data-end=\"6342\">Level 6 — <strong data-start=\"6323\" data-end=\"6342\">Silence of Will</strong></h2><p data-start=\"6344\" data-end=\"6360\">You break focus.</p><h3 data-start=\"6362\" data-end=\"6384\">Mechanical Effects</h3><p data-start=\"6385\" data-end=\"6401\">Targets you hit:</p><ul data-start=\"6402\" data-end=\"6499\"><li data-start=\"6402\" data-end=\"6449\"><p data-start=\"6404\" data-end=\"6449\">roll 3d10 keep lowest 2 on <strong data-start=\"6425\" data-end=\"6449\">Clarity hold checks</strong></p></li><li data-start=\"6450\" data-end=\"6499\"><p data-start=\"6452\" data-end=\"6499\">Cannot benefit from rallying or command effects</p></li></ul><p data-start=\"6501\" data-end=\"6516\">At <strong data-start=\"6504\" data-end=\"6515\">Burn 3+</strong>:</p><ul data-start=\"6517\" data-end=\"6604\"><li data-start=\"6517\" data-end=\"6604\"><p data-start=\"6519\" data-end=\"6604\">Failing a Clarity hold check also causes <strong data-start=\"6561\" data-end=\"6582\">Burn-like fatigue</strong> (GM narrative effect)</p></li></ul><p data-start=\"6606\" data-end=\"6635\">Hope stops organizing itself.</p>",
+      "chat": ""
+    },
+    "identifier": "voidedge_silence_of_will",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "voidedge_silence_of_will",
+      "burn": {
+        "min": 3,
+        "_taggedBy": "bbttcc-burn-batch-tagger",
+        "_ts": 1770856290389,
+        "_from": "Void Edge: Silence of Will"
+      }
+    }
+  },
+  "folder": "640HHePTVNcMB98C",
+  "sort": 106250,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459909019,
+    "modifiedTime": 1781116108545,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!1AIGgkb9HQ4ZY9iY"
+}

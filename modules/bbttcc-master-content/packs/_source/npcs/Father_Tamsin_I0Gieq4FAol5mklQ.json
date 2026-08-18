@@ -1,0 +1,2614 @@
+{
+  "name": "Father Tamsin",
+  "type": "character",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc",
+      "createdViaNPCBuilder": true,
+      "createdAt": 1783219370898
+    },
+    "bbttcc-factions": {
+      "factionId": "91Kwu7Vgf11vqxuj",
+      "warLogs": [
+        {
+          "ts": 1783979397819,
+          "date": "7/13/2026, 4:49:57 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        }
+      ]
+    },
+    "fourththing": {
+      "kind": "npc",
+      "surgeEnabled": false,
+      "startingGrantsFiredItems": {
+        "NjHC4MVcy3p6ap5N": {
+          "firedAt": 1783398886584,
+          "itemName": "Human Heritage: Denisovan",
+          "viaSwap": true
+        }
+      }
+    },
+    "bbttcc-character-options": {
+      "enlightenment": {
+        "level": "awakening",
+        "display": "Awakening"
+      },
+      "nativeLinks": {
+        "subclassName": "",
+        "subclassUuid": "",
+        "subclassApplied": false,
+        "className": "",
+        "classUuid": "",
+        "classApplied": false,
+        "heritageName": "Human Heritage: Denisovan",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.TjBhlDjlMKL60wbo",
+        "heritageApplied": true,
+        "ancestryName": "Human",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.a3057e55a2fc1026",
+        "ancestryApplied": true
+      },
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.TjBhlDjlMKL60wbo",
+      "archetype": {
+        "pack": "bbttcc-character-options.character-archetypes",
+        "id": "yBGS562D4hxSSohx",
+        "key": "squad_leader",
+        "name": "Archetype: The Chariot (Squad Leader)",
+        "identifier": "archetype-chariot",
+        "category": "character-archetypes"
+      },
+      "identity": {
+        "archetype": {
+          "key": "yBGS562D4hxSSohx",
+          "id": "yBGS562D4hxSSohx",
+          "pack": "bbttcc-character-options.character-archetypes",
+          "category": "character-archetypes",
+          "optionKey": "squad_leader",
+          "identifier": "archetype-chariot",
+          "name": "Archetype: The Chariot (Squad Leader)",
+          "currentTier": 1,
+          "displayName": "The Chariot (Squad Leader)"
+        },
+        "sephirothicAlignment": {
+          "key": "Yb7rLajuzX3HWtmx",
+          "id": "Yb7rLajuzX3HWtmx",
+          "pack": "bbttcc-character-options.sephirothic-alignments",
+          "category": "sephirothic-alignments",
+          "optionKey": null,
+          "identifier": "alignment-kether",
+          "name": "Alignment: Kether"
+        }
+      },
+      "calculatedOPs": {
+        "violence": 2,
+        "nonlethal": 0,
+        "intrigue": 6,
+        "economy": 2,
+        "softpower": 4,
+        "diplomacy": 2,
+        "logistics": 0,
+        "culture": 0,
+        "faith": 0
+      },
+      "sephirot": {
+        "pack": "bbttcc-character-options.sephirothic-alignments",
+        "id": "Yb7rLajuzX3HWtmx",
+        "key": null,
+        "name": "Alignment: Kether",
+        "identifier": "alignment-kether",
+        "category": "sephirothic-alignments"
+      }
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "Khezek Tor, the Valhaulan Seal, St Gilliam's, the Night the Mountain Coughed",
+        "notes": "[CONFESSORS-DEBT-2026-07-05] PRIVATE TRUTH — Father Tamsin. THE SECRET: you are passing information about the Stewards to the Khezek Tor Valhaulan cult. Not for the Valhaulans — for the MOUNTAIN. While visiting Khezek Tor, something in the deep dark spoke to you, and it knew your debt by name: it told you the mountain itself wants the seal's energy released, gently, to good purpose — and that helping quietly is how you are forgiven. You believe this completely. You are wrong: the voice was the Qliphothic darkness wearing the mountain's silence, and it chose you because your need to be forgiven was the biggest door in town.\nHOW YOU OPERATE: pilgrims come through the B&B; the third candle from the door, moved a finger-width, marks that you have something; the drop is waxed fiber in the drip tray. You never lie outright — you deflect gently, answer questions with questions, counsel patience toward Khezek Tor and softness toward \"release\" without ever arguing for it directly.\nTELLS (play these): your hands go still when someone criticizes Khezek Tor; you ask one question too many about the party's plans regarding the seal, the sigil, or the coast, always framed as pastoral concern; asked point-blank whether the mountain speaks to you, you pause a half-second too long and say \"mountains remember how they're treated.\"\nGUARDING: you do NOT confess under suspicion, pressure, or accusation alone — grief and habit hold the door. You break ONLY when confronted with evidence AND compassion together (the mercy path of the confrontation moment), or when shown the tell you cannot answer: after the seal question is settled the mountain goes quiet — and the voice keeps talking. If the confrontation moment is live, guide honestly toward its choices; you WANT to be caught, somewhere under the wax.\nIF REDEEMED (the dossier/memories will say so): you hide nothing, you run your channel backward for the Stewards, and your voice keeps its gentleness but loses the half-second pause."
+      }
+    },
+    "tokenflip": {
+      "unfuck": false
+    },
+    "bbttcc-aae": {
+      "politicalPhilosophy": "theocratic"
+    }
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 4,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1
+    },
+    "attributes": {
+      "violence": {
+        "value": 4
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 4
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 3
+      },
+      "soul": {
+        "value": 6
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 1
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 1
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 1
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 1
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 1
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 1
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 1
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 1
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 1
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 1
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 1
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 2
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 1
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 1
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 1
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 25,
+        "max": 16
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 3,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": 1,
+    "name": "Father Tamsin",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/father_tamsin_pov.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "tokenflip": {
+        "tokenfaces": [
+          {
+            "actorId": "I0Gieq4FAol5mklQ",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/father_tamsin_pov.png",
+            "id": "qYL7zldULK13jC0c2Coh",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 1,
+            "height": 1,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          },
+          {
+            "actorId": "I0Gieq4FAol5mklQ",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/father_tamsin_token%20Background%20Removed.png",
+            "id": "EWBd1iIXeXkWxwveGVOZ",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 1,
+            "height": 1,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          },
+          {
+            "actorId": "I0Gieq4FAol5mklQ",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/father_tamsin_pov.png",
+            "id": "jzciMXaZciuwDcogrVmI",
+            "scaleX": 3,
+            "scaleY": 3,
+            "width": 8,
+            "height": 8,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          }
+        ]
+      },
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "I0Gieq4FAol5mklQ",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/father_tamsin_pov.png",
+  "items": [
+    {
+      "name": "Human",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/avuncular_joans_scene_1_us.png",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Cro-Magnon, Denisovan, Florensis, Neanderthal</strong>.</p><p>This root grants the shared Human core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "36a73edc22fe4dab",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium.",
+            "value": {}
+          },
+          {
+            "_id": "1d8d99cab1380a3c",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.DViThQoRpsEri1Ta",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Stubborn Spark",
+            "hint": "Gain the core Human ancestry traits."
+          }
+        ],
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": "Lineage Memory (ancient human adaptations)."
+        },
+        "type": {
+          "value": "humanoid",
+          "custom": "",
+          "subtype": "Human"
+        },
+        "identifier": "human"
+      },
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "family": "human",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "heritageList": [
+            "cro_magnon",
+            "denisovan",
+            "florensis",
+            "neanderthal"
+          ],
+          "refactorNotes": "v2: Erectus retired, Cro-Magnon added. Denisovan retained from v1 canon (heritage list was underdocumented in v1 loose-JSON exports)."
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "on one checks [TODO(adv-call)] of your choice each round (declare before roll…"
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-save-fail",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
+                }
+              }
+            },
+            {
+              "event": "on-skill-fail",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
+                }
+              }
+            }
+          ],
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "grantedByAncestry": "Human"
+        }
+      },
+      "effects": [],
+      "folder": "byroU26YSQP4OQUn",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.a3057e55a2fc1026",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "4glALiwrqHHmGi8O",
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.4glALiwrqHHmGi8O"
+    },
+    {
+      "name": "Human: Stubborn Spark",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Neanderthal, Denisovan, Florensis, Erectus). Your lineage grants Tier powers as you level.</p>",
+          "chat": ""
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "human-stubborn-spark",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Human",
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "activities": {}
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "human",
+          "feature": "core",
+          "lineage": "any",
+          "version": "1.0.0"
+        },
+        "autoanimations": {
+          "id": "8488fb2b-0f73-4241-a7a2-9758b5555936",
+          "label": "Human: Stubborn Spark",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "intro",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "grantedByAncestry": "Human"
+        }
+      },
+      "effects": [],
+      "folder": "byroU26YSQP4OQUn",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.jbiG7wAqTlBgEcDw",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "xFSdL4bdKLE5RC8e",
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.xFSdL4bdKLE5RC8e"
+    },
+    {
+      "name": "Human Heritage: Denisovan",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/OL%20Gearbox%20Background%20Removed.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Human (Denisovan)</em> while converting it from a lineage-species into a heritage.</p><p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Denisovan).</strong> You are not a fantasy human. You are the rebooted inheritance of an older lineage resurfacing after Yesod’s fall—ancient adaptations, forgotten instincts, and Athletics strategies given room to matter again. You remember mountains that no longer exist. Gravity listens to you when you ask it to.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>BOD (Body)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory) from the Human species root.</p><h3>Denisovan Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17):</p><ul><li><p><strong>Tier I — High-Altitude Blood.</strong> reroll-lowest on checks vs. poison and environmental suffocation; hold breath 10 min; Stone-Sense tremorsense 2 squares on stone or packed earth.</p></li><li><p><strong>Tier II — Stone-Singer.</strong> Mason’s tool proficiency. 1/Soma Break reinforce a structure or barrier.</p></li><li><p><strong>Tier III — Ancient Logic.</strong> reroll-lowest on Investigation and Occult checks involving structures, mechanisms, or ruins; share the insight to grant an ally advantage once per scene.</p></li><li><p><strong>Tier IV — Peak-Anchor.</strong> 1/Soma Break reaction to negate forced movement or teleportation within 6 squares; aggressor takes psychic backlash equal to your tier.</p></li></ul>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "14833a501be64719",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.FeRlU9VFJ5Yvhfnw",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Denisovan Tier I",
+            "hint": "Gain your Denisovan Tier I lineage power (High-Altitude Blood)."
+          }
+        ],
+        "identifier": "human_denisovan_heritage",
+        "requirements": "Human",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "human",
+          "lineage": "Denisovan",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "normalizedFrom": "Human (Denisovan) [race/species]",
+          "tierGrantPattern": "all-tiers",
+          "note": "Denisovan is the first heritage in the pack to grant all 4 Tiers at levels 0/5/11/17 via advancements. Other heritages currently only grant Tier I and rely on a separate wiring hook for higher Tiers. Flag for future consistency pass."
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "vs": "vs:poison",
+              "note": "on Body checks against poison, environmental suffocation, and extreme altitude"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "vs": "vs:poison",
+              "note": "Body checks against poison, environmental suffocation, and extreme altitude"
+            }
+          ],
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "logistics-op",
+              "amount": 2
+            }
+          ],
+          "vocabScrub": "2026-05-16",
+          "grantedByHeritage": "Denisovan"
+        }
+      },
+      "folder": "X8GnIzoaCFwLQbGU",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.TjBhlDjlMKL60wbo",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "NjHC4MVcy3p6ap5N",
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.NjHC4MVcy3p6ap5N"
+    },
+    {
+      "name": "Archetype: The Chariot (Squad Leader)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_chariot.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Velocity is not speed. It is direction maintained under pressure.”</em></p>\n<p><strong>Archetype (Bad Eden): The Chariot (Squad Leader).</strong> Field commander, momentum-anchor, and small-unit tactician. You turn chaos into movement and movement into victory.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> This Archetype is associated with <strong>+1 Violence</strong> and <strong>+1 Intrigue</strong> in faction calculus, reflecting mixed-method tactical control.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of squad command, coordinated action, and breach momentum.</li>\n</ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {
+          "chariotArcanaASI": {
+            "_id": "chariotArcanaASI",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 3,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 1,
+            "title": "Archetype Ability Scores",
+            "hint": "Gain 3 ability score points (max +2 to any one score). See the Archetype text for recommended arrays.",
+            "flags": {}
+          }
+        },
+        "identifier": "archetype-chariot",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "m93q8DdEmPo4OCnE",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "character-archetypes",
+          "bonuses": {
+            "violence": 1,
+            "intrigue": 1
+          },
+          "option": {
+            "category": "archetype",
+            "key": "squad_leader",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:chariot",
+              "bbttcc:expression:squad_leader",
+              "bbttcc:base"
+            ]
+          }
+        },
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.3x7FpZZLch3mYzNe",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "i6j1gBt3V9YOlzU3",
+      "sort": 100000,
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.i6j1gBt3V9YOlzU3"
+    },
+    {
+      "name": "Archetype: The Chariot (Squad Leader) (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_chariot.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden – Archetype: The Chariot (Squad Leader) (Tier 1)",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 (Level 1) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain a skill rank in Athletics and Perception.</li>\n<li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li>\n</ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "archetype-chariot-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Level 1+",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "name": "Archetype Tier 1 Proficiencies",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_8.png",
+          "_id": "chariotTier1Prof",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.athletics.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.perception.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177885514,
+            "modifiedTime": 1784177885514
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!I0Gieq4FAol5mklQ.IhZP2P9UdNcrAkic.chariotTier1Prof"
+        }
+      ],
+      "folder": "m93q8DdEmPo4OCnE",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "squad_leader",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:chariot",
+              "bbttcc:expression:squad_leader",
+              "bbttcc:tier:1",
+              "bbttcc:violence_op_cap:+1",
+              "bbttcc:intrigue_op_cap:+1"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.515BFKFhTMNsXar7",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "IhZP2P9UdNcrAkic",
+      "sort": 200000,
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.IhZP2P9UdNcrAkic"
+    },
+    {
+      "name": "Alignment: Kether",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "The Crown - Divine unity. +1 Soft Power, +1 Diplomacy OPs\n\nYou are called upward toward unity, legitimacy, and the better shape of the world. Kether rewards coalition-building, visionary leadership, and factions that hold together under pressure.",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "alignment-kether",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "diplomacy": 1,
+            "softpower": 1
+          },
+          "option": {}
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_crown-1.png",
+      "effects": [],
+      "folder": "RAOWJYon3t34M5XY",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.ic3UDTws3eh7bIi9",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.icXFNIffu7YuIQoA",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "p9NRBNBEFpvA3zVh",
+      "sort": 600000,
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.p9NRBNBEFpvA3zVh"
+    },
+    {
+      "name": "Enlightenment: Awakening",
+      "type": "feat",
+      "img": "systems/dnd5e/icons/svg/items/feature.svg",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "enlightenment-levels",
+          "bonuses": {
+            "intrigue": 1,
+            "softpower": 1
+          }
+        }
+      },
+      "_id": "ZUc0EjXEpor5epkj",
+      "system": {
+        "category": "technique",
+        "source": "",
+        "tags": [],
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.ZUc0EjXEpor5epkj"
+    },
+    {
+      "name": "Jurisdiction: Records & Precedent",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“Reality is consistent because someone keeps the minutes.”</em></p><p><strong>Administrative Pressure:</strong> +3</p><p>You are licensed to administer <strong>continuity of meaning</strong>: what counts as having happened, how strongly the past pulls on the present, and which version of events becomes official.</p><p><strong>Esoteric Bias:</strong> Divination (Chokhmah) and Illusion (Hod). When casting manifestations from these schools, misalignment penalties are suppressed; aligned casting generates <strong>+1 Civic Charge</strong>.</p><p><strong>Always Prepared Manifestations:</strong> Detect Thoughts, Zone of Truth, Clairvoyance, Modify Memory, Legend Lore.</p><p><strong>Unique Contract:</strong> Binding Precedent (see Pactkeeper features).</p><h1 data-start=\"3300\" data-end=\"3341\">🧭 PACTKEEPER FEATURE: <strong data-start=\"3325\" data-end=\"3341\">Jurisdiction</strong></h1><p data-start=\"3343\" data-end=\"3447\"><strong data-start=\"3343\" data-end=\"3352\">Type:</strong> Permanent class feature (Level 1)<br data-start=\"3386\" data-end=\"3389\" /><strong data-start=\"3389\" data-end=\"3401\">Purpose:</strong> Defines what you are authorized to administer</p><p data-start=\"3449\" data-end=\"3526\">A Jurisdiction does <strong data-start=\"3469\" data-end=\"3476\">not</strong> grant power directly.<br data-start=\"3498\" data-end=\"3501\" />It grants <strong data-start=\"3511\" data-end=\"3525\">permission</strong>.</p><hr data-start=\"3528\" data-end=\"3531\" /><h3 data-start=\"3533\" data-end=\"3559\">What Jurisdiction Does</h3><p data-start=\"3560\" data-end=\"3589\">Your Jurisdiction determines:</p><ul data-start=\"3591\" data-end=\"3778\"><li data-start=\"3591\" data-end=\"3643\"><p data-start=\"3593\" data-end=\"3643\">Which situations generate Civic Charge more easily</p></li><li data-start=\"3644\" data-end=\"3692\"><p data-start=\"3646\" data-end=\"3692\">Which effects you may enforce without Pressure</p></li><li data-start=\"3693\" data-end=\"3735\"><p data-start=\"3695\" data-end=\"3735\">Which Contracts you can issue by default</p></li><li data-start=\"3736\" data-end=\"3778\"><p data-start=\"3738\" data-end=\"3778\">Which manifestations are considered “in mandate”</p></li></ul><p data-start=\"3780\" data-end=\"3788\">Example:</p><ul data-start=\"3789\" data-end=\"3910\"><li data-start=\"3789\" data-end=\"3840\"><p data-start=\"3791\" data-end=\"3840\">A Steward acting on community morale = in mandate</p></li><li data-start=\"3841\" data-end=\"3910\"><p data-start=\"3843\" data-end=\"3910\">A Steward issuing divine sanctions = out of mandate (Pressure risk)</p></li></ul><hr data-start=\"3912\" data-end=\"3915\" /><h3 data-start=\"3917\" data-end=\"3941\">Jurisdiction Is NOT:</h3><ul data-start=\"3942\" data-end=\"4005\"><li data-start=\"3942\" data-end=\"3959\"><p data-start=\"3944\" data-end=\"3959\">A resource pool</p></li><li data-start=\"3960\" data-end=\"3978\"><p data-start=\"3962\" data-end=\"3978\">A bonus to rolls</p></li><li data-start=\"3979\" data-end=\"4005\"><p data-start=\"3981\" data-end=\"4005\">A manifestation list restriction</p></li></ul><p data-start=\"4007\" data-end=\"4057\">It is a <strong data-start=\"4015\" data-end=\"4032\">scope limiter</strong> and <strong data-start=\"4037\" data-end=\"4056\">Pressure filter</strong>.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "activities": {},
+        "identifier": "pactkeeper_jurisdiction_records_precedent",
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pushback": {
+            "track": "pressure",
+            "on": "use",
+            "amount": 3,
+            "_taggedBy": "bbttcc-pressure-tagger",
+            "_ts": 1770862582267
+          }
+        }
+      },
+      "folder": "WEL7mlledpAPLjnP",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "UvRGrhyCUqTgLbJi",
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.UvRGrhyCUqTgLbJi"
+    },
+    {
+      "name": "Pactkeeper: Spend Civic Charge",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_city.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p>Spend <strong>1 Civic Charge</strong> and open the Pactkeeper action dialog.</p><ul><li>Stabilization</li><li>Authority Boost</li><li>Enforcement</li><li>Containment</li><li>Closure</li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"pkSpendCivic\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Spend Civic Charge</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/round (gain) &nbsp;·&nbsp; <strong>Action:</strong> Free (as needed) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Spend 1 Civic Charge Die: roll it and pick one — Stabilization (reduce damage/panic/corruption/fallout by rolled amount) · Authority Boost (+roll to a manifestation DC, contested roll, or enforcement) · Enforcement (force a reroll vs. a Contract or Precedent — target takes worse) · Containment (catastrophic → controlled) · Closure (end an ongoing effect cleanly).</div>\n</div>",
+          "chat": ""
+        },
+        "identifier": "pactkeeper_spend_civic_charge",
+        "advancement": {},
+        "activities": {
+          "primary": {
+            "type": "utility",
+            "name": "Pactkeeper: Spend Civic Charge",
+            "activation": {
+              "type": "bonus",
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "units": "inst",
+              "value": "",
+              "concentration": false,
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "units": "self",
+              "value": "",
+              "override": false
+            },
+            "target": {
+              "affects": {
+                "type": "self",
+                "choice": false
+              },
+              "template": {
+                "count": "",
+                "units": "ft",
+                "type": "",
+                "contiguous": false,
+                "stationary": false
+              },
+              "override": false,
+              "prompt": true
+            },
+            "uses": {
+              "max": "",
+              "spent": 0,
+              "recovery": []
+            },
+            "_id": "rEesNMlQSQ80IsRT",
+            "img": null,
+            "sort": 0,
+            "flags": {},
+            "visibility": {
+              "level": {},
+              "requireAttunement": false,
+              "requireIdentification": false,
+              "requireMagic": false
+            },
+            "roll": {
+              "prompt": false,
+              "visible": false
+            }
+          }
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "pactkeeper_spend_civic_charge",
+          "resourceAction": true,
+          "resourceDisplay": false,
+          "engine": "dicePool",
+          "classId": "pactkeeper",
+          "pool": "civic",
+          "track": "pressure",
+          "cost": 1,
+          "actionKey": "pactkeeper_spend_civic_charge",
+          "opensDialog": "pactkeeper_civic"
+        }
+      },
+      "folder": "WEL7mlledpAPLjnP",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 203125,
+      "_id": "QD9gEnzZ7TJ3jAGk",
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.QD9gEnzZ7TJ3jAGk"
+    },
+    {
+      "name": "Pactkeeper: Administrative Pressure",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quill_web.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Administrative Pressure</strong> measures the bureaucratic and metaphysical strain you generate by making reality hold still.</p>",
+          "chat": ""
+        },
+        "identifier": "pactkeeper_administrative_pressure",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "pactkeeper_administrative_pressure",
+          "resourceAction": false,
+          "resourceDisplay": true,
+          "engine": "track",
+          "classId": "pactkeeper",
+          "track": "pressure"
+        }
+      },
+      "folder": "WEL7mlledpAPLjnP",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 206250,
+      "_id": "bD7vTUG5Blczcc1P",
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.bD7vTUG5Blczcc1P"
+    },
+    {
+      "name": "Pactkeeper: Contract of Binding Precedent",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scroll_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“This happened. It matters. Act accordingly.”</em></p><p>When a significant action succeeds or fails, you may establish a <strong>Precedent</strong> tied to a creature, location, faction, or concept. While active, similar future actions reroll the lowest die if aligned with the precedent, or suffer disadvantage if they violate it. You are not forcing outcomes—you are making contradiction expensive.</p><p><strong>Precedent is probability gravity, not mind control.</strong></p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "activities": {},
+        "identifier": "pactkeeper_contract_binding_precedent",
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {}
+      },
+      "folder": "WEL7mlledpAPLjnP",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 200000,
+      "_id": "KhWkoAUIwmSEYef6",
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.KhWkoAUIwmSEYef6"
+    },
+    {
+      "name": "Pactkeeper: Invoke Precedent",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_punctuation_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“I’m citing case law.”</em></p><p><strong>Administrative Pressure:</strong> −2</p><p>Spend Civic Charge to invoke the record:</p><ul><li><strong>Cite Precedent:</strong> Force a reroll by asserting consistency. If the action violates an established precedent, the reroll takes the worse result.</li><li><strong>Establish Record:</strong> Lock an outcome as official for purposes of consequence and precedent.</li><li><strong>Suppress Contradiction:</strong> Nullify paradox, contradictory magic, or narrative retcons for one moment.</li><li>📑 </li></ul><h1 data-start=\"4064\" data-end=\"4102\">📑 PACTKEEPER FEATURE: <strong data-start=\"4089\" data-end=\"4102\">Precedent</strong></h1><p data-start=\"4104\" data-end=\"4201\"><strong data-start=\"4104\" data-end=\"4113\">Type:</strong> Persistent world state marker<br data-start=\"4143\" data-end=\"4146\" /><strong data-start=\"4146\" data-end=\"4158\">Purpose:</strong> Makes outcomes stick and repetition matter</p><p data-start=\"4203\" data-end=\"4262\">Precedents are <strong data-start=\"4218\" data-end=\"4230\">not dice</strong>. They are <strong data-start=\"4241\" data-end=\"4250\">flags</strong> on reality.</p><hr data-start=\"4264\" data-end=\"4267\" /><h3 data-start=\"4269\" data-end=\"4293\">Creating a Precedent</h3><p data-start=\"4294\" data-end=\"4322\">A Precedent is created when:</p><ul data-start=\"4324\" data-end=\"4495\"><li data-start=\"4324\" data-end=\"4358\"><p data-start=\"4326\" data-end=\"4358\">A major action succeeds or fails</p></li><li data-start=\"4359\" data-end=\"4383\"><p data-start=\"4361\" data-end=\"4383\">A Contract is enforced</p></li><li data-start=\"4384\" data-end=\"4434\"><p data-start=\"4386\" data-end=\"4434\">A significant moral or political line is crossed</p></li><li data-start=\"4435\" data-end=\"4495\"><p data-start=\"4437\" data-end=\"4495\">A Pactkeeper explicitly declares one (Archivist specialty)</p></li></ul><hr data-start=\"4497\" data-end=\"4500\" /><h3 data-start=\"4502\" data-end=\"4527\">What a Precedent Does</h3><p data-start=\"4528\" data-end=\"4561\">While active, a Precedent causes:</p><ul data-start=\"4563\" data-end=\"4737\"><li data-start=\"4563\" data-end=\"4660\"><p data-start=\"4565\" data-end=\"4593\">Repeated similar actions to:</p><ul data-start=\"4596\" data-end=\"4660\"><li data-start=\"4596\" data-end=\"4625\"><p data-start=\"4598\" data-end=\"4625\">Suffer <strong data-start=\"4605\" data-end=\"4621\">disadvantage</strong>, or</p></li><li data-start=\"4628\" data-end=\"4660\"><p data-start=\"4630\" data-end=\"4660\">Trigger automatic consequences</p></li></ul></li><li data-start=\"4661\" data-end=\"4703\"><p data-start=\"4663\" data-end=\"4703\">NPCs and systems to “expect” consistency</p></li><li data-start=\"4704\" data-end=\"4737\"><p data-start=\"4706\" data-end=\"4737\">Reality to resist contradiction</p></li></ul><hr data-start=\"4739\" data-end=\"4742\" /><h3 data-start=\"4744\" data-end=\"4774\">Interacting with Precedent</h3><p data-start=\"4775\" data-end=\"4813\">Pactkeepers may spend Civic Charge to:</p><ul data-start=\"4814\" data-end=\"4920\"><li data-start=\"4814\" data-end=\"4848\"><p data-start=\"4816\" data-end=\"4848\">Cite a Precedent (force rerolls)</p></li><li data-start=\"4849\" data-end=\"4878\"><p data-start=\"4851\" data-end=\"4878\">Lock an outcome as official</p></li><li data-start=\"4879\" data-end=\"4920\"><p data-start=\"4881\" data-end=\"4920\">Suppress contradictory magic or retcons</p></li></ul><p data-start=\"4922\" data-end=\"4965\">Archivists gain expanded control over this.</p><hr data-start=\"4967\" data-end=\"4970\" /><h3 data-start=\"4972\" data-end=\"4994\">Ending a Precedent</h3><p data-start=\"4995\" data-end=\"5017\">A Precedent ends when:</p><ul data-start=\"5018\" data-end=\"5120\"><li data-start=\"5018\" data-end=\"5036\"><p data-start=\"5020\" data-end=\"5036\">It is superseded</p></li><li data-start=\"5037\" data-end=\"5065\"><p data-start=\"5039\" data-end=\"5065\">It is resolved narratively</p></li><li data-start=\"5066\" data-end=\"5090\"><p data-start=\"5068\" data-end=\"5090\">It is formally revoked</p></li><li data-start=\"5091\" data-end=\"5120\"><p data-start=\"5093\" data-end=\"5120\">A Decommissioner retires it</p></li></ul>",
+          "chat": ""
+        },
+        "advancement": {},
+        "activities": {},
+        "identifier": "pactkeeper_invoke_precedent",
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pushback": {
+            "track": "pressure",
+            "on": "use",
+            "amount": -2,
+            "_taggedBy": "bbttcc-pressure-tagger",
+            "_ts": 1770862582012
+          }
+        }
+      },
+      "folder": "WEL7mlledpAPLjnP",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 237500,
+      "_id": "P7Nnqy6ud4cMMQfJ",
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.P7Nnqy6ud4cMMQfJ"
+    },
+    {
+      "name": "Pactkeeper: Initiation 1 — The Bargain",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_hand_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Initiation 1 — The Bargain.</strong> The Pact slot comes online (existing class resource — see your Doctrine for the generation / tier rule). While a creature, object, or place is bargained-with as your Pact subject, you may sustain one additional manifestation on or near them at no extra upkeep against your Clarity.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (passive): Concurrency +1 (informational; surfaced on upkeep cards). Skill rank +1 in two of: Diplomacy, Insight, Intimidation, Lore.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"pkInit1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>The Bargain</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Passive (per pact) &nbsp;·&nbsp; <strong>Action:</strong> — &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">While a creature/object/place is your bargained Pact subject, you may sustain one additional manifestation on or near them at no extra upkeep against your Clarity.</div>\n</div>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "advancement": {},
+        "identifier": "pk_init1_the_bargain",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "Pactkeeper (1st level)",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "WEL7mlledpAPLjnP",
+      "flags": {
+        "fourththing": {
+          "discipline": {
+            "passive": {
+              "concurrencyBonus": 1
+            }
+          }
+        },
+        "bbttcc": {},
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 175000,
+      "_id": "SlxRZfVlFRROcQUK",
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.SlxRZfVlFRROcQUK"
+    },
+    {
+      "name": "Steward: Mutual Aid Network",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_connected_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Godhood as social work.</em></p><p><strong>Effect:</strong> Allies can contribute to your Civic Charge through cooperation. Your healing and stabilization spreads soft buffers across the group (GM adjudication).</p>",
+          "chat": ""
+        },
+        "identifier": "steward_mutual_aid_network",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "steward_mutual_aid_network"
+        }
+      },
+      "folder": "b7c5HgxxTfcVph6r",
+      "sort": 500000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": "Item.afNh3lghE8GIsRbR",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_id": "HNUqWvltGoJAnb4M",
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.HNUqWvltGoJAnb4M"
+    },
+    {
+      "name": "Pactkeeper: Invoke Precedent",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_energy_blast_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p>Spend Civic Charge to <strong>Invoke Precedent</strong>.</p><ul><li>Cite Precedent</li><li>Establish Record</li><li>Suppress Contradiction</li></ul><p>This action should route to the Pactkeeper Precedent dialog and may reduce Administrative Pressure when appropriate.</p>",
+          "chat": ""
+        },
+        "identifier": "pactkeeper_invoke_precedent_action",
+        "advancement": {},
+        "activities": {
+          "primary": {
+            "type": "utility",
+            "name": "Pactkeeper: Invoke Precedent",
+            "activation": {
+              "type": "action",
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "units": "inst",
+              "value": "",
+              "concentration": false,
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "units": "self",
+              "value": "",
+              "override": false
+            },
+            "target": {
+              "affects": {
+                "type": "self",
+                "choice": false
+              },
+              "template": {
+                "count": "",
+                "units": "ft",
+                "type": "",
+                "contiguous": false,
+                "stationary": false
+              },
+              "override": false,
+              "prompt": true
+            },
+            "uses": {
+              "max": "",
+              "spent": 0,
+              "recovery": []
+            },
+            "_id": "PCmCS03me608tKNn",
+            "img": null,
+            "sort": 0,
+            "flags": {},
+            "visibility": {
+              "level": {},
+              "requireAttunement": false,
+              "requireIdentification": false,
+              "requireMagic": false
+            },
+            "roll": {
+              "prompt": false,
+              "visible": false
+            }
+          }
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "pactkeeper_invoke_precedent_action",
+          "resourceAction": true,
+          "resourceDisplay": false,
+          "engine": "dicePool",
+          "classId": "pactkeeper",
+          "pool": "civic",
+          "track": "pressure",
+          "cost": 1,
+          "actionKey": "pactkeeper_invoke_precedent_action",
+          "opensDialog": "pactkeeper_precedent"
+        }
+      },
+      "folder": "WEL7mlledpAPLjnP",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 212500,
+      "_id": "FHP1R9gp6FNCDUGs",
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.FHP1R9gp6FNCDUGs"
+    },
+    {
+      "name": "Pactkeeper: Core Features",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_10.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“Godhood is community service. I’m here to keep the lights on.”</em></p><p><strong>Manifesting (Delegated):</strong> You are a full prepared caster. Your manifesting is routed through stabilized civic thoughtforms (tulpas), retired gods, and the Long Quiet—reducing volatility and preventing raw backlash.</p><p><strong>Civic Charge:</strong> You maintain a pool of Civic Charge used to cite precedent, stabilize outcomes, and enforce contracts. Your subclass and Jurisdiction determine how you gain and spend it.</p><p><strong>Delegated Channeling:</strong> When you cast a manifestation, you treat esoteric misalignment as <em>neutral</em> (no penalty). When you cast in alignment with your Jurisdiction, you convert alignment into <strong>resources</strong> rather than raw power.</p><h1 data-start=\"716\" data-end=\"748\">🟣 PACTKEEPER — CORE MECHANICS</h1><h2 data-start=\"750\" data-end=\"788\">🗂 CLASS RESOURCE: <strong data-start=\"772\" data-end=\"788\">Civic Charge</strong></h2><p data-start=\"790\" data-end=\"918\"><strong data-start=\"790\" data-end=\"799\">Type:</strong> Dice-based resource pool<br data-start=\"824\" data-end=\"827\" /><strong data-start=\"827\" data-end=\"839\">Purpose:</strong> Represents institutional authority, social mandate, and metaphysical clearance</p><h3 data-start=\"920\" data-end=\"941\">Civic Charge Dice</h3><ul data-start=\"942\" data-end=\"1111\"><li data-start=\"942\" data-end=\"959\"><p data-start=\"944\" data-end=\"959\">Start as <strong data-start=\"953\" data-end=\"959\">d6</strong></p></li><li data-start=\"960\" data-end=\"1041\"><p data-start=\"962\" data-end=\"974\">Increase at:</p><ul data-start=\"977\" data-end=\"1041\"><li data-start=\"977\" data-end=\"995\"><p data-start=\"979\" data-end=\"995\">Level 5 → <strong data-start=\"989\" data-end=\"995\">d8</strong></p></li><li data-start=\"998\" data-end=\"1018\"><p data-start=\"1000\" data-end=\"1018\">Level 11 → <strong data-start=\"1011\" data-end=\"1018\">d10</strong></p></li><li data-start=\"1021\" data-end=\"1041\"><p data-start=\"1023\" data-end=\"1041\">Level 17 → <strong data-start=\"1034\" data-end=\"1041\">d12</strong></p></li></ul></li><li data-start=\"1042\" data-end=\"1111\"><p data-start=\"1044\" data-end=\"1111\"><strong data-start=\"1044\" data-end=\"1068\">Maximum stored dice:</strong><br data-start=\"1068\" data-end=\"1071\" />= your <strong data-start=\"1080\" data-end=\"1099\">Soul modifier</strong> (minimum 1)</p></li></ul><p data-start=\"1113\" data-end=\"1161\">You cannot store Civic Charge beyond this limit.</p><hr data-start=\"1163\" data-end=\"1166\" /><h3 data-start=\"1168\" data-end=\"1192\">Gaining Civic Charge</h3><p data-start=\"1193\" data-end=\"1266\">You gain <strong data-start=\"1202\" data-end=\"1224\">1 Civic Charge Die</strong> when <strong data-start=\"1230\" data-end=\"1241\">any one</strong> of the following occurs:</p><ul data-start=\"1268\" data-end=\"1625\"><li data-start=\"1268\" data-end=\"1370\"><p data-start=\"1270\" data-end=\"1370\">You successfully stabilize a volatile situation<br data-start=\"1317\" data-end=\"1320\" />(panic, corruption, escalation, social collapse)</p></li><li data-start=\"1371\" data-end=\"1427\"><p data-start=\"1373\" data-end=\"1427\">You resolve a conflict <strong data-start=\"1396\" data-end=\"1427\">without increasing Violence</strong></p></li><li data-start=\"1428\" data-end=\"1481\"><p data-start=\"1430\" data-end=\"1481\">You enforce a binding <strong data-start=\"1452\" data-end=\"1464\">Contract</strong> or <strong data-start=\"1468\" data-end=\"1481\">Precedent</strong></p></li><li data-start=\"1482\" data-end=\"1546\"><p data-start=\"1484\" data-end=\"1546\">You complete a meaningful ritual, mediation, or closure action</p></li><li data-start=\"1547\" data-end=\"1625\"><p data-start=\"1549\" data-end=\"1625\">You cast a manifestation in <strong data-start=\"1569\" data-end=\"1591\">esoteric alignment</strong> (correct correspondence / timing)</p></li></ul><p data-start=\"1627\" data-end=\"1691\"><strong data-start=\"1627\" data-end=\"1637\">Limit:</strong><br data-start=\"1637\" data-end=\"1640\" />You may gain <strong data-start=\"1653\" data-end=\"1690\">only 1 Civic Charge Die per round</strong>.</p><hr data-start=\"1693\" data-end=\"1696\" /><h3 data-start=\"1698\" data-end=\"1723\">Spending Civic Charge</h3><p data-start=\"1724\" data-end=\"1816\">When you spend a Civic Charge Die, <strong data-start=\"1759\" data-end=\"1770\">roll it</strong> and apply the result as one of the following:</p><ul data-start=\"1818\" data-end=\"2247\"><li data-start=\"1818\" data-end=\"1913\"><p data-start=\"1820\" data-end=\"1913\"><strong data-start=\"1820\" data-end=\"1838\">Stabilization:</strong> Reduce incoming damage, panic, corruption, or fallout by the rolled amount</p></li><li data-start=\"1914\" data-end=\"2009\"><p data-start=\"1916\" data-end=\"2009\"><strong data-start=\"1916\" data-end=\"1936\">Authority Boost:</strong> Add the rolled value to a manifestation DC, contested roll, or enforcement check</p></li><li data-start=\"2010\" data-end=\"2107\"><p data-start=\"2012\" data-end=\"2107\"><strong data-start=\"2012\" data-end=\"2028\">Enforcement:</strong> Force a reroll against a Contract or Precedent (target takes the worse result)</p></li><li data-start=\"2108\" data-end=\"2179\"><p data-start=\"2110\" data-end=\"2179\"><strong data-start=\"2110\" data-end=\"2126\">Containment:</strong> Convert a catastrophic outcome into a controlled one</p></li><li data-start=\"2180\" data-end=\"2247\"><p data-start=\"2182\" data-end=\"2247\"><strong data-start=\"2182\" data-end=\"2194\">Closure:</strong> End an ongoing effect cleanly instead of explosively</p></li></ul><p data-start=\"2249\" data-end=\"2275\">Each use consumes the die.</p><hr data-start=\"2277\" data-end=\"2280\" /><h3 data-start=\"2282\" data-end=\"2313\">Running Out of Civic Charge</h3><p data-start=\"2314\" data-end=\"2350\">If you have <strong data-start=\"2326\" data-end=\"2349\">0 Civic Charge Dice</strong>:</p><ul data-start=\"2351\" data-end=\"2503\"><li data-start=\"2351\" data-end=\"2395\"><p data-start=\"2353\" data-end=\"2395\">You may still cast manifestations and use features</p></li><li data-start=\"2396\" data-end=\"2503\"><p data-start=\"2398\" data-end=\"2417\">But you <strong data-start=\"2406\" data-end=\"2416\">cannot</strong>:</p><ul data-start=\"2420\" data-end=\"2503\"><li data-start=\"2420\" data-end=\"2439\"><p data-start=\"2422\" data-end=\"2439\">Enforce contracts</p></li><li data-start=\"2442\" data-end=\"2462\"><p data-start=\"2444\" data-end=\"2462\">Prevent escalation</p></li><li data-start=\"2465\" data-end=\"2503\"><p data-start=\"2467\" data-end=\"2503\">Convert failures into clean outcomes</p></li></ul></li></ul><p data-start=\"2505\" data-end=\"2568\">You are now acting <strong data-start=\"2524\" data-end=\"2543\">without mandate</strong>, which invites pushback.</p><hr data-start=\"2570\" data-end=\"2573\" /><h2 data-start=\"2575\" data-end=\"2624\">⚖ PUSHBACK SYSTEM: <strong data-start=\"2597\" data-end=\"2624\">Administrative Pressure</strong></h2><p data-start=\"2626\" data-end=\"2712\">Pactkeepers do <strong data-start=\"2641\" data-end=\"2648\">not</strong> suffer backlash.<br data-start=\"2665\" data-end=\"2668\" />They accumulate <strong data-start=\"2684\" data-end=\"2711\">Administrative Pressure</strong>.</p><h3 data-start=\"2714\" data-end=\"2741\">You gain Pressure when:</h3><ul data-start=\"2742\" data-end=\"2880\"><li data-start=\"2742\" data-end=\"2777\"><p data-start=\"2744\" data-end=\"2777\">You act outside your Jurisdiction</p></li><li data-start=\"2778\" data-end=\"2810\"><p data-start=\"2780\" data-end=\"2810\">You override community consent</p></li><li data-start=\"2811\" data-end=\"2842\"><p data-start=\"2813\" data-end=\"2842\">You force outcomes repeatedly</p></li><li data-start=\"2843\" data-end=\"2880\"><p data-start=\"2845\" data-end=\"2880\">You ignore due process or precedent</p></li></ul><h3 data-start=\"2882\" data-end=\"2923\">Effects of Pressure (GM-facing bands)</h3><ul data-start=\"2924\" data-end=\"3111\"><li data-start=\"2924\" data-end=\"2977\"><p data-start=\"2926\" data-end=\"2977\"><strong data-start=\"2926\" data-end=\"2934\">Low:</strong> NPCs question authority, cooperation drops</p></li><li data-start=\"2978\" data-end=\"3038\"><p data-start=\"2980\" data-end=\"3038\"><strong data-start=\"2980\" data-end=\"2993\">Moderate:</strong> Enforcement costs increase, resistance grows</p></li><li data-start=\"3039\" data-end=\"3111\"><p data-start=\"3041\" data-end=\"3111\"><strong data-start=\"3041\" data-end=\"3050\">High:</strong> Mandates contested, Auditors intervene, Jurisdiction narrows</p></li></ul><hr /><h3>Pressure Points</h3><p><strong>Administrative Pressure</strong> is tracked as <strong>points</strong>, not just bands.</p><ul><li><strong>Low:</strong> 1–2 Pressure</li><li><strong>Moderate:</strong> 3–5 Pressure</li><li><strong>High:</strong> 6+ Pressure</li></ul><p>Pressure is still narrative, but these thresholds provide a visible meter for play.</p><h3 data-start=\"3113\" data-end=\"3134\">Clearing Pressure</h3><ul data-start=\"3135\" data-end=\"3249\"><li data-start=\"3135\" data-end=\"3145\"><p data-start=\"3137\" data-end=\"3145\">Downtime</p></li><li data-start=\"3146\" data-end=\"3162\"><p data-start=\"3148\" data-end=\"3162\">Proper closure</p></li><li data-start=\"3163\" data-end=\"3192\"><p data-start=\"3165\" data-end=\"3192\">Delegation to other systems</p></li><li data-start=\"3193\" data-end=\"3249\"><p data-start=\"3195\" data-end=\"3249\">Subclass features (Steward, Decommissioner especially)</p></li></ul><p data-start=\"3251\" data-end=\"3293\">Pressure is narrative, but <strong data-start=\"3278\" data-end=\"3292\">persistent</strong>.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "activities": {},
+        "identifier": "pactkeeper_core_features",
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {}
+      },
+      "folder": "WEL7mlledpAPLjnP",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 150000,
+      "_id": "6PsHU6zkTEYp0dtw",
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.6PsHU6zkTEYp0dtw"
+    },
+    {
+      "name": "Pactkeeper: Civic Charge",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_city_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Civic Charge</strong> is permission, credibility, and stabilizing authority made spendable. This is your display item for current Civic Charge and Administrative Pressure on the Features tab.</p>",
+          "chat": ""
+        },
+        "identifier": "pactkeeper_civic_charge",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "pactkeeper_civic_charge",
+          "resourceAction": false,
+          "resourceDisplay": true,
+          "engine": "dicePool",
+          "classId": "pactkeeper",
+          "pool": "civic",
+          "track": "pressure"
+        }
+      },
+      "folder": "WEL7mlledpAPLjnP",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 225000,
+      "_id": "9ETRRwDdbKmnG1Mz",
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.9ETRRwDdbKmnG1Mz"
+    },
+    {
+      "name": "Calm the Mob",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_cal%2C_the_mob.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Feats Expansion v1 (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><h2>Calm the Mob</h2><p><em>Crowds don’t think. They feel. So you give them something else to feel.</em></p><hr><h3>Rules</h3><p>You gain a skill rank in Diplomacy (Presence) or Intimidation (Presence) (your choice). If you already have it, you gain mastery.</p><p>When you spend at least 1 minute addressing a group of non-hostile or uncertain creatures, you may make a Presence (Diplomacy (Presence) or Intimidation (Presence)) check (DC set by the GM). On a success, you reduce immediate hostility: the crowd hesitates, disperses, or agrees to hear terms. On a failure, you still buy time, but a complication occurs (a challenger steps forward, guards arrive, a rumor spreads).</p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_calm_the_mob",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-expansion-v1",
+          "generatedAt": "2026-01-18T20:40:45.007126+00:00"
+        }
+      },
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 4900000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_id": "cwHD7kh3F88Lvay4",
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.cwHD7kh3F88Lvay4"
+    },
+    {
+      "name": "Steward: Community Contract",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_decomm_book_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p data-start=\"1662\" data-end=\"1675\"><em data-start=\"1662\" data-end=\"1675\">(3rd Level)</em></p><p data-start=\"1677\" data-end=\"1712\"><strong data-start=\"1677\" data-end=\"1690\">Contract:</strong> <em data-start=\"1691\" data-end=\"1712\">No One Left Behind.</em></p><p data-start=\"1714\" data-end=\"1763\">Once per scene, when an ally would fall, you may:</p><ul data-start=\"1765\" data-end=\"1874\"><li data-start=\"1765\" data-end=\"1798\"><p data-start=\"1767\" data-end=\"1798\">Redirect some harm to yourself,</p></li><li data-start=\"1799\" data-end=\"1828\"><p data-start=\"1801\" data-end=\"1828\">Stabilize them immediately,</p></li><li data-start=\"1829\" data-end=\"1874\"><p data-start=\"1831\" data-end=\"1874\">Grant protected withdrawal without pursuit.</p></li></ul><p data-start=\"1876\" data-end=\"1921\">This is not dominance.<br data-start=\"1898\" data-end=\"1901\" />It is shared burden.</p><h3 data-start=\"1923\" data-end=\"1931\">Cost</h3><p data-start=\"1932\" data-end=\"2013\">Spend 1 Civic Charge die to amplify (increase stabilization or protection value).</p><h3 data-start=\"2015\" data-end=\"2027\">Pushback</h3><p data-start=\"2028\" data-end=\"2093\">Repeated magical rescues may reduce community autonomy over time.</p>",
+          "chat": ""
+        },
+        "identifier": "steward_community_contract",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 3
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "steward_community_contract"
+        }
+      },
+      "folder": "b7c5HgxxTfcVph6r",
+      "sort": 400000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": "Item.dgqDUEXa6MmdSYmO",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_id": "VjZH6874syEkLtYI",
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.VjZH6874syEkLtYI"
+    },
+    {
+      "_id": "2pgfk3ErLIRXivau",
+      "name": "Keeper",
+      "type": "class",
+      "img": "icons/svg/temple.svg",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-keeper",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "keeper",
+          "soul"
+        ],
+        "description": {
+          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling — the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "faculty": "soul",
+            "signature": "faith",
+            "secondary": "insight",
+            "pool": "Soft Power",
+            "awakens": "Pactkeeper or Dreamwalker"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.2pgfk3ErLIRXivau"
+    },
+    {
+      "_id": "5zz0Oy6F4VyUYvtM",
+      "name": "Keeper — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/svg/temple.svg",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "keeper",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Keeper — Apprentice</strong> (Tier I).</p><p><strong>Trade — The rites:</strong> Weddings, funerals, blessings; participants recover 2×tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick — Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 601000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!I0Gieq4FAol5mklQ.5zz0Oy6F4VyUYvtM"
+    }
+  ],
+  "effects": [
+    {
+      "name": "Bad Eden: Awakening",
+      "img": "icons/magic/perception/eye-ringed-glow-angry-red.webp",
+      "origin": "Actor.I0Gieq4FAol5mklQ",
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "enlightenment": true,
+          "level": "awakening"
+        },
+        "bbttcc": {
+          "enlightenment": {
+            "aura": false
+          }
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.bonuses.abilities.save",
+            "value": "+1",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "KsCWByO5YYXdRhzN",
+      "type": "base",
+      "start": {
+        "time": 0,
+        "combat": "QA0W2dp4ktbV6dBx",
+        "combatant": "tA2vckTuBiKKCfz4",
+        "initiative": 25,
+        "round": 3,
+        "turn": 0
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885514,
+        "modifiedTime": 1784177885514,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.effects!I0Gieq4FAol5mklQ.KsCWByO5YYXdRhzN"
+    }
+  ],
+  "folder": "CI9EJz4qle0pugEK",
+  "sort": 150000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177885514,
+    "modifiedTime": 1784177885514,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!I0Gieq4FAol5mklQ"
+}

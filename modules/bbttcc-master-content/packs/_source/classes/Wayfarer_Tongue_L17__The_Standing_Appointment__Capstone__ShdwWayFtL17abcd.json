@@ -1,0 +1,77 @@
+{
+  "name": "Wayfarer Tongue L17: The Standing Appointment (Capstone)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_checkmark.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>You always have a Message. The world keeps a slot warm for you.</em></p><p>If at any time your Package slot is empty, the GM <strong>designates a Message</strong> that the world structurally needs delivered: a truth that is under-distributed, an apology a decade overdue, a name that must be said in a specific place, a treaty that must be witnessed by a specific person. The GM tells you the destination.</p><p>You are not obligated to carry it. Carrying it is a Message like any other — Protected Word (L9) applies, Reply With Interest (L13) applies, the L1 delivery refill applies, Package Mastery (Class Tier 3) applies.</p><p><strong>On delivery of a Standing Appointment Message:</strong></p><ul><li><p><strong>Darkness in the recipient's hex is reduced by 2 points</strong> (in addition to any other reductions).</p></li><li><p>The faction the recipient belongs to gains <strong>2 Tikkun progress</strong> toward their next stage.</p></li></ul>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "shadow_courier_wayfarer_l17_standing_appointment",
+    "requirements": "Route of the Wayfarer Tongue, Shadow Courier Initiation 17",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "shadow_courier",
+      "subclassIdentifier": "bbttcc-shadow-courier-courier-wayfarer-tongue",
+      "subclassLevel": 17,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true,
+      "capstone": true
+    },
+    "fourththing": {
+      "grants": {},
+      "triggers": [
+        {
+          "event": "on-delivery",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "On delivery of a Standing Appointment Message: Darkness in the recipient's hex is reduced by 2 points (in addition to any other reductions)"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "W1e3ZXUelQ4D70io",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777005233967,
+    "modifiedTime": 1781116157342,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ShdwWayFtL17abcd",
+  "sort": 600000,
+  "_key": "!items!ShdwWayFtL17abcd"
+}

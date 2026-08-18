@@ -1,0 +1,57 @@
+{
+  "name": "Resonance Mark",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sigil_1.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "seed-bestiary-attacks",
+      "tier-iii",
+      "role-caster"
+    ],
+    "description": {
+      "value": "<p><strong>Passive.</strong> The first creature to deal qliphothic, sephirotic, or psychic damage to the adept becomes Resonance-Marked for the rest of the scene: they take +1 damage from all of the adept's attacks. The mark is one-way; the marked creature gets no equivalent against the adept.</p><p><em>The channel remembers who hit it first. It is small. It is patient.</em></p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "frame": "feature"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Yesodium Cultist Adept"
+        ],
+        "worlds": [
+          "foundry"
+        ]
+      }
+    }
+  },
+  "sort": 0,
+  "_id": "qVHvOCAUXI6crzVV",
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": null,
+    "modifiedTime": null,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!qVHvOCAUXI6crzVV"
+}

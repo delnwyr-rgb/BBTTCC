@@ -1,0 +1,76 @@
+{
+  "name": "Sephirotic Intervention",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_sephirotic_intervention.jpeg",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p>The structure of everything leans in and quietly says, <em>yeah — this one's yours.</em> Doesn't happen often, stewards. Savor it.</p><p><b>Auto-win one opposed roll; Darkness −1.</b></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "sephirotic-intervention",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "sephirotic_intervention",
+      "meta": {
+        "tier": 4,
+        "rarity": "legendary",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "universal",
+        "raidTypes": [
+          "any"
+        ]
+      }
+    }
+  },
+  "_id": "zrbCT4XQx9AwOp03",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 500000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1771977107845,
+    "modifiedTime": 1779731340832,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS"
+  },
+  "_key": "!items!zrbCT4XQx9AwOp03"
+}

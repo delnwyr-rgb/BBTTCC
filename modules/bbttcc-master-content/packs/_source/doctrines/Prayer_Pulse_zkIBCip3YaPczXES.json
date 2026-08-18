@@ -1,0 +1,63 @@
+{
+  "name": "Prayer Pulse",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>The faithful all hit the same note at once and the dark actually FLINCHES. I felt that one somewhere in my circuits.</p><p><b>On Success: faction morale +2, Darkness −1; allies gain Prayer's Grace and the scene pulses gold.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "prayer_pulse",
+      "meta": {
+        "tier": 3,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "universal",
+        "layer": "cross-layer",
+        "costBand": "medium",
+        "raidTypes": [
+          "any"
+        ],
+        "fireMode": "post-commit",
+        "opCosts": {
+          "faith": 4,
+          "softpower": 2
+        },
+        "authoredSprint": 2
+      },
+      "effects": {
+        "text": "On success: faction morale +2, darkness −1. Scene-bound: 'Prayer's Grace' on allies + gold pulse VFX."
+      }
+    }
+  },
+  "_id": "zkIBCip3YaPczXES",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 100098,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778964846637,
+    "modifiedTime": 1780163528135,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!zkIBCip3YaPczXES"
+}

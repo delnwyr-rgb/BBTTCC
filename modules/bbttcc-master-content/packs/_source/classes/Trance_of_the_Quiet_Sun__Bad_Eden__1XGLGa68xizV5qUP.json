@@ -1,0 +1,49 @@
+{
+  "name": "Trance of the Quiet Sun (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sun_1.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "dreamwalker",
+    "source": {
+      "custom": "Bad Eden Originals — Sprint F",
+      "revision": 1,
+      "rules": "2026"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"Stillness is the loudest thing.\"</em></p>\n<p><strong>Mode:</strong> Contemplative · <strong>Drift:</strong> Away</p>\n<p>The Quiet Sun is the dreamer who stops the room by going still. Your Surge spends turn perception and patience into mechanics — seeing clearly, refusing a death, and forcing a beat of peace into a fight that didn't ask for one.</p>\n<h3>Trance (spent via Surge)</h3>\n<ul>\n  <li><strong>Still Attention</strong> (1) — you and allies within 6 squares bank a reroll-lowest.</li>\n  <li><strong>Somnolent Peace</strong> (2) — the next lethal blow against an ally drops them to 1 Integrity (unconscious), not dead.</li>\n  <li><strong>Radiant Pause</strong> (3) — nearby enemies are Calmed: a contemplative beat where violence stalls.</li>\n</ul>\n<p><em>Out-of-combat:</em> The Revelation (ask the GM one true thing), The Unhurried Word, and the Sun-That-Does-Not-Set capstone (no lie holds in your presence) remain the oracle's quiet powers.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-dreamwalker-quiet-sun",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "11soLvLsTohdUQFT",
+  "flags": {
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "1XGLGa68xizV5qUP",
+  "sort": 500000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.364",
+    "createdTime": 1776459469161,
+    "modifiedTime": 1782167240797,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.1",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!1XGLGa68xizV5qUP"
+}

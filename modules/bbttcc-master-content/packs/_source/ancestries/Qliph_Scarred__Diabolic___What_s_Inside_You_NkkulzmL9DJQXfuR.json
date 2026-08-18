@@ -1,0 +1,252 @@
+{
+  "name": "Qliph-Scarred (Diabolic): What’s Inside You",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_lightning.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-canon-qliph-scarred=\"v1\" style=\"display:none\"></div><p><em>\"It wasn't your voice. It was a voice you agreed to share.\"</em></p><p><strong>What's Inside You (1/Soma Break).</strong> Action — let the splinter speak. Choose one humanoid you can see within 6 squares who can hear and understand a language you know. They make a Soul check vs. your Resolve.</p><p><strong>Failure:</strong> they are <strong>Calmed</strong> by you for 1 minute, or until they take damage or witness you attack them or someone they consider an ally.</p><p><strong>Success:</strong> they know someone else briefly spoke through your mouth and can describe it to others — they are probably going to tell their friends.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"qliphDiabolicWhatsInside\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>What's Inside You</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Action (6 squares target)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">One humanoid in 6 squares makes Soul check vs your Resolve. Fail → Calmed by you for 1 min (or until damaged / witnesses you attack). Success → they know it happened and may talk.</span></p></div>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "qliph_scarred_diabolic_tier1",
+    "requirements": "Qliph-Scarred (Diabolic)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll",
+          "formula": ""
+        }
+      ],
+      "max": "1"
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "qliph_scarred",
+      "feature": "what’s_inside_you",
+      "lineage": "Diabolic",
+      "tierLevel": 1,
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {},
+    "autoanimations": {
+      "id": "68ae862e-7d83-47d2-8dec-6ed79942bb21",
+      "label": "Qliph-Scarred (Diabolic): What’s Inside You",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "conditions",
+          "animation": "fear",
+          "variant": "02",
+          "color": "darkpurple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "28DugmQDnUc8htEy",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.NkkulzmL9DJQXfuR",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776660294576,
+    "modifiedTime": 1782167240124,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "NkkulzmL9DJQXfuR",
+  "sort": 0,
+  "_key": "!items!NkkulzmL9DJQXfuR"
+}

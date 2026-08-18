@@ -1,0 +1,81 @@
+{
+  "name": "Black Stair L1: The Crossing, Weaponized",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_knife_2.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>A locked door is a suggestion.</em></p><p><strong>Mode: Thief / drift: Toward.</strong></p><p>Your default Package type is either a <strong>Blade</strong> or a <strong>Key</strong>. Declare which you are carrying at the start of each scene; you may switch on a Soma Break.</p><ul><li><p><strong>Blade.</strong> A single opportunistic strike, deployable once. While carrying a Blade, your <strong>first attack from concealment or surprise</strong> in the scene deals an extra <strong>+1d10x10 kinetic damage</strong> with <strong>damageFlavor: blade</strong>. The damage explodes on 10s and banks Surge as normal. Using the strike consumes the Blade.</p></li><li><p><strong>Key.</strong> A single-use access bypass. While carrying a Key, you may bypass <strong>one non-magical lock, ward, or password challenge</strong> without rolling, once per scene. Using the Key consumes it.</p></li></ul><p><strong>On delivery</strong> (resolving the Blade strike on its intended target, or using the Key on its intended barrier): no Pace refill from this base feature — see Class Tier 3 Package Mastery for the Black Stair delivery bonus.</p><p>You may designate a new Package on your next Soma Break or on entering a new scene if your slot is empty.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "shadow_courier_blackstair_l1_crossing_weaponized",
+    "requirements": "Route of the Black Stair, Shadow Courier Initiation 1",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "shadow_courier",
+      "subclassIdentifier": "bbttcc-shadow-courier-courier-black-stair",
+      "subclassLevel": 1,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true,
+      "defaultPackageType": "blade-or-key"
+    },
+    "fourththing": {
+      "grants": {},
+      "triggers": [
+        {
+          "event": "on-delivery",
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Using the Key consumes it. On delivery (resolving the Blade strike on its intended target, or using the Key on its intended barrier): no Pace refill from this base f..."
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "eQl1GnJxLhG4BD19",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777005233904,
+    "modifiedTime": 1781116150678,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ShdwBlkFtL01abcd",
+  "sort": 100000,
+  "_key": "!items!ShdwBlkFtL01abcd"
+}

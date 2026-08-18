@@ -1,0 +1,72 @@
+{
+  "_id": "Fk2oPWk2GDeDEVls",
+  "name": "Auditor: Compliance Action",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_checkmark.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"1567\" data-end=\"1580\"><em data-start=\"1567\" data-end=\"1580\">(3rd Level)</em></p><p><strong>Administrative Pressure:</strong> +1</p><p data-start=\"1582\" data-end=\"1697\">Once per scene, when an <strong data-start=\"1606\" data-end=\"1627\">Out of Compliance</strong> target violates a binding contract or established precedent, you may:</p><ul data-start=\"1699\" data-end=\"1788\"><li data-start=\"1699\" data-end=\"1749\"><p data-start=\"1701\" data-end=\"1749\">Force a reroll (taking the worse result), <strong data-start=\"1743\" data-end=\"1749\">or</strong></p></li><li data-start=\"1750\" data-end=\"1788\"><p data-start=\"1752\" data-end=\"1788\">Cause the target to lose its action.</p></li></ul><p data-start=\"1790\" data-end=\"1839\">This represents procedural enforcement—not anger.</p><h3 data-start=\"1841\" data-end=\"1849\">Cost</h3><p data-start=\"1850\" data-end=\"1865\">Free (1/scene).</p><h3 data-start=\"1867\" data-end=\"1881\">Escalation</h3><p data-start=\"1882\" data-end=\"2006\">If paired with a Civic Charge spend, the action loss cannot be mitigated by legendary or divine resistance (GM adjudicated).</p><h3 data-start=\"2008\" data-end=\"2020\">Pushback</h3><p data-start=\"2021\" data-end=\"2070\">Repeated public enforcement increases visibility.</p>",
+      "chat": ""
+    },
+    "identifier": "auditor_compliance_action",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "auditor_compliance_action",
+      "pushback": {
+        "track": "pressure",
+        "on": "use",
+        "amount": 1,
+        "_taggedBy": "bbttcc-pressure-tagger",
+        "_ts": 1770862582670
+      }
+    }
+  },
+  "folder": "Z0Kl38HLbgyB7iFl",
+  "sort": 200000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.Fk2oPWk2GDeDEVls",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776481562684,
+    "modifiedTime": 1781116131510,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!Fk2oPWk2GDeDEVls"
+}

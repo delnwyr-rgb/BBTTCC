@@ -1,0 +1,96 @@
+{
+  "name": "Cassock of Quiet Hours",
+  "type": "armor",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "guardBonus": 1,
+    "evasionBonus": 1,
+    "resolveBonus": 3,
+    "resistances": [
+      "psychic"
+    ],
+    "armorSkill": "warding",
+    "equipped": false,
+    "tags": [
+      "warding",
+      "vestment",
+      "sept",
+      "vigil"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A heavy sept-cassock cut for the ones who sit the night vigils — quilted, hooded, stitched with a calming refrain in a thread you can only read by touch. The mind stays the bearer's own through the long dark.</p><p><strong>Quiet Hours.</strong> Resists psychic. The refrain holds the bearer's thoughts to their own shape.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Defense:</strong> Guard +1, Evasion +1, Resolve +3</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Psychic</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 225 Nonlethal marks</p></li></ul>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Worn by those who keep the late watch.",
+          "origin": "given",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A heavy sept-cassock cut for the ones who sit the night vigils — quilted, hooded, stitched with a calming refrain in a thread you can only read by touch. The mind stays the bearer's own through the long dark.</p><p><b>Quiet Hours.</b> Resists psychic. The refrain holds the bearer's thoughts to their own shape.</p>",
+          "materialOf": [
+            "sept-cloth",
+            "calming-thread",
+            "vigil-resin"
+          ],
+          "price": {
+            "marks": 225,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII armor × 1.50",
+            "bound": "free",
+            "saleBack": 90
+          }
+        }
+      },
+      "grants": {
+        "resistances": [
+          {
+            "type": "psychic"
+          }
+        ]
+      }
+    }
+  },
+  "folder": "gD1WklJiuS6Vg2p3",
+  "_id": "M167SdRgzKbqo91d",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782150391699,
+    "modifiedTime": 1784518730565,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!M167SdRgzKbqo91d"
+}

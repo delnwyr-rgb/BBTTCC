@@ -1,0 +1,121 @@
+{
+  "name": "War Tower Teeth Halo",
+  "type": "equipment",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_war_tower_teeth_halo.jpeg",
+  "system": {
+    "description": {
+      "value": "<p>Vehicle upgrade: reactive radiant bite (2d8) vs attackers; stacks with sanctum shields.</p>",
+      "chat": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 30,
+      "units": "lb"
+    },
+    "price": {
+      "value": 7000,
+      "denomination": "gp"
+    },
+    "rarity": "veryRare",
+    "attunement": "",
+    "identified": true,
+    "type": {
+      "value": "trinket",
+      "baseItem": ""
+    },
+    "equipped": false,
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "war-tower-teeth-halo",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "attuned": false,
+    "crewed": false,
+    "armor": {
+      "value": null,
+      "dex": null
+    },
+    "proficient": null,
+    "properties": [],
+    "strength": null
+  },
+  "flags": {
+    "bbttcc": {
+      "tags": []
+    },
+    "rfi": {
+      "item": {
+        "tier": "II",
+        "footprint": 1,
+        "reach": "self",
+        "frame": "armor",
+        "signature": "",
+        "origin": "looted",
+        "originator": null,
+        "bound": "free",
+        "upkeep": {
+          "mode": "passive",
+          "per": "scene"
+        },
+        "misfire": {
+          "tierClamp": true,
+          "table": null
+        },
+        "signals": {}
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          },
+          "tier": "II",
+          "frame": "armor",
+          "origin": "looted",
+          "bound": "free",
+          "reach": "self",
+          "footprint": 1
+        }
+      }
+    }
+  },
+  "effects": [],
+  "folder": "TNrB6kEiHS0KwwJT",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1767834211942,
+    "modifiedTime": 1782159994982,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "HNDyhtTOQhhrt2xE",
+  "sort": 2500000,
+  "_key": "!items!HNDyhtTOQhhrt2xE"
+}

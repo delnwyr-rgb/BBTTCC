@@ -1,0 +1,65 @@
+{
+  "name": "Mountain L13: Grave Weight",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_ghostly_runner_2.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>Your body has mass that is not strictly physical.</em></p><p>Three constant effects:</p><ul><li><p><strong>Ranged attacks against you</strong> roll <strong>3d10 keep lowest 2</strong> instead of the standard 2d10x10 attack pool (no Surge banking on dropped dice).</p></li><li><p><strong>Manifestations and effects that require you to move</strong> in order to resolve (forced-charge compulsions, spatial-displacement triggers, ritual circles dependent on your motion) <strong>fail outright</strong>. The caster's expenditure is consumed.</p></li><li><p><strong>Area-of-effect damage</strong> that allows a defense check is reduced by <strong>your Bulwark Initiation</strong> in points <em>even on a failed check</em>, before resistances apply.</p></li></ul><p><strong>Slow approach.</strong> A creature attempting to advance toward you across open ground (≥ 6 squares of unobstructed path) must succeed on a <strong>Soul defense check vs DC 15 + your Initiation tier</strong>. On a failure, the creature uses its entire turn to advance only its normal Move distance — it cannot Dash, charge, or take additional movement actions that turn.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "bulwark_mountain_l13_grave_weight",
+    "requirements": "Path of the Mountain, Bulwark Initiation 13",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 13
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "bulwark",
+      "subclassIdentifier": "bbttcc-bulwark-mountain",
+      "subclassLevel": 13,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {}
+    }
+  },
+  "folder": "By8SiTcVi3AfmZUU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777004381002,
+    "modifiedTime": 1782167240811,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BlwkMtnFtL13abcd",
+  "sort": 0,
+  "_key": "!items!BlwkMtnFtL13abcd"
+}

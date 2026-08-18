@@ -1,0 +1,191 @@
+{
+  "folder": "ZjlMCyl32BJTXn9l",
+  "name": "allesh_gilliam_st_gilliams_pov",
+  "_id": "p1DEvvtJJ8yjhz8u",
+  "active": false,
+  "navigation": true,
+  "navOrder": 0,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-MzSBbM_AZezAKhVSWL6Gng.webp",
+  "width": 3840,
+  "height": 2160,
+  "padding": 0.25,
+  "initial": {
+    "x": null,
+    "y": null,
+    "scale": null
+  },
+  "grid": {
+    "type": 0,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 1,
+    "color": "#000000",
+    "alpha": 0.2,
+    "distance": 5,
+    "units": "ft"
+  },
+  "tokenVision": false,
+  "fog": {
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    },
+    "mode": 1
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": false,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "drawings": [],
+  "tokens": [],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [
+    {
+      "x": 967,
+      "y": 1124,
+      "width": 3002,
+      "height": 1687,
+      "rotation": 0,
+      "elevation": 0,
+      "sort": 0,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/father_tamsin_pov.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "anchorX": 0,
+        "anchorY": 0,
+        "fit": "fill",
+        "alphaThreshold": 0.75
+      },
+      "alpha": 1,
+      "occlusion": {
+        "alpha": 0,
+        "modes": []
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "_id": "Z37SwpBeQgkJC0kS",
+      "hidden": false,
+      "locked": false,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "flags": {},
+      "levels": [],
+      "_key": "!scenes.tiles!p1DEvvtJJ8yjhz8u.Z37SwpBeQgkJC0kS"
+    }
+  ],
+  "walls": [],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "sort": 1000000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982535987,
+    "modifiedTime": 1783982535987,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "navName": "",
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "allesh_gilliam_st_gilliams_pov",
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/allesh_gilliam_st_gilliam_pov.webm",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!p1DEvvtJJ8yjhz8u.defaultLevel0000"
+    }
+  ],
+  "shiftX": 0,
+  "shiftY": 0,
+  "initialLevel": "defaultLevel0000",
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "_key": "!scenes!p1DEvvtJJ8yjhz8u",
+  "templates": []
+}

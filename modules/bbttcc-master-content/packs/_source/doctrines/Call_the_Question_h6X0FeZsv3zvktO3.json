@@ -1,0 +1,62 @@
+{
+  "name": "Call the Question",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scissors.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Cut the dithering. Put it to the room, right now, no purses opening. Everyone hates this — that's rather the point.</p><p><strong>Force the next exchange to resolve with 0 spend on both sides.</strong></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "courtly_call_question",
+      "meta": {
+        "tier": 3,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "courtly",
+        "layer": "tactical",
+        "costBand": "medium",
+        "raidTypes": [
+          "presence"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "softpower": 2
+        },
+        "authoredSprint": "courtly-d"
+      },
+      "effects": {
+        "text": "Force next exchange to resolve with 0 spend both sides."
+      }
+    }
+  },
+  "_id": "h6X0FeZsv3zvktO3",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "6ut7GT8pCAhpdWjS": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1779731271081,
+    "modifiedTime": 1781402943607,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!h6X0FeZsv3zvktO3"
+}

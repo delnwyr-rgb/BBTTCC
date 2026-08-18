@@ -1,0 +1,83 @@
+{
+  "_id": "humflorensisht01",
+  "name": "Human Heritage: Florensis",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/A_top_down_view%2C_taken%2C_202604291557%20Background%20Removed.png",
+  "system": {
+    "category": "heritage",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human Lineage.</strong> The branch that kept the reach. Small frames, far horizons, the ancestor who learned that an island is just a problem you can outlast.</p><p><em>“The map says ‘stop.’ You keep walking.”</em></p><p><strong>Florensis.</strong> You are the diminutive lineage that survived by being the thing the predators didn’t bother to chase.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Small or Medium (choose at creation).</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>INTR (Intrigue)</strong>—expressed primarily through Tier powers.</p></li><li><p><strong>Little But Persistent.</strong> Your speed is not reduced by being Small. You can move through the space of any creature larger than you.</p></li></ul>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "humflorensisad01",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.yiyTRWER6Bc0R8K7",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Florensis Tier I",
+        "hint": "Gain your Florensis Tier I lineage power (Little But Mighty)."
+      }
+    ],
+    "identifier": "human_florensis_heritage",
+    "requirements": "Human",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "human",
+      "lineage": "Florensis",
+      "version": "2.0.0",
+      "date": "2026-04-18"
+    }
+  },
+  "folder": "v5wsLJ5hZbxfPRXC",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776543000000,
+    "modifiedTime": 1781116094041,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 200000,
+  "_key": "!items!humflorensisht01"
+}

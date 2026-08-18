@@ -1,0 +1,81 @@
+{
+  "name": "Reality Rearranges",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [
+      "seed-bestiary-attacks",
+      "tier-iv",
+      "role-caster",
+      "passive"
+    ],
+    "description": {
+      "value": "<p>At the start of the avatar's turn, they may relocate themselves and one other creature within 12 squares by up to 6 squares each. No save, no provoke. The room agreed to the change before anyone in it did.</p><p><em>It does not move. The space around it moves. The distinction does not matter to anyone except the people doing the moving.</em></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "trait"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Avatar of the Veil"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "sort": 0,
+  "_id": "IE9NrSEXr54cJx9r",
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782167244993,
+    "modifiedTime": 1782167244993,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!IE9NrSEXr54cJx9r"
+}

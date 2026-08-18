@@ -1,0 +1,67 @@
+{
+  "name": "Pattern of Mercy",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_hand_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You’ve noticed that mercy has a shape. You help the world remember it.”</em></p><ul><li>When your party resolves a conflict via <strong>Parley</strong>, surrender, negotiation, or other peaceful means where you had meaningful narrative involvement, you can, once per Soma Break, trigger a soft power realignment.</li><li>After that resolution, you may convert <strong>1 Economy OP</strong> into <strong>1 Soft Power OP</strong> for your faction, or vice versa, representing the quiet reshaping of reputations, rumors, and supply lines.</li><li>This conversion must be applied to the strategic turn most closely associated with that scenario (GM adjudicates exact timing).</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-bound-light-pattern-of-mercy",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 14, Forge of Bound Light",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "JaASOItbL0tB8Z9y",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_boundlight",
+      "featureKey": "pattern_of_mercy"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459996553,
+    "modifiedTime": 1782167240826,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "i0TTq3QeTdvE7BgK",
+  "sort": 250000,
+  "_key": "!items!i0TTq3QeTdvE7BgK"
+}

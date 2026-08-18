@@ -1,0 +1,76 @@
+{
+  "name": "Ego-Dragon Echo",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_ego_dragon_echo.jpeg",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p>You called the dragon. The dragon is a shard of somebody's worst self, wearing teeth. This was YOUR idea. Remember that part.</p><p><b>Summon an Ego-Dragon fragment: +4 attack, double the Darkness risk.</b></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "ego-dragon-echo",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "ego_dragon_echo",
+      "meta": {
+        "tier": 4,
+        "rarity": "legendary",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "violence",
+        "raidTypes": [
+          "violence"
+        ]
+      }
+    }
+  },
+  "_id": "xas5cy4lQu2qFsUp",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 2600000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1771977107845,
+    "modifiedTime": 1779731338996,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS"
+  },
+  "_key": "!items!xas5cy4lQu2qFsUp"
+}

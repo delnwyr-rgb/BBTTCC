@@ -1,0 +1,67 @@
+{
+  "name": "Crowd Current",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_crowd_control_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You swim through groups like water.</em></p><p>When you are in or adjacent to a <strong>friendly crowd</strong> or allied group (at least three non-hostile creatures within 2 squares of you):</p><ul><li>You gain the benefits of <strong>half cover</strong> (+2 Guard and Intrigue checks) against ranged attacks and effects coming from outside the crowd.</li><li>Allies adjacent to you gain a <strong>+1 bonus to Guard</strong> as long as you maintain this flow and do not become Staggered.</li></ul><p>You may treat maintaining Crowd Current as a light <strong>Clarity hold-like state</strong>; the GM may rule that you lose its benefits if you are stunned, knocked prone repeatedly, or otherwise disrupted.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "dreamwalker-thousand-crowd-current",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": [],
+    "requirements": "Dreamwalker 6, Trance of the Thousand Faces",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "ElDtbAjWdrLjiz5K",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "dreamwalker_thousand_faces",
+      "featureKey": "crowd_current"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459927034,
+    "modifiedTime": 1782167240819,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "SKo0XaP0BjW6gD2S",
+  "sort": 237500,
+  "_key": "!items!SKo0XaP0BjW6gD2S"
+}

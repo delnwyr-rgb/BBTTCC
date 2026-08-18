@@ -1,0 +1,170 @@
+{
+  "name": "Menhirkin: Gravity Well",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_14.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You don’t just stand on the ground. You negotiate with it.”</em></p><p>When you plant your feet, the world quietly updates its assumptions about where ‘down’ is.</p><ul><li>You are exceptionally good at shoving, bracing, and making your presence felt physically.</li><li>Your melee attacks hit objects and structures harder.</li><li>In Bad Eden strategic play, your sheer bulk helps stabilize Slippage hexes and nudges Non-Lethal OP budgets (handled via flags). Your Gravity Well also supports an optional OP trigger when you successfully shove something—implemented as a ‘Do you want to apply this OP change?’ card, never automatic.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "menhirkin-gravity-well",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Menhirkin",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Menhirkin: Gravity Well (Passive)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_box_2.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.op.nonLethal.baseBonus",
+            "type": "add",
+            "value": 1,
+            "phase": "initial",
+            "priority": 10
+          },
+          {
+            "key": "flags.bbttcc.op.violence.baseBonus",
+            "type": "add",
+            "value": 1,
+            "phase": "initial",
+            "priority": 10
+          },
+          {
+            "key": "system.skills.athletics.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 10
+          },
+          {
+            "key": "system.bonuses.mwak.damage",
+            "type": "add",
+            "value": "+2",
+            "phase": "initial",
+            "priority": 10
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p><strong>Note:</strong> The +2 melee weapon damage is intended for attacks against objects and structures; players and the GM enforce this condition manually.</p>",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346197148,
+        "modifiedTime": 1777433398751
+      },
+      "_id": "ZuYhctzM022pDoYt",
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!f3Bsc9dz6g6QeU9z.ZuYhctzM022pDoYt"
+    }
+  ],
+  "folder": "9ZAaSSW35KsYH2F1",
+  "flags": {
+    "bbttcc": {
+      "menhirkinFeature": "gravity_well",
+      "opEffects": {
+        "nonLethal": 1,
+        "violence": 1
+      },
+      "terrain": {
+        "slippageAffinity": 1
+      },
+      "opTrigger": {
+        "id": "menhirkin_gravity_well_momentum",
+        "label": "Gravity Well Momentum",
+        "delta": {
+          "violence": 1
+        },
+        "conditionHint": "On a successful shove attack, you may gain +1 Violence OP (player approval required)."
+      }
+    },
+    "dnd5e": {},
+    "bbttcc-character-options": {
+      "option": {}
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.NHHUSqK7vPywwoFx",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1775004111090,
+    "modifiedTime": 1781116090941,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "f3Bsc9dz6g6QeU9z",
+  "sort": 100000,
+  "_key": "!items!f3Bsc9dz6g6QeU9z"
+}

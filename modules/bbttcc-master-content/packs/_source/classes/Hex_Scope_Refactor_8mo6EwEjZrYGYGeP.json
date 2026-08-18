@@ -1,0 +1,125 @@
+{
+  "name": "Hex-Scope Refactor",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_24.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Hex-Scope Refactor.</strong> You can rewrite how a hex’s story beat lands in the larger narrative.</p><ul><li>Once per strategic turn, after a hex-level outcome is resolved (Resolution Engine result, Encounter Engine outcome, or Turn Request effect), you can propose a <strong>refactor</strong> to the GM.</li><li>Mechanically, the GM may permit one small <strong>hex-level adjustment</strong>: downgrading a devastation result, softening a Darkness spike, slightly improving a Loyalty shift, or re-skinning the visible form of the damage without changing its full mechanical weight.</li><li>This is your hook for “symbolic reframing”—sometimes you can turn “we broke their walls” into “they willingly removed their own walls.” The map still changes, but the meaning is less poisonous.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "hex-scope-refactor",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 18
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (18th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Hex-Scope Refactor",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_charmed_1.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984383,
+        "modifiedTime": 1777346197911
+      },
+      "_id": "InsihXJxraEMh4DF",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.hexScopeRefactor",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.hexHooks.hexRefactorEvents",
+            "value": 1,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!8mo6EwEjZrYGYGeP.InsihXJxraEMh4DF"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "hexScopeRefactor": true
+      },
+      "hexHooks": {
+        "hexRefactorEvents": 1
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984383,
+    "modifiedTime": 1781116117223,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "8mo6EwEjZrYGYGeP",
+  "sort": 562500,
+  "_key": "!items!8mo6EwEjZrYGYGeP"
+}

@@ -1,0 +1,65 @@
+{
+  "folder": "aLOArmTQHDECz4tJ",
+  "name": "AI Paper - The Sarmoung Brotherhood, (PDF)",
+  "_id": "zyop21oXIOIJYpJs",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "They've Always Been Among Us",
+      "type": "pdf",
+      "_id": "xHpbGilV8CjxyiYl",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": "art/bbttcc/GOTTGAIT/The%20Sarmoung%20Brotherhood%20%E2%80%93%20Mythic%20Guardians%20of%20Knowledge%20in%20History%20and%20BBTTCC.pdf",
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1784077421541,
+        "modifiedTime": 1784077421541
+      },
+      "_key": "!journal.pages!zyop21oXIOIJYpJs.xHpbGilV8CjxyiYl"
+    }
+  ],
+  "categories": [],
+  "sort": 150000,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784077421541,
+    "modifiedTime": 1784077421541,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!journal!zyop21oXIOIJYpJs"
+}

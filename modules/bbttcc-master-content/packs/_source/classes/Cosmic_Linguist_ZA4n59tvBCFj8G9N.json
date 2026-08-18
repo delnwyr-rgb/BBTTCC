@@ -1,0 +1,205 @@
+{
+  "name": "Cosmic Linguist",
+  "type": "class",
+  "system": {
+    "category": "path",
+    "identifier": "cosmic_linguist",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"Strike the clause. Insert your own. Reality reads from the top.\"</em></p>\n<p>The Cosmic Linguist edits reality like text — meaning first, matter second. One currency now: <strong>Surge</strong>. The editor always has the next word, so you bank <strong>+1 Surge at the start of your turn</strong> (the old Resonance, Strain, and Editorial Authority pools are folded into this single pool).</p>\n<h3>The Edit (spent via Surge)</h3>\n<ul>\n  <li><strong>Emphasis</strong> (1) — your next Strike or manifestation hits for +Tier d6 (the word, underlined).</li>\n  <li><strong>Stabilize</strong> (2) — you gain DR equal to Tier; your next cast resists counter / dispel (the sentence holds).</li>\n  <li><strong>Impose a Reading</strong> (3) — a foe's next attack and its saves are at disadvantage (only one correct interpretation: yours).</li>\n  <li><strong>Rewrite the Sentence</strong> (5) — a foe loses its reactions and rolls saves at disadvantage; allies near you bank a reroll.</li>\n</ul>\n<p><strong>The Sentence</strong> endures as your signature stance — while held, the manifestation's primary target is bound by name and rolls its checks against you at disadvantage.</p>",
+      "chat": ""
+    },
+    "hd": {
+      "additional": "",
+      "spent": 0
+    },
+    "advancement": [
+      {
+        "_id": "rOxiMPiQoOXcWVsP",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.l4s5F3CMg7bo0Lb2",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.wc0V0gK05SnEXBR9",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.BiSJL6Gl0tnBLAmW",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.iIcYhYyA4LhD1Ei2",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.9c0g33iP1wGPGedB",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.cLddE4bSelGil06x",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.0THo7r8y2sUg8JlZ",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 1,
+        "title": "Cosmic Linguist Core Features"
+      },
+      {
+        "_id": "5f28179b5fe01b69",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.431954640378b392",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": {
+            "ability": "",
+            "preparation": "",
+            "uses": {
+              "max": "",
+              "per": ""
+            }
+          }
+        },
+        "value": {},
+        "level": 1,
+        "title": "Cosmic Linguist Discipline (Init 1) — True-Name Touch",
+        "icon": "",
+        "classRestriction": "",
+        "hint": "",
+        "flags": {}
+      },
+      {
+        "_id": "0dfd0ceed783fc00",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.7a37d8358c144126",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": {
+            "ability": "",
+            "preparation": "",
+            "uses": {
+              "max": "",
+              "per": ""
+            }
+          }
+        },
+        "value": {},
+        "level": 6,
+        "title": "Cosmic Linguist Discipline (Init 6) — Translation",
+        "icon": "",
+        "classRestriction": "",
+        "hint": "",
+        "flags": {}
+      },
+      {
+        "_id": "9fbd2f150a62e292",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.a2702a2349d936dd",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": {
+            "ability": "",
+            "preparation": "",
+            "uses": {
+              "max": "",
+              "per": ""
+            }
+          }
+        },
+        "value": {},
+        "level": 11,
+        "title": "Cosmic Linguist Discipline (Init 11) — The Sentence",
+        "icon": "",
+        "classRestriction": "",
+        "hint": "",
+        "flags": {}
+      },
+      {
+        "_id": "2bee2f4389022b8d",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.8a7f6bcb78b3de87",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": {
+            "ability": "",
+            "preparation": "",
+            "uses": {
+              "max": "",
+              "per": ""
+            }
+          }
+        },
+        "value": {},
+        "level": 16,
+        "title": "Cosmic Linguist Discipline (Init 16) — Word That Was",
+        "icon": "",
+        "classRestriction": "",
+        "hint": "",
+        "flags": {}
+      }
+    ]
+  },
+  "flags": {
+    "bbttcc": {
+      "primary": "charisma",
+      "opBonus": {
+        "intrigue": 2,
+        "faith": 2
+      }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_id": "ZA4n59tvBCFj8G9N",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Cosmic%20Linguist.png",
+  "effects": [],
+  "folder": "IyB4V2rPqsdbGukM",
+  "ownership": {
+    "default": 0
+  },
+  "sort": 100000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.364",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1782167240823,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.1",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ZA4n59tvBCFj8G9N"
+}

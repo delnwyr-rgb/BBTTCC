@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "e0QBxXMScwOJA8aO",
+  "name": "Character Options",
+  "color": null,
+  "sorting": "a",
+  "_id": "qdqMhHfZdVgUs1gN",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "createdTime": 1776459996494,
+    "modifiedTime": 1776459996494
+  },
+  "_key": "!folders!qdqMhHfZdVgUs1gN"
+}

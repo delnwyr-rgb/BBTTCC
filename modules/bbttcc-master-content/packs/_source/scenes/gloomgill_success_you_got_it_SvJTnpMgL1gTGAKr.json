@@ -1,0 +1,150 @@
+{
+  "folder": "05yNZN06ZVGAMVbS",
+  "name": "gloomgill_success_you_got_it",
+  "_id": "SvJTnpMgL1gTGAKr",
+  "active": false,
+  "navigation": true,
+  "navOrder": 0,
+  "thumb": "worlds/the-gotgait-files/assets/scenes/SvJTnpMgL1gTGAKr-thumb.webp",
+  "width": 3840,
+  "height": 2160,
+  "padding": 0.25,
+  "initial": {
+    "x": null,
+    "y": null,
+    "scale": null
+  },
+  "grid": {
+    "type": 0,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 1,
+    "color": "#000000",
+    "alpha": 0.2,
+    "distance": 5,
+    "units": "ft"
+  },
+  "tokenVision": true,
+  "fog": {
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    },
+    "mode": 0
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": false,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "drawings": [],
+  "tokens": [],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [],
+  "walls": [],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775335593380,
+    "modifiedTime": 1775335593380,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "navName": "",
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "gloomgill_success_you_got_it",
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/Gloomgill%20Beats/GloomgillSuccess5.mp4",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!SvJTnpMgL1gTGAKr.defaultLevel0000"
+    }
+  ],
+  "shiftX": 0,
+  "shiftY": 0,
+  "initialLevel": "defaultLevel0000",
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "_key": "!scenes!SvJTnpMgL1gTGAKr",
+  "templates": []
+}

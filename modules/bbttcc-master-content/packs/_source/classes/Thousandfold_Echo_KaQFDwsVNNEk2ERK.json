@@ -1,0 +1,72 @@
+{
+  "name": "Thousandfold Echo",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You become a living archive of possible selves.</em></p><p>Once per <strong>a Soma Break</strong>, as a <strong>bonus action</strong>, you manifest the Thousandfold Echo for <strong>1 minute</strong>:</p><ul><li>You may switch between your prepared personas as a <strong>free interaction</strong> (no action) on your turn.</li><li>Whenever you switch personas, you gain a <strong>+1 bonus</strong> to your next Stealth (Intrigue), Diplomacy (Presence), or Performance (Presence) check before the end of your turn (stacking up to a maximum of +3).</li><li>During this time, creatures attempting to recall your true identity or appearance have <strong>disadvantage</strong> on such checks or saves.</li></ul><p><strong>Strategic Echo.</strong> If a major intrigue, Parley, or Courtly Intrigue scenario concluded under Thousandfold Echo ends in a <strong>Best Friends / Integration</strong> or <strong>Justice / Reformation</strong> style outcome, your faction gains <strong>+1 Soft Power OP</strong> and <strong>+1 Intrigue OP</strong> as the legend of your many faces spreads.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "dreamwalker-thousand-thousandfold-echo",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 18
+    },
+    "properties": [],
+    "requirements": "Dreamwalker 18, Trance of the Thousand Faces",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "ElDtbAjWdrLjiz5K",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "dreamwalker_thousand_faces",
+      "featureKey": "thousandfold_echo"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459927032,
+    "modifiedTime": 1782167240816,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "KaQFDwsVNNEk2ERK",
+  "sort": 225000,
+  "_key": "!items!KaQFDwsVNNEk2ERK"
+}

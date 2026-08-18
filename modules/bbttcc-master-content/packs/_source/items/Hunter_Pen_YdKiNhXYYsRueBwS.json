@@ -1,0 +1,62 @@
+{
+  "name": "Hunter Pen",
+  "type": "gear",
+  "img": "icons/tools/smithing/anvil.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>Cages, hooks, and a butcher who hums. Works mid-deployment; nature provides on the move.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "output-module",
+        "yield": {
+          "meat": 2,
+          "leather": 1
+        },
+        "mobileLegal": true
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "YdKiNhXYYsRueBwS",
+  "effects": [],
+  "sort": 3000000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205374519,
+    "modifiedTime": 1778963271957,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!YdKiNhXYYsRueBwS"
+}

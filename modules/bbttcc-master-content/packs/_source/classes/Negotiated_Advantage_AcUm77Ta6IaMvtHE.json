@@ -1,0 +1,115 @@
+{
+  "name": "Negotiated Advantage",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Negotiated Advantage.</strong> You can derail a hostile act mid-motion with a word, a look, or a sudden reframing.</p><ul><li>When a creature you can see within 6 squares makes an attack roll or attribute check against you or an ally, you can use your reaction to impose roll 3d10 keep lowest 2 on that roll, as you disrupt the moment with a sharp interjection.</li><li>You can use this feature a number of times per Soma Break equal to your Presence modifier (minimum once).</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "negotiated-advantage",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 7
+    },
+    "properties": [],
+    "requirements": "Harmony Marshal (7th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Negotiated Advantage",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_1.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776467816702,
+        "modifiedTime": 1777346198032
+      },
+      "_id": "wavI6g9H9cVSrp2p",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.harmonyMarshal.negotiatedAdvantage",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!AcUm77Ta6IaMvtHE.wavI6g9H9cVSrp2p"
+    }
+  ],
+  "folder": "6ELe0FPqgC58OzKS",
+  "flags": {
+    "bbttcc": {
+      "harmonyMarshal": {
+        "negotiatedAdvantage": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776467816702,
+    "modifiedTime": 1782167240799,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "AcUm77Ta6IaMvtHE",
+  "sort": -475000,
+  "_key": "!items!AcUm77Ta6IaMvtHE"
+}

@@ -1,0 +1,41 @@
+{
+  "name": "Refraction of Mercy (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "wyrdlens-adept",
+    "source": "Bad Eden Originals — Sprint F (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"Not them. Not like this.\"</em></p>\n<p><strong>Refraction:</strong> Mercy — perception bent toward compassion; motive over action, the prevented blow, the offered exit.</p>\n<p>The Refraction of Mercy sees the person inside the threat. Your Surge spends shield and redirect: step between an ally and the hit, send harm into a wall instead, and open a clean way out.</p>\n<h3>Refraction (spent via Surge)</h3>\n<ul>\n  <li><strong>The Prevented Blow</strong> (1) — an ally gains DR equal to Tier (you stepped between).</li>\n  <li><strong>Redirected Harm</strong> (2) — an ally gains DR + the next hit that would drop them holds at 1.</li>\n  <li><strong>The Open Hand</strong> (5) — heal an ally and clear a condition (offer the clean exit).</li>\n</ul>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-wyrdlens-adept-mercy",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "pKuSnWKpU0fVPuje",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "JWRyydS5vsVoZLzB",
+  "sort": 500000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1781116137879,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!JWRyydS5vsVoZLzB"
+}

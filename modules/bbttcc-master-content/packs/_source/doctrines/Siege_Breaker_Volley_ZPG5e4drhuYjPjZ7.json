@@ -1,0 +1,76 @@
+{
+  "name": "Siege Breaker Volley",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_siege_breaker_volley.jpeg",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p>Knock politely. With, you know, a wall's worth of ordnance. The little FORTIFIED sign just sort of... falls off.</p><p><b>Remove the Fortified tag from the target.</b></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "siege-breaker-volley",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "siege_breaker_volley",
+      "meta": {
+        "tier": 3,
+        "rarity": "very rare",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "raidTypes": [
+          "violence"
+        ],
+        "engine": "violence"
+      }
+    }
+  },
+  "_id": "ZPG5e4drhuYjPjZ7",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 400000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1771977107845,
+    "modifiedTime": 1779731341049,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS"
+  },
+  "_key": "!items!ZPG5e4drhuYjPjZ7"
+}

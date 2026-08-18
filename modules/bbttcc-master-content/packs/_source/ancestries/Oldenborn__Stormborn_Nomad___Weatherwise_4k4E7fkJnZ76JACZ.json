@@ -1,0 +1,325 @@
+{
+  "name": "Oldenborn (Stormborn Nomad): Weatherwise",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_weather_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-canon-oldenborn-furrykin=\"v1\" style=\"display:none\"></div>\n<p><em>\"The sky is a language. You were the first to learn the punctuation.\"</em></p><p><strong>Weatherwise (passive).</strong> Always know the upcoming weather for the next 12 hours within 1 mile, even underground. Reroll the lowest die on defense checks against weather effects (extreme cold, extreme heat, wind, storm) — auto-fires.</p><p><strong>Wind-Read (1/Soma Break).</strong> Reaction — when you would take electrical damage (lightning or cold flavor) or kinetic damage (thunder flavor), halve it. The wind shifts as you do.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldStormNomadTier1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Weatherwise + Wind-Read</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break (active) + always-on passive &nbsp;·&nbsp; <strong>Action:</strong> Reaction (on weather damage) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Active: halve incoming lightning/cold/electrical damage as a reaction. Passive: 12-hour weather foresight in 1 mile + reroll-lowest vs weather effects (auto).</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "oldenborn_stormborn_nomad_tier1",
+    "requirements": "Oldenborn (Stormborn Nomad)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll",
+          "formula": ""
+        }
+      ],
+      "max": "1"
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "oldenborn",
+      "feature": "weatherwise",
+      "lineage": "Stormborn Nomad",
+      "tierLevel": 1,
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "defense",
+          "mode": "reroll-lowest",
+          "note": "on defense checks against weather effects (extreme cold, extreme heat, wind, …"
+        },
+        {
+          "context": "defense",
+          "mode": "reroll-lowest",
+          "note": "defense checks against weather effects (extreme cold, extreme heat, wind, storm)"
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-typed-damage-taken",
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Wind-Read (1/Short Rest; recharges on Soma Break). When you would take energy damage with the lightning or cold flavor, or kinetic damage with the thunder flavor, you may use your reaction ..."
+            }
+          }
+        },
+        {
+          "event": "on-damage-taken",
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Wind-Read (1/Short Rest; recharges on Soma Break). When you would take energy damage with the lightning or cold flavor, or kinetic damage with the thunder flavor, you may use your reaction ..."
+            }
+          }
+        },
+        {
+          "event": "on-typed-damage-taken",
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Wind-Read (1/Short Rest). When you would take lightning, thunder, or cold damage, you may use your reaction to halve it"
+            }
+          }
+        },
+        {
+          "event": "on-damage-taken",
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Wind-Read (1/Short Rest). When you would take lightning, thunder, or cold damage, you may use your reaction to halve it"
+            }
+          }
+        }
+      ]
+    },
+    "autoanimations": {
+      "id": "f818c0d6-fcff-43f2-8f73-52d3ddbd1ae3",
+      "label": "Oldenborn (Stormborn Nomad): Weatherwise",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "intro",
+          "color": "yellow",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "yDsEwVuM6VuCj5c6",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.4k4E7fkJnZ76JACZ",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777003646483,
+    "modifiedTime": 1782167281944,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "4k4E7fkJnZ76JACZ",
+  "sort": 0,
+  "_key": "!items!4k4E7fkJnZ76JACZ"
+}

@@ -1,0 +1,76 @@
+{
+  "name": "Last-Stand Banner",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_last_stand_banner.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p>Plant the flag exactly where it's stupid to plant a flag. Everyone fights harder near a stupid, defiant flag. Science.</p><p><b>Defenders ignore the first Structure loss this round.</b></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "last-stand-banner",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "last_stand_banner",
+      "meta": {
+        "tier": 1,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "violence",
+        "raidTypes": [
+          "violence"
+        ]
+      }
+    }
+  },
+  "_id": "Nmy7XpGFjyAW8ABP",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 1800000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1771977107845,
+    "modifiedTime": 1779731339611,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS"
+  },
+  "_key": "!items!Nmy7XpGFjyAW8ABP"
+}

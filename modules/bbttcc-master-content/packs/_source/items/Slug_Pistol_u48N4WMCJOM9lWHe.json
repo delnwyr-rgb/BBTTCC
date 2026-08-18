@@ -1,0 +1,324 @@
+{
+  "name": "Slug Pistol",
+  "type": "weapon",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_lazer_pistol_2.png",
+  "system": {
+    "category": "ranged",
+    "intent": "violence",
+    "skill": "firearms",
+    "damage": {
+      "formula": "1d8",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "ballistic",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 20,
+      "long": 80
+    },
+    "tags": [
+      "t1-baseline",
+      "pistol",
+      "ballistic",
+      "sidearm"
+    ],
+    "effect": "Standard ballistic sidearm. No signature ability.",
+    "flavor": "Boring. Reliable. The two best things a pistol can be.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "<p>Standard-pattern slug-throwing sidearm. Iron sights, six-round chamber, kicks like a polite mule. The most common ranged weapon in Bad Eden — the kind of pistol you find in a glove box, a holster, or the bottom of a trade-post crate.</p><p><b>Standard Issue.</b> No signature, no electronics, no hum. It just shoots.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Standard ballistic sidearm. No signature ability.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d8 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(ballistic)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 20 / 80</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "5",
+          "frame": "weapon",
+          "signature": "Six rounds, one trigger, no opinions.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Standard-pattern slug-throwing sidearm. Iron sights, six-round chamber, kicks like a polite mule. The most common ranged weapon in Bad Eden — the kind of pistol you find in a glove box, a holster, or the bottom of a trade-post crate.</p><p><b>Standard Issue.</b> No signature, no electronics, no hum. It just shoots.</p>",
+          "materialOf": [
+            "scrap-steel",
+            "casing-brass"
+          ],
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon stamp",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    },
+    "autoanimations": {
+      "id": "53aa0b6b-d75b-4b4b-b207-c7e9acd1d303",
+      "label": "Slug Pistol",
+      "levels3d": {
+        "type": "explosion",
+        "data": {
+          "color01": "#FFFFFF",
+          "color02": "#FFFFFF",
+          "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+        },
+        "sound": {
+          "enable": false
+        },
+        "secondary": {
+          "enable": false,
+          "data": {
+            "color01": "#FFFFFF",
+            "color02": "#FFFFFF",
+            "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+          }
+        }
+      },
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "range",
+      "primary": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "weapon",
+          "animation": "bullet",
+          "variant": "1",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isReturning": false,
+          "isWait": false,
+          "onlyX": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "isWait": true,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": false,
+          "opacity": 1,
+          "persistent": false,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "unbindAlpha": false,
+          "unbindVisibility": false,
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "bQhXd1gwJXtaVLGh",
+  "_id": "u48N4WMCJOM9lWHe",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777869584416,
+    "modifiedTime": 1782160020992,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!u48N4WMCJOM9lWHe"
+}

@@ -1,0 +1,72 @@
+{
+  "_id": "gIpTl51C1T79Odhf",
+  "name": "Stillheart: Emotional Lock",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_goddess.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2 data-start=\"4882\" data-end=\"4914\">Level 14 — <strong data-start=\"4896\" data-end=\"4914\">Emotional Lock</strong></h2><p data-start=\"4916\" data-end=\"4938\">You refuse disruption.</p><h3 data-start=\"4940\" data-end=\"4962\">Mechanical Effects</h3><ul data-start=\"4963\" data-end=\"5138\"><li data-start=\"4963\" data-end=\"5005\"><p data-start=\"4965\" data-end=\"5005\">Your Aura <strong data-start=\"4975\" data-end=\"5005\">cannot be forcibly changed</strong></p></li><li data-start=\"5006\" data-end=\"5138\"><p data-start=\"5008\" data-end=\"5069\">As a bonus action, you may <strong data-start=\"5035\" data-end=\"5069\">freeze your current Burn level</strong></p><ul data-start=\"5072\" data-end=\"5138\"><li data-start=\"5072\" data-end=\"5138\"><p data-start=\"5074\" data-end=\"5138\">It cannot increase or decrease until the start of your next turn</p></li></ul></li></ul><p data-start=\"5140\" data-end=\"5155\">At <strong data-start=\"5143\" data-end=\"5154\">Burn 3+</strong>:</p><ul data-start=\"5156\" data-end=\"5202\"><li data-start=\"5156\" data-end=\"5202\"><p data-start=\"5158\" data-end=\"5202\">You may ignore one backlash trigger entirely</p></li></ul><p data-start=\"5204\" data-end=\"5243\">You choose who you are — and remain so.</p>",
+      "chat": ""
+    },
+    "identifier": "stillheart_emotional_lock",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 14
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "stillheart_emotional_lock",
+      "burn": {
+        "min": 3,
+        "lockTurns": 1,
+        "_taggedBy": "bbttcc-burn-batch-tagger",
+        "_ts": 1770856292121,
+        "_from": "Stillheart: Emotional Lock"
+      }
+    }
+  },
+  "folder": "Tp2149safpsn0Bmg",
+  "sort": 150000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459909022,
+    "modifiedTime": 1781116175365,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!gIpTl51C1T79Odhf"
+}

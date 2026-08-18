@@ -1,0 +1,49 @@
+{
+  "name": "Multiattack",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fist_1.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "5e-port"
+    ],
+    "description": {
+      "value": "<p>The shambler makes two Rot-Branch attacks, or one Rot-Branch attack and one Grasping Vines attack.</p>",
+      "chat": ""
+    }
+  },
+  "_id": "D89TCx6AkIcqbuMu",
+  "effects": [],
+  "sort": 0,
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Qlipothic Shambler"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": null,
+    "modifiedTime": null,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!D89TCx6AkIcqbuMu"
+}

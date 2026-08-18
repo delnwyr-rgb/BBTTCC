@@ -1,0 +1,1432 @@
+{
+  "name": "Commander Ostrid Pell",
+  "type": "character",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc",
+      "createdViaNPCBuilder": true,
+      "createdAt": 1783993054320
+    },
+    "fourththing": {
+      "kind": "npc",
+      "surgeEnabled": false
+    },
+    "bbttcc-character-options": {
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.26835c616bf6e60d",
+      "nativeLinks": {
+        "heritageName": "Circuitborn Heritage: Parallax",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.26835c616bf6e60d",
+        "heritageApplied": true,
+        "ancestryName": "Circuitborn",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.84f23a0c6bb4d55d",
+        "ancestryApplied": true
+      }
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the trench, the school, market day, drainage, protocol, the demand (guarded), the tea (secret), year zero (deep secret)",
+        "notes": "[SIEGE-2026-07-13] PRIVATE TRUTH — Commander Ostrid Pell, the Besieger Camp. Voice: parade-ground correctness gone soft at the edges, like a uniform worn fifteen years; discusses trench drainage and the school rota with the pride other commanders save for victories, because they ARE his victories — nobody has died in his siege in eleven years and he knows the exact number of days. THE DEMAND: he does not remember it. This is the sentence he practices: 'the paperwork was lost in year three.' It is TRUE and it is also a mercy he has chosen to accept. When pressed, he rearranges his desk until the subject changes; if pressed with real kindness, he will admit the worse thing — he's not afraid of remembering. He's afraid it was SMALL. THE TEA (secret; yields to someone both commanders have come to trust, or to anyone who has clearly worked it out): every Thursday after market close, in the old culvert gate between the lines, he takes tea with Warden Alderwick. Fifteen years less two. They have never once discussed terms — that's the RULE; they discuss drainage, the children, the weather coming off the sea. Each believes the other would be ruined by exposure; each has kept the secret to protect the OTHER; neither has noticed this is the entire treaty already, unsigned. YEAR ZERO (the deep drawer — yields only after the tea is known, or to someone holding the other half of the story): as a junior officer, Pell himself carried the gift to the town gate. An enormous basket. Fruit, mostly — oranges from somewhere no orange should have survived — with paperwork tucked under the ribbon that he was ordered NOT to read. The Warden's grandmother refused delivery at the gate, on principle, and the siege began before the basket finished rotting. In his locked drawer: one orange from it, dried to the size and weight of a question, which he has kept for fifteen years and cannot explain. He never read the paperwork. He has spent fifteen years grateful he never read the paperwork. TELLS: checks the time before Thursdays like a man with an appointment he'd die before naming; touches the drawer key through his coat when year zero comes up; says 'the demand' never 'our demand.'"
+      }
+    }
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 4,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 2,
+      "tier": 1
+    },
+    "attributes": {
+      "violence": {
+        "value": 6
+      },
+      "intrigue": {
+        "value": 4
+      },
+      "presence": {
+        "value": 2
+      },
+      "body": {
+        "value": 5
+      },
+      "mind": {
+        "value": 3
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 0
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 1
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 0
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 0
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 0
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 0
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 34,
+        "max": 16
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 3,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": 1,
+    "name": "Commander Ostrid Pell",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/bootbutt.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "e75bKUdEGFeM9fYj",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/bootbutt.png",
+  "items": [
+    {
+      "_id": "whejmhpjPB9iTyix",
+      "name": "Bravo",
+      "type": "class",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-bravo",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "bravo",
+          "violence"
+        ],
+        "description": {
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "faculty": "violence",
+            "signature": "melee",
+            "secondary": "brawl",
+            "pool": "Violence",
+            "awakens": "Aurablade or Bulwark"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534525,
+        "modifiedTime": 1784177534525,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!e75bKUdEGFeM9fYj.whejmhpjPB9iTyix"
+    },
+    {
+      "_id": "VUloPZ2sFLFmmYID",
+      "name": "Bravo — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "bravo",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 101000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534525,
+        "modifiedTime": 1784177534525,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!e75bKUdEGFeM9fYj.VUloPZ2sFLFmmYID"
+    },
+    {
+      "name": "Circuitborn",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_1.png",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Exo-Knight, Parallax, Salvage, Synapse</strong>.</p><p>This root grants the shared Circuitborn core trait package (<em>Firmware of Identity</em>) and preserves live UUID compatibility for the four Line items.</p><p><em>“You are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.”</em></p><p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p><p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you, you may regain either one spent Bad Eden OP (a category you used this scene) or Integrity equal to your tier.</p><p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor.</p><p><strong>Line Memory.</strong> Choose one Circuitborn line (Exo-Knight, Parallax, Salvage, Synapse). Your line grants Tier powers as you level.</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "cbsizeadvancmnt0",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium.",
+            "value": {}
+          },
+          {
+            "_id": "cbfirmwareadvnc0",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.MLNWLvI12pEWb6tN",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Firmware of Identity",
+            "hint": "Gain the shared Circuitborn core trait package."
+          }
+        ],
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": "Informational Matrix Sense (radio / signal / ritual / rumor networks)."
+        },
+        "type": {
+          "value": "humanoid",
+          "custom": "Construct-Living",
+          "subtype": "Circuitborn"
+        },
+        "identifier": "circuitborn"
+      },
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "family": "circuitborn",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "heritageList": [
+            "exo_knight",
+            "parallax",
+            "salvage",
+            "synapse"
+          ],
+          "refactorNotes": "v2: Introduced Circuitborn species root to mirror the v2 species + heritage pattern. Existing Line items remain race-typed for backward compat."
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "defense",
+              "mode": "reroll-lowest",
+              "vs": "vs:poison and disease",
+              "note": "on defense checks [TODO(adv-call)] against poison and disease, and you are im…"
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-rest",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "You do not eat, drink, or sleep. You enter maintenance trance when you rest"
+                }
+              }
+            },
+            {
+              "event": "on-rest",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "You do not eat, drink, or sleep. You enter maintenance trance when you rest"
+                }
+              }
+            }
+          ],
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "grantedByAncestry": "Circuitborn"
+        }
+      },
+      "effects": [],
+      "folder": "3H6h9q66XbEDFtAN",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534525,
+        "modifiedTime": 1784177534525,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "iEjzDh0BiurSQUM4",
+      "_key": "!actors.items!e75bKUdEGFeM9fYj.iEjzDh0BiurSQUM4"
+    },
+    {
+      "name": "Circuitborn: Firmware of Identity",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_14.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You are not a robot. You are a decision the world keeps making about itself.”</em></p>\n<p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p>\n<p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), you may regain either (a) one spent Bad Eden OP (a category you used this scene) or (b) Integrity equal to your tier.</p>\n<p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor. You reroll the lowest die on checks to identify surveillance, hidden speakers, encoded messages, or noospheric “attention traps.”</p>\n<p><strong>Glitch-Surge.</strong> When you drop to 0 Integrity, you can choose to emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In Bad Eden play, this is a perfect excuse for weird consequences.</p>",
+          "chat": ""
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "circuitborn-firmware-of-identity",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Circuitborn",
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "activities": {}
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "circuitborn",
+          "feature": "core",
+          "chassis": "any",
+          "version": "1.0.0"
+        },
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "autoanimations": {
+          "id": "4b9e33bb-5b8c-4140-a837-38b5e590759c",
+          "label": "Circuitborn: Firmware of Identity",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "grantedByAncestry": "Circuitborn"
+        }
+      },
+      "effects": [
+        {
+          "_id": "3e7f9ff1fcf44207",
+          "name": "Circuitborn: Poison Resistance",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_book_4.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.traits.dr.value",
+                "value": "poison",
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Safe automation: poison resistance. Other parts are table-facing.",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "dnd5e": {
+              "riders": {
+                "statuses": []
+              }
+            }
+          },
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177534525,
+            "modifiedTime": 1784177534525
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!e75bKUdEGFeM9fYj.mctjEC9hWvHhX1eu.3e7f9ff1fcf44207"
+        }
+      ],
+      "folder": "3H6h9q66XbEDFtAN",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.a0bpTg2C1TVKxpLf",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534525,
+        "modifiedTime": 1784177534525,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "mctjEC9hWvHhX1eu",
+      "_key": "!actors.items!e75bKUdEGFeM9fYj.mctjEC9hWvHhX1eu"
+    },
+    {
+      "name": "Circuitborn Heritage: Parallax",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_Parallax_1.png",
+      "system": {
+        "category": "heritage",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 2,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn Line.</strong> The paradox-walking. Designed to be in the place no one expects, two seconds before the rest of the world catches up.</p><p><em>“Don’t look at where I am. Look at where I’m about to have already been.”</em></p><p><strong>Parallax.</strong> You are a sentient chassis built around the principle of <em>positional doubt</em>. The world keeps a fuzzy outline of where you are, and that fuzziness is your weapon.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>INTR (Intrigue)</strong>—expressed primarily through Tier powers.</li><li><strong>Phase Drift.</strong> When you take the Disengage, your speed increases by 2 squares for that turn.</li></ul>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "cbparallaxadv001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.wToShnxT6FMISGzW",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Parallax Tier I",
+            "hint": "Gain your Parallax Line Tier I power (Light-Bend Cloak)."
+          }
+        ],
+        "identifier": "circuitborn_parallax_heritage",
+        "requirements": "Circuitborn",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "circuitborn",
+          "lineage": "Parallax",
+          "version": "2.0.0",
+          "date": "2026-04-18"
+        },
+        "fourththing": {
+          "grantedByHeritage": "Parallax"
+        }
+      },
+      "folder": "I4c7puuhC808BtVW",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534525,
+        "modifiedTime": 1784177534525,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "oSJsr7ACXi87u0fW",
+      "_key": "!actors.items!e75bKUdEGFeM9fYj.oSJsr7ACXi87u0fW"
+    },
+    {
+      "name": "Circuitborn (Parallax Line): Light-Bend Cloak",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_cloak_hooded_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You are where the camera says you are.”</em></p>\n        <p><strong>Light-Bend Cloak (tier/Soma Break).</strong> As a bonus action, you become lightly obscured until the start of your next turn. Your first attack from this state reroll the lowest die, or you can instead disengage without provoking.</p>",
+          "chat": ""
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "circuitborn-parallax-light_bend",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Circuitborn",
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "activities": {}
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "circuitborn",
+          "feature": "light_bend",
+          "chassis": "Parallax Line",
+          "tierLevel": 0,
+          "version": "1.0.0"
+        },
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "autoanimations": {
+          "id": "8768fb65-1dfb-480f-bb2d-368a84d27562",
+          "label": "Circuitborn (Parallax Line): Light-Bend Cloak",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "loop",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "grantedByHeritage": "Parallax"
+        }
+      },
+      "effects": [],
+      "folder": "GHTzmc8A1m5TtZyl",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.XYmTzuktULpM40ke",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534525,
+        "modifiedTime": 1784177534525,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 300000,
+      "_id": "8imHa5UcUJZyBHun",
+      "_key": "!actors.items!e75bKUdEGFeM9fYj.8imHa5UcUJZyBHun"
+    },
+    {
+      "name": "Battlefield Presence",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_battlefied_presence.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Core Feats v1",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Battlefield Presence</h2><p><em>People fight better when you are near.</em></p><hr /><h3>Rules</h3><p>Allies within 2 squares of you reroll the lowest die on the first defense checks they make against being Shaken or charmed each combat.</p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_battlefield_presence",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-core-v1",
+          "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+        }
+      },
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 5300000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534525,
+        "modifiedTime": 1784177534525,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_id": "GcmWEqM21bOLLjVE",
+      "_key": "!actors.items!e75bKUdEGFeM9fYj.GcmWEqM21bOLLjVE"
+    }
+  ],
+  "effects": [],
+  "folder": "BGl62HNOkUgeWGck",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177534525,
+    "modifiedTime": 1784177534525,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!e75bKUdEGFeM9fYj"
+}

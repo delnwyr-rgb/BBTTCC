@@ -1,0 +1,265 @@
+{
+  "name": "Qliph-Scarred (Chthonic): What the Deep Dark Taught You",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_monster.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-canon-qliph-scarred=\"v1\" style=\"display:none\"></div><p><em>\"There are ways to move that the sun never got to review.\"</em></p><p><strong>What the Deep Dark Taught You (1/Soma Break).</strong> Bonus action — sink partially into shadow, earth, or stone. For up to 1 minute, while sunken you gain:</p><ul><li><p>Reroll the lowest die on Stealth (Intrigue) checks.</p></li><li><p>Difficult terrain costs you no extra movement.</p></li><li><p>You can move through spaces 1 square wide.</p></li><li><p>Resistance to qliphothic damage.</p></li></ul><p>The effect ends early if you are fully submerged in running water or take sephirotic damage.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"qliphChthonicDeepDark\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>What the Deep Dark Taught You</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Bonus action (1-min duration)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Sink into shadow/earth/stone for up to 1 min: reroll-lowest on Stealth · ignore difficult terrain · squeeze through 1 square gaps · resist qliphothic damage. Ends early on running water or sephirotic damage.</span></p></div>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "qliph_scarred_chthonic_tier1",
+    "requirements": "Qliph-Scarred (Chthonic)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll",
+          "formula": ""
+        }
+      ],
+      "max": "1"
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "qliph_scarred",
+      "feature": "what_the_deep_dark_taught_you",
+      "lineage": "Chthonic",
+      "tierLevel": 1,
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "skill": "stealth",
+          "mode": "reroll-lowest"
+        },
+        {
+          "context": "check",
+          "attribute": "intrigue",
+          "mode": "reroll-lowest"
+        }
+      ]
+    },
+    "autoanimations": {
+      "id": "3aaa84ef-c429-4634-9a3e-75d3723ce539",
+      "label": "Qliph-Scarred (Chthonic): What the Deep Dark Taught You",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "shieldfx",
+          "animation": "ice",
+          "variant": "03",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "i2LJtRQvaflkhVMU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.PL8ziBJUUMdeiFN0",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776660294570,
+    "modifiedTime": 1782167240125,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "PL8ziBJUUMdeiFN0",
+  "sort": 0,
+  "_key": "!items!PL8ziBJUUMdeiFN0"
+}

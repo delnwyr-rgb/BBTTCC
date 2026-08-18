@@ -1,0 +1,81 @@
+{
+  "name": "Self-Wrapping Sandwich",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/self_wrapping_sandwich.png",
+  "system": {
+    "slot": "consumable",
+    "tags": [
+      "mal-voiced",
+      "consumable",
+      "weird"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>A wax-paper sandwich that re-folds itself when you set it down. Take a bite, set it down, look up, look back: re-wrapped. Take another bite, set it down. Re-wrapped. The bread stays fresh. The filling stays at exactly the temperature it was when you got it. You have been eating this sandwich for three days now. So has the previous owner, apparently. So has the owner before them.</p><p><strong>Eternal Lunch.</strong> Heals 1 Stress per scene if eaten during the scene. Cannot be eaten in fewer than 4 actions across at least 4 scenes. The sandwich never spoils. The sandwich never runs out. The sandwich is approximately 60% as satisfying as a real sandwich.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "consumable",
+          "signature": "You can't lose it. You also can't eat it all at once. Yes that's a problem. No I don't know how to fix it.",
+          "origin": "given",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A wax-paper sandwich that re-folds itself when you set it down. Take a bite, set it down, look up, look back: re-wrapped. Take another bite, set it down. Re-wrapped. The bread stays fresh. The filling stays at exactly the temperature it was when you got it. You have been eating this sandwich for three days now. So has the previous owner, apparently. So has the owner before them.</p><p><b>Eternal Lunch.</b> Heals 1 Stress per scene if eaten during the scene. Cannot be eaten in fewer than 4 actions across at least 4 scenes. The sandwich never spoils. The sandwich never runs out. The sandwich is approximately 60% as satisfying as a real sandwich.</p>",
+          "materialOf": [
+            "wax-paper",
+            "bad-eden-meat",
+            "patience"
+          ],
+          "price": {
+            "marks": 10,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI consumable stamp",
+            "bound": "free",
+            "saleBack": 4
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "dtoHASkNzKxlBBB6",
+  "effects": [],
+  "sort": 850000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725668,
+    "modifiedTime": 1778541973059,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!dtoHASkNzKxlBBB6"
+}

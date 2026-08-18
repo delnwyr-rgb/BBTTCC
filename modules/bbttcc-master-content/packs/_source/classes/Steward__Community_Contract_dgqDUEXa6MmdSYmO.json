@@ -1,0 +1,65 @@
+{
+  "_id": "dgqDUEXa6MmdSYmO",
+  "name": "Steward: Community Contract",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_decomm_book_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"1662\" data-end=\"1675\"><em data-start=\"1662\" data-end=\"1675\">(3rd Level)</em></p><p data-start=\"1677\" data-end=\"1712\"><strong data-start=\"1677\" data-end=\"1690\">Contract:</strong> <em data-start=\"1691\" data-end=\"1712\">No One Left Behind.</em></p><p data-start=\"1714\" data-end=\"1763\">Once per scene, when an ally would fall, you may:</p><ul data-start=\"1765\" data-end=\"1874\"><li data-start=\"1765\" data-end=\"1798\"><p data-start=\"1767\" data-end=\"1798\">Redirect some harm to yourself,</p></li><li data-start=\"1799\" data-end=\"1828\"><p data-start=\"1801\" data-end=\"1828\">Stabilize them immediately,</p></li><li data-start=\"1829\" data-end=\"1874\"><p data-start=\"1831\" data-end=\"1874\">Grant protected withdrawal without pursuit.</p></li></ul><p data-start=\"1876\" data-end=\"1921\">This is not dominance.<br data-start=\"1898\" data-end=\"1901\" />It is shared burden.</p><h3 data-start=\"1923\" data-end=\"1931\">Cost</h3><p data-start=\"1932\" data-end=\"2013\">Spend 1 Civic Charge die to amplify (increase stabilization or protection value).</p><h3 data-start=\"2015\" data-end=\"2027\">Pushback</h3><p data-start=\"2028\" data-end=\"2093\">Repeated magical rescues may reduce community autonomy over time.</p>",
+      "chat": ""
+    },
+    "identifier": "steward_community_contract",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "steward_community_contract"
+    }
+  },
+  "folder": "b7c5HgxxTfcVph6r",
+  "sort": 400000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.dgqDUEXa6MmdSYmO",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776481562688,
+    "modifiedTime": 1781116171608,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!dgqDUEXa6MmdSYmO"
+}

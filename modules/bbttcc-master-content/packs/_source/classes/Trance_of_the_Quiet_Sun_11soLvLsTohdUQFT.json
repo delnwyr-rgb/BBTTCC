@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "yBwlSftij6ADf4Lg",
+  "name": "Trance of the Quiet Sun",
+  "color": null,
+  "sorting": "a",
+  "_id": "11soLvLsTohdUQFT",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "modifiedTime": 1776459926968,
+    "createdTime": 1776459926968
+  },
+  "_key": "!folders!11soLvLsTohdUQFT"
+}

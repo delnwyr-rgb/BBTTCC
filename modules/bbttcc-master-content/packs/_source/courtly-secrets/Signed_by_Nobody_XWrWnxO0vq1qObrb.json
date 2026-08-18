@@ -1,0 +1,45 @@
+{
+  "name": "Signed by Nobody",
+  "type": "feat",
+  "img": "icons/sundries/documents/document-sealed-signatures-red.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Signed by Nobody.</strong> A contract of impossible provenance: terms nobody remembers setting, in language a shade older than the paper it's printed on, ending in a notarized, sealed, entirely blank signature block — and binding anyway. It does not explain anything. It unsettles everyone.</p><p><em>Play:</em> queue −2 to your opponent's next courtly roll <strong>and</strong> +2 Suspicion — the court cannot stop wondering whose pen it was.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "oppRollMinus2+stirThePot",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "_id": "XWrWnxO0vq1qObrb",
+  "effects": [],
+  "folder": null,
+  "sort": 1500000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982978821,
+    "modifiedTime": 1784079176430,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!XWrWnxO0vq1qObrb"
+}

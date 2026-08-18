@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": null,
+  "name": "Lyrenn",
+  "color": null,
+  "sorting": "a",
+  "_id": "QmJ285DSqohgPg33",
+  "description": "",
+  "sort": 500000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177895196,
+    "modifiedTime": 1784177895374,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!QmJ285DSqohgPg33"
+}

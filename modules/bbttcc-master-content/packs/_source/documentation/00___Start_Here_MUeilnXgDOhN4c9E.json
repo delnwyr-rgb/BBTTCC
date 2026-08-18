@@ -1,0 +1,23 @@
+{
+  "type": "JournalEntry",
+  "folder": null,
+  "name": "00 - Start Here",
+  "color": "#414ad9",
+  "sorting": "a",
+  "_id": "MUeilnXgDOhN4c9E",
+  "description": "",
+  "sort": 800000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775619847862,
+    "modifiedTime": 1775619848007,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!folders!MUeilnXgDOhN4c9E"
+}

@@ -1,0 +1,115 @@
+{
+  "name": "Signal Boost",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_ray_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2025",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You elevate a single voice until it carries a whole room.</em></p><p>As a <strong>bonus action</strong>, choose one ally within <strong>12 squares</strong> who can hear you. Until the start of your next turn:</p><ul><li>The ally gains <strong>advantage</strong> on their next <strong>Diplomacy (Presence)</strong> or <strong>Intimidation (Presence)</strong> check.</li><li>If that check shifts a crowd, faction representative, or social tempo, your faction gains <strong>+1 Soft Power OP</strong> for the next Strategic Turn (once per scene).</li></ul><p>This represents you turning someone into the right voice at the right time.</p>",
+      "chat": ""
+    },
+    "activities": {
+      "signalBoost": {
+        "type": "utility",
+        "activation": {
+          "type": "bonus",
+          "override": false
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "range": {
+          "value": "60",
+          "units": "ft",
+          "override": false
+        },
+        "description": {},
+        "_id": "a3R0J5MGhUfTAeRn",
+        "sort": 0,
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": "@prof"
+    },
+    "advancement": {},
+    "identifier": "harmmarshal-overwatch-signal-boost",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Harmony Marshal 3, Mandate of Overwatch",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "2lNXuSAY9vKC4tM0",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "harmmarshal_overwatch",
+      "featureKey": "signal_boost"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776467813568,
+    "modifiedTime": 1782167240828,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "r5lQWwb7IfP9t8zm",
+  "sort": 175000,
+  "_key": "!items!r5lQWwb7IfP9t8zm"
+}

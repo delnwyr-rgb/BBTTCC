@@ -1,0 +1,363 @@
+{
+  "name": "Rad‑Bloom Injector",
+  "type": "consumable",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_rad_bloom_injector.jpeg",
+  "system": {
+    "description": {
+      "value": "<p><b>Use:</b> Remove radiation effects from yourself. For the next 10 minutes, you experience vivid hallucinations (GM voice opportunity).</p><p><b>Engine hook:</b> flagged for Bad Eden radiation cleanse.</p>",
+      "chat": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "attunement": "",
+    "identified": true,
+    "uses": {
+      "max": "1",
+      "autoDestroy": true,
+      "spent": 0,
+      "recovery": []
+    },
+    "unidentified": {
+      "description": ""
+    },
+    "type": {
+      "value": "potion",
+      "subtype": ""
+    },
+    "activities": {},
+    "identifier": "radbloom-injector",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "container": null,
+    "attuned": false,
+    "equipped": false,
+    "damage": {
+      "base": {
+        "types": [],
+        "custom": {
+          "enabled": false
+        },
+        "scaling": {
+          "number": 1
+        }
+      },
+      "replace": false
+    },
+    "properties": []
+  },
+  "flags": {
+    "bbttcc": {
+      "tags": [
+        "radiation",
+        "consumable"
+      ],
+      "radiation": {
+        "cleanse": true
+      }
+    },
+    "rfi": {
+      "item": {
+        "tier": "III",
+        "footprint": 0,
+        "reach": "self",
+        "frame": "consumable",
+        "signature": "",
+        "origin": "looted",
+        "originator": null,
+        "bound": "free",
+        "upkeep": {
+          "mode": "passive",
+          "per": "none"
+        },
+        "misfire": {
+          "tierClamp": true,
+          "table": null
+        },
+        "signals": {}
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          },
+          "legacySystem": {
+            "description": {
+              "value": "<p><b>Use:</b> Remove radiation effects from yourself. For the next 10 minutes, you experience vivid hallucinations (GM voice opportunity).</p><p><b>Engine hook:</b> flagged for Bad Eden radiation cleanse.</p>",
+              "chat": ""
+            },
+            "quantity": 1,
+            "weight": {
+              "value": 0,
+              "units": "lb"
+            },
+            "price": {
+              "value": 0,
+              "denomination": "gp"
+            },
+            "rarity": "rare",
+            "attunement": "",
+            "identified": true,
+            "uses": {
+              "max": "1",
+              "autoDestroy": true,
+              "spent": 0,
+              "recovery": []
+            },
+            "unidentified": {
+              "description": ""
+            },
+            "type": {
+              "value": "potion",
+              "subtype": ""
+            },
+            "activities": {},
+            "identifier": "radbloom-injector",
+            "source": {
+              "revision": 1,
+              "rules": "2024"
+            },
+            "container": null,
+            "attuned": false,
+            "equipped": false,
+            "damage": {
+              "base": {
+                "types": [],
+                "custom": {
+                  "enabled": false
+                },
+                "scaling": {
+                  "number": 1
+                }
+              },
+              "replace": false
+            },
+            "properties": []
+          },
+          "tier": "III",
+          "frame": "consumable",
+          "origin": "looted",
+          "bound": "free",
+          "reach": "self",
+          "footprint": 0
+        }
+      }
+    },
+    "autoanimations": {
+      "id": "ff1d9aa3-d670-4833-b020-4d26535b63d8",
+      "label": "Rad‑Bloom Injector",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "effects": [],
+  "folder": "TNrB6kEiHS0KwwJT",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1767834191326,
+    "modifiedTime": 1782159994985,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "nH0C8b8OHAIVniEI",
+  "sort": 1500000,
+  "_key": "!items!nH0C8b8OHAIVniEI"
+}

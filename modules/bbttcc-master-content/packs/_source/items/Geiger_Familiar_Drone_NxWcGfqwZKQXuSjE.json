@@ -1,0 +1,276 @@
+{
+  "name": "Geiger Familiar Drone",
+  "type": "equipment",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_geiger_familiar_zone.jpeg",
+  "system": {
+    "description": {
+      "value": "<p>Tiny flying sensor (Guard 15, Integrity 5). As an action, release drone for 10 minutes to map radiation pockets and Spark traces within 300 ft.</p>",
+      "chat": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1,
+      "units": "lb"
+    },
+    "price": {
+      "value": 250,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "attunement": "",
+    "identified": true,
+    "type": {
+      "value": "",
+      "baseItem": ""
+    },
+    "equipped": false,
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "geiger-familiar-drone",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "attuned": false,
+    "crewed": false,
+    "armor": {
+      "value": null,
+      "dex": null
+    },
+    "proficient": null,
+    "properties": [],
+    "strength": null
+  },
+  "flags": {
+    "bbttcc": {
+      "tags": []
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          },
+          "legacySystem": {
+            "description": {
+              "value": "<p>Tiny flying sensor (Guard 15, Integrity 5). As an action, release drone for 10 minutes to map radiation pockets and Spark traces within 60 squares</p>"
+            }
+          }
+        }
+      }
+    },
+    "autoanimations": {
+      "id": "e048d014-c2ca-4477-9ad1-c1ab8b4a28b7",
+      "label": "Geiger Familiar Drone",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "magicsign",
+          "animation": "enchantment",
+          "variant": "02",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "effects": [],
+  "folder": "Wxh1A343inwTUeoo",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1767834171894,
+    "modifiedTime": 1782164185975,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "NxWcGfqwZKQXuSjE",
+  "sort": 1200000,
+  "_key": "!items!NxWcGfqwZKQXuSjE"
+}

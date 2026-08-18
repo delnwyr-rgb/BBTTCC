@@ -1,0 +1,45 @@
+{
+  "name": "Trance of the Thousand Faces (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "dreamwalker",
+    "source": "Bad Eden Originals — Sprint F (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"Identity is negotiable.\"</em></p>\n<p><strong>Mode:</strong> Shape-changer · <strong>Drift:</strong> Toward</p>\n<p>The Thousand Faces is never quite where — or who — you swung at. Your Surge spends weaponize misdirection: borrowed faces that can't be hit cleanly, read tells thrown back at the enemy, two of you at once.</p>\n<h3>Trance (spent via Surge)</h3>\n<ul>\n  <li><strong>Borrowed Face</strong> (1) — they can't tell which face is real: you gain DR + bank a reroll.</li>\n  <li><strong>Mirror Read</strong> (2) — you wear a foe's tell back at them: it rolls its next attack at disadvantage, and you bank a reroll.</li>\n  <li><strong>Shared Face</strong> (3) — you and an ally blur behind borrowed identities: both gain DR.</li>\n</ul>\n<p><em>Out-of-combat:</em> the Borrowed / Gathered / Composite Faces (full disguise + memory access), Persona Cache, and the Thousand-and-One capstone remain the infiltrator's powers.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-dreamwalker-thousand-faces",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "ElDtbAjWdrLjiz5K",
+  "flags": {
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "AsKe0OjImUSGgg1j",
+  "sort": 400000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1781116120730,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!AsKe0OjImUSGgg1j"
+}

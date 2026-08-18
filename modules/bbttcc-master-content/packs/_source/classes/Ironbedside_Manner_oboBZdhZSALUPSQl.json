@@ -1,0 +1,122 @@
+{
+  "name": "Ironbedside Manner",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_8.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Ironbedside Manner.</strong> You have learned to be calm, precise, and a little terrifying when things are bad.</p><ul><li>You gain a small mechanical bonus on <strong>Faith (Soul) checks</strong> to stabilize, treat injuries, or assess physical trauma.</li><li>When you attempt to <strong>stabilize a dying creature</strong>, a roll of 9 or lower on the 2d10x10 counts as a 10 for that attempt (once per creature per Soma Break).</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "ironbedside-manner",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Soul-Smith (3rd level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Ironbedside Manner (Faith (Soul) Edge)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_lucid_3.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459996554,
+        "modifiedTime": 1777433398885
+      },
+      "_id": "8QjtS5FmDnV0b29h",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.faith.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "flags.bbttcc.soulSmith.ironbedsideManner",
+            "type": "custom",
+            "value": true,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!oboBZdhZSALUPSQl.8QjtS5FmDnV0b29h"
+    }
+  ],
+  "folder": "qdqMhHfZdVgUs1gN",
+  "flags": {
+    "bbttcc": {
+      "soulSmith": {
+        "ironbedsideManner": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459996554,
+    "modifiedTime": 1782167240828,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "oboBZdhZSALUPSQl",
+  "sort": 168750,
+  "_key": "!items!oboBZdhZSALUPSQl"
+}

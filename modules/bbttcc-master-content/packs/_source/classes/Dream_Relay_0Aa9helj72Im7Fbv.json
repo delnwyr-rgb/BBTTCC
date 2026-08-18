@@ -1,0 +1,67 @@
+{
+  "name": "Dream Relay",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icon_energy_connection.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Some couriers walk; some dream their routes.</em></p><p>While you are <strong>asleep or in a dream state</strong> (magical or mundane), you may send <strong>short messages</strong> (up to 12 words) to up to <strong>tier allies</strong> who are:</p><ul><li>In Hexes <strong>adjacent</strong> to your own, and</li><li>Marked as <strong>Gate Anchors</strong> by you at any previous time.</li></ul><p>Allies receive these messages as sudden waking impressions or dream-echoes. They may send one brief reply (12 words) which you hear as though whispered across a hallway of light.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "dreamwalker-sapphire-dream-relay",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": [],
+    "requirements": "Dreamwalker 6, Trance of the Sapphire Gate",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "EpLuwx2VEkhesaOK",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "dreamwalker_sapphire_gate",
+      "featureKey": "dream_relay"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459927029,
+    "modifiedTime": 1781116106853,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "0Aa9helj72Im7Fbv",
+  "sort": 150000,
+  "_key": "!items!0Aa9helj72Im7Fbv"
+}

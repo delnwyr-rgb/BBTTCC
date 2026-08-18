@@ -1,0 +1,65 @@
+{
+  "_id": "l4s5F3CMg7bo0Lb2",
+  "name": "Cosmic Linguist: Core Features",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“Magic is grammar. Reality is a draft.”</em></p><p>You are a prepared, academic manifestant who edits meaning directly. You do not delegate power; you channel it raw.</p><p><strong>Esoteric OS Integration:</strong> Your manifesting interacts with correspondences (school ↔ sephirah, day/slot timing). Alignment yields <strong>Resonance</strong>; misalignment accumulates <strong>Strain</strong>.</p><p><strong>Curated List (doc-only):</strong> Cosmic Linguists favor semantic leverage, control, ritual work, and correspondence-aligned craft.</p><h2 data-start=\"6208\" data-end=\"6240\"></h2>",
+      "chat": ""
+    },
+    "identifier": "cosmic_linguist_core_features",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "cosmic_linguist_core_features"
+    }
+  },
+  "folder": "r5DULAhp98iub0mt",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.l4s5F3CMg7bo0Lb2",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459923345,
+    "modifiedTime": 1782167240826,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!l4s5F3CMg7bo0Lb2"
+}

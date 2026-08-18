@@ -1,0 +1,76 @@
+{
+  "name": "Prayer in the Smoke",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_prayer_in_the_smoke.jpeg",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p>A few quiet words aimed at a sky that has, frankly, seen some things. It helps. Don't overthink it.</p><p><b>Allies reroll the lowest die vs Fear; Darkness −1 in the region.</b></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "prayer-in-the-smoke",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "prayer_in_the_smoke",
+      "meta": {
+        "tier": 1,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "presence",
+        "raidTypes": [
+          "presence"
+        ]
+      }
+    }
+  },
+  "_id": "eE4cb9yKafMswvyj",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 1300000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1771977107845,
+    "modifiedTime": 1782167245445,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!eE4cb9yKafMswvyj"
+}

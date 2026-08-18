@@ -1,0 +1,115 @@
+{
+  "name": "Peacekeeper's Poise",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_music_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Peacekeeper's Poise.</strong> Your presence steadies people at the exact moment everything could go sideways.</p><ul><li>When initiative is rolled, you can choose up to a number of creatures equal to your Presence modifier (minimum one) within 6 squares of you. Each gains temporary Integrity equal to your Presence modifier + your tier.</li><li>You can use this feature a number of times per Soma Break equal to your tier.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "peacekeepers-poise",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "Harmony Marshal (1st level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Peacekeeper's Poise (Initiative Temp Integrity)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dagger_3.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776467816703,
+        "modifiedTime": 1777346198714
+      },
+      "_id": "rVJfyeoRd4ioDQyk",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.harmonyMarshal.peacekeepersPoise",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!PnovPwxPKXZWOZjs.rVJfyeoRd4ioDQyk"
+    }
+  ],
+  "folder": "6ELe0FPqgC58OzKS",
+  "flags": {
+    "bbttcc": {
+      "harmonyMarshal": {
+        "peacekeepersPoise": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776467816703,
+    "modifiedTime": 1782167240818,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "PnovPwxPKXZWOZjs",
+  "sort": -700000,
+  "_key": "!items!PnovPwxPKXZWOZjs"
+}

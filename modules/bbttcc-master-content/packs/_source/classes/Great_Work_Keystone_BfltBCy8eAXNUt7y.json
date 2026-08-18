@@ -1,0 +1,125 @@
+{
+  "name": "Great Work Keystone",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hypercube_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Great Work Keystone.</strong> You can design a project whose whole is kinder than the sum of its parts.</p><ul><li>Once per strategic arc, you may designate a multi-hex project (fortification belt, canal, transit line, shrine network, etc.) as a <strong>Great Work Keystone Project</strong>.</li><li>While this project is underway and you are actively involved, <strong>hex-level improvements</strong> made as part of it (Loyalty bumps, Darkness reduction, infrastructure upgrades) are slightly more efficient: they may cost 1 fewer OP, grant +1 additional benefit, or resolve one step faster (GM sets the exact expression).</li><li>This feature narratively and mechanically ties several Soul-Smith actions into a single, named piece of the Great Work.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "great-work-keystone",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "requirements": "Soul-Smith (17th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Great Work Keystone (Project Hook)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_12.png",
+      "origin": null,
+      "transfer": false,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459996550,
+        "modifiedTime": 1777346198077
+      },
+      "_id": "70V3vwai1zEJaOOA",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.soulSmith.greatWorkKeystone",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.hexHooks.keystoneProjectBonus",
+            "value": 1,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!BfltBCy8eAXNUt7y.70V3vwai1zEJaOOA"
+    }
+  ],
+  "folder": "qdqMhHfZdVgUs1gN",
+  "flags": {
+    "bbttcc": {
+      "soulSmith": {
+        "greatWorkKeystone": true
+      },
+      "hexHooks": {
+        "keystoneProjectBonus": 1
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996550,
+    "modifiedTime": 1781116121314,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BfltBCy8eAXNUt7y",
+  "sort": 187500,
+  "_key": "!items!BfltBCy8eAXNUt7y"
+}

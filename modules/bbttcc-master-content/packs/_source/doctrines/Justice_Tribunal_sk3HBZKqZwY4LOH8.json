@@ -1,0 +1,70 @@
+{
+  "name": "Justice Tribunal",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_justic_tribunal.jpeg",
+  "system": {
+    "description": {
+      "value": "<p><strong>Justice Tribunal</strong></p><p>Remove 1 Darkness; Morale +1.</p><p><strong>Cost:</strong> Faith 1</p><hr /><p class=\"hint\"><em>BBTTCC Doctrine</em> • <code>strategic</code> • <code>justice_tribunal</code></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "justice-tribunal",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "justice_tribunal",
+      "meta": {
+        "tier": 2,
+        "rarity": "rare",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": null,
+        "unlockKey": null
+      }
+    }
+  },
+  "_id": "sk3HBZKqZwY4LOH8",
+  "effects": [],
+  "folder": "UpsmhFcQUtMCrYu2",
+  "sort": 3100000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1771977109852,
+    "modifiedTime": 1775063192941,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!items!sk3HBZKqZwY4LOH8"
+}

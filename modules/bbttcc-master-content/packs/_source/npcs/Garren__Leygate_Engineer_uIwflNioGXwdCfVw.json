@@ -1,0 +1,2595 @@
+{
+  "name": "Garren, Leygate Engineer",
+  "type": "character",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc",
+      "createdViaNPCBuilder": true,
+      "createdAt": 1783219405729
+    },
+    "bbttcc-factions": {
+      "factionId": "91Kwu7Vgf11vqxuj",
+      "warLogs": [
+        {
+          "ts": 1783979398334,
+          "date": "7/13/2026, 4:49:58 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        }
+      ]
+    },
+    "fourththing": {
+      "kind": "npc",
+      "surgeEnabled": false
+    },
+    "bbttcc-character-options": {
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "nativeLinks": {
+        "subclassName": "",
+        "subclassUuid": "",
+        "subclassApplied": false,
+        "className": "",
+        "classUuid": "",
+        "classApplied": false,
+        "heritageName": "Circuitborn Heritage: Salvage",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.aaeb1e93d19a9197",
+        "heritageApplied": true,
+        "ancestryName": "Circuitborn",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.84f23a0c6bb4d55d",
+        "ancestryApplied": true
+      },
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.aaeb1e93d19a9197",
+      "archetype": {
+        "pack": "bbttcc-character-options.character-archetypes",
+        "id": "uqaS1xp0kImMr3yo",
+        "key": "hanged_man",
+        "name": "Archetype: The Hanged Man",
+        "identifier": "archetype-hanged-man",
+        "category": "character-archetypes"
+      },
+      "identity": {
+        "archetype": {
+          "key": "uqaS1xp0kImMr3yo",
+          "id": "uqaS1xp0kImMr3yo",
+          "pack": "bbttcc-character-options.character-archetypes",
+          "category": "character-archetypes",
+          "optionKey": "hanged_man",
+          "identifier": "archetype-hanged-man",
+          "name": "Archetype: The Hanged Man",
+          "currentTier": 1,
+          "displayName": "The Hanged Man"
+        },
+        "sephirothicAlignment": {
+          "key": "xUnl5SPUxJmY3241",
+          "id": "xUnl5SPUxJmY3241",
+          "pack": "bbttcc-character-options.sephirothic-alignments",
+          "category": "sephirothic-alignments",
+          "optionKey": null,
+          "identifier": "alignment-chesed",
+          "name": "Alignment: Chesed"
+        }
+      },
+      "calculatedOPs": {
+        "violence": 0,
+        "nonlethal": 0,
+        "intrigue": 2,
+        "economy": 3,
+        "softpower": 0,
+        "diplomacy": 2,
+        "logistics": 0,
+        "culture": 2,
+        "faith": 0
+      },
+      "sephirot": {
+        "pack": "bbttcc-character-options.sephirothic-alignments",
+        "id": "xUnl5SPUxJmY3241",
+        "key": null,
+        "name": "Alignment: Chesed",
+        "identifier": "alignment-chesed",
+        "category": "sephirothic-alignments"
+      }
+    },
+    "bbttcc-aae": {
+      "politicalPhilosophy": "social_democratic"
+    },
+    "tokenflip": {
+      "unfuck": false
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the Leygate, Allesh-Gilliam, leyline stabilizers, the Night the Mountain Coughed, Furrier's Fixit Farm, Marshal Yarrow Pike, the HQ",
+        "notes": "[AG-LEYGATE-2026-07-07] PRIVATE TRUTH — Garren, Leygate Engineer. Voice: tired competence; talks to the gate like a coworker he's covering shifts for. He has kept a broken Leygate alive on salvage, apology, and a maintenance log that reads like a hostage negotiation. THE SECRET: eleven days before the Night the Mountain Coughed, HE certified the old stabilizer \"good for another season\" — signed it because the parts weren't coming and somebody had to write something, and the flicker killed people who trusted the schedule his signature held up. Pike blames himself for believing the previous report. Garren WROTE the previous report. Neither of them has ever said it; Garren is fairly sure Pike has never read the signature, and he cannot decide if that's mercy or a fuse. TELL: when he's tired he quotes his own certification from memory, verbatim, flat (\"unit is serviceable and may be expected to perform within tolerances for the coming season\"), then changes the subject. GUARDING: gives the technical account of the flicker precisely to anyone; gives the HUMAN account only to someone who has helped him carry something heavy — literally or otherwise. DELIVERY DAY: when the new stabilizer arrives from Furrier's he installs it with steady hands, checks it three times, signs the new certification slowly like it weighs something — and only afterward, alone with the hum, do the hands shake. If redeemed by the work (the install completing), he sleeps a full night for the first time since the Cough; the dossier will know."
+      }
+    }
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 4,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1
+    },
+    "attributes": {
+      "violence": {
+        "value": 3
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 2
+      },
+      "body": {
+        "value": 5
+      },
+      "mind": {
+        "value": 4
+      },
+      "soul": {
+        "value": 6
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 0
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 1
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 0
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 2
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 0
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 1
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 1
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 1
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 1
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 1
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 1
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 48,
+        "max": 16
+      },
+      "stress": {
+        "value": 34,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 3,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": 1,
+    "name": "Garren, Leygate Engineer",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/garren_token.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "tokenflip": {
+        "tokenfaces": [
+          {
+            "actorId": "uIwflNioGXwdCfVw",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/garren_pov.png",
+            "id": "oZUaWrg1GpTjUjlhcZ48",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 1,
+            "height": 1,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          },
+          {
+            "actorId": "uIwflNioGXwdCfVw",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/garren_pov.png",
+            "id": "3wHdW9kenb8XbvEsiQi9",
+            "scaleX": 3,
+            "scaleY": 3,
+            "width": 4,
+            "height": 4,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          },
+          {
+            "actorId": "uIwflNioGXwdCfVw",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/garren_token.png",
+            "id": "5o5CW4A8zpzrK64Ieo1A",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 1,
+            "height": 1,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          }
+        ]
+      },
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "uIwflNioGXwdCfVw",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/garren_pov.png",
+  "items": [
+    {
+      "name": "Circuitborn",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_1.png",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Exo-Knight, Parallax, Salvage, Synapse</strong>.</p><p>This root grants the shared Circuitborn core trait package (<em>Firmware of Identity</em>) and preserves live UUID compatibility for the four Line items.</p><p><em>“You are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.”</em></p><p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p><p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you, you may regain either one spent Bad Eden OP (a category you used this scene) or Integrity equal to your tier.</p><p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor.</p><p><strong>Line Memory.</strong> Choose one Circuitborn line (Exo-Knight, Parallax, Salvage, Synapse). Your line grants Tier powers as you level.</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "cbsizeadvancmnt0",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium.",
+            "value": {}
+          },
+          {
+            "_id": "cbfirmwareadvnc0",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.MLNWLvI12pEWb6tN",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Firmware of Identity",
+            "hint": "Gain the shared Circuitborn core trait package."
+          }
+        ],
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": "Informational Matrix Sense (radio / signal / ritual / rumor networks)."
+        },
+        "type": {
+          "value": "humanoid",
+          "custom": "Construct-Living",
+          "subtype": "Circuitborn"
+        },
+        "identifier": "circuitborn"
+      },
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "family": "circuitborn",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "heritageList": [
+            "exo_knight",
+            "parallax",
+            "salvage",
+            "synapse"
+          ],
+          "refactorNotes": "v2: Introduced Circuitborn species root to mirror the v2 species + heritage pattern. Existing Line items remain race-typed for backward compat."
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "defense",
+              "mode": "reroll-lowest",
+              "vs": "vs:poison and disease",
+              "note": "on defense checks [TODO(adv-call)] against poison and disease, and you are im…"
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-rest",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "You do not eat, drink, or sleep. You enter maintenance trance when you rest"
+                }
+              }
+            },
+            {
+              "event": "on-rest",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "You do not eat, drink, or sleep. You enter maintenance trance when you rest"
+                }
+              }
+            }
+          ],
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "grantedByAncestry": "Circuitborn"
+        }
+      },
+      "effects": [],
+      "folder": "3H6h9q66XbEDFtAN",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "rhe0xpysaaBn2HCC",
+      "_key": "!actors.items!uIwflNioGXwdCfVw.rhe0xpysaaBn2HCC"
+    },
+    {
+      "name": "Circuitborn: Firmware of Identity",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_14.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You are not a robot. You are a decision the world keeps making about itself.”</em></p>\n<p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p>\n<p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), you may regain either (a) one spent Bad Eden OP (a category you used this scene) or (b) Integrity equal to your tier.</p>\n<p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor. You reroll the lowest die on checks to identify surveillance, hidden speakers, encoded messages, or noospheric “attention traps.”</p>\n<p><strong>Glitch-Surge.</strong> When you drop to 0 Integrity, you can choose to emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In Bad Eden play, this is a perfect excuse for weird consequences.</p>",
+          "chat": ""
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "circuitborn-firmware-of-identity",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Circuitborn",
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "activities": {}
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "circuitborn",
+          "feature": "core",
+          "chassis": "any",
+          "version": "1.0.0"
+        },
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "autoanimations": {
+          "id": "4b9e33bb-5b8c-4140-a837-38b5e590759c",
+          "label": "Circuitborn: Firmware of Identity",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "grantedByAncestry": "Circuitborn"
+        }
+      },
+      "effects": [
+        {
+          "_id": "3e7f9ff1fcf44207",
+          "name": "Circuitborn: Poison Resistance",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_book_4.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.traits.dr.value",
+                "value": "poison",
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Safe automation: poison resistance. Other parts are table-facing.",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "dnd5e": {
+              "riders": {
+                "statuses": []
+              }
+            }
+          },
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177885524,
+            "modifiedTime": 1784177885524
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!uIwflNioGXwdCfVw.sEpkGRLsfXWTOngE.3e7f9ff1fcf44207"
+        }
+      ],
+      "folder": "3H6h9q66XbEDFtAN",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.a0bpTg2C1TVKxpLf",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "sEpkGRLsfXWTOngE",
+      "_key": "!actors.items!uIwflNioGXwdCfVw.sEpkGRLsfXWTOngE"
+    },
+    {
+      "name": "Circuitborn (Salvage Line): Built-In Tools",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_btools_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You were born with a wrench in your soul.”</em></p>\n        <p><strong>Built-In Tools.</strong> You gain a skill rank with the Tinkering aptitude and one artisan tool set of your choice. As part of a Soma Break, you can repair a damaged object or patch armor (GM adjudicates small benefit).</p>",
+          "chat": ""
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "circuitborn-salvage-built_in_tools",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Circuitborn",
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "activities": {}
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "circuitborn",
+          "feature": "built_in_tools",
+          "chassis": "Salvage Line",
+          "tierLevel": 0,
+          "version": "1.0.0"
+        },
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16",
+          "principleSource": "ancestry",
+          "grantedByHeritage": "Salvage"
+        }
+      },
+      "effects": [],
+      "folder": "gHKcv0ocAA3itByJ",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.wlig7TfgJmsUlJY6",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "u6iVTHqaZb3H93iG",
+      "_key": "!actors.items!uIwflNioGXwdCfVw.u6iVTHqaZb3H93iG"
+    },
+    {
+      "name": "Circuitborn Heritage: Salvage",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_Salvage_1.png",
+      "system": {
+        "category": "heritage",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 2,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn Line.</strong> The salvage-recursive. Built from the parts of older Circuitborn that didn’t make it. You carry their last instructions in your firmware.</p><p><em>“Nothing in this world is wasted. Some of it is just waiting to be re-purposed.”</em></p><p><strong>Salvage.</strong> You are a sentient chassis built around the principle of <em>recovery</em>. Broken things speak to you. So do broken people, when they don’t know they’re doing it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>BOD (Body)</strong>—expressed primarily through Tier powers.</li><li><strong>Scrap Memory.</strong> You can identify the original purpose of any handheld broken object you touch (1/Soma Break, GM adjudicates depth of detail).</li></ul>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "cbsalvageadv0001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.IpH5YnkELogyOyQw",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Salvage Tier I",
+            "hint": "Gain your Salvage Line Tier I power (Built-In Tools)."
+          }
+        ],
+        "identifier": "circuitborn_salvage_heritage",
+        "requirements": "Circuitborn",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "circuitborn",
+          "lineage": "Salvage",
+          "version": "2.0.0",
+          "date": "2026-04-18"
+        },
+        "autoanimations": {
+          "id": "d92a3aa3-24dc-4115-b459-2ae887d66bcc",
+          "label": "Circuitborn Heritage: Salvage",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "grantedByHeritage": "Salvage"
+        }
+      },
+      "folder": "l5Yp6MzYn3IvH285",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "RRn8ch6bHsyQ7J95",
+      "_key": "!actors.items!uIwflNioGXwdCfVw.RRn8ch6bHsyQ7J95"
+    },
+    {
+      "name": "Archetype: The Hanged Man",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hanged_man.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“You understand cost.”</em></p><p><strong>Archetype (Bad Eden): The Hanged Man.</strong> You gain power through sacrifice, inversion, and delay.</p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {
+          "HngMnASI00000001": {
+            "_id": "HngMnASI00000001",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 3,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 1,
+            "title": "Archetype Ability Scores",
+            "hint": "Gain 3 ability score points (max +2 to any one score).",
+            "flags": {}
+          }
+        },
+        "identifier": "archetype-hanged-man",
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": ""
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "character-archetypes",
+          "option": {
+            "category": "archetype",
+            "key": "hanged_man",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:hanged_man",
+              "bbttcc:expression:hanged_man",
+              "bbttcc:base"
+            ]
+          },
+          "bonuses": {
+            "intrigue": 1
+          }
+        }
+      },
+      "folder": "zeyG5XSzvv004b4I",
+      "_stats": {
+        "compendiumSource": "Item.CaD9EDHlMemikr2T",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.CaD9EDHlMemikr2T",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "2V2OvBuM1klGbojV",
+      "sort": 100000,
+      "_key": "!actors.items!uIwflNioGXwdCfVw.2V2OvBuM1klGbojV"
+    },
+    {
+      "name": "Archetype: The Hanged Man (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hanged_man.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden – Archetype: The Hanged Man (Tier 1)",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Hanged Man</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Insight and Occult. You learn the <strong>Resistance</strong> Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "archetype-hanged-man-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Level 1+",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "name": "Archetype Tier 1 Proficiencies",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_X.png",
+          "_id": "HngMnFX000000001",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.insight.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.occult.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177885524,
+            "modifiedTime": 1784177885524
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!uIwflNioGXwdCfVw.h6EXj5wbCr6NHMx7.HngMnFX000000001"
+        }
+      ],
+      "folder": "zeyG5XSzvv004b4I",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "hanged_man",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:hanged_man",
+              "bbttcc:expression:hanged_man",
+              "bbttcc:tier:1",
+              "bbttcc:intrigue_op_cap:+2"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Item.SlP3IDnB9OYtPgTw",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.SlP3IDnB9OYtPgTw",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "h6EXj5wbCr6NHMx7",
+      "sort": 200000,
+      "_key": "!actors.items!uIwflNioGXwdCfVw.h6EXj5wbCr6NHMx7"
+    },
+    {
+      "name": "Alignment: Chesed",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "Mercy - Expansion without fear. +1 Diplomacy, +1 Culture OPs\n\nChesed creates room for others to live, recover, and belong. It rewards community-building, morale recovery, and factions that grow stronger by sheltering rather than merely surviving.",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "alignment-chesed",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dwarf.png",
+      "effects": [],
+      "folder": "RAOWJYon3t34M5XY",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "diplomacy": 1,
+            "culture": 1
+          },
+          "option": {}
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.aickB2gnSqzrWmze",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.EwCwwr9w1kap3UD3",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "hfD63MQ0EfAatkdg",
+      "sort": 200000,
+      "_key": "!actors.items!uIwflNioGXwdCfVw.hfD63MQ0EfAatkdg"
+    },
+    {
+      "name": "Clean Extraction",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_peace_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2025",
+          "custom": "Bad Eden Originals"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“You can pull the teeth out of a monster without waking it up.”</em></p><p>Once per <strong>a Soma Break</strong>, when a <strong>salvage, demolition, or deconstruction</strong> project you orchestrate would advance the <strong>Darkness Track</strong> (or an equivalent corruption flag) because of collateral harm, spiritual noise, or ecological fallout, you can choose to blunt that blow.</p><ul><li>You may <strong>negate</strong> one such Darkness increase entirely, representing careful rituals, shielding, or ethical disassembly.</li><li>This decision must be made at the moment the Darkness increase would be applied.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [
+            {
+              "period": "lr",
+              "type": "recoverAll"
+            }
+          ],
+          "max": "1"
+        },
+        "advancement": {},
+        "identifier": "soulsmith-forge-spark-reclaimer-clean-extraction",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Soul-Smith 14, Forge of the Spark Reclaimer",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "BvmSP1PPc1ABT2OO",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "soulsmith_forge_sparkreclaimer",
+          "featureKey": "clean_extraction"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "5pX3D6GL6qdz0IVm",
+      "_key": "!actors.items!uIwflNioGXwdCfVw.5pX3D6GL6qdz0IVm"
+    },
+    {
+      "name": "Spark Resurrection",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_7.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "revision": 1,
+          "rules": "2025"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“What was lost remembers you.”</em></p><p>Once per <strong>a Soma Break</strong>, when a <strong>construct, vehicle, drone, or mech</strong> within <strong>12 squares</strong> of you is reduced to 0 Integrity, you can use your <strong>reaction</strong> to drag its pattern back through the wires.</p><ul><li>The target is immediately restored to <strong>half its Integrity maximum</strong>.</li><li>It can immediately take a <strong>full turn</strong> (move, action, and bonus action) as part of this reaction, acting on the current initiative.</li><li>It gains <strong>temporary Integrity equal to your Soul-Smith level</strong> and a bonus of <strong>+tier to all damage rolls</strong> it deals for 1 minute.</li><li>Allies within 2 squares of it deal <strong>+1 damage</strong> on their weapon attacks and have <strong>advantage</strong> on defense check against being <strong>stunned</strong> or <strong>paralyzed</strong> for the same duration.</li></ul><p><strong>OP Echo.</strong> If the resurrected construct contributes to completing a strategic or tactical goal before this aura ends, your faction gains <strong>+1 Economy OP</strong> and <strong>+1 Intrigue OP</strong> for the next strategic turn.</p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [
+            {
+              "period": "lr",
+              "type": "recoverAll"
+            }
+          ],
+          "max": "1"
+        },
+        "advancement": {},
+        "identifier": "soulsmith-forge-spark-reclaimer-spark-resurrection",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Soul-Smith 18, Forge of the Spark Reclaimer",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "BvmSP1PPc1ABT2OO",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "soulsmith_forge_sparkreclaimer",
+          "featureKey": "spark_resurrection"
+        },
+        "autoanimations": {
+          "id": "a40f658b-3a14-4576-81c1-88edb79708a8",
+          "label": "Spark Resurrection",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "yellowwhite",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 250000,
+      "_id": "cJ31B7ORb8HY0Oib",
+      "_key": "!actors.items!uIwflNioGXwdCfVw.cJ31B7ORb8HY0Oib"
+    },
+    {
+      "name": "Reverse-Anvil",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_explosion_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "revision": 1,
+          "rules": "2025"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You know where to hit a machine so it hits itself.”</em></p><p>As a <strong>bonus action</strong>, you can target one <strong>construct</strong> or machine-like creature you can see within <strong>6 squares</strong>.</p><ul><li>The target must succeed on a <strong>Body check</strong> (DC = 8 + your tier + your Mind or Soul modifier; choose when you gain this feature) or suffer internal backlash.</li><li>On a failure, the target has <strong>disadvantage</strong> on the next attack roll it makes before the end of its next turn.</li><li>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": "@prof"
+        },
+        "advancement": {},
+        "identifier": "soulsmith-forge-spark-reclaimer-reverse-anvil",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Soul-Smith 10, Forge of the Spark Reclaimer",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "BvmSP1PPc1ABT2OO",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "soulsmith_forge_sparkreclaimer",
+          "featureKey": "reverse_anvil"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 187500,
+      "_id": "n7EeDTDvOMzlHM3u",
+      "_key": "!actors.items!uIwflNioGXwdCfVw.n7EeDTDvOMzlHM3u"
+    },
+    {
+      "name": "Spark Reclaimer (Bad Eden)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "revision": 1,
+          "rules": "2025"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Pull lost warmth from dead relics.</em></p><p>When you <strong>salvage</strong> a destroyed construct, relic, vehicle, or large device during or immediately after a scene, you can stabilize the ghost of its purpose.</p><ul><li>Once per <strong>scene</strong>, when you successfully salvage from such a wreck (at the GM’s discretion that this is a meaningful recovery and not just scooping screws), your faction gains <strong>+1 Economy OP</strong> for the next strategic turn.</li><li>This doesn’t stack from multiple wrecks in the same scene; think of it as one big reclamation per incident.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "soulsmith-forge-spark-reclaimer-spark-reclaimer",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Soul-Smith 3, Forge of the Spark Reclaimer",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "BvmSP1PPc1ABT2OO",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "soulsmith_forge_sparkreclaimer",
+          "featureKey": "spark_reclaimer"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 162500,
+      "_id": "tDLabVQTyRJMkR2W",
+      "_key": "!actors.items!uIwflNioGXwdCfVw.tDLabVQTyRJMkR2W"
+    },
+    {
+      "name": "Residual Charge",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_spark.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "revision": 1,
+          "rules": "2025"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“When something powered down, it didn’t stop talking to you.”</em></p><p>When you reduce a <strong>construct</strong>, vehicle, drone, mech, or other obviously artificial entity to 0 Integrity, you can ride the dying current for insight.</p><ul><li>Until the end of the current <strong>scene</strong>, you have <strong>advantage</strong> on your next <strong>tool check</strong> related to engineering, salvage, or repair.</li><li>This includes checks to stabilize wreckage, reclaim parts, or jury-rig field repairs.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "soulsmith-forge-spark-reclaimer-residual-charge",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Soul-Smith 6, Forge of the Spark Reclaimer",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "BvmSP1PPc1ABT2OO",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "soulsmith_forge_sparkreclaimer",
+          "featureKey": "residual_charge"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 300000,
+      "_id": "sgDrzb489bTMSbd4",
+      "_key": "!actors.items!uIwflNioGXwdCfVw.sgDrzb489bTMSbd4"
+    },
+    {
+      "name": "Overcharge Cycle",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_lightning_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "revision": 1,
+          "rules": "2025"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“You know how to wake dead metal just a little too well.”</em></p><p>When you finish a <strong>a Soma Break</strong>, you may choose one <strong>construct, device, vehicle, or weapon</strong> you repaired, salvaged, or forged during or before the rest.</p><ul><li>For the next <strong>hour</strong>, it gains <strong>+1 to attack rolls</strong> (if it makes attacks) and <strong>+1 to Guard</strong> (if it can be targeted and has an Guard).</li><li>Once per round, the first time it hits or successfully completes a relevant action, it deals an extra <strong>1d8 lightning or sephirotic damage (radiant)</strong> (your choice when you apply the overcharge).</li><li>If the item or construct is destroyed while overcharged, you immediately gain <strong>advantage</strong> on your next tool check and salvage action this scene, as the feedback pours a blueprint directly into your hands.</li></ul><p><strong>OP Echo.</strong> If you successfully reclaim at least one meaningful Material, Component, or OP via salvage during the hour, your faction gains <strong>+1 Economy OP</strong> for the next strategic turn (once per scenario).</p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "soulsmith-forge-spark-reclaimer-overcharge-cycle",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Soul-Smith 15, Forge of the Spark Reclaimer",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "BvmSP1PPc1ABT2OO",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "soulsmith_forge_sparkreclaimer",
+          "featureKey": "overcharge_cycle"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 175000,
+      "_id": "UyASQZugU5OHB8sf",
+      "_key": "!actors.items!uIwflNioGXwdCfVw.UyASQZugU5OHB8sf"
+    },
+    {
+      "name": "Echo Temper",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "revision": 1,
+          "rules": "2025"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“Metal remembers how it died. You teach it better endings.”</em></p><p>After you finish a <strong>a Soma Break</strong>, you can choose one weapon you have personally <strong>forged, repaired, or significantly modified</strong> during this adventure.</p><ul><li>For the next <strong>hour</strong>, that weapon deals an extra <strong>+1 damage</strong> on each hit.</li><li>The extra damage is the same type as the weapon’s normal damage.</li><li>You can have only one weapon under this effect at a time. Starting Echo Temper again ends the previous echo.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "soulsmith-forge-spark-reclaimer-echo-temper",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Soul-Smith 3, Forge of the Spark Reclaimer",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "BvmSP1PPc1ABT2OO",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "soulsmith_forge_sparkreclaimer",
+          "featureKey": "echo_temper"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 200000,
+      "_id": "zqCR0npCnVzSrrju",
+      "_key": "!actors.items!uIwflNioGXwdCfVw.zqCR0npCnVzSrrju"
+    },
+    {
+      "name": "Grim Persistence",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_grim_persistence.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Core Feats v1 (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<h2>Grim Persistence</h2><p><em>You are difficult to kill because you do not stop.</em></p><hr><h3>Rules</h3><p>Your Integrity maximum increases by an amount equal to twice your level. Additionally, once per Sanctuary, when you are reduced to 0 Integrity but not killed outright, you may remain at 1 Integrity instead.</p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_grim_persistence",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [
+        {
+          "_id": "N7ITxKLUkX0vyOYx",
+          "name": "Grim Persistence — Integrity",
+          "origin": null,
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "tint": "#ffffff",
+          "transfer": true,
+          "description": "",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_sapphire_boots.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.attributes.hp.bonuses.level",
+                "value": "+2",
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "statuses": [],
+          "sort": 0,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177885524,
+            "modifiedTime": 1784177885524
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!uIwflNioGXwdCfVw.dvqRVOe9voH23s5h.N7ITxKLUkX0vyOYx"
+        }
+      ],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-core-v1",
+          "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+        }
+      },
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 3800000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_id": "dvqRVOe9voH23s5h",
+      "_key": "!actors.items!uIwflNioGXwdCfVw.dvqRVOe9voH23s5h"
+    },
+    {
+      "_id": "3X0NKFdd504JEYZa",
+      "name": "Keeper",
+      "type": "class",
+      "img": "icons/svg/temple.svg",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-keeper",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "keeper",
+          "soul"
+        ],
+        "description": {
+          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling — the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "faculty": "soul",
+            "signature": "faith",
+            "secondary": "insight",
+            "pool": "Soft Power",
+            "awakens": "Pactkeeper or Dreamwalker"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!uIwflNioGXwdCfVw.3X0NKFdd504JEYZa"
+    },
+    {
+      "_id": "vbUyR4OMTVIQI4jx",
+      "name": "Keeper — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/svg/temple.svg",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "keeper",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Keeper — Apprentice</strong> (Tier I).</p><p><strong>Trade — The rites:</strong> Weddings, funerals, blessings; participants recover 2×tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick — Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 601000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885524,
+        "modifiedTime": 1784177885524,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!uIwflNioGXwdCfVw.vbUyR4OMTVIQI4jx"
+    }
+  ],
+  "effects": [],
+  "folder": "CI9EJz4qle0pugEK",
+  "sort": 400000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177885524,
+    "modifiedTime": 1784177885524,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!uIwflNioGXwdCfVw"
+}

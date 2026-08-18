@@ -1,0 +1,90 @@
+{
+  "name": "Wayfarer Tongue L1: The Tongue That Does Not Lie",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music_3.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>Every message is already halfway arrived.</em></p><p><strong>Mode: Herald / drift: Away.</strong></p><p>Your default Package type is <strong>Message</strong>. You may carry one Message at a time — a specific piece of information given to you by an NPC, ally, or faction, intended for a specific recipient. The Message is recorded narratively (write it on your sheet's Package field).</p><p><strong>While carrying a Message:</strong></p><ul><li><p>You <strong>reroll the lowest die</strong> on Insight (Soul) checks made about or against the Message's intended recipient.</p></li><li><p>You <strong>reroll the lowest die</strong> on Diplomacy (Presence) checks made to secure safe passage, hospitality, or audience related to delivering the Message.</p></li></ul><p><strong>On delivery:</strong> When you successfully deliver a Message to its intended recipient (the GM confirms it counts), your <strong>Pace pool refills to maximum</strong>, and the faction that entrusted the Message gains <strong>+1 Intrigue OP</strong>.</p><p>You may receive a new Message any time your Package slot is empty.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "shadow_courier_wayfarer_l1_tongue_that_does_not_lie",
+    "requirements": "Route of the Wayfarer Tongue, Shadow Courier Initiation 1",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "shadow_courier",
+      "subclassIdentifier": "bbttcc-shadow-courier-courier-wayfarer-tongue",
+      "subclassLevel": 1,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true,
+      "defaultPackageType": "message"
+    },
+    "fourththing": {
+      "grants": {},
+      "triggers": [
+        {
+          "event": "on-delivery",
+          "effect": {
+            "kind": "grant-resource",
+            "args": {
+              "resource": "intrigue-op",
+              "amount": 1,
+              "target": "faction"
+            }
+          }
+        },
+        {
+          "event": "on-delivery",
+          "effect": {
+            "kind": "grant-resource",
+            "args": {
+              "resource": "pace",
+              "amount": 8,
+              "target": "self"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "W1e3ZXUelQ4D70io",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777005233951,
+    "modifiedTime": 1781116156263,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ShdwWayFtL01abcd",
+  "sort": 100000,
+  "_key": "!items!ShdwWayFtL01abcd"
+}

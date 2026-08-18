@@ -1,0 +1,40 @@
+{
+  "name": "Interdict Supply Line",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_net_1.png",
+  "system": {
+    "category": "strategic",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Interdict Supply Line</h3><p>Cut a supply-path hex feeding an enemy siege. Strips the hex's 'Supply Line' modifier (severs the route until restored) and lands an immediate harassment pulse: the besieger's Supply Buffer is shaved and per-turn attrition rises. Any faction except the besieger may interdict. Target the supply-road hex, not the besieged hex.</p><p><strong>OP Cost:</strong> intrigue 15, violence 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> uncommon</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "interdict_supply_line"
+    }
+  },
+  "_id": "iETXwNE66hCiCr9a",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601763,
+    "modifiedTime": 1782703702692,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!iETXwNE66hCiCr9a"
+}

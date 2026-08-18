@@ -1,0 +1,641 @@
+{
+  "name": "S'narchy Burger Drive-Thru (Mobile Unit)",
+  "type": "rig",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "rig",
+      "createdViaContentSprint": "2026-06-13",
+      "createdAt": 1781332648936
+    },
+    "bbttcc-structures": {
+      "hasStructure": true,
+      "facilityMode": false,
+      "materialBOM": [
+        {
+          "materialKey": "scribed-steel",
+          "qty": 6,
+          "originalQty": 6,
+          "family": "metal",
+          "tier": "III",
+          "name": "Scribed Steel",
+          "tagsCache": [
+            "material",
+            "scribed-steel"
+          ]
+        },
+        {
+          "materialKey": "heart-iron",
+          "qty": 3,
+          "originalQty": 3,
+          "family": "metal",
+          "tier": "II",
+          "name": "Heart-Iron",
+          "tagsCache": [
+            "material",
+            "heart-iron",
+            "heart-iron",
+            "aurablade",
+            "metal"
+          ]
+        },
+        {
+          "materialKey": "cold-iron",
+          "qty": 2,
+          "originalQty": 2,
+          "family": "metal",
+          "tier": "II",
+          "name": "Cold-Iron",
+          "tagsCache": [
+            "material",
+            "cold-iron",
+            "iron",
+            "cold-forge",
+            "hex-resistant"
+          ]
+        }
+      ],
+      "state": "intact",
+      "plates": {
+        "current": 33,
+        "max": 33
+      },
+      "threshold": 3.05,
+      "resists": {
+        "kinetic": 0.5
+      },
+      "vulnerabilities": {
+        "energy|heat": {
+          "type": "energy",
+          "flavor": "heat",
+          "factor": 2
+        }
+      },
+      "loadBearing": false,
+      "collapseProfile": {
+        "fallFt": 10,
+        "damageDice": "2d10",
+        "nonlethal": true,
+        "knockbackFt": 5,
+        "triggerState": "breached"
+      },
+      "history": []
+    }
+  },
+  "system": {
+    "identity": {
+      "mobility": "hybrid",
+      "state": "parked",
+      "factionOwnerId": "",
+      "archetype": "Mobile Sanctuary",
+      "binding": {
+        "hexId": "",
+        "sceneId": "",
+        "tokenId": ""
+      }
+    },
+    "crew": {
+      "slots": [],
+      "capacity": {
+        "pilot": {
+          "min": 1,
+          "max": 1
+        },
+        "gunner": {
+          "min": 0,
+          "max": 2
+        },
+        "engineer": {
+          "min": 0,
+          "max": 1
+        },
+        "crew": {
+          "min": 0,
+          "max": 4
+        }
+      },
+      "crewMin": 1,
+      "crewMax": 8
+    },
+    "integrity": {
+      "value": 50,
+      "max": 50,
+      "tier": 2,
+      "bracket": "medium"
+    },
+    "derived": {
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 12
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "defenses": {
+      "resistances": [
+        "psychic"
+      ],
+      "immunities": [
+        "fear"
+      ],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "output": {
+      "modules": [],
+      "basePerTurn": {}
+    },
+    "travel": {
+      "speed": 3,
+      "range": 14,
+      "hazardResist": 1,
+      "domains": [
+        "land"
+      ],
+      "depthRating": 0
+    },
+    "tags": [
+      "sanctuary",
+      "civic",
+      "home-town",
+      "faction-rig"
+    ],
+    "details": {
+      "biography": {
+        "value": "<p><strong>Concept.</strong> When Allesh-Gilliam needs to move the whole HQ, it folds the repurposed S'narchy Burger into a self-propelled drive-thru. The order speaker still works. It will take your order whether you stop or not. PROUDLY OVERCOOKED SINCE THE SHATTERING.</p>\n<p><strong>Signature.</strong> A moving home town — the wrongness of the wastes falls quiet around it, and the coffee is, against all odds, fresh.</p>",
+        "public": ""
+      }
+    },
+    "description": "<p><strong>Concept.</strong> When Allesh-Gilliam needs to move the whole HQ, it folds the repurposed Snarky Burger into a self-propelled drive-thru. The order speaker still works. It will take your order whether you stop or not. PROUDLY OVERCOOKED SINCE THE SHATTERING.</p>\n<p><strong>Signature.</strong> A moving home town — the wrongness of the wastes falls quiet around it, and the coffee is, against all odds, fresh.</p>"
+  },
+  "prototypeToken": {
+    "actorLink": true,
+    "disposition": 1,
+    "name": "S'narchy Burger Drive-Thru (Mobile Unit)",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "h5hwUBEVASaJjP2e",
+  "items": [
+    {
+      "name": "Forge Facility Frame",
+      "type": "gear",
+      "img": "icons/environment/settlement/wagon-black.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "<p>A bolted-down industrial cathedral. Chimneys exhale slag and prayer in equal measure. Doesn't move; doesn't need to. Things come <em>to</em> it.</p><p><strong>Frame · Siege · Stationary</strong></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-frame"
+          },
+          "rigFrame": {
+            "bracket": "siege",
+            "baseIntegrity": 64,
+            "tierStep": 18,
+            "mobilityAllowed": [
+              "stationary"
+            ],
+            "slots": {
+              "weapon": 1,
+              "system": 2,
+              "output": 4
+            },
+            "capacity": {
+              "pilot": {
+                "min": 0,
+                "max": 0
+              },
+              "gunner": {
+                "min": 0,
+                "max": 1
+              },
+              "engineer": {
+                "min": 0,
+                "max": 2
+              },
+              "crew": {
+                "min": 0,
+                "max": 4
+              }
+            },
+            "actions": {
+              "pilot": [],
+              "gunner": [
+                "fire-weapon",
+                "suppression",
+                "opportunity-fire"
+              ],
+              "engineer": [
+                "repair",
+                "boost-system",
+                "vent-heat",
+                "cycle-power",
+                "counter-sabotage"
+              ],
+              "crew": [
+                "operate-module",
+                "reload",
+                "brace"
+              ]
+            },
+            "travel": {
+              "speed": 0,
+              "range": 0
+            },
+            "visualFrame": "anchor-corners"
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 3100000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398498139,
+        "modifiedTime": 1781398498139,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "r3KIGi9tW7FmBxf6",
+      "_key": "!actors.items!h5hwUBEVASaJjP2e.r3KIGi9tW7FmBxf6"
+    },
+    {
+      "name": "Repair Bay",
+      "type": "gear",
+      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "<p>A dedicated cubby with a wrench wall and a swearing engineer. Engineer's repair action gains traction here.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-system",
+            "passive": false
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 800000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398498139,
+        "modifiedTime": 1781398498139,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "HtsGZw0t8l3JoQYN",
+      "_key": "!actors.items!h5hwUBEVASaJjP2e.HtsGZw0t8l3JoQYN"
+    },
+    {
+      "name": "Comms Array",
+      "type": "gear",
+      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "<p>A nest of antennae held together by faith. Extends signal range; allies on hex coordinate at +1 step.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-system",
+            "passive": true
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 1100000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398498139,
+        "modifiedTime": 1781398498139,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "YvQb6cnv6ZrQ0kbi",
+      "_key": "!actors.items!h5hwUBEVASaJjP2e.YvQb6cnv6ZrQ0kbi"
+    },
+    {
+      "name": "Sensor Suite",
+      "type": "gear",
+      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-system",
+            "passive": true
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 300000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398498139,
+        "modifiedTime": 1781398498139,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "Abmw6wNfHhWMI8fH",
+      "_key": "!actors.items!h5hwUBEVASaJjP2e.Abmw6wNfHhWMI8fH"
+    },
+    {
+      "name": "Quartermaster Dispenser",
+      "type": "gear",
+      "img": "icons/tools/smithing/anvil.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "<p>A clipboarded oracle that allocates rations, ammo, and small mercies. Faction supplies stack here.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "output-module",
+            "yield": {
+              "supplies": 3
+            },
+            "mobileLegal": true
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 3500000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398498139,
+        "modifiedTime": 1781398498139,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "gixanYkLYJJAbQ8b",
+      "_key": "!actors.items!h5hwUBEVASaJjP2e.gixanYkLYJJAbQ8b"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1781398498139,
+    "modifiedTime": 1784515283082,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 0,
+  "_key": "!actors!h5hwUBEVASaJjP2e"
+}

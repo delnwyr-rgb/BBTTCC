@@ -1,0 +1,148 @@
+{
+  "name": "Menhirkin: Strategic Hooks (Hex-Giant)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_push_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“Congratulations, the bunker took a level in <strong>you</strong>.”</em></p><p><strong>OP Edge.</strong> Your faction gains +1 Non-Lethal OP and +1 Violence OP at campaign start.</p><p><strong>Fortify Hex.</strong> Each Turn, the first Patch the Breach or structure-repair Siege activity your faction undertakes costs 1 fewer OP (minimum 0).</p><p><strong>Logistics Frame.</strong> Once per Turn, when your faction runs a raid or operation with a Logistics cost, you can treat that cost as Logistics −1 (minimum 0).</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "menhirkin-strategic-hooks-hex-giant",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Menhirkin",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Menhirkin: Strategic Hooks (Bad Eden Flags)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_brawl.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.op.nonLethal.baseBonus",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.op.violence.baseBonus",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>These flags are for your Bad Eden OP engine to read. They do not automate OP changes on their own.</p>",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116092048,
+        "modifiedTime": 1781116092048
+      },
+      "_id": "rZlBLWMwuCJuji2m",
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!gk2lUo4Ic9lme7QC.rZlBLWMwuCJuji2m"
+    }
+  ],
+  "folder": "9ZAaSSW35KsYH2F1",
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryHooks",
+      "opEffects": {
+        "nonLethal": 1,
+        "violence": 1
+      },
+      "siegeRepairDiscount": 1,
+      "logisticsDiscountPerTurn": 1,
+      "version": "1.1.0"
+    },
+    "dnd5e": {},
+    "bbttcc-character-options": {
+      "option": {}
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.SLKRBj8LyQ5ffkT3",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1775004111090,
+    "modifiedTime": 1781116092047,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "gk2lUo4Ic9lme7QC",
+  "sort": 62500,
+  "_key": "!items!gk2lUo4Ic9lme7QC"
+}

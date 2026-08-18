@@ -1,0 +1,258 @@
+{
+  "name": "Menhirkin (Sedimentary): Read the Strata",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunset_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-canon-menhirkin=\"v1\" style=\"display:none\"></div>\n<p><em>\"The stones keep what the rest of us tried to throw away.\"</em></p>\n<p><strong>Read the Strata (1/Soma Break).</strong> Spend 10 minutes with a structure, ruin, battlefield, or natural formation older than a century. The GM answers two true questions about it — one about how it was built or formed, and one about the last decade of its occupation or use.</p>\n<p>This is a separate use from the ancestry's Hex Recognition; they do not share a pool.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"menhirkinSedimentaryReadStrata\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Read the Strata</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Action (10-minute ritual) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">10-min focus on a structure / ruin / formation older than a century → GM answers 2 true questions: one about origin / construction, one about last decade of use. Separate pool from Hex Recognition.</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "menhirkin_sedimentary_tier1",
+    "requirements": "Menhirkin (Sedimentary)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll",
+          "formula": ""
+        }
+      ],
+      "max": "1"
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "menhirkin",
+      "feature": "read_the_strata",
+      "lineage": "Sedimentary",
+      "tierLevel": 1,
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {},
+    "autoanimations": {
+      "id": "616da2f9-446b-4e1b-888d-b98c744f80c5",
+      "label": "Menhirkin (Sedimentary): Read the Strata",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "yellowwhite",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "leAGGkMsNctH4Hm4",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.Anlv3wpYLJzW2lPq",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776660294541,
+    "modifiedTime": 1781116071100,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "Anlv3wpYLJzW2lPq",
+  "sort": 0,
+  "_key": "!items!Anlv3wpYLJzW2lPq"
+}

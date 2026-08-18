@@ -1,0 +1,567 @@
+{
+  "name": "fixit_gullywasher_interior",
+  "_id": "r80yB4XukWUFeoPD",
+  "active": false,
+  "navigation": true,
+  "navOrder": 0,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-_YRzQm2vQzdGukMEPCSNrA.webp",
+  "width": 3840,
+  "height": 2160,
+  "padding": 0.25,
+  "initial": {
+    "x": null,
+    "y": null,
+    "scale": null
+  },
+  "grid": {
+    "type": 1,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 1,
+    "color": "#000000",
+    "alpha": 0.2,
+    "distance": 5,
+    "units": "ft"
+  },
+  "tokenVision": false,
+  "fog": {
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    },
+    "mode": 1
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": true,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "drawings": [],
+  "tokens": [
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/toblerone_token_2%20Background%20Removed.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "name": "Toblerone",
+      "displayName": 30,
+      "actorLink": true,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": "derived.integrity"
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        },
+        "tokenflip": {
+          "tokenfaces": [
+            {
+              "actorId": "GpOORLTg9fSxAqDW",
+              "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/toblerone_token_2%20Background%20Removed.png",
+              "id": "S0nyKMbuODaz0pbX9ult",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 1,
+              "height": 1,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "GpOORLTg9fSxAqDW",
+              "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/toblerone_2%20Background%20Removed.png",
+              "id": "NMnACZQ6nUdFDowCoVcJ",
+              "scaleX": 3,
+              "scaleY": 3,
+              "width": 2,
+              "height": 2,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            }
+          ]
+        }
+      },
+      "actorId": "GpOORLTg9fSxAqDW",
+      "hidden": false,
+      "sort": 1,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "xQorkKzew5rQAc0e",
+      "delta": null,
+      "x": 2700,
+      "y": 1300,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!r80yB4XukWUFeoPD.xQorkKzew5rQAc0e"
+    },
+    {
+      "actorLink": false,
+      "disposition": 1,
+      "name": "Dougan",
+      "displayName": 30,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Local%20Factions/dougan_token.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1.8,
+        "scaleY": 1.8,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        }
+      },
+      "actorId": "7Lee6ROPnc4gWYJh",
+      "hidden": false,
+      "sort": 2,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "G0DlasK9wpTH84Zb",
+      "delta": {
+        "_id": "G0DlasK9wpTH84Zb",
+        "name": null,
+        "type": null,
+        "img": null,
+        "system": {},
+        "items": [],
+        "effects": [],
+        "ownership": null,
+        "flags": {
+          "bbttcc-mal-voice": {
+            "dialogue": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Toblerone: Hello Mr Dougan! I'm Toblerone, with the new Stewards from Allesh Gilliam. Ummm, you're a Chupacabra, right? Running a bar in a Jackalope Town?",
+                  "speaker": "Toblerone",
+                  "ts": 1783133943232
+                },
+                {
+                  "role": "assistant",
+                  "content": "*sets down the glass he's been polishing, looks Toblerone over with the frank, unhurried curiosity of a man used to strange company*\n\nDougan Marsh, at your service. And yes — Chupacabra, saloon-keeper, and about as unbothered by the arrangement as you are, friend. Furrier's don't much care what you were born as, so long as you pour a fair drink and keep your ledger honest. I do both. Most nights.\n\n*taps the bar twice, a habit more than a gesture*\n\nNow — Toblerone. That's a new one on me. Allesh-Gilliam, you said. You'll be here about the Gate trouble, or just thirsty? Either's a fine reason to sit.",
+                  "speaker": "Dougan",
+                  "ts": 1783133947813
+                }
+              ]
+            }
+          }
+        },
+        "_key": "!scenes.tokens.delta!r80yB4XukWUFeoPD.G0DlasK9wpTH84Zb.G0DlasK9wpTH84Zb"
+      },
+      "x": 2600,
+      "y": 1100,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!r80yB4XukWUFeoPD.G0DlasK9wpTH84Zb"
+    },
+    {
+      "actorLink": false,
+      "disposition": 1,
+      "name": "Miliard",
+      "displayName": 30,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/miliard_token.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 225,
+      "alpha": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        },
+        "tokenflip": {
+          "tokenfaces": [
+            {
+              "actorId": "OaZGlGHBBdTXfJHr",
+              "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/miliard_token.png",
+              "id": "PELgF6IJ79ebXhqGPtpS",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 1,
+              "height": 1,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "OaZGlGHBBdTXfJHr",
+              "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/milliard_weeping_prisoner.png",
+              "id": "voZGGzQbl0ssF1hjQjPj",
+              "scaleX": 3,
+              "scaleY": 3,
+              "width": 5,
+              "height": 5,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            }
+          ]
+        }
+      },
+      "actorId": "OaZGlGHBBdTXfJHr",
+      "x": 2400,
+      "y": 1300,
+      "hidden": false,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "kk7mHBrgLeqz5PCJ",
+      "delta": null,
+      "elevation": 0,
+      "sort": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!r80yB4XukWUFeoPD.kk7mHBrgLeqz5PCJ"
+    }
+  ],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [],
+  "walls": [],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "folder": "QLkQ6AYisOyXkJg1",
+  "sort": 400000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982536082,
+    "modifiedTime": 1783982536082,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "navName": "",
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "fixit_gullywasher_interior",
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/furrier_saloon_interior.mp4",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!r80yB4XukWUFeoPD.defaultLevel0000"
+    }
+  ],
+  "shiftX": 0,
+  "shiftY": 0,
+  "initialLevel": "defaultLevel0000",
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "_key": "!scenes!r80yB4XukWUFeoPD",
+  "templates": []
+}

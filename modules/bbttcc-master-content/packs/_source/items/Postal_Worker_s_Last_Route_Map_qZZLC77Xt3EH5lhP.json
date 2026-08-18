@@ -1,0 +1,81 @@
+{
+  "name": "Postal Worker's Last Route Map",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/tech_hex_map.png",
+  "system": {
+    "slot": "tool",
+    "tags": [
+      "mal-voiced",
+      "map",
+      "memory"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>A laminated mail-route map, hand-annotated in three colors of ink. The roads are pre-Shattering. Most are now dust, briar, or crater. The annotations include phrases like <em>\"dog at 12, friendly,\"</em> and <em>\"Mrs. Vorhees needs the package put inside the screen door,\"</em> and, more recently in different handwriting, <em>\"the bend remembers wrong.\"</em></p><p><strong>Pre-Shattering Memory.</strong> Once per scene, consult the map. The GM tells you one fact about the current hex that pre-dates the Shattering — a building, a road, a name, a habit of the land. This information is true; it is also at least 27 years out of date. Use it however you want.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "tool",
+          "signature": "The roads on it don't exist anymore. The annotations sometimes describe the road you're on RIGHT NOW. Don't ask.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A laminated mail-route map, hand-annotated in three colors of ink. The roads are pre-Shattering. Most are now dust, briar, or crater. The annotations include phrases like <i>\"dog at 12, friendly,\"</i> and <i>\"Mrs. Vorhees needs the package put inside the screen door,\"</i> and, more recently in different handwriting, <i>\"the bend remembers wrong.\"</i></p><p><b>Pre-Shattering Memory.</b> Once per scene, consult the map. The GM tells you one fact about the current hex that pre-dates the Shattering — a building, a road, a name, a habit of the land. This information is true; it is also at least 27 years out of date. Use it however you want.</p>",
+          "materialOf": [
+            "pre-fall-paper",
+            "civic-conscientiousness",
+            "ink-three-colors"
+          ],
+          "price": {
+            "marks": 90,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII tool stamp",
+            "bound": "attuned",
+            "saleBack": 36
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "qZZLC77Xt3EH5lhP",
+  "effects": [],
+  "sort": 2550000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725664,
+    "modifiedTime": 1778541978461,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!qZZLC77Xt3EH5lhP"
+}

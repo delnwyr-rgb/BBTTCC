@@ -1,0 +1,332 @@
+{
+  "name": "Brass Knife of the Quiet Word",
+  "type": "weapon",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_knife.png",
+  "system": {
+    "category": "melee",
+    "intent": "intrigue",
+    "skill": "melee",
+    "damage": {
+      "formula": "1d6",
+      "attribute": "intrigue",
+      "type": "kinetic",
+      "damageFlavor": "stab",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1
+    },
+    "tags": [
+      "knife",
+      "parry",
+      "courier-favored"
+    ],
+    "effect": "Quiet Word: +1 Evasion vs the first attack each round while attuned and equipped.",
+    "flavor": "Carried in the inside seam, not the belt.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "<p>Small parry knife. Brass guard etched with a single word in three languages, all meaning <i>enough</i>.</p><p>Favored by Shadow Couriers. Light enough to draw between sentences.</p><p><b>Quiet Word.</b> While attuned and equipped, you have +1 to Evasion against the first attack each round.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Quiet Word: +1 Evasion vs the first attack each round while attuned and equipped.</p>\n<ul>\n <li><strong>Damage:</strong> 1d6 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(stab)</span></li>\n <li><strong>Faculty:</strong> Intrigue</li>\n <li><strong>Attack:</strong> Melee (Intrigue)</li>\n <li><strong>Reach:</strong> Melee</li>\n <li><strong>Duration:</strong> Scene</li>\n <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "5",
+          "frame": "weapon",
+          "signature": "A word kept short; an edge kept shorter.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {
+            "parry": true
+          },
+          "lore": "<p>Small parry knife. Brass guard etched with a single word in three languages, all meaning <i>enough</i>.</p><p>Favored by Shadow Couriers. Light enough to draw between sentences.</p><p><b>Quiet Word.</b> While attuned and equipped, you have +1 to Evasion against the first attack each round.</p>",
+          "materialOf": [
+            "bronze-nail",
+            "hex-script",
+            "finger-bone"
+          ],
+          "price": {
+            "marks": 150,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII weapon stamp",
+            "bound": "attuned",
+            "saleBack": 60
+          }
+        }
+      },
+      "manifestSheetMode": {
+        "bytUGWIOqq9eT7Or": "display"
+      }
+    },
+    "autoanimations": {
+      "id": "5286f4c5-b631-482e-8e0e-5689ee70a954",
+      "label": "Brass Knife of the Quiet Word",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "melee",
+      "primary": {
+        "video": {
+          "dbSection": "melee",
+          "menuType": "weapon",
+          "animation": "dagger",
+          "variant": "01",
+          "color": "white",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5,
+      "meleeSwitch": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "weapon",
+          "animation": "arrow",
+          "variant": "regular",
+          "color": "regular",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "detect": "automatic",
+          "range": 2,
+          "returning": false,
+          "switchType": "on"
+        }
+      }
+    }
+  },
+  "folder": "H6eMhWQrjwcwZcBi",
+  "_id": "NgE3NC7b7tJJGirU",
+  "effects": [],
+  "sort": 900000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137142772,
+    "modifiedTime": 1782159946544,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!NgE3NC7b7tJJGirU"
+}

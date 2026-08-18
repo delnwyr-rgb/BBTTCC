@@ -1,0 +1,23 @@
+{
+  "type": "Scene",
+  "folder": "ZEG45WRE7W5b9hgt",
+  "name": "The Three Lost Stone Statues of Apparent Importance",
+  "color": null,
+  "sorting": "a",
+  "_id": "MHaSZbKaY3mIBTci",
+  "description": "",
+  "sort": 800000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982526119,
+    "modifiedTime": 1783982526119,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!folders!MHaSZbKaY3mIBTci"
+}

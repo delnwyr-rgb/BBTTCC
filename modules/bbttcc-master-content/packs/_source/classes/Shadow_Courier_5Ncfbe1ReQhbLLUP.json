@@ -1,0 +1,205 @@
+{
+  "name": "Shadow Courier",
+  "type": "class",
+  "system": {
+    "category": "path",
+    "identifier": "shadow_courier",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"You're already moving. The fight rearranges around it.\"</em></p>\n<p>The Shadow Courier runs on <strong>Surge</strong>, like everyone — but yours comes from <strong>motion</strong>. Move <strong>30+ ft in a turn and you bank +1 Surge</strong> (again at 12 squares, max +2/round). A courier in motion has options; a courier standing still is just a target. The old <em>Pace</em> pool folds into this — same fuel, one number.</p>\n<h3>The Courier (spent via Surge)</h3>\n<ul>\n  <li><strong>Courier's Step</strong> (1) — +half-speed move (no provoke) and a freed reaction; flow through the fight.</li>\n  <li><strong>Ghoststep</strong> (3) — DR equal to Tier till your next turn, and reposition out of danger.</li>\n  <li><strong>Flank &amp; Strike</strong> (5) — reposition, then your next Strike reroll the lowest die <em>and</em> +Tier d6.</li>\n  <li><strong>No Such Door</strong> (8) — allies within Tier squares each gain a freed reaction and a reroll; open the road for the whole team.</li>\n</ul>\n<p>The <strong>Package</strong> endures as your work — designate it, carry it, deliver it. <strong>Delivery banks your Surge to full</strong> and still triggers the route's strategic payoff (Intrigue OP, Darkness reduction, the arrival that mattered).</p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "ysJfJkeA2WfOMglf",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL01abcd",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL01abcd",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwClassFt01abc",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 1,
+        "title": "Shadow Courier Core Features"
+      },
+      {
+        "_id": "fKMpucL0iMdGK36R",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL05abcd",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL05abcd",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 5,
+        "title": "Shadow Courier: Level 5 Features"
+      },
+      {
+        "_id": "WWn1GvGPn6D5b7VT",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwClassFt02abc",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 6,
+        "title": "Shadow Courier — Tier 2: The Crossing"
+      },
+      {
+        "_id": "XTTN4qPwzYgfQmVV",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL09abcd",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL09abcd",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 9,
+        "title": "Shadow Courier: Level 9 Features"
+      },
+      {
+        "_id": "04Vm8pF6PL24VTNk",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwClassFt03abc",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 11,
+        "title": "Shadow Courier — Tier 3: Package Mastery"
+      },
+      {
+        "_id": "T33qFY91LUnCWm0K",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL13abcd",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL13abcd",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 13,
+        "title": "Shadow Courier: Level 13 Features"
+      },
+      {
+        "_id": "DssNqx6N2zCsLnbY",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwClassFt04abc",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 16,
+        "title": "Shadow Courier — Tier 4: Unfound Route"
+      },
+      {
+        "_id": "vZgryR38AUD5g5Is",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwBlkFtL17abcd",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ShdwLstFtL17abcd",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 17,
+        "title": "Shadow Courier: Level 17 Features"
+      }
+    ]
+  },
+  "flags": {
+    "bbttcc": {
+      "primary": "dexterity",
+      "opBonus": {
+        "intrigue": 2,
+        "logistics": 2
+      }
+    }
+  },
+  "_id": "5Ncfbe1ReQhbLLUP",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Shadowjack.png",
+  "effects": [],
+  "folder": "apQBjTCtfZVreQpj",
+  "ownership": {
+    "default": 0
+  },
+  "sort": 400000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.364",
+    "createdTime": 1776459469161,
+    "modifiedTime": 1782167240798,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.1",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!5Ncfbe1ReQhbLLUP"
+}

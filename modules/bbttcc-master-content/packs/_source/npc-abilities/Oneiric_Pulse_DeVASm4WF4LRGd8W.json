@@ -1,0 +1,77 @@
+{
+  "name": "Oneiric Pulse",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_head_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Oneiric Pulse.</strong> Close your eyes. The future blinks first.</p><ul><li>Your consciousness intermittently echoes ahead of your physical movement, granting subtle foresight.</li><li>You can feel metaphysical anomalies ‘warming up’ before they manifest.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "oneiric-pulse",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "Dreamwalker",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "dreamwalker": {
+        "pulse": true
+      },
+      "npcAbility": {
+        "sources": [
+          "Dreamie"
+        ],
+        "worlds": [
+          "ember"
+        ]
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "principleSource": "class"
+    }
+  },
+  "sort": 0,
+  "_id": "DeVASm4WF4LRGd8W",
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1781116229062,
+    "modifiedTime": 1781116229062,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!DeVASm4WF4LRGd8W"
+}

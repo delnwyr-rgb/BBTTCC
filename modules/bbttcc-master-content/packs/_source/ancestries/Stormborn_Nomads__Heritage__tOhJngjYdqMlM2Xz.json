@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "5PPxNybRn7zD0k0G",
+  "name": "Stormborn Nomads (Heritage)",
+  "color": null,
+  "sorting": "a",
+  "_id": "tOhJngjYdqMlM2Xz",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776573991471,
+    "modifiedTime": 1776574250923,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!tOhJngjYdqMlM2Xz"
+}

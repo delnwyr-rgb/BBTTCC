@@ -1,0 +1,65 @@
+{
+  "_id": "0eK8s40U34rIKaqW",
+  "name": "Redactor: Semantic Redaction",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"862\" data-end=\"875\"><em data-start=\"862\" data-end=\"875\">(3rd Level)</em></p><p data-start=\"877\" data-end=\"929\"><em data-start=\"877\" data-end=\"929\">“If it shouldn’t be there, I remove the sentence.”</em></p><p data-start=\"931\" data-end=\"978\">Your Subtractive Editing Mode becomes enhanced.</p><p data-start=\"980\" data-end=\"1007\">When you cast a manifestation that:</p><ul data-start=\"1009\" data-end=\"1087\"><li data-start=\"1009\" data-end=\"1021\"><p data-start=\"1011\" data-end=\"1021\">Banishes</p></li><li data-start=\"1022\" data-end=\"1033\"><p data-start=\"1024\" data-end=\"1033\">Dispels</p></li><li data-start=\"1034\" data-end=\"1047\"><p data-start=\"1036\" data-end=\"1047\">Restrains</p></li><li data-start=\"1048\" data-end=\"1060\"><p data-start=\"1050\" data-end=\"1060\">Silences</p></li><li data-start=\"1061\" data-end=\"1072\"><p data-start=\"1063\" data-end=\"1072\">Negates</p></li><li data-start=\"1073\" data-end=\"1087\"><p data-start=\"1075\" data-end=\"1087\">Suppresses</p></li></ul><p data-start=\"1089\" data-end=\"1128\">You may apply <strong data-start=\"1103\" data-end=\"1127\">one Redaction Effect</strong>:</p><ol data-start=\"1130\" data-end=\"1447\"><li data-start=\"1130\" data-end=\"1245\"><p data-start=\"1133\" data-end=\"1245\"><strong data-start=\"1133\" data-end=\"1151\">Erase Presence</strong> — Target becomes partially removed (treat as invisible or untargetable) until your next turn.</p></li><li data-start=\"1246\" data-end=\"1343\"><p data-start=\"1249\" data-end=\"1343\"><strong data-start=\"1249\" data-end=\"1270\">Revoke Permission</strong> — Target loses access to one ability/manifestation/feature until your next turn.</p></li><li data-start=\"1344\" data-end=\"1447\"><p data-start=\"1347\" data-end=\"1447\"><strong data-start=\"1347\" data-end=\"1365\">Cut Continuity</strong> — One ongoing effect ends immediately (Clarity hold snaps; summons destabilize).</p></li></ol><p data-start=\"1449\" data-end=\"1502\"><strong data-start=\"1449\" data-end=\"1458\">Cost:</strong><br data-start=\"1458\" data-end=\"1461\" />Spend 1 Resonance Die and gain +1 Strain.</p><p data-start=\"1504\" data-end=\"1540\">This is not damage.<br data-start=\"1523\" data-end=\"1526\" />It is absence.</p><p data-start=\"1542\" data-end=\"1579\"></p>",
+      "chat": ""
+    },
+    "identifier": "redactor_semantic_redaction",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "redactor_semantic_redaction"
+    }
+  },
+  "folder": "pcv0zMJZU8aoEMQc",
+  "sort": 500000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.0eK8s40U34rIKaqW",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923343,
+    "modifiedTime": 1781116107907,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!0eK8s40U34rIKaqW"
+}

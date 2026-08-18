@@ -1,0 +1,325 @@
+{
+  "name": "Oldenborn (Lumenwrought): Sovereign Mask",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mask.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-canon-oldenborn-furrykin=\"v1\" style=\"display:none\"></div>\n<p><em>\"You put on a story, and the world agrees.\"</em></p><p><strong>Sovereign Mask (1/Soma Break).</strong> Over 1 minute, assume a mythic persona (King, Trickster, Saint, Monster, etc.). For 10 minutes, gain a skill rank in Diplomacy (Presence), Stealth (Intrigue), and Intimidation (Presence) — or mastery if already proficient. You cannot be magically identified or scryed while masked.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldLumenSovereignMask\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Sovereign Mask</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> 1-minute donning &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Assume mythic persona for 10 min: +1 rank Diplomacy/Stealth/Intimidation (mastery if proficient); immune to magical identification/scrying.</div>\n</div>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "oldenborn-lumenwrought-sovereign_mask",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Oldenborn",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "oldenborn",
+      "feature": "sovereign_mask",
+      "lineage": "Lumenwrought",
+      "tierLevel": 11,
+      "version": "1.0.0"
+    },
+    "autoanimations": {
+      "id": "dcdcb389-d986-4c60-a278-0b2b10a06b81",
+      "label": "Oldenborn (Lumenwrought): Sovereign Mask",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "magicsign",
+          "animation": "enchantment",
+          "variant": "02",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "effects": [
+    {
+      "_id": "deffebd5550f4ede",
+      "name": "Lumenwrought: Social Mastery (+1 to Persuasion/Deception/Intimidation)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blade_1.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.diplomacy.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 10
+          },
+          {
+            "key": "system.skills.stealth.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 10
+          },
+          {
+            "key": "system.skills.intimidation.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 10
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Represents mythic presence. Full proficiency changes are table-facing.",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346196476,
+        "modifiedTime": 1777433398720
+      },
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!5YwIIOApcLGZC7dw.deffebd5550f4ede"
+    }
+  ],
+  "folder": "AZpEGZW4ZA1Kjb9K",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.LrrTJWmNwYk5zbq0",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1775004114716,
+    "modifiedTime": 1781116067024,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "5YwIIOApcLGZC7dw",
+  "sort": 0,
+  "_key": "!items!5YwIIOApcLGZC7dw"
+}

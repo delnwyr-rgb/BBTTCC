@@ -1,0 +1,100 @@
+{
+  "name": "Crew Type: Ashbound Survivors",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "revision": 2,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Crew Type (Bad Eden): Ashbound Survivors.</em></p><p><strong>“You don’t conquer the wasteland. You outlast it.”</strong></p><p>Ashbound Survivors know how to live where maps stop pretending. They ration breath, read heat shimmer like scripture, and treat hostile terrain as a negotiation instead of a death sentence.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Lore.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Economy OPs.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-ashbound-survivors",
+    "requirements": "",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew-types",
+      "bonuses": {
+        "economy": 1
+      },
+      "option": {
+        "category": "crew",
+        "key": "ashbound-survivors",
+        "progressionType": "level",
+        "domains": [
+          "op"
+        ],
+        "scope": "faction",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:ashbound-survivors",
+          "bbttcc:progression:level",
+          "bbttcc:domain:op",
+          "bbttcc:scope:faction",
+          "bbttcc:effect:op:economy:+8",
+          "bbttcc:theme:endurance",
+          "bbttcc:theme:survival",
+          "bbttcc:theme:attrition",
+          "bbttcc:theme:wasteland-mastery"
+        ]
+      }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Dreamie"
+        ],
+        "worlds": [
+          "ember"
+        ]
+      }
+    }
+  },
+  "_id": "FngvA5r51c1ljOd8",
+  "sort": 0,
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1781116229307,
+    "modifiedTime": 1782167244991,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!FngvA5r51c1ljOd8"
+}

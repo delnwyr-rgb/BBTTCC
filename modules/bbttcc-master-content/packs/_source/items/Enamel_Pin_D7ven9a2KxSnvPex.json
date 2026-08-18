@@ -1,0 +1,78 @@
+{
+  "name": "Enamel Pin",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/enamel_pin_1.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "enamel-pin"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Enameled metal pin, sigil-blank. Used to identify Shadow Couriers — and, when worked, to bind crossing-magic.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "A small flag for a private kingdom.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Enameled metal pin, sigil-blank. Used to identify Shadow Couriers — and, when worked, to bind crossing-magic.</p>",
+          "charges": 4,
+          "materialKey": "enamel-pin",
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI material stamp",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "D7ven9a2KxSnvPex",
+  "effects": [],
+  "sort": 450000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137161819,
+    "modifiedTime": 1782156674942,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!D7ven9a2KxSnvPex"
+}

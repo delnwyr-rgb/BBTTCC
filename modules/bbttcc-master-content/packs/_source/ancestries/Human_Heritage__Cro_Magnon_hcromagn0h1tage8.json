@@ -1,0 +1,111 @@
+{
+  "_id": "hcromagn0h1tage8",
+  "name": "Human Heritage: Cro-Magnon",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/ezeren_shadow_courier.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>New Heritage (v2).</strong> Cro-Magnon replaces Erectus in the Human heritage lineup.</p><p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Cro-Magnon).</strong> You are not a fantasy human. You are the cognitive, symbolic, cooperative inheritance of the lineage that first painted ancestors on cave walls, buried its dead with flowers, and traded ochre across a continent it had no map for.</p><p>Where Neanderthal is <em>strength</em> and Florensis is <em>reach</em>, Cro-Magnon is <em>pattern</em>. Language, ritual, coalition. You are the human branch that kept explaining things until the explanation started working.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>MND (Mind)</strong> or <strong>PRE (Presence)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory).</p><h3>Cro-Magnon Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Cro-Magnon powers emphasize: <em>Symbolic Thought</em> (ritual and language sensitivity), <em>Coalition Instinct</em> (cooperation bonuses with allies), <em>Tool Mind</em> (improvisational tool use), and <em>Narrative Memory</em> (lore retention that persists across generations).</p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "hcromagadv000001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.HCROMAGNONTIERI0",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Cro-Magnon Tier I",
+        "hint": "Gain your Cro-Magnon Tier I lineage power."
+      }
+    ],
+    "identifier": "human_cro_magnon_heritage",
+    "requirements": "Human",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "human",
+      "lineage": "Cro-Magnon",
+      "version": "2.0.0",
+      "date": "2026-04-18",
+      "normalizedFrom": "new-in-v2",
+      "replaces": "human_erectus_heritage"
+    },
+    "fourththing": {
+      "resourceGrants": [
+        {
+          "cadence": "per-campaign-start",
+          "resource": "intrigue-op",
+          "amount": 2
+        },
+        {
+          "cadence": "per-campaign-start",
+          "resource": "soft-power-op",
+          "amount": 2
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-help-action",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Coalition Instinct. When you use the Help action on an ally's check and they succeed, the ally also recovers 1 point of Stress"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "XtVszfKGXh1D3T29",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-ancestry-v2",
+      "uuid": "Item.hcromagn0h1tage8",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1744977600000,
+    "modifiedTime": 1782167240131,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 100000,
+  "_key": "!items!hcromagn0h1tage8"
+}

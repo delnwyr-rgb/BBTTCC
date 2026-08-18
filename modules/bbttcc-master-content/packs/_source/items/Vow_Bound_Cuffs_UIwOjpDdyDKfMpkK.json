@@ -1,0 +1,87 @@
+{
+  "name": "Vow-Bound Cuffs",
+  "type": "gear",
+  "img": "icons/equipment/wrist/manacles-iron.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [
+      "tech"
+    ],
+    "category": "gear",
+    "source": "Phase 7 Seed (2026-05-10)",
+    "description": {
+      "value": "<p>Cold-iron cuffs scribed with a vow of stillness. The wearer cannot lie, attack, or flee until they accept the oath, fulfill it, or break it (and themselves).</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "frame": "tool",
+          "bound": "free",
+          "materialOf": [
+            {
+              "key": "vow-bone",
+              "qty": 1
+            },
+            {
+              "key": "cold-iron",
+              "qty": 2
+            },
+            {
+              "key": "sacred-gold",
+              "qty": 1
+            },
+            {
+              "key": "witness-glass",
+              "qty": 1
+            }
+          ],
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 1,
+              "max": 1,
+              "recoverPer": "manual"
+            },
+            "failure": "drain",
+            "origin": "septcraft"
+          },
+          "price": {
+            "marks": 180,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII tool × 0.60 × tech 2.0",
+            "bound": "free",
+            "saleBack": 72
+          }
+        }
+      }
+    }
+  },
+  "_id": "UIwOjpDdyDKfMpkK",
+  "effects": [],
+  "folder": "Wxh1A343inwTUeoo",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778963373519,
+    "modifiedTime": 1778963373519,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 0,
+  "_key": "!items!UIwOjpDdyDKfMpkK"
+}

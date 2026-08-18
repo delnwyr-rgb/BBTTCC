@@ -1,0 +1,67 @@
+{
+  "name": "Quiet March",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wave_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>You walk in ways that don’t wake monsters.</em></p><p>When you <strong>lead travel</strong> for the party:</p><ul><li>The chance of an encounter triggered by that travel is reduced by <strong>10%</strong> (GM applies this as a flat reduction to whatever table they’re using).</li><li>Once per in-world day, you may ignore the <strong>first Logistics OP surcharge</strong> applied to travel you lead, treating it as if the route were slightly kinder than expected.</li></ul><p>Some roads are quieter simply because you were the one who chose them.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "dreamwalker-quiet-quiet-march",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 10
+    },
+    "properties": [],
+    "requirements": "Dreamwalker 10, Trance of the Quiet Sun",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "11soLvLsTohdUQFT",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "dreamwalker_quiet_sun",
+      "featureKey": "quiet_march"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459927030,
+    "modifiedTime": 1781116114719,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "6KA6CTSPqrQgLa03",
+  "sort": 200000,
+  "_key": "!items!6KA6CTSPqrQgLa03"
+}

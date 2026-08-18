@@ -1,0 +1,81 @@
+{
+  "name": "Gathers, Reports, Dies Anonymously",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_surveillance.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [
+      "seed-bestiary-attacks",
+      "tier-ii",
+      "role-stealth",
+      "passive"
+    ],
+    "description": {
+      "value": "<p>On death, the initiate's last sight is transmitted to a Witness-Warden within 1 mile. Combat-relevant: any nearby allied Witness gains reroll-the-lowest on their next attack roll against the killer.</p><p><em>They were always going to die this mission. The point was what they saw before they did.</em></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "frame": "trait"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Witness Initiate"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "sort": 0,
+  "_id": "qXHUDkgrDxQmcg11",
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": null,
+    "modifiedTime": null,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!qXHUDkgrDxQmcg11"
+}

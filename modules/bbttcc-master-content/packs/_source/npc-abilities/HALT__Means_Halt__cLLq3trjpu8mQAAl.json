@@ -1,0 +1,296 @@
+{
+  "name": "HALT (Means Halt)",
+  "type": "weapon",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_fist_wall.png",
+  "system": {
+    "category": "ranged",
+    "intent": "presence",
+    "skill": "channel",
+    "damage": {
+      "formula": "1d10",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 60,
+      "long": 60
+    },
+    "tags": [
+      "control",
+      "single-target",
+      "civic"
+    ],
+    "effect": "One creature within 60 ft. Body vs DC 13. Fail: Restrained (speed 0) until the end of its next turn — the ordinance compels it to stop.",
+    "flavor": "",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "<p><strong>Stop Order.</strong> Body check vs DC 13. Fail: Restrained until end of next turn.</p><p><em>The light is red. The light has been red for forty years. You will respect the light.</em></p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "frame": "save",
+          "aoeShape": "none",
+          "aoeSize": 0,
+          "dcAbility": "wis",
+          "dc": 13,
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "ability stamp",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Crossing Guard (Lapsed Protocol)"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    },
+    "autoanimations": {
+      "id": "f4bc6a2a-f608-4b5e-851e-aace3819f9eb",
+      "label": "HALT (Means Halt)",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "hold",
+          "variant": "01",
+          "color": "red",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "_id": "cLLq3trjpu8mQAAl",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1780000000000,
+    "modifiedTime": 1782167245004,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "_key": "!items!cLLq3trjpu8mQAAl"
+}

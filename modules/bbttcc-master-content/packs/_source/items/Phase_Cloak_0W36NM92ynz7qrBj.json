@@ -1,0 +1,58 @@
+{
+  "name": "Phase Cloak",
+  "type": "gear",
+  "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>Burns coolant for invisibility. Active toggle; the rig is harder to target until cycled off.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "rig-system",
+        "passive": false
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "0W36NM92ynz7qrBj",
+  "effects": [],
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205374303,
+    "modifiedTime": 1778963271954,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!0W36NM92ynz7qrBj"
+}

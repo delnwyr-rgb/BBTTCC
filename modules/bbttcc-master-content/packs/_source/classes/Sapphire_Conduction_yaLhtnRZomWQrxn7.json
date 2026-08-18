@@ -1,0 +1,72 @@
+{
+  "name": "Sapphire Conduction",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_earth_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Let the Spark’s afterglow pass through you safely.</em></p><p>Once per <strong>a Soma Break</strong>, when your party completes a <strong>Spark Step</strong>—stabilization, purification, negotiation, containment, or conversion—you may invoke Sapphire Conduction.</p><ul><li>Reduce an appropriate <strong>Darkness Track</strong> by <strong>1</strong>.</li><li>You gain <strong>advantage</strong> on the first defense check or skill check related to Spark falloff or Spark backlash in the next 24 hours.</li></ul><p>You ground the metaphysical heat, leaving the region a touch brighter.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "dreamwalker-sapphire-conduction",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 14
+    },
+    "properties": [],
+    "requirements": "Dreamwalker 14, Trance of the Sapphire Gate",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "EpLuwx2VEkhesaOK",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "dreamwalker_sapphire_gate",
+      "featureKey": "sapphire_conduction"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459927037,
+    "modifiedTime": 1781116196383,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "yaLhtnRZomWQrxn7",
+  "sort": 156250,
+  "_key": "!items!yaLhtnRZomWQrxn7"
+}

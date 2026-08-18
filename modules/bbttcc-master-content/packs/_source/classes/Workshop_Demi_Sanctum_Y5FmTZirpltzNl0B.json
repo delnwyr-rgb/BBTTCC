@@ -1,0 +1,125 @@
+{
+  "name": "Workshop Demi-Sanctum",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bunker_4.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Workshop Demi-Sanctum.</strong> Given time and materials, you can turn a workshop into a minor holy site of repair.</p><ul><li>When you have at least a week of downtime in a single location with access to tools and materials, you can establish a <strong>Demi-Sanctum Workshop</strong>.</li><li>Creatures who take a Soma Break while you are actively maintaining this workshop may recover one additional <strong>level of Stress</strong> (GM’s discretion for stacking with other effects) and reroll the lowest die on <strong>Soul check</strong> against despair or hopelessness for the next day.</li><li>On the campaign layer, this location becomes a <strong>key asset</strong>: your faction may gain small bonuses to repair, healing, or Tikkun-related projects done there.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "workshop-demi-sanctum",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 15
+    },
+    "properties": [],
+    "requirements": "Soul-Smith (15th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Workshop Demi-Sanctum (Hex Workshop Hook)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dragon.png",
+      "origin": null,
+      "transfer": false,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459996552,
+        "modifiedTime": 1777346199082
+      },
+      "_id": "pgnC2au7FWu60fYV",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.soulSmith.workshopDemiSanctum",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.hexHooks.workshopSanctumBonus",
+            "value": 1,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!Y5FmTZirpltzNl0B.pgnC2au7FWu60fYV"
+    }
+  ],
+  "folder": "qdqMhHfZdVgUs1gN",
+  "flags": {
+    "bbttcc": {
+      "soulSmith": {
+        "workshopDemiSanctum": true
+      },
+      "hexHooks": {
+        "workshopSanctumBonus": 1
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996552,
+    "modifiedTime": 1781116164532,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "Y5FmTZirpltzNl0B",
+  "sort": 254688,
+  "_key": "!items!Y5FmTZirpltzNl0B"
+}

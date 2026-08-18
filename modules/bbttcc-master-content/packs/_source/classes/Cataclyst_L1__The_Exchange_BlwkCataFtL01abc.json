@@ -1,0 +1,65 @@
+{
+  "name": "Cataclyst L1: The Exchange",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_gauntlet_2.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>Polarity is a pose. The hinge is what does the work.</em></p><p><strong>Mode: Hinge / drift: Sideways.</strong></p><p>As a <strong>bonus action</strong>, you may convert <strong>1 Frame Die into 1 Ruin Charge</strong> or <strong>1 Ruin Charge into 1 Frame Die</strong>. You may use this conversion up to <strong>your Initiation tier</strong> times per Soma Break (1 at T1, 2 at T2, 3 at T3, 4 at T4).</p><p><strong>Charged.</strong> When you convert this way, the resulting die or charge becomes <em>charged</em> until spent. The next time it's used:</p><ul><li><p><strong>Frame Die (charged) spent on absorption:</strong> grants +1 die step on the absorption roll (d8 → d10).</p></li><li><p><strong>Ruin Charge (charged) spent on damage:</strong> deals +1 die step of damage (replace one d6 with a d8, or one d8 with a d10, in the spending feature's damage expression).</p></li></ul><p>Charged status is consumed by the spend whether the spend produces a roll or a flat effect.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "bulwark_cataclyst_l1_the_exchange",
+    "requirements": "Path of the Cataclyst, Bulwark Initiation 1",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "bulwark",
+      "subclassIdentifier": "bbttcc-bulwark-cataclyst",
+      "subclassLevel": 1,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {}
+    }
+  },
+  "folder": "HmbujXzEJL7v48Q9",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777004380746,
+    "modifiedTime": 1781116123872,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BlwkCataFtL01abc",
+  "sort": 0,
+  "_key": "!items!BlwkCataFtL01abc"
+}

@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Shadow Courier",
+  "color": null,
+  "sorting": "a",
+  "_id": "apQBjTCtfZVreQpj",
+  "description": "",
+  "sort": 1800000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776460001085,
+    "modifiedTime": 1776460001108,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!apQBjTCtfZVreQpj"
+}

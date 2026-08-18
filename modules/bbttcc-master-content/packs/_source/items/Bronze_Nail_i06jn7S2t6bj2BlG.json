@@ -1,0 +1,78 @@
+{
+  "name": "Bronze Nail",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_bronze_nail_2.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "bronze-nail"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Plain bronze nail. Useful in knife construction, sept-fittings, and patching boots. Common.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "A fastener with no opinions.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Plain bronze nail. Useful in knife construction, sept-fittings, and patching boots. Common.</p>",
+          "charges": 10,
+          "materialKey": "bronze-nail",
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI material stamp",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "i06jn7S2t6bj2BlG",
+  "effects": [],
+  "sort": 400000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137161833,
+    "modifiedTime": 1782156674951,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!i06jn7S2t6bj2BlG"
+}

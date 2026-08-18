@@ -1,0 +1,45 @@
+{
+  "name": "Trance of the Sapphire Gate (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_sapphire_gate.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "dreamwalker",
+    "source": {
+      "custom": "Bad Eden Originals — Sprint F",
+      "revision": 1,
+      "rules": "2026"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"Every threshold is also a doorway.\"</em></p>\n<p><strong>Mode:</strong> Transitional · <strong>Drift:</strong> Sideways</p>\n<p>The Sapphire Gate treats walls as suggestions and distance as paperwork. Your Surge spends are repositioning made real — carrying allies clear, stepping through a threshold for the tactical edge, holding the line steady at the door.</p>\n<h3>Trance (spent via Surge)</h3>\n<ul>\n  <li><strong>Gate-Touched</strong> (1) — carry an ally through to safety: DR + a freed reaction.</li>\n  <li><strong>Sapphire Step</strong> (2) — you and an ally step through and out elsewhere: each banks a reroll + a freed reaction.</li>\n  <li><strong>Gate Held Open</strong> (3) — allies within 6 squares bank a reroll and gain DR (the threshold steadies them).</li>\n</ul>\n<p><em>Out-of-combat:</em> threshold-sight, the true teleport-by-linkage, the Gate Held Open evacuation, and the Gatewright capstone (make a door where none was) remain the explorer's powers.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-dreamwalker-sapphire-gate",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "EpLuwx2VEkhesaOK",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "WoSYdwlhj33HK3jr",
+  "sort": 300000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.364",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1782167240822,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.1",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!WoSYdwlhj33HK3jr"
+}

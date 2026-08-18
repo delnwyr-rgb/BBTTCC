@@ -1,0 +1,45 @@
+{
+  "name": "Sealed Indictment",
+  "type": "feat",
+  "img": "icons/sundries/documents/document-official-capital.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Sealed Indictment.</strong> Charges nobody can quash. <em>Play:</em> deal 3 Influence damage outside an exchange.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "influenceDmg3",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "_id": "9uVR9ijT5IzGEj2M",
+  "effects": [],
+  "folder": null,
+  "sort": 200000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782065103711,
+    "modifiedTime": 1784079176429,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!9uVR9ijT5IzGEj2M"
+}

@@ -1,0 +1,304 @@
+{
+  "name": "Crowd-Calmer Beacon",
+  "type": "equipment",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_crowd_calming_beacon.jpeg",
+  "system": {
+    "description": {
+      "value": "<p>Action: emit soothing tone (Calm Emotions, DC 14) in 60‑ft radius; 3 charges/day.</p>",
+      "chat": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 2,
+      "units": "lb"
+    },
+    "price": {
+      "value": 400,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "attunement": "",
+    "identified": true,
+    "type": {
+      "value": "",
+      "baseItem": ""
+    },
+    "equipped": false,
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "crowd-calmer-beacon",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "attuned": false,
+    "crewed": false,
+    "armor": {
+      "value": null,
+      "dex": null
+    },
+    "proficient": null,
+    "properties": [],
+    "strength": null
+  },
+  "flags": {
+    "bbttcc": {
+      "charges": 3,
+      "tags": []
+    },
+    "rfi": {
+      "item": {
+        "tier": "II",
+        "footprint": 1,
+        "reach": "self",
+        "frame": "armor",
+        "signature": "",
+        "origin": "looted",
+        "originator": null,
+        "bound": "free",
+        "upkeep": {
+          "mode": "passive",
+          "per": "scene"
+        },
+        "misfire": {
+          "tierClamp": true,
+          "table": null
+        },
+        "signals": {}
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          },
+          "tier": "II",
+          "frame": "armor",
+          "origin": "looted",
+          "bound": "free",
+          "reach": "self",
+          "footprint": 1,
+          "legacySystem": {
+            "description": {
+              "value": "<p>Action: emit soothing tone (Calm Emotions, DC 14) in 12 squares radius; 3 charges/day.</p>"
+            }
+          }
+        }
+      }
+    },
+    "autoanimations": {
+      "id": "06073ef9-ec60-4225-9aa0-e7ea7162ddd9",
+      "label": "Crowd-Calmer Beacon",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "loop",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "effects": [],
+  "folder": "TNrB6kEiHS0KwwJT",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1767834168938,
+    "modifiedTime": 1782164185972,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "HjMIPWCXhnW59EIj",
+  "sort": 900000,
+  "_key": "!items!HjMIPWCXhnW59EIj"
+}

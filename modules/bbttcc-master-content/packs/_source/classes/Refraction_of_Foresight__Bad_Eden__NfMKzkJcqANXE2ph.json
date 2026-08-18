@@ -1,0 +1,41 @@
+{
+  "name": "Refraction of Foresight (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hourglass_broken_1.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "wyrdlens-adept",
+    "source": "Bad Eden Originals — Sprint F (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"You already know how this goes.\"</em></p>\n<p><strong>Refraction:</strong> Anticipation — perception bent toward the next instant; routes, reactions, the moment before the moment.</p>\n<p>The Refraction of Foresight reads time a half-second early. Your Surge spends are that edge made real: foreseen rerolls, an ally given room time shouldn't allow, and the strike that simply declines to land.</p>\n<h3>Refraction (spent via Surge)</h3>\n<ul>\n  <li><strong>Anticipation</strong> (1) — you and an ally each bank a reroll (foreseen).</li>\n  <li><strong>The Slowed Instant</strong> (2) — an ally gains a freed reaction and DR equal to Tier.</li>\n  <li><strong>The Stopped Strike</strong> (5) — a foe is Staggered and its next attack is at disadvantage.</li>\n</ul>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-wyrdlens-adept-foresight",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "bfvmbtbYMd6cxsV2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "NfMKzkJcqANXE2ph",
+  "sort": 500000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1781116144388,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!NfMKzkJcqANXE2ph"
+}

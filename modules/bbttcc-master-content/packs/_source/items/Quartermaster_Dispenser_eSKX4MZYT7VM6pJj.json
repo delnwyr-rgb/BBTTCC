@@ -1,0 +1,61 @@
+{
+  "name": "Quartermaster Dispenser",
+  "type": "gear",
+  "img": "icons/tools/smithing/anvil.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>A clipboarded oracle that allocates rations, ammo, and small mercies. Faction supplies stack here.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "output-module",
+        "yield": {
+          "supplies": 3
+        },
+        "mobileLegal": true
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "eSKX4MZYT7VM6pJj",
+  "effects": [],
+  "sort": 3500000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205374435,
+    "modifiedTime": 1778963271958,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!eSKX4MZYT7VM6pJj"
+}

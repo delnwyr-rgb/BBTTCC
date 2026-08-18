@@ -1,0 +1,78 @@
+{
+  "name": "Silence-Silk",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_silk.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "silence-silk"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Spider-silk from caves below sept-trial chambers. Dampens sound and rumor in equal measure.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Cloth so quiet it forgets it was woven.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Spider-silk from caves below sept-trial chambers. Dampens sound and rumor in equal measure.</p>",
+          "charges": 2,
+          "materialKey": "silence-silk",
+          "price": {
+            "marks": 450,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII material stamp",
+            "bound": "free",
+            "saleBack": 180
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "hlBxyR2VYIP6zILY",
+  "effects": [],
+  "sort": 474839,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137161779,
+    "modifiedTime": 1782156674951,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hlBxyR2VYIP6zILY"
+}

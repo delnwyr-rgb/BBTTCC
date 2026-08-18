@@ -1,0 +1,65 @@
+{
+  "name": "Mountain L9: The Hold",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_3.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>Time itself counts as ground you have claimed.</em></p><p>You cannot be moved from a space you have occupied for at least <strong>one full round</strong>, except by a single damage instance equal to or greater than your <strong>current Integrity value</strong>. This denial covers, but is not limited to:</p><ul><li><p>Forced movement of any kind (push, pull, slide, throw)</p></li><li><p>Teleportation effects targeting you</p></li><li><p>Banishment, dimensional swap, and plane-shift effects</p></li><li><p>Knockback from area-of-effect damage</p></li><li><p>Grapple and drag attempts</p></li></ul><p>You may end the Hold voluntarily as a free action on your turn. After moving voluntarily, you must occupy a new space for one full round before the Hold protects you again.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "bulwark_mountain_l9_the_hold",
+    "requirements": "Path of the Mountain, Bulwark Initiation 9",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 9
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "bulwark",
+      "subclassIdentifier": "bbttcc-bulwark-mountain",
+      "subclassLevel": 9,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {}
+    }
+  },
+  "folder": "By8SiTcVi3AfmZUU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777004380962,
+    "modifiedTime": 1781116126971,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BlwkMtnFtL09abcd",
+  "sort": 0,
+  "_key": "!items!BlwkMtnFtL09abcd"
+}

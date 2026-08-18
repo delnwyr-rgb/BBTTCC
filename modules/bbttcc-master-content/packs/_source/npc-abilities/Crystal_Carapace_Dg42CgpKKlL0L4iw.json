@@ -1,0 +1,81 @@
+{
+  "name": "Crystal Carapace",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cracked_stone.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [
+      "seed-bestiary-attacks",
+      "tier-ii",
+      "role-stealth",
+      "passive"
+    ],
+    "description": {
+      "value": "<p>First attack each combat against the lurker has reroll-the-highest (the carapace turns the first blow). After the carapace cracks, the lurker gains +1 to its next attack roll (the loose shards bite).</p><p><em>The armor is not finished. It is still growing.</em></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "frame": "trait"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Crystal Lurker"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "sort": 0,
+  "_id": "Dg42CgpKKlL0L4iw",
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": null,
+    "modifiedTime": null,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!Dg42CgpKKlL0L4iw"
+}

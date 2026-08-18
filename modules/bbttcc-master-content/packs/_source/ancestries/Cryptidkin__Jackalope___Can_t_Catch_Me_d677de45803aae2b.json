@@ -1,0 +1,243 @@
+{
+  "_id": "d677de45803aae2b",
+  "name": "Cryptidkin (Jackalope): Can't Catch Me",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_ghostly_runner_2.png",
+  "folder": "sU5wM5ZUL33lrQxV",
+  "system": {
+    "category": "feature",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>\"By the time the rifle goes off, the rumor has already moved house.\"</em></p><p><strong>Can't Catch Me (1/Soma Break).</strong> Bonus action — take the Dash or Disengage.</p><p><strong>Light-Footed.</strong> Difficult terrain caused by undergrowth, brush, snow drifts, or scrap-strewn ground does not slow you. You can move along narrow ledges, fences, branches, or rooftops at full speed without making a check unless they are actively crumbling.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"crypJackCantCatch\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Can't Catch Me</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Bonus action  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Take the Dash or Disengage.</span></p></div>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "cryptidkin-jackalope-cant-catch-me",
+    "requirements": "Cryptidkin (Jackalope)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "cryptidkin",
+      "feature": "cant_catch_me",
+      "lineage": "Jackalope",
+      "tierLevel": 5,
+      "version": "2.0.0",
+      "date": "2026-04-29"
+    },
+    "autoanimations": {
+      "id": "e3dd4225-8586-4b42-83a7-ae48bbedf3e3",
+      "label": "Cryptidkin (Jackalope): Can't Catch Me",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "loop",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "sort": 100000,
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777499679450,
+    "modifiedTime": 1781116089605,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!d677de45803aae2b"
+}

@@ -1,0 +1,49 @@
+{
+  "name": "Legendary Action — Spot Clean",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_8.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "5e-port"
+    ],
+    "description": {
+      "value": "<p>Gilbert moves up to half his movement without provoking reaction strikes, provided he moves toward spilled terrain, rubble, loose objects, or the nearest aesthetically offensive creature.</p>",
+      "chat": ""
+    }
+  },
+  "_id": "RFKun0nGzj4eAK7Q",
+  "effects": [],
+  "sort": 0,
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gilbert, Eternally Cleaning Not Leaning Theater Attendant"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": null,
+    "modifiedTime": null,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!RFKun0nGzj4eAK7Q"
+}

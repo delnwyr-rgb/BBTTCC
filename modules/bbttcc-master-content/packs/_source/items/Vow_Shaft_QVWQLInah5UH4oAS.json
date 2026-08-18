@@ -1,0 +1,78 @@
+{
+  "name": "Vow-Shaft",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_tree_of_life_section_1.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "vow-shaft"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Hollow oath-wood reinforced with witness-glass. Forms the spine of pact styluses and binding tools.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "A barrel that won't lie about what it carries.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Hollow oath-wood reinforced with witness-glass. Forms the spine of pact styluses and binding tools.</p>",
+          "charges": 3,
+          "materialKey": "vow-shaft",
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII material stamp",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "QVWQLInah5UH4oAS",
+  "effects": [],
+  "sort": 103125,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137161796,
+    "modifiedTime": 1782156674946,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!QVWQLInah5UH4oAS"
+}

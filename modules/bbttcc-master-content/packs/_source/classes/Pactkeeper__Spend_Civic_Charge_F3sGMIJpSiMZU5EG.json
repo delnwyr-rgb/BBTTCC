@@ -1,0 +1,140 @@
+{
+  "name": "Pactkeeper: Spend Civic Charge",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_city.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p>Spend <strong>1 Civic Charge</strong> and open the Pactkeeper action dialog.</p><ul><li>Stabilization</li><li>Authority Boost</li><li>Enforcement</li><li>Containment</li><li>Closure</li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"pkSpendCivic\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Spend Civic Charge</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/round (gain) &nbsp;·&nbsp; <strong>Action:</strong> Free (as needed) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Spend 1 Civic Charge Die: roll it and pick one — Stabilization (reduce damage/panic/corruption/fallout by rolled amount) · Authority Boost (+roll to a manifestation DC, contested roll, or enforcement) · Enforcement (force a reroll vs. a Contract or Precedent — target takes worse) · Containment (catastrophic → controlled) · Closure (end an ongoing effect cleanly).</div>\n</div>",
+      "chat": ""
+    },
+    "identifier": "pactkeeper_spend_civic_charge",
+    "advancement": {},
+    "activities": {
+      "primary": {
+        "type": "utility",
+        "name": "Pactkeeper: Spend Civic Charge",
+        "activation": {
+          "type": "bonus",
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "value": "",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "units": "self",
+          "value": "",
+          "override": false
+        },
+        "target": {
+          "affects": {
+            "type": "self",
+            "choice": false
+          },
+          "template": {
+            "count": "",
+            "units": "ft",
+            "type": "",
+            "contiguous": false,
+            "stationary": false
+          },
+          "override": false,
+          "prompt": true
+        },
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "_id": "rEesNMlQSQ80IsRT",
+        "img": null,
+        "sort": 0,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "pactkeeper_spend_civic_charge",
+      "resourceAction": true,
+      "resourceDisplay": false,
+      "engine": "dicePool",
+      "classId": "pactkeeper",
+      "pool": "civic",
+      "track": "pressure",
+      "cost": 1,
+      "actionKey": "pactkeeper_spend_civic_charge",
+      "opensDialog": "pactkeeper_civic"
+    }
+  },
+  "folder": "WEL7mlledpAPLjnP",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776481562684,
+    "modifiedTime": 1781116131024,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "F3sGMIJpSiMZU5EG",
+  "sort": 203125,
+  "_key": "!items!F3sGMIJpSiMZU5EG"
+}

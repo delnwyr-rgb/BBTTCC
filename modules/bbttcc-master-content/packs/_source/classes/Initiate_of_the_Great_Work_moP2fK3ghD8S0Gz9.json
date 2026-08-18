@@ -1,0 +1,121 @@
+{
+  "name": "Initiate of the Great Work",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sun_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Initiate of the Great Work.</strong> Sleep is a meeting place, not a refuge.</p><ul><li>Once per Soma Break, you may choose to reroll the lowest die on an Insight (Soul) checks, a Soul check, or a Presence check as you call upon the Dream for guidance.</li><li>You may ask the Dream one question each a Soma Break—an omen, a vector, or a hidden connection. The Dream does not lie, but neither is it always literal.</li></ul>",
+      "chat": ""
+    },
+    "activities": {
+      "invokeDream": {
+        "type": "utility",
+        "activation": {
+          "type": "special",
+          "override": false
+        },
+        "description": {},
+        "_id": "1hOJJ3oSkPMxfDSE",
+        "sort": 0,
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "units": "self",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false,
+          "prompt": true
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "initiate-of-the-great-work",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "Dreamwalker",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "YLUIFZ5nPOUSaSH2",
+  "flags": {
+    "bbttcc": {
+      "dreamwalker": {
+        "initiate": true,
+        "dailyAdvantageChoice": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459927035,
+    "modifiedTime": 1782167240827,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "moP2fK3ghD8S0Gz9",
+  "sort": 300000,
+  "_key": "!items!moP2fK3ghD8S0Gz9"
+}

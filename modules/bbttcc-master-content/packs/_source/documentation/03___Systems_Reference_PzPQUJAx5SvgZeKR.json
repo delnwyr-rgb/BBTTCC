@@ -1,0 +1,23 @@
+{
+  "type": "JournalEntry",
+  "folder": null,
+  "name": "03 - Systems Reference",
+  "color": "#232d40",
+  "sorting": "a",
+  "_id": "PzPQUJAx5SvgZeKR",
+  "description": "",
+  "sort": 1100000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775619860472,
+    "modifiedTime": 1775619861020,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!folders!PzPQUJAx5SvgZeKR"
+}

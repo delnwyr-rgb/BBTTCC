@@ -1,0 +1,104 @@
+{
+  "name": "Landspeeder Frame",
+  "type": "gear",
+  "img": "icons/environment/settlement/wagon-black.webp",
+  "folder": "0JDB983lzPepXXNe",
+  "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>Hovers a foot off the dirt and hates every grain of it. Single pilot, side-mounted hardpoint, just enough cargo for a canteen and a grudge.</p><p><b>Frame · Personal · Mobile · Single seat + 1 weapon</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "rig-frame"
+      },
+      "rigFrame": {
+        "bracket": "personal",
+        "baseIntegrity": 10,
+        "tierStep": 4,
+        "mobilityAllowed": [
+          "mobile"
+        ],
+        "slots": {
+          "weapon": 1,
+          "system": 0,
+          "output": 0
+        },
+        "capacity": {
+          "pilot": {
+            "min": 1,
+            "max": 1
+          },
+          "gunner": {
+            "min": 0,
+            "max": 0
+          },
+          "engineer": {
+            "min": 0,
+            "max": 0
+          },
+          "crew": {
+            "min": 0,
+            "max": 0
+          }
+        },
+        "actions": {
+          "pilot": [
+            "steer",
+            "ram",
+            "evasive",
+            "swerve"
+          ],
+          "gunner": [],
+          "engineer": [],
+          "crew": []
+        },
+        "travel": {
+          "speed": 5,
+          "range": 12
+        },
+        "visualFrame": "open-corners"
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool × 0.60",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "_id": "5f8oEsv7AGWYEcOL",
+  "effects": [],
+  "sort": 600000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778961742305,
+    "modifiedTime": 1778963271954,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!5f8oEsv7AGWYEcOL"
+}

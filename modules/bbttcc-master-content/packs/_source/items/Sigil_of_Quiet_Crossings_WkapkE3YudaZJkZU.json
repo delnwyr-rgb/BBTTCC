@@ -1,0 +1,83 @@
+{
+  "name": "Sigil of Quiet Crossings",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/enamel_pin_4.png",
+  "system": {
+    "slot": "pin",
+    "tags": [
+      "sigil",
+      "courier",
+      "attunement"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>A small enameled pin worn at the collar by Shadow Couriers. The sigil shifts depending on the threshold most recently crossed by the wearer.</p><p><strong>Recognized in Transit.</strong> While attuned and equipped, doors that the wearer has previously passed remain open one beat longer than they should — narratively, the courier slips through where another wouldn't.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "sigil",
+          "signature": "The threshold knows your name.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {
+            "crossing_aligned": true
+          },
+          "lore": "<p>A small enameled pin worn at the collar by Shadow Couriers. The sigil shifts depending on the threshold most recently crossed by the wearer.</p><p><b>Recognized in Transit.</b> While attuned and equipped, doors that the wearer has previously passed remain open one beat longer than they should — narratively, the courier slips through where another wouldn't.</p>",
+          "materialOf": [
+            "enamel-pin",
+            "courier-glass",
+            "threshold-wax"
+          ],
+          "price": {
+            "marks": 180,
+            "currency": "softpower",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII sigil stamp",
+            "bound": "attuned",
+            "saleBack": 72
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "WkapkE3YudaZJkZU",
+  "effects": [],
+  "sort": 800000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777137142787,
+    "modifiedTime": 1778541970292,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!WkapkE3YudaZJkZU"
+}

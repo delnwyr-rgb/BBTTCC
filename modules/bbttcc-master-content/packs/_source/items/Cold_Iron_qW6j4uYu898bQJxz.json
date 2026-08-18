@@ -1,0 +1,81 @@
+{
+  "name": "Cold-Iron",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_cold_iron.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "cold-iron",
+      "iron",
+      "cold-forge",
+      "hex-resistant"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Iron worked once at low temperature and sealed before it can sing. Bites against curses and qliphothic substance; brittle to careless shaping.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Forged at midnight, never reheated.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Iron worked once at low temperature and sealed before it can sing. Bites against curses and qliphothic substance; brittle to careless shaping.</p>",
+          "charges": 5,
+          "materialKey": "cold-iron",
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII material stamp",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "qW6j4uYu898bQJxz",
+  "effects": [],
+  "sort": 287500,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137194173,
+    "modifiedTime": 1782156674954,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!qW6j4uYu898bQJxz"
+}

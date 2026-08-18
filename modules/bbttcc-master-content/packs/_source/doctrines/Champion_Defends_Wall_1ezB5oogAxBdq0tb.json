@@ -1,0 +1,40 @@
+{
+  "name": "Champion Defends Wall",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_fist_wall.png",
+  "system": {
+    "category": "strategic",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Defends Wall</h3><p>A named defender Champion takes the wall: locked Active for 2 turns and +1 Anytime budget. Optional note {\"championId\":\"...\"} picks the champion; otherwise the first eligible. Target the besieged hex.</p><p><strong>OP Cost:</strong> violence 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> uncommon</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "champion_defends_wall"
+    }
+  },
+  "_id": "1ezB5oogAxBdq0tb",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601766,
+    "modifiedTime": 1782703702691,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!1ezB5oogAxBdq0tb"
+}

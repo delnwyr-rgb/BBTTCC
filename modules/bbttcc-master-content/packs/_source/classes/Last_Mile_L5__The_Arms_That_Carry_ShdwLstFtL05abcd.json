@@ -1,0 +1,71 @@
+{
+  "name": "Last Mile L5: The Arms That Carry",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_fly_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "RFI-native",
+      "revision": 1,
+      "book": "Bulwark + Shadow Courier v1.0",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>You learn to carry the body that cannot carry itself.</em></p><p>You may pick up an <strong>unconscious, bound, or Staggered creature</strong> of your size or smaller as a <strong>bonus action</strong>, without spending or reducing your remaining movement that turn (the L1 Soul speed penalty still applies only to the Soul Package, not to a creature you are physically carrying).</p><p>You may <strong>hand off</strong> a carried creature to an ally in an adjacent space as a <strong>free action</strong>. The hand-off does not provoke reactions.</p><p>You may <strong>carry a creature one size larger than yourself</strong> at half your movement speed, no Package penalty stacking — though the GM may adjudicate that this is conspicuous in tight terrain.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "shadow_courier_lastmile_l5_arms_that_carry",
+    "requirements": "Route of the Last Mile, Shadow Courier Initiation 5",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "shadow_courier",
+      "subclassIdentifier": "bbttcc-shadow-courier-courier-last-mile",
+      "subclassLevel": 5,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {}
+    }
+  },
+  "folder": "NYwTsnPu4JjS5QE0",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777005233931,
+    "modifiedTime": 1781116154589,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ShdwLstFtL05abcd",
+  "sort": 200000,
+  "_key": "!items!ShdwLstFtL05abcd"
+}

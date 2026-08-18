@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "BBTTCC Weapons",
+  "color": null,
+  "sorting": "a",
+  "_id": "H6eMhWQrjwcwZcBi",
+  "description": "",
+  "sort": 800000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1772304315385,
+    "modifiedTime": 1781329260825,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!folders!H6eMhWQrjwcwZcBi"
+}

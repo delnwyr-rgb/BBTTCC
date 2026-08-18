@@ -1,0 +1,72 @@
+{
+  "name": "Victory Forge",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_forge_blessed_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You know how to turn ‘we did it’ into policy.”</em></p><p>Once per <strong>a Soma Break</strong>, when your party achieves a <strong>peaceful objective</strong> (successful negotiation, retreat, extraction, or surrender) where your symbolism, banners, or presence clearly mattered, you can formalize that victory into factionspace.</p><ul><li>After that scene resolves, you may convert <strong>1 Intrigue OP</strong> into either <strong>1 Diplomacy OP</strong> or <strong>1 Soft Power OP</strong> for your faction.</li><li>This represents codifying rumors, agreements, and personal heroics into actual structural leverage.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-victory-victory-forge",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 10, Forge of Victory",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "dsO4fBFdVXDt6vRA",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_victory",
+      "featureKey": "victory_forge"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996554,
+    "modifiedTime": 1781116181956,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "mLir1mqxp69yKhJd",
+  "sort": 275000,
+  "_key": "!items!mLir1mqxp69yKhJd"
+}

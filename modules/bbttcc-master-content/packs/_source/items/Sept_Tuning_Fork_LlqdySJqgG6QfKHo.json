@@ -1,0 +1,77 @@
+{
+  "name": "Sept Tuning Fork",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_spanner.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "sept-tuning-fork"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>Cast at the moment of dawn from sept-bell alloy. Used as a tuning core in resonant weapons.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "One note, sustained until you stop listening.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Cast at the moment of dawn from sept-bell alloy. Used as a tuning core in resonant weapons.</p>",
+          "charges": 2,
+          "materialKey": "sept-tuning-fork",
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII material stamp",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "LlqdySJqgG6QfKHo",
+  "effects": [],
+  "sort": 474830,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777137161782,
+    "modifiedTime": 1778541963151,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!LlqdySJqgG6QfKHo"
+}

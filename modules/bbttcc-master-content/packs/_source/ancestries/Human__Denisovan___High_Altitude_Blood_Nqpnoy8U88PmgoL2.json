@@ -1,0 +1,75 @@
+{
+  "name": "Human (Denisovan): High-Altitude Blood",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mountain.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>“You remember mountains that no longer exist.”</em></p><p><strong>High-Altitude Blood.</strong> You reroll the lowest die on defense checks against poison and environmental suffocation. You can hold your breath for 10 minutes.</p><p><strong>Stone-Sense.</strong> You gain tremorsense 2 squares while standing on stone or packed earth.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "human_denisovan_tier1",
+    "requirements": "Human (Denisovan)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "human",
+      "feature": "high-altitude_blood",
+      "lineage": "Denisovan",
+      "tierLevel": 1,
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          "poison"
+        ]
+      }
+    }
+  },
+  "folder": "YEloYY4YXYyWatRb",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.Nqpnoy8U88PmgoL2",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776660294519,
+    "modifiedTime": 1782167240125,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "Nqpnoy8U88PmgoL2",
+  "sort": 0,
+  "_key": "!items!Nqpnoy8U88PmgoL2"
+}

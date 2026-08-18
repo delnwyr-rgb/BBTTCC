@@ -1,0 +1,67 @@
+{
+  "name": "Mercy Refraction (Bad Eden)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_8.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Turn the lens toward the kinder world.</em></p><p>Once per <strong>scene</strong>, when you see a creature within <strong>6 squares</strong> of you take damage from a blow that would reduce it to 0 Integrity, you can use your <strong>reaction</strong> to refract the outcome.</p><ul><li>The attack is treated as <strong>non-lethal</strong> instead. The target falls <strong>unconscious but stable</strong> rather than dying.</li><li>If this non-lethal outcome directly forces a <strong>surrender, stand-down, or captured-alive resolution</strong>, your faction gains <strong>+1 Diplomacy OP</strong> for the next Strategic Turn (once per scene).</li></ul><p>You don’t erase the harm; you change what the last hit <em>means</em>.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlMercyRefr\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Mercy Refraction</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Reaction &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When a creature within 6 squares would drop to 0 Integrity, refract the outcome to non-lethal: target falls unconscious-but-stable. If this directly forces a surrender / stand-down / captured-alive resolution, faction gains +1 Diplomacy OP next Strategic Turn.</div>\n</div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "wyrdlens-refraction-mercy-mercy-refraction",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept 3, Refraction of Mercy",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "pKuSnWKpU0fVPuje",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "wyrdlens_refraction_mercy",
+      "featureKey": "mercy_refraction"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459984388,
+    "modifiedTime": 1782167240828,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ocx6Zg68LWhef5a3",
+  "sort": 400000,
+  "_key": "!items!ocx6Zg68LWhef5a3"
+}

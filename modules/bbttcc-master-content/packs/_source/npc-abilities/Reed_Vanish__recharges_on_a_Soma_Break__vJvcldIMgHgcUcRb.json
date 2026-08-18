@@ -1,0 +1,298 @@
+{
+  "name": "Reed-Vanish (recharges on a Soma Break)",
+  "type": "weapon",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
+  "system": {
+    "category": "ranged",
+    "intent": "presence",
+    "skill": "melee",
+    "damage": {
+      "formula": "1d6",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "splash-vanish",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 2,
+      "long": 2
+    },
+    "tags": [
+      "seed-bestiary-attacks",
+      "tier-i",
+      "role-stealth",
+      "aoe",
+      "shape-radius"
+    ],
+    "effect": "Radius 10 ft. — targets roll vs Resolve (DC 11). Half damage on success. On a failed save, target loses sight of the stalker until the start of its next turn. Stalker may move up to its speed and re-conceal. Recharge 5–6.",
+    "flavor": "There is a splash. There is no stalker. There was, a moment ago.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "<p><strong>Area Attack.</strong> Each creature within 2 squares rolls <strong>Resolve</strong> vs DC 11. Hit: <code>1d6</code> kinetic (splash-vanish) + violence; half on success. On a failed save, target loses sight of the stalker until the start of its next turn. Stalker may move up to its speed and re-conceal.<br/><em>Recharges on a Soma Break.</em></p><p><em>There is a splash. There is no stalker. There was, a moment ago.</em></p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "frame": "save",
+          "aoeShape": "radius",
+          "aoeSize": 10,
+          "dcAbility": "wis",
+          "dc": 11,
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI save × 1",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Reed-Skin Stalker"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    },
+    "autoanimations": {
+      "id": "fa03b18d-f233-42b7-869f-debc6b0579da",
+      "label": "Reed-Vanish (Recharge 5–6)",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "templatefx",
+      "primary": {
+        "video": {
+          "dbSection": "templatefx",
+          "menuType": "circle",
+          "animation": "shatter",
+          "variant": "01",
+          "color": "orange",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "sort": 0,
+  "_id": "vJvcldIMgHgcUcRb",
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1781024241451,
+    "modifiedTime": 1782167245011,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!vJvcldIMgHgcUcRb"
+}

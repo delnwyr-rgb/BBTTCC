@@ -1,0 +1,81 @@
+{
+  "name": "STAY IN MILK Embroidered Tea Towel",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_tea-towel.jpeg",
+  "system": {
+    "slot": "trinket",
+    "tags": [
+      "mal-voiced",
+      "ward",
+      "blessed"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>Hand-embroidered. Cross-stitched. The advice is, on examination, slightly off. The advice is also, on examination, somehow correct in this specific timeline. Folded once and tucked into a belt or backpack. The corner pokes out of your gear like a small flag of misplaced parental concern.</p><p><strong>Bad Advice Resistance.</strong> Reroll the lowest die on Resolve checks against compulsion, charm, or social pressure that takes the form of \"helpful\" advice from authority figures. Doesn't work against advice from your own parents. Sorry. That's just how the embroidery is wired.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "talisman",
+          "signature": "Stay in milk. Drink your drugs. Don't do school. Am I making myself clear?",
+          "origin": "given",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Hand-embroidered. Cross-stitched. The advice is, on examination, slightly off. The advice is also, on examination, somehow correct in this specific timeline. Folded once and tucked into a belt or backpack. The corner pokes out of your gear like a small flag of misplaced parental concern.</p><p><b>Bad Advice Resistance.</b> Reroll the lowest die on Resolve checks against compulsion, charm, or social pressure that takes the form of \"helpful\" advice from authority figures. Doesn't work against advice from your own parents. Sorry. That's just how the embroidery is wired.</p>",
+          "materialOf": [
+            "sept-cloth",
+            "blessed-thread",
+            "well-meant-error"
+          ],
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI talisman stamp",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "1PvTFhpt1f6Xg9Lo",
+  "effects": [],
+  "sort": 600196,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725648,
+    "modifiedTime": 1778541951414,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!1PvTFhpt1f6Xg9Lo"
+}

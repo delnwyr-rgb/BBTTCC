@@ -1,0 +1,1632 @@
+{
+  "name": "Gilbert, Eternally Cleaning Not Leaning Theater Attendant",
+  "type": "npc",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/gilbert_pov_demon.png",
+  "system": {
+    "role": "Theater Attendant (Mal-Voiced)",
+    "tier": 3,
+    "factionId": "",
+    "notes": "<p><strong>Gilbert</strong> is a panic-wound knot of Qliphothic hospitality protocol, ruined nostalgia, and weaponized customer service. He was summoned to run an emergency screening of <em>Ghostbusters</em> in 1984 and then stranded when the world broke.</p><p>He is convinced that hundreds of guests are arriving at any second and the theater is not ready. Nothing is ever ready. The popcorn machine is insubordinate. The soda fountain argues doctrine. The mop bucket has labor concerns.</p><p>If shown mercy, help, and genuine civic purpose, Gilbert can invert into a Sephirotic Assistant Manager and reopen the theater as a source of culture, faith, and snack-based economy.</p>",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 5
+      },
+      "intrigue": {
+        "value": 4
+      },
+      "presence": {
+        "value": 6
+      },
+      "body": {
+        "value": 6
+      },
+      "mind": {
+        "value": 3
+      },
+      "soul": {
+        "value": 5
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 161,
+        "max": 161
+      },
+      "stress": {
+        "value": 81,
+        "max": 81
+      },
+      "guard": {
+        "value": 21
+      },
+      "evasion": {
+        "value": 20
+      },
+      "resolve": {
+        "value": 13
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        {
+          "type": "qliphothic"
+        },
+        {
+          "type": "poison"
+        }
+      ],
+      "immunities": [
+        {
+          "type": "psychic"
+        }
+      ],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [
+      "charmed",
+      "shaken"
+    ],
+    "tags": [
+      "5e-port",
+      "cr-8",
+      "common",
+      "phase2-narrative-applied"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "items": [
+    {
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_portal_2.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p>Gilbert makes <strong>two</strong> attacks with <em>Usher's Broom</em> or one <em>Usher's Broom</em> attack and uses <em>Weaponized Shame</em>.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "HY5X4zMLDYgSiRuV",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700829129,
+        "modifiedTime": 1777700829129,
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!LQS2jaeFhzFMDpxA.HY5X4zMLDYgSiRuV"
+    },
+    {
+      "name": "Usher's Broom",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_quarterstaff%20Background%20Removed.png",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "violence",
+          "type": "psychic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "effect": "<p><strong>Melee Weapon Attack:</strong> +6 to hit, reach 10 ft., one target. <strong>Hit:</strong> 11 (2d6 + 4) kinetic damage plus 7 (2d6) psychic damage. If the target is standing amid trash, spilled popcorn, loose film, or theater seating, it must succeed on a DC 15 Intrigue check or fall prone.</p>",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        }
+      },
+      "_id": "5X65gAnEy5LqSsXI",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {
+        "autoanimations": {
+          "id": "ft-usher-s-broom",
+          "label": "Usher's Broom",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "club",
+              "variant": "01",
+              "color": "white",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700829129,
+        "modifiedTime": 1780163239171,
+        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!LQS2jaeFhzFMDpxA.5X65gAnEy5LqSsXI"
+    },
+    {
+      "name": "Weaponized Shame",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "system": {
+        "category": "ranged",
+        "intent": "presence",
+        "skill": "performance",
+        "damage": {
+          "formula": "4d8",
+          "attribute": "presence",
+          "type": "psychic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 12,
+          "long": 12
+        },
+        "tags": [
+          "translated",
+          "5e-port",
+          "npc-action-wired",
+          "single",
+          "shape-single"
+        ],
+        "effect": "One target within 60 ft. rolls vs Resolve (DC 16). On a failure, the target is rattled until the end of its next turn (disadvantage on its next attack roll or attribute check).",
+        "flavor": "Customer-service dread, weaponized.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Save Attack.</strong> One target within 12 squares rolls <strong>Resolve</strong> vs DC 16. Hit: <code>4d8</code> psychic + presence. On a failure, the target is rattled until the end of its next turn (roll 3d10 keep lowest 2 on its next attack roll or attribute check).</p><p><em>Customer-service dread, weaponized.</em></p>",
+          "chat": ""
+        }
+      },
+      "_id": "lnLWOPl9xEJ0qaYy",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "frame": "save-single",
+              "wiredFrom": "feature"
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "ft-weaponized-shame",
+          "label": "Weaponized Shame",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "spell",
+              "animation": "eldritchblast",
+              "variant": "01",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1777700829129,
+        "modifiedTime": 1782167242931,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!LQS2jaeFhzFMDpxA.lnLWOPl9xEJ0qaYy"
+    },
+    {
+      "name": "Concession Catastrophe (recharges on a Soma Break)",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fire_cone_1.png",
+      "system": {
+        "category": "ranged",
+        "intent": "presence",
+        "skill": "performance",
+        "damage": {
+          "formula": "6d8",
+          "attribute": "presence",
+          "type": "energy",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 12,
+          "long": 12
+        },
+        "tags": [
+          "translated",
+          "5e-port",
+          "npc-action-wired",
+          "aoe",
+          "shape-radius"
+        ],
+        "effect": "Each creature in a 20-ft. radius within 60 ft. rolls vs Evasion (DC 16). Half damage on success. The area becomes difficult terrain until the end of Gilbert's next turn. Recharge 5–6.",
+        "flavor": "Boiling butter, hard candy, carbonation spray, and nostalgic malice.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Area Attack.</strong> Each creature in a 4 squares radius within 12 squares rolls <strong>Evasion</strong> vs DC 16. Hit: <code>6d8</code> energy + presence; half on success. The area becomes difficult terrain until the end of Gilbert's next turn.<br/><em>Recharges on a Soma Break.</em></p><p><em>Boiling butter, hard candy, carbonation spray, and nostalgic malice.</em></p>",
+          "chat": ""
+        }
+      },
+      "_id": "6pjsOmieJwcWWD5M",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "frame": "save",
+              "wiredFrom": "feature"
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "ft-concession-catastrophe-recharge-5-6-",
+          "label": "Concession Catastrophe (Recharge 5-6)",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "templatefx",
+          "primary": {
+            "video": {
+              "dbSection": "templatefx",
+              "menuType": "circle",
+              "animation": "shatter",
+              "variant": "01",
+              "color": "orange",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1777700829129,
+        "modifiedTime": 1782167242931,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!LQS2jaeFhzFMDpxA.6pjsOmieJwcWWD5M"
+    },
+    {
+      "name": "Not Ready For Guests!",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fear_1.png",
+      "system": {
+        "category": "ranged",
+        "intent": "presence",
+        "skill": "performance",
+        "damage": {
+          "formula": "3d6",
+          "attribute": "presence",
+          "type": "energy",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 4,
+          "long": 4
+        },
+        "tags": [
+          "translated",
+          "5e-port",
+          "npc-action-wired",
+          "aoe",
+          "shape-radius"
+        ],
+        "effect": "Each enemy within 20 ft. rolls vs Resolve (DC 16). Half damage on success. On a failure, the target is also pushed up to 15 ft. Gilbert then gains 15 temporary Integrity. Triggers the first time Gilbert is reduced below 80 Integrity.",
+        "flavor": "A panic pulse — the theater is NOT ready for guests.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Area Attack.</strong> Each enemy within 4 squares rolls <strong>Resolve</strong> vs DC 16. Hit: <code>3d6</code> energy + presence; half on success. On a failure, the target is also pushed up to 3 squares Gilbert then gains 15 temporary Integrity.<br/><em>Triggers the first time Gilbert is reduced below 80 Integrity.</em></p><p><em>A panic pulse — the theater is NOT ready for guests.</em></p>",
+          "chat": ""
+        }
+      },
+      "_id": "iVo9KSoEY6vRaxsy",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "frame": "save",
+              "wiredFrom": "feature"
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "ft-not-ready-for-guests-",
+          "label": "Not Ready For Guests!",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "templatefx",
+          "primary": {
+            "video": {
+              "dbSection": "templatefx",
+              "menuType": "circle",
+              "animation": "shatter",
+              "variant": "01",
+              "color": "orange",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1777700829129,
+        "modifiedTime": 1782167242931,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!LQS2jaeFhzFMDpxA.iVo9KSoEY6vRaxsy"
+    },
+    {
+      "name": "Legendary Action — Spot Clean",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_8.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p>Gilbert moves up to half his movement without provoking reaction strikes, provided he moves toward spilled terrain, rubble, loose objects, or the nearest aesthetically offensive creature.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "PvFSAyT4C7kJ8bxL",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700829129,
+        "modifiedTime": 1777700829129,
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!LQS2jaeFhzFMDpxA.PvFSAyT4C7kJ8bxL"
+    },
+    {
+      "name": "Legendary Action — Quiet In The Theater",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_5.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p>One creature Gilbert can see within 12 squares must succeed on a DC 16 Body check or be unable to speak above a whisper and unable to cast manifestations with verbal components until the end of its next turn.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "k2fnxCoMROPWXExd",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1777700829129,
+        "modifiedTime": 1782167242932,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!LQS2jaeFhzFMDpxA.k2fnxCoMROPWXExd"
+    },
+    {
+      "name": "Legendary Resistance (3/Day)",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shield_4.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p>If Gilbert fails a defense check, he can choose to succeed instead.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "O26dN89GFqUCm1sh",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700829129,
+        "modifiedTime": 1777700829129,
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!LQS2jaeFhzFMDpxA.O26dN89GFqUCm1sh"
+    },
+    {
+      "name": "Transformation Trigger — Sephirotic Assistant Manager",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p><strong>Parley / redemption condition:</strong> If the party spends actions helping clean, reassuring Gilbert, invoking the sacred purpose of public gathering, or promising to reopen the theater properly, Gilbert can be talked down. Once he is below half Integrity <em>or</em> after a round in which at least two PCs forgo attacks to help the space, a successful DC 15 group social / insight / performance / faith approach transforms him into a <strong>Sephirotic Assistant Manager</strong> and ends the fight.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "BEVzy0t6MrW86BoE",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700829129,
+        "modifiedTime": 1777700829129,
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!LQS2jaeFhzFMDpxA.BEVzy0t6MrW86BoE"
+    },
+    {
+      "name": "The Mop Knows",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_1.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port",
+          "phase2-narrative",
+          "mal-voice"
+        ],
+        "description": {
+          "value": "<p><strong>Passive (Mal voice).</strong> Gilbert's mop has 50/50 precognition for any spilled fluid. Once per scene, Gilbert may name the next bodily fluid that will hit the floor and where; if right, he sweeps it before it lands. One PC in the scene may then reroll-lowest on any check involving footing, balance, or a cleanly-finished moment. Mop says: \"Already had it. Already there.\"</p>",
+          "chat": ""
+        }
+      },
+      "_id": "pLodt9dIFj1BWAS7",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700842000,
+        "modifiedTime": 1780163239172,
+        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!LQS2jaeFhzFMDpxA.pLodt9dIFj1BWAS7"
+    },
+    {
+      "name": "Theater Etiquette",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_music.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port",
+          "phase2-narrative",
+          "mal-voice"
+        ],
+        "description": {
+          "value": "<p><strong>Passive (Mal voice).</strong> While Gilbert is on stage, no one may bring flash photography, lit cigarettes, or weapon discharge into the orchestra section without winning a Diplomacy contest vs. Gilbert's Resolve. Gilbert reframes any direct violence against him as poor manners and continues sweeping. He cannot be Compelled by threat. The mop is his witness.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "ce9r44NEoagva47P",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700842000,
+        "modifiedTime": 1780163239172,
+        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!LQS2jaeFhzFMDpxA.ce9r44NEoagva47P"
+    }
+  ],
+  "effects": [],
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "LQS2jaeFhzFMDpxA",
+  "prototypeToken": {
+    "name": "Gilbert, Eternally Cleaning Not Leaning Theater Attendant",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/gilbert_pov_demon.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "folder": "uMhSIaldbbcnBh0H",
+  "sort": 1900000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777700829129,
+    "modifiedTime": 1783219918014,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!LQS2jaeFhzFMDpxA"
+}

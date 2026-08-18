@@ -1,0 +1,196 @@
+{
+  "name": "Qliph-Scarred",
+  "type": "species",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Qliph-Scarred4.png",
+  "system": {
+    "category": "ancestry",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Qliph-Scarred.</strong> You walked out of a place that should have unmade you. The hollows and fractures in your soul never fully closed, and the world can feel the pressure leaking out.</p><hr><p><em><strong>Qliph-Scarred Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</p></li><li><p><strong>Size.</strong> You are Medium.</p></li><li><p><strong>Speed.</strong> Your walking speed is 6 squares</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Qliph-Scarred does not grant any attribute bonuses.</p></li></ul><p>Your Qliph-Scarred heritage grants you additional features through advancements (Item Grants) added during character creation.</p>",
+      "chat": ""
+    },
+    "advancement": {
+      "QLSIZ00000000001": {
+        "_id": "QLSIZ00000000001",
+        "type": "Size",
+        "configuration": {
+          "sizes": [
+            "med"
+          ]
+        },
+        "level": 0,
+        "title": "",
+        "hint": "Medium Qliph-Scarred.",
+        "value": {},
+        "flags": {}
+      },
+      "QLSCAR0000000001": {
+        "_id": "QLSCAR0000000001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.PFguHdcJ3AbtSDhx",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Shadow Resilience",
+        "hint": "Gain the Qliph-Scarred: Shadow Resilience feature.",
+        "flags": {}
+      },
+      "QLSCAR0000000002": {
+        "_id": "QLSCAR0000000002",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.AC1pQoGk2r1JsO1t",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Qliphothic Saturation",
+        "hint": "Gain the Qliph-Scarred: Qliphothic Saturation feature.",
+        "flags": {}
+      },
+      "QLSCAR0000000003": {
+        "_id": "QLSCAR0000000003",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.0Jar440SAvE96hdE",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Hunger Mask",
+        "hint": "Gain the Qliph-Scarred: Hunger Mask feature.",
+        "flags": {}
+      },
+      "QLSCAR0000000004": {
+        "_id": "QLSCAR0000000004",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.bLbk3JlqcS1MfBcn",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Shadow-Wake",
+        "hint": "Gain the Qliph-Scarred: Shadow-Wake feature.",
+        "flags": {}
+      },
+      "QLSCAR0000000005": {
+        "_id": "QLSCAR0000000005",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.JYdGhXK2dKB1wEg6",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Strategic Hooks (Qliph-Scarred)",
+        "hint": "Grants OP and corruption hooks used by Bad Eden faction and world systems.",
+        "flags": {}
+      }
+    },
+    "movement": {
+      "walk": "30",
+      "units": null,
+      "hover": false,
+      "ignoredDifficultTerrain": []
+    },
+    "senses": {
+      "darkvision": null,
+      "blindsight": null,
+      "tremorsense": null,
+      "truesight": null,
+      "units": null,
+      "special": ""
+    },
+    "type": {
+      "value": "humanoid",
+      "custom": "",
+      "subtype": "Qliph-Scarred"
+    },
+    "identifier": "qliph-scarred"
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "race",
+      "version": "1.0.0",
+      "date": "2025-12-08",
+      "ancestryKey": "qliph_scarred"
+    },
+    "bbttcc-character-options": {
+      "option": {}
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "folder": "j42C7j9nQ8gpXSoM",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1775014486366,
+    "modifiedTime": 1782167240136,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "rMuXXItrEQDROPEP",
+  "sort": 100000,
+  "_key": "!items!rMuXXItrEQDROPEP"
+}

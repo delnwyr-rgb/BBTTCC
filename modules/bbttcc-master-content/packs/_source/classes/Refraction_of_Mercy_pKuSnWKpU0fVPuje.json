@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "nTJRZc3ULRpJtjWX",
+  "name": "Refraction of Mercy",
+  "color": null,
+  "sorting": "a",
+  "_id": "pKuSnWKpU0fVPuje",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "createdTime": 1776459984325,
+    "modifiedTime": 1776459984325
+  },
+  "_key": "!folders!pKuSnWKpU0fVPuje"
+}

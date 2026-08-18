@@ -1,0 +1,82 @@
+{
+  "name": "The Apologizing Burger",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/the_apologizing_burger.png",
+  "system": {
+    "slot": "consumable",
+    "tags": [
+      "mal-voiced",
+      "consumable",
+      "kind"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>A wrapped burger that murmurs faint apologies through the wax paper. Listen, I don't know either. I've stopped asking. Some chef in Allesh Gilliam started making them after the Shattering and people just kept eating them. The bun is good. The meat is real-ish. The apologies are sincere.</p><p><strong>One-Time Snack.</strong> Eat (action). Recover 1d4 Stress and 1 Integrity. The burger thanks you for forgiving it. Cannot be saved for later — apologies don't keep.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "consumable",
+          "signature": "It's sorry. It's so sorry. It would like you to know that.",
+          "origin": "given",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A wrapped burger that murmurs faint apologies through the wax paper. Listen, I don't know either. I've stopped asking. Some chef in Allesh Gilliam started making them after the Shattering and people just kept eating them. The bun is good. The meat is real-ish. The apologies are sincere.</p><p><b>One-Time Snack.</b> Eat (action). Recover 1d4 Stress and 1 Integrity. The burger thanks you for forgiving it. Cannot be saved for later — apologies don't keep.</p>",
+          "materialOf": [
+            "bad-eden-meat",
+            "wax-paper",
+            "sincere-regret"
+          ],
+          "charges": 1,
+          "price": {
+            "marks": 10,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI consumable stamp",
+            "bound": "free",
+            "saleBack": 4
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "4TXLg6P4GxPY3wR6",
+  "effects": [],
+  "sort": 600245,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725653,
+    "modifiedTime": 1778541953805,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!4TXLg6P4GxPY3wR6"
+}

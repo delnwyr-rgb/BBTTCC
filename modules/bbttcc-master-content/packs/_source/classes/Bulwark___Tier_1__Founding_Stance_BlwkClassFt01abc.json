@@ -1,0 +1,129 @@
+{
+  "name": "Bulwark — Tier 1: Founding Stance",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_10.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>The world has two ways of saying no to change. You learn one of them today.</em></p><p><strong>On gaining Bulwark Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Athletics (Violence)</strong>.</p></li><li><p>Skill rank +1 in <strong>one tool of your choice</strong> (any single tool tracked as a skill on your sheet).</p></li><li><p><strong>Violence OP cap +3</strong> and <strong>Siege OP cap +2</strong> on the faction your character belongs to.</p></li><li><p>Your <strong>Frame Dice</strong> pool comes online (persistence — d8 dice, spend to absorb hits or fuel doctrine effects). Pool max = max(2, ceil((Violence value + Bulwark Initiation) / 3)), capped at 8.</p></li><li><p>Your <strong>Ruin Charges</strong> pool comes online (inevitability — single-use charges, spend to fuel offensive doctrine effects). Same pool-size formula.</p></li></ul><p>Both pools refill on a Soma Break. How you generate them depends on your chosen Path; see your doctrine's L1 feature.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "bulwark_tier1_founding_stance",
+    "requirements": "Bulwark Initiation 1",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [
+    {
+      "name": "Founding Stance: Athletics +1",
+      "img": "icons/skills/melee/shield-block-bash-yellow.webp",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.athletics.value",
+            "value": 1,
+            "type": "add",
+            "priority": 10,
+            "phase": "initial"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Passive: Founding Stance: Athletics +1",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "sprint": "passive-ae-2026-04-28"
+        }
+      },
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "_id": "WRxpkdXH7WzavuRw",
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777394530732,
+        "modifiedTime": 1777394530732,
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!BlwkClassFt01abc.WRxpkdXH7WzavuRw"
+    }
+  ],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "classfeat",
+      "classIdentifier": "bulwark",
+      "tierLevel": 1,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true,
+      "opEffects": {
+        "capDelta": {
+          "violence": 3,
+          "siege": 2
+        }
+      }
+    },
+    "fourththing": {
+      "grants": {}
+    }
+  },
+  "folder": "rWwlRrTVc3OdPSZA",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777003646518,
+    "modifiedTime": 1781116125204,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BlwkClassFt01abc",
+  "sort": 0,
+  "_key": "!items!BlwkClassFt01abc"
+}

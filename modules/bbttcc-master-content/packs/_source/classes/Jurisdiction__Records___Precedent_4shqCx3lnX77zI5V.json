@@ -1,0 +1,71 @@
+{
+  "name": "Jurisdiction: Records & Precedent",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“Reality is consistent because someone keeps the minutes.”</em></p><p><strong>Administrative Pressure:</strong> +3</p><p>You are licensed to administer <strong>continuity of meaning</strong>: what counts as having happened, how strongly the past pulls on the present, and which version of events becomes official.</p><p><strong>Esoteric Bias:</strong> Divination (Chokhmah) and Illusion (Hod). When casting manifestations from these schools, misalignment penalties are suppressed; aligned casting generates <strong>+1 Civic Charge</strong>.</p><p><strong>Always Prepared Manifestations:</strong> Detect Thoughts, Zone of Truth, Clairvoyance, Modify Memory, Legend Lore.</p><p><strong>Unique Contract:</strong> Binding Precedent (see Pactkeeper features).</p><h1 data-start=\"3300\" data-end=\"3341\">🧭 PACTKEEPER FEATURE: <strong data-start=\"3325\" data-end=\"3341\">Jurisdiction</strong></h1><p data-start=\"3343\" data-end=\"3447\"><strong data-start=\"3343\" data-end=\"3352\">Type:</strong> Permanent class feature (Level 1)<br data-start=\"3386\" data-end=\"3389\" /><strong data-start=\"3389\" data-end=\"3401\">Purpose:</strong> Defines what you are authorized to administer</p><p data-start=\"3449\" data-end=\"3526\">A Jurisdiction does <strong data-start=\"3469\" data-end=\"3476\">not</strong> grant power directly.<br data-start=\"3498\" data-end=\"3501\" />It grants <strong data-start=\"3511\" data-end=\"3525\">permission</strong>.</p><hr data-start=\"3528\" data-end=\"3531\" /><h3 data-start=\"3533\" data-end=\"3559\">What Jurisdiction Does</h3><p data-start=\"3560\" data-end=\"3589\">Your Jurisdiction determines:</p><ul data-start=\"3591\" data-end=\"3778\"><li data-start=\"3591\" data-end=\"3643\"><p data-start=\"3593\" data-end=\"3643\">Which situations generate Civic Charge more easily</p></li><li data-start=\"3644\" data-end=\"3692\"><p data-start=\"3646\" data-end=\"3692\">Which effects you may enforce without Pressure</p></li><li data-start=\"3693\" data-end=\"3735\"><p data-start=\"3695\" data-end=\"3735\">Which Contracts you can issue by default</p></li><li data-start=\"3736\" data-end=\"3778\"><p data-start=\"3738\" data-end=\"3778\">Which manifestations are considered “in mandate”</p></li></ul><p data-start=\"3780\" data-end=\"3788\">Example:</p><ul data-start=\"3789\" data-end=\"3910\"><li data-start=\"3789\" data-end=\"3840\"><p data-start=\"3791\" data-end=\"3840\">A Steward acting on community morale = in mandate</p></li><li data-start=\"3841\" data-end=\"3910\"><p data-start=\"3843\" data-end=\"3910\">A Steward issuing divine sanctions = out of mandate (Pressure risk)</p></li></ul><hr data-start=\"3912\" data-end=\"3915\" /><h3 data-start=\"3917\" data-end=\"3941\">Jurisdiction Is NOT:</h3><ul data-start=\"3942\" data-end=\"4005\"><li data-start=\"3942\" data-end=\"3959\"><p data-start=\"3944\" data-end=\"3959\">A resource pool</p></li><li data-start=\"3960\" data-end=\"3978\"><p data-start=\"3962\" data-end=\"3978\">A bonus to rolls</p></li><li data-start=\"3979\" data-end=\"4005\"><p data-start=\"3981\" data-end=\"4005\">A manifestation list restriction</p></li></ul><p data-start=\"4007\" data-end=\"4057\">It is a <strong data-start=\"4015\" data-end=\"4032\">scope limiter</strong> and <strong data-start=\"4037\" data-end=\"4056\">Pressure filter</strong>.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "identifier": "pactkeeper_jurisdiction_records_precedent",
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pushback": {
+        "track": "pressure",
+        "on": "use",
+        "amount": 3,
+        "_taggedBy": "bbttcc-pressure-tagger",
+        "_ts": 1770862582267
+      }
+    }
+  },
+  "folder": "WEL7mlledpAPLjnP",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776481562682,
+    "modifiedTime": 1782167240797,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "4shqCx3lnX77zI5V",
+  "sort": 100000,
+  "_key": "!items!4shqCx3lnX77zI5V"
+}

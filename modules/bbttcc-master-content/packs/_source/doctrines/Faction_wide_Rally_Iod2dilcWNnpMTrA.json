@@ -1,0 +1,62 @@
+{
+  "name": "Faction-wide Rally",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>One good shout down the whole line and suddenly everyone remembers why they bothered showing up. Goosebumps. I don't have skin, but still.</p><p><b>+1 attacker roll this round; friendly tokens gain Rallied for 1 round.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "faction_wide_rally",
+      "meta": {
+        "tier": 1,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "universal",
+        "layer": "cross-layer",
+        "costBand": "light",
+        "raidTypes": [
+          "any"
+        ],
+        "fireMode": "pre-roll",
+        "opCosts": {
+          "softpower": 2
+        },
+        "authoredSprint": 2
+      },
+      "effects": {
+        "text": "Inspire the line: +1 attacker roll this round; friendly tokens on the battle scene gain 'Rallied' for 1 round."
+      }
+    }
+  },
+  "_id": "Iod2dilcWNnpMTrA",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 100782,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778964846637,
+    "modifiedTime": 1780163524151,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!Iod2dilcWNnpMTrA"
+}

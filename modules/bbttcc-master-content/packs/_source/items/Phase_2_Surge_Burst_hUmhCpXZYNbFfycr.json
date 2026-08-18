@@ -1,0 +1,41 @@
+{
+  "name": "Phase 2 Surge Burst",
+  "type": "feature",
+  "img": "icons/magic/symbols/runes-etched-steel-orange.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>On entering Phase 2, gain 2 Surge dice immediately. The boss <em>remembers it has options</em>.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "boss-augment"
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "hUmhCpXZYNbFfycr",
+  "effects": [],
+  "sort": 3700000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205374608,
+    "modifiedTime": 1778963271958,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!hUmhCpXZYNbFfycr"
+}

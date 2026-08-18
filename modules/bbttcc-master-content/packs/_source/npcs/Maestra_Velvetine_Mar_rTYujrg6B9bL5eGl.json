@@ -1,0 +1,993 @@
+{
+  "name": "Maestra Velvetine Mar",
+  "type": "character",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc",
+      "createdViaNPCBuilder": true,
+      "createdAt": 1783991398053
+    },
+    "fourththing": {
+      "kind": "npc",
+      "surgeEnabled": false
+    },
+    "bbttcc-character-options": {
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.oldnlumenwrght01",
+      "nativeLinks": {
+        "heritageName": "Oldenborn Heritage: Lumenwrought",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.oldnlumenwrght01",
+        "heritageApplied": true,
+        "ancestryName": "Oldenborn",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.7709222f8ff32964",
+        "ancestryApplied": true
+      }
+    },
+    "bbttcc-factions": {
+      "factionId": "gvZvjqy8hxloOnwS"
+    },
+    "bbttcc-territory": {
+      "faction": "The Cadence"
+    }
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 4,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 2,
+      "tier": 1
+    },
+    "attributes": {
+      "violence": {
+        "value": 3
+      },
+      "intrigue": {
+        "value": 5
+      },
+      "presence": {
+        "value": 5
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 3
+      },
+      "soul": {
+        "value": 3
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 0
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 0
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 0
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 1
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 0
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 0
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 31,
+        "max": 16
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 3,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": "gvZvjqy8hxloOnwS",
+      "loyalty": 0,
+      "name": "The Cadence"
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": 1,
+    "name": "Maestra Velvetine Mar",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Ember_Lumenwrought_3.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "rTYujrg6B9bL5eGl",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Ember_Lumenwrought_3.png",
+  "items": [
+    {
+      "_id": "PHE9sHFDCMNZuASe",
+      "name": "Broker",
+      "type": "class",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-broker",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "broker",
+          "presence"
+        ],
+        "description": {
+          "value": "<p><em>\"There is no problem two reasonable parties can't monetize.\"</em></p><p><strong>Broker</strong> is the Presence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: merchant, envoy, entertainer, cult recruiter, gang face. A profession is a flavor label on the Calling.</p><p><strong>Knack — Fair Price:</strong> The Broker moves any negotiated price <strong>5% per tier</strong> in their side's favor inside the ±25% tolerance band (Tier IV: the full ±20% swing).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Diplomacy</strong> rank = tier; secondary <strong>Empathy</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Diplomacy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Harmony Marshal. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "broker",
+            "faculty": "presence",
+            "signature": "diplomacy",
+            "secondary": "empathy",
+            "pool": "Diplomacy or Soft Power (GM picks by job)",
+            "awakens": "Harmony Marshal"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534540,
+        "modifiedTime": 1784177534540,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!rTYujrg6B9bL5eGl.PHE9sHFDCMNZuASe"
+    },
+    {
+      "_id": "ugD7MikYlmfi7J3c",
+      "name": "Broker — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "broker",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Broker — Apprentice</strong> (Tier I).</p><p><strong>Trade — Word on the street:</strong> Current prices, current rumors, who's buying. <span style=\"opacity:0.7\">Standard fee 10 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Read the Room</strong> <em>(1/scene)</em>: GM truthfully answers: who here has the real power, and what do they want right now?</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 301000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "broker",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534540,
+        "modifiedTime": 1784177534540,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!rTYujrg6B9bL5eGl.ugD7MikYlmfi7J3c"
+    },
+    {
+      "name": "Oldenborn",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Earthbound_2.png",
+      "system": {
+        "category": "ancestry",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 2,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Oldenborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Earthbound, Lumenwrought, Stormborn Nomad, Rustland Scavenger</strong>.</p><p>This root grants the shared Oldenborn core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>“You are not an elf. You are the memory of a place that learned to walk again.”</em></p>\n<p><strong>Dream-Flesh.</strong> You do not sleep. When you rest, you drift into Yesod—symbolic memory-space—unless you choose otherwise. You are immune to magical sleep, and you can always tell when a dream, illusion, or constructed reality is present.</p>\n<p><strong>Old Memory, Old Paths.</strong> You reroll the lowest die on checks to interpret ruins, follow ley-lines, identify altered terrain, and sense metaphysical instability. You always know if a place feels <em>remembered</em>, <em>abandoned</em>, or <em>contested</em> (the GM answers vaguely).</p>\n<p><strong>Veil-Sight.</strong> You perceive the <em>presence</em> of spirits, ghosts, Spark echoes, and noospheric constructs. This grants awareness, not perfect sight.</p>\n<p><strong>You Are Remembered.</strong> When you first meet a community, the GM chooses (or rolls) whether you are met with reverence, fear, or familiarity. It’s never neutral.</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "8dfcdc1a6e9e4b08",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium.",
+            "value": {}
+          },
+          {
+            "_id": "95aae7269bab1119",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.TNlzDCiEgc27ZzOl",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Old Memory, Old Flesh",
+            "hint": "Gain the core Oldenborn ancestry traits."
+          }
+        ],
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": "Veil-Sight (awareness of spirits, Spark echoes, noospheric constructs)."
+        },
+        "type": {
+          "value": "humanoid",
+          "custom": "",
+          "subtype": "Oldenborn"
+        },
+        "identifier": "oldenborn"
+      },
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "family": "oldenborn",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "heritageList": [
+            "earthbound",
+            "lumenwrought",
+            "stormborn_nomad",
+            "rustland_scavenger"
+          ],
+          "refactorNotes": "v2 simplification: Sky-Threaded and Ember-Touched retired. Stormborn Nomad and Rustland Scavenger demoted from species to Oldenborn heritages."
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "on checks to interpret ruins, follow ley-lines, identify altered terrain, and…"
+            },
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "checks to interpret ruins, follow ley-lines, identify altered terrain, and se…"
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-rest",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Dream-Flesh. You do not sleep. When you rest, you drift into Yesod"
+                }
+              }
+            }
+          ],
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "grantedByAncestry": "Oldenborn"
+        }
+      },
+      "effects": [],
+      "folder": "5PPxNybRn7zD0k0G",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.7709222f8ff32964",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534540,
+        "modifiedTime": 1784177534540,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "kYD6fE77HYKBnpn9",
+      "_key": "!actors.items!rTYujrg6B9bL5eGl.kYD6fE77HYKBnpn9"
+    },
+    {
+      "name": "Oldenborn Heritage: Lumenwrought",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Ember_Lumenwrought_3.png",
+      "system": {
+        "category": "heritage",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Oldenborn Heritage.</strong> The branch that lit up from inside. Festival-spirit, glamour-spirit, the ancestor that taught the people to call something beautiful before they had a word for sacred.</p><p><em>“The world remembered old names. You answered—and you were lit by the answering.”</em></p><p><strong>Lumenwrought.</strong> You are the place-soul that learned to wear a mask of light. Folks call you elf, sylph, faerie, depending on what scares them prettier than it scares them honestly. You are the first reason a candle is holy.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Fey).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>PRE (Presence)</strong>—expressed primarily through Tier powers.</p></li><li><p><strong>Glamourcast.</strong> You can shed dim light in a 1 square radius at will, and snuff it out the same way. Your light is the colour of one specific moment in your past—the GM and you decide which.</p></li></ul>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "oldnlumenad0001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.VCDspGrzcx0FkfEj",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Lumenwrought Tier I",
+            "hint": "Gain your Lumenwrought Tier I lineage power (Glamourfield)."
+          }
+        ],
+        "identifier": "oldenborn_lumenwrought_heritage",
+        "requirements": "Oldenborn",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "oldenborn",
+          "lineage": "Lumenwrought",
+          "version": "2.0.0",
+          "date": "2026-04-18"
+        },
+        "fourththing": {
+          "grantedByHeritage": "Lumenwrought"
+        }
+      },
+      "folder": "8lnQFXfSvlVrEqA2",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534540,
+        "modifiedTime": 1784177534540,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 150000,
+      "_id": "gG5NdN7aYe3fDbEE",
+      "_key": "!actors.items!rTYujrg6B9bL5eGl.gG5NdN7aYe3fDbEE"
+    },
+    {
+      "name": "Oldenborn (Lumenwrought): Glamourfield",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rainbow.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“You were not beautiful. You were <strong>wanted</strong>.”</em></p>\n        <p><strong>Glamourfield (At Will, Minor).</strong> You can create subtle illusions affecting light, sound, scent, or emotional tone. It never overwhelms; it always influences.</p>\n        <p><strong>Dream Anchor.</strong> You have a +1 bonus to checks against metaphysical hazards (slippage, dream traps, Spark backlash).</p>",
+          "chat": ""
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "oldenborn-lumenwrought-glamourfield",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Oldenborn",
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "activities": {}
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "oldenborn",
+          "feature": "glamourfield",
+          "lineage": "Lumenwrought",
+          "tierLevel": 0,
+          "version": "1.0.0"
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "grantedByHeritage": "Lumenwrought"
+        }
+      },
+      "effects": [
+        {
+          "_id": "9b52887635e340da",
+          "name": "Lumenwrought: Dream Anchor (+1 saves)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_4.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.bonuses.abilities.save",
+                "value": "+1",
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Represents anchoring presence.",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "dnd5e": {
+              "riders": {
+                "statuses": []
+              }
+            }
+          },
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177534540,
+            "modifiedTime": 1784177534540
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!rTYujrg6B9bL5eGl.Peq5WuOAM4vRSMW1.9b52887635e340da"
+        }
+      ],
+      "folder": "AZpEGZW4ZA1Kjb9K",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.0QQRNxNGttQFVSHj",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534540,
+        "modifiedTime": 1784177534540,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "Peq5WuOAM4vRSMW1",
+      "_key": "!actors.items!rTYujrg6B9bL5eGl.Peq5WuOAM4vRSMW1"
+    },
+    {
+      "name": "Adaptive Defense",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_adaptive_defense.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Core Feats v1 (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<h2>Adaptive Defense</h2><p><em>Defense is not denial. It is management.</em></p><hr><h3>Rules</h3><p>When you are hit by an attack you can see, you may use your reaction to reduce the damage by an amount equal to your skill rank bonus + your Violence or Intrigue value (your choice).</p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_adaptive_defense",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-core-v1",
+          "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+        }
+      },
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 100000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534540,
+        "modifiedTime": 1784177534540,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_id": "oE7PaT8cm3aPlZtH",
+      "_key": "!actors.items!rTYujrg6B9bL5eGl.oE7PaT8cm3aPlZtH"
+    }
+  ],
+  "effects": [],
+  "folder": "JWlFGqbp9zPNNlWl",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177534540,
+    "modifiedTime": 1784177534540,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!rTYujrg6B9bL5eGl"
+}

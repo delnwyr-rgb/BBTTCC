@@ -1,0 +1,334 @@
+{
+  "folder": "JCPy84JuWlbDotW6",
+  "name": "bbttcc_travel_generic_canyon_1",
+  "_id": "pL9Xs0djcqL9L1gi",
+  "active": false,
+  "navigation": true,
+  "navOrder": 0,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-dORLKt_TWMlbmqICpwU4RA.webp",
+  "width": 3840,
+  "height": 2160,
+  "padding": 0.25,
+  "initial": {
+    "x": null,
+    "y": null,
+    "scale": null
+  },
+  "grid": {
+    "type": 1,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 1,
+    "color": "#000000",
+    "alpha": 0.2,
+    "distance": 5,
+    "units": "ft"
+  },
+  "tokenVision": true,
+  "fog": {
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    },
+    "mode": 1
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": true,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "drawings": [],
+  "tokens": [],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [],
+  "walls": [
+    {
+      "light": 0,
+      "sight": 0,
+      "sound": 0,
+      "move": 20,
+      "c": [
+        1525,
+        1313,
+        3825,
+        1338
+      ],
+      "_id": "7ixUElXCEybR8brA",
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "levels": [],
+      "_key": "!scenes.walls!pL9Xs0djcqL9L1gi.7ixUElXCEybR8brA"
+    },
+    {
+      "light": 0,
+      "sight": 0,
+      "sound": 0,
+      "move": 20,
+      "c": [
+        2088,
+        2000,
+        3925,
+        2000
+      ],
+      "_id": "zrwlnzg1JO7rZY4J",
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "levels": [],
+      "_key": "!scenes.walls!pL9Xs0djcqL9L1gi.zrwlnzg1JO7rZY4J"
+    },
+    {
+      "light": 0,
+      "sight": 0,
+      "sound": 0,
+      "move": 20,
+      "c": [
+        4113,
+        1050,
+        3825,
+        1338
+      ],
+      "_id": "gS6TpUuQ0c7MGeWg",
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "levels": [],
+      "_key": "!scenes.walls!pL9Xs0djcqL9L1gi.gS6TpUuQ0c7MGeWg"
+    },
+    {
+      "light": 0,
+      "sight": 0,
+      "sound": 0,
+      "move": 20,
+      "c": [
+        4113,
+        1050,
+        4838,
+        1250
+      ],
+      "_id": "GFZqhFXcsjwzNled",
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "levels": [],
+      "_key": "!scenes.walls!pL9Xs0djcqL9L1gi.GFZqhFXcsjwzNled"
+    },
+    {
+      "light": 0,
+      "sight": 0,
+      "sound": 0,
+      "move": 20,
+      "c": [
+        975,
+        950,
+        1525,
+        1313
+      ],
+      "_id": "nNa77LBUQiMfZWtd",
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "levels": [],
+      "_key": "!scenes.walls!pL9Xs0djcqL9L1gi.nNa77LBUQiMfZWtd"
+    },
+    {
+      "light": 0,
+      "sight": 0,
+      "sound": 0,
+      "move": 20,
+      "c": [
+        1000,
+        2663,
+        2088,
+        2000
+      ],
+      "_id": "vJmcGcPLybg98F4G",
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "levels": [],
+      "_key": "!scenes.walls!pL9Xs0djcqL9L1gi.vJmcGcPLybg98F4G"
+    },
+    {
+      "light": 0,
+      "sight": 0,
+      "sound": 0,
+      "move": 20,
+      "c": [
+        4850,
+        2475,
+        3925,
+        2000
+      ],
+      "_id": "ARoaLsRNIzjyiKXt",
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "levels": [],
+      "_key": "!scenes.walls!pL9Xs0djcqL9L1gi.ARoaLsRNIzjyiKXt"
+    }
+  ],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "sort": 2200000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982530604,
+    "modifiedTime": 1783982530604,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "navName": "",
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "bbttcc_travel_generic_canyon_1",
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/bbttcc_travel_generic_canyon_1.mp4",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!pL9Xs0djcqL9L1gi.defaultLevel0000"
+    }
+  ],
+  "shiftX": 0,
+  "shiftY": 0,
+  "initialLevel": "defaultLevel0000",
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "_key": "!scenes!pL9Xs0djcqL9L1gi",
+  "templates": []
+}

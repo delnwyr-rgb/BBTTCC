@@ -1,0 +1,72 @@
+{
+  "name": "Clear the Signal",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_punctuation_12.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You strip the noise out of the lie.</em></p><p>When a creature within <strong>12 squares</strong> of you is about to suffer a <strong>deceit-based penalty</strong> on a roll—such as imposed disadvantage from illusions, deliberate misinformation, fear propaganda, or a manipulative magical effect—you can use your <strong>reaction</strong> to cut through it.</p><ul><li>The disadvantage, reroll, or penalty from that deceitful source is <strong>canceled</strong> for that one roll.</li><li>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a <strong>a Soma Break</strong>.</li></ul><p>This does not end the underlying effect; it simply refuses to let this particular moment be distorted.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlTruthClear\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Clear the Signal</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> tier uses / Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Reaction &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Cancel a deceit-based penalty (illusion-imposed disadvantage, fear propaganda, manipulative magic) on one roll within 12 squares Doesn't end the underlying effect — just refuses to let this moment be distorted. Recovers on Soma Break.</div>\n</div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "@prof"
+    },
+    "advancement": {},
+    "identifier": "wyrdlens-refraction-truth-clear-signal",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept 6, Refraction of Truth",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "4SZvMbYoYLB4LZnj",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "wyrdlens_refraction_truth",
+      "featureKey": "clear_signal"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459984385,
+    "modifiedTime": 1782167240815,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "K05WqD1AjCVlF31B",
+  "sort": 100000,
+  "_key": "!items!K05WqD1AjCVlF31B"
+}

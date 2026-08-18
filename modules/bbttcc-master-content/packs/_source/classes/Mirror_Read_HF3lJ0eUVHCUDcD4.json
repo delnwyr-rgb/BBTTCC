@@ -1,0 +1,116 @@
+{
+  "name": "Mirror Read",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_mirror_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>People are glass if you know where to look.</em></p><p>As an <strong>action</strong>, you focus on a creature you can see within <strong>6 squares</strong> and let your own faces flicker in response.</p><ul><li>Make an <strong>Insight (Soul)</strong> check contested by the target’s <strong>Stealth (Intrigue)</strong> (or Presence check, GM’s call).</li><li>On a success, you learn one <strong>useful tag</strong> about the target, chosen by the GM: a primary <strong>fear</strong>, <strong>loyalty</strong>, or <strong>desire</strong> relevant to the current situation.</li><li>On a failure, you get a blurred or partial read; the GM may give you a softer or less precise tag, or hint that the target is unusually opaque.</li></ul><p>This doesn’t expose secrets outright, but it tells you which emotional door is unlocked.</p>",
+      "chat": ""
+    },
+    "activities": {
+      "mirrorRead": {
+        "type": "utility",
+        "activation": {
+          "type": "action",
+          "condition": "",
+          "override": false
+        },
+        "range": {
+          "value": "30",
+          "units": "ft",
+          "override": false
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "description": {},
+        "_id": "Rq1b8iGnU9NjZjbq",
+        "sort": 0,
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "dreamwalker-thousand-mirror-read",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Dreamwalker 3, Trance of the Thousand Faces",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "ElDtbAjWdrLjiz5K",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "dreamwalker_thousand_faces",
+      "featureKey": "mirror_read"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459927032,
+    "modifiedTime": 1782167240814,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "HF3lJ0eUVHCUDcD4",
+  "sort": 300000,
+  "_key": "!items!HF3lJ0eUVHCUDcD4"
+}

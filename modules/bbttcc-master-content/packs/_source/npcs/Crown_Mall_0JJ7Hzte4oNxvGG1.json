@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": "ZiFLx2LEOrGxvEmc",
+  "name": "Crown Mall",
+  "color": "#c5372f",
+  "sorting": "a",
+  "_id": "0JJ7Hzte4oNxvGG1",
+  "description": "",
+  "sort": 700000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177533966,
+    "modifiedTime": 1784177533966,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!0JJ7Hzte4oNxvGG1"
+}

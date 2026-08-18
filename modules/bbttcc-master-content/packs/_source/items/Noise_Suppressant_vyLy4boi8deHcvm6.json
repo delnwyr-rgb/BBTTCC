@@ -1,0 +1,88 @@
+{
+  "name": "Noise Suppressant",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_serum_2.png",
+  "system": {
+    "slot": "consumable",
+    "tags": [
+      "consumable",
+      "tier-ii"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Counter-resonant draught. Eats the static you've been carrying — the kind manifestations leave behind.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Restore <strong>3</strong> Noise</li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 30 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "consumable",
+          "signature": "The Qliphothic echo fades for a breath.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "Counter-resonant draught. Eats the static you've been carrying — the kind manifestations leave behind.",
+          "charges": 1,
+          "consume": {
+            "effects": [
+              {
+                "kind": "track",
+                "track": "noise",
+                "op": "subtract",
+                "delta": 3
+              }
+            ],
+            "decrement": true
+          },
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII consumable stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "folder": "guHYjt0gjPLU2wCs",
+  "_id": "vyLy4boi8deHcvm6",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777096380565,
+    "modifiedTime": 1782160020993,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!vyLy4boi8deHcvm6"
+}

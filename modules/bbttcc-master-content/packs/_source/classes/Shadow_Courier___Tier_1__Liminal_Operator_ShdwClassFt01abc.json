@@ -1,0 +1,207 @@
+{
+  "name": "Shadow Courier — Tier 1: Liminal Operator",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_4.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>You cross what isn't supposed to be crossed — and you always come out the other side carrying something.</em></p><p><strong>On gaining Shadow Courier Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Stealth (Intrigue)</strong>.</p></li><li><p>Skill rank +1 in <strong>Tinkering (Intrigue)</strong>.</p></li><li><p><strong>Intrigue OP cap +2</strong> and <strong>Logistics OP cap +2</strong> on the faction your character belongs to.</p></li><li><p><strong>Pace</strong> pool comes online (movement-generated). Max = max(2, ceil((Intrigue value + Shadow Courier Initiation) / 3)), capped at 8. Refills on Soma Break and on Package delivery.</p></li><li><p><strong>Package</strong> slot comes online — one Package at a time, type set by your chosen Route at L1.</p></li></ul><p><strong>Pace generation.</strong> Gain 1 Pace when you move at least 6 squares on your turn. Maximum 1 Pace generated per turn from this feature. Doctrine features may add their own generators.</p><p><strong>Baseline Pace spends</strong> (free action, 1 Pace each):</p><ul><li><p>Move 5 extra feet without spending an action.</p></li><li><p>Reroll a single Stealth (Intrigue), Athletics (Violence), or Tinkering (Intrigue) check — keep the new result.</p></li><li><p>Ignore a single reaction strike against you on this turn.</p></li></ul><p><strong>Liminal Sense.</strong> Once per encounter, ignore the first detection-style roll an opponent attempts against you (perception, scrying, Insight to read your intent, etc.). The roll is treated as if it had failed; resources spent on the attempt are not refunded.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "shadow_courier_tier1_liminal_operator",
+    "requirements": "Shadow Courier Initiation 1",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [
+    {
+      "name": "Liminal Operator: Tinkering +1",
+      "img": "icons/tools/smithing/anvil.webp",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.tinkering.value",
+            "value": 1,
+            "type": "add",
+            "priority": 10,
+            "phase": "initial"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Passive: Liminal Operator: Tinkering +1",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "sprint": "passive-ae-2026-04-28"
+        }
+      },
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "_id": "NY2BDWuBBR9JOQSn",
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777394530744,
+        "modifiedTime": 1777394530744,
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!ShdwClassFt01abc.NY2BDWuBBR9JOQSn"
+    },
+    {
+      "name": "Liminal Operator: Stealth +1",
+      "img": "icons/skills/movement/feet-winged-boots.webp",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.stealth.value",
+            "value": 1,
+            "type": "add",
+            "priority": 10,
+            "phase": "initial"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Passive: Liminal Operator: Stealth +1",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "sprint": "passive-ae-2026-04-28"
+        }
+      },
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "_id": "QmS7XNQZJGpbqJaM",
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777394530745,
+        "modifiedTime": 1777394530745,
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!ShdwClassFt01abc.QmS7XNQZJGpbqJaM"
+    }
+  ],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "classfeat",
+      "classIdentifier": "shadow_courier",
+      "tierLevel": 1,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true,
+      "opEffects": {
+        "capDelta": {
+          "intrigue": 2,
+          "logistics": 2
+        }
+      }
+    },
+    "fourththing": {
+      "grants": {},
+      "triggers": [
+        {
+          "event": "on-move",
+          "predicate": {
+            "amountMin": 30
+          },
+          "limit": {
+            "window": "turn",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "grant-resource",
+            "args": {
+              "resource": "pace",
+              "amount": 1,
+              "target": "self"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "i2DrP0h8cZ7UFXpy",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777005233883,
+    "modifiedTime": 1782167240819,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ShdwClassFt01abc",
+  "sort": 0,
+  "_key": "!items!ShdwClassFt01abc"
+}

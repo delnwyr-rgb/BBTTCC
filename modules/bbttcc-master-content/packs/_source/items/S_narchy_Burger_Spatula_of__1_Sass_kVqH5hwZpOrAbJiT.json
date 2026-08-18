@@ -1,0 +1,329 @@
+{
+  "name": "S'narchy Burger Spatula of +1 Sass",
+  "type": "weapon",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mace.png",
+  "_id": "kVqH5hwZpOrAbJiT",
+  "effects": [],
+  "folder": "TNrB6kEiHS0KwwJT",
+  "sort": 101563,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1780000000000,
+    "modifiedTime": 1784515282607,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "system": {
+    "category": "melee",
+    "intent": "presence",
+    "skill": "melee",
+    "damage": {
+      "formula": "1d6",
+      "attribute": "presence",
+      "type": "kinetic",
+      "damageFlavor": "served with a side of commentary",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 5,
+      "long": 5
+    },
+    "tags": [
+      "t1-baseline",
+      "comedic",
+      "improvised",
+      "sass"
+    ],
+    "effect": "Improvised melee. On a hit, you may make a withering remark — target rolls Resolve vs DC 11 or is Shaken until the end of its next turn.",
+    "flavor": "The grill is cold. The burns are not.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "<p>Standard-issue S'narchy Burger flat-top spatula, well-seasoned, slightly cursed by decades of overheard sarcasm. Hits about as hard as you'd expect and exactly as hard as it needs to.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Improvised melee. On a hit, you may make a withering remark — target rolls Resolve vs DC 11 or is Shaken until the end of its next turn.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d6 Kinetic damage to <em>Stress</em> <span style=\"opacity:.75\">(served with a side of commentary)</span></li>\n  <li><strong>Faculty:</strong> Presence</li>\n  <li><strong>Attack:</strong> Melee (Presence)</li>\n  <li><strong>Range:</strong> 5</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "5",
+          "frame": "weapon",
+          "signature": "Flips burgers. Flips attitudes. Flips you off, spiritually.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Standard-issue Snarky Burger flat-top spatula, well-seasoned, slightly cursed by decades of overheard sarcasm. Hits about as hard as you'd expect and exactly as hard as it needs to.</p>",
+          "materialOf": [
+            "soft-alloy",
+            "ash-wood"
+          ],
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon — comedic",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      },
+      "manifestSheetMode": {
+        "bytUGWIOqq9eT7Or": "display"
+      }
+    },
+    "autoanimations": {
+      "id": "5d9f8fcb-5562-44ea-9aa3-5214515f4f5a",
+      "label": "Snarky Burger Spatula of +1 Sass",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "melee",
+      "primary": {
+        "video": {
+          "dbSection": "melee",
+          "menuType": "weapon",
+          "animation": "mace",
+          "variant": "01",
+          "color": "orange",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5,
+      "meleeSwitch": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "weapon",
+          "animation": "arrow",
+          "variant": "regular",
+          "color": "regular",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "detect": "automatic",
+          "range": 2,
+          "returning": false,
+          "switchType": "on"
+        }
+      }
+    }
+  },
+  "_key": "!items!kVqH5hwZpOrAbJiT"
+}

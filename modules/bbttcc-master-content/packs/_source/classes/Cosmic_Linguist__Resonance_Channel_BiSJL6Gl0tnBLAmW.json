@@ -1,0 +1,141 @@
+{
+  "name": "Cosmic Linguist: Resonance Channel",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_6.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Originals (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p>Spend <strong>1 Resonance Die</strong> and open the Resonance Channel dialog.</p><ul><li><p>+1 Resolve DC</p></li><li><p>Add one additional damage/effect die</p></li><li><p>Extend duration one step</p></li><li><p>Impose roll 3d10 keep lowest 2 on one save</p></li><li><p>Stabilize against counters / dispels</p></li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"clResChanAct\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Resonance Channel (Spend)</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/round (gain)  ·  <strong>Action:</strong> Free (with manifestation)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Spend 1 Resonance Die and pick one channel: +1 Resolve DC · add an extra damage/effect die · extend duration one step · impose roll 3d10 keep lowest 2 on one defense · stabilize against counter/dispel.</span></p></div>",
+      "chat": ""
+    },
+    "identifier": "cosmic_linguist_resonance_channel_action",
+    "advancement": {},
+    "activities": {
+      "primary": {
+        "type": "utility",
+        "name": "Cosmic Linguist: Resonance Channel",
+        "activation": {
+          "type": "bonus",
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "value": "",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "units": "self",
+          "value": "",
+          "override": false
+        },
+        "target": {
+          "affects": {
+            "type": "self",
+            "choice": false
+          },
+          "template": {
+            "count": "",
+            "units": "ft",
+            "type": "",
+            "contiguous": false,
+            "stationary": false
+          },
+          "override": false,
+          "prompt": true
+        },
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "_id": "XLQVKoy7hJ0RAdwv",
+        "img": null,
+        "sort": 0,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "cosmic_linguist_resonance_channel_action",
+      "resourceAction": true,
+      "resourceDisplay": false,
+      "engine": "dicePool",
+      "classId": "cosmic_linguist",
+      "pool": "resonance",
+      "track": "strain",
+      "cost": 1,
+      "actionKey": "cosmic_linguist_resonance_channel_action",
+      "opensDialog": "cosmic_resonance"
+    },
+    "dnd5e": {
+      "sourceId": "Compendium.bbttcc-master-content.classes.Item.9HYrLhpbKzGcH6ST",
+      "advancementOrigin": "J987fkECT4OLz0EV.RsrcActClL1P8a9s",
+      "advancementRoot": "J987fkECT4OLz0EV.RsrcActClL1P8a9s"
+    }
+  },
+  "folder": "r5DULAhp98iub0mt",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923343,
+    "modifiedTime": 1781116122065,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BiSJL6Gl0tnBLAmW",
+  "sort": 400000,
+  "_key": "!items!BiSJL6Gl0tnBLAmW"
+}

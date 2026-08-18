@@ -1,0 +1,66 @@
+{
+  "folder": "dIbTKQdDuf3aez6C",
+  "name": "Local Gazetteer, Bad Eden Edition",
+  "_id": "wnKYIpwP2GNy9bW1",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "Bits and Pieces of Interest",
+      "type": "text",
+      "_id": "7JSJ4ulbmCcJ2sIv",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h2 data-start=\"973\" data-end=\"1011\">🧭 REGION JOURNAL — <strong data-start=\"996\" data-end=\"1011\">THE BARRENS</strong></h2><p data-start=\"1012\" data-end=\"1059\"><em data-start=\"1012\" data-end=\"1059\">(BarrenPlains.a–f, Bedlam Barrens, Thirdword)</em></p><blockquote data-start=\"1061\" data-end=\"1725\"><p data-start=\"1063\" data-end=\"1122\">The Barrens were not always empty.<br data-start=\"1097\" data-end=\"1100\">They were <em data-start=\"1112\" data-end=\"1121\">emptied</em>.</p><p data-start=\"1127\" data-end=\"1392\">Wind moves freely here, because nothing argues with it anymore. The grass is thin, sharp, and stubborn — it grows like it’s proving a point. Structures rarely last long unless someone is actively defending them, and even then the land remembers when it was ignored.</p><p data-start=\"1397\" data-end=\"1457\">People who live in the Barrens tend to believe three things:</p><ol data-start=\"1460\" data-end=\"1632\"><li data-start=\"1460\" data-end=\"1487\"><p data-start=\"1463\" data-end=\"1487\">Ownership is temporary</p></li><li data-start=\"1490\" data-end=\"1543\"><p data-start=\"1493\" data-end=\"1543\">Promises are lies unless backed by force or food</p></li><li data-start=\"1546\" data-end=\"1630\"><p data-start=\"1549\" data-end=\"1630\">Anyone traveling <em data-start=\"1566\" data-end=\"1575\">through</em> is either brave, foolish, or about to become a problem</p></li></ol><p data-start=\"1635\" data-end=\"1725\">The Barrens produce riders, scavengers, prophets, and mistakes.<br data-start=\"1698\" data-end=\"1701\">Sometimes all at once.</p></blockquote><hr data-start=\"1727\" data-end=\"1730\"><h2 data-start=\"1732\" data-end=\"1773\">🏙️ HEX JOURNAL — <strong data-start=\"1753\" data-end=\"1771\">ALLESH GILLIAM</strong></h2><p data-start=\"1774\" data-end=\"1792\"><em data-start=\"1774\" data-end=\"1792\">(PC Capital Hex)</em></p><blockquote data-start=\"1794\" data-end=\"2373\"><p data-start=\"1796\" data-end=\"1881\">Allesh Gilliam looks like a city that learned how to survive <em data-start=\"1857\" data-end=\"1864\">after</em> the world ended.</p><p data-start=\"1886\" data-end=\"1938\">It is not large. It is not pretty.<br data-start=\"1920\" data-end=\"1923\">But it works.</p><p data-start=\"1943\" data-end=\"2180\">Scrap towers lean against one another like tired friends. Walkways are reinforced not with confidence, but with experience. Everyone here knows where the exits are, and most people know where the trouble will come from before it arrives.</p><p data-start=\"2185\" data-end=\"2280\">This is the seat of the PCs’ faction not because it is powerful — but because it is <em data-start=\"2269\" data-end=\"2279\">reliable</em>.</p><p data-start=\"2285\" data-end=\"2373\">Allesh Gilliam remembers who helped build it.<br data-start=\"2330\" data-end=\"2333\">And it remembers who tried to take it.</p></blockquote><hr data-start=\"2375\" data-end=\"2378\"><h2 data-start=\"2380\" data-end=\"2411\">🏘️ HEX JOURNAL — <strong data-start=\"2401\" data-end=\"2411\">LYRENN</strong></h2><p data-start=\"2412\" data-end=\"2433\"><em data-start=\"2412\" data-end=\"2433\">(PC Collective Hex)</em></p><blockquote data-start=\"2435\" data-end=\"2833\"><p data-start=\"2437\" data-end=\"2473\">Lyrenn is quieter than it should be.</p><p data-start=\"2478\" data-end=\"2638\">Small buildings cluster together as if sharing secrets. Gardens grow in places no one remembers planting. The land here feels <em data-start=\"2604\" data-end=\"2613\">patient</em> — not safe, but waiting.</p><p data-start=\"2643\" data-end=\"2762\">Travelers often report that their arguments soften while staying in Lyrenn. Decisions feel easier. Doubts feel heavier.</p><p data-start=\"2767\" data-end=\"2833\">No one has proven Lyrenn is special.<br>No one has proven it isn’t.</p></blockquote><hr data-start=\"2835\" data-end=\"2838\"><h2 data-start=\"2840\" data-end=\"2874\">🏭 HEX JOURNAL — <strong data-start=\"2860\" data-end=\"2874\">KHEZEK TOR</strong></h2><p data-start=\"2875\" data-end=\"2914\"><em data-start=\"2875\" data-end=\"2914\">(PC Collective Hex — Supply Pressure)</em></p><blockquote data-start=\"2916\" data-end=\"3350\"><p data-start=\"2918\" data-end=\"2965\">Khezek Tor was built to solve problems quickly.</p><p data-start=\"2970\" data-end=\"3038\">Most of those problems were logistical.<br data-start=\"3009\" data-end=\"3012\">Some of them were moral.</p><p data-start=\"3043\" data-end=\"3223\">Warehouses dominate the skyline. Everything here has a number, a label, or a destination — even the people. When shortages hit, Khezek Tor feels it first and complains the loudest.</p><p data-start=\"3228\" data-end=\"3303\">If Allesh Gilliam is the heart of the faction,<br data-start=\"3274\" data-end=\"3277\">Khezek Tor is the liver.</p><p data-start=\"3308\" data-end=\"3350\">Necessary. Overworked. Slightly resentful.</p></blockquote><hr data-start=\"3352\" data-end=\"3355\"><h2 data-start=\"3357\" data-end=\"3402\">🛠️ HEX JOURNAL — <strong data-start=\"3378\" data-end=\"3402\">FARRIER’S FIXIT FARM</strong></h2><p data-start=\"3403\" data-end=\"3430\"><em data-start=\"3403\" data-end=\"3430\">(Jackalope Faction Asset)</em></p><blockquote data-start=\"3432\" data-end=\"3926\"><p data-start=\"3434\" data-end=\"3526\">Farrier’s Fixit Farm is exactly what it sounds like, and far more dangerous than it appears.</p><p data-start=\"3531\" data-end=\"3642\">Half factory, half general store, half rumor mill — the math does not work, but neither does the world anymore.</p><p data-start=\"3647\" data-end=\"3860\">Jackalope banners hang from rusted silos. Machines are repaired with equal parts mastery and improvisation. If something <em data-start=\"3770\" data-end=\"3775\">can</em> be fixed, it probably will be. If it can’t, someone will sell you the pieces anyway.</p><p data-start=\"3865\" data-end=\"3926\">People come here needing things.<br>People leave owing favors.</p></blockquote><hr data-start=\"3928\" data-end=\"3931\"><h2 data-start=\"3933\" data-end=\"3966\">⚓ HEX JOURNAL — <strong data-start=\"3952\" data-end=\"3966\">PORT KUDZU</strong></h2><p data-start=\"3967\" data-end=\"3994\"><em data-start=\"3967\" data-end=\"3994\">(Jackalope Coastal Asset)</em></p><blockquote data-start=\"3996\" data-end=\"4394\"><p data-start=\"3998\" data-end=\"4068\">Port Kudzu is winning a war against the coastline and losing politely.</p><p data-start=\"4073\" data-end=\"4220\">Docks are overgrown, then cut back, then overgrown again. Ships come in lighter than they left. Deals are struck loudly and remembered selectively.</p><p data-start=\"4225\" data-end=\"4283\">The Jackalopes control the port, but the sea has opinions.</p><p data-start=\"4288\" data-end=\"4394\">This is where the PCs began their journey upriver — not as heroes, but as cargo that learned to talk back.</p></blockquote><hr data-start=\"4396\" data-end=\"4399\"><h2 data-start=\"4401\" data-end=\"4446\">🌊 REGION JOURNAL — <strong data-start=\"4424\" data-end=\"4446\">THE ODAROLOC RIVER</strong></h2><p data-start=\"4447\" data-end=\"4460\"><em data-start=\"4447\" data-end=\"4460\">(River.a–d)</em></p><blockquote data-start=\"4462\" data-end=\"4845\"><p data-start=\"4464\" data-end=\"4511\">The Odaroloc does not flow so much as <em data-start=\"4502\" data-end=\"4510\">insist</em>.</p><p data-start=\"4516\" data-end=\"4719\">It cuts through territory without asking permission. Settlements grow along it out of necessity, not affection. The water carries silt, stories, and occasionally things that should have stayed submerged.</p><p data-start=\"4724\" data-end=\"4792\">Following the Odaroloc upstream feels like rewinding a bad decision.</p><p data-start=\"4797\" data-end=\"4845\">It does not forgive you for reaching the source.</p></blockquote><hr data-start=\"4847\" data-end=\"4850\"><h2 data-start=\"4852\" data-end=\"4898\">🌲 REGION JOURNAL — <strong data-start=\"4875\" data-end=\"4898\">THE POLYGON FORESTS</strong></h2><p data-start=\"4899\" data-end=\"4920\"><em data-start=\"4899\" data-end=\"4920\">(PolygonForest.a–d)</em></p><blockquote data-start=\"4922\" data-end=\"5274\"><p data-start=\"4924\" data-end=\"4990\">The Polygon Forests are wrong in ways that don’t immediately hurt.</p><p data-start=\"4995\" data-end=\"5108\">Trees grow at angles that make sense only from above. Clearings repeat. Paths feel intentional until they aren’t.</p><p data-start=\"5113\" data-end=\"5201\">Locals say the forest was measured once — carefully — and has been resentful ever since.</p><p data-start=\"5206\" data-end=\"5274\">Structures sink here. Memories drift.<br data-start=\"5243\" data-end=\"5246\">Maps become <em data-start=\"5260\" data-end=\"5273\">suggestions</em>.</p></blockquote><hr data-start=\"5276\" data-end=\"5279\"><h2 data-start=\"5281\" data-end=\"5324\">🧟 HEX JOURNAL — <strong data-start=\"5301\" data-end=\"5324\">“PROBABLY BEAUMONT”</strong></h2><p data-start=\"5325\" data-end=\"5360\"><em data-start=\"5325\" data-end=\"5360\">(BarrenPlains Hex, Marked in Red)</em></p><blockquote data-start=\"5362\" data-end=\"5699\"><p data-start=\"5364\" data-end=\"5385\">There is a city here.</p><p data-start=\"5390\" data-end=\"5403\">Or there was.</p><p data-start=\"5408\" data-end=\"5549\">From a distance, the skyline looks convincing. From closer, the angles don’t quite line up. Smoke rises inconsistently. Sound travels poorly.</p><p data-start=\"5554\" data-end=\"5643\">Locals refer to this place as “Probably Beaumont,” which is not comforting, but accurate.</p><p data-start=\"5648\" data-end=\"5699\">No one agrees on what happens if you stay too long.</p></blockquote><hr data-start=\"5701\" data-end=\"5704\">"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1784077421522,
+        "modifiedTime": 1784077421522
+      },
+      "_key": "!journal.pages!wnKYIpwP2GNy9bW1.7JSJ4ulbmCcJ2sIv"
+    }
+  ],
+  "categories": [],
+  "sort": 125000,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784077421522,
+    "modifiedTime": 1784077421522,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!journal!wnKYIpwP2GNy9bW1"
+}

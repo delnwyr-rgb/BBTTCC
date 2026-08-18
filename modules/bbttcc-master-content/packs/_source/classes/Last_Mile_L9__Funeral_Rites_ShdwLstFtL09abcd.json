@@ -1,0 +1,71 @@
+{
+  "name": "Last Mile L9: Funeral Rites",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_4.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "RFI-native",
+      "revision": 1,
+      "book": "Bulwark + Shadow Courier v1.0",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Some weights resolve only when delivered to the right ground.</em></p><p>When the Soul you carry is a <strong>dead body</strong>, a <strong>dying creature's final message</strong>, or a creature <strong>marked by a death curse</strong>, you may deliver it to a <strong>place of meaning</strong> — a burial ground, an ancestral home, a sacred site, the next of kin, the place of death, or any location the GM agrees has narrative weight for that specific Soul.</p><p>Doing so <strong>resolves the curse, completes the rite, or closes the narrative thread mechanically</strong>. The mechanical effect ends, the haunting ceases, the related faction gains <strong>2 Tikkun progress</strong> toward their next stage, and the recipient hex's Darkness is reduced by an additional <strong>1 point</strong> beyond the L1 delivery effect.</p><p>The GM adjudicates what counts as 'place of meaning'. When in doubt, it is the place the Soul most regrets having left, or the place it most wanted to return to.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "shadow_courier_lastmile_l9_funeral_rites",
+    "requirements": "Route of the Last Mile, Shadow Courier Initiation 9",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 9
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "shadow_courier",
+      "subclassIdentifier": "bbttcc-shadow-courier-courier-last-mile",
+      "subclassLevel": 9,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {}
+    }
+  },
+  "folder": "NYwTsnPu4JjS5QE0",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777005233936,
+    "modifiedTime": 1781116155088,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ShdwLstFtL09abcd",
+  "sort": 300000,
+  "_key": "!items!ShdwLstFtL09abcd"
+}

@@ -1,0 +1,154 @@
+{
+  "name": "Menhirkin: Heartstone",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_heart_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“Some bunkers built walls. Some bunkers built <strong>you</strong>.”</em></p><p>Your chest houses a dense geomantic Heartstone, a knot of petrified Yesod and bad decisions. It reinforces your body, dampens hostile forces, and hums softly whenever the world is about to get weird.</p><ul><li>You gain a +1 bonus to Body.</li><li>You have resistance to kinetic damage.</li><li>You are unusually steady; you instinctively brace against shocks and impacts (represented as a small general bonus to checks).</li><li>Your body filters metaphysical fallout; your Radiation intake is reduced (handled by Bad Eden flags).</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "menhirkin-heartstone",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Menhirkin",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Menhirkin: Heartstone (Passive)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_broken_wall_2.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.abilities.con.value",
+            "value": 1,
+            "priority": 10,
+            "type": "add"
+          },
+          {
+            "key": "system.traits.dr.value",
+            "value": "force",
+            "priority": 10,
+            "type": "add"
+          },
+          {
+            "key": "system.bonuses.abilities.save",
+            "value": "+1",
+            "priority": 10,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346197371,
+        "modifiedTime": 1777346197371
+      },
+      "_id": "ghyNbAS3nQ186emH",
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!wUE96QyhyJAZOFnb.ghyNbAS3nQ186emH"
+    }
+  ],
+  "folder": "9ZAaSSW35KsYH2F1",
+  "flags": {
+    "bbttcc": {
+      "menhirkinFeature": "heartstone",
+      "radiation": {
+        "resistance": 0.5
+      },
+      "darkness": {
+        "mod": -1
+      },
+      "terrain": {
+        "stableAffinity": 1
+      }
+    },
+    "dnd5e": {},
+    "bbttcc-character-options": {
+      "option": {}
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.I8XrScDxVNLHHuGX",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1775004111090,
+    "modifiedTime": 1782167240138,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "wUE96QyhyJAZOFnb",
+  "sort": 0,
+  "_key": "!items!wUE96QyhyJAZOFnb"
+}

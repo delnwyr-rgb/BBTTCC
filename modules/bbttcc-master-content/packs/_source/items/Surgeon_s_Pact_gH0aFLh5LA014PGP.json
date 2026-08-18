@@ -1,0 +1,93 @@
+{
+  "name": "Surgeon's Pact",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_syringe.jpeg",
+  "system": {
+    "slot": "consumable",
+    "tags": [
+      "consumable",
+      "tier-iii"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>Black-market field surgery in a syringe. Unbinds death from the body for a moment; the cost lands in stress, not flesh.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>On use:</strong> Restore <strong>4d6+5</strong> Integrity; Restore <strong>1</strong> Stress</p></li><li><p><strong>Charges:</strong> 1 (consumed on use)</p></li><li><p><strong>Target:</strong> Self</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 90 Economy marks</p></li></ul>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "consumable",
+          "signature": "A wound traded for a heavier one, owed elsewhere.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "Black-market field surgery in a syringe. Unbinds death from the body for a moment; the cost lands in stress, not flesh.",
+          "charges": 1,
+          "consume": {
+            "effects": [
+              {
+                "kind": "track",
+                "track": "integrity",
+                "op": "add",
+                "formula": "4d6+5"
+              },
+              {
+                "kind": "track",
+                "track": "stress",
+                "op": "subtract",
+                "delta": 1
+              }
+            ],
+            "decrement": true
+          },
+          "price": {
+            "marks": 90,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII consumable stamp",
+            "bound": "free",
+            "saleBack": 36
+          }
+        }
+      }
+    }
+  },
+  "folder": "guHYjt0gjPLU2wCs",
+  "_id": "gH0aFLh5LA014PGP",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777096380548,
+    "modifiedTime": 1781729221533,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!gH0aFLh5LA014PGP"
+}

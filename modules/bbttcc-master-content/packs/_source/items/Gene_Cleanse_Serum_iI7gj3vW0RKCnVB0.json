@@ -1,0 +1,87 @@
+{
+  "name": "Gene-Cleanse Serum",
+  "type": "gear",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "slot": "consumable",
+    "tags": [
+      "consumable",
+      "tier-iii"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "Retroviral scrub-kit. Targets a single mutation and unwrites it from the marrow — you choose which scar to lose.\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Cleanse <strong>1</strong> mutation</li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 90 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "consumable",
+          "signature": "The body forgets one thing the radiation taught it.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "Retroviral scrub-kit. Targets a single mutation and unwrites it from the marrow — you choose which scar to lose.",
+          "charges": 1,
+          "consume": {
+            "effects": [
+              {
+                "kind": "mutation",
+                "op": "cleanse",
+                "count": 1
+              }
+            ],
+            "decrement": true
+          },
+          "price": {
+            "marks": 90,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII consumable × 0.20",
+            "bound": "free",
+            "saleBack": 36
+          }
+        }
+      }
+    }
+  },
+  "folder": "guHYjt0gjPLU2wCs",
+  "_id": "iI7gj3vW0RKCnVB0",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1781993031772,
+    "modifiedTime": 1782160020990,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!iI7gj3vW0RKCnVB0"
+}

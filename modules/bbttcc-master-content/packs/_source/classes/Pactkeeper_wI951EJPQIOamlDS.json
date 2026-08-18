@@ -1,0 +1,207 @@
+{
+  "name": "Pactkeeper",
+  "type": "class",
+  "system": {
+    "category": "path",
+    "identifier": "pactkeeper",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Primary Attribute:</strong> Presence</p>\n<p><em>Every manifestation is an agreement with something. Most casters don't read what they signed. You did, you do, and you keep what you signed for.</em></p>\n<p style=\"opacity:0.7;font-size:0.85em\">Manifestation Discipline: <strong>Upkeep / concurrency specialist</strong> (5-pt budget — Upkeep ●●●, Misfire ●●, Clarity ●, Reach ●, Signature Mode: Sealed Pact)</p> <h3>Class Identity</h3>\n<p>Tier cap and footprint stay universal. What you have is <em>holding</em>: more concurrent manifestations sustained at once, lower upkeep on bargained subjects, and the right to renegotiate a misfire instead of eating it. Pactkeepers don't manifest bigger — they manifest more, longer, and in writing.</p> <h3>Class Features</h3>\n<ul> <li><strong>Initiation 1 — The Bargain.</strong> The Pact slot comes online (existing class resource — see your Doctrine for the generation / tier rule). While a creature, object, or place is bargained-with as your Pact subject, you may sustain one additional manifestation on or near them at no extra upkeep against your Clarity. Skill rank +1 in two of: Diplomacy, Insight, Intimidation, Lore.</li> <li><strong>Initiation 6 — Renegotiate.</strong> When one of your manifestations would misfire, you may instead accept a GM-set narrative debt (a future scene, a future cost, a future favor owed) and treat the manifestation as having succeeded at base tier. The debt is real; the GM's table runs the bill.</li> <li><strong>Initiation 11 — Sealed Pact (Signature Mode).</strong> Stance. While the Seal holds, your concurrent-manifestation cap is +2, and you cannot voluntarily drop a manifestation sustained on a pact-bound subject (the seal carries the upkeep, not your moment-to-moment will). Pays ongoing upkeep against your Clarity. <em>(Pilot: lock exact upkeep curve and break condition after one playtest cycle.)</em></li> <li><strong>Initiation 16 — Ledger Day.</strong> 1/Soma Break, transfer one of your sustained manifestations to a willing ally — they pick up upkeep from their Clarity from that point on. The pact moves with the paper, not the person who originally signed.</li>\n</ul> <h3>Doctrines</h3>\n<p>See your Doctrine document for the L1 Pact slot generation rule and the rest of the doctrine ladder. Doctrines remain the depth lane — the Discipline budget above is what you bring to <em>any</em> Pact-shape.</p> <h3>Carryover Notes</h3>\n<ul> <li>Existing Pact / pool mechanics are preserved; concurrency-bonus above stacks with pool spend, not a replacement.</li> <li>Tier cap, footprint, Clarity max are universal. Holding power is the only knob you bend.</li>\n</ul>",
+      "chat": ""
+    },
+    "hd": {
+      "additional": "",
+      "spent": 0
+    },
+    "advancement": [
+      {
+        "_id": "0BwnWDp0gXuT0qxg",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.4shqCx3lnX77zI5V",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Gv4YtfY6EcMSd8GD",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.zpU69a8E5XlWdjy7",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.H5yCxRbwmSSToHWj",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.v2PteOnTErjsVZ66",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.KxVfBnlL6E531IeD",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.fCnlK9VmSfLKfqia",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.F3sGMIJpSiMZU5EG",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 1,
+        "title": "Pactkeeper Core Features"
+      },
+      {
+        "_id": "d353361c63e1d281",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.d8e8766841052301",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": {
+            "ability": "",
+            "preparation": "",
+            "uses": {
+              "max": "",
+              "per": ""
+            }
+          }
+        },
+        "value": {},
+        "level": 1,
+        "title": "Pactkeeper Discipline (Init 1) — The Bargain",
+        "icon": "",
+        "classRestriction": "",
+        "hint": "",
+        "flags": {}
+      },
+      {
+        "_id": "2bfc484cd9eda894",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.17a3d8a250aa6a0d",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": {
+            "ability": "",
+            "preparation": "",
+            "uses": {
+              "max": "",
+              "per": ""
+            }
+          }
+        },
+        "value": {},
+        "level": 6,
+        "title": "Pactkeeper Discipline (Init 6) — Renegotiate",
+        "icon": "",
+        "classRestriction": "",
+        "hint": "",
+        "flags": {}
+      },
+      {
+        "_id": "de74050860135cbc",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.1926ac785c72e47c",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": {
+            "ability": "",
+            "preparation": "",
+            "uses": {
+              "max": "",
+              "per": ""
+            }
+          }
+        },
+        "value": {},
+        "level": 11,
+        "title": "Pactkeeper Discipline (Init 11) — Sealed Pact",
+        "icon": "",
+        "classRestriction": "",
+        "hint": "",
+        "flags": {}
+      },
+      {
+        "_id": "e0388e27582db592",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.e29d7645b68cdd51",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": {
+            "ability": "",
+            "preparation": "",
+            "uses": {
+              "max": "",
+              "per": ""
+            }
+          }
+        },
+        "value": {},
+        "level": 16,
+        "title": "Pactkeeper Discipline (Init 16) — Ledger Day",
+        "icon": "",
+        "classRestriction": "",
+        "hint": "",
+        "flags": {}
+      }
+    ]
+  },
+  "flags": {
+    "bbttcc": {
+      "primary": "wisdom",
+      "opBonus": {
+        "economy": 2,
+        "intrigue": 2
+      }
+    }
+  },
+  "_id": "wI951EJPQIOamlDS",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Pactkeeper1.png",
+  "effects": [],
+  "folder": "kaIqMuIOHeaj1T71",
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776481562694,
+    "modifiedTime": 1779512877727,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "sort": 0,
+  "_key": "!items!wI951EJPQIOamlDS"
+}

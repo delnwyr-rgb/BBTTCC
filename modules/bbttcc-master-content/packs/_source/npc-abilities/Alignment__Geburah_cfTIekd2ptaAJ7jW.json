@@ -1,0 +1,78 @@
+{
+  "name": "Alignment: Geburah",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "Judgment - Necessary force. +1 Violence, +1 Logistics OPs\n\nGeburah draws the line. It rewards discipline, enforcement, and decisive action against fortified problems, but always risks becoming cruelty if severity outruns wisdom.",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "alignment-geburah",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sword_1.png",
+  "effects": [],
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "sephirothic-alignments",
+      "bonuses": {
+        "violence": 1,
+        "logistics": 1
+      },
+      "option": {}
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Dreamie"
+        ],
+        "worlds": [
+          "ember"
+        ]
+      }
+    }
+  },
+  "_id": "cfTIekd2ptaAJ7jW",
+  "sort": 0,
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1781116230994,
+    "modifiedTime": 1781116230994,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!cfTIekd2ptaAJ7jW"
+}

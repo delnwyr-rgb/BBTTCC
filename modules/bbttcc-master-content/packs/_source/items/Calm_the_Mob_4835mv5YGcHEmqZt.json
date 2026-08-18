@@ -1,0 +1,61 @@
+{
+  "_id": "4835mv5YGcHEmqZt",
+  "name": "Calm the Mob",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_cal%2C_the_mob.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Feats Expansion v1 (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><h2>Calm the Mob</h2><p><em>Crowds don’t think. They feel. So you give them something else to feel.</em></p><hr><h3>Rules</h3><p>You gain a skill rank in Diplomacy (Presence) or Intimidation (Presence) (your choice). If you already have it, you gain mastery.</p><p>When you spend at least 1 minute addressing a group of non-hostile or uncertain creatures, you may make a Presence (Diplomacy (Presence) or Intimidation (Presence)) check (DC set by the GM). On a success, you reduce immediate hostility: the crowd hesitates, disperses, or agrees to hear terms. On a failure, you still buy time, but a complication occurs (a challenger steps forward, guards arrive, a rumor spreads).</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_calm_the_mob",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-expansion-v1",
+      "generatedAt": "2026-01-18T20:40:45.007126+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 4900000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1781116199316,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!4835mv5YGcHEmqZt"
+}

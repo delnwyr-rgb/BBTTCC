@@ -1,0 +1,319 @@
+{
+  "name": "Qliph-Scarred Heritage: Diabolic",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_3.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Qliph-Scarred heritage: Diabolic.</p><p><em>“Something fell into you and it’s still awake in there.”</em></p><p><strong>Qliph-Scarred (Diabolic).</strong> Your scar is a splinter. Something with a will of its own got into you when you walked out of that place, and you didn’t kick it out so much as you negotiated with it. The tongue in your mouth is not always yours. The advice you give is not always what you meant to say. It is, however, useful.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Qliph-Scarred does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Presence</strong> in fiction and through Tier powers.</p></li></ul><h3>Qliph-Scarred Core: What Walked Out</h3><p><em>Shared across all Qliph-Scarred heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Shadow Resilience.</strong> You have resistance to qliphothic damage. You reroll the lowest die on Body checks against effects that would drain, wither, or corrupt your body.</p></li><li><p><strong>Qliphothic Saturation.</strong> Once per scene, when you fail a Soul check, you may reroll it — but your scene's Darkness-gain count increases by 1. The scar pays for what the scar saves.</p></li><li><p><strong>Hunger Mask.</strong> You can suppress a bodily need (hunger, thirst, sleep, breath) for up to 24 hours by deciding to; you do not suffer its penalties during that window. At the end of the 24 hours, all deferred needs strike you at once, each as a separate Stress-class consequence.</p></li><li><p><strong>Shadow-Wake.</strong> Creatures with qliphothic attunement (demons, corrupt sephirot, Radiation-warped entities) can sense you at 12 squares and know you have been marked. They may not know how to read the mark.</p></li></ul><h3>Diabolic Traits</h3><ul><li><p><strong>Splinter Tongue.</strong> You know Infernal as a bonus language. You reroll the lowest die on Presence checks to persuade, deceive, or intimidate creatures who are already lying to themselves — the splinter knows its audience.</p></li><li><p><strong>Cold Iron Cost.</strong> You take 1 extra point of damage from any weapon forged of cold iron or blessed against fiends. The splinter does not like those things, and you share a body with the splinter.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Presence OP</strong> and <strong>+1 Violence OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Black Market / Cult / Corrupted-Territory</em> hexes, your faction's negotiation and recruitment operations gain +2 on the success check.</p></li><li><p><strong>Splinter Network.</strong> Once per Strategic Turn, when a rival faction has a member who is secretly compromised (GM determines), you may learn that such a person exists. You do not learn who. You learn they exist.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Qliphothic Saturation</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Free  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Reroll a failed Soul check. Cost: scene's Darkness-gain count goes up by 1.</span></p></div>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "34984219b1ec554b",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.NkkulzmL9DJQXfuR",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Diabolic Tier I",
+        "hint": "Gain your Diabolic Tier I feat."
+      }
+    ],
+    "identifier": "qliph_scarred_diabolic_heritage",
+    "requirements": "Qliph-Scarred",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "qliph_scarred",
+      "lineage": "Diabolic",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "presence": 2,
+        "violence": 1
+      }
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "vs:effects that would drain",
+          "note": "on Body checks against effects that would drain, wither, or corrupt your body"
+        },
+        {
+          "context": "check",
+          "attribute": "presence",
+          "mode": "reroll-lowest",
+          "note": "on Presence checks to persuade, deceive, or intimidate creatures who are alre…"
+        },
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "vs:effects that would drain",
+          "note": "Body checks against effects that would drain, wither, or corrupt your body"
+        },
+        {
+          "context": "check",
+          "attribute": "presence",
+          "mode": "reroll-lowest",
+          "note": "Presence checks to persuade, deceive, or intimidate creatures who are already…"
+        }
+      ],
+      "resourceGrants": [
+        {
+          "cadence": "per-campaign-start",
+          "resource": "violence-op",
+          "amount": 2
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-skill-fail",
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Qliphothic Saturation. Once per scene, when you fail a Soul check, you may reroll it"
+            }
+          }
+        }
+      ]
+    },
+    "autoanimations": {
+      "id": "2a99a2b9-50e2-4718-b158-b555bbb406c9",
+      "label": "Qliph-Scarred Heritage: Diabolic",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "darkpurple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "iSSJkuzg1e3GF9YV",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.vgjf6l5eVpI5yl9l",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776660294455,
+    "modifiedTime": 1782167240137,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "vgjf6l5eVpI5yl9l",
+  "sort": 0,
+  "_key": "!items!vgjf6l5eVpI5yl9l"
+}

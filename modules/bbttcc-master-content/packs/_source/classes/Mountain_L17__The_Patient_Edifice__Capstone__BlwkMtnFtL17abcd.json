@@ -1,0 +1,66 @@
+{
+  "name": "Mountain L17: The Patient Edifice (Capstone)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bunker_3.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>You no longer age in the conventional sense. The world weathers you the way it weathers a mountain — slowly, and with reverence.</em></p><p><strong>You do not age.</strong> You may still choose to eat, drink, and sleep. You are a person, not a statue.</p><p><strong>Defending Mode.</strong> At the start of any session, you may declare a single <strong>Place</strong> you are defending — a hex, building, structure, person, faction, idea, or named treaty. While you are within / near that Place (GM call), or actively traveling toward it with no detour:</p><ul><li><p><strong>Resistance to all damage types.</strong> All seven RFI damage types are halved (after vulnerability, before flavor-specific overrides).</p></li><li><p><strong>Reroll the lowest die</strong> on every defense check (Body, Intrigue, Soul) and every attribute check made to maintain your Place.</p></li><li><p><strong>Immune to charmed, compelled, and shaken</strong>. Effects that would apply these conditions to you instead apply to the source as a feedback (GM-narrated).</p></li><li><p><strong>Allies within 6 squares</strong> defending the same Place may use <strong>your Violence value or Body value</strong> in place of their own for any defense check against fear effects, forced movement, banishment, or compulsion.</p></li></ul><p>Defending Mode ends if you abandon the Place voluntarily, declare a different Place, or finish a Soma Break that explicitly closes the defense (GM call). You may re-declare at the next session start.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "bulwark_mountain_l17_patient_edifice",
+    "requirements": "Path of the Mountain, Bulwark Initiation 17",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "bulwark",
+      "subclassIdentifier": "bbttcc-bulwark-mountain",
+      "subclassLevel": 17,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true,
+      "capstone": true
+    },
+    "fourththing": {
+      "grants": {}
+    }
+  },
+  "folder": "By8SiTcVi3AfmZUU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777004381035,
+    "modifiedTime": 1782167240811,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BlwkMtnFtL17abcd",
+  "sort": 0,
+  "_key": "!items!BlwkMtnFtL17abcd"
+}

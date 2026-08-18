@@ -1,0 +1,293 @@
+{
+  "name": "Frame Drift",
+  "type": "power",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_4.png",
+  "system": {
+    "intent": "intrigue",
+    "channel": "mind",
+    "sephirah": "yesod",
+    "mode": "working",
+    "clarityRequired": 1,
+    "noiseGain": 2,
+    "activation": "action",
+    "target": "self",
+    "range": "self",
+    "damage": "1d6",
+    "damageType": "energy",
+    "damageFlavor": "",
+    "damageRoll": {
+      "op": "none",
+      "number": 0,
+      "die": "d6",
+      "attribute": "",
+      "type": "kinetic",
+      "flavor": "",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "effect": "Phase the Wraith partially out of the current frame. Until the start of its next turn, attackers reroll-lowest on attacks against it; on each missed attack, the attacker takes 1d6 qliphothic to Stress as the slip bleeds back into them.",
+    "tags": [
+      "translated",
+      "5e-port",
+      "phase2-narrative",
+      "manifestation"
+    ],
+    "category": "manifestation",
+    "flavor": "The air around it remembers things that didn't happen.",
+    "manifestation": {
+      "tier": 1,
+      "family": "working",
+      "concept": "Stop being entirely present.",
+      "form": "self-effect",
+      "function": "evade",
+      "stability": "sustained",
+      "interactionModel": "ward",
+      "costType": "clarity",
+      "costValue": 1,
+      "costText": "1 Clarity / scene",
+      "duration": "scene",
+      "durationText": "Until the next turn or dismissed.",
+      "triggerText": "When attacked.",
+      "scale": "personal",
+      "targetText": "Self.",
+      "rangeAreaText": "Self.",
+      "rangeFt": 0,
+      "maintenanceCost": "1 Clarity per round to sustain.",
+      "riskText": "The Wraith may slip too far and lose 1 Integrity to a frame it can't return from.",
+      "pathResonance": "Yesod — foundation as suggestion.",
+      "fictionalPermission": "May refuse to be where it was.",
+      "gmCalibration": "Reroll-lowest on attacks; 1d6 qliphothic to Stress on misses.",
+      "mechanicalHook": "Reroll-lowest defense; reflective qliphothic damage.",
+      "signature": "The air remembers things that didn't happen.",
+      "thirdThing": "Anyone watching forgets where they were standing.",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "area": {
+        "shape": "none",
+        "size": 0
+      },
+      "activation": {
+        "type": "action",
+        "consumePool": true
+      },
+      "save": {
+        "enabled": false,
+        "defense": "evasion",
+        "attribute": "",
+        "dcMode": "derived",
+        "dcFixed": 15
+      }
+    }
+  },
+  "_id": "7DUzTLtSEp7bJq9j",
+  "effects": [],
+  "sort": 0,
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Slippage Wraith"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    },
+    "autoanimations": {
+      "id": "4918bb29-a6ee-489a-9dfa-c066dd2ea310",
+      "label": "Frame Drift",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "loop",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": 1781024225546,
+    "modifiedTime": 1781024225546,
+    "lastModifiedBy": "MRFjjbUTBd66pWBY",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!7DUzTLtSEp7bJq9j"
+}

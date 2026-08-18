@@ -1,0 +1,72 @@
+{
+  "_id": "tCuQztjBeIehvYhK",
+  "name": "Auditor: Forensic Audit",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_10.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"909\" data-end=\"922\"><em data-start=\"909\" data-end=\"922\">3rd Level)</em></p><p><strong>Administrative Pressure:</strong> +3</p><p data-start=\"924\" data-end=\"1012\">You identify unstable divinity: feral tulpas, corrupted contracts, rogue manifestations.</p><p data-start=\"1014\" data-end=\"1079\">As an action, mark a target <strong data-start=\"1042\" data-end=\"1063\">Out of Compliance</strong> for this scene.</p><h3 data-start=\"1081\" data-end=\"1109\">While Out of Compliance:</h3><ul data-start=\"1110\" data-end=\"1321\"><li data-start=\"1110\" data-end=\"1249\"><p data-start=\"1112\" data-end=\"1162\">Your suppression, banishment, and disable effects:</p><ul data-start=\"1165\" data-end=\"1249\"><li data-start=\"1165\" data-end=\"1188\"><p data-start=\"1167\" data-end=\"1188\">reroll the lowest die <strong data-start=\"1182\" data-end=\"1188\">or</strong></p></li><li data-start=\"1191\" data-end=\"1249\"><p data-start=\"1193\" data-end=\"1249\">Add your Civic Charge die result to the DC (your choice)</p></li></ul></li><li data-start=\"1250\" data-end=\"1321\"><p data-start=\"1252\" data-end=\"1321\">Violations of contracts or major precedents trigger Auditor features.</p></li></ul><p data-start=\"1323\" data-end=\"1376\">Only one creature may be Out of Compliance at a time.</p><h3 data-start=\"1378\" data-end=\"1386\">Cost</h3><p data-start=\"1387\" data-end=\"1420\">No Civic Charge required to mark.</p><h3 data-start=\"1422\" data-end=\"1434\">Pushback</h3><p data-start=\"1435\" data-end=\"1496\">Marking politically protected entities may generate backlash.</p>",
+      "chat": ""
+    },
+    "identifier": "auditor_forensic_audit",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "auditor_forensic_audit",
+      "pushback": {
+        "track": "pressure",
+        "on": "use",
+        "amount": 3,
+        "_taggedBy": "bbttcc-pressure-tagger",
+        "_ts": 1770862584506
+      }
+    }
+  },
+  "folder": "Z0Kl38HLbgyB7iFl",
+  "sort": 400000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.tCuQztjBeIehvYhK",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776481562691,
+    "modifiedTime": 1782167240829,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!tCuQztjBeIehvYhK"
+}

@@ -1,0 +1,62 @@
+{
+  "name": "Cosmic Linguist: Initiation 16 — Word That Was",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_9.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Initiation 16 — Word That Was.</strong> 1/Soma Break, retroactively re-narrate one of your misfires as if the manifestation had succeeded at one tier lower than the one you spent for. Pay the lower tier's base upkeep instead. Where others spent the syllables and lost the meaning, you spent the meaning and chose the syllables.</p><p><span style=\"opacity: 0.7; font-size: 0.85em\">Click this feature on the sheet to mark spent and post the chat card. Reset on Soma Break.</span></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"clInit16\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Word That Was</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Reaction (after misfire) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Re-narrate one of your misfires as if the manifestation had succeeded one tier lower than the tier you spent for. Pay the lower tier's base upkeep.</div>\n</div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "cl_word_that_was",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 16
+    },
+    "properties": [],
+    "requirements": "Cosmic Linguist (16th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "r5DULAhp98iub0mt",
+  "flags": {
+    "fourththing": {
+      "discipline": {}
+    },
+    "bbttcc": {},
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777312943677,
+    "modifiedTime": 1781116116873,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "8a7f6bcb78b3de87",
+  "sort": 137500,
+  "_key": "!items!8a7f6bcb78b3de87"
+}

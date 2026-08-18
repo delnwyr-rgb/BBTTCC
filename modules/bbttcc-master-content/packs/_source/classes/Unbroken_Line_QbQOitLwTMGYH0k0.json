@@ -1,0 +1,125 @@
+{
+  "name": "Unbroken Line",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Unbroken Line.</strong> You refuse to let the line collapse.</p><ul><li>When an ally you can see within 6 squares is reduced to 0 Integrity but not killed outright, you can use your reaction to shout them back into formation. That ally instead drops to 1 Integrity, and gains temporary Integrity equal to your Presence modifier + your tier. Until the start of your next turn, that ally reroll the lowest die on defense checks.</li><li>Once you use this feature, you can’t use it again until you finish a Soma Break, unless you spend 1 Soft Power OP during a strategic rest to refresh it early (GM’s discretion).</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "unbroken-line",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 15
+    },
+    "properties": [],
+    "requirements": "Harmony Marshal (15th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Unbroken Line (Last-Stand Guard)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_defense.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776467816703,
+        "modifiedTime": 1777346198718
+      },
+      "_id": "nAZFdzDGcNIweFwh",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.harmonyMarshal.unbrokenLine",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.opHooks.softPowerRefreshHook",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!QbQOitLwTMGYH0k0.nAZFdzDGcNIweFwh"
+    }
+  ],
+  "folder": "6ELe0FPqgC58OzKS",
+  "flags": {
+    "bbttcc": {
+      "harmonyMarshal": {
+        "unbrokenLine": true
+      },
+      "opHooks": {
+        "softPowerRefreshHook": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776467816703,
+    "modifiedTime": 1782167240818,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "QbQOitLwTMGYH0k0",
+  "sort": -485937,
+  "_key": "!items!QbQOitLwTMGYH0k0"
+}

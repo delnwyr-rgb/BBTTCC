@@ -1,0 +1,68 @@
+{
+  "name": "Global Symbol Index",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_19.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Global Symbol Index.</strong> You maintain a living mental index of metaphysical “logs”: Sparks, factions, hexes, and anomalies.</p><ul><li>When you take downtime to review <strong>war logs, encounter reports, travel notes, and divinatory outputs</strong>, you reroll the lowest die on one big-picture<strong>Mind check</strong> (Occult (Mind), Lore (Mind), or Investigation (Mind)) per downtime period to answer questions about <strong>regional trends</strong>: where things are getting worse, where they’re stabilizing, and where the plot clearly wants to go next.</li><li>On a success, the GM may reveal <strong>one macro-level pattern</strong> (a faction arc, a spreading corruption front, or an emerging Tikkun opportunity) beyond what normal research would provide.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "global-symbol-index",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 16
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (16th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "globalSymbolIndex": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459984385,
+    "modifiedTime": 1782167240815,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "JClBHQVOqzC452it",
+  "sort": 575000,
+  "_key": "!items!JClBHQVOqzC452it"
+}

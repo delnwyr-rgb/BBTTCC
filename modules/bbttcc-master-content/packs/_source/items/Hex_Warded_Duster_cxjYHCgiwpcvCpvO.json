@@ -1,0 +1,163 @@
+{
+  "name": "Hex-Warded Duster",
+  "type": "armor",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_cloak_1.png",
+  "_id": "cxjYHCgiwpcvCpvO",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.resists",
+            "value": "qliphothic",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 2,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.resolve",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "em0kCa3kGAPKiubl",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781726107639,
+        "modifiedTime": 1781726107639,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!cxjYHCgiwpcvCpvO.em0kCa3kGAPKiubl"
+    }
+  ],
+  "folder": "TNrB6kEiHS0KwwJT",
+  "sort": 150000,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1780000000000,
+    "modifiedTime": 1781742902260,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "system": {
+    "guardBonus": 2,
+    "evasionBonus": 0,
+    "resolveBonus": 1,
+    "resistances": [
+      "qliphothic"
+    ],
+    "armorSkill": "plating",
+    "equipped": false,
+    "tags": [
+      "light",
+      "hex-warded",
+      "frontier",
+      "attunement"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A long frontier coat with hex-script stitched into the lining and threshold-wax worked into the seams. Light enough to ride in, warded enough to sleep in. The wrongness slides off it like rain off oilcloth.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Light</p></li><li><p><strong>Defense:</strong> Guard +2, Resolve +1</p></li><li><p><strong>Requires:</strong> Plating (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 400 Nonlethal marks</p></li></ul>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          "qliphothic"
+        ]
+      },
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Keeps the dust out. Keeps the worse things out too.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "",
+          "materialOf": [
+            "herd-leather",
+            "hex-script",
+            "threshold-wax"
+          ],
+          "price": {
+            "marks": 400,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII light armor — qliphothic ward",
+            "bound": "attuned",
+            "saleBack": 160
+          },
+          "grants": {
+            "resistances": [
+              "qliphothic"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "_key": "!items!cxjYHCgiwpcvCpvO"
+}

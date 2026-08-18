@@ -1,0 +1,82 @@
+{
+  "name": "Wayfarer Tongue L13: Reply With Interest",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bite_human_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "RFI-native",
+      "revision": 1,
+      "book": "Bulwark + Shadow Courier v1.0",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Every door you knock on owes you an answer.</em></p><p>When you successfully deliver a Message, you may accept a <strong>Reply</strong> as a free action. The Reply becomes your next Message automatically and fills your Package slot immediately upon delivery (Pace still refills to max from the just-completed delivery).</p><p>The recipient is <strong>obligated to provide a Reply</strong> if they wish to fully benefit from the delivery you just made — they may decline, but doing so withdraws the L1 delivery effect (no Pace refill, no faction Intrigue OP) and any L11 Package Mastery bonus.</p><p>You may decline to carry a Reply. You usually shouldn't.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "shadow_courier_wayfarer_l13_reply_with_interest",
+    "requirements": "Route of the Wayfarer Tongue, Shadow Courier Initiation 13",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 13
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "shadow_courier",
+      "subclassIdentifier": "bbttcc-shadow-courier-courier-wayfarer-tongue",
+      "subclassLevel": 13,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {},
+      "triggers": [
+        {
+          "event": "on-delivery",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Every door you knock on owes you an answer. When you successfully deliver a Message, you may accept a Reply as a free action"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "W1e3ZXUelQ4D70io",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777005233963,
+    "modifiedTime": 1781116157024,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ShdwWayFtL13abcd",
+  "sort": 500000,
+  "_key": "!items!ShdwWayFtL13abcd"
+}

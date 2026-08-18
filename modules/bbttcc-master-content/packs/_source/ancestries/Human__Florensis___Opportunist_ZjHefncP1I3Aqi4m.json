@@ -1,0 +1,83 @@
+{
+  "name": "Human (Florensis): Opportunist",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_knife.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You don’t fight fair. You fight alive.”</em></p>\n        <p><strong>Opportunist.</strong> You reroll the lowest die on attacks against distracted foes (GM: target is distracted if engaged by an ally or suffering a condition).</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "human-florensis-opportunist",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Human",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "human",
+      "feature": "opportunist",
+      "lineage": "Florensis",
+      "tierLevel": 5,
+      "version": "1.0.0"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "attack",
+          "mode": "reroll-lowest",
+          "note": "on attacks against distracted foes (GM: target is distracted if engaged by an…"
+        }
+      ]
+    }
+  },
+  "effects": [],
+  "folder": "5uWwAnq69wld1Rkg",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.E9TixN8Uw8K8jlrY",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1775004105807,
+    "modifiedTime": 1781116084099,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "ZjHefncP1I3Aqi4m",
+  "sort": 400000,
+  "_key": "!items!ZjHefncP1I3Aqi4m"
+}

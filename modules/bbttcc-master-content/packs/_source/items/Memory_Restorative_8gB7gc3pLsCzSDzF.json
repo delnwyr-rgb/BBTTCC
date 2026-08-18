@@ -1,0 +1,92 @@
+{
+  "name": "Memory Restorative",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_serum_6.png",
+  "system": {
+    "slot": "consumable",
+    "tags": [
+      "consumable",
+      "tier-ii"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "Ritual draught — equal parts pharmacology and naming. Strips charm and compulsion off the will.\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Cure <strong>Charmed</strong>; Cure <strong>Compelled</strong></li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 30 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "consumable",
+          "signature": "You are returned to yourself.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "Ritual draught — equal parts pharmacology and naming. Strips charm and compulsion off the will.",
+          "charges": 1,
+          "consume": {
+            "effects": [
+              {
+                "kind": "condition",
+                "op": "remove",
+                "condition": "charmed"
+              },
+              {
+                "kind": "condition",
+                "op": "remove",
+                "condition": "compelled"
+              }
+            ],
+            "decrement": true
+          },
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII consumable stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "folder": "guHYjt0gjPLU2wCs",
+  "_id": "8gB7gc3pLsCzSDzF",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777096380581,
+    "modifiedTime": 1782160020984,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!8gB7gc3pLsCzSDzF"
+}

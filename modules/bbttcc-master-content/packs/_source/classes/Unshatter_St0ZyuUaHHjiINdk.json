@@ -1,0 +1,72 @@
+{
+  "name": "Unshatter",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_15.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>You teach broken truths how to be honest again.</em></p><p>Once per <strong>a Soma Break</strong>, when your faction would normally <strong>destroy</strong> or consume a <strong>Corrupted Spark step</strong> or similarly tainted occult element, you can instead perform a brief rite of penance and reframing (at least 10 minutes of focused narrative or ritual work).</p><ul><li>Instead of destroying it, you may <strong>purify</strong> or <strong>stabilize</strong> that Spark step into a usable, non-corrupt form, as defined by your Tikkun/Spark rules.</li><li>Reduce an appropriate <strong>Darkness Track</strong> by <strong>1</strong> (local, regional, or campaign-scale, at GM’s discretion).</li></ul><p>This does not make all corruption safe; it lets you salvage specific shards that were trying to be true all along.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "wyrdlens-refraction-truth-unshatter",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 14
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept 14, Refraction of Truth",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "4SZvMbYoYLB4LZnj",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "wyrdlens_refraction_truth",
+      "featureKey": "unshatter"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984386,
+    "modifiedTime": 1781116157810,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "St0ZyuUaHHjiINdk",
+  "sort": 400000,
+  "_key": "!items!St0ZyuUaHHjiINdk"
+}

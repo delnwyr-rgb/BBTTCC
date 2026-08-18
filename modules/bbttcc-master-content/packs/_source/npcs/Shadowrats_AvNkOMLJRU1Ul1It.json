@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": "FBhV32XeCO4JNcym",
+  "name": "Shadowrats",
+  "color": null,
+  "sorting": "a",
+  "_id": "AvNkOMLJRU1Ul1It",
+  "description": "",
+  "sort": 100000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177517980,
+    "modifiedTime": 1784177517980,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!AvNkOMLJRU1Ul1It"
+}

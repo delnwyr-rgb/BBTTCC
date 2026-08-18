@@ -1,0 +1,306 @@
+{
+  "name": "Sephirotic Scion Heritage: Cherubic",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_music_2.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Sephirotic Scion heritage: Cherubic.</p><p><em>“Cherubim guard with flaming swords. You guard with a look.”</em></p><p><strong>Sephirotic Scion (Cherubic).</strong> Your blood runs guardian. The Cherubim are the order that stands at the gate and decides who gets through; you are what that order looks like three thousand years downstream, wearing pants and carrying someone’s grocery list. Thresholds notice you. So do the things that were planning to cross them.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic Scion).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Sephirotic Scion does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Soul</strong> in fiction and through Tier powers.</p></li></ul><h3>Sephirotic Scion Core: The Higher Register</h3><p><em>Shared across all Sephirotic Scion heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Sephirotic Physiology.</strong> You have resistance to sephirotic damage. Your blood runs a little bright under the right light; you do not technically age while on consecrated ground.</p></li><li><p><strong>Sefirot Attunement.</strong> At creation, pick one sephirah (player choice). Once per scene, you can invoke its register and gain a +1 rank bonus to one check that falls clearly within that sephirah's domain.</p></li><li><p><strong>Holy Conduit.</strong> Manifestations, rituals, and other sephirotic-register effects that target you or pass through your space treat their effective caster-attribute as +1 for the duration of that effect. Works on allies and on you; does not work on qliphothic-register effects.</p></li><li><p><strong>Light of Harmony.</strong> When two or more creatures within 6 squares of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity. This refreshes when a new agreement is reached between different creatures.</p></li></ul><h3>Cherubic Traits</h3><ul><li><p><strong>Name-Held.</strong> Creatures you have spoken with for at least one minute cannot hide their true name from divination you cast or are targeted by. You remember the shape of names. That's the job.</p></li><li><p><strong>Unblinking.</strong> You are immune to magical sleep effects. You reroll the lowest die on defense checks against being calmed. A Cherub does not rest at their post. Neither do you.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Faith OP</strong> and <strong>+1 Soft Power OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Consecrated / Warded / Gate-Adjacent</em> hexes, your faction's diplomatic and witnessing operations gain +2 on the success check.</p></li><li><p><strong>Gate-Audit.</strong> Once per Strategic Turn, your faction may audit the movements in and out of a single hex you occupy. The GM tells you who crossed the boundary this Turn, in what direction, and (if your faction rank is sufficient) with what intent.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Sefirot Attunement</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Free (declare before roll)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Invoke your chosen sephirah for +1 rank bonus on a check clearly in its domain.</span></p></div>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "576052754606f54e",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.tpHue82FhCxvokAP",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Cherubic Tier I",
+        "hint": "Gain your Cherubic Tier I feat."
+      }
+    ],
+    "identifier": "sephirotic_scion_cherubic_heritage",
+    "requirements": "Sephirotic Scion",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "sephirotic_scion",
+      "lineage": "Cherubic",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "faith": 2,
+        "softpower": 1
+      }
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "defense",
+          "mode": "reroll-lowest",
+          "vs": "vs:calmed",
+          "note": "on defense checks against being calmed"
+        },
+        {
+          "context": "defense",
+          "mode": "reroll-lowest",
+          "vs": "vs:calmed",
+          "note": "defense checks against being calmed"
+        }
+      ],
+      "resourceGrants": [
+        {
+          "cadence": "per-campaign-start",
+          "resource": "soft-power-op",
+          "amount": 2
+        },
+        {
+          "cadence": "per-campaign-start",
+          "resource": "faith-op",
+          "amount": 2
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-agreement",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Light of Harmony. When two or more creatures within 30 feet of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity"
+            }
+          }
+        }
+      ]
+    },
+    "autoanimations": {
+      "id": "79298b82-e3cf-49e0-8fdc-0566626683f6",
+      "label": "Sephirotic Scion Heritage: Cherubic",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "intro",
+          "color": "yellow",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "EJdzPtz6Kk3ushob",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.ZF8oThFRx2gPqn7y",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776660294463,
+    "modifiedTime": 1782167240128,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ZF8oThFRx2gPqn7y",
+  "sort": 0,
+  "_key": "!items!ZF8oThFRx2gPqn7y"
+}

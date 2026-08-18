@@ -1,0 +1,86 @@
+{
+  "name": "Gene-Purge Infusion",
+  "type": "gear",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "slot": "consumable",
+    "tags": [
+      "consumable",
+      "tier-iii"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "Full-spectrum genomic reset, vault-grade and brutal. Strips away every radiation mutation — boon and bane alike — in one searing pass.\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Cleanse <strong>all</strong> mutations</li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 90 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "consumable",
+          "signature": "Every borrowed shape, returned at once.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "Full-spectrum genomic reset, vault-grade and brutal. Strips away every radiation mutation — boon and bane alike — in one searing pass.",
+          "charges": 1,
+          "consume": {
+            "effects": [
+              {
+                "kind": "mutation",
+                "op": "cleanseAll"
+              }
+            ],
+            "decrement": true
+          },
+          "price": {
+            "marks": 90,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII consumable × 0.20",
+            "bound": "free",
+            "saleBack": 36
+          }
+        }
+      }
+    }
+  },
+  "folder": "guHYjt0gjPLU2wCs",
+  "_id": "e5KOEbfdDs0mCMER",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1781993031816,
+    "modifiedTime": 1782160020989,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!e5KOEbfdDs0mCMER"
+}

@@ -1,0 +1,76 @@
+{
+  "name": "Black Stair L9: Extraction",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_black_ice.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>What you carry, no one else can find.</em></p><p>When you take a <strong>non-owned object</strong>, a <strong>piece of information</strong>, or a <strong>willing small creature</strong> into your possession as a Package, both you and the Package become <strong>untraceable by divination</strong>:</p><ul><li><p>Scrying, Locate Object, Locate Creature, Detect Thoughts, and equivalent divinatory effects all <strong>fail</strong> against you for the duration.</p></li><li><p>Scent-tracking, magical mark-tracking, and faction-loyalty tracking all <strong>lose your trail</strong> at the moment of extraction.</p></li></ul><p>The protection holds until <strong>any</strong> of these occur:</p><ul><li><p>You deliver the Package to its intended destination.</p></li><li><p>You willingly reveal your location or the Package's location.</p></li><li><p><strong>24 hours</strong> pass.</p></li></ul><p>You may carry a non-Package object as a Package for the purpose of this feature only — the Package slot is occupied even if no doctrine effect applies to the contents.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "shadow_courier_blackstair_l9_extraction",
+    "requirements": "Route of the Black Stair, Shadow Courier Initiation 9",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 9
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "shadow_courier",
+      "subclassIdentifier": "bbttcc-shadow-courier-courier-black-stair",
+      "subclassLevel": 9,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {},
+      "triggers": [
+        {
+          "event": "on-package-take",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "What you carry, no one else can find. When you take a non-owned object , a piece of information , or a willing small creature into your possession as a Package, both you and the Package become untraceable by divinatio..."
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "eQl1GnJxLhG4BD19",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777005233913,
+    "modifiedTime": 1781116151172,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ShdwBlkFtL09abcd",
+  "sort": 300000,
+  "_key": "!items!ShdwBlkFtL09abcd"
+}

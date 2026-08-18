@@ -1,0 +1,70 @@
+{
+  "name": "Training Drills",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_training_drill.jpeg",
+  "system": {
+    "description": {
+      "value": "<p><b>Training Drills</b></p><p>Increase Violence cap +1 for 2 turns.</p><p><b>Cost:</b> Violence 3 • Nonlethal 2</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>training_drills</code></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "training-drills",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "training_drills",
+      "meta": {
+        "tier": 2,
+        "rarity": "rare",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": null,
+        "unlockKey": null
+      }
+    }
+  },
+  "_id": "K490u6h3YJi0HJ9d",
+  "effects": [],
+  "folder": "UpsmhFcQUtMCrYu2",
+  "sort": 7200000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1771977109852,
+    "modifiedTime": 1775063180840,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!items!K490u6h3YJi0HJ9d"
+}

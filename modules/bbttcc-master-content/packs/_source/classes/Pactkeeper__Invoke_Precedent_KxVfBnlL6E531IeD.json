@@ -1,0 +1,71 @@
+{
+  "name": "Pactkeeper: Invoke Precedent",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_punctuation_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“I’m citing case law.”</em></p><p><strong>Administrative Pressure:</strong> −2</p><p>Spend Civic Charge to invoke the record:</p><ul><li><strong>Cite Precedent:</strong> Force a reroll by asserting consistency. If the action violates an established precedent, the reroll takes the worse result.</li><li><strong>Establish Record:</strong> Lock an outcome as official for purposes of consequence and precedent.</li><li><strong>Suppress Contradiction:</strong> Nullify paradox, contradictory magic, or narrative retcons for one moment.</li><li>📑 </li></ul><h1 data-start=\"4064\" data-end=\"4102\">📑 PACTKEEPER FEATURE: <strong data-start=\"4089\" data-end=\"4102\">Precedent</strong></h1><p data-start=\"4104\" data-end=\"4201\"><strong data-start=\"4104\" data-end=\"4113\">Type:</strong> Persistent world state marker<br data-start=\"4143\" data-end=\"4146\" /><strong data-start=\"4146\" data-end=\"4158\">Purpose:</strong> Makes outcomes stick and repetition matter</p><p data-start=\"4203\" data-end=\"4262\">Precedents are <strong data-start=\"4218\" data-end=\"4230\">not dice</strong>. They are <strong data-start=\"4241\" data-end=\"4250\">flags</strong> on reality.</p><hr data-start=\"4264\" data-end=\"4267\" /><h3 data-start=\"4269\" data-end=\"4293\">Creating a Precedent</h3><p data-start=\"4294\" data-end=\"4322\">A Precedent is created when:</p><ul data-start=\"4324\" data-end=\"4495\"><li data-start=\"4324\" data-end=\"4358\"><p data-start=\"4326\" data-end=\"4358\">A major action succeeds or fails</p></li><li data-start=\"4359\" data-end=\"4383\"><p data-start=\"4361\" data-end=\"4383\">A Contract is enforced</p></li><li data-start=\"4384\" data-end=\"4434\"><p data-start=\"4386\" data-end=\"4434\">A significant moral or political line is crossed</p></li><li data-start=\"4435\" data-end=\"4495\"><p data-start=\"4437\" data-end=\"4495\">A Pactkeeper explicitly declares one (Archivist specialty)</p></li></ul><hr data-start=\"4497\" data-end=\"4500\" /><h3 data-start=\"4502\" data-end=\"4527\">What a Precedent Does</h3><p data-start=\"4528\" data-end=\"4561\">While active, a Precedent causes:</p><ul data-start=\"4563\" data-end=\"4737\"><li data-start=\"4563\" data-end=\"4660\"><p data-start=\"4565\" data-end=\"4593\">Repeated similar actions to:</p><ul data-start=\"4596\" data-end=\"4660\"><li data-start=\"4596\" data-end=\"4625\"><p data-start=\"4598\" data-end=\"4625\">Suffer <strong data-start=\"4605\" data-end=\"4621\">disadvantage</strong>, or</p></li><li data-start=\"4628\" data-end=\"4660\"><p data-start=\"4630\" data-end=\"4660\">Trigger automatic consequences</p></li></ul></li><li data-start=\"4661\" data-end=\"4703\"><p data-start=\"4663\" data-end=\"4703\">NPCs and systems to “expect” consistency</p></li><li data-start=\"4704\" data-end=\"4737\"><p data-start=\"4706\" data-end=\"4737\">Reality to resist contradiction</p></li></ul><hr data-start=\"4739\" data-end=\"4742\" /><h3 data-start=\"4744\" data-end=\"4774\">Interacting with Precedent</h3><p data-start=\"4775\" data-end=\"4813\">Pactkeepers may spend Civic Charge to:</p><ul data-start=\"4814\" data-end=\"4920\"><li data-start=\"4814\" data-end=\"4848\"><p data-start=\"4816\" data-end=\"4848\">Cite a Precedent (force rerolls)</p></li><li data-start=\"4849\" data-end=\"4878\"><p data-start=\"4851\" data-end=\"4878\">Lock an outcome as official</p></li><li data-start=\"4879\" data-end=\"4920\"><p data-start=\"4881\" data-end=\"4920\">Suppress contradictory magic or retcons</p></li></ul><p data-start=\"4922\" data-end=\"4965\">Archivists gain expanded control over this.</p><hr data-start=\"4967\" data-end=\"4970\" /><h3 data-start=\"4972\" data-end=\"4994\">Ending a Precedent</h3><p data-start=\"4995\" data-end=\"5017\">A Precedent ends when:</p><ul data-start=\"5018\" data-end=\"5120\"><li data-start=\"5018\" data-end=\"5036\"><p data-start=\"5020\" data-end=\"5036\">It is superseded</p></li><li data-start=\"5037\" data-end=\"5065\"><p data-start=\"5039\" data-end=\"5065\">It is resolved narratively</p></li><li data-start=\"5066\" data-end=\"5090\"><p data-start=\"5068\" data-end=\"5090\">It is formally revoked</p></li><li data-start=\"5091\" data-end=\"5120\"><p data-start=\"5093\" data-end=\"5120\">A Decommissioner retires it</p></li></ul>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "identifier": "pactkeeper_invoke_precedent",
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pushback": {
+        "track": "pressure",
+        "on": "use",
+        "amount": -2,
+        "_taggedBy": "bbttcc-pressure-tagger",
+        "_ts": 1770862582012
+      }
+    }
+  },
+  "folder": "WEL7mlledpAPLjnP",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776481562684,
+    "modifiedTime": 1781116140174,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "KxVfBnlL6E531IeD",
+  "sort": 237500,
+  "_key": "!items!KxVfBnlL6E531IeD"
+}

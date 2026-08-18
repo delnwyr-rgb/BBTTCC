@@ -1,0 +1,903 @@
+{
+  "name": "S'narchy Burger Mascot (Reanimated)",
+  "type": "npc",
+  "img": "art/devin-knight/MayFantasy/Gingerbread_Soldier.webp",
+  "system": {
+    "role": "brute",
+    "tier": 2,
+    "factionId": "",
+    "notes": "The cracked sign outside the Allesh-Gilliam HQ got up. The grin is frozen mid-sarcasm and the speech-bubble still flickers PROUDLY OVERCOOKED SINCE THE SHATTERING. Beware the magic of cinema.",
+    "details": {
+      "level": 2,
+      "tier": 2,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 4
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 4
+      },
+      "body": {
+        "value": 5
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 38,
+        "max": 38
+      },
+      "stress": {
+        "value": 14,
+        "max": 14
+      },
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 9
+      },
+      "resolve": {
+        "value": 12
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 0,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "psychic"
+      ],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "II",
+          "bracket": "medium",
+          "archetype": "animate-signage",
+          "bestiary": {
+            "themes": [
+              "construct",
+              "animate-object",
+              "comedic",
+              "frontier"
+            ],
+            "role": "brute",
+            "lootTable": [
+              {
+                "name": "Flickering Neon Tube",
+                "qty": "1d4",
+                "weight": 5
+              },
+              {
+                "name": "Mascot Grin (Detached)",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "price": {
+            "marks": 450,
+            "bounty": 400,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "II medium brute"
+          }
+        }
+      }
+    }
+  },
+  "_id": "NZwUSJxiR3jQWWP5",
+  "prototypeToken": {
+    "name": "S'narchy Burger Mascot (Reanimated)",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/devin-knight/MayFantasy/Gingerbread_Soldier.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "name": "Combo-Meal Slam",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mace.png",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "body",
+          "type": "kinetic",
+          "damageFlavor": "served hot",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 5,
+          "long": 5
+        },
+        "tags": [
+          "construct",
+          "slam"
+        ],
+        "effect": "Two fistfuls of laminated particleboard. Knocks Prone on a hit if the target is your size or smaller.",
+        "flavor": "Would you like to make that a meal? It wasn't a question.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>Two fistfuls of laminated particleboard. Knocks Prone on a hit if the target is your size or smaller.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "weapon",
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "bbttcc": {
+          "npcAbility": {
+            "sources": [
+              "Snarky Burger Mascot (Reanimated)"
+            ],
+            "worlds": [
+              "ember",
+              "foundry"
+            ]
+          }
+        },
+        "autoanimations": {
+          "id": "8c32b10f-b0a6-4610-b49d-47933570b6a2",
+          "label": "Combo-Meal Slam",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "mace",
+              "variant": "01",
+              "color": "orange",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_id": "nDEiJ8UOrST2D8tA",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1780000000000,
+        "modifiedTime": 1780000000000,
+        "lastModifiedBy": "ftSprintBuilder0",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_key": "!actors.items!NZwUSJxiR3jQWWP5.nDEiJ8UOrST2D8tA"
+    },
+    {
+      "name": "Aggressive Up-Sell",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_5.png",
+      "system": {
+        "category": "ranged",
+        "intent": "presence",
+        "skill": "channel",
+        "damage": {
+          "formula": "1d8",
+          "attribute": "presence",
+          "type": "psychic",
+          "damageFlavor": "the jingle, weaponized",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 5,
+          "long": 5
+        },
+        "tags": [
+          "aoe",
+          "sonic",
+          "comedic"
+        ],
+        "effect": "15 ft. sphere of relentless marketing. Resolve vs DC 12. Fail: 1d8 psychic to Stress and Staggered until the start of its next turn.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Jingle Burst.</strong> 3 squares Resolve vs DC 12. Fail: <code>1d8</code> psychic (Stress) + Staggered.</p><p><em>You will be humming this in your next three lives.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "save",
+              "aoeShape": "sphere",
+              "aoeSize": 15,
+              "dcAbility": "cha",
+              "dc": 12,
+              "price": {
+                "marks": 150,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "ability stamp",
+                "bound": "free",
+                "saleBack": 60
+              }
+            }
+          }
+        },
+        "bbttcc": {
+          "npcAbility": {
+            "sources": [
+              "Snarky Burger Mascot (Reanimated)"
+            ],
+            "worlds": [
+              "ember",
+              "foundry"
+            ]
+          }
+        },
+        "autoanimations": {
+          "id": "3fce740b-b9ab-4b5d-b1ac-7e6584e717fb",
+          "label": "Aggressive Up-Sell",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "templatefx",
+          "primary": {
+            "video": {
+              "dbSection": "templatefx",
+              "menuType": "circle",
+              "animation": "soundwave",
+              "variant": "01",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_id": "M1sRZZgRKwRJgMg9",
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1780000000000,
+        "modifiedTime": 1782167243067,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "_key": "!actors.items!NZwUSJxiR3jQWWP5.M1sRZZgRKwRJgMg9"
+    }
+  ],
+  "effects": [],
+  "folder": "uMhSIaldbbcnBh0H",
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1780000000000,
+    "modifiedTime": 1784515284953,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "sort": 640625,
+  "_key": "!actors!NZwUSJxiR3jQWWP5"
+}

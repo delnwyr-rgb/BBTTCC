@@ -1,0 +1,44 @@
+{
+  "_id": "Wjb58hQkiP93tdnO",
+  "name": "Marked Cards at the Salon",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hex_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Marked Cards at the Salon.</strong> The game was rigged before you sat down. You rigged it. Sit down.</p><p><em>Play:</em> +3 to your next courtly exchange roll.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "rollPlus3",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1400000,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1780000000000,
+    "modifiedTime": 1784079176430,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!Wjb58hQkiP93tdnO"
+}

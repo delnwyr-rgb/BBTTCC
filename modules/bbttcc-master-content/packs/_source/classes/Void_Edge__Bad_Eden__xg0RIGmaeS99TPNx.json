@@ -1,0 +1,45 @@
+{
+  "name": "Void Edge (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_void_edge_1.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "aurablade",
+    "source": {
+      "custom": "Bad Eden Originals — Sprint F",
+      "revision": 1,
+      "rules": "2026"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Entropy has a shape. I cut along it.</em></p>\n<p><strong>Mode:</strong> Edge-walker · <strong>Drift:</strong> Sideways</p>\n<p>Void Edge Aurablades cut along the seams of decay. The doctrine suppresses what enemies rely on — buffs, advantage, morale — and propagates dread into the spaces between people. Played as the operative whose presence makes hope harder to organize.</p>\n<h3>Doctrine Features</h3>\n<ul>\n  <li><strong>Level 3 — Null Field.</strong> Your blade suppresses advantage. When you hit at Burn 1+, suppress one of the following until the end of the target's next turn: reroll-lowest on attacks, bonus damage, or morale/inspiration effects. At Burn 3+ the target also loses one reaction.</li>\n  <li><strong>Level 6 — Silence of Will.</strong> You break focus. Targets you hit roll 3d10 keep lowest 2 on Clarity hold checks and cannot benefit from rallying or command effects. At Burn 3+, failing a Clarity hold also causes Burn-like fatigue (GM narrative).</li>\n  <li><strong>Level 10 — Dread Cut.</strong> Fear propagates. When you hit at Burn 2+, the target saves or is Shaken; nearby enemies save or suffer hesitation (lose movement or reactions). At Burn 4+ fear spreads automatically to one additional creature.</li>\n  <li><strong>Level 14 — Emotional Erasure.</strong> Once per round when you hit, remove one beneficial emotional, morale, or inspiration effect from the target. Bypasses resistance tied to hope or courage. At Burn 4+ the effect cannot be reapplied for 1 round.</li>\n  <li><strong>Level 18 — Final Quiet (Capstone).</strong> Once per Soma Break, create a 6 squares zone for 1 minute: morale cannot rise, inspiration fails, hope/unity/courage buffs do not apply, enemies roll 3d10 keep lowest 2 on checks vs fear. Afterward your Burn drops to 0.</li>\n</ul>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-aurablade-void-edge",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "640HHePTVNcMB98C",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "xg0RIGmaeS99TPNx",
+  "sort": 300000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.364",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1782167240832,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.1",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!xg0RIGmaeS99TPNx"
+}

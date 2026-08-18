@@ -1,0 +1,121 @@
+{
+  "name": "War Rig Frame",
+  "type": "gear",
+  "img": "icons/environment/settlement/wagon-black.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>A diesel-howling hulk of plate and bolted-on intent. The kind of vehicle that arrives like weather. Crew of five, four guns, room in back for whatever you took.</p><p><strong>Frame · Heavy · Mobile · Mad Max canon</strong></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "rig-frame"
+      },
+      "rigFrame": {
+        "bracket": "heavy",
+        "baseIntegrity": 48,
+        "tierStep": 14,
+        "mobilityAllowed": [
+          "mobile"
+        ],
+        "slots": {
+          "weapon": 4,
+          "system": 2,
+          "output": 1
+        },
+        "capacity": {
+          "pilot": {
+            "min": 1,
+            "max": 1
+          },
+          "gunner": {
+            "min": 0,
+            "max": 2
+          },
+          "engineer": {
+            "min": 0,
+            "max": 1
+          },
+          "crew": {
+            "min": 0,
+            "max": 3
+          }
+        },
+        "actions": {
+          "pilot": [
+            "steer",
+            "ram",
+            "hold-position",
+            "evasive",
+            "swerve"
+          ],
+          "gunner": [
+            "fire-weapon",
+            "aimed-shot",
+            "suppression",
+            "reload",
+            "opportunity-fire"
+          ],
+          "engineer": [
+            "repair",
+            "boost-system",
+            "vent-heat",
+            "counter-sabotage"
+          ],
+          "crew": [
+            "operate-module",
+            "reload",
+            "brace",
+            "hold-on"
+          ]
+        },
+        "travel": {
+          "speed": 3,
+          "range": 8
+        },
+        "visualFrame": "open-corners"
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "IkT8J6cIvEzZYXdG",
+  "effects": [],
+  "sort": 2100000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205373670,
+    "modifiedTime": 1778998014712,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!IkT8J6cIvEzZYXdG"
+}

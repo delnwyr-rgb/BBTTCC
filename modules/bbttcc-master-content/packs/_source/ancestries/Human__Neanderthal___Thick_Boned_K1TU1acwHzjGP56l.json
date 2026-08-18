@@ -1,0 +1,139 @@
+{
+  "name": "Human (Neanderthal): Thick-Boned",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_brawl_4.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You are built for cold, conflict, and clan.”</em></p>\n        <p><strong>Thick-Boned.</strong> You have resistance to thermal damage, and you reroll the lowest die on checks or checks against being knocked prone.</p>\n        <p><strong>Clan Memory.</strong> You gain a skill rank in Insight or Athletics.</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "human-neanderthal-thick_boned",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Human",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "human",
+      "feature": "thick_boned",
+      "lineage": "Neanderthal",
+      "tierLevel": 0,
+      "version": "1.0.0"
+    },
+    "bbttcc-character-options": {
+      "option": {}
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "effects": [
+    {
+      "_id": "b87757b73fc640f8",
+      "name": "Neanderthal: Cold Resistance",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_book_2.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.traits.dr.value",
+            "value": "cold",
+            "priority": 10,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Safe automation: cold resistance.",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346196852,
+        "modifiedTime": 1777346196852
+      },
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!K1TU1acwHzjGP56l.b87757b73fc640f8"
+    }
+  ],
+  "folder": "QX8nwxDuMx1qPmXY",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.eJKmyI5Ucfi0dPZg",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1775004105807,
+    "modifiedTime": 1782167240123,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "K1TU1acwHzjGP56l",
+  "sort": 300000,
+  "_key": "!items!K1TU1acwHzjGP56l"
+}

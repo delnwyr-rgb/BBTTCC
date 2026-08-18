@@ -1,0 +1,117 @@
+{
+  "name": "Sail Barge Frame",
+  "type": "gear",
+  "img": "icons/environment/settlement/wagon-black.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>A pleasure-galley with delusions of fortress. Docks at hexes to throw lavish productions; cuts loose to roam when the music demands it. Throne optional, mandatory.</p><p><b>Frame · Medium · Hybrid · Jabba canon</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "rig-frame"
+      },
+      "rigFrame": {
+        "bracket": "medium",
+        "baseIntegrity": 32,
+        "tierStep": 10,
+        "mobilityAllowed": [
+          "hybrid"
+        ],
+        "slots": {
+          "weapon": 2,
+          "system": 2,
+          "output": 3
+        },
+        "capacity": {
+          "pilot": {
+            "min": 1,
+            "max": 1
+          },
+          "gunner": {
+            "min": 0,
+            "max": 1
+          },
+          "engineer": {
+            "min": 0,
+            "max": 1
+          },
+          "crew": {
+            "min": 0,
+            "max": 6
+          }
+        },
+        "actions": {
+          "pilot": [
+            "steer",
+            "tack-against-wind",
+            "raise-sail",
+            "evasive"
+          ],
+          "gunner": [
+            "fire-weapon",
+            "suppression",
+            "reload"
+          ],
+          "engineer": [
+            "repair",
+            "boost-system",
+            "vent-heat"
+          ],
+          "crew": [
+            "operate-module",
+            "brace",
+            "signal",
+            "hold-on"
+          ]
+        },
+        "travel": {
+          "speed": 2,
+          "range": 10
+        },
+        "visualFrame": "anchor-ring"
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "XjmS2vVRLGPl6RqN",
+  "effects": [],
+  "sort": 2900000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205373715,
+    "modifiedTime": 1778963271956,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!XjmS2vVRLGPl6RqN"
+}

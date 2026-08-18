@@ -1,0 +1,960 @@
+{
+  "name": "Cinder-Hawk Mother",
+  "type": "npc",
+  "img": "art/devin-knight/Monsters_October/Fiery_Heron.webp",
+  "system": {
+    "role": "scout",
+    "tier": 2,
+    "factionId": "",
+    "notes": "Apex aerial predator. Smaller than legend; meaner than expected.",
+    "details": {
+      "level": 2,
+      "tier": 2,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 3
+      },
+      "intrigue": {
+        "value": 4
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 4
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 50,
+        "max": 50
+      },
+      "stress": {
+        "value": 25,
+        "max": 25
+      },
+      "guard": {
+        "value": 12
+      },
+      "evasion": {
+        "value": 12
+      },
+      "resolve": {
+        "value": 12
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "II",
+          "bracket": "medium",
+          "archetype": "cinder-hawk-mother",
+          "bestiary": {
+            "themes": [
+              "wildlife",
+              "predator",
+              "aerial"
+            ],
+            "role": "scout",
+            "lootTable": [
+              {
+                "name": "Herd Leather",
+                "qty": "1d2",
+                "weight": 4
+              },
+              {
+                "name": "Ash-Wood",
+                "qty": "1d3",
+                "weight": 3
+              },
+              {
+                "name": "Heart-Iron",
+                "qty": "1",
+                "weight": 2
+              }
+            ]
+          },
+          "price": {
+            "marks": 1080,
+            "bounty": 1080,
+            "hire": 2700,
+            "ransom": 1800,
+            "currency": "violence",
+            "gmOverride": false,
+            "notes": "TII medium scout (bestiary) — bounty 1080 / hire 2700 / ransom 1800 marks (paid in violence)"
+          }
+        }
+      }
+    }
+  },
+  "_id": "8l45F9lX2Cuzqk7B",
+  "prototypeToken": {
+    "name": "Cinder-Hawk Mother",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/devin-knight/Monsters_October/Fiery_Heron.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "name": "Aerial Dominance",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_fly_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [
+          "seed-bestiary-attacks",
+          "tier-ii",
+          "role-scout",
+          "passive"
+        ],
+        "description": {
+          "value": "<p>While airborne, the cinder-hawk has reroll-the-lowest on attack rolls against grounded targets, and ground-based attackers have reroll-the-highest against her.</p><p><em>She does not fight on your terms. She fights at altitude.</em></p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "advancement": {},
+        "identifier": "",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "trait"
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "6ut7GT8pCAhpdWjS": 3
+      },
+      "_id": "gPFfE89bRQHTz4fh",
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1780118701738,
+        "modifiedTime": 1780163238704,
+        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!actors.items!8l45F9lX2Cuzqk7B.gPFfE89bRQHTz4fh"
+    },
+    {
+      "name": "Diving Talons",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_raptor.png",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d10",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "talon-shred",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "seed-bestiary-attacks",
+          "tier-ii",
+          "role-scout"
+        ],
+        "effect": "If used after a Dive (moves 30+ ft. straight toward target), damage rolls reroll-the-lowest and target is knocked prone on hit.",
+        "flavor": "She is not above you for long. She is past you, and you are different now.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 1 square, one target. Damage: <code>1d10</code> kinetic (talon-shred) + violence. If used after a Dive (moves 30+ ft. straight toward target), damage rolls reroll-the-lowest and target is knocked prone on hit.</p><p><em>She is not above you for long. She is past you, and you are different now.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "attack",
+              "price": {
+                "marks": 150,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII attack × 1",
+                "bound": "free",
+                "saleBack": 60
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "ft-diving-talons",
+          "label": "Diving Talons",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "sword",
+              "variant": "01",
+              "color": "white",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "6ut7GT8pCAhpdWjS": 3
+      },
+      "_id": "UVVdXEbrODNvOBMw",
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1780118701738,
+        "modifiedTime": 1782167242345,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!actors.items!8l45F9lX2Cuzqk7B.UVVdXEbrODNvOBMw"
+    },
+    {
+      "name": "Downdraft Burn (recharges on a Soma Break)",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fire_cone_1.png",
+      "system": {
+        "category": "ranged",
+        "intent": "presence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "1d10",
+          "attribute": "violence",
+          "type": "energy",
+          "damageFlavor": "feather-cinder",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 4,
+          "long": 4
+        },
+        "tags": [
+          "seed-bestiary-attacks",
+          "tier-ii",
+          "role-scout",
+          "aoe",
+          "shape-cone"
+        ],
+        "effect": "Cone 20 ft. — targets roll vs Evasion (DC 12). Half damage on success. Smoldering feathers cascade down; failed targets are Blinded until the end of their next turn. Recharge 5–6.",
+        "flavor": "Her wings shed cinder when she beats them hard. She is beating them hard now.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Area Attack.</strong> Each creature in a 4 squares cone below the hawk (must be airborne to use) rolls <strong>Evasion</strong> vs DC 12. Hit: <code>1d10</code> thermal (feather-cinder) + violence; half on success. Smoldering feathers cascade down; failed targets are Blinded until the end of their next turn.<br/><em>Recharges on a Soma Break.</em></p><p><em>Her wings shed cinder when she beats them hard. She is beating them hard now.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "save",
+              "aoeShape": "cone",
+              "aoeSize": 20,
+              "dcAbility": "dex",
+              "dc": 12,
+              "price": {
+                "marks": 150,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII save × 1",
+                "bound": "free",
+                "saleBack": 60
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "ft-downdraft-burn-recharge-5-6-",
+          "label": "Downdraft Burn (Recharge 5–6)",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "templatefx",
+          "primary": {
+            "video": {
+              "dbSection": "templatefx",
+              "menuType": "circle",
+              "animation": "shatter",
+              "variant": "01",
+              "color": "orange",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "6ut7GT8pCAhpdWjS": 3
+      },
+      "_id": "dp028FSn7kYBTbNa",
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1780118701738,
+        "modifiedTime": 1782167283305,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!actors.items!8l45F9lX2Cuzqk7B.dp028FSn7kYBTbNa"
+    }
+  ],
+  "effects": [],
+  "folder": "uMhSIaldbbcnBh0H",
+  "ownership": {
+    "default": 0,
+    "6ut7GT8pCAhpdWjS": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1780118701738,
+    "modifiedTime": 1783219918002,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 200000,
+  "_key": "!actors!8l45F9lX2Cuzqk7B"
+}

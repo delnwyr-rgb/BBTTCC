@@ -1,0 +1,70 @@
+{
+  "name": "Dark Harvest",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_dark_harvest.jpeg",
+  "system": {
+    "description": {
+      "value": "<p><strong>Dark Harvest</strong></p><p>Convert Darkness to +2 Economy; Morale −1.</p><p><strong>Cost:</strong> Economy 4 • Faith 2</p><hr /><p class=\"hint\"><em>BBTTCC Doctrine</em> • <code>strategic</code> • <code>dark_harvest</code></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "dark-harvest",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "dark_harvest",
+      "meta": {
+        "tier": 3,
+        "rarity": "very rare",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": null,
+        "unlockKey": null
+      }
+    }
+  },
+  "_id": "LWjCmsF4P28Qoh6X",
+  "effects": [],
+  "folder": "UpsmhFcQUtMCrYu2",
+  "sort": 5500000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1771977109852,
+    "modifiedTime": 1775063181352,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!items!LWjCmsF4P28Qoh6X"
+}

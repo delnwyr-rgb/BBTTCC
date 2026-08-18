@@ -1,0 +1,88 @@
+{
+  "name": "Coolant Glycerol",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_capsule_5.png",
+  "system": {
+    "slot": "consumable",
+    "tags": [
+      "consumable",
+      "tier-ii"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>On use:</strong> Lose <strong>2</strong> Burn</p></li><li><p><strong>Charges:</strong> 1 (consumed on use)</p></li><li><p><strong>Target:</strong> Self</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 30 Economy marks</p></li></ul>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Lose <strong>2</strong> Burn</li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 30 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "consumable",
+          "signature": "The aura settles back into its case.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "Topical channel-coolant. Brings a hot edge back to controlled temper.",
+          "charges": 1,
+          "consume": {
+            "effects": [
+              {
+                "kind": "track",
+                "track": "burn",
+                "op": "subtract",
+                "delta": 2
+              }
+            ],
+            "decrement": true
+          },
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII consumable stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "folder": "guHYjt0gjPLU2wCs",
+  "_id": "XijBL5fp1csEiC95",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777096380576,
+    "modifiedTime": 1782160020988,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!XijBL5fp1csEiC95"
+}

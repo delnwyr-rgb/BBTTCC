@@ -1,0 +1,61 @@
+{
+  "_id": "i3Mh6Mxk5zv8uNoE",
+  "name": "Adaptive Defense",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_adaptive_defense.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Core Feats v1 (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<h2>Adaptive Defense</h2><p><em>Defense is not denial. It is management.</em></p><hr><h3>Rules</h3><p>When you are hit by an attack you can see, you may use your reaction to reduce the damage by an amount equal to your skill rank bonus + your Violence or Intrigue value (your choice).</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_adaptive_defense",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-core-v1",
+      "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1781116209832,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!i3Mh6Mxk5zv8uNoE"
+}

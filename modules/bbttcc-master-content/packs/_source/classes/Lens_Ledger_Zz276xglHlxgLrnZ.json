@@ -1,0 +1,67 @@
+{
+  "name": "Lens Ledger",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_17.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>You keep a quiet accounting of what should have gone wrong.</em></p><p>When you use a <strong>refraction die</strong> from Foresight Refraction to alter a roll and the result changes a <strong>failure into a success</strong>, mark one tally in your <strong>ledger</strong>.</p><ul><li>At the end of the scene, if you have at least <strong>2 tallies</strong>, you gain  before a future scene (chosen by you) as the timeline pre-cooperates with your entry.</li><li>After you receive this initiative bonus once, your ledger resets to 0 tallies.</li></ul><p>This is purely narrative bookkeeping: you’re getting credit for every disaster you quietly deflected.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlForesightLedger\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Lens Ledger</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Tally-based &nbsp;·&nbsp; <strong>Action:</strong> Free (passive bookkeeping) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When a Foresight Refraction die converts a failure into a success, mark a tally. With 2+ tallies at scene end, gain an initiative bonus on a future scene of your choice; ledger then resets to 0.</div>\n</div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "wyrdlens-refraction-foresight-lens-ledger",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept 3, Refraction of Foresight",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "bfvmbtbYMd6cxsV2",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "wyrdlens_refraction_foresight",
+      "featureKey": "lens_ledger"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984386,
+    "modifiedTime": 1781116166107,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "Zz276xglHlxgLrnZ",
+  "sort": 300000,
+  "_key": "!items!Zz276xglHlxgLrnZ"
+}

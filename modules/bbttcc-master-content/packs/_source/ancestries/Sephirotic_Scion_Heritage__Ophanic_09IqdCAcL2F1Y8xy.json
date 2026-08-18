@@ -1,0 +1,338 @@
+{
+  "name": "Sephirotic Scion Heritage: Ophanic",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_spark.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Sephirotic Scion heritage: Ophanic.</p><p><em>“The wheels were full of eyes. You never stop turning. You never stop seeing.”</em></p><p><strong>Sephirotic Scion (Ophanic).</strong> Your blood runs rotating. The Ophanim are wheels-and-eyes — motion, sight, the order that is always already looking both ways. You are descended from a thing that could not be snuck up on because it had no back. You kept some of that. Not all. Enough.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic Scion).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Sephirotic Scion does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Sephirotic Scion Core: The Higher Register</h3><p><em>Shared across all Sephirotic Scion heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Sephirotic Physiology.</strong> You have resistance to sephirotic damage. Your blood runs a little bright under the right light; you do not technically age while on consecrated ground.</p></li><li><p><strong>Sefirot Attunement.</strong> At creation, pick one sephirah (player choice). Once per scene, you can invoke its register and gain a +1 rank bonus to one check that falls clearly within that sephirah's domain.</p></li><li><p><strong>Holy Conduit.</strong> Manifestations, rituals, and other sephirotic-register effects that target you or pass through your space treat their effective caster-attribute as +1 for the duration of that effect. Works on allies and on you; does not work on qliphothic-register effects.</p></li><li><p><strong>Light of Harmony.</strong> When two or more creatures within 6 squares of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity. This refreshes when a new agreement is reached between different creatures.</p></li></ul><h3>Ophanic Traits</h3><ul><li><p><strong>Wheel-and-Eye.</strong> You can see invisible creatures and objects within 6 squares as dimly lit shapes. You cannot be flanked.</p></li><li><p><strong>Concentric Sight.</strong> You reroll the lowest die on Mind (Perception) checks that involve noticing movement, pattern, or change over time. You roll 3d10 keep lowest 2 on Mind (Perception) checks to notice things that have been perfectly still since before you started looking — you see motion, not furniture.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Violence OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Battlefield / Procession / High-Traffic</em> hexes, your faction's observation and counter-intel operations gain +2 on the success check.</p></li><li><p><strong>Turning Witness.</strong> Once per Strategic Turn, you may observe one exchange of goods, intelligence, or personnel between two rival factions within your field of influence. You learn that it happened and between whom, though not necessarily what was exchanged.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Sefirot Attunement</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Free (declare before roll)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Invoke your chosen sephirah for +1 rank bonus on a check clearly in its domain.</span></p></div>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "39a5d14ae0dc93f3",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.jpagUy0moeZlFgkX",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Ophanic Tier I",
+        "hint": "Gain your Ophanic Tier I feat."
+      }
+    ],
+    "identifier": "sephirotic_scion_ophanic_heritage",
+    "requirements": "Sephirotic Scion",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "sephirotic_scion",
+      "lineage": "Ophanic",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "intrigue": 2,
+        "violence": 1
+      }
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "skill": "perception",
+          "mode": "reroll-lowest"
+        },
+        {
+          "context": "check",
+          "attribute": "mind",
+          "mode": "reroll-lowest"
+        },
+        {
+          "context": "check",
+          "skill": "perception",
+          "mode": "reroll-highest",
+          "note": "on Mind (Perception) checks to notice things that have been perfectly still s…"
+        },
+        {
+          "context": "check",
+          "attribute": "mind",
+          "mode": "reroll-highest",
+          "note": "on Mind (Perception) checks to notice things that have been perfectly still s…"
+        },
+        {
+          "context": "check",
+          "skill": "perception",
+          "mode": "reroll-lowest"
+        },
+        {
+          "context": "check",
+          "attribute": "mind",
+          "mode": "reroll-lowest"
+        },
+        {
+          "context": "check",
+          "skill": "perception",
+          "mode": "reroll-highest",
+          "note": "Mind (Perception) checks to notice things that have been perfectly still sinc…"
+        },
+        {
+          "context": "check",
+          "attribute": "mind",
+          "mode": "reroll-highest",
+          "note": "Mind (Perception) checks to notice things that have been perfectly still sinc…"
+        }
+      ],
+      "resourceGrants": [
+        {
+          "cadence": "per-campaign-start",
+          "resource": "violence-op",
+          "amount": 2
+        },
+        {
+          "cadence": "per-campaign-start",
+          "resource": "intrigue-op",
+          "amount": 2
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-agreement",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Light of Harmony. When two or more creatures within 30 feet of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity"
+            }
+          }
+        }
+      ]
+    },
+    "autoanimations": {
+      "id": "2f229d2e-75a3-47e7-9917-bbc99848bb82",
+      "label": "Sephirotic Scion Heritage: Ophanic",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "loop",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "jZarWfKQgT5cujvt",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.09IqdCAcL2F1Y8xy",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776660294467,
+    "modifiedTime": 1782167240110,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "09IqdCAcL2F1Y8xy",
+  "sort": 0,
+  "_key": "!items!09IqdCAcL2F1Y8xy"
+}

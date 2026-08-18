@@ -1,0 +1,57 @@
+{
+  "name": "Frugal Caster",
+  "type": "feat",
+  "img": "icons/magic/light/explosion-star-glow-blue.webp",
+  "folder": "QbGNBV70xh9pF0eh",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC Manifestation Techniques v1",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2>Frugal Caster</h2><p><em>You wring every drop of meaning from a working.</em></p><hr /><h3>Rules</h3><p>Reduce the <strong>Clarity</strong> cost of any <strong>Tier&nbsp;1</strong> manifestation you cast by <strong>1</strong> (minimum&nbsp;0).</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">✍ Applied by the GM/player — no automatic engine effect.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_frugal_caster",
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-manifestation-techniques-v1",
+      "theme": "Clarity economy"
+    },
+    "fourththing": {}
+  },
+  "_id": "oW5nIfO5G7iwnHZA",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782190567983,
+    "modifiedTime": 1782190567983,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!oW5nIfO5G7iwnHZA"
+}

@@ -1,0 +1,70 @@
+{
+  "name": "Pilgrimage Route",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_pilgrimage_route.jpeg",
+  "system": {
+    "description": {
+      "value": "<p><b>Pilgrimage Route</b></p><p>+1 Faith regen; Loyalty +1 to Hex.</p><p><b>Cost:</b> Diplomacy 1 • Faith 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>pilgrimage_route</code></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "pilgrimage-route",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "pilgrimage_route",
+      "meta": {
+        "tier": 1,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": null,
+        "unlockKey": null
+      }
+    }
+  },
+  "_id": "C6ibR4RGWONCib5C",
+  "effects": [],
+  "folder": "UpsmhFcQUtMCrYu2",
+  "sort": 2200000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1771977109852,
+    "modifiedTime": 1775063178388,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!items!C6ibR4RGWONCib5C"
+}

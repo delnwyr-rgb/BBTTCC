@@ -1,0 +1,105 @@
+{
+  "name": "Rust-Ooze Solvent Vial",
+  "type": "consumable",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_rust_ooze_solvent_vial.jpeg",
+  "system": {
+    "description": {
+      "value": "<p>Dissolves mundane rust/ooze residue; grants advantage to escape viscous traps or restraints crafted from rusting materials for 1 minute.</p>",
+      "chat": ""
+    },
+    "rarity": "common",
+    "price": {
+      "value": 15,
+      "denomination": "gp"
+    },
+    "type": {
+      "value": "poison",
+      "subtype": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "autoDestroy": false,
+      "max": ""
+    },
+    "identifier": "rust-ooze-solvent-vial",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "identified": true,
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "attunement": "",
+    "attuned": false,
+    "equipped": false,
+    "damage": {
+      "base": {
+        "types": [],
+        "custom": {
+          "enabled": false
+        },
+        "scaling": {
+          "number": 1
+        }
+      },
+      "replace": false
+    },
+    "properties": []
+  },
+  "flags": {
+    "bbttcc": {
+      "tags": []
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          },
+          "legacySystem": {
+            "description": {
+              "value": "<p>Dissolves mundane rust/ooze residue; reroll the lowest die to escape viscous traps or restraints crafted from rusting materials for 1 minute.</p>"
+            }
+          }
+        }
+      }
+    }
+  },
+  "effects": [],
+  "folder": "Wxh1A343inwTUeoo",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1767834195185,
+    "modifiedTime": 1782164185974,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "Lz9niNHviI4BS8nr",
+  "sort": 1800000,
+  "_key": "!items!Lz9niNHviI4BS8nr"
+}

@@ -1,0 +1,67 @@
+{
+  "name": "Spark Reclaimer (Bad Eden)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Pull lost warmth from dead relics.</em></p><p>When you <strong>salvage</strong> a destroyed construct, relic, vehicle, or large device during or immediately after a scene, you can stabilize the ghost of its purpose.</p><ul><li>Once per <strong>scene</strong>, when you successfully salvage from such a wreck (at the GM’s discretion that this is a meaningful recovery and not just scooping screws), your faction gains <strong>+1 Economy OP</strong> for the next strategic turn.</li><li>This doesn’t stack from multiple wrecks in the same scene; think of it as one big reclamation per incident.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-spark-reclaimer-spark-reclaimer",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 3, Forge of the Spark Reclaimer",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "BvmSP1PPc1ABT2OO",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_sparkreclaimer",
+      "featureKey": "spark_reclaimer"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996551,
+    "modifiedTime": 1781116150508,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "SeFyNqrt4337Gfl0",
+  "sort": 162500,
+  "_key": "!items!SeFyNqrt4337Gfl0"
+}

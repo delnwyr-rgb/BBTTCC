@@ -1,0 +1,78 @@
+{
+  "name": "Prayer Resin",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/technoa-rresin.jpeg",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "prayer-resin"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Waxy buildup scraped from sept-pews after long vigils. Smells of incense and exhaustion.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Tacky residue from a long vigil.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Waxy buildup scraped from sept-pews after long vigils. Smells of incense and exhaustion.</p>",
+          "charges": 3,
+          "materialKey": "prayer-resin",
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII material stamp",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "2rqSKDeKz6ZVTeB9",
+  "effects": [],
+  "sort": 471094,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137161776,
+    "modifiedTime": 1782156674939,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!2rqSKDeKz6ZVTeB9"
+}

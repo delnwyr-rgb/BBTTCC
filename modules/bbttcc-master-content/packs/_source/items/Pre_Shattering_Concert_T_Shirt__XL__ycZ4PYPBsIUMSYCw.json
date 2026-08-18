@@ -1,0 +1,137 @@
+{
+  "name": "Pre-Shattering Concert T-Shirt (XL)",
+  "type": "armor",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/pre_shattering_concert_t.png",
+  "system": {
+    "guardBonus": 0,
+    "evasionBonus": 0,
+    "resolveBonus": 1,
+    "resistances": [],
+    "armorSkill": "weave",
+    "equipped": false,
+    "tags": [
+      "mal-voiced",
+      "vestment",
+      "pre-fall"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Faded black cotton, unreasonably soft from a thousand washes, sized XL regardless of who's wearing it. The graphic is a band logo and tour list, both indistinct. Cities and dates the world no longer keeps. Wearers consistently describe the same vague dream — a stadium, a lighter held aloft, a single sustained chord — and consistently fail to remember it past breakfast.</p><p><strong>Tour Memory.</strong> +1 to Resolve. While worn, you do not gain Stress from being homesick, lost, or out of your element. The shirt has been to bigger venues than this one. The shirt is unimpressed.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "vestment",
+          "signature": "The band name is unreadable. Wearers report dreams they can't quite remember. Probably a cool tour.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Faded black cotton, unreasonably soft from a thousand washes, sized XL regardless of who's wearing it. The graphic is a band logo and tour list, both indistinct. Cities and dates the world no longer keeps. Wearers consistently describe the same vague dream — a stadium, a lighter held aloft, a single sustained chord — and consistently fail to remember it past breakfast.</p><p><b>Tour Memory.</b> +1 to Resolve. While worn, you do not gain Stress from being homesick, lost, or out of your element. The shirt has been to bigger venues than this one. The shirt is unimpressed.</p>",
+          "materialOf": [
+            "pre-fall-cotton",
+            "stadium-memory",
+            "indistinct-rebellion"
+          ],
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI vestment stamp",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "ycZ4PYPBsIUMSYCw",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.resolve",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "DtuX8b0Uuxg2z5yK",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781726108332,
+        "modifiedTime": 1781726108332,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!ycZ4PYPBsIUMSYCw.DtuX8b0Uuxg2z5yK"
+    }
+  ],
+  "sort": 603125,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725676,
+    "modifiedTime": 1778541981825,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ycZ4PYPBsIUMSYCw"
+}

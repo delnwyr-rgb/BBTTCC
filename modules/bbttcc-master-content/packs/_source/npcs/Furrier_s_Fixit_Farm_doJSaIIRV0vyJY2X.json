@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": "ZiFLx2LEOrGxvEmc",
+  "name": "Furrier's Fixit Farm",
+  "color": null,
+  "sorting": "a",
+  "_id": "doJSaIIRV0vyJY2X",
+  "description": "",
+  "sort": 600000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177533966,
+    "modifiedTime": 1784177533966,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!doJSaIIRV0vyJY2X"
+}

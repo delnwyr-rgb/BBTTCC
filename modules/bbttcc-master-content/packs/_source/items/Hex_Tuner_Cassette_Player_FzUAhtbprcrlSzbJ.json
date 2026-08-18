@@ -1,0 +1,82 @@
+{
+  "name": "Hex-Tuner Cassette Player",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/cassette_player.png",
+  "system": {
+    "slot": "tool",
+    "tags": [
+      "mal-voiced",
+      "ley-tuned",
+      "tool"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>An old yellow Walkman with a single cassette permanently inside. The label is hand-written in a marker that has since stopped being manufactured. The headphones are foam-and-tinfoil affairs that ride over the ears with the dignity of a sleeping cat. The player is, somehow, ley-tuned. It plays when you need it to. Sometimes more.</p><p><strong>Side A — GENERIC MOTIVATIONAL.</strong> Once per scene as a free action, press play. You and one ally within Near range reroll the lowest die on the next Resolve check.</p><p><strong>Side B — EMERGENCY ONLY.</strong> Once per session, flip the cassette. The track plays for the rest of the scene. All allies within Near range reroll the lowest die on every Resolve check. The cassette will not flip back without 24 hours of silence. Mal does not recommend abusing this.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "tool",
+          "signature": "Side A: GENERIC MOTIVATIONAL. Side B: EMERGENCY ONLY. Don't flip it casually.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>An old yellow Walkman with a single cassette permanently inside. The label is hand-written in a marker that has since stopped being manufactured. The headphones are foam-and-tinfoil affairs that ride over the ears with the dignity of a sleeping cat. The player is, somehow, ley-tuned. It plays when you need it to. Sometimes more.</p><p><b>Side A — GENERIC MOTIVATIONAL.</b> Once per scene as a free action, press play. You and one ally within Near range reroll the lowest die on the next Resolve check.</p><p><b>Side B — EMERGENCY ONLY.</b> Once per session, flip the cassette. The track plays for the rest of the scene. All allies within Near range reroll the lowest die on every Resolve check. The cassette will not flip back without 24 hours of silence. Mal does not recommend abusing this.</p>",
+          "materialOf": [
+            "pre-fall-electronics",
+            "ley-tuned-magnetic-tape",
+            "stubborn-batteries"
+          ],
+          "charges": 1,
+          "price": {
+            "marks": 90,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII tool stamp",
+            "bound": "attuned",
+            "saleBack": 36
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "FzUAhtbprcrlSzbJ",
+  "effects": [],
+  "sort": 350000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725658,
+    "modifiedTime": 1778541959484,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!FzUAhtbprcrlSzbJ"
+}

@@ -1,0 +1,97 @@
+{
+  "name": "Yesodic Gate Frame",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/yesodic_gate_frame.jpeg",
+  "system": {
+    "slot": "structure",
+    "tags": [
+      "yesodic",
+      "structure",
+      "gate-frame",
+      "leyline",
+      "attunement"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>Modular Yesodium frame component, hand-fitted at a Ley Gate site. One set of brackets — three are typically needed for a working gate.</p><p><strong>Leyline Stable (Harmonized).</strong> +1 to stabilization checks involving Leylines within the gate's cell.</p><p><strong>Gate Attunement (Harmonized).</strong> Reduces Gate-travel instability chance by one tier.</p><p><strong>Reversion Note.</strong> If Khezek-Tor's main vein destabilizes, every Yesodic structure globally rolls Reversion. Plan accordingly.</p><p><em>Unharmonized: structural value only — signal abilities inert.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "tool",
+          "signature": "A frame around the door between.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {
+            "gateAttunement": true,
+            "leylineStable": true,
+            "structuralFrame": true
+          },
+          "requiresHarmonization": true,
+          "lore": "<p>Modular Yesodium frame component, hand-fitted at a Ley Gate site. One set of brackets — three are typically needed for a working gate.</p><p><b>Leyline Stable (Harmonized).</b> +1 to stabilization checks involving Leylines within the gate's cell.</p><p><b>Gate Attunement (Harmonized).</b> Reduces Gate-travel instability chance by one tier.</p><p><b>Reversion Note.</b> If Khezek-Tor's main vein destabilizes, every Yesodic structure globally rolls Reversion. Plan accordingly.</p><p><i>Unharmonized: structural value only — signal abilities inert.</i></p>",
+          "materialOf": [
+            {
+              "key": "yesodium",
+              "qty": 4
+            },
+            {
+              "key": "tree-of-life-shard",
+              "qty": 1
+            },
+            {
+              "key": "prayer-binding",
+              "qty": 2
+            }
+          ],
+          "price": {
+            "marks": 810,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV tool stamp",
+            "bound": "attuned",
+            "saleBack": 324
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "DTEmxbQRstyRz9dp",
+  "effects": [],
+  "sort": 474838,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777137210137,
+    "modifiedTime": 1778541958284,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!DTEmxbQRstyRz9dp"
+}

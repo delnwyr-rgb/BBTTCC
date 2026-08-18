@@ -1,0 +1,382 @@
+{
+  "name": "Ascension Layer",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_attack_3.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Ascension Layer.</strong> When you move in service of the Great Work, reality bends to keep the story alive.</p><ul><li><p><strong>Ascension Aura:</strong> While you are pursuing an active Spark quest or directly working a Great Work objective, you and allies within 6 squares gain a +2 bonus to all defense check.</p></li><li><p><strong>Fate Catch (1/a Soma Break):</strong> While Ascension Aura is active, when you or an ally within 6 squares fails a defense check, you may use your reaction to treat that failure as a success instead.</p></li><li><p><strong>World-Tuned:</strong> Bad Eden travel, encounter, and hex/faction systems may treat catastrophic outcomes related to the current Spark quest as reduced in severity—fumbles become partial failures, disasters become hard lessons instead of dead ends.</p></li></ul>",
+      "chat": ""
+    },
+    "activities": {
+      "triggerFateCatch": {
+        "type": "utility",
+        "activation": {
+          "type": "reaction",
+          "override": false
+        },
+        "description": {},
+        "_id": "bx0Gt5z52xltARNl",
+        "sort": 0,
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "units": "self",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false,
+          "prompt": true
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "ascension-layer",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "requirements": "Dreamwalker (17th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Ascension Aura (Self Save Buff)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_destruction_1.png",
+      "origin": null,
+      "transfer": false,
+      "disabled": true,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459927033,
+        "modifiedTime": 1777346198777
+      },
+      "_id": "GANgvbod3WwDNyRO",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.abilities.str.bonuses.save",
+            "value": "+2",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.abilities.dex.bonuses.save",
+            "value": "+2",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.abilities.con.bonuses.save",
+            "value": "+2",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.abilities.int.bonuses.save",
+            "value": "+2",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.abilities.wis.bonuses.save",
+            "value": "+2",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.abilities.cha.bonuses.save",
+            "value": "+2",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.dreamwalker.ascensionAuraActive",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!RQhSgy0Ps39BucuM.GANgvbod3WwDNyRO"
+    }
+  ],
+  "folder": "YLUIFZ5nPOUSaSH2",
+  "flags": {
+    "bbttcc": {
+      "dreamwalker": {
+        "ascensionLayer": true
+      }
+    },
+    "dnd5e": {},
+    "autoanimations": {
+      "id": "e710063e-dbab-46e4-b9f4-020097a70638",
+      "label": "Ascension Layer",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "intro",
+          "color": "yellow",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459927033,
+    "modifiedTime": 1782167240819,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "RQhSgy0Ps39BucuM",
+  "sort": 175000,
+  "_key": "!items!RQhSgy0Ps39BucuM"
+}

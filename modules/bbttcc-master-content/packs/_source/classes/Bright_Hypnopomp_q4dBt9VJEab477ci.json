@@ -1,0 +1,67 @@
+{
+  "name": "Bright Hypnopomp",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Wake bearing good news from the other side.</em></p><p>When you finish a <strong>a Soma Break</strong>, choose up to <strong>tier allies</strong> who rested with you.</p><ul><li>They each gain <strong>temporary Integrity equal to your tier</strong>.</li><li>They may each remove the <strong>Shaken</strong> condition if they are suffering from it.</li></ul><p>You return from dreams carrying a little morning light for everyone.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "dreamwalker-sapphire-bright-hypnopomp",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 10
+    },
+    "properties": [],
+    "requirements": "Dreamwalker 10, Trance of the Sapphire Gate",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "EpLuwx2VEkhesaOK",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "dreamwalker_sapphire_gate",
+      "featureKey": "bright_hypnopomp"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459927035,
+    "modifiedTime": 1781116185874,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "q4dBt9VJEab477ci",
+  "sort": 200000,
+  "_key": "!items!q4dBt9VJEab477ci"
+}

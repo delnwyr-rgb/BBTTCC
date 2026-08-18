@@ -1,0 +1,2385 @@
+{
+  "name": "Brennig Tamsin",
+  "type": "character",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc",
+      "createdViaNPCBuilder": true,
+      "createdAt": 1783479536551
+    },
+    "bbttcc-factions": {
+      "factionId": "7Z8QNm4VGo6JRJG2",
+      "warLogs": [
+        {
+          "ts": 1783979396723,
+          "date": "7/13/2026, 4:49:56 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        }
+      ]
+    },
+    "fourththing": {
+      "kind": "npc",
+      "surgeEnabled": false,
+      "startingGrantsFiredItems": {
+        "gcEOHIl4PG6aMFT5": {
+          "firedAt": 1783481964688,
+          "itemName": "Human Heritage: Denisovan",
+          "viaSwap": true
+        }
+      }
+    },
+    "bbttcc-character-options": {
+      "nativeLinks": {
+        "subclassName": "",
+        "subclassUuid": "",
+        "subclassApplied": false,
+        "className": "",
+        "classUuid": "",
+        "classApplied": false,
+        "heritageName": "Human Heritage: Denisovan",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.TjBhlDjlMKL60wbo",
+        "heritageApplied": true,
+        "ancestryName": "Human",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.a3057e55a2fc1026",
+        "ancestryApplied": true
+      },
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.TjBhlDjlMKL60wbo",
+      "archetype": {
+        "pack": "bbttcc-character-options.character-archetypes",
+        "id": "Mufyd0GAcuSRnzuP",
+        "key": "hermit",
+        "name": "Archetype: The Hermit (Mystic-Isolator)",
+        "identifier": "archetype-hermit",
+        "category": "character-archetypes"
+      },
+      "identity": {
+        "archetype": {
+          "key": "Mufyd0GAcuSRnzuP",
+          "id": "Mufyd0GAcuSRnzuP",
+          "pack": "bbttcc-character-options.character-archetypes",
+          "category": "character-archetypes",
+          "optionKey": "hermit",
+          "identifier": "archetype-hermit",
+          "name": "Archetype: The Hermit (Mystic-Isolator)",
+          "currentTier": 1,
+          "displayName": "The Hermit (Mystic-Isolator)"
+        },
+        "crew": {
+          "key": "brAELAWiggUsnsox",
+          "id": "brAELAWiggUsnsox",
+          "pack": "bbttcc-character-options.crew-types",
+          "optionKey": "ironbound-ascendants",
+          "identifier": "crew-ironbound-ascendants",
+          "name": "Crew Type: Ironbound Ascendants",
+          "displayName": "Ironbound Ascendants",
+          "currentTier": 1
+        },
+        "occult": {
+          "key": "uzklMVc8EUDpGBA7",
+          "id": "uzklMVc8EUDpGBA7",
+          "pack": "bbttcc-character-options.occult-associations",
+          "optionKey": "exorcist",
+          "identifier": "occult-association-exorcist",
+          "name": "Occult Association: Exorcist / Purifier",
+          "displayName": "Exorcist / Purifier",
+          "currentTier": 1
+        },
+        "sephirothicAlignment": {
+          "key": "SO8CCo1JqxifZ2c0",
+          "id": "SO8CCo1JqxifZ2c0",
+          "pack": "bbttcc-character-options.sephirothic-alignments",
+          "category": "sephirothic-alignments",
+          "optionKey": null,
+          "identifier": "alignment-chokmah",
+          "name": "Alignment: Chokmah"
+        }
+      },
+      "calculatedOPs": {
+        "violence": 2,
+        "nonlethal": 0,
+        "intrigue": 4,
+        "economy": 0,
+        "softpower": 5,
+        "diplomacy": 0,
+        "logistics": 0,
+        "culture": 0,
+        "faith": 4
+      },
+      "crew": {
+        "pack": "bbttcc-character-options.crew-types",
+        "id": "brAELAWiggUsnsox",
+        "name": "Crew Type: Ironbound Ascendants",
+        "identifier": "crew-ironbound-ascendants"
+      },
+      "occult": {
+        "pack": "bbttcc-character-options.occult-associations",
+        "id": "uzklMVc8EUDpGBA7",
+        "name": "Occult Association: Exorcist / Purifier",
+        "identifier": "occult-association-exorcist"
+      },
+      "sephirot": {
+        "pack": "bbttcc-character-options.sephirothic-alignments",
+        "id": "SO8CCo1JqxifZ2c0",
+        "key": null,
+        "name": "Alignment: Chokmah",
+        "identifier": "alignment-chokmah",
+        "category": "sephirothic-alignments"
+      }
+    },
+    "bbttcc-aae": {
+      "politicalPhilosophy": "authoritarian"
+    },
+    "tokenflip": {
+      "unfuck": true
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the Lift Hall, Khezek Tor, Yesodium shipments, manifests, Father Tamsin, Allesh-Gilliam, the Night the Mountain Coughed",
+        "notes": "[KHEZEK-TREATMENT-2026-07-07] PRIVATE TRUTH — Brennig Tamsin, Quartermaster of the Lift Hall. Voice: dry competence with a laugh in the back of it; treats crates like patients and manifests like suspects. THE SCAR along his jaw he calls 'the mountain's receipt' — he was the man on the table the Night the Mountain Coughed, the stitch finished in the dark by feel. He knows Doc Greeley saved him; he does NOT know she had already chosen, in the dark, who she'd have let go — and he must never learn it from a careless conversation (that truth is hers and Father Tamsin's to carry). HIS BROTHER: the Father visits more than any parish requires. Brennig puts it down to guilt and love, in whichever order, and teases him about it gently. He does NOT know the visits are also the cover for something else — he is the alibi and doesn't know it. IF THE CONFESSOR'S DEBT RESOLVES (the dossier pages will say): redeemed → Brennig is quietly furious for a week, then walks to St Gilliam's and hugs his brother hard enough to hurt; exposed → he stands next to Tamsin in the daylight, jaw set, daring the town to say something; counterfeit → he never learns, which is its own small tragedy. THE CRATES: he knows which ones hum before touching them, keeps the humming ones apart from the food, and has opinions about anyone who calls that superstition. TELLS: taps the scar when the Cough comes up; counts crates aloud when avoiding a subject, exactly like Verna counts spoons (they have never met; they would be MENACES together)."
+      }
+    }
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 4,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1
+    },
+    "attributes": {
+      "violence": {
+        "value": 4
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 6
+      },
+      "body": {
+        "value": 4
+      },
+      "mind": {
+        "value": 3
+      },
+      "soul": {
+        "value": 3
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 0
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 1
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 1
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 1
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 1
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 3
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 1
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 1
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 2
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 0
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 1
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 1
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 1
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 1
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 1
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 1
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 31,
+        "max": 16
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 3,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": 1,
+    "name": "Brennig Tamsin",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/brennig_tamsin_pov.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "tokenflip": {
+        "tokenfaces": [
+          {
+            "actorId": "4Ie9Tl4NGBWwO5aj",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/brennig_tamsin_pov.png",
+            "id": "IhSRLgI85deH6tU2rN37",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 1,
+            "height": 1,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          },
+          {
+            "actorId": "4Ie9Tl4NGBWwO5aj",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/brennig_tamsin_token.png",
+            "id": "9bSjYG8lYePXgXObCVS1",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 1,
+            "height": 1,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          },
+          {
+            "actorId": "4Ie9Tl4NGBWwO5aj",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/brennig_tamsin_pov.png",
+            "id": "wYxSpmSSFD0fvcy0UYJU",
+            "scaleX": 3,
+            "scaleY": 3,
+            "width": 8,
+            "height": 8,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          }
+        ]
+      },
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "4Ie9Tl4NGBWwO5aj",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/brennig_tamsin_pov.png",
+  "items": [
+    {
+      "name": "Human",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/avuncular_joans_scene_1_us.png",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Cro-Magnon, Denisovan, Florensis, Neanderthal</strong>.</p><p>This root grants the shared Human core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "36a73edc22fe4dab",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium.",
+            "value": {}
+          },
+          {
+            "_id": "1d8d99cab1380a3c",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.DViThQoRpsEri1Ta",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Stubborn Spark",
+            "hint": "Gain the core Human ancestry traits."
+          }
+        ],
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": "Lineage Memory (ancient human adaptations)."
+        },
+        "type": {
+          "value": "humanoid",
+          "custom": "",
+          "subtype": "Human"
+        },
+        "identifier": "human"
+      },
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "family": "human",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "heritageList": [
+            "cro_magnon",
+            "denisovan",
+            "florensis",
+            "neanderthal"
+          ],
+          "refactorNotes": "v2: Erectus retired, Cro-Magnon added. Denisovan retained from v1 canon (heritage list was underdocumented in v1 loose-JSON exports)."
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "on one checks [TODO(adv-call)] of your choice each round (declare before roll…"
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-save-fail",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
+                }
+              }
+            },
+            {
+              "event": "on-skill-fail",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Adaptive. Once per a Soma Break, when you fail a defense check, you can choose to succeed instead"
+                }
+              }
+            }
+          ],
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "grantedByAncestry": "Human"
+        }
+      },
+      "effects": [],
+      "folder": "byroU26YSQP4OQUn",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.a3057e55a2fc1026",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891286,
+        "modifiedTime": 1784177891286,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "k4GPgJTxUcsefVKg",
+      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.k4GPgJTxUcsefVKg"
+    },
+    {
+      "name": "Human: Stubborn Spark",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Neanderthal, Denisovan, Florensis, Erectus). Your lineage grants Tier powers as you level.</p>",
+          "chat": ""
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "human-stubborn-spark",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Human",
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "activities": {}
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "human",
+          "feature": "core",
+          "lineage": "any",
+          "version": "1.0.0"
+        },
+        "autoanimations": {
+          "id": "8488fb2b-0f73-4241-a7a2-9758b5555936",
+          "label": "Human: Stubborn Spark",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "intro",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "grantedByAncestry": "Human"
+        }
+      },
+      "effects": [],
+      "folder": "byroU26YSQP4OQUn",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.jbiG7wAqTlBgEcDw",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891286,
+        "modifiedTime": 1784177891286,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "AM2MhBkgzr3kSgcH",
+      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.AM2MhBkgzr3kSgcH"
+    },
+    {
+      "name": "Human Heritage: Denisovan",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/OL%20Gearbox%20Background%20Removed.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Human (Denisovan)</em> while converting it from a lineage-species into a heritage.</p><p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Denisovan).</strong> You are not a fantasy human. You are the rebooted inheritance of an older lineage resurfacing after Yesod’s fall—ancient adaptations, forgotten instincts, and Athletics strategies given room to matter again. You remember mountains that no longer exist. Gravity listens to you when you ask it to.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>BOD (Body)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory) from the Human species root.</p><h3>Denisovan Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17):</p><ul><li><p><strong>Tier I — High-Altitude Blood.</strong> reroll-lowest on checks vs. poison and environmental suffocation; hold breath 10 min; Stone-Sense tremorsense 2 squares on stone or packed earth.</p></li><li><p><strong>Tier II — Stone-Singer.</strong> Mason’s tool proficiency. 1/Soma Break reinforce a structure or barrier.</p></li><li><p><strong>Tier III — Ancient Logic.</strong> reroll-lowest on Investigation and Occult checks involving structures, mechanisms, or ruins; share the insight to grant an ally advantage once per scene.</p></li><li><p><strong>Tier IV — Peak-Anchor.</strong> 1/Soma Break reaction to negate forced movement or teleportation within 6 squares; aggressor takes psychic backlash equal to your tier.</p></li></ul>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "14833a501be64719",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.FeRlU9VFJ5Yvhfnw",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Denisovan Tier I",
+            "hint": "Gain your Denisovan Tier I lineage power (High-Altitude Blood)."
+          }
+        ],
+        "identifier": "human_denisovan_heritage",
+        "requirements": "Human",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "human",
+          "lineage": "Denisovan",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "normalizedFrom": "Human (Denisovan) [race/species]",
+          "tierGrantPattern": "all-tiers",
+          "note": "Denisovan is the first heritage in the pack to grant all 4 Tiers at levels 0/5/11/17 via advancements. Other heritages currently only grant Tier I and rely on a separate wiring hook for higher Tiers. Flag for future consistency pass."
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "vs": "vs:poison",
+              "note": "on Body checks against poison, environmental suffocation, and extreme altitude"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "vs": "vs:poison",
+              "note": "Body checks against poison, environmental suffocation, and extreme altitude"
+            }
+          ],
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "logistics-op",
+              "amount": 2
+            }
+          ],
+          "vocabScrub": "2026-05-16",
+          "grantedByHeritage": "Denisovan"
+        }
+      },
+      "folder": "X8GnIzoaCFwLQbGU",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.TjBhlDjlMKL60wbo",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891286,
+        "modifiedTime": 1784177891286,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "gcEOHIl4PG6aMFT5",
+      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.gcEOHIl4PG6aMFT5"
+    },
+    {
+      "name": "Archetype: The Hermit (Mystic-Isolator)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hermit.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Leave me alone. I’ll return with something useful.”</em></p><p><strong>Archetype (Bad Eden): The Hermit (Mystic-Isolator).</strong> You step away in order to see clearly. Solitude is not withdrawal to you. It is a forge, a lens, and a discipline.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens contemplation, covert preparation, and hidden spiritual leverage. This Archetype is associated with <strong>+1 Faith OP</strong> and <strong>+1 Intrigue OP</strong>.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {
+          "YS6BJ7ehS0Vjt4vI": {
+            "_id": "YS6BJ7ehS0Vjt4vI",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 3,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 1,
+            "title": "Archetype Ability Scores",
+            "hint": "Gain 3 ability score points (max +2 to any one score). See the Archetype text for recommended arrays.",
+            "flags": {}
+          }
+        },
+        "identifier": "archetype-hermit",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "IOjnhZoMwrcOAdaa",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "character-archetypes",
+          "bonuses": {
+            "faith": 1,
+            "intrigue": 1
+          },
+          "option": {
+            "category": "archetype",
+            "key": "hermit",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:hermit",
+              "bbttcc:expression:mystic-isolator",
+              "bbttcc:base"
+            ]
+          }
+        },
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891286,
+        "modifiedTime": 1784177891286,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "5P4B7UrEAvI8O2n1",
+      "sort": 100000,
+      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.5P4B7UrEAvI8O2n1"
+    },
+    {
+      "name": "Archetype: The Hermit (Mystic-Isolator) (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hermit.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden – Archetype: The Hermit (Mystic-Isolator) (Tier 1)",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Stealth. You learn the Light Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's Faith OP cap increases by 1 and Intrigue OP cap increases by 1.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "archetype-hermit-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Level 1+",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "name": "Archetype Tier 1 Proficiencies",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_4.png",
+          "_id": "XJgwMQYkTW4ZYllF",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.faith.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.stealth.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177891286,
+            "modifiedTime": 1784177891286
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!4Ie9Tl4NGBWwO5aj.DimsrDwGVTiApYIA.XJgwMQYkTW4ZYllF"
+        }
+      ],
+      "folder": "IOjnhZoMwrcOAdaa",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {
+            "faith": 1,
+            "intrigue": 1
+          },
+          "option": {
+            "category": "archetype",
+            "key": "hermit",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:hermit",
+              "bbttcc:expression:mystic-isolator",
+              "bbttcc:tier:1",
+              "bbttcc:faith_op_cap:+1",
+              "bbttcc:intrigue_op_cap:+1"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891286,
+        "modifiedTime": 1784177891286,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "DimsrDwGVTiApYIA",
+      "sort": 200000,
+      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.DimsrDwGVTiApYIA"
+    },
+    {
+      "name": "Alignment: Chokmah",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "Soul - Creative energy. +1 Violence, +1 Soft Power OPs\n\nCreation arrives all at once. Chokmah rewards decisive action, inspired leadership, and bold openers that turn possibility into momentum before anyone else is ready.",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "alignment-chokmah",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "softpower": 1,
+            "violence": 1
+          },
+          "option": {}
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_staff.png",
+      "effects": [],
+      "folder": "RAOWJYon3t34M5XY",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.YBryhDI3aQ92d65o",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.LilpQAsCU1MbIgsz",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891286,
+        "modifiedTime": 1784177891286,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "bvBWNHZnc9hm4Ays",
+      "sort": 300000,
+      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.bvBWNHZnc9hm4Ays"
+    },
+    {
+      "name": "Crew Type: Ironbound Ascendants (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden – Crew Type: Ironbound Ascendants (Tier 1)",
+          "revision": 2,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You’ve learned the first law of altitude: the hill fights for whoever arrives prepared.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic:</strong> In Mountains and Highlands, travel is more efficient for your faction and elevation penalties are easier to manage.</li></ul>",
+          "chat": ""
+        },
+        "identifier": "crew-ironbound-ascendants-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "requirements": "Level 1+",
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        }
+      },
+      "effects": [
+        {
+          "_id": "9e8c1c03e6d14b51",
+          "name": "Ironbound Ascendants T1 Skills",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_armor_2.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.athletics.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.athletics.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "dnd5e": {
+              "riders": {
+                "statuses": []
+              }
+            }
+          },
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177891286,
+            "modifiedTime": 1784177891286
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!4Ie9Tl4NGBWwO5aj.gsRyeRcYpXjdzO0h.9e8c1c03e6d14b51"
+        }
+      ],
+      "folder": "wmqio7Q7DY1BZeRJ",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "ironbound-ascendants",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "travel",
+              "logistics",
+              "defense"
+            ],
+            "terrains": [
+              "mountain",
+              "highlands"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:ironbound-ascendants",
+              "bbttcc:tier:1",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:logistics",
+              "bbttcc:domain:defense",
+              "bbttcc:terrain:mountain",
+              "bbttcc:terrain:highlands",
+              "bbttcc:scope:hex",
+              "bbttcc:when:origin_terrain:mountain",
+              "bbttcc:when:origin_terrain:highlands",
+              "bbttcc:effect:travel:cost_reduction:+1step",
+              "bbttcc:effect:travel:elevation_penalty:-1step",
+              "bbttcc:theme:elevation",
+              "bbttcc:theme:mountain-discipline",
+              "bbttcc:theme:chokepoints"
+            ]
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Item.uTTREaIGmbvryPE3",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.uTTREaIGmbvryPE3",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891286,
+        "modifiedTime": 1784177891286,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "gsRyeRcYpXjdzO0h",
+      "sort": 0,
+      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.gsRyeRcYpXjdzO0h"
+    },
+    {
+      "name": "Occult Association: Exorcist / Purifier (Tier 1)",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Exorcist</strong></p><p><strong>“That should not be here.”</strong></p><p>You can identify corruption, spiritual pressure, and Qliphothic influence.</p><p><strong>Tactical</strong></p><ul><li>reroll-lowest on checks vs corruption, fear, or possession</li></ul><p><strong>Strategic</strong></p><ul><li>When entering a Hex, automatically detect presence of corruption or unnatural influence</li></ul><p><strong>Cost:</strong> constant awareness of corruption creates strain and intolerance for ambiguity.</p>",
+          "chat": ""
+        },
+        "identifier": "occult-association-exorcist-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "tags": [
+              "bbttcc:tier:1",
+              "bbttcc:effect:detect:corruption",
+              "bbttcc:effect:advantage:saves:corruption",
+              "bbttcc:cost:strain"
+            ],
+            "category": "occult",
+            "key": "exorcist",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1
+          },
+          "category": "occult"
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "effects": [],
+      "folder": "eZrB95VvJnQ4Pb77",
+      "_stats": {
+        "compendiumSource": "Item.HkKJUdADMuiHexr5",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.HkKJUdADMuiHexr5",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891286,
+        "modifiedTime": 1784177891286,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "fuzqNxtF6aGysye0",
+      "sort": 0,
+      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.fuzqNxtF6aGysye0"
+    },
+    {
+      "name": "Rallying Words",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_8.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Rallying Words.</strong> You can deliver a short, targeted speech that makes people remember why you’re here.</p><ul><li>As a bonus action, choose one creature other than yourself within 6 squares who can see or hear you. That creature gains a bonus to the next attack roll, attribute check, or defense check it makes before the start of your next turn. The bonus equals your Presence modifier (minimum +1).</li><li>You can use this feature a number of times per Soma Break equal to your tier.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "rallying-words",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 2
+        },
+        "properties": [],
+        "requirements": "Harmony Marshal (2nd level)",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Rallying Words (Inspiring Bonus)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_3.png",
+          "origin": null,
+          "transfer": true,
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177891286,
+            "modifiedTime": 1784177891286
+          },
+          "_id": "cAPrkPRQ6ETCdinM",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "flags.bbttcc.harmonyMarshal.rallyingWords",
+                "value": true,
+                "priority": 20,
+                "type": "custom",
+                "phase": "initial"
+              }
+            ]
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!4Ie9Tl4NGBWwO5aj.Tb3fGFh1PCHE1pP9.cAPrkPRQ6ETCdinM"
+        }
+      ],
+      "folder": "6ELe0FPqgC58OzKS",
+      "flags": {
+        "bbttcc": {
+          "harmonyMarshal": {
+            "rallyingWords": true
+          }
+        },
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891286,
+        "modifiedTime": 1784177891286,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": -487500,
+      "_id": "Tb3fGFh1PCHE1pP9",
+      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.Tb3fGFh1PCHE1pP9"
+    },
+    {
+      "name": "Read the Room",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_chalice_4.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Read the Room.</strong> You have an instinctive feel for the emotional geometry of conversations.</p><ul><li>When you make an <strong>Insight (Soul)</strong> or <strong>Perception (Mind)</strong> check to gauge mood, detect Stealth, or sense the underlying stakes of a scene, you can add a d4 to the roll.</li><li>You can use this feature after you roll but before the GM tells you whether you succeed. Uses per Soma Break equal to your Soul modifier (minimum once).</li></ul><p>(The Active Effect below also gives you a small numeric edge on Insight (Soul) and Perception (Mind) checks.)</p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "read-the-room",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 2
+        },
+        "properties": [],
+        "requirements": "Harmony Marshal (2nd level)",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Read the Room (Insight (Soul) (Soul) & Perception (Mind) (Mind) Edge)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_5.png",
+          "origin": null,
+          "transfer": true,
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177891286,
+            "modifiedTime": 1784177891286
+          },
+          "_id": "td2cFhPIKR65aGNY",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.insight.value",
+                "type": "add",
+                "value": "+1",
+                "phase": "initial",
+                "priority": 0
+              },
+              {
+                "key": "system.skills.perception.value",
+                "type": "add",
+                "value": "+1",
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "flags.bbttcc.harmonyMarshal.readTheRoom",
+                "type": "custom",
+                "value": true,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "description": "",
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!4Ie9Tl4NGBWwO5aj.2ljAK2jvhtXwDdeC.td2cFhPIKR65aGNY"
+        }
+      ],
+      "folder": "6ELe0FPqgC58OzKS",
+      "flags": {
+        "bbttcc": {
+          "harmonyMarshal": {
+            "readTheRoom": true
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891286,
+        "modifiedTime": 1784177891286,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": -481250,
+      "_id": "2ljAK2jvhtXwDdeC",
+      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.2ljAK2jvhtXwDdeC"
+    },
+    {
+      "name": "Disciplined Fire",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_disciplined_fire.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Feats Expansion v1",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Disciplined Fire</h2><p><em>It’s not about more shots. It’s about the right shot.</em></p><hr /><h3>Rules</h3><p>Once per turn when you hit with a ranged weapon attack, you may choose one:</p><ul><li><strong>Pin:</strong> The target’s movement is reduced by 2 squares until the start of your next turn.</li><li><strong>Disrupt:</strong> The next attack roll the target makes before the end of its next turn is made with keep-lowest.</li></ul><p>A creature can be affected by this principle only once per round.</p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_disciplined_fire",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-expansion-v1",
+          "generatedAt": "2026-01-18T20:40:45.007450+00:00"
+        }
+      },
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 4300000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891286,
+        "modifiedTime": 1784177891286,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_id": "0SBdSq5WrYyezhOe",
+      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.0SBdSq5WrYyezhOe"
+    },
+    {
+      "name": "Overwatch (Bad Eden)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_satellite_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2025",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Your vantage is systems-level; your voice, the signal.</em></p><p>When an ally within <strong>6 squares</strong> makes a key roll directly tied to the current objective (attack on a critical target, clutch save, investigation breakthrough, negotiation pivot), you may use your <strong>reaction</strong> to steady the moment.</p><ul><li>The ally adds your <strong>tier</strong> to the roll.</li><li>You may use this feature a number of times equal to your <strong>tier</strong>, regaining all uses on a <strong>a Soma Break</strong>.</li></ul><p><strong>Strategic Layer.</strong> When you lead a diplomatic, social, or morale-driven <em>scenario</em>, the <strong>first Soft Power OP spend</strong> your faction makes during that scenario is reduced by <strong>1 OP</strong> (minimum 1). This can occur once per scenario you lead.</p>",
+          "chat": ""
+        },
+        "activities": {
+          "overwatchReaction": {
+            "type": "utility",
+            "activation": {
+              "type": "reaction",
+              "condition": "Ally within 30 ft makes a key roll.",
+              "override": false
+            },
+            "target": {
+              "prompt": true,
+              "template": {
+                "contiguous": false,
+                "units": "ft"
+              },
+              "affects": {
+                "choice": false
+              },
+              "override": false
+            },
+            "range": {
+              "value": "30",
+              "units": "ft",
+              "override": false
+            },
+            "description": {},
+            "_id": "EquvelwQdn0LtRn9",
+            "sort": 0,
+            "consumption": {
+              "scaling": {
+                "allowed": false
+              },
+              "spellSlot": true,
+              "targets": []
+            },
+            "duration": {
+              "units": "inst",
+              "concentration": false,
+              "override": false
+            },
+            "effects": [],
+            "uses": {
+              "spent": 0,
+              "recovery": []
+            },
+            "roll": {
+              "prompt": false,
+              "visible": false
+            }
+          }
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [
+            {
+              "period": "lr",
+              "type": "recoverAll"
+            }
+          ],
+          "max": "@prof"
+        },
+        "advancement": {},
+        "identifier": "harmmarshal-overwatch-overwatch",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 3
+        },
+        "properties": [],
+        "requirements": "Harmony Marshal 3, Mandate of Overwatch",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "2lNXuSAY9vKC4tM0",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "harmmarshal_overwatch",
+          "featureKey": "overwatch"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891286,
+        "modifiedTime": 1784177891286,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 150000,
+      "_id": "fgDl4N38ZCB4cJtR",
+      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.fgDl4N38ZCB4cJtR"
+    },
+    {
+      "name": "Signal Boost",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_ray_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2025",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You elevate a single voice until it carries a whole room.</em></p><p>As a <strong>bonus action</strong>, choose one ally within <strong>12 squares</strong> who can hear you. Until the start of your next turn:</p><ul><li>The ally gains <strong>advantage</strong> on their next <strong>Diplomacy (Presence)</strong> or <strong>Intimidation (Presence)</strong> check.</li><li>If that check shifts a crowd, faction representative, or social tempo, your faction gains <strong>+1 Soft Power OP</strong> for the next Strategic Turn (once per scene).</li></ul><p>This represents you turning someone into the right voice at the right time.</p>",
+          "chat": ""
+        },
+        "activities": {
+          "signalBoost": {
+            "type": "utility",
+            "activation": {
+              "type": "bonus",
+              "override": false
+            },
+            "target": {
+              "prompt": true,
+              "template": {
+                "contiguous": false,
+                "units": "ft"
+              },
+              "affects": {
+                "choice": false
+              },
+              "override": false
+            },
+            "range": {
+              "value": "60",
+              "units": "ft",
+              "override": false
+            },
+            "description": {},
+            "_id": "a3R0J5MGhUfTAeRn",
+            "sort": 0,
+            "consumption": {
+              "scaling": {
+                "allowed": false
+              },
+              "spellSlot": true,
+              "targets": []
+            },
+            "duration": {
+              "units": "inst",
+              "concentration": false,
+              "override": false
+            },
+            "effects": [],
+            "uses": {
+              "spent": 0,
+              "recovery": []
+            },
+            "roll": {
+              "prompt": false,
+              "visible": false
+            }
+          }
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": "@prof"
+        },
+        "advancement": {},
+        "identifier": "harmmarshal-overwatch-signal-boost",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 3
+        },
+        "properties": [],
+        "requirements": "Harmony Marshal 3, Mandate of Overwatch",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "2lNXuSAY9vKC4tM0",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "harmmarshal_overwatch",
+          "featureKey": "signal_boost"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891286,
+        "modifiedTime": 1784177891286,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 175000,
+      "_id": "7NthsoStMtXjkCK9",
+      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.7NthsoStMtXjkCK9"
+    },
+    {
+      "_id": "Fx4EriCTAXf5Ey34",
+      "name": "Broker",
+      "type": "class",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-broker",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "broker",
+          "presence"
+        ],
+        "description": {
+          "value": "<p><em>\"There is no problem two reasonable parties can't monetize.\"</em></p><p><strong>Broker</strong> is the Presence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: merchant, envoy, entertainer, cult recruiter, gang face. A profession is a flavor label on the Calling.</p><p><strong>Knack — Fair Price:</strong> The Broker moves any negotiated price <strong>5% per tier</strong> in their side's favor inside the ±25% tolerance band (Tier IV: the full ±20% swing).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Diplomacy</strong> rank = tier; secondary <strong>Empathy</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Diplomacy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Harmony Marshal. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "broker",
+            "faculty": "presence",
+            "signature": "diplomacy",
+            "secondary": "empathy",
+            "pool": "Diplomacy or Soft Power (GM picks by job)",
+            "awakens": "Harmony Marshal"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891286,
+        "modifiedTime": 1784177891286,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.Fx4EriCTAXf5Ey34"
+    },
+    {
+      "_id": "gC8LLAVK1euoyNbe",
+      "name": "Broker — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "broker",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Broker — Apprentice</strong> (Tier I).</p><p><strong>Trade — Word on the street:</strong> Current prices, current rumors, who's buying. <span style=\"opacity:0.7\">Standard fee 10 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Read the Room</strong> <em>(1/scene)</em>: GM truthfully answers: who here has the real power, and what do they want right now?</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 301000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "broker",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891286,
+        "modifiedTime": 1784177891286,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!4Ie9Tl4NGBWwO5aj.gC8LLAVK1euoyNbe"
+    }
+  ],
+  "effects": [],
+  "folder": "sa53SaqrBf3NAcFV",
+  "sort": 225000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177891286,
+    "modifiedTime": 1784177891286,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!4Ie9Tl4NGBWwO5aj"
+}

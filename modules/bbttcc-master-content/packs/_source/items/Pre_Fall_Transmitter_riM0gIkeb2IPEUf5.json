@@ -1,0 +1,83 @@
+{
+  "name": "Pre-Fall Transmitter",
+  "type": "gear",
+  "img": "icons/sundries/lights/lantern-bullseye-blue.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [
+      "tech"
+    ],
+    "category": "gear",
+    "source": "Phase 7 Seed (2026-05-10)",
+    "description": {
+      "value": "<p>A relic-grade transmitter. Encrypts faction-wide comms across an entire hex; pre-Fall pattern, Witness-shielded against detection.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "tool",
+          "bound": "attuned",
+          "materialOf": [
+            {
+              "key": "pre-fall-component",
+              "qty": 2
+            },
+            {
+              "key": "hex-glyph-plate",
+              "qty": 1
+            },
+            {
+              "key": "witness-glass",
+              "qty": 1
+            }
+          ],
+          "tech": {
+            "kind": "linked",
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "shielded": true,
+            "failure": "inert",
+            "origin": "pre-fall"
+          },
+          "price": {
+            "marks": 1620,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV tool × 0.60 × tech 2.0",
+            "bound": "attuned",
+            "saleBack": 648
+          }
+        }
+      }
+    }
+  },
+  "_id": "riM0gIkeb2IPEUf5",
+  "effects": [],
+  "folder": "Wxh1A343inwTUeoo",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778963348889,
+    "modifiedTime": 1778963348889,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 0,
+  "_key": "!items!riM0gIkeb2IPEUf5"
+}

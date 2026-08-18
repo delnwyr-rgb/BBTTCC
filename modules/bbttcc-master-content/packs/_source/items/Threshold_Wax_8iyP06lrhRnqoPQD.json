@@ -1,0 +1,78 @@
+{
+  "name": "Threshold Wax",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_beeswax.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "threshold-wax"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Black wax sealed at a sept-threshold. Holds the threshold's permission; used in courier sigils and crossing pacts.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Wax pressed at a door that mattered.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Black wax sealed at a sept-threshold. Holds the threshold's permission; used in courier sigils and crossing pacts.</p>",
+          "charges": 3,
+          "materialKey": "threshold-wax",
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII material stamp",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "8iyP06lrhRnqoPQD",
+  "effects": [],
+  "sort": 150000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137161824,
+    "modifiedTime": 1782156674940,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!8iyP06lrhRnqoPQD"
+}

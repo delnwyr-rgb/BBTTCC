@@ -1,0 +1,78 @@
+{
+  "name": "Blessed Thread",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_thread.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "blessed-thread"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Hand-spun thread blessed at a sept-altar. Sewn into vestments and pact-bindings.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Spool that hums faintly when held to the ear.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Hand-spun thread blessed at a sept-altar. Sewn into vestments and pact-bindings.</p>",
+          "charges": 5,
+          "materialKey": "blessed-thread",
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI material stamp",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "x8DHea01cMfIaCwL",
+  "effects": [],
+  "sort": 250000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137161771,
+    "modifiedTime": 1782156674955,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!x8DHea01cMfIaCwL"
+}

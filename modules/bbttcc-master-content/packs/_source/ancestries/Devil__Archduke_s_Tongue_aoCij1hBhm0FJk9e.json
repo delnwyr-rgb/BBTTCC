@@ -1,0 +1,77 @@
+{
+  "_id": "aoCij1hBhm0FJk9e",
+  "name": "Devil: Archduke's Tongue",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mask.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Archduke's Tongue.</strong> When you make a Presence (Diplomacy or Stealth) check, you may roll twice and take the better. You also know whenever a creature within 6 squares tells a deliberate lie.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "devil-archduke",
+    "requirements": "Devil (Infernal)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "devil",
+      "lineage": "Devil (Infernal)",
+      "feature": "archduke",
+      "tierLevel": 3,
+      "version": "1.0.0",
+      "date": "2026-05-15",
+      "npAncestry": true
+    },
+    "fourththing": {
+      "principleSource": "ancestry",
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1778961511892,
+    "modifiedTime": 1782167240129,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "folder": "tOM0KLv9UgMPUDOT",
+  "sort": 200000,
+  "_key": "!items!aoCij1hBhm0FJk9e"
+}

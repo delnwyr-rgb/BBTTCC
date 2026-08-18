@@ -1,0 +1,145 @@
+{
+  "name": "Worker's Leathers",
+  "type": "armor",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/aurablade_florensis.png",
+  "system": {
+    "guardBonus": 1,
+    "evasionBonus": 1,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "weave",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "light",
+      "leather",
+      "utility"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Heavy work jacket, reinforced gloves, and a thigh-strap of tool loops. The standard kit for hex-laborers, salvage crews, scrap-line foremen, and anyone whose day involves both sharp edges and difficult conversations with their employer. Not glamorous. Hard to ruin.</p><p><strong>Standard Issue.</strong> Counts as armor for protection rolls and as gear for any skill check you can talk your way into calling \"work.\"</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Light</p></li><li><p><strong>Defense:</strong> Guard +1, Evasion +1</p></li><li><p><strong>Requires:</strong> Weave (trained)</p></li><li><p><strong>Tier:</strong> I</p></li><li><p><strong>Cost:</strong> 75 Nonlethal marks</p></li></ul>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Built for the kind of day where something might fall on you.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Heavy work jacket, reinforced gloves, and a thigh-strap of tool loops. The standard kit for hex-laborers, salvage crews, scrap-line foremen, and anyone whose day involves both sharp edges and difficult conversations with their employer. Not glamorous. Hard to ruin.</p><p><b>Standard Issue.</b> Counts as armor for protection rolls and as gear for any skill check you can talk your way into calling \"work.\"</p>",
+          "materialOf": [
+            "work-leather",
+            "rivet-strap",
+            "tool-loop"
+          ],
+          "price": {
+            "marks": 75,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI armor stamp",
+            "bound": "free",
+            "saleBack": 30
+          }
+        }
+      }
+    }
+  },
+  "folder": "2yW6O57xUFtROfpB",
+  "_id": "PD8W17Vwk2Bvw0sr",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.evasion",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "wYpVcJpecmF8ZKHo",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781726107285,
+        "modifiedTime": 1781726107285,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!PD8W17Vwk2Bvw0sr.wYpVcJpecmF8ZKHo"
+    }
+  ],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777862455333,
+    "modifiedTime": 1781918639468,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!PD8W17Vwk2Bvw0sr"
+}

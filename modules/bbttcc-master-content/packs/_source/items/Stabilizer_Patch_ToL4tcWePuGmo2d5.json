@@ -1,0 +1,132 @@
+{
+  "name": "Stabilizer Patch",
+  "type": "consumable",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_stabilizer_patch.jpeg",
+  "system": {
+    "description": {
+      "value": "<p>Adhesive med patch. Bonus Action: remove 1 level of Stress from environmental travel once per day.</p>",
+      "chat": ""
+    },
+    "rarity": "common",
+    "price": {
+      "value": 20,
+      "denomination": "gp"
+    },
+    "type": {
+      "value": "potion",
+      "subtype": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "autoDestroy": false,
+      "max": ""
+    },
+    "identifier": "stabilizer-patch",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "identified": true,
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "attunement": "",
+    "attuned": false,
+    "equipped": false,
+    "damage": {
+      "base": {
+        "types": [],
+        "custom": {
+          "enabled": false
+        },
+        "scaling": {
+          "number": 1
+        }
+      },
+      "replace": false
+    },
+    "properties": []
+  },
+  "flags": {
+    "bbttcc": {
+      "tags": []
+    },
+    "rfi": {
+      "item": {
+        "tier": "I",
+        "footprint": 0,
+        "reach": "self",
+        "frame": "consumable",
+        "signature": "",
+        "origin": "looted",
+        "originator": null,
+        "bound": "free",
+        "upkeep": {
+          "mode": "passive",
+          "per": "none"
+        },
+        "misfire": {
+          "tierClamp": true,
+          "table": null
+        },
+        "signals": {}
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          },
+          "tier": "I",
+          "frame": "consumable",
+          "origin": "looted",
+          "bound": "free",
+          "reach": "self",
+          "footprint": 0,
+          "legacySystem": {
+            "description": {
+              "value": "<p>Adhesive med patch. Bonus Action: remove 1 level of Stress from environmental travel once per Soma Break.</p>"
+            }
+          }
+        }
+      }
+    }
+  },
+  "effects": [],
+  "folder": "TNrB6kEiHS0KwwJT",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1767834204855,
+    "modifiedTime": 1782164185976,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "ToL4tcWePuGmo2d5",
+  "sort": 1900000,
+  "_key": "!items!ToL4tcWePuGmo2d5"
+}

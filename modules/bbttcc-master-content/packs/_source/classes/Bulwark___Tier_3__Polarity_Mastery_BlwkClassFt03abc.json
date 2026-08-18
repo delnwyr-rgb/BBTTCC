@@ -1,0 +1,83 @@
+{
+  "name": "Bulwark — Tier 3: Polarity Mastery",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_scales.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>Your Path's resource-generation rules learn a second voice.</em></p><p><strong>At Bulwark Initiation 11</strong>, your doctrine's pool-generation logic extends. Apply the rule for your chosen Path:</p><ul><li><p><strong>Path of the Avalanche.</strong> In addition to your normal Frame generation, gain 1 Frame Die when you score a successful melee strike (any roll where at least one die rolled before explosions shows ≥ 8). 1/turn cap.</p></li><li><p><strong>Path of the Mountain.</strong> In addition to your normal Ruin generation, gain 1 Ruin Charge when you take damage from a single instance of any source while remaining upright. 1/turn cap.</p></li><li><p><strong>Path of the Cataclyst.</strong> Once per round, you may swap 1 Frame Die for 1 Ruin Charge or vice versa as a free action (no action economy cost). The transferred die/charge is not 'charged' (see Cataclyst L1).</p></li></ul>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "bulwark_tier3_polarity_mastery",
+    "requirements": "Bulwark Initiation 11",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "classfeat",
+      "classIdentifier": "bulwark",
+      "tierLevel": 3,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {},
+      "triggers": [
+        {
+          "event": "on-attack-hit",
+          "predicate": {
+            "tag": [
+              "melee"
+            ],
+            "dieMin": 8
+          },
+          "effect": {
+            "kind": "grant-resource",
+            "args": {
+              "resource": "frame-die",
+              "amount": 1,
+              "target": "self"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "rWwlRrTVc3OdPSZA",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777003646526,
+    "modifiedTime": 1781116125781,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BlwkClassFt03abc",
+  "sort": 0,
+  "_key": "!items!BlwkClassFt03abc"
+}

@@ -1,0 +1,82 @@
+{
+  "name": "Black Stair L5: The Threshold Is A Lie",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_ghostly_runner_invisible.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "RFI-native",
+      "revision": 1,
+      "book": "Bulwark + Shadow Courier v1.0",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Wards aren't walls. They're paperwork.</em></p><p>When you use your class's <strong>The Crossing</strong> ability (Class Tier 2) on a magical barrier, treat the barrier's check DC as if it were <strong>2 lower</strong>.</p><p>Additionally, you leave <strong>no magical trace</strong> of the crossing — divination cast after the fact does not reveal that you passed, no alarm aftermath fires, no scrying residue lingers — <strong>unless</strong> the barrier was <em>specifically warded against your character or class</em>. Most weren't, because most wardmakers don't know you exist.</p><p>If a barrier is specifically warded against you, the DC reduction still applies, but the no-trace effect does not.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "shadow_courier_blackstair_l5_threshold_is_a_lie",
+    "requirements": "Route of the Black Stair, Shadow Courier Initiation 5",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "shadow_courier",
+      "subclassIdentifier": "bbttcc-shadow-courier-courier-black-stair",
+      "subclassLevel": 5,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {},
+      "triggers": [
+        {
+          "event": "on-feature-use",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Wards aren't walls. They're paperwork. When you use your class's The Crossing ability (Class Tier 2) on a magical barrier, treat the barrier's check DC as if it were 2 lower"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "eQl1GnJxLhG4BD19",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777005233908,
+    "modifiedTime": 1781116151011,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ShdwBlkFtL05abcd",
+  "sort": 200000,
+  "_key": "!items!ShdwBlkFtL05abcd"
+}

@@ -1,0 +1,67 @@
+{
+  "name": "Reverse-Anvil",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_explosion_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You know where to hit a machine so it hits itself.”</em></p><p>As a <strong>bonus action</strong>, you can target one <strong>construct</strong> or machine-like creature you can see within <strong>6 squares</strong>.</p><ul><li>The target must succeed on a <strong>Body check</strong> (DC = 8 + your tier + your Mind or Soul modifier; choose when you gain this feature) or suffer internal backlash.</li><li>On a failure, the target has <strong>disadvantage</strong> on the next attack roll it makes before the end of its next turn.</li><li>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": "@prof"
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-spark-reclaimer-reverse-anvil",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 10, Forge of the Spark Reclaimer",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "BvmSP1PPc1ABT2OO",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_sparkreclaimer",
+      "featureKey": "reverse_anvil"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459996551,
+    "modifiedTime": 1782167240816,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "L4lvU04xw7AliIK3",
+  "sort": 187500,
+  "_key": "!items!L4lvU04xw7AliIK3"
+}

@@ -1,0 +1,49 @@
+{
+  "name": "Temporal Afterimage",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hourglass_1.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "5e-port"
+    ],
+    "description": {
+      "value": "<p>Attack rolls against the wraith are made with disadvantage until the start of its next turn after it moves 2 squares or more.</p>",
+      "chat": ""
+    }
+  },
+  "_id": "YjizstQaGEskq9p7",
+  "effects": [],
+  "sort": 0,
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Slippage Wraith"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782167245002,
+    "modifiedTime": 1782167245002,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!YjizstQaGEskq9p7"
+}

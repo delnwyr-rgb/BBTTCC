@@ -1,0 +1,122 @@
+{
+  "name": "Hazard Prediction Matrix",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_27.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Hazard Prediction Matrix.</strong> Your gut runs simulations a few seconds ahead of everyone else.</p><ul><li>You gain a small mechanical bonus on <strong>Intrigue check</strong> made to avoid <strong>traps, collapsing structures, and sudden environmental hazards</strong>.</li><li>When you or your party would trigger a hazard tied to a symbolic anomaly (Qliphothic residue, misaligned ley-line, unstable Spark field), the GM may allow you a <strong>last-moment Perception (Mind) or Occult (Mind) check</strong> to notice and warn others before it goes off.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "hazard-prediction-matrix",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 4
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (4th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Hazard Prediction Matrix (Dex Save Edge)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cast_1.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984383,
+        "modifiedTime": 1777346197752
+      },
+      "_id": "slNTO4rUEcAesafT",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.abilities.dex.bonuses.save",
+            "value": "+1",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.hazardPredictionMatrix",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!5Ol7xTa7nbHAorK1.slNTO4rUEcAesafT"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "hazardPredictionMatrix": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984383,
+    "modifiedTime": 1781116114247,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "5Ol7xTa7nbHAorK1",
+  "sort": 550000,
+  "_key": "!items!5Ol7xTa7nbHAorK1"
+}

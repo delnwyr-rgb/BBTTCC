@@ -1,0 +1,78 @@
+{
+  "name": "Heart-Iron Shaving",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/techno_heart_2_iron.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "heart-iron-shaving"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Curl of heart-iron pulled from the smith's anvil. Used as catalyst in marrow tonics and aurablade compounds; one stack equals one full bar shaved.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "A flake that hums.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Curl of heart-iron pulled from the smith's anvil. Used as catalyst in marrow tonics and aurablade compounds; one stack equals one full bar shaved.</p>",
+          "charges": 5,
+          "materialKey": "heart-iron-shaving",
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI material stamp",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "H35CO4rSxpFwBbAC",
+  "effects": [],
+  "sort": 462500,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137161835,
+    "modifiedTime": 1782156674943,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!H35CO4rSxpFwBbAC"
+}

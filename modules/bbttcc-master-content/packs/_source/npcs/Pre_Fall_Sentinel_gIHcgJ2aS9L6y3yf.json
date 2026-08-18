@@ -1,0 +1,961 @@
+{
+  "name": "Pre-Fall Sentinel",
+  "type": "npc",
+  "img": "art/devin-knight/Robots_24/Robot2.webp",
+  "system": {
+    "role": "hardened",
+    "tier": 2,
+    "factionId": "",
+    "notes": "A relic guardian still patrolling a pre-Fall installation. Doesn't recognize the new world.",
+    "details": {
+      "level": 2,
+      "tier": 2,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 3
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 5
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 3
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 50,
+        "max": 50
+      },
+      "stress": {
+        "value": 25,
+        "max": 25
+      },
+      "guard": {
+        "value": 12
+      },
+      "evasion": {
+        "value": 12
+      },
+      "resolve": {
+        "value": 12
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "kinetic",
+        "radiant"
+      ],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [
+      "charmed",
+      "shaken",
+      "compelled"
+    ],
+    "tags": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "II",
+          "bracket": "medium",
+          "archetype": "pre-fall-sentinel",
+          "bestiary": {
+            "themes": [
+              "construct",
+              "pre-fall",
+              "guardian"
+            ],
+            "role": "hardened",
+            "lootTable": [
+              {
+                "name": "Pre-Fall Component",
+                "qty": "1",
+                "weight": 2
+              },
+              {
+                "name": "Heart-Coil",
+                "qty": "1",
+                "weight": 3
+              },
+              {
+                "name": "Scribed Steel",
+                "qty": "1",
+                "weight": 4
+              }
+            ]
+          },
+          "price": {
+            "marks": 1080,
+            "bounty": 1080,
+            "hire": 2700,
+            "ransom": 1800,
+            "currency": "intrigue",
+            "gmOverride": false,
+            "notes": "TII medium hardened (bestiary) — bounty 1080 / hire 2700 / ransom 1800 marks (paid in intrigue)"
+          }
+        }
+      }
+    }
+  },
+  "_id": "gIHcgJ2aS9L6y3yf",
+  "prototypeToken": {
+    "name": "Pre-Fall Sentinel",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/devin-knight/Robots_24/Robot2.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "name": "Outdated Recognition",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_robot.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [
+          "seed-bestiary-attacks",
+          "tier-ii",
+          "role-hardened",
+          "passive"
+        ],
+        "description": {
+          "value": "<p>The sentinel has resistance to kinetic and sephirotic damage and is immune to Charmed / Shaken / Compelled. Treats anyone without proper pre-fall credentials as a hostile intruder (i.e., everyone alive).</p><p><em>It is still patrolling. The patrol route includes the place you are standing.</em></p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "advancement": {},
+        "identifier": "",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "trait"
+            }
+          }
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "6ut7GT8pCAhpdWjS": 3
+      },
+      "_id": "bNgUqQrropa4h0Uh",
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1780118739261,
+        "modifiedTime": 1780163239896,
+        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!actors.items!gIHcgJ2aS9L6y3yf.bNgUqQrropa4h0Uh"
+    },
+    {
+      "name": "Pre-Fall Halberd",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_spear.png",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d10",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "polearm-edge",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 2,
+          "long": 2
+        },
+        "tags": [
+          "seed-bestiary-attacks",
+          "tier-ii",
+          "role-hardened"
+        ],
+        "effect": "On a hit, the target must succeed a DC 13 Body save or be pushed 5 ft. (the sentinel is enforcing a perimeter, not killing).",
+        "flavor": "The blade has not been sharpened since before the Fall. It does not need to be.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> reach 2 squares, one target. Damage: <code>1d10</code> kinetic (polearm-edge) + violence. On a hit, the target must succeed a DC 13 Body check or be pushed 1 square (the sentinel is enforcing a perimeter, not killing).</p><p><em>The blade has not been sharpened since before the Fall. It does not need to be.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "attack",
+              "price": {
+                "marks": 150,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII attack × 1",
+                "bound": "free",
+                "saleBack": 60
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "ft-pre-fall-halberd",
+          "label": "Pre-Fall Halberd",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "sword",
+              "variant": "01",
+              "color": "white",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "6ut7GT8pCAhpdWjS": 3
+      },
+      "_id": "gpH9ZiUMjDDkIjiY",
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1780118739261,
+        "modifiedTime": 1782167243833,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!actors.items!gIHcgJ2aS9L6y3yf.gpH9ZiUMjDDkIjiY"
+    },
+    {
+      "name": "Classification Scan",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_surveillance.png",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "ranged",
+        "damage": {
+          "formula": "1d10",
+          "attribute": "violence",
+          "type": "energy",
+          "damageFlavor": "scan-beam",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 12,
+          "long": 36
+        },
+        "tags": [
+          "seed-bestiary-attacks",
+          "tier-ii",
+          "role-hardened"
+        ],
+        "effect": "On a hit, target is flagged: until the sentinel falls, ALL pre-fall constructs within 1 mile know the target's exact position. Cumulative — multiple scans deepen the flag.",
+        "flavor": "A blue line touches you. You feel briefly less alone, and very afraid.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p><strong>Strike.</strong> range 12/36 squares, one target. Damage: <code>1d10</code> energy (scan-beam) + violence. On a hit, target is flagged: until the sentinel falls, ALL pre-fall constructs within 1 mile know the target's exact position. Cumulative — multiple scans deepen the flag.</p><p><em>A blue line touches you. You feel briefly less alone, and very afraid.</em></p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "attack",
+              "price": {
+                "marks": 150,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII attack × 1",
+                "bound": "free",
+                "saleBack": 60
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "ft-classification-scan",
+          "label": "Classification Scan",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "spell",
+              "animation": "magicmissile",
+              "variant": "01",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "6ut7GT8pCAhpdWjS": 3
+      },
+      "_id": "qdEBwv1COiqpPRuR",
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1780118739261,
+        "modifiedTime": 1782167243834,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_key": "!actors.items!gIHcgJ2aS9L6y3yf.qdEBwv1COiqpPRuR"
+    }
+  ],
+  "effects": [],
+  "folder": "uMhSIaldbbcnBh0H",
+  "ownership": {
+    "default": 0,
+    "6ut7GT8pCAhpdWjS": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1780118739261,
+    "modifiedTime": 1783219918005,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 600000,
+  "_key": "!actors!gIHcgJ2aS9L6y3yf"
+}

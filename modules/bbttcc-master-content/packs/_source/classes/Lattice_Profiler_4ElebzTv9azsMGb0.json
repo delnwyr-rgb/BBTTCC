@@ -1,0 +1,115 @@
+{
+  "name": "Lattice Profiler",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_22.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Lattice Profiler.</strong> You can run a mental profiler on the world’s underlying lattice and get a sanity check back.</p><ul><li>Once per scene, you can spend an action or one minute of focused observation to “profile” a <strong>hex, faction, or Spark</strong>.</li><li>Make an <strong>Occult (Mind) or Insight (Soul)</strong> check (DC set by the GM). On a success, you get a <strong>diagnostic summary</strong>: current tilt, major stressors, hidden risks, and the single most effective kind of action to improve its state (violence, diplomacy, Tikkun, infrastructure, etc.).</li><li>Even on a failure, the GM may give you a “noisy” read: you know something is badly off, just not what.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "lattice-profiler",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 18
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (18th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Lattice Profiler",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bunker_5.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984382,
+        "modifiedTime": 1777346197695
+      },
+      "_id": "4VEFnnV3XRjb1Fgw",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.latticeProfiler",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!4ElebzTv9azsMGb0.4VEFnnV3XRjb1Fgw"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "latticeProfiler": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984382,
+    "modifiedTime": 1781116112204,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "4ElebzTv9azsMGb0",
+  "sort": 556250,
+  "_key": "!items!4ElebzTv9azsMGb0"
+}

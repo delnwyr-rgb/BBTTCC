@@ -1,0 +1,92 @@
+{
+  "_id": "e942ef206acef7f6",
+  "name": "Oldenborn (Rustland Scavenger): Urban Scrounger",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_oldenborn_1.png",
+  "system": {
+    "category": "feature",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 2,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Markets, junkyards, half-dead malls. Your habitat.”</em></p>\n<p><strong>Urban Scrounger.</strong> When you spend at least 4 hours searching any market, junkyard, ruin, or scrap economy, you can find one specific reasonable item the GM rules is plausibly available there. The item must be something an attentive scavenger could realistically locate (no plot keys, no unique relics) and may cost trade goods or favours appropriate to the place.</p>\n<p><strong>Reading the Rust.</strong> You reroll the lowest die on Investigation checks to find concealed compartments, hidden stashes, or pre-collapse infrastructure (vents, conduits, sub-tunnels) inside ruined or formerly-inhabited structures.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "oldenborn-rustland-urban-scrounger",
+    "requirements": "Oldenborn (Rustland Scavenger)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "oldenborn",
+      "feature": "urban_scrounger",
+      "lineage": "Rustland Scavenger",
+      "tierLevel": 11,
+      "version": "2.0.0",
+      "date": "2026-04-19"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "skill": "investigation",
+          "mode": "reroll-lowest",
+          "note": "on Investigation (Mind) (Mind) checks [TODO(adv-call)] to find concealed comp…"
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-search",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Markets, junkyards, half-dead malls. Your habitat.” Urban Scrounger. When you spend at least 4 hours searching any market, junkyard, ruin, or scrap economy, you can find one specific reasonable item the GM rules is p..."
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "sLAoXdttpeuRXEex",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776600000000,
+    "modifiedTime": 1781116090490,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 250000,
+  "_key": "!items!e942ef206acef7f6"
+}

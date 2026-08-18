@@ -1,0 +1,65 @@
+{
+  "_id": "rOs07Ok3ScQGoJWQ",
+  "name": "Annotator: Correspondence Mastery",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_10.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"2353\" data-end=\"2391\">You master one correspondence channel.</p><p data-start=\"2393\" data-end=\"2417\">Choose one manifestation school.</p><p data-start=\"2419\" data-end=\"2503\">Once per Soma Break (or for one casting), treat that school as aligned for timing purposes.</p><p data-start=\"2505\" data-end=\"2510\">This:</p><ul data-start=\"2511\" data-end=\"2570\"><li data-start=\"2511\" data-end=\"2547\"><p data-start=\"2513\" data-end=\"2547\">Generates Resonance as if aligned.</p></li><li data-start=\"2548\" data-end=\"2570\"><p data-start=\"2550\" data-end=\"2570\">Reduces Strain risk.</p></li></ul><p data-start=\"2572\" data-end=\"2659\">You have internalized that channel’s grammar so completely that it answers when called.</p>",
+      "chat": ""
+    },
+    "identifier": "annotator_correspondence_mastery",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "annotator_correspondence_mastery"
+    }
+  },
+  "folder": "7fCEbHBaAKFkEuHN",
+  "sort": 600000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.rOs07Ok3ScQGoJWQ",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459923345,
+    "modifiedTime": 1782167240829,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!rOs07Ok3ScQGoJWQ"
+}

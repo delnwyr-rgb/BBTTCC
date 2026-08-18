@@ -1,0 +1,70 @@
+{
+  "name": "Terraforming Project",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_terraforming_project.png",
+  "system": {
+    "description": {
+      "value": "<p><b>Terraforming Project</b></p><p>Cleanse 1 Corrupted Hex.</p><p><b>Cost:</b> Economy 4 • Faith 4</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>strategic</code> • <code>terraforming_project</code></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "terraforming-project",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "terraforming_project",
+      "meta": {
+        "tier": 3,
+        "rarity": "very rare",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": null,
+        "unlockKey": null
+      }
+    }
+  },
+  "_id": "engiJTCo26z3g6uw",
+  "effects": [],
+  "folder": "UpsmhFcQUtMCrYu2",
+  "sort": 6900000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1771977109852,
+    "modifiedTime": 1775063189270,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!items!engiJTCo26z3g6uw"
+}

@@ -1,0 +1,67 @@
+{
+  "name": "Refracted Attention",
+  "type": "feat",
+  "img": "icons/magic/perception/eye-ringed-glow-angry-blue.webp",
+  "folder": "QbGNBV70xh9pF0eh",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC Manifestation Techniques v1",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2>Refracted Attention</h2><p><em>Through the lens, one mind looks out of many windows.</em></p><hr /><h3>Rules</h3><p>While your <strong>Refraction</strong> stance is active, you split your focus across more threads: hold <strong>+1 manifestation</strong> and pay only <strong>three-quarters</strong> upkeep on what you sustain.</p><p style=\"font-size:0.8rem;opacity:0.85;margin:0.5rem 0 0\"><strong>Requires:</strong> Wyrdlens-Adept</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">⚙ Applies automatically while the Refraction stance is active: +1 concurrency, upkeep ×0.75.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_refracted_attention",
+    "requirements": "Wyrdlens-Adept",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-manifestation-techniques-v1",
+      "theme": "Concurrency & upkeep"
+    },
+    "fourththing": {
+      "discipline": {
+        "mode": {
+          "key": "wlRefraction",
+          "grants": {
+            "concurrencyBonus": 1,
+            "upkeepScale": 0.75
+          }
+        }
+      }
+    }
+  },
+  "_id": "sRlow24HYNfaPaE5",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782190568159,
+    "modifiedTime": 1782190568159,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!sRlow24HYNfaPaE5"
+}

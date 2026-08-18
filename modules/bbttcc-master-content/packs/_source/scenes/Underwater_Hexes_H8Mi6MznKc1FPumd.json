@@ -1,0 +1,23 @@
+{
+  "type": "Scene",
+  "folder": null,
+  "name": "Underwater Hexes",
+  "color": null,
+  "sorting": "a",
+  "_id": "H8Mi6MznKc1FPumd",
+  "description": "",
+  "sort": 1400000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982556921,
+    "modifiedTime": 1783982557022,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!H8Mi6MznKc1FPumd"
+}

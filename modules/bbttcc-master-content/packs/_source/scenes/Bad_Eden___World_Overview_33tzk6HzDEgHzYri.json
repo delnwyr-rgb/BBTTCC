@@ -1,0 +1,426 @@
+{
+  "name": "Bad Eden — World Overview",
+  "width": 4800,
+  "height": 3584,
+  "padding": 0.25,
+  "grid": {
+    "type": 0,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 5,
+    "color": "#ddbf4a",
+    "alpha": 0.2,
+    "distance": 1,
+    "units": "m"
+  },
+  "initial": {
+    "x": null,
+    "y": null,
+    "scale": null
+  },
+  "flags": {
+    "bbttcc-travel": {
+      "isWorldHub": true
+    },
+    "wall-height": {
+      "advancedVision": true
+    }
+  },
+  "_id": "33tzk6HzDEgHzYri",
+  "navigation": false,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-4cv9YPZdE75jnpV5QdW6ng.webp",
+  "shiftX": 0,
+  "shiftY": 0,
+  "initialLevel": "defaultLevel0000",
+  "tokenVision": false,
+  "fog": {
+    "mode": 1,
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    }
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": false,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "drawings": [
+    {
+      "author": "bytUGWIOqq9eT7Or",
+      "x": 1745,
+      "y": 1405,
+      "shape": {
+        "type": "r",
+        "width": 1511,
+        "height": 1357,
+        "radius": null,
+        "points": []
+      },
+      "fillType": 1,
+      "fillColor": "#9c7b4d",
+      "fillAlpha": 0,
+      "strokeWidth": 6,
+      "strokeColor": "#e8cfa0",
+      "strokeAlpha": 0,
+      "text": "The Iron Reaches",
+      "textColor": "#ffffff",
+      "fontSize": 100,
+      "flags": {
+        "bbttcc-travel": {
+          "regionLink": {
+            "targetSceneUuid": "Scene.mjV0QxxlmeZj4EHj",
+            "label": "The Iron Reaches"
+          }
+        }
+      },
+      "_id": "BToGDbNpKFXD1y5e",
+      "elevation": 0,
+      "levels": [],
+      "sort": 0,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!33tzk6HzDEgHzYri.BToGDbNpKFXD1y5e"
+    },
+    {
+      "author": "bytUGWIOqq9eT7Or",
+      "x": 3355,
+      "y": 1392,
+      "shape": {
+        "type": "r",
+        "width": 1291,
+        "height": 1167,
+        "radius": null,
+        "points": []
+      },
+      "fillType": 1,
+      "fillColor": "#c9a23a",
+      "fillAlpha": 0,
+      "strokeWidth": 6,
+      "strokeColor": "#f3e0a0",
+      "strokeAlpha": 0,
+      "text": "The Northern Marches",
+      "textColor": "#ffffff",
+      "fontSize": 100,
+      "flags": {
+        "bbttcc-travel": {
+          "regionLink": {
+            "targetSceneUuid": "Scene.X7XmEyebKXwjMlTW",
+            "label": "The Northern Marches"
+          }
+        }
+      },
+      "_id": "Lo2HI49MkvOAGOXH",
+      "elevation": 0,
+      "levels": [],
+      "sort": 0,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!33tzk6HzDEgHzYri.Lo2HI49MkvOAGOXH"
+    },
+    {
+      "author": "bytUGWIOqq9eT7Or",
+      "x": 4590,
+      "y": 1608,
+      "shape": {
+        "type": "r",
+        "width": 1071,
+        "height": 1167,
+        "radius": null,
+        "points": []
+      },
+      "fillType": 1,
+      "fillColor": "#3aa0c9",
+      "fillAlpha": 0,
+      "strokeWidth": 6,
+      "strokeColor": "#bfe8f3",
+      "strokeAlpha": 0,
+      "text": "The Saltwake Coast",
+      "textColor": "#ffffff",
+      "fontSize": 100,
+      "flags": {
+        "bbttcc-travel": {
+          "regionLink": {
+            "targetSceneUuid": "Scene.ve5hTwcmNddNlPxW",
+            "label": "The Saltwake Coast"
+          }
+        }
+      },
+      "_id": "jUW50kGI4bFbFv5M",
+      "elevation": 0,
+      "levels": [],
+      "sort": 0,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!33tzk6HzDEgHzYri.jUW50kGI4bFbFv5M"
+    },
+    {
+      "author": "bytUGWIOqq9eT7Or",
+      "x": 2862,
+      "y": 2267,
+      "shape": {
+        "type": "r",
+        "width": 1401,
+        "height": 1357,
+        "radius": null,
+        "points": []
+      },
+      "fillType": 1,
+      "fillColor": "#4bbf6a",
+      "fillAlpha": 0,
+      "strokeWidth": 6,
+      "strokeColor": "#c8f3d4",
+      "strokeAlpha": 0,
+      "text": "The River Heart",
+      "textColor": "#ffffff",
+      "fontSize": 100,
+      "flags": {
+        "bbttcc-travel": {
+          "regionLink": {
+            "targetSceneUuid": "Scene.zjVbB2ykTV6PcSiv",
+            "label": "The River Heart"
+          }
+        }
+      },
+      "_id": "2Bj0UobIX9WnNAdd",
+      "elevation": 0,
+      "levels": [],
+      "sort": 0,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!33tzk6HzDEgHzYri.2Bj0UobIX9WnNAdd"
+    },
+    {
+      "author": "bytUGWIOqq9eT7Or",
+      "x": 4237,
+      "y": 2685,
+      "shape": {
+        "type": "r",
+        "width": 1401,
+        "height": 1167,
+        "radius": null,
+        "points": []
+      },
+      "fillType": 1,
+      "fillColor": "#3a5ec9",
+      "fillAlpha": 0,
+      "strokeWidth": 6,
+      "strokeColor": "#bfc8f3",
+      "strokeAlpha": 0,
+      "text": "The Drowned South",
+      "textColor": "#ffffff",
+      "fontSize": 100,
+      "flags": {
+        "bbttcc-travel": {
+          "regionLink": {
+            "targetSceneUuid": "Scene.PCLBxi4TNR5rfDaE",
+            "label": "The Drowned South"
+          }
+        }
+      },
+      "_id": "oZj27xuzThD2Da6w",
+      "elevation": 0,
+      "levels": [],
+      "sort": 0,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!33tzk6HzDEgHzYri.oZj27xuzThD2Da6w"
+    }
+  ],
+  "tokens": [],
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "Level",
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/bad_eden_new_v2.webp",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!33tzk6HzDEgHzYri.defaultLevel0000"
+    }
+  ],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/bad_eden_map_label.webp",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 2019,
+      "y": 3504,
+      "width": 1406,
+      "height": 1050,
+      "rotation": 0,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": true,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "_id": "MlmeF1vupw6vZqQM",
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_key": "!scenes.tiles!33tzk6HzDEgHzYri.MlmeF1vupw6vZqQM"
+    }
+  ],
+  "walls": [],
+  "playlist": "Dc6VRpV2CbLGvrVx",
+  "playlistSound": "R4vvcG04CSwRG1fp",
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "folder": "STndwgHlZB2v21rM",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982583683,
+    "modifiedTime": 1783982593700,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "navName": "",
+  "active": false,
+  "navOrder": 0,
+  "sort": 103125,
+  "_key": "!scenes!33tzk6HzDEgHzYri",
+  "templates": []
+}

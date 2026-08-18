@@ -1,0 +1,98 @@
+{
+  "_id": "k8xjtKEZHM2XVq6t",
+  "name": "Oldenborn (Rustland Scavenger): Ruin-Sense",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_oldenborn_1.png",
+  "system": {
+    "category": "feature",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 2,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“The dead cities are not silent. They are mid-sentence.”</em></p>\n<p><strong>Ruin-Sense.</strong> When you spend 10 minutes examining a broken or ruined object, you can ask the GM one of: <em>What was its last use? Who broke it? What does it still want?</em> The answer is at least one truth.</p>\n<p><strong>Scavenger’s Eye (1/Soma Break).</strong> Spend 10 minutes searching a rubble pile, gutted building, or wreckage of any kind. You recover one minor useful item — the GM picks from a short list of plausible salvage (a half-charged battery, a length of usable wire, a sealed container of clean water, a still-edible ration, a tool of one trade). It is what the place actually had.</p>\n<p><strong>Toxic-Lung Filters.</strong> You reroll the lowest die on checks against airborne poisons, toxic gas, and rad-dust. You can hold your breath for 10 minutes.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "oldenborn-rustland-ruin-sense",
+    "requirements": "Oldenborn (Rustland Scavenger)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "oldenborn",
+      "feature": "ruin_sense",
+      "lineage": "Rustland Scavenger",
+      "tierLevel": 0,
+      "version": "2.0.0",
+      "date": "2026-04-18"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "save",
+          "mode": "reroll-lowest",
+          "vs": "vs:airborne poisons",
+          "note": "on saves against airborne poisons, toxic gas, and rad-dust"
+        },
+        {
+          "context": "save",
+          "mode": "reroll-lowest",
+          "vs": "vs:airborne poisons",
+          "note": "saves against airborne poisons, toxic gas, and rad-dust"
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-search",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "The dead cities are not silent. They are mid-sentence.” Ruin-Sense. When you spend 10 minutes examining a broken or ruined object, you can ask the GM one of: What was its last use? Who broke it? What does it still wa..."
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "sLAoXdttpeuRXEex",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776543000000,
+    "modifiedTime": 1782167240133,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 200000,
+  "_key": "!items!k8xjtKEZHM2XVq6t"
+}

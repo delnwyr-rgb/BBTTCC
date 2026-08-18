@@ -1,0 +1,66 @@
+{
+  "folder": "nYigXqM8gzOLaEjm",
+  "name": "Oannes",
+  "_id": "OpbBZuNl6F81c2e4",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "Fish gods are a big deal. Jut ask Jesus.",
+      "type": "text",
+      "_id": "O0s5JsDeVs0vnYhU",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p><strong>Gloomgill (Once Called Oannes)</strong></p><p class=\"p2\"><em>A Brief and Increasingly Irritated Lore (Mind), in Mal Voice</em></p><p class=\"p2\">Before there were cities that thought themselves clever, before laws learned to wear robes and crowns, there was <strong>Oannes</strong>.</p><p class=\"p2\">He came from the sea.</p><p class=\"p2\">Not in conquest.<br>Not in fire.<br>But in <em>instruction</em>.</p><p class=\"p2\">He rose from the water draped in scales and silence, half-man and half-fish, and he <strong>taught</strong>. Writing. Counting. Measuring. Building things that stayed built. He taught people how not to starve in predictable ways. How to argue without immediately killing one another. How to remember yesterday long enough to improve tomorrow.</p><p class=\"p2\">Then, when the sun set, he went back into the sea.</p><p class=\"p2\">Every day, for years.</p><p class=\"p2\">No temples demanded.<br>No sacrifices required.<br>Just <em>pay attention</em>.</p><p class=\"p2\">And people did—at first.</p><p class=\"p2\">They wrote some of it down. They remembered pieces. They built cities and called themselves advanced. They forgot the parts that were inconvenient. They weaponized the rest. They decided they were done learning.</p><p class=\"p2\">Oannes waited.</p><p class=\"p2\">Centuries passed. Empires rose, fell, and rebranded their failures. The oceans swallowed coastlines. Names changed. Memory thinned. The lessons became myths, then metaphors, then trivia.</p><p class=\"p2\">Eventually, Oannes came back up.</p><p class=\"p2\">He looked around.<br>Listened.<br>Checked the math.</p><p class=\"p2\">And realized—<em>with a quiet, ancient horror</em>—that almost no one had actually learned the important parts.</p><p class=\"p2\">So he stopped being a teacher.</p><p class=\"p2\">Now he is <strong>Gloomgill</strong>.</p><p class=\"p2\">Because if you’re going to spend eternity checking the homework of history, you might as well pick a name that sounds like a problem.</p><p class=\"p2\">Gloomgill no longer lectures. He <strong>quizzes</strong>.</p><p class=\"p2\">He appears where people are confident and wrong. Where groups believe themselves righteous, clever, or justified. He asks questions that should have answers—about balance, consequence, cooperation, stewardship, restraint. The questions are simple. The implications are not.</p><p class=\"p2\">Correct answers earn grudging approval.<br>Incorrect answers earn <em>follow-up questions</em>.<br>Repeated failure earns attention.</p><p class=\"p2\">He does not destroy civilizations. He has tried that. It doesn’t stick.</p><p class=\"p2\">Instead, Gloomgill <strong>harasses</strong> them.</p><p class=\"p2\">Relentlessly. Patiently. With the Stress of a being who once believed education was enough.</p><p class=\"p2\">Some still call him a god.<br>Some call him a monster.<br>He prefers neither.</p><p class=\"p2\">He is not here to be worshipped.</p><p class=\"p2\">He is here to find out whether <em>anyone</em>, anywhere, finally understood the lesson.</p><p class=\"p2\">And if not—</p><p class=\"p2\">Well.</p><p class=\"p2\">He has all the time in the world to ask again.</p>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1784077421458,
+        "modifiedTime": 1784077421458
+      },
+      "_key": "!journal.pages!OpbBZuNl6F81c2e4.O0s5JsDeVs0vnYhU"
+    }
+  ],
+  "categories": [],
+  "sort": 200000,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784077421458,
+    "modifiedTime": 1784077421458,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!journal!OpbBZuNl6F81c2e4"
+}

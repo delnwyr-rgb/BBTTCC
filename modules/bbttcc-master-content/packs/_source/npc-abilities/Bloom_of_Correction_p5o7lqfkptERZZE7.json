@@ -1,0 +1,49 @@
+{
+  "name": "Bloom of Correction",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_1.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "5e-port"
+    ],
+    "description": {
+      "value": "<p>Radiant petals erupt in a 3 squares radius. On a failure, creatures are also restrained until the start of the Tree Being’s next turn.</p>",
+      "chat": ""
+    }
+  },
+  "_id": "p5o7lqfkptERZZE7",
+  "effects": [],
+  "sort": 0,
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Aggressive Tiferet Tree Person"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782167245009,
+    "modifiedTime": 1782167245009,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!p5o7lqfkptERZZE7"
+}

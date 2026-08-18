@@ -1,0 +1,63 @@
+{
+  "folder": "PzPQUJAx5SvgZeKR",
+  "name": "4. Faction Tracks",
+  "_id": "SgmI1I8XgfOQivo3",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "Care and Feeding For Your Faction",
+      "type": "text",
+      "_id": "uTTGNj4MLLN7gosn",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h1>Measuring the Health of Your Faction</h1><p data-start=\"550\" data-end=\"626\">A faction is more than the territory it controls or the resources it spends.</p><p data-start=\"628\" data-end=\"771\">It is a living organization made up of people, beliefs, and relationships. As the campaign unfolds, the condition of that organization changes.</p><p data-start=\"773\" data-end=\"851\">Faction Tracks represent the <strong data-start=\"802\" data-end=\"850\">overall health and stability of your faction</strong>.</p><p data-start=\"853\" data-end=\"947\">They show how well the organization is functioning and how the world responds to your actions.</p><p data-start=\"949\" data-end=\"1043\">These tracks shift over time as the faction succeeds, struggles, or faces difficult decisions.</p><hr data-start=\"1045\" data-end=\"1048\" /><h1 data-section-id=\"1cokejj\" data-start=\"1050\" data-end=\"1077\">Why Faction Tracks Matter</h1><p data-start=\"1079\" data-end=\"1135\">Faction Tracks help tell the story of your organization.</p><p data-start=\"1137\" data-end=\"1164\">They answer questions like:</p><p data-start=\"1166\" data-end=\"1333\">• Do people still believe in the faction’s mission?<br data-start=\"1217\" data-end=\"1220\" />• Are communities inspired or discouraged by your actions?<br data-start=\"1278\" data-end=\"1281\" />• Is the faction becoming stronger or more unstable?</p><p data-start=\"1335\" data-end=\"1441\">Because of this, faction tracks are constantly influenced by the choices players make during the campaign.</p><p data-start=\"1443\" data-end=\"1564\">A single decision may seem small in the moment, but over time those decisions shape the overall condition of the faction.</p><hr data-start=\"1566\" data-end=\"1569\" /><h1 data-section-id=\"ref2d4\" data-start=\"1571\" data-end=\"1588\">The Core Tracks</h1><p data-start=\"1590\" data-end=\"1662\">Most factions monitor several key measures that reflect their condition.</p><p data-start=\"1664\" data-end=\"1731\">These tracks represent different aspects of the faction’s strength.</p><hr data-start=\"1733\" data-end=\"1736\" /><h2 data-section-id=\"12h7b99\" data-start=\"1738\" data-end=\"1747\">Morale</h2><p data-start=\"1749\" data-end=\"1807\"><strong data-start=\"1749\" data-end=\"1759\">Morale</strong> represents the emotional energy of the faction.</p><p data-start=\"1809\" data-end=\"1968\">When morale is high, people feel hopeful and motivated. Members of the faction believe their work matters and are willing to take risks to achieve their goals.</p><p data-start=\"1970\" data-end=\"2096\">When morale falls, Stress and doubt begin to spread. Members may lose confidence in the mission or become hesitant to act.</p><p data-start=\"2098\" data-end=\"2192\">Morale is influenced by victories, defeats, and the overall progress of the faction’s efforts.</p><hr data-start=\"2194\" data-end=\"2197\" /><h2 data-section-id=\"17lxj1b\" data-start=\"2199\" data-end=\"2209\">Loyalty</h2><p data-start=\"2211\" data-end=\"2297\"><strong data-start=\"2211\" data-end=\"2222\">Loyalty</strong> reflects how strongly people trust the faction’s leadership and direction.</p><p data-start=\"2299\" data-end=\"2401\">High loyalty means that members and communities believe the faction is acting in their best interests.</p><p data-start=\"2403\" data-end=\"2477\">Low loyalty suggests growing distrust, disagreement, or internal conflict.</p><p data-start=\"2479\" data-end=\"2575\">Loyalty can shift when factions make difficult decisions that affect the communities they serve.</p><hr data-start=\"2577\" data-end=\"2580\" /><h2 data-section-id=\"xmaq8q\" data-start=\"2582\" data-end=\"2590\">Unity</h2><p data-start=\"2592\" data-end=\"2671\"><strong data-start=\"2592\" data-end=\"2601\">Unity</strong> represents how well the different parts of the faction work together.</p><p data-start=\"2673\" data-end=\"2770\">A unified faction coordinates effectively, resolves disagreements, and moves toward common goals.</p><p data-start=\"2772\" data-end=\"2912\">Low unity indicates fragmentation within the organization. Rival groups, competing priorities, or ideological divisions may begin to appear.</p><p data-start=\"2914\" data-end=\"2998\">Maintaining unity becomes more challenging as factions grow larger and more complex.</p><hr data-start=\"3000\" data-end=\"3003\" /><h2 data-section-id=\"zqf5gp\" data-start=\"3005\" data-end=\"3015\">Victory</h2><p data-start=\"3017\" data-end=\"3101\"><strong data-start=\"3017\" data-end=\"3028\">Victory</strong> reflects the faction’s overall success in achieving its long-term goals.</p><p data-start=\"3103\" data-end=\"3195\">Every successful expedition, stabilized hex, or defeated threat contributes to this measure.</p><p data-start=\"3197\" data-end=\"3300\">Victory is not only about winning battles. It represents meaningful progress toward the <strong data-start=\"3285\" data-end=\"3299\">Great Work</strong>.</p><p data-start=\"3302\" data-end=\"3368\">As victory increases, the faction’s influence and reputation grow.</p><hr data-start=\"3370\" data-end=\"3373\" /><h2 data-section-id=\"gmvjle\" data-start=\"3375\" data-end=\"3386\">Darkness</h2><p data-start=\"3388\" data-end=\"3471\"><strong data-start=\"3388\" data-end=\"3400\">Darkness</strong> measures the level of corruption or instability affecting the faction.</p><p data-start=\"3473\" data-end=\"3605\">This does not always mean the faction has become malicious. Instead, it reflects the pressure of operating within a fractured world.</p><p data-start=\"3607\" data-end=\"3716\">Darkness may increase when factions make harsh decisions, neglect communities, or allow corruption to spread.</p><p data-start=\"3718\" data-end=\"3804\">Left unchecked, Darkness can weaken the organization and distort its original mission.</p><hr data-start=\"3806\" data-end=\"3809\" /><h1 data-section-id=\"nrhd2k\" data-start=\"3811\" data-end=\"3830\">How Tracks Change</h1><p data-start=\"3832\" data-end=\"3905\">Faction Tracks move up or down based on what happens during the campaign.</p><p data-start=\"3907\" data-end=\"3928\">They may change when:</p><p data-start=\"3930\" data-end=\"4094\">• the faction succeeds or fails in major objectives<br data-start=\"3981\" data-end=\"3984\" />• communities are helped or harmed<br data-start=\"4018\" data-end=\"4021\" />• difficult moral choices are made<br data-start=\"4055\" data-end=\"4058\" />• corruption spreads or is contained</p><p data-start=\"4096\" data-end=\"4189\">Because of this, faction tracks become a record of the story your group is creating together.</p><hr data-start=\"4191\" data-end=\"4194\" /><h1 data-section-id=\"16d1wcg\" data-start=\"4196\" data-end=\"4218\">Balancing the Tracks</h1><p data-start=\"4220\" data-end=\"4282\">Healthy factions usually maintain balance across their tracks.</p><p data-start=\"4284\" data-end=\"4393\">A faction with high victory but low morale may succeed in the short term but struggle to sustain its mission.</p><p data-start=\"4395\" data-end=\"4499\">A faction with strong unity but growing darkness may face difficult ethical questions about its methods.</p><p data-start=\"4501\" data-end=\"4572\">Players often need to decide which goals matter most in a given moment.</p><p data-start=\"4574\" data-end=\"4637\">These decisions shape both the faction and the world around it.</p><hr data-start=\"4639\" data-end=\"4642\" /><h1 data-section-id=\"1duqyks\" data-start=\"4644\" data-end=\"4671\">Tracks and the Great Work</h1><p data-start=\"4673\" data-end=\"4779\">Faction Tracks also reflect how effectively your organization contributes to the restoration of the world.</p><p data-start=\"4781\" data-end=\"4828\">A stable and unified faction is better able to:</p><p data-start=\"4830\" data-end=\"4916\">• rebuild communities<br data-start=\"4851\" data-end=\"4854\" />• stabilize dangerous regions<br data-start=\"4883\" data-end=\"4886\" />• push back against corruption</p><p data-start=\"4918\" data-end=\"5037\">In this way, the condition of your faction directly influences how much progress can be made toward the <strong data-start=\"5022\" data-end=\"5036\">Great Work</strong>.</p><hr data-start=\"5039\" data-end=\"5042\" /><h1 data-section-id=\"jr4o1u\" data-start=\"5044\" data-end=\"5074\">What Players Should Remember</h1><p data-start=\"5076\" data-end=\"5118\">Three simple ideas explain faction tracks.</p><p data-start=\"5120\" data-end=\"5165\"><strong data-start=\"5120\" data-end=\"5165\">1 — Tracks show how your faction is doing</strong></p><p data-start=\"5167\" data-end=\"5225\">They measure the health and stability of the organization.</p><p data-start=\"5227\" data-end=\"5267\"><strong data-start=\"5227\" data-end=\"5267\">2 — Tracks respond to your decisions</strong></p><p data-start=\"5269\" data-end=\"5321\">Every major action can influence one or more tracks.</p><p data-start=\"5323\" data-end=\"5356\"><strong data-start=\"5323\" data-end=\"5356\">3 — Tracks shape the campaign</strong></p><p data-start=\"5358\" data-end=\"5418\">The condition of your faction affects how the story unfolds.</p><hr data-start=\"5420\" data-end=\"5423\" /><h1 data-section-id=\"ex09de\" data-start=\"5425\" data-end=\"5442\">In Simple Terms</h1><p data-start=\"5444\" data-end=\"5510\">Faction Tracks are the <strong data-start=\"5467\" data-end=\"5509\">health indicators of your organization</strong>.</p><p data-start=\"5512\" data-end=\"5590\">They reflect morale, trust, unity, success, and corruption within the faction.</p><p data-start=\"5592\" data-end=\"5746\">As your group explores the world and makes decisions, these tracks change — recording the story of the faction’s rise, struggles, and impact on the world.</p>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.3.0",
+        "lastModifiedBy": null
+      },
+      "_key": "!journal.pages!SgmI1I8XgfOQivo3.uTTGNj4MLLN7gosn"
+    }
+  ],
+  "categories": [],
+  "sort": 200000,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775619860546,
+    "modifiedTime": 1775619860546,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!journal!SgmI1I8XgfOQivo3"
+}

@@ -1,0 +1,1044 @@
+{
+  "name": "Lisa Frank Elemental",
+  "type": "npc",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/lisa_frank_elemental.png",
+  "system": {
+    "role": "Joy Elemental (Saturated)",
+    "tier": 2,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 4
+      },
+      "intrigue": {
+        "value": 6
+      },
+      "presence": {
+        "value": 7
+      },
+      "body": {
+        "value": 5
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 3
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 78,
+        "max": 78
+      },
+      "stress": {
+        "value": 39,
+        "max": 39
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "netzach"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [
+      "5e-port",
+      "cr-4",
+      "Common",
+      "phase2-narrative-applied"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "items": [
+    {
+      "name": "Chromatic Slam",
+      "type": "weapon",
+      "img": "systems/dnd5e/icons/svg/items/weapon.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d8+4",
+          "attribute": "violence",
+          "type": "psychic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "effect": "",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        }
+      },
+      "_id": "P4Cy2BPvBAyqMPrN",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {
+        "autoanimations": {
+          "id": "ft-chromatic-slam",
+          "label": "Chromatic Slam",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "club",
+              "variant": "01",
+              "color": "white",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700829141,
+        "modifiedTime": 1780163239707,
+        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!a9orjOV99MnMObho.P4Cy2BPvBAyqMPrN"
+    },
+    {
+      "name": "Weaponized Whimsy",
+      "type": "feature",
+      "img": "systems/dnd5e/icons/svg/items/feature.svg",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p>When the Lisa Frank Elemental is attacked, it releases a burst of overwhelming color and affirmation.</p><p>Attacker must succeed on a DC 15 Soul check or become <strong>Dazed</strong> until the end of their next turn.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "CZ31MDOUkMad1Ivq",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700829141,
+        "modifiedTime": 1777700829141,
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!a9orjOV99MnMObho.CZ31MDOUkMad1Ivq"
+    },
+    {
+      "name": "Feed on Attention",
+      "type": "feature",
+      "img": "systems/dnd5e/icons/svg/items/feature.svg",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p>Whenever a creature targets the Elemental with an attack, manifestation, or insult, it regains 5 Integrity.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "nOIzi6FZBEUUQXGT",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700829141,
+        "modifiedTime": 1777700829141,
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!a9orjOV99MnMObho.nOIzi6FZBEUUQXGT"
+    },
+    {
+      "name": "Aura of Aggressive Positivity",
+      "type": "feature",
+      "img": "systems/dnd5e/icons/svg/items/feature.svg",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p>Creatures within 2 squares must make a DC 14 Presence check at the start of their turn or suffer roll 3d10 keep lowest 2 on hostile actions against the Elemental.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "WaUsizUwK6GqzyTS",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1777700829141,
+        "modifiedTime": 1782167243687,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!a9orjOV99MnMObho.WaUsizUwK6GqzyTS"
+    },
+    {
+      "name": "Weakness: Boredom",
+      "type": "feature",
+      "img": "systems/dnd5e/icons/svg/items/feature.svg",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p>If ignored for a full round, or if a creature successfully distracts it with a new aesthetic or sincere compliment, the Elemental becomes <strong>Stunned</strong> until the end of its next turn.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "pgiA63TMmONV8aSX",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700829141,
+        "modifiedTime": 1777700829141,
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!a9orjOV99MnMObho.pgiA63TMmONV8aSX"
+    },
+    {
+      "name": "Glitter Aftermath",
+      "type": "feature",
+      "img": "systems/dnd5e/icons/svg/items/feature.svg",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p>When reduced to 0 Integrity, the Elemental explodes into harmless glitter. Any creature present suffers a permanent cosmetic glitter effect and reroll the lowest die on their next Soft Power interaction.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "Mk72XFTfexTORJRL",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1777700829141,
+        "modifiedTime": 1782167243687,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!a9orjOV99MnMObho.Mk72XFTfexTORJRL"
+    },
+    {
+      "name": "Rainbow Cascade",
+      "type": "power",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rainbow.png",
+      "system": {
+        "intent": "presence",
+        "channel": "soul",
+        "sephirah": "netzach",
+        "mode": "working",
+        "clarityRequired": 2,
+        "noiseGain": 1,
+        "activation": "action",
+        "target": "burst",
+        "range": "near",
+        "damage": "2d6",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "none",
+          "number": 0,
+          "die": "d6",
+          "attribute": "",
+          "type": "kinetic",
+          "flavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "effect": "Release a saturated wave. Each creature within near makes a Resolve check; on failure, take 2d6 energy damage and become Charmed for one exchange (they see only beauty in the Elemental).",
+        "tags": [
+          "translated",
+          "5e-port",
+          "phase2-narrative",
+          "manifestation"
+        ],
+        "category": "manifestation",
+        "flavor": "Animal silhouettes briefly inhabit the landscape behind targets — a unicorn, a kitten, a dolphin.",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "An eruption of impossible color and goodwill.",
+          "form": "aura",
+          "function": "charm",
+          "stability": "instant",
+          "interactionModel": "save",
+          "costType": "clarity",
+          "costValue": 2,
+          "costText": "2 Clarity",
+          "duration": "instant",
+          "durationText": "One pulse; Charm lasts one exchange.",
+          "triggerText": "Activated as an Action.",
+          "scale": "scene",
+          "targetText": "All creatures within near.",
+          "rangeAreaText": "Near burst.",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "The Elemental fades by 1 Integrity per Cascade — joy is expensive.",
+          "pathResonance": "Netzach — eternity of art.",
+          "fictionalPermission": "Charmed targets cannot directly attack the Elemental.",
+          "gmCalibration": "Resolve check; energy damage; Charm one exchange.",
+          "mechanicalHook": "AOE save; 2d6 energy + Charmed.",
+          "signature": "Animals appear behind the targets.",
+          "thirdThing": "Anyone Charmed remembers it as the best afternoon of their life.",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          }
+        }
+      },
+      "_id": "RxhzsiHCBJJJniRU",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3
+      },
+      "flags": {
+        "autoanimations": {
+          "id": "ft-rainbow-cascade",
+          "label": "Rainbow Cascade",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "intro",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700841957,
+        "modifiedTime": 1780163239707,
+        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!a9orjOV99MnMObho.RxhzsiHCBJJJniRU"
+    },
+    {
+      "name": "Saturation Field",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rainbow.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port",
+          "phase2-narrative"
+        ],
+        "description": {
+          "value": "<p><strong>Passive.</strong> While the Elemental is present in the scene, lighting saturates impossibly. All damage to Integrity from any source is reduced by 1 (minimum 1). Manifestations cost +1 Clarity to cast — joy is expensive.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "mXxJ99TzvETyaxQb",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700841957,
+        "modifiedTime": 1780163239708,
+        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!a9orjOV99MnMObho.mXxJ99TzvETyaxQb"
+    }
+  ],
+  "effects": [],
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "a9orjOV99MnMObho",
+  "prototypeToken": {
+    "name": "Lisa Frank Elemental",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/lisa_frank_elemental.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "folder": "uMhSIaldbbcnBh0H",
+  "sort": 1100000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777700829141,
+    "modifiedTime": 1783219918009,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!a9orjOV99MnMObho"
+}

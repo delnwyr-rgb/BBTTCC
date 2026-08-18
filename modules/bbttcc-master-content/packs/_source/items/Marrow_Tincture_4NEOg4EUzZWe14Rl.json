@@ -1,0 +1,78 @@
+{
+  "name": "Marrow Tincture",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_marrow.jpeg",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "marrow-tincture"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Refined marrow tincture, drawn under sept-supervision. Required to bind heart-iron and vow-resin compounds; can never be commercially substituted.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "A drop, drawn from a willing arm.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Refined marrow tincture, drawn under sept-supervision. Required to bind heart-iron and vow-resin compounds; can never be commercially substituted.</p>",
+          "charges": 2,
+          "materialKey": "marrow-tincture",
+          "price": {
+            "marks": 450,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII material stamp",
+            "bound": "free",
+            "saleBack": 180
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "4NEOg4EUzZWe14Rl",
+  "effects": [],
+  "sort": 271485,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137161826,
+    "modifiedTime": 1782156674939,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!4NEOg4EUzZWe14Rl"
+}

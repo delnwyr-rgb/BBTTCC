@@ -1,0 +1,87 @@
+{
+  "name": "Infernal Bargain",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_infernal_bargain.jpeg",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p>A deal with a faint sulfur smell to it. Sign right here. Don't read the small print. Nobody ever reads the small print.</p><p><b>Defender accepts (+2 to their next roll; attacker gains 1 Darkness) or refuses (defender morale −1).</b></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "-infernal-bargain-option",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "opt_infernal_bargain",
+      "meta": {
+        "tier": 1,
+        "rarity": "option",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "presence",
+        "raidTypes": [
+          "presence"
+        ],
+        "layer": "strategic",
+        "costBand": "light",
+        "fireMode": "anytime",
+        "opCosts": {
+          "diplomacy": 1,
+          "faith": 1
+        },
+        "authoredSprint": 2.5
+      },
+      "effects": {
+        "text": "Offer the defender a sealed bargain: accept (+2 to defender's next roll, attacker gains 1 darkness) or refuse (defender morale −1 from the snubbed offer)."
+      }
+    }
+  },
+  "_id": "PaQud8zARjfIM3RS",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 4100000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1771977107845,
+    "modifiedTime": 1779731345420,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS"
+  },
+  "_key": "!items!PaQud8zARjfIM3RS"
+}

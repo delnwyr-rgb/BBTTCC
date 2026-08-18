@@ -1,0 +1,73 @@
+{
+  "name": "Last Mile L17: The Ferryman's Right (Capstone)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_escape.png.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>This ability is not for escape. It is for people who cannot escape themselves.</em></p><p><strong>The Ferryman's Right — 1/session.</strong> You may carry one Soul that the world <em>would not otherwise release</em>:</p><ul><li><p>A prisoner from a place that does not release prisoners</p></li><li><p>A dying ally whose time has come</p></li><li><p>A refugee from a destroyed or sealed hex</p></li><li><p>A ghost from a haunting that the haunting cannot end on its own</p></li><li><p>A name that Lore has tried to forget</p></li></ul><p>The carry costs you. Choose at the moment of acceptance:</p><ul><li><p><strong>1 permanent point of Stress maximum</strong> (your Stress max is reduced by 1 forever; this stacks across multiple uses), <strong>OR</strong></p></li><li><p><strong>25 Radiation points</strong> added to your <code>system.radiation.rp</code> (one full minor threshold, permanent until cleansed).</p></li></ul><p>The Soul arrives at <strong>a destination you declare</strong>, alive and whole — or as whole as the journey permits. Some Souls become more themselves on the journey. Some become less. The cost paid by the Ferryman is non-negotiable.</p><p>This ability cannot be used to remove a creature from an ongoing combat round. It cannot be used to escape your own death. It cannot be repeated for the same Soul on the same session.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "shadow_courier_lastmile_l17_ferrymans_right",
+    "requirements": "Route of the Last Mile, Shadow Courier Initiation 17",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll",
+          "formula": ""
+        }
+      ],
+      "max": "1"
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "shadow_courier",
+      "subclassIdentifier": "bbttcc-shadow-courier-courier-last-mile",
+      "subclassLevel": 17,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true,
+      "capstone": true
+    },
+    "fourththing": {
+      "grants": {},
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "folder": "NYwTsnPu4JjS5QE0",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777005233945,
+    "modifiedTime": 1781116155903,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ShdwLstFtL17abcd",
+  "sort": 600000,
+  "_key": "!items!ShdwLstFtL17abcd"
+}

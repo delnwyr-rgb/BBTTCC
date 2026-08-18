@@ -1,0 +1,66 @@
+{
+  "name": "Environmental Opportunist",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_environmental_opportunist.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Core Feats (Batch 3)",
+      "revision": 1,
+      "rules": "2026"
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2>Environmental Opportunist</h2><p><em>The ground is complicit.</em></p><hr /><h3>Rules</h3><p>Once per turn, when an enemy enters or leaves difficult terrain within your reach, you may make a melee attack against it as a reaction.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_environmental_opportunist",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-batch3",
+      "featNumber": 51,
+      "generatedAt": "2026-01-19T05:04:20.693394Z"
+    }
+  },
+  "_id": "POyLpZMfqulCClg1",
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 900000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.POyLpZMfqulCClg1",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1781116205416,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!POyLpZMfqulCClg1"
+}

@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "byroU26YSQP4OQUn",
+  "name": "Cro Magnon (Heritage)",
+  "color": null,
+  "sorting": "a",
+  "_id": "XtVszfKGXh1D3T29",
+  "description": "",
+  "sort": 500000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776574150818,
+    "modifiedTime": 1776574199839,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!XtVszfKGXh1D3T29"
+}

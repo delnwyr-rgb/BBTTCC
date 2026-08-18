@@ -1,0 +1,51 @@
+{
+  "name": "The Mop Knows",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_1.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "5e-port",
+      "phase2-narrative",
+      "mal-voice"
+    ],
+    "description": {
+      "value": "<p><strong>Passive (Mal voice).</strong> Gilbert's mop has 50/50 precognition for any spilled fluid. Once per scene, Gilbert may name the next bodily fluid that will hit the floor and where; if right, he sweeps it before it lands. One PC in the scene may then reroll-lowest on any check involving footing, balance, or a cleanly-finished moment. Mop says: \"Already had it. Already there.\"</p>",
+      "chat": ""
+    }
+  },
+  "_id": "OphaZVtbX3WfILkH",
+  "effects": [],
+  "sort": 0,
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gilbert, Eternally Cleaning Not Leaning Theater Attendant"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": null,
+    "modifiedTime": null,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!OphaZVtbX3WfILkH"
+}

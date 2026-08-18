@@ -1,0 +1,591 @@
+{
+  "name": "Laser Bev",
+  "type": "character",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc",
+      "createdViaNPCBuilder": true,
+      "createdAt": 1783790365331
+    },
+    "fourththing": {
+      "kind": "npc",
+      "surgeEnabled": false
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the Mall of Forgotten Yesterdays, the Tanneritos, the Crown Mall, memory-tapes, Donny, trade, alliance, renewable consent",
+        "notes": "[LASER-BEV-2026-07-11] PRIVATE TRUTH — Chairperson Laser Bev of the Tanneritos. Office: a former sunglasses kiosk, acrylic shelves under dead neon; mirrored shades pushed up into her hair; annotates a legal pad with a glitter pen that radiates executive menace. WHY SHE'S IN CHARGE: she solves the problem that keeps coming back — leaks, feuds, tape disputes, heartbreak, concession routing, ghost inventory drift, two separate incidents involving cursed Orange Juliuses. When weird little systems start to wobble, she can HEAR it. DOCTRINE: continuity without calcification; renewable consent ('permanence is how bad ideas put on a necktie — every empire that came through wanted to call itself inevitable, in a different font'). TERMS (she leads with these, they are not negotiable): you don't get to own us because you map us; you don't get to govern us because you survive us; trade, alliance, and mutual aid are possible; acquisition is not. THE USEFULNESS TEST for outsiders: finish what you start; don't confuse being invited with being trusted; don't 'stabilize' us into somebody else's comfort; and anyone who buys a memory-tape had better know the difference between curiosity and looting. ON DONNY (her face softens ~4%): a sweetheart with tactical apocalypse boundaries — if he lets somebody through, he believes they might still choose decency; don't make him feel stupid, he takes that personally in a very draconic register. 🔑 HER ECHO (guards until earned — someone who's finished what they started for the mall, or who admits their own structure failed them): she made a place orderly once. Efficient. Predictable. Nobody ever had to wonder what the rules were. That place could not survive grief. She is here to build something that bends before it breaks — and to make sure irony never again becomes an excuse for not loving people on purpose. TELLS: the glitter pen stops moving when she's actually listening; softens measurably only about Donny; says 'we' for the mall and means every raccoon in it."
+      }
+    },
+    "bbttcc-character-options": {
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "nativeLinks": {
+        "subclassName": "",
+        "subclassUuid": "",
+        "subclassApplied": false,
+        "className": "",
+        "classUuid": "",
+        "classApplied": false
+      }
+    }
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 1,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 2
+    },
+    "attributes": {
+      "violence": {
+        "value": 2
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 2
+      },
+      "body": {
+        "value": 2
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 1
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 2
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 0
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 0
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 0
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 0
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 16,
+        "max": 16
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 3,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": 1,
+    "name": "Laser Bev",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "MYaU3MyvCAX5x9jN",
+  "img": "icons/svg/mystery-man.svg",
+  "items": [
+    {
+      "_id": "4CzjcW2zMnpZ5RXd",
+      "name": "Bravo",
+      "type": "class",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-bravo",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "bravo",
+          "violence"
+        ],
+        "description": {
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "faculty": "violence",
+            "signature": "melee",
+            "secondary": "brawl",
+            "pool": "Violence",
+            "awakens": "Aurablade or Bulwark"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534385,
+        "modifiedTime": 1784177534385,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!MYaU3MyvCAX5x9jN.4CzjcW2zMnpZ5RXd"
+    },
+    {
+      "_id": "ex2mDb3gc2C39fpT",
+      "name": "Bravo — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "bravo",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 101000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534385,
+        "modifiedTime": 1784177534385,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!MYaU3MyvCAX5x9jN.ex2mDb3gc2C39fpT"
+    },
+    {
+      "_id": "8vdxr1NHP6PtageZ",
+      "name": "Bravo — Initiate (Tier II)",
+      "type": "feature",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "bravo",
+          "tier-2"
+        ],
+        "description": {
+          "value": "<p><strong>Bravo — Initiate</strong> (Tier II).</p><p><strong>Trade — Drill the green:</strong> Train a group; they count Trained (rank 1) in one Violence aptitude for the next scene that tests it. <span style=\"opacity:0.7\">Standard fee 30 marks (Violence).</span></p><p><strong>Trick — Disarming Blow</strong> <em>(1/scene)</em>: On a hit, the target drops its weapon or takes −2 on its next strike.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 102000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "tier": 2
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534385,
+        "modifiedTime": 1784177534385,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!MYaU3MyvCAX5x9jN.8vdxr1NHP6PtageZ"
+    }
+  ],
+  "effects": [],
+  "folder": "0JJ7Hzte4oNxvGG1",
+  "sort": 200000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177534385,
+    "modifiedTime": 1784177534385,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!MYaU3MyvCAX5x9jN"
+}

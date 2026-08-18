@@ -1,0 +1,192 @@
+{
+  "name": "Echo-Diver Heritage: Empyrean",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_weather_2.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Echo-Diver heritage: Empyrean.</p><p><em>“Something is about to happen. Move.”</em></p><p><strong>Echo-Diver (Empyrean).</strong> Your time-sense tilts forward. You feel weather before it arrives — not the storm outside, the storm of events. Empyrean Echo-Divers are the ones who always get out of the room five seconds before the bad thing, and can never quite explain how.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Echo-Diver).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Echo-Diver does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Echo-Diver Core: Half-Second Inheritance</h3><p><em>Shared across all Echo-Diver heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Temporal Flinch.</strong> You cannot be surprised while conscious. Once per scene, when you or an ally within 2 squares would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 1 square If this moves the target out of the attack's range or line, the attack misses.</p></li><li><p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air that a comparable Medium creature needs. You reroll the lowest die on Body checks against suffocation, starvation, dehydration, and extreme temperature.</p></li><li><p><strong>Vault Sight.</strong> You have low-light vision out to 12 squares You reroll the lowest die on Mind (Perception) checks to notice unstable structure, active traps, trigger plates, load-bearing failure, and temporal or Spark residue.</p></li><li><p><strong>Rat Inheritance.</strong> You can squeeze through spaces at least one foot wide without halving your movement, and you can hold stillness that shouldn't work.</p></li></ul><h3>Empyrean Traits</h3><ul><li><p><strong>Stratospheric Resistance.</strong> You have resistance to chemical damage with the lightning flavor, kinetic damage with the thunder flavor, and psychic damage. The sky takes its swing at you constantly. It misses.</p></li><li><p><strong>Weathered.</strong> You reroll the lowest die on Mind (Perception) checks that rely on hearing or air currents. You always know which way the wind is blowing. Always.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Soft Power OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Open Sky / Plateau / High-Altitude</em> hexes, your faction gains +1 initiative on all conflicts resolved in those hexes.</p></li><li><p><strong>Storm Warning.</strong> Once per Strategic Turn, when the GM reveals an incoming hazard or attack on your faction, you may force the GM to disclose one additional detail about it. You saw it coming.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Temporal Flinch</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Reaction  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When an attack would hit you or an ally within 2 squares, shift them 1 square If that breaks range/LoS, the attack misses.</span></p></div>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "e1de72736ee05d97",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.rSeuOb0ns3zbEGT6",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Empyrean Tier I",
+        "hint": "Gain your Empyrean Tier I feat."
+      }
+    ],
+    "identifier": "echo_diver_empyrean_heritage",
+    "requirements": "Echo-Diver",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "echo_diver",
+      "lineage": "Empyrean",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "intrigue": 2,
+        "softpower": 1
+      }
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          {
+            "type": "energy",
+            "flavor": "lightning"
+          },
+          {
+            "type": "kinetic",
+            "flavor": "thunder"
+          },
+          "psychic"
+        ]
+      },
+      "rerolls": [
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "vs:suffocation",
+          "note": "on Body checks against suffocation, starvation, dehydration, and extreme temp…"
+        },
+        {
+          "context": "check",
+          "skill": "perception",
+          "mode": "reroll-lowest",
+          "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg…"
+        },
+        {
+          "context": "check",
+          "attribute": "mind",
+          "mode": "reroll-lowest",
+          "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg…"
+        },
+        {
+          "context": "check",
+          "skill": "perception",
+          "mode": "reroll-lowest"
+        },
+        {
+          "context": "check",
+          "attribute": "mind",
+          "mode": "reroll-lowest"
+        },
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "vs:suffocation",
+          "note": "Body checks against suffocation, starvation, dehydration, and extreme tempera…"
+        },
+        {
+          "context": "check",
+          "skill": "perception",
+          "mode": "reroll-lowest",
+          "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger …"
+        },
+        {
+          "context": "check",
+          "attribute": "mind",
+          "mode": "reroll-lowest",
+          "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger …"
+        },
+        {
+          "context": "check",
+          "skill": "perception",
+          "mode": "reroll-lowest"
+        },
+        {
+          "context": "check",
+          "attribute": "mind",
+          "mode": "reroll-lowest"
+        }
+      ],
+      "resourceGrants": [
+        {
+          "cadence": "per-campaign-start",
+          "resource": "intrigue-op",
+          "amount": 2
+        },
+        {
+          "cadence": "per-campaign-start",
+          "resource": "soft-power-op",
+          "amount": 2
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-self-or-ally-hit",
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Temporal Flinch. You cannot be surprised while conscious. Once per scene, when you or an ally within 10 feet would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 5 feet"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "1kUSB35CSTCvrCJy",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.Uryua7cj6XkhMzgl",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776660294408,
+    "modifiedTime": 1782167281945,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "Uryua7cj6XkhMzgl",
+  "sort": 0,
+  "_key": "!items!Uryua7cj6XkhMzgl"
+}

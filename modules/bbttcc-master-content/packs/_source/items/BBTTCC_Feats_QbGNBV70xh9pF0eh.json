@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "BBTTCC Feats",
+  "color": null,
+  "sorting": "a",
+  "_id": "QbGNBV70xh9pF0eh",
+  "description": "",
+  "sort": 400000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "dnd5e",
+    "systemVersion": "5.1.9",
+    "createdTime": 1768802465607,
+    "modifiedTime": 1781331693996,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!folders!QbGNBV70xh9pF0eh"
+}

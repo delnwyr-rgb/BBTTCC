@@ -1,0 +1,58 @@
+{
+  "name": "Speaks Only When Ending Things",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_speech_1.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "seed-bestiary-attacks",
+      "tier-iv",
+      "role-caster"
+    ],
+    "description": {
+      "value": "<p><strong>Passive.</strong> The apotheon does not communicate during combat. The first time it speaks aloud in a scene, that scene ends within 1d4 rounds — narratively, mechanically, somehow. The GM picks how. The players know it is coming.</p><p><em>Silence, then a single sentence. The sentence is also the end credits.</em></p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "feature"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Witness Apotheon"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "sort": 0,
+  "_id": "YJFF3YXC9lZVZrD0",
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": null,
+    "modifiedTime": null,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!YJFF3YXC9lZVZrD0"
+}

@@ -1,0 +1,81 @@
+{
+  "name": "Focusing Lens",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_lens_2.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "focusing-lens",
+      "lens",
+      "glass",
+      "optical"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Hand-ground glass blank, optical-grade. Used in laser barrels, sephirotic lenses, and confession crystals. Tedious to make; cheap to buy if you don't ask where it came from.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Glass ground until it argues with light.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Hand-ground glass blank, optical-grade. Used in laser barrels, sephirotic lenses, and confession crystals. Tedious to make; cheap to buy if you don't ask where it came from.</p>",
+          "charges": 3,
+          "materialKey": "focusing-lens",
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII material stamp",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "HCit0fQu5DEVmlQk",
+  "effects": [],
+  "sort": 475000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137194180,
+    "modifiedTime": 1782156674943,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!HCit0fQu5DEVmlQk"
+}

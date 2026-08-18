@@ -1,0 +1,67 @@
+{
+  "name": "Parallax Step",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_ghostly_runner_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>You move in half-seen gaps between possible positions.</em></p><p>At the start of each of your turns, choose <strong>one creature</strong> you can see.</p><ul><li>Until the start of your next turn, your movement <strong>does not provoke opportunity attacks</strong> from that creature.</li><li>This effect ends early if you become <strong>Staggered</strong> or your movement is reduced to 0.</li></ul><p>You don’t dodge them; you simply walk where their memory of you isn’t.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "wyrdlens-refraction-foresight-parallax-step",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept 6, Refraction of Foresight",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "bfvmbtbYMd6cxsV2",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "wyrdlens_refraction_foresight",
+      "featureKey": "parallax_step"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984388,
+    "modifiedTime": 1781116175701,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "gK013NKTNoo6tS30",
+  "sort": 250000,
+  "_key": "!items!gK013NKTNoo6tS30"
+}

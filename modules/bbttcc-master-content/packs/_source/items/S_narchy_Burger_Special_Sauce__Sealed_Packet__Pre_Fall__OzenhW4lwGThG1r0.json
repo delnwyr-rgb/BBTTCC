@@ -1,0 +1,83 @@
+{
+  "name": "S'narchy Burger Special Sauce (Sealed Packet, Pre-Fall)",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/snarky_burger_sauce_packet_2.png",
+  "system": {
+    "slot": "consumable",
+    "tags": [
+      "mal-voiced",
+      "consumable",
+      "pre-fall"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>A small foil packet. The logo is half-flaked. The expiration date is, generously, optimistic. The seal is intact. The contents are, against all known food science and several known thermodynamic principles, still safe. Allesh Gilliam has a quiet trade in these. Lyrenn refuses to touch them. Khezek Tor takes them as wages.</p><p><strong>The Sauce That Knows.</strong> Eat (action). For the next scene, you cannot tell a lie. (You may decline to speak. You may speak truthfully. You may speak incompletely. You cannot affirm a falsehood.) NPCs notice. Some will trust you more. Some will leave the room. Mal: \"This is S'narchy Burger Special Sauce. We don't know why it works. We've stopped asking.\"</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "consumable",
+          "signature": "Hasn't expired in twenty-seven years. People say if you eat it, you stop being able to lie. People say a lot of things.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A small foil packet. The logo is half-flaked. The expiration date is, generously, optimistic. The seal is intact. The contents are, against all known food science and several known thermodynamic principles, still safe. Allesh Gilliam has a quiet trade in these. Lyrenn refuses to touch them. Khezek Tor takes them as wages.</p><p><b>The Sauce That Knows.</b> Eat (action). For the next scene, you cannot tell a lie. (You may decline to speak. You may speak truthfully. You may speak incompletely. You cannot affirm a falsehood.) NPCs notice. Some will trust you more. Some will leave the room. Mal: \"This is Snarky Burger Special Sauce. We don't know why it works. We've stopped asking.\"</p>",
+          "materialOf": [
+            "pre-fall-condiment",
+            "sealed-foil",
+            "actually-suspect-additives"
+          ],
+          "charges": 1,
+          "price": {
+            "marks": 90,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII consumable stamp",
+            "bound": "free",
+            "saleBack": 36
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "OzenhW4lwGThG1r0",
+  "effects": [],
+  "sort": 600391,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777437725680,
+    "modifiedTime": 1784515282434,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!OzenhW4lwGThG1r0"
+}

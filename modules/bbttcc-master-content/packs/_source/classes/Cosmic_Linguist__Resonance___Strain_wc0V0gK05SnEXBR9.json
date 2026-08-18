@@ -1,0 +1,61 @@
+{
+  "_id": "wc0V0gK05SnEXBR9",
+  "name": "Cosmic Linguist: Resonance & Strain",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_earthquake_2.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Originals (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Resonance Dice (shared pool):</strong> You gain Resonance when you cast in correspondence-aligned timing or complete proper ritual work. You may spend Resonance to increase potency (see Resonance Channel).</p><p><strong>Strain (shared meter):</strong> You gain Strain when you cast misaligned, overcharge effects, or force semantic contradictions. At thresholds, the GM triggers <strong>Backlash</strong>: reality glitches, psychic recoil, or narrative consequences.</p><p><em>Wizards get to be powerful. Wizards also pay the bill.</em></p><h2 data-start=\"5166\" data-end=\"5201\">🔮 CLASS RESOURCE: <strong data-start=\"5188\" data-end=\"5201\">Resonance</strong></h2><p data-start=\"5203\" data-end=\"5307\"><strong data-start=\"5203\" data-end=\"5212\">Type:</strong> Dice-based resource pool<br data-start=\"5237\" data-end=\"5240\"><strong data-start=\"5240\" data-end=\"5252\">Purpose:</strong> Measures alignment with reality’s underlying structure</p><h3 data-start=\"5309\" data-end=\"5327\">Resonance Dice</h3><ul data-start=\"5328\" data-end=\"5503\"><li data-start=\"5328\" data-end=\"5345\"><p data-start=\"5330\" data-end=\"5345\">Start as <strong data-start=\"5339\" data-end=\"5345\">d6</strong></p></li><li data-start=\"5346\" data-end=\"5427\"><p data-start=\"5348\" data-end=\"5360\">Increase at:</p><ul data-start=\"5363\" data-end=\"5427\"><li data-start=\"5363\" data-end=\"5381\"><p data-start=\"5365\" data-end=\"5381\">Level 5 → <strong data-start=\"5375\" data-end=\"5381\">d8</strong></p></li><li data-start=\"5384\" data-end=\"5404\"><p data-start=\"5386\" data-end=\"5404\">Level 11 → <strong data-start=\"5397\" data-end=\"5404\">d10</strong></p></li><li data-start=\"5407\" data-end=\"5427\"><p data-start=\"5409\" data-end=\"5427\">Level 17 → <strong data-start=\"5420\" data-end=\"5427\">d12</strong></p></li></ul></li><li data-start=\"5428\" data-end=\"5503\"><p data-start=\"5430\" data-end=\"5503\"><strong data-start=\"5430\" data-end=\"5454\">Maximum stored dice:</strong><br data-start=\"5454\" data-end=\"5457\">= your <strong data-start=\"5466\" data-end=\"5491\">Mind modifier</strong> (minimum 1)</p></li></ul><hr data-start=\"5505\" data-end=\"5508\"><h3 data-start=\"5510\" data-end=\"5531\">Gaining Resonance</h3><p data-start=\"5532\" data-end=\"5566\">You gain <strong data-start=\"5541\" data-end=\"5560\">1 Resonance Die</strong> when:</p><ul data-start=\"5568\" data-end=\"5766\"><li data-start=\"5568\" data-end=\"5616\"><p data-start=\"5570\" data-end=\"5616\">You cast a manifestation in correct esoteric alignment</p></li><li data-start=\"5617\" data-end=\"5658\"><p data-start=\"5619\" data-end=\"5658\">You complete a properly prepared ritual</p></li><li data-start=\"5659\" data-end=\"5704\"><p data-start=\"5661\" data-end=\"5704\">You exploit an established semantic pattern</p></li><li data-start=\"5705\" data-end=\"5766\"><p data-start=\"5707\" data-end=\"5766\">Your subclass leverages symbolism, structure, or constraint</p></li></ul><p data-start=\"5768\" data-end=\"5829\"><strong data-start=\"5768\" data-end=\"5778\">Limit:</strong><br data-start=\"5778\" data-end=\"5781\">You may gain <strong data-start=\"5794\" data-end=\"5828\">only 1 Resonance Die per round</strong>.</p><p data-start=\"5831\" data-end=\"5886\">Resonance decays quickly — it is momentum, not savings.</p><hr data-start=\"5888\" data-end=\"5891\"><h3 data-start=\"5893\" data-end=\"5915\">Spending Resonance</h3><p data-start=\"5916\" data-end=\"5981\">When you spend a Resonance Die, <strong data-start=\"5948\" data-end=\"5959\">roll it</strong> and apply one effect:</p><ul data-start=\"5983\" data-end=\"6160\"><li data-start=\"5983\" data-end=\"6018\"><p data-start=\"5985\" data-end=\"6018\">Add the result to a Resolve DC</p></li><li data-start=\"6019\" data-end=\"6054\"><p data-start=\"6021\" data-end=\"6054\">Add an extra damage or effect die</p></li><li data-start=\"6055\" data-end=\"6081\"><p data-start=\"6057\" data-end=\"6081\">Extend duration or scope</p></li><li data-start=\"6082\" data-end=\"6121\"><p data-start=\"6084\" data-end=\"6121\">Impose roll 3d10 keep lowest 2 on a defense checks</p></li><li data-start=\"6122\" data-end=\"6160\"><p data-start=\"6124\" data-end=\"6160\">Stabilize a manifestation against countering</p></li></ul><p data-start=\"6162\" data-end=\"6201\">Each die spent <strong data-start=\"6177\" data-end=\"6200\">may generate Strain</strong>.</p><hr data-start=\"6203\" data-end=\"6206\"><h2 data-start=\"6208\" data-end=\"6240\">⚠ PUSHBACK SYSTEM: <strong data-start=\"6230\" data-end=\"6240\">Strain</strong></h2><p data-start=\"6242\" data-end=\"6340\"><strong data-start=\"6242\" data-end=\"6251\">Type:</strong> Escalating consequence meter<br data-start=\"6280\" data-end=\"6283\"><strong data-start=\"6283\" data-end=\"6295\">Purpose:</strong> Measures damage to reality from forced edits</p><hr data-start=\"6342\" data-end=\"6345\"><h3 data-start=\"6347\" data-end=\"6365\">Gaining Strain</h3><p data-start=\"6366\" data-end=\"6394\">You gain <strong data-start=\"6375\" data-end=\"6388\">+1 Strain</strong> when:</p><ul data-start=\"6395\" data-end=\"6522\"><li data-start=\"6395\" data-end=\"6421\"><p data-start=\"6397\" data-end=\"6421\">Casting while misaligned</p></li><li data-start=\"6422\" data-end=\"6455\"><p data-start=\"6424\" data-end=\"6455\">Spending Resonance aggressively</p></li><li data-start=\"6456\" data-end=\"6488\"><p data-start=\"6458\" data-end=\"6488\">Forcing contradictory meanings</p></li><li data-start=\"6489\" data-end=\"6522\"><p data-start=\"6491\" data-end=\"6522\">Using certain subclass features</p></li></ul><p data-start=\"6524\" data-end=\"6564\">Some abilities add Strain automatically.</p><hr data-start=\"6566\" data-end=\"6569\"><h3 data-start=\"6571\" data-end=\"6606\">Strain Thresholds (Recommended)</h3><ul data-start=\"6607\" data-end=\"6780\"><li data-start=\"6607\" data-end=\"6651\"><p data-start=\"6609\" data-end=\"6651\"><strong data-start=\"6609\" data-end=\"6617\">1–2:</strong> Cosmetic anomalies, sensory bleed</p></li><li data-start=\"6652\" data-end=\"6695\"><p data-start=\"6654\" data-end=\"6695\"><strong data-start=\"6654\" data-end=\"6662\">3–4:</strong> Psychic damage, manifestation distortion</p></li><li data-start=\"6696\" data-end=\"6747\"><p data-start=\"6698\" data-end=\"6747\"><strong data-start=\"6698\" data-end=\"6706\">5–6:</strong> Reality glitches, hostile manifestations</p></li><li data-start=\"6748\" data-end=\"6780\"><p data-start=\"6750\" data-end=\"6780\"><strong data-start=\"6750\" data-end=\"6757\">7+:</strong> GM-controlled backlash</p></li></ul><hr data-start=\"6782\" data-end=\"6785\"><h3 data-start=\"6787\" data-end=\"6806\">Clearing Strain</h3><ul data-start=\"6807\" data-end=\"6896\"><li data-start=\"6807\" data-end=\"6813\"><p data-start=\"6809\" data-end=\"6813\">Rest</p></li><li data-start=\"6814\" data-end=\"6824\"><p data-start=\"6816\" data-end=\"6824\">Downtime</p></li><li data-start=\"6825\" data-end=\"6849\"><p data-start=\"6827\" data-end=\"6849\">Careful ritual casting</p></li><li data-start=\"6850\" data-end=\"6870\"><p data-start=\"6852\" data-end=\"6870\">Annotator features</p></li><li data-start=\"6871\" data-end=\"6896\"><p data-start=\"6873\" data-end=\"6896\">Pactkeeper intervention</p></li></ul><p data-start=\"6898\" data-end=\"6937\">Strain is dangerous but <strong data-start=\"6922\" data-end=\"6936\">manageable</strong>.</p><hr data-start=\"6939\" data-end=\"6942\"><h1 data-start=\"6944\" data-end=\"6968\">🧠 SUMMARY FOR PLAYERS</h1><ul data-start=\"6970\" data-end=\"7234\"><li data-start=\"6970\" data-end=\"7008\"><p data-start=\"6972\" data-end=\"7008\"><strong data-start=\"6972\" data-end=\"6987\">Pactkeepers</strong> manage <strong data-start=\"6995\" data-end=\"7008\">authority</strong></p></li><li data-start=\"7009\" data-end=\"7051\"><p data-start=\"7011\" data-end=\"7051\"><strong data-start=\"7011\" data-end=\"7031\">Cosmic Linguists</strong> manage <strong data-start=\"7039\" data-end=\"7051\">momentum</strong></p></li><li data-start=\"7052\" data-end=\"7100\"><p data-start=\"7054\" data-end=\"7100\">Jurisdiction = <em data-start=\"7069\" data-end=\"7100\">what you are allowed to touch</em></p></li><li data-start=\"7101\" data-end=\"7140\"><p data-start=\"7103\" data-end=\"7140\">Civic Charge = <em data-start=\"7118\" data-end=\"7140\">permission you spend</em></p></li><li data-start=\"7141\" data-end=\"7173\"><p data-start=\"7143\" data-end=\"7173\">Precedent = <em data-start=\"7155\" data-end=\"7173\">what now matters</em></p></li><li data-start=\"7174\" data-end=\"7207\"><p data-start=\"7176\" data-end=\"7207\">Resonance = <em data-start=\"7188\" data-end=\"7207\">how hard you push</em></p></li><li data-start=\"7208\" data-end=\"7234\"><p data-start=\"7210\" data-end=\"7234\">Strain = <em data-start=\"7219\" data-end=\"7234\">what it costs</em></p></li></ul><p data-start=\"7236\" data-end=\"7346\">Nothing here is vague.<br>Nothing here is hand-wavy.<br>Everything can be adjudicated at the table <strong data-start=\"7329\" data-end=\"7345\">consistently</strong>.</p>",
+      "chat": ""
+    },
+    "identifier": "cosmic_linguist_resonance_strain",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "cosmic_linguist_resonance_strain"
+    }
+  },
+  "folder": "r5DULAhp98iub0mt",
+  "sort": 200000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.wc0V0gK05SnEXBR9",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923345,
+    "modifiedTime": 1781116192855,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!wc0V0gK05SnEXBR9"
+}

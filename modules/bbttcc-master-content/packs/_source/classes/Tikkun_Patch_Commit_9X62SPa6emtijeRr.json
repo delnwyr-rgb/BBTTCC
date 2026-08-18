@@ -1,0 +1,125 @@
+{
+  "name": "Tikkun Patch Commit",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_globe_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tikkun Patch Commit.</strong> When you resolve a bug in reality, you know how to push the fix upstream.</p><ul><li>When your party resolves a <strong>Spark, Tikkun, or hex-tilt scene</strong> in a way that clearly <strong>repairs</strong> something (socially, spiritually, or structurally), you can declare a <em>patch commit</em>.</li><li>Once per such scene, the GM may apply a small <strong>hex-level improvement</strong> to the affected location: a point of <strong>Darkness reduction</strong>, a nudge toward better <strong>hex tilt</strong>, or a minor positive modifier, as appropriate to your campaign rules.</li></ul><p>This feature gives you a repeatable, mechanical way to justify the map getting slightly better wherever you do good Tikkun work.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "tikkun-patch-commit",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 10
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (10th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Tikkun Patch Commit (Hex Improvement Hook)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_checkmark.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984383,
+        "modifiedTime": 1777346197966
+      },
+      "_id": "g35Ndv5cYsNefwaO",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.tikkunPatchCommit",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.hexHooks.tikkunPatchEvents",
+            "value": 1,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!9X62SPa6emtijeRr.g35Ndv5cYsNefwaO"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "tikkunPatchCommit": true
+      },
+      "hexHooks": {
+        "tikkunPatchEvents": 1
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984383,
+    "modifiedTime": 1781116118613,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "9X62SPa6emtijeRr",
+  "sort": 146875,
+  "_key": "!items!9X62SPa6emtijeRr"
+}

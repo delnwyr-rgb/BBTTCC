@@ -1,0 +1,71 @@
+{
+  "name": "Cataclyst L13: The Third Door",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_explosion_4.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>Frame and Ruin are not opposite. They are partners. Today they take the same step.</em></p><p><strong>The Third Door — 1/scene (recovers on Soma Break).</strong> As part of any single action on your turn, you may spend <strong>any number of Frame Dice and Ruin Charges together</strong>. They do not compete for the same action-economy slot:</p><ul><li><p><strong>Each Frame Die spent</strong> contributes to the action's defensive component (absorbing the next incoming hit through the same action, or fueling a doctrine effect's defensive side).</p></li><li><p><strong>Each Ruin Charge spent</strong> contributes to the action's offensive component (damage, force, or doctrine effect's offensive side).</p></li><li><p>The spends do not displace each other and do not require separate action-economy.</p></li></ul><p>Example: you may strike a target (Ruin), absorb the counterattack from that target (Frame), and pull off both effects in a single attack action.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "bulwark_cataclyst_l13_the_third_door",
+    "requirements": "Path of the Cataclyst, Bulwark Initiation 13",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 13
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll",
+          "formula": ""
+        }
+      ],
+      "max": "1"
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "bulwark",
+      "subclassIdentifier": "bbttcc-bulwark-cataclyst",
+      "subclassLevel": 13,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {}
+    }
+  },
+  "folder": "HmbujXzEJL7v48Q9",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777004380834,
+    "modifiedTime": 1781116124718,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BlwkCataFtL13abc",
+  "sort": 0,
+  "_key": "!items!BlwkCataFtL13abc"
+}

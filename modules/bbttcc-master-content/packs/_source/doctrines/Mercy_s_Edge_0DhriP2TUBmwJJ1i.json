@@ -1,0 +1,40 @@
+{
+  "name": "Mercy's Edge",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_1.png",
+  "system": {
+    "category": "strategic",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Mercy's Edge</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> violence 15, softPower 10</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "cls_aurablade"
+    }
+  },
+  "_id": "0DhriP2TUBmwJJ1i",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601772,
+    "modifiedTime": 1782703702693,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!0DhriP2TUBmwJJ1i"
+}

@@ -1,0 +1,137 @@
+{
+  "name": "Soul-Smith: Tier 3 — Furnace of Renewal",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_furnace_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Furnace of Renewal.</strong> You have tempered your body and spirit in heat meant to burn away rot.</p><ul><li>You gain <strong>resistance to poison and qliphothic damage (qliphothic)</strong>.</li><li>When creatures spend Body dice to heal during a short or a Soma Break while you are present and tending the campfire, forge, or ritual space, they regain an additional <strong>+2 Integrity per Hit Die</strong> spent (to a maximum per Soma Break equal to twice your Body modifier, at the GM’s discretion for large groups).</li></ul><p>Your resting places smell faintly of oil, incense, and quenched steel, and people wake feeling like they’ve had old rust scraped off the inside of their ribs.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "soul-smith-tier-3--furnace-of-renewal",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "properties": [],
+    "requirements": "Soul-Smith (11th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Furnace of Renewal (Resist Poison/Necrotic)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dodge.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459996551,
+        "modifiedTime": 1777346199026
+      },
+      "_id": "HPdQl9LQQOdRQaAJ",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.traits.dr.value",
+            "value": "poison",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.traits.dr.value",
+            "value": "necrotic",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.soulSmith.tier3",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.soulSmith.furnaceOfRenewal",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!WBGRGFsQqlOfRko6.HPdQl9LQQOdRQaAJ"
+    }
+  ],
+  "folder": "qdqMhHfZdVgUs1gN",
+  "flags": {
+    "bbttcc": {
+      "soulSmith": {
+        "tier3": true,
+        "furnaceOfRenewal": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459996551,
+    "modifiedTime": 1782167240822,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "WBGRGFsQqlOfRko6",
+  "sort": 259375,
+  "_key": "!items!WBGRGFsQqlOfRko6"
+}

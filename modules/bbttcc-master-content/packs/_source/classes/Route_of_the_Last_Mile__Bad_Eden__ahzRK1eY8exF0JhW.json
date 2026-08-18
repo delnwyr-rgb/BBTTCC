@@ -1,0 +1,41 @@
+{
+  "name": "Route of the Last Mile (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunrise_1.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "shadow_courier",
+    "source": "Bad Eden Originals — Sprint F (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"Give it to me. I carry things.\"</em></p>\n<p><strong>Doctrine:</strong> Carry the unbearable thing to where it must go — intimate, burdensome, exact. Who bears the package now?</p>\n<p>The Last Mile is the courier as the one who refuses to let it fall. Your Surge spends take the weight off others: shoulder their wounds at your own cost, carry an ally through a place that should have killed them, and deliver the unbearable thing intact.</p>\n<h3>Route (spent via Surge)</h3>\n<ul>\n  <li><strong>Shoulder the Weight</strong> (1) — heal an ally Tier d6; you take half as Stress; they bank a reroll.</li>\n  <li><strong>Quiet Voyage</strong> (2) — an ally gains DR equal to Tier, and the next hit that would drop them is held at 1.</li>\n  <li><strong>Delivered</strong> (5) — restore a fallen or badly-hurt ally to half Integrity and clear a condition.</li>\n</ul>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-shadow-courier-courier-last-mile",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "NYwTsnPu4JjS5QE0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "ahzRK1eY8exF0JhW",
+  "sort": 500000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1781116167814,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ahzRK1eY8exF0JhW"
+}

@@ -1,0 +1,23 @@
+{
+  "type": "Scene",
+  "folder": "2vNM9F0rxBIPVRNE",
+  "name": "Port Kudzu",
+  "color": null,
+  "sorting": "a",
+  "_id": "dKEGMrS6N1PTTIrv",
+  "description": "",
+  "sort": 500000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982535656,
+    "modifiedTime": 1783982535656,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!dKEGMrS6N1PTTIrv"
+}

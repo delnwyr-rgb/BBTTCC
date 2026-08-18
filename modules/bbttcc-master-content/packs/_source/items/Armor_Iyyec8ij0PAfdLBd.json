@@ -1,0 +1,23 @@
+{
+  "name": "Armor",
+  "sorting": "m",
+  "folder": null,
+  "type": "Item",
+  "_id": "Iyyec8ij0PAfdLBd",
+  "description": "",
+  "sort": 500000,
+  "color": null,
+  "flags": {},
+  "_stats": {
+    "duplicateSource": null,
+    "compendiumSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1772304174523,
+    "modifiedTime": 1781331693996,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!folders!Iyyec8ij0PAfdLBd"
+}

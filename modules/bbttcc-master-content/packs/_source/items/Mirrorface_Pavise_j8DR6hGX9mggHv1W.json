@@ -1,0 +1,100 @@
+{
+  "name": "Mirrorface Pavise",
+  "type": "armor",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "guardBonus": 4,
+    "evasionBonus": -1,
+    "resolveBonus": 1,
+    "resistances": [
+      "electrical",
+      "thermal"
+    ],
+    "armorSkill": "warding",
+    "equipped": false,
+    "tags": [
+      "shield",
+      "warding",
+      "tower",
+      "attunement"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A full-height pavise faced in polished mirror-alloy over a hex-lattice core. Heavy enough to plant; broad enough to hide a second Steward. The mirror face scatters arc and flame back the way they came.</p><p><strong>Mirror Face.</strong> Resists electrical and thermal. Slow to carry, slower to move — but nothing gets past it cheaply.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Shield</li>\n  <li><strong>Defense:</strong> Guard +4, Evasion -1, Resolve +1</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Electrical, Thermal</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 450 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "shield",
+          "signature": "Stand behind it. Let the world spend itself.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A full-height pavise faced in polished mirror-alloy over a hex-lattice core. Heavy enough to plant; broad enough to hide a second Steward. The mirror face scatters arc and flame back the way they came.</p><p><b>Mirror Face.</b> Resists electrical and thermal. Slow to carry, slower to move — but nothing gets past it cheaply.</p>",
+          "materialOf": [
+            "mirror-alloy",
+            "hex-lattice",
+            "brace-iron"
+          ],
+          "price": {
+            "marks": 450,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII shield × 1",
+            "bound": "attuned",
+            "saleBack": 180
+          }
+        }
+      },
+      "grants": {
+        "resistances": [
+          {
+            "type": "electrical"
+          },
+          {
+            "type": "thermal"
+          }
+        ]
+      }
+    }
+  },
+  "folder": "gD1WklJiuS6Vg2p3",
+  "_id": "j8DR6hGX9mggHv1W",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782150391507,
+    "modifiedTime": 1782160020991,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!j8DR6hGX9mggHv1W"
+}

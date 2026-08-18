@@ -1,0 +1,62 @@
+{
+  "name": "Hide in Shadow",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Become furniture. Become a rumor. Become the thing the patrol decides it must've imagined.</p><p><b>−1 alarm.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "hide_in_shadow",
+      "meta": {
+        "tier": 1,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "intrigue",
+        "layer": "tactical",
+        "costBand": "light",
+        "raidTypes": [
+          "infiltration_alarm"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "intrigue": 1
+        },
+        "authoredSprint": "3a"
+      },
+      "effects": {
+        "text": "Slip into cover: -1 alarm."
+      }
+    }
+  },
+  "_id": "tHrcFadaTLQ9eN1K",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 4650000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778965786764,
+    "modifiedTime": 1780163527178,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!tHrcFadaTLQ9eN1K"
+}

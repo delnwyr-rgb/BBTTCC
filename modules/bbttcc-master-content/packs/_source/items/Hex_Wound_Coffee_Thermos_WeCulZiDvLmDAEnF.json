@@ -1,0 +1,83 @@
+{
+  "name": "Hex-Wound Coffee Thermos",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/coffee_thermos_2.png",
+  "system": {
+    "slot": "tool",
+    "tags": [
+      "mal-voiced",
+      "tool",
+      "hex-wound"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>A battered steel thermos wrapped in hex-script copper wire. The interior is older than the exterior, somehow. The lid screws on counterclockwise. The coffee inside is always hot, always strong, and always tastes like exactly what kind of day you're having. Some days it's cardamom and rain. Some days it's the warm bitter ash of decisions you'd rather not revisit. Some days it's just plain.</p><p><strong>Day's Reading.</strong> Once per scene, take a sip. The GM names a single mood-word that describes the current scene's emotional center: <em>tense. desperate. hollow. tender. funny.</em> You may use that word in conversation as if you'd been told it directly by an authority figure. (NPCs accept it as plausibly true.) The thermos refills overnight. Coffee is non-negotiable.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "tool",
+          "signature": "Always hot. Tastes vary. Don't ask what flavor it is today.",
+          "origin": "claimed",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A battered steel thermos wrapped in hex-script copper wire. The interior is older than the exterior, somehow. The lid screws on counterclockwise. The coffee inside is always hot, always strong, and always tastes like exactly what kind of day you're having. Some days it's cardamom and rain. Some days it's the warm bitter ash of decisions you'd rather not revisit. Some days it's just plain.</p><p><b>Day's Reading.</b> Once per scene, take a sip. The GM names a single mood-word that describes the current scene's emotional center: <i>tense. desperate. hollow. tender. funny.</i> You may use that word in conversation as if you'd been told it directly by an authority figure. (NPCs accept it as plausibly true.) The thermos refills overnight. Coffee is non-negotiable.</p>",
+          "materialOf": [
+            "hex-script",
+            "rad-iron",
+            "ground-bean",
+            "low-grade-precognition"
+          ],
+          "charges": 3,
+          "price": {
+            "marks": 90,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII tool stamp",
+            "bound": "attuned",
+            "saleBack": 36
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "WeCulZiDvLmDAEnF",
+  "effects": [],
+  "sort": 612500,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725671,
+    "modifiedTime": 1778541970063,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!WeCulZiDvLmDAEnF"
+}

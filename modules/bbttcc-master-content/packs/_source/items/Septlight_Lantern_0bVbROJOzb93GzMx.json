@@ -1,0 +1,79 @@
+{
+  "name": "Septlight Lantern",
+  "type": "gear",
+  "img": "icons/sundries/lights/lantern-iron-yellow.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [
+      "tech"
+    ],
+    "category": "gear",
+    "source": "Phase 7 Seed (2026-05-10)",
+    "description": {
+      "value": "<p>A hex-glass lantern that burns on stored Yesodium light. Three rests of bright, septlight-clean illumination per charge cycle.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "frame": "tool",
+          "bound": "free",
+          "materialOf": [
+            {
+              "key": "yesodium",
+              "qty": 1
+            },
+            {
+              "key": "witness-glass",
+              "qty": 1
+            }
+          ],
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 3,
+              "max": 3,
+              "recoverPer": "soma-break"
+            },
+            "failure": "inert",
+            "origin": "septcraft"
+          },
+          "price": {
+            "marks": 60,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool × 0.60 × tech 2.0",
+            "bound": "free",
+            "saleBack": 24
+          }
+        }
+      }
+    }
+  },
+  "_id": "0bVbROJOzb93GzMx",
+  "effects": [],
+  "folder": "Wxh1A343inwTUeoo",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778963355294,
+    "modifiedTime": 1778963355294,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 0,
+  "_key": "!items!0bVbROJOzb93GzMx"
+}

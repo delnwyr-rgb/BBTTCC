@@ -1,0 +1,65 @@
+{
+  "_id": "J61K3pME3vjUeXF8",
+  "name": "Quickdraw Protocol",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_quickdraw_protocol.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Quickdraw Protocol</h2><p><em>The first second decides who gets a second.</em></p><hr /><h3>Rules</h3><p>You may draw or stow a weapon as part of rolling Initiative (Intrigue).</p><p>Additionally, during the first round of combat, you reroll the lowest die on your first attack roll made with a weapon you drew this way.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_quickdraw_protocol",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-expansion-v1",
+      "generatedAt": "2026-01-18T20:40:45.006353+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 2900000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1782159946541,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!J61K3pME3vjUeXF8"
+}

@@ -1,0 +1,136 @@
+{
+  "name": "Soul-Smith: Tier 1 — Sanctified Forge Initiate",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_blessed_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Sanctified Forge Initiate.</strong> You are licensed by the Great Work to hit things until they get better.</p><ul><li>You gain skill rank with <strong>the Plating aptitude</strong> and the <strong>Faith (Soul)</strong> skill (handled by the Soul-Smith class traits).</li><li>On the campaign layer, when you are physically present in a hex that has structural damage, environmental ruin, or infrastructure loss, your faction may spend <strong>Economy OP</strong> to <strong>repair or stabilize</strong> that hex more efficiently, with you as the narrative focus.</li></ul><p>The exact mechanical effect is governed by your hex repair rules, but this feature marks you as a Bad Eden-specific repair engine keyed off Economy OP.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "soul-smith-tier-1--sanctified-forge-initiate",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "Soul-Smith (1st level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Sanctified Forge Initiate (Hex Repair Hook)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cast_2.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459996548,
+        "modifiedTime": 1777346197806
+      },
+      "_id": "j68LcNFuutaNYPB0",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.soulSmith.tier1",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.soulSmith.sanctifiedForgeInitiate",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.hexHooks.economyRepairEnabled",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!6Xip1ZQnwdQxH1NT.j68LcNFuutaNYPB0"
+    }
+  ],
+  "folder": "qdqMhHfZdVgUs1gN",
+  "flags": {
+    "bbttcc": {
+      "soulSmith": {
+        "tier1": true,
+        "sanctifiedForgeInitiate": true
+      },
+      "hexHooks": {
+        "economyRepairEnabled": true
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996548,
+    "modifiedTime": 1781116115064,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "6Xip1ZQnwdQxH1NT",
+  "sort": 175000,
+  "_key": "!items!6Xip1ZQnwdQxH1NT"
+}

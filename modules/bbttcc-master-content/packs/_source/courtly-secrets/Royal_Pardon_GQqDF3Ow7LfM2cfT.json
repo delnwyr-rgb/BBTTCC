@@ -1,0 +1,45 @@
+{
+  "name": "Royal Pardon",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scroll_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Royal Pardon.</strong> A signed favor from a higher patron, granted in advance of a rumor's bloom.</p><p><em>Play:</em> clear your own Scandal flag (if any).</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "clearScandal",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "_id": "GQqDF3Ow7LfM2cfT",
+  "effects": [],
+  "folder": null,
+  "sort": 600000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1779393195600,
+    "modifiedTime": 1784079176429,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!GQqDF3Ow7LfM2cfT"
+}

@@ -1,0 +1,66 @@
+{
+  "name": "Scavenged Insight (Soul) (Soul)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_scavenged_insight.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Core Feats (Batch 3)",
+      "revision": 1,
+      "rules": "2026"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Scavenged Insight (Soul)</h2><p><em>Debris tells stories.</em></p><hr /><h3>Rules</h3><p>After a combat encounter, you may ask the GM one factual question about what the enemies were carrying, guarding, or afraid of.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_scavenged_insight",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-batch3",
+      "featNumber": 57,
+      "generatedAt": "2026-01-19T05:04:20.693394Z"
+    }
+  },
+  "_id": "24g8mxNy4iJ6bcxE",
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 125000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.24g8mxNy4iJ6bcxE",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1781116198084,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!24g8mxNy4iJ6bcxE"
+}

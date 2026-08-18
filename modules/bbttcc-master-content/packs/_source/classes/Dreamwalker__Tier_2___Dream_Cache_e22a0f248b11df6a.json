@@ -1,0 +1,70 @@
+{
+  "name": "Dreamwalker: Tier 2 — Dream-Cache",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 2 — Dream-Cache.</strong> Between scenes, you may bank one manifestation in a dream slot. The next scene, deploy it without paying Clarity — you still pay upkeep from your live pool.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (passive): Clarity max +1 (stacks with Tier 1 to total +3).</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Carryover: while you carry an active Dream-Cache, you reroll the lowest die on checks vs. illusion / fear / corruption (the cached manifestation is itself a hedge against unreality).</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwT2\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Dream-Cache</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene (between) &nbsp;·&nbsp; <strong>Action:</strong> Free (between scenes) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Bank one manifestation in a dream slot between scenes; deploy next scene without paying Clarity (still pay upkeep). While the cache is active, reroll lowest on checks vs. illusion / fear / corruption.</div>\n</div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "dw_t2_dream_cache",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "requirements": "Dreamwalker (5th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "YLUIFZ5nPOUSaSH2",
+  "flags": {
+    "fourththing": {
+      "discipline": {
+        "passive": {
+          "clarityMaxBonus": 1
+        }
+      }
+    },
+    "bbttcc": {},
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777312943677,
+    "modifiedTime": 1782167240825,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "e22a0f248b11df6a",
+  "sort": 381250,
+  "_key": "!items!e22a0f248b11df6a"
+}

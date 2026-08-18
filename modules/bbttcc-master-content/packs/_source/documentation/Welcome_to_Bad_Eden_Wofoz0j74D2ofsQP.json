@@ -1,0 +1,221 @@
+{
+  "folder": "MUeilnXgDOhN4c9E",
+  "name": "Welcome to Bad Eden",
+  "_id": "Wofoz0j74D2ofsQP",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "Welcome to Bad Eden",
+      "type": "text",
+      "_id": "yUngKTTItFaWgqxc",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p data-start=\"1675\" data-end=\"1689\">Reality broke.</p><p data-start=\"1691\" data-end=\"1727\">Not metaphorically. Not spiritually.</p><p data-start=\"1729\" data-end=\"1739\">Literally.</p><p data-start=\"1741\" data-end=\"1919\">Once, the world existed as part of a vast structure called <strong data-start=\"1800\" data-end=\"1815\">Adam Kadmon</strong>—a cosmic architecture that bound imagination, matter, and meaning together into a single living system.</p><p data-start=\"1921\" data-end=\"1939\">Then it collapsed.</p><p data-start=\"1941\" data-end=\"2074\">Fragments of that structure now drift across existence as <strong data-start=\"1999\" data-end=\"2032\">hex-shaped regions of reality</strong>, each holding pieces of the broken whole.</p><p data-start=\"2076\" data-end=\"2108\">You live inside those fragments.</p><p data-start=\"2110\" data-end=\"2165\">And you are among the few who understand what happened.</p><img src=\"art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_backline_commander.png\">"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116254936,
+        "modifiedTime": 1781116254936
+      },
+      "_key": "!journal.pages!Wofoz0j74D2ofsQP.yUngKTTItFaWgqxc"
+    },
+    {
+      "sort": 200000,
+      "name": "What this Game Is",
+      "type": "text",
+      "_id": "sBptvrC6J1ixJndw",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p data-start=\"2195\" data-end=\"2270\">Bad Eden is a faction-driven tabletop RPG about <strong data-start=\"2241\" data-end=\"2269\">repairing a broken world</strong>.</p><p data-start=\"2272\" data-end=\"2293\">Players control both:</p><p data-start=\"2295\" data-end=\"2373\">• <strong data-start=\"2297\" data-end=\"2311\">Characters</strong> exploring the world<br data-start=\"2331\" data-end=\"2334\">• <strong data-start=\"2336\" data-end=\"2349\">A faction</strong> rebuilding civilization</p><p data-start=\"2375\" data-end=\"2393\">Together you will:</p><p data-start=\"2395\" data-end=\"2532\">• explore mysterious hexes<br data-start=\"2421\" data-end=\"2424\">• solve strange problems<br data-start=\"2448\" data-end=\"2451\">• develop territory<br data-start=\"2470\" data-end=\"2473\">• defend your faction<br data-start=\"2494\" data-end=\"2497\">• slowly restore harmony to reality</p><p data-start=\"2534\" data-end=\"2595\">Every action pushes the world toward <strong data-start=\"2571\" data-end=\"2595\">repair… or collapse.</strong></p><img src=\"art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_adaptive_defense.png\">"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116254937,
+        "modifiedTime": 1781116254937
+      },
+      "_key": "!journal.pages!Wofoz0j74D2ofsQP.sBptvrC6J1ixJndw"
+    },
+    {
+      "sort": 300000,
+      "name": "What Players Actually Do",
+      "type": "text",
+      "_id": "YpgIfZWO5EmflrXY",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p>During play, your faction is trying to <strong data-start=\"2673\" data-end=\"2701\">repair pieces of reality</strong>.</p><p data-start=\"2704\" data-end=\"2736\">Each session you will typically:</p><ol data-start=\"2738\" data-end=\"2972\"><li data-section-id=\"6rdpoc\" data-start=\"2738\" data-end=\"2762\"><p data-start=\"2741\" data-end=\"2762\"><strong data-start=\"2741\" data-end=\"2762\">Explore new hexes</strong></p></li><li data-section-id=\"8898k8\" data-start=\"2763\" data-end=\"2801\"><p data-start=\"2766\" data-end=\"2801\"><strong data-start=\"2766\" data-end=\"2801\">Encounter problems or mysteries</strong></p></li><li data-section-id=\"9eqrm0\" data-start=\"2802\" data-end=\"2847\"><p data-start=\"2805\" data-end=\"2847\"><strong data-start=\"2805\" data-end=\"2847\">Make decisions about how to solve them</strong></p></li><li data-section-id=\"19e92u6\" data-start=\"2848\" data-end=\"2900\"><p data-start=\"2851\" data-end=\"2900\"><strong data-start=\"2851\" data-end=\"2900\">Resolve conflicts (raids or skill challenges)</strong></p></li><li data-section-id=\"1tf5s2f\" data-start=\"2901\" data-end=\"2925\"><p data-start=\"2904\" data-end=\"2925\"><strong data-start=\"2904\" data-end=\"2925\">Develop territory</strong></p></li><li data-section-id=\"1tczxne\" data-start=\"2926\" data-end=\"2972\"><p data-start=\"2929\" data-end=\"2972\"><strong data-start=\"2929\" data-end=\"2972\">Advance the world toward the Great Work</strong></p></li></ol><p data-start=\"2974\" data-end=\"2993\">Your choices shape:</p><p data-start=\"2995\" data-end=\"3056\">• the world<br data-start=\"3006\" data-end=\"3009\">• your faction<br data-start=\"3023\" data-end=\"3026\">• the future of reality itself</p><img src=\"art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_focused_shot.png\">"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116254937,
+        "modifiedTime": 1781116254937
+      },
+      "_key": "!journal.pages!Wofoz0j74D2ofsQP.YpgIfZWO5EmflrXY"
+    },
+    {
+      "sort": 400000,
+      "name": "The Gameplay Loop",
+      "type": "text",
+      "_id": "u2HcnCkuFm6aeiVT",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Almost everything in Bad Eden follows this cycle.</p><pre class=\"overflow-visible! px-0!\" data-start=\"3157\" data-end=\"3328\"><code>EXPLORE HEX\n     ↓\nDISCOVER A PROBLEM\n     ↓\nTRIGGER A CAMPAIGN BEAT\n     ↓\nMAKE DECISIONS\n     ↓\nRESOLVE CONFLICT\n     ↓\nDEVELOP TERRITORY\n     ↓\nADVANCE THE TURN</code></pre><p data-start=\"3330\" data-end=\"3354\">Over time this leads to:</p><p data-start=\"3356\" data-end=\"3437\">• stronger factions<br data-start=\"3375\" data-end=\"3378\">• repaired territory<br data-start=\"3398\" data-end=\"3401\">• progress toward the <strong data-start=\"3423\" data-end=\"3437\">Great Work</strong></p><p data-start=\"3439\" data-end=\"3459\">Or… deeper collapse.</p><img src=\"art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_breach_specialist.png\">"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116254937,
+        "modifiedTime": 1781116254937
+      },
+      "_key": "!journal.pages!Wofoz0j74D2ofsQP.u2HcnCkuFm6aeiVT"
+    },
+    {
+      "sort": 500000,
+      "name": "Your First Session",
+      "type": "text",
+      "_id": "vQTFtVz2pLy5hPRk",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p data-start=\"3492\" data-end=\"3532\">A typical first session looks like this:</p><h3 data-section-id=\"1r8mk6l\" data-start=\"3534\" data-end=\"3559\">1 — Create Characters</h3><p data-start=\"3560\" data-end=\"3611\">Players build characters and join a shared faction.</p><h3 data-section-id=\"f16y4e\" data-start=\"3613\" data-end=\"3642\">2 — Establish the Faction</h3><p data-start=\"3643\" data-end=\"3707\">The faction begins with a small territory and limited resources.</p><h3 data-section-id=\"sn6lzo\" data-start=\"3709\" data-end=\"3741\">3 — Explore the Starting Hex</h3><p data-start=\"3742\" data-end=\"3807\">The first exploration reveals the <strong data-start=\"3776\" data-end=\"3806\">first problem in the world</strong>.</p><h3 data-section-id=\"1f59cbs\" data-start=\"3809\" data-end=\"3841\">4 — Encounter the First Beat</h3><p data-start=\"3842\" data-end=\"3889\">A narrative situation requiring player choices.</p><h3 data-section-id=\"o1r0bo\" data-start=\"3891\" data-end=\"3917\">5 — Resolve a Conflict</h3><p data-start=\"3918\" data-end=\"3996\">This might involve a <strong data-start=\"3939\" data-end=\"3947\">raid</strong>, skill checks, diplomacy, or creative solutions.</p><h3 data-section-id=\"1tt11e7\" data-start=\"3998\" data-end=\"4027\">6 — Improve the Territory</h3><p data-start=\"4028\" data-end=\"4092\">Success allows the faction to develop the hex or gain resources.</p><h3 data-section-id=\"1hxejqz\" data-start=\"4094\" data-end=\"4118\">7 — Advance the Turn</h3><p data-start=\"4119\" data-end=\"4165\">The world reacts and new opportunities appear.</p><p data-start=\"4167\" data-end=\"4194\">And the cycle begins again.</p><hr data-start=\"4196\" data-end=\"4199\"><h3>Sample Gameplay Loop in Action</h3><p data-start=\"4239\" data-end=\"4255\">Example session:</p><pre class=\"overflow-visible! px-0!\" data-start=\"4257\" data-end=\"4533\"><code>Players explore an abandoned hex\n↓\nThey discover corrupted infrastructure\n↓\nA Campaign Beat triggers\n↓\nPlayers investigate the cause\n↓\nThey raid a hostile entity controlling the hex\n↓\nVictory restores part of the region\n↓\nFaction develops the territory\n↓\nTurn advances</code></pre><p data-start=\"4535\" data-end=\"4586\">Each success pushes the world closer to <strong data-start=\"4575\" data-end=\"4585\">repair</strong>.</p><img src=\"art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_grave_calm.jpeg\">"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116254938,
+        "modifiedTime": 1781116254938
+      },
+      "_key": "!journal.pages!Wofoz0j74D2ofsQP.vQTFtVz2pLy5hPRk"
+    }
+  ],
+  "categories": [],
+  "sort": 0,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775619847906,
+    "modifiedTime": 1781116254936,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!journal!Wofoz0j74D2ofsQP"
+}

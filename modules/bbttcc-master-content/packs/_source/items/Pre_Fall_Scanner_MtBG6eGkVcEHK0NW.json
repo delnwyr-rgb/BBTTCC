@@ -1,0 +1,88 @@
+{
+  "name": "Pre-Fall Scanner",
+  "type": "gear",
+  "img": "icons/tools/navigation/compass-brass-blue.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [
+      "tech"
+    ],
+    "category": "gear",
+    "source": "Phase 7 Seed (2026-05-10)",
+    "quantity": 1,
+    "description": {
+      "value": "<p>A relic-scanner. Sweep a hex and the device names what's hidden — radiation, waystones, buried tech, sleeping things. Three sweeps per Soma Break.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "frame": "tool",
+          "bound": "attuned",
+          "materialOf": [
+            {
+              "key": "pre-fall-component",
+              "qty": 1
+            },
+            {
+              "key": "focused-crystal",
+              "qty": 2
+            },
+            {
+              "key": "memory-resin",
+              "qty": 1
+            }
+          ],
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 3,
+              "max": 3,
+              "recoverPer": "soma-break"
+            },
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "failure": "misfire",
+            "origin": "pre-fall"
+          },
+          "price": {
+            "marks": 540,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII tool × 0.60 × tech 2.0",
+            "bound": "attuned",
+            "saleBack": 216
+          }
+        }
+      }
+    }
+  },
+  "_id": "MtBG6eGkVcEHK0NW",
+  "effects": [],
+  "folder": "Wxh1A343inwTUeoo",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1778963347124,
+    "modifiedTime": 1782159946544,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 0,
+  "_key": "!items!MtBG6eGkVcEHK0NW"
+}

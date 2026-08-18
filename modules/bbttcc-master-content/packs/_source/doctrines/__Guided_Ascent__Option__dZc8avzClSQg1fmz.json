@@ -1,0 +1,40 @@
+{
+  "name": "⭐ Guided Ascent [Option]",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunrise_2.png",
+  "system": {
+    "category": "strategic",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Guided Ascent [Option]</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> faith 20</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "optact_guided_ascent"
+    }
+  },
+  "_id": "dZc8avzClSQg1fmz",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601762,
+    "modifiedTime": 1782703702688,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!dZc8avzClSQg1fmz"
+}

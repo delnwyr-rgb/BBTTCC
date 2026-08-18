@@ -1,0 +1,95 @@
+{
+  "name": "Sept-Blessed Aegis",
+  "type": "armor",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "guardBonus": 2,
+    "evasionBonus": 0,
+    "resolveBonus": 2,
+    "resistances": [
+      "qliphothic"
+    ],
+    "armorSkill": "warding",
+    "equipped": false,
+    "tags": [
+      "shield",
+      "warding",
+      "sept-blessed"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A kite shield consecrated in a sept-house, its face inlaid with a prayer-resin sigil that warms faintly when the world's static draws near. Issued to chapter-wardens who walk into qliphothic ground on purpose.</p><p><strong>Consecrated.</strong> Corruption finds the shield quieter than the body behind it. Resists qliphothic.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +2, Resolve +2</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 150 Economy marks</p></li></ul>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "shield",
+          "signature": "Blessed once, and it took.",
+          "origin": "given",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A kite shield consecrated in a sept-house, its face inlaid with a prayer-resin sigil that warms faintly when the world's static draws near. Issued to chapter-wardens who walk into qliphothic ground on purpose.</p><p><b>Consecrated.</b> Corruption finds the shield quieter than the body behind it. Resists qliphothic.</p>",
+          "materialOf": [
+            "blessed-steel",
+            "prayer-resin",
+            "sept-leather"
+          ],
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII shield × 1",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      },
+      "grants": {
+        "resistances": [
+          {
+            "type": "qliphothic"
+          }
+        ]
+      }
+    }
+  },
+  "folder": "gD1WklJiuS6Vg2p3",
+  "_id": "bI0HBaGb7ErcCfL1",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782150391462,
+    "modifiedTime": 1782189726565,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!bI0HBaGb7ErcCfL1"
+}

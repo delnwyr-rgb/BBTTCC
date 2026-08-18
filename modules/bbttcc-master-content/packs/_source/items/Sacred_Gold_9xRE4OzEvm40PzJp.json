@@ -1,0 +1,78 @@
+{
+  "name": "Sacred Gold",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_gold.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "sacred-gold"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Gold reclaimed from sept-tithes and re-melted at consecrated forge. Resists qliphothic tarnish.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Gold that remembers the offering plate.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Gold reclaimed from sept-tithes and re-melted at consecrated forge. Resists qliphothic tarnish.</p>",
+          "charges": 2,
+          "materialKey": "sacred-gold",
+          "price": {
+            "marks": 450,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII material stamp",
+            "bound": "free",
+            "saleBack": 180
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "9xRE4OzEvm40PzJp",
+  "effects": [],
+  "sort": 474805,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137161792,
+    "modifiedTime": 1782156674941,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!9xRE4OzEvm40PzJp"
+}

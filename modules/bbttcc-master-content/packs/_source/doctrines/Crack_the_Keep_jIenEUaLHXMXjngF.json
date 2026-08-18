@@ -1,0 +1,64 @@
+{
+  "name": "Crack the Keep",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_smash_wall_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Everything you've got, thrown at one stubborn point in the stone. And then — that sound. That lovely, terrible sound of a keep giving up.</p><p><strong>On Success: 11 damage to all enemy tokens; breach burst; faction morale +1.</strong></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "crack_the_keep",
+      "meta": {
+        "tier": 4,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "violence",
+        "layer": "cross-layer",
+        "costBand": "heavy",
+        "raidTypes": [
+          "siege",
+          "violence"
+        ],
+        "fireMode": "post-commit",
+        "opCosts": {
+          "violence": 5,
+          "logistics": 2
+        },
+        "authoredSprint": "balance-w1"
+      },
+      "effects": {
+        "text": "On a breached round: all enemy tokens take 11 damage; the wall comes down in dust and fire (breach VFX)."
+      }
+    }
+  },
+  "_id": "jIenEUaLHXMXjngF",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "6ut7GT8pCAhpdWjS": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1779731207892,
+    "modifiedTime": 1781402960438,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!jIenEUaLHXMXjngF"
+}

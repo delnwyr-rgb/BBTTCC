@@ -1,0 +1,180 @@
+{
+  "name": "Hex-Carved Plate",
+  "type": "armor",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/DiplomatBodyguard2.png",
+  "system": {
+    "guardBonus": 4,
+    "evasionBonus": -1,
+    "resolveBonus": 1,
+    "resistances": [
+      "kinetic",
+      "qliphothic"
+    ],
+    "armorSkill": "plating",
+    "equipped": false,
+    "tags": [
+      "plate",
+      "hex-warded",
+      "attunement"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Plate</p></li><li><p><strong>Defense:</strong> Guard +4, Evasion -1, Resolve +1</p></li><li><p><strong>Requires:</strong> Plating (trained)</p></li><li><p><strong>Resistance:</strong> Kinetic, Qliphothic</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 675 Nonlethal marks</p></li></ul>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "The hex remembers what the steel would forget.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Heavy plate hand-engraved with hex-warding glyphs over every joint and seam. Cold-iron core, anchorstone fittings.</p><p>Slows the wearer; unmoves them. The hex grounds blunt force; the carving turns cursed-energy aside.</p>",
+          "materialOf": [
+            "cold-iron",
+            "hex-glyph-plate",
+            "anchorstone"
+          ],
+          "grants": {
+            "resistances": [
+              "kinetic",
+              "qliphothic"
+            ]
+          },
+          "price": {
+            "marks": 675,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII armor stamp",
+            "bound": "attuned",
+            "saleBack": 270
+          }
+        }
+      },
+      "grants": {
+        "resistances": [
+          "kinetic",
+          "qliphothic"
+        ]
+      }
+    }
+  },
+  "folder": "Iyyec8ij0PAfdLBd",
+  "_id": "47X9SsmkIHmpsIjp",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.resists",
+            "value": "kinetic",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.resists",
+            "value": "qliphothic",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 4,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.evasion",
+            "value": -1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.resolve",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "RsiFLyhGwKdmohsR",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781726106399,
+        "modifiedTime": 1781726106399,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!47X9SsmkIHmpsIjp.RsiFLyhGwKdmohsR"
+    }
+  ],
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137142766,
+    "modifiedTime": 1782151518971,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!47X9SsmkIHmpsIjp"
+}

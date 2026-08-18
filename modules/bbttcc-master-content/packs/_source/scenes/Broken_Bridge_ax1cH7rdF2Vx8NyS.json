@@ -1,0 +1,576 @@
+{
+  "name": "Broken Bridge",
+  "_id": "ax1cH7rdF2Vx8NyS",
+  "active": false,
+  "navigation": true,
+  "navOrder": 0,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-g0kiirNpz6BE97IA1GZAWQ.webp",
+  "width": 3840,
+  "height": 2160,
+  "padding": 0.25,
+  "initial": {
+    "x": null,
+    "y": null,
+    "scale": null
+  },
+  "grid": {
+    "type": 1,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 1,
+    "color": "#000000",
+    "alpha": 0.2,
+    "distance": 5,
+    "units": "ft"
+  },
+  "tokenVision": true,
+  "fog": {
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    },
+    "mode": 1
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": true,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "drawings": [],
+  "tokens": [
+    {
+      "name": "Glyph-Ward Pylon",
+      "displayName": 30,
+      "actorLink": true,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "texture": {
+        "src": "icons/svg/aura.svg",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": 0,
+      "displayBars": 0,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 1,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {},
+      "actorId": "mHs2fluhE9W80ArW",
+      "x": 2870,
+      "y": 1630,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "it9thQscwQ5qvApP",
+      "delta": null,
+      "elevation": 0,
+      "sort": 0,
+      "locked": false,
+      "hidden": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!ax1cH7rdF2Vx8NyS.it9thQscwQ5qvApP"
+    },
+    {
+      "name": "Glyph-Ward Pylon",
+      "displayName": 0,
+      "actorLink": true,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "texture": {
+        "src": "icons/svg/aura.svg",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": -1,
+      "displayBars": 0,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 1,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {},
+      "actorId": "mHs2fluhE9W80ArW",
+      "hidden": false,
+      "sort": 1,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "lQJT1OHK0XTtuAQk",
+      "delta": null,
+      "x": 4100,
+      "y": 1700,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!ax1cH7rdF2Vx8NyS.lQJT1OHK0XTtuAQk"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/kranzington.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1.5,
+        "scaleY": 1.5,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "name": "Kranzington",
+      "displayName": 30,
+      "actorLink": true,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": "derived.integrity"
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        }
+      },
+      "actorId": "SIjvNWY5VSnr2imH",
+      "hidden": false,
+      "sort": 2,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "YlvNNCzqwu7tpCbf",
+      "delta": null,
+      "x": 4200,
+      "y": 1900,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!ax1cH7rdF2Vx8NyS.YlvNNCzqwu7tpCbf"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Lobar.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "name": "Brexit the Terrible",
+      "displayName": 30,
+      "actorLink": true,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": 1,
+      "displayBars": 50,
+      "bar1": {
+        "attribute": "derived.integrity"
+      },
+      "bar2": {
+        "attribute": "derived.stress"
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        }
+      },
+      "actorId": "zc1XnmoXkLC6KGoB",
+      "hidden": false,
+      "sort": 3,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "3aOk8uWAYVa7vETG",
+      "delta": null,
+      "x": 4200,
+      "y": 1700,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!ax1cH7rdF2Vx8NyS.3aOk8uWAYVa7vETG"
+    }
+  ],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [],
+  "walls": [],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "folder": "eMpeqwnjtn1E4Fzp",
+  "sort": 225000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "wall-height": {
+      "advancedVision": true
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982553733,
+    "modifiedTime": 1783982553733,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "navName": "",
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "Broken Bridge",
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/GOTTGAIT%20Scenes/BrokenBridgeUS.mp4",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!ax1cH7rdF2Vx8NyS.defaultLevel0000"
+    }
+  ],
+  "shiftX": 0,
+  "shiftY": 0,
+  "initialLevel": "defaultLevel0000",
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "_key": "!scenes!ax1cH7rdF2Vx8NyS",
+  "templates": []
+}

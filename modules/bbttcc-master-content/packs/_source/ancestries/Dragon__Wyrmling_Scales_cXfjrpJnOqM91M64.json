@@ -1,0 +1,76 @@
+{
+  "_id": "cXfjrpJnOqM91M64",
+  "name": "Dragon: Wyrmling Scales",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_armor_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Wyrmling Scales.</strong> Your scales count as light armor (Guard 12 + Intrigue). When struck by a melee attack, the attacker takes 1 thermal damage on a hit.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "dragon-wyrmling",
+    "requirements": "Dragon",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "dragon",
+      "lineage": "Dragon",
+      "feature": "wyrmling",
+      "tierLevel": 1,
+      "version": "1.0.0",
+      "date": "2026-05-15",
+      "npAncestry": true
+    },
+    "fourththing": {
+      "principleSource": "ancestry"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1778961511252,
+    "modifiedTime": 1782167240130,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "folder": "3ZT3OPQvwKQwCJIr",
+  "sort": 275000,
+  "_key": "!items!cXfjrpJnOqM91M64"
+}

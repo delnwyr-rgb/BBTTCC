@@ -1,0 +1,62 @@
+{
+  "name": "Conceal Body",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_cloak_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Tuck the poor fella somewhere thoughtful. Behind the vending machine's a classic — nobody EVER checks behind the vending machine.</p><p><b>+2 turns before discovery; −2 alarm when found.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "conceal_body",
+      "meta": {
+        "tier": 1,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "intrigue",
+        "layer": "tactical",
+        "costBand": "light",
+        "raidTypes": [
+          "infiltration_alarm"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "intrigue": 1
+        },
+        "authoredSprint": "3a"
+      },
+      "effects": {
+        "text": "Hide a downed guard: +2 turns, -2 alarm on discovery."
+      }
+    }
+  },
+  "_id": "ARxh37EbJTz9wS5O",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 4750000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778965786766,
+    "modifiedTime": 1780163522465,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ARxh37EbJTz9wS5O"
+}

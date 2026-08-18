@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "NPA - Dragon",
+  "color": null,
+  "sorting": "a",
+  "_id": "3ZT3OPQvwKQwCJIr",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778964429866,
+    "modifiedTime": 1778964429866,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!3ZT3OPQvwKQwCJIr"
+}

@@ -1,0 +1,138 @@
+{
+  "name": "Aurablade: Stabilize Burn",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_escape.png.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p>Open the <strong>Stabilize Burn</strong> dialog and reduce, clear, or safely manage Burn according to class/subclass rules.</p>",
+      "chat": ""
+    },
+    "identifier": "aurablade_stabilize_burn",
+    "advancement": {},
+    "activities": {
+      "primary": {
+        "type": "utility",
+        "name": "Aurablade: Stabilize Burn",
+        "activation": {
+          "type": "bonus",
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "value": "",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "units": "self",
+          "value": "",
+          "override": false
+        },
+        "target": {
+          "affects": {
+            "type": "self",
+            "choice": false
+          },
+          "template": {
+            "count": "",
+            "units": "ft",
+            "type": "",
+            "contiguous": false,
+            "stationary": false
+          },
+          "override": false,
+          "prompt": true
+        },
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "_id": "OdmQ847e0z2puskL",
+        "img": null,
+        "sort": 0,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "aurablade_stabilize_burn",
+      "resourceAction": true,
+      "resourceDisplay": false,
+      "engine": "stateTrack",
+      "classId": "aurablade",
+      "track": "burn",
+      "actionKey": "aurablade_stabilize_burn",
+      "opensDialog": "aurablade_stabilize_burn"
+    }
+  },
+  "folder": "jzZQust69VtMPSOe",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459909019,
+    "modifiedTime": 1781116107033,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "0HJDPkWxEvKLPZQG",
+  "sort": 275000,
+  "_key": "!items!0HJDPkWxEvKLPZQG"
+}

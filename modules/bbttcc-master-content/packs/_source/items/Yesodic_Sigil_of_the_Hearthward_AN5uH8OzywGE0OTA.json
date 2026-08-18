@@ -1,0 +1,95 @@
+{
+  "name": "Yesodic Sigil of the Hearthward",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/yesodic_sigil_ward.png",
+  "system": {
+    "slot": "pin",
+    "tags": [
+      "yesodic",
+      "sigil",
+      "reversion-shield",
+      "attunement"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>Small enameled sigil of Yesodium-bonded sept-cloth and blessed thread, worn at the throat or pinned under the lapel.</p><p><strong>Reversion Shield (Harmonized, 1/raid).</strong> When the wearer (or one item they're carrying) would suffer a Reversion event, the sigil takes the hit instead — the sigil itself reverts to slag and is destroyed.</p><p><em>Unharmonized: a comforting weight at the throat. Nothing more.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "sigil",
+          "signature": "Worn against the day the world forgets your name.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {
+            "reversionShield": true,
+            "hearthward": true
+          },
+          "requiresHarmonization": true,
+          "lore": "<p>Small enameled sigil of Yesodium-bonded sept-cloth and blessed thread, worn at the throat or pinned under the lapel.</p><p><b>Reversion Shield (Harmonized, 1/raid).</b> When the wearer (or one item they're carrying) would suffer a Reversion event, the sigil takes the hit instead — the sigil itself reverts to slag and is destroyed.</p><p><i>Unharmonized: a comforting weight at the throat. Nothing more.</i></p>",
+          "materialOf": [
+            {
+              "key": "yesodium",
+              "qty": 1
+            },
+            {
+              "key": "sept-cloth",
+              "qty": 2
+            },
+            {
+              "key": "blessed-thread",
+              "qty": 3
+            }
+          ],
+          "price": {
+            "marks": 540,
+            "currency": "softpower",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII sigil stamp",
+            "bound": "attuned",
+            "saleBack": 216
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "AN5uH8OzywGE0OTA",
+  "effects": [],
+  "sort": 300000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777137210139,
+    "modifiedTime": 1778541956736,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!AN5uH8OzywGE0OTA"
+}

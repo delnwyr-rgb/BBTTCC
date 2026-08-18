@@ -1,0 +1,68 @@
+{
+  "name": "Alloy of Trust",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_hand_5.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Alloy of Trust.</strong> People who have seen you work learn that things you touch come back better.</p><ul><li>You gain a small mechanical bonus on <strong>Diplomacy (Presence)</strong> checks to convince others to let you <strong>repair, modify, or ritually work on</strong> their gear, relics, or sacred spaces.</li><li>When dealing with communities that have directly benefited from your repairs or healing in the past, the GM may reroll the lowest die on those checks.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "alloy-of-trust",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "requirements": "Soul-Smith (5th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "qdqMhHfZdVgUs1gN",
+  "flags": {
+    "bbttcc": {
+      "soulSmith": {
+        "alloyOfTrust": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459996552,
+    "modifiedTime": 1782167240825,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "d9TIJgni8NyP5wlx",
+  "sort": 125000,
+  "_key": "!items!d9TIJgni8NyP5wlx"
+}

@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Raid Maneuvers",
+  "color": null,
+  "sorting": "a",
+  "_id": "SziFuLdTIX4Y2Rav",
+  "description": "",
+  "sort": 100000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1771977107717,
+    "modifiedTime": 1771977107717,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!folders!SziFuLdTIX4Y2Rav"
+}

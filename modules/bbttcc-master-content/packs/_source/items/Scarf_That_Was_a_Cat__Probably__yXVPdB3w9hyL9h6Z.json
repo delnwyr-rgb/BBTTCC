@@ -1,0 +1,151 @@
+{
+  "name": "Scarf That Was a Cat (Probably)",
+  "type": "armor",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/cat_scarf2.png",
+  "system": {
+    "guardBonus": 0,
+    "evasionBonus": 0,
+    "resolveBonus": 2,
+    "resistances": [
+      "psychic"
+    ],
+    "armorSkill": "warding",
+    "equipped": false,
+    "tags": [
+      "mal-voiced",
+      "vestment",
+      "companion"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>An unreasonably long woolen scarf, two-tone gray, that occasionally shifts position on its own. Sometimes it tightens against the neck on a cold night. Sometimes it falls off your shoulder for no reason. Sometimes, very quietly, when you are alone in a room, it purrs. The previous owner left it to you. The previous owner was very specific that this was a kindness.</p><p><strong>Companion-Texture.</strong> +1 to Resolve while worn. Once per scene, when you would gain a Stress, you may pet the scarf instead. The Stress is averted. The scarf purrs faintly for a few seconds. Allies notice. Allies do not comment.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "vestment",
+          "signature": "Long. Soft. Occasionally purrs. The previous owner swears it was a cat. You believe them.",
+          "origin": "given",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>An unreasonably long woolen scarf, two-tone gray, that occasionally shifts position on its own. Sometimes it tightens against the neck on a cold night. Sometimes it falls off your shoulder for no reason. Sometimes, very quietly, when you are alone in a room, it purrs. The previous owner left it to you. The previous owner was very specific that this was a kindness.</p><p><b>Companion-Texture.</b> +1 to Resolve while worn. Once per scene, when you would gain a Stress, you may pet the scarf instead. The Stress is averted. The scarf purrs faintly for a few seconds. Allies notice. Allies do not comment.</p>",
+          "materialOf": [
+            "wool",
+            "memory",
+            "small-affection"
+          ],
+          "grants": {
+            "resistances": [
+              "psychic"
+            ]
+          },
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI vestment stamp",
+            "bound": "attuned",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "yXVPdB3w9hyL9h6Z",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.resists",
+            "value": "psychic",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.resolve",
+            "value": 2,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "PKER32L5s6sa7a4d",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781726108164,
+        "modifiedTime": 1781726108164,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!yXVPdB3w9hyL9h6Z.PKER32L5s6sa7a4d"
+    }
+  ],
+  "sort": 601563,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725669,
+    "modifiedTime": 1778541981609,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!yXVPdB3w9hyL9h6Z"
+}

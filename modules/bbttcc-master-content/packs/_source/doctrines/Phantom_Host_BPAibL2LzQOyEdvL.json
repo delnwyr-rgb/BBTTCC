@@ -1,0 +1,40 @@
+{
+  "name": "Phantom Host",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_monster.png",
+  "system": {
+    "category": "strategic",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Phantom Host</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> intrigue 15, faith 10</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "cls_dreamwalker"
+    }
+  },
+  "_id": "BPAibL2LzQOyEdvL",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601773,
+    "modifiedTime": 1782703702693,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!BPAibL2LzQOyEdvL"
+}

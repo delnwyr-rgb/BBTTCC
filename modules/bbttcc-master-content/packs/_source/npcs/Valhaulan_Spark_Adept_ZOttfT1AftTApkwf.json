@@ -1,0 +1,1214 @@
+{
+  "name": "Valhaulan Spark Adept",
+  "type": "npc",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/RaiderHymnspeaker2.png",
+  "system": {
+    "role": "Martial Caster (Storm-Voiced)",
+    "tier": 2,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 2
+      },
+      "intrigue": {
+        "value": 4
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 3
+      },
+      "soul": {
+        "value": 4
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 38,
+        "max": 38
+      },
+      "stress": {
+        "value": 19,
+        "max": 19
+      },
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 13
+      },
+      "resolve": {
+        "value": 12
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "geburah"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [
+      "5e-port",
+      "cr-2",
+      "common",
+      "phase2-narrative-applied"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "items": [
+    {
+      "name": "Yesodic Ward",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shield_1.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p>When hit by an attack, the adept can use its reaction to gain +2 Guard against that attack, potentially causing it to miss (3/Day).</p>",
+          "chat": ""
+        }
+      },
+      "_id": "TdXyQmQDP3Q4M6vE",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700829261,
+        "modifiedTime": 1780163239601,
+        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!ZOttfT1AftTApkwf.TdXyQmQDP3Q4M6vE"
+    },
+    {
+      "name": "Spark Rite",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_1.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p>If the adept starts its turn within 2 squares of the Spark of Yesod, it regains 5 Integrity.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "mT8KN8PtWGrynkyD",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1777700829261,
+        "modifiedTime": 1782167243592,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!ZOttfT1AftTApkwf.mT8KN8PtWGrynkyD"
+    },
+    {
+      "name": "Radiant Spike",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "2d6+3",
+          "attribute": "violence",
+          "type": "sephirotic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "effect": "<p><strong>Attack.</strong> +5 to hit, range 60 ft., one target. Hit: 10 (2d6+3) radiant.</p>",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        }
+      },
+      "_id": "F1G6CmnCTtoljxdo",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {
+        "autoanimations": {
+          "id": "ft-radiant-spike",
+          "label": "Radiant Spike",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "spell",
+              "animation": "guidingbolt",
+              "variant": "01",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700829261,
+        "modifiedTime": 1780163239601,
+        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!ZOttfT1AftTApkwf.F1G6CmnCTtoljxdo"
+    },
+    {
+      "name": "Disorienting Pulse (recharges on a Soma Break)",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mental.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port"
+        ],
+        "description": {
+          "value": "<p><strong>Attack.</strong> Each creature of the adept’s choice within 3 squares must succeed on a DC 13 Soul check or be disoriented until end of its next turn (cannot take reaction strikes; roll 3d10 keep lowest 2 on Perception (Mind)).</p>",
+          "chat": ""
+        }
+      },
+      "_id": "TGSLF3JWFWRmz5u8",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1777700829261,
+        "modifiedTime": 1782167243592,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!ZOttfT1AftTApkwf.TGSLF3JWFWRmz5u8"
+    },
+    {
+      "name": "Spark Vow",
+      "type": "power",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_1.png",
+      "system": {
+        "intent": "violence",
+        "channel": "presence",
+        "sephirah": "geburah",
+        "mode": "working",
+        "clarityRequired": 2,
+        "noiseGain": 1,
+        "activation": "action",
+        "target": "single",
+        "range": "far",
+        "damage": "2d8",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "none",
+          "number": 0,
+          "die": "d6",
+          "attribute": "",
+          "type": "kinetic",
+          "flavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "effect": "Name a target and speak a vow against them. The next time that target misses an attack against you or an ally, lightning answers — they take 2d8 energy to Integrity. Vow lasts one scene; only one Spark Vow may be active at a time.",
+        "tags": [
+          "translated",
+          "5e-port",
+          "phase2-narrative",
+          "manifestation"
+        ],
+        "category": "manifestation",
+        "flavor": "Ozone smell, and a bell rings somewhere in Valhaul.",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "A martial pact with a sky that owes you.",
+          "form": "vow",
+          "function": "punish",
+          "stability": "bound",
+          "interactionModel": "trigger",
+          "costType": "clarity",
+          "costValue": 2,
+          "costText": "2 Clarity",
+          "duration": "scene",
+          "durationText": "Until paid out or scene ends.",
+          "triggerText": "When the named target misses an attack against the Adept or an ally.",
+          "scale": "personal",
+          "targetText": "One creature within far range.",
+          "rangeAreaText": "Far; sightline.",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "If the named target dies before the vow pays out, the Adept takes 1 Stress.",
+          "pathResonance": "Geburah — severity, the answer that comes back.",
+          "fictionalPermission": "May call lightning on a missed attack.",
+          "gmCalibration": "Resolves once and ends; one Spark Vow at a time.",
+          "mechanicalHook": "2d8 energy on triggered miss.",
+          "signature": "Ozone, then a distant bell.",
+          "thirdThing": "The struck target's hair stands up for an hour after.",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          }
+        }
+      },
+      "_id": "NcSWpVeoOdr7Jsdu",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3
+      },
+      "flags": {
+        "autoanimations": {
+          "id": "ft-spark-vow",
+          "label": "Spark Vow",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "spell",
+              "animation": "magicmissile",
+              "variant": "01",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700841904,
+        "modifiedTime": 1780163239602,
+        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!ZOttfT1AftTApkwf.NcSWpVeoOdr7Jsdu"
+    },
+    {
+      "name": "Hammer-Bright Ward",
+      "type": "power",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_smith_hammer_holy_1.png",
+      "system": {
+        "intent": "violence",
+        "channel": "body",
+        "sephirah": "geburah",
+        "mode": "form",
+        "clarityRequired": 1,
+        "noiseGain": 0,
+        "activation": "bonus",
+        "target": "self",
+        "range": "self",
+        "damage": "",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "none",
+          "number": 0,
+          "die": "d6",
+          "attribute": "",
+          "type": "kinetic",
+          "flavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "effect": "While wielding a martial Form, +1 Guard. While the ward holds, kinetic damage you deal counts as energy.",
+        "tags": [
+          "translated",
+          "5e-port",
+          "phase2-narrative",
+          "manifestation"
+        ],
+        "category": "manifestation",
+        "flavor": "Sparks crawl up the haft.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "A bright halo around the haft of any weapon.",
+          "form": "ward",
+          "function": "protect",
+          "stability": "bound",
+          "interactionModel": "passive",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "1 Clarity / Soma Break",
+          "duration": "soma-break",
+          "durationText": "Until next Soma Break.",
+          "triggerText": "Activated as a Bonus action.",
+          "scale": "personal",
+          "targetText": "Self while armed.",
+          "rangeAreaText": "Self.",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "While the ward is up, the Adept cannot benefit from cover.",
+          "pathResonance": "Geburah — bright martial discipline.",
+          "fictionalPermission": "May reflavor kinetic strikes as energy.",
+          "gmCalibration": "+1 Guard, kinetic→energy on outgoing damage.",
+          "mechanicalHook": "+1 Guard; outgoing damage type swap.",
+          "signature": "Sparks crawl up the haft.",
+          "thirdThing": "Iron near the wielder rings faintly.",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          }
+        }
+      },
+      "_id": "A7B9KAYVvGO58KWI",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3
+      },
+      "flags": {
+        "autoanimations": {
+          "id": "ft-hammer-bright-ward",
+          "label": "Hammer-Bright Ward",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "shieldfx",
+              "animation": "ice",
+              "variant": "03",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777700841904,
+        "modifiedTime": 1780163239602,
+        "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!ZOttfT1AftTApkwf.A7B9KAYVvGO58KWI"
+    }
+  ],
+  "effects": [],
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ZOttfT1AftTApkwf",
+  "prototypeToken": {
+    "name": "Valhaulan Spark Adept",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/RaiderHymnspeaker2.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "folder": "uMhSIaldbbcnBh0H",
+  "sort": 647657,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777700829261,
+    "modifiedTime": 1783219933216,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!ZOttfT1AftTApkwf"
+}

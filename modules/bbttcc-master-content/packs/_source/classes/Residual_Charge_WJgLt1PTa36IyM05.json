@@ -1,0 +1,67 @@
+{
+  "name": "Residual Charge",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_spark.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“When something powered down, it didn’t stop talking to you.”</em></p><p>When you reduce a <strong>construct</strong>, vehicle, drone, mech, or other obviously artificial entity to 0 Integrity, you can ride the dying current for insight.</p><ul><li>Until the end of the current <strong>scene</strong>, you have <strong>advantage</strong> on your next <strong>tool check</strong> related to engineering, salvage, or repair.</li><li>This includes checks to stabilize wreckage, reclaim parts, or jury-rig field repairs.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-spark-reclaimer-residual-charge",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 6, Forge of the Spark Reclaimer",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "BvmSP1PPc1ABT2OO",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_sparkreclaimer",
+      "featureKey": "residual_charge"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996552,
+    "modifiedTime": 1781116162658,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "WJgLt1PTa36IyM05",
+  "sort": 300000,
+  "_key": "!items!WJgLt1PTa36IyM05"
+}

@@ -1,0 +1,78 @@
+{
+  "name": "Tree-of-Life Shard",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_treeoflife_shard.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "tree-of-life-shard"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Crystalline fragment dropped from sephirotic alignment events. Each shard carries one sefirah's signature; used in lenses and ward-anchors.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "A piece of the diagram, made solid.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Crystalline fragment dropped from sephirotic alignment events. Each shard carries one sefirah's signature; used in lenses and ward-anchors.</p>",
+          "charges": 1,
+          "materialKey": "tree-of-life-shard",
+          "price": {
+            "marks": 1800,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 4,
+            "notes": "TIII material stamp × rarity 4",
+            "bound": "free",
+            "saleBack": 720
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "o8ehKlLNHIIeH141",
+  "effects": [],
+  "sort": 125000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137161828,
+    "modifiedTime": 1782156674953,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!o8ehKlLNHIIeH141"
+}

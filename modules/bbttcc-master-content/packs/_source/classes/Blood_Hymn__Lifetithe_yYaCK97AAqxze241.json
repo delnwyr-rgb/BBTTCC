@@ -1,0 +1,71 @@
+{
+  "_id": "yYaCK97AAqxze241",
+  "name": "Blood Hymn: Lifetithe",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blood_hymn_tree.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2 data-start=\"1606\" data-end=\"1632\">Level 6 — <strong data-start=\"1619\" data-end=\"1632\">Lifetithe</strong></h2><p data-start=\"1634\" data-end=\"1667\">You convert flesh into certainty.</p><h3 data-start=\"1669\" data-end=\"1687\">How This Works</h3><p data-start=\"1688\" data-end=\"1733\">As part of an attack or Aura effect, you may:</p><ul data-start=\"1734\" data-end=\"1917\"><li data-start=\"1734\" data-end=\"1773\"><p data-start=\"1736\" data-end=\"1773\">Take <strong data-start=\"1741\" data-end=\"1773\">self-damage equal to your tier</strong></p></li><li data-start=\"1774\" data-end=\"1917\"><p data-start=\"1776\" data-end=\"1791\">Choose <strong data-start=\"1783\" data-end=\"1790\">one</strong>:</p><ul data-start=\"1794\" data-end=\"1917\"><li data-start=\"1794\" data-end=\"1835\"><p data-start=\"1796\" data-end=\"1835\">Add <strong data-start=\"1800\" data-end=\"1811\">+1 Burn</strong> without using an action</p></li><li data-start=\"1838\" data-end=\"1861\"><p data-start=\"1840\" data-end=\"1861\">Reroll one damage die</p></li><li data-start=\"1864\" data-end=\"1917\"><p data-start=\"1866\" data-end=\"1917\">Reclaim a previously expended Aura effect this turn</p></li></ul></li></ul><p data-start=\"1919\" data-end=\"1967\">This damage <strong data-start=\"1931\" data-end=\"1966\">cannot be reduced or redirected</strong>.</p><p data-start=\"1969\" data-end=\"1997\">The blade accepts sacrifice.</p>",
+      "chat": ""
+    },
+    "identifier": "bloodhymn_lifetithe",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "bloodhymn_lifetithe",
+      "burn": {
+        "delta": 1,
+        "_taggedBy": "bbttcc-burn-batch-tagger",
+        "_ts": 1770856292633,
+        "_from": "Blood Hymn: Lifetithe"
+      }
+    }
+  },
+  "folder": "KPLHk8VtCoaVM95K",
+  "sort": 112500,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459909023,
+    "modifiedTime": 1781116196160,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!yYaCK97AAqxze241"
+}

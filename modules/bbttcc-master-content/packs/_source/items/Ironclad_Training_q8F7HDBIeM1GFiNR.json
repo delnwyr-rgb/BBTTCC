@@ -1,0 +1,65 @@
+{
+  "_id": "q8F7HDBIeM1GFiNR",
+  "name": "Ironclad Training",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_ironclad_training.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Ironclad Training</h2><p><em>Armor isn’t weight. It’s permission.</em></p><hr /><h3>Rules</h3><p>While you are wearing armor or wielding a shield, you reroll the lowest die on defense checks against being knocked prone.</p><p>Additionally, when you would be pushed or pulled, you may reduce the distance moved by 1 square You can do so once per turn.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_ironclad_training",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-expansion-v1",
+      "generatedAt": "2026-01-18T20:40:45.006200+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 3400000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1782164185980,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!q8F7HDBIeM1GFiNR"
+}

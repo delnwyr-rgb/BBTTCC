@@ -1,0 +1,63 @@
+{
+  "folder": "GruW1UQmcpIS9hgw",
+  "name": "4. Operations Points",
+  "_id": "AwScUxrKt57LesMs",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "Where Attention Flows ...",
+      "type": "text",
+      "_id": "w2NKHuUT30jwM54F",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<img src=\"art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/sephirotic_hex.png\" /><h1>The Power Behind Your Faction</h1><p data-start=\"580\" data-end=\"665\">While characters act as individuals in the world, factions operate on a larger scale.</p><p data-start=\"667\" data-end=\"812\">To organize expeditions, build infrastructure, and confront major threats, a faction must spend <strong data-start=\"763\" data-end=\"784\">Operations Points</strong>, often shortened to <strong data-start=\"805\" data-end=\"811\">OP</strong>.</p><p data-start=\"814\" data-end=\"898\">Operations Points represent the <strong data-start=\"846\" data-end=\"897\">collective capacity of your organization to act</strong>.</p><p data-start=\"900\" data-end=\"954\">They reflect many different forms of power, including:</p><p data-start=\"956\" data-end=\"1066\">• manpower<br data-start=\"966\" data-end=\"969\" />• logistical support<br data-start=\"989\" data-end=\"992\" />• political influence<br data-start=\"1013\" data-end=\"1016\" />• economic resources<br data-start=\"1036\" data-end=\"1039\" />• coordination and planning</p><p data-start=\"1068\" data-end=\"1170\">When your faction spends OP, it is mobilizing all of these forces to accomplish something significant.</p><hr data-start=\"1172\" data-end=\"1175\" /><h1 data-section-id=\"fe001h\" data-start=\"1177\" data-end=\"1198\">What OP Is Used For</h1><p data-start=\"1200\" data-end=\"1250\">Operations Points fuel most major faction actions.</p><p data-start=\"1252\" data-end=\"1281\">Your faction may spend OP to:</p><p data-start=\"1283\" data-end=\"1409\">• develop hexes<br data-start=\"1298\" data-end=\"1301\" />• construct infrastructure<br data-start=\"1327\" data-end=\"1330\" />• conduct raids<br data-start=\"1345\" data-end=\"1348\" />• organize large expeditions<br data-start=\"1376\" data-end=\"1379\" />• support strategic activities</p><p data-start=\"1411\" data-end=\"1509\">If characters represent the <strong data-start=\"1439\" data-end=\"1448\">hands</strong> of the faction, OP represents its <strong data-start=\"1483\" data-end=\"1508\">strength and momentum</strong>.</p><hr data-start=\"1511\" data-end=\"1514\" /><h1 data-section-id=\"xeqkiv\" data-start=\"1516\" data-end=\"1543\">Earning Operations Points</h1><p data-start=\"1545\" data-end=\"1630\">Factions generate OP over time through the strength and stability of their territory.</p><p data-start=\"1632\" data-end=\"1661\">Common sources of OP include:</p><p data-start=\"1663\" data-end=\"1767\">• developed hexes<br data-start=\"1680\" data-end=\"1683\" />• functional infrastructure<br data-start=\"1710\" data-end=\"1713\" />• stable communities<br data-start=\"1733\" data-end=\"1736\" />• successful faction activities</p><p data-start=\"1769\" data-end=\"1864\">As your territory grows and becomes more organized, your faction gains greater capacity to act.</p><hr data-start=\"1866\" data-end=\"1869\" /><h1 data-section-id=\"arlcmr\" data-start=\"1871\" data-end=\"1899\">Spending Operations Points</h1><p data-start=\"1901\" data-end=\"1987\">When your faction attempts something large or coordinated, it will usually require OP.</p><p data-start=\"1989\" data-end=\"2011\">Some examples include:</p><p data-start=\"2013\" data-end=\"2193\">• launching a raid against a powerful enemy<br data-start=\"2056\" data-end=\"2059\" />• restoring infrastructure in a damaged hex<br data-start=\"2102\" data-end=\"2105\" />• organizing large-scale travel or expeditions<br data-start=\"2151\" data-end=\"2154\" />• supporting major strategic activities</p><p data-start=\"2195\" data-end=\"2281\">OP represents the <strong data-start=\"2213\" data-end=\"2240\">effort and coordination</strong> required to make these actions possible.</p><p data-start=\"2283\" data-end=\"2373\">Because OP is limited, factions must decide <strong data-start=\"2327\" data-end=\"2372\">carefully where to invest their resources</strong>.</p><hr data-start=\"2375\" data-end=\"2378\" /><h1 data-section-id=\"1lg7lgd\" data-start=\"2380\" data-end=\"2393\">Managing OP</h1><p data-start=\"2395\" data-end=\"2475\">Operations Points are one of the most important resources your faction controls.</p><p data-start=\"2477\" data-end=\"2515\">A faction with strong OP reserves can:</p><p data-start=\"2517\" data-end=\"2604\">• respond quickly to threats<br data-start=\"2545\" data-end=\"2548\" />• expand into new territory<br data-start=\"2575\" data-end=\"2578\" />• support large operations</p><p data-start=\"2606\" data-end=\"2687\">A faction with little OP must act cautiously and choose its priorities carefully.</p><p data-start=\"2689\" data-end=\"2783\">Managing OP well is often the difference between <strong data-start=\"2738\" data-end=\"2782\">steady progress and dangerous stagnation</strong>.</p><hr data-start=\"2785\" data-end=\"2788\" /><h1 data-section-id=\"62fvq3\" data-start=\"2790\" data-end=\"2806\">The Flow of OP</h1><p data-start=\"2808\" data-end=\"2871\">Over the course of a campaign, OP moves through a simple cycle.</p><pre class=\"overflow-visible! px-0!\" data-start=\"2873\" data-end=\"3063\"><code>Generate OP from Territory\n        ↓\nPlan Strategic Actions\n        ↓\nSpend OP to Act\n        ↓\nResolve Outcomes\n        ↓\nTerritory Changes\n        ↓\nGenerate OP Again</code></pre><p data-start=\"3065\" data-end=\"3186\">Success often leads to stronger territory, which produces more OP and allows the faction to attempt even larger projects.</p><hr data-start=\"3188\" data-end=\"3191\" /><h1 data-section-id=\"eo3w3t\" data-start=\"3193\" data-end=\"3210\">OP and Strategy</h1><p data-start=\"3212\" data-end=\"3283\">Because OP is limited, factions must constantly make strategic choices.</p><p data-start=\"3285\" data-end=\"3319\">You may need to decide whether to:</p><p data-start=\"3321\" data-end=\"3440\">• expand into new hexes<br data-start=\"3344\" data-end=\"3347\" />• strengthen existing territory<br data-start=\"3378\" data-end=\"3381\" />• confront dangerous enemies<br data-start=\"3409\" data-end=\"3412\" />• prepare for future threats</p><p data-start=\"3442\" data-end=\"3522\">Every decision shapes the direction of your faction and the future of the world.</p><hr data-start=\"3524\" data-end=\"3527\" /><h1 data-section-id=\"1641ien\" data-start=\"3529\" data-end=\"3552\">OP and the Great Work</h1><p data-start=\"3554\" data-end=\"3609\">Operations Points represent more than simple resources.</p><p data-start=\"3611\" data-end=\"3693\">They reflect the <strong data-start=\"3628\" data-end=\"3692\">collective will of people working together to repair reality</strong>.</p><p data-start=\"3695\" data-end=\"3834\">When factions spend OP to stabilize hexes, build communities, or confront corruption, they are contributing directly to the <strong data-start=\"3819\" data-end=\"3833\">Great Work</strong>.</p><p data-start=\"3836\" data-end=\"3887\">Each action pushes the world closer to restoration.</p><hr data-start=\"3889\" data-end=\"3892\" /><h1 data-section-id=\"jr4o1u\" data-start=\"3894\" data-end=\"3924\">What Players Should Remember</h1><p data-start=\"3926\" data-end=\"3963\">Three ideas define Operations Points.</p><p data-start=\"3965\" data-end=\"3993\"><strong data-start=\"3965\" data-end=\"3993\">1 — OP is faction energy</strong></p><p data-start=\"3995\" data-end=\"4055\">It represents the power your organization can bring to bear.</p><p data-start=\"4057\" data-end=\"4087\"><strong data-start=\"4057\" data-end=\"4087\">2 — OP enables big actions</strong></p><p data-start=\"4089\" data-end=\"4133\">Major faction activities usually require OP.</p><p data-start=\"4135\" data-end=\"4173\"><strong data-start=\"4135\" data-end=\"4173\">3 — OP requires careful management</strong></p><p data-start=\"4175\" data-end=\"4226\">How you spend OP shapes the future of the campaign.</p><hr data-start=\"4228\" data-end=\"4231\" /><h1 data-section-id=\"ex09de\" data-start=\"4233\" data-end=\"4250\">In Simple Terms</h1><p data-start=\"4252\" data-end=\"4312\">Operations Points are the <strong data-start=\"4278\" data-end=\"4311\">fuel that powers your faction</strong>.</p><p data-start=\"4314\" data-end=\"4395\">They determine what your organization can accomplish and how quickly it can grow.</p><p data-start=\"4397\" data-end=\"4482\">Used wisely, OP allows your faction to transform small successes into lasting change.</p><img src=\"art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/PortOverlay.png\" />"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.3.0",
+        "lastModifiedBy": null
+      },
+      "_key": "!journal.pages!AwScUxrKt57LesMs.w2NKHuUT30jwM54F"
+    }
+  ],
+  "categories": [],
+  "sort": 0,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775619852110,
+    "modifiedTime": 1775619852110,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!journal!AwScUxrKt57LesMs"
+}

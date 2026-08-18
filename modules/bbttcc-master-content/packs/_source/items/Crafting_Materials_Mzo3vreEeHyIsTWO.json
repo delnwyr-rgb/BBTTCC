@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Crafting Materials",
+  "color": null,
+  "sorting": "a",
+  "_id": "Mzo3vreEeHyIsTWO",
+  "description": "",
+  "sort": 100000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777567592221,
+    "modifiedTime": 1781331693995,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!Mzo3vreEeHyIsTWO"
+}

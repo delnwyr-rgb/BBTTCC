@@ -1,0 +1,62 @@
+{
+  "name": "Quote the Old Law",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_2.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Invoke a precedent so old even the rumor-mongers won't trespass on it. Dusty. Effective. The room sits back down.</p><p><b>−2 Suspicion; clear one Scandal on the table.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "courtly_quote_old_law",
+      "meta": {
+        "tier": 2,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "courtly",
+        "layer": "tactical",
+        "costBand": "medium",
+        "raidTypes": [
+          "presence"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "diplomacy": 2
+        },
+        "authoredSprint": "courtly-d"
+      },
+      "effects": {
+        "text": "Suspicion −2. Cancel one Scandal on the table."
+      }
+    }
+  },
+  "_id": "EIyI0hEOlKKqkseK",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "6ut7GT8pCAhpdWjS": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1779731271080,
+    "modifiedTime": 1780163523374,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!EIyI0hEOlKKqkseK"
+}

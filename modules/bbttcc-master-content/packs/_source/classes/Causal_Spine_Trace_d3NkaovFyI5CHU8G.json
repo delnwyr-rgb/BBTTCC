@@ -1,0 +1,118 @@
+{
+  "name": "Causal Spine Trace",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_21.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Causal Spine Trace.</strong> You can follow a single spine of cause and effect through otherwise chaotic Lore.</p><ul><li>When you investigate a <strong>major campaign event</strong> (a war, a hex’s fall, a Spark drift, a faction coup), you can spend an hour performing a ritual analysis: timelines drawn on walls, string on maps, or a thousand-yard stare.</li><li>Make an <strong>Occult (Mind), Lore (Mind), or Investigation (Mind)</strong> check (GM sets DC). On a success, you identify the <strong>primary causal spine</strong>: the 2–3 key decisions, entities, or hexes that drove the outcome.</li><li>This gives the GM explicit permission to hand you a <strong>story skeleton</strong> you can attack: those become the levers for future refactors.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "causal-spine-trace",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 16
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (16th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Causal Spine Trace",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_Prime.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984387,
+        "modifiedTime": 1777346199249
+      },
+      "_id": "SPmg6pZDbzF6EJRv",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.causalSpineTrace",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!d3NkaovFyI5CHU8G.SPmg6pZDbzF6EJRv"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "causalSpineTrace": true
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984387,
+    "modifiedTime": 1781116170351,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "d3NkaovFyI5CHU8G",
+  "sort": 206250,
+  "_key": "!items!d3NkaovFyI5CHU8G"
+}

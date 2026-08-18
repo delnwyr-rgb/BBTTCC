@@ -1,0 +1,67 @@
+{
+  "name": "Echo Temper",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“Metal remembers how it died. You teach it better endings.”</em></p><p>After you finish a <strong>a Soma Break</strong>, you can choose one weapon you have personally <strong>forged, repaired, or significantly modified</strong> during this adventure.</p><ul><li>For the next <strong>hour</strong>, that weapon deals an extra <strong>+1 damage</strong> on each hit.</li><li>The extra damage is the same type as the weapon’s normal damage.</li><li>You can have only one weapon under this effect at a time. Starting Echo Temper again ends the previous echo.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-spark-reclaimer-echo-temper",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 3, Forge of the Spark Reclaimer",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "BvmSP1PPc1ABT2OO",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_sparkreclaimer",
+      "featureKey": "echo_temper"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996554,
+    "modifiedTime": 1781116190113,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "taGYFGNL6DKgIC8C",
+  "sort": 200000,
+  "_key": "!items!taGYFGNL6DKgIC8C"
+}

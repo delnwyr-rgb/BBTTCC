@@ -1,0 +1,1450 @@
+{
+  "name": "Nyoom",
+  "type": "rig",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "rig",
+      "createdViaRigBuilder": true,
+      "createdAt": 1779215917857
+    },
+    "bbttcc-factions": {
+      "factionId": "H8sSXuuoTZIJKCXP",
+      "warLogs": [
+        {
+          "ts": 1780167122433,
+          "date": "5/30/2026, 1:52:02 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780167951973,
+          "date": "5/30/2026, 2:05:51 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780168661807,
+          "date": "5/30/2026, 2:17:41 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780168732054,
+          "date": "5/30/2026, 2:18:52 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780173120453,
+          "date": "5/30/2026, 3:32:00 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780178449692,
+          "date": "5/30/2026, 5:00:49 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780179933663,
+          "date": "5/30/2026, 5:25:33 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780211887134,
+          "date": "5/31/2026, 2:18:07 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780211932258,
+          "date": "5/31/2026, 2:18:52 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780211977971,
+          "date": "5/31/2026, 2:19:37 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780212024272,
+          "date": "5/31/2026, 2:20:24 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780212070587,
+          "date": "5/31/2026, 2:21:10 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780212108718,
+          "date": "5/31/2026, 2:21:48 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780212171776,
+          "date": "5/31/2026, 2:22:51 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780336216244,
+          "date": "6/1/2026, 12:50:16 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780336447378,
+          "date": "6/1/2026, 12:54:07 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780462183278,
+          "date": "6/2/2026, 11:49:43 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780462378082,
+          "date": "6/2/2026, 11:52:58 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780500420364,
+          "date": "6/3/2026, 10:27:00 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780510407695,
+          "date": "6/3/2026, 1:13:27 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780510514970,
+          "date": "6/3/2026, 1:15:14 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780510582478,
+          "date": "6/3/2026, 1:16:22 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780510691925,
+          "date": "6/3/2026, 1:18:11 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780510767280,
+          "date": "6/3/2026, 1:19:27 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780513607051,
+          "date": "6/3/2026, 2:06:47 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780521933765,
+          "date": "6/3/2026, 4:25:33 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780522371837,
+          "date": "6/3/2026, 4:32:51 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780522590560,
+          "date": "6/3/2026, 4:36:30 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780522853652,
+          "date": "6/3/2026, 4:40:53 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780599534470,
+          "date": "6/4/2026, 1:58:54 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781056411121,
+          "date": "6/9/2026, 8:53:31 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781559154592,
+          "date": "6/15/2026, 4:32:34 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781562204072,
+          "date": "6/15/2026, 5:23:24 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781567052859,
+          "date": "6/15/2026, 6:44:12 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781567256611,
+          "date": "6/15/2026, 6:47:36 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781567798547,
+          "date": "6/15/2026, 6:56:38 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781568797938,
+          "date": "6/15/2026, 7:13:17 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781570760869,
+          "date": "6/15/2026, 7:46:00 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781573113146,
+          "date": "6/15/2026, 8:25:13 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781573247429,
+          "date": "6/15/2026, 8:27:27 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781580447612,
+          "date": "6/15/2026, 10:27:27 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781580921481,
+          "date": "6/15/2026, 10:35:21 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781637135852,
+          "date": "6/16/2026, 2:12:15 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781736337995,
+          "date": "6/17/2026, 5:45:37 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781837279275,
+          "date": "6/18/2026, 9:47:59 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1783979399634,
+          "date": "7/13/2026, 4:49:59 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        }
+      ]
+    },
+    "fourththing": {
+      "combat": {
+        "heat": 1
+      },
+      "kind": "rig"
+    },
+    "tokenflip": {
+      "unfuck": false
+    },
+    "bbttcc-structures": {
+      "hasStructure": true,
+      "facilityMode": false,
+      "materialBOM": [
+        {
+          "materialKey": "bog-iron",
+          "qty": 4,
+          "originalQty": 4,
+          "family": "metal",
+          "tier": "I",
+          "name": "bog-iron",
+          "tagsCache": []
+        },
+        {
+          "materialKey": "ash-wood",
+          "qty": 2,
+          "originalQty": 2,
+          "family": "wood",
+          "tier": "I",
+          "name": "ash-wood",
+          "tagsCache": []
+        },
+        {
+          "materialKey": "hex-iron-cleat",
+          "qty": 1,
+          "originalQty": 1,
+          "family": "metal",
+          "tier": "II",
+          "name": "Hex-Iron Cleat",
+          "tagsCache": [
+            "material",
+            "hex-iron-cleat"
+          ]
+        }
+      ],
+      "state": "intact",
+      "plates": {
+        "current": 19,
+        "max": 19
+      },
+      "threshold": 1.2,
+      "resists": {
+        "kinetic": 0.5
+      },
+      "vulnerabilities": {
+        "energy|heat": {
+          "type": "energy",
+          "flavor": "heat",
+          "factor": 2
+        },
+        "energy|fire": {
+          "type": "energy",
+          "flavor": "fire",
+          "factor": 2
+        }
+      },
+      "loadBearing": false,
+      "collapseProfile": {
+        "fallFt": 10,
+        "damageDice": "2d10",
+        "nonlethal": true,
+        "knockbackFt": 5,
+        "triggerState": "breached"
+      },
+      "history": []
+    }
+  },
+  "system": {
+    "identity": {
+      "mobility": "mobile",
+      "state": "deployed",
+      "factionOwnerId": "H8sSXuuoTZIJKCXP",
+      "archetype": "Hexmobile",
+      "binding": {
+        "hexId": "",
+        "sceneId": "eepoQcXvPmRZLykB",
+        "tokenId": "usfS9RmzpqslImOn"
+      }
+    },
+    "crew": {
+      "slots": [
+        {
+          "role": "pilot",
+          "actorId": "",
+          "label": "Optimistic Growth Scrappy (OGS)"
+        },
+        {
+          "role": "crew",
+          "actorId": "",
+          "label": "Optimistic Growth Scrappy (OGS)"
+        }
+      ],
+      "capacity": {
+        "pilot": {
+          "min": 1,
+          "max": 1
+        },
+        "gunner": {
+          "min": 0,
+          "max": 0
+        },
+        "engineer": {
+          "min": 0,
+          "max": 0
+        },
+        "crew": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "crewMin": 1,
+      "crewMax": 2
+    },
+    "integrity": {
+      "value": 10,
+      "max": 10,
+      "tier": 1,
+      "bracket": "personal"
+    },
+    "derived": {
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 12
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "output": {
+      "modules": [],
+      "basePerTurn": {}
+    },
+    "travel": {
+      "speed": 3,
+      "range": 8,
+      "hazardResist": 0,
+      "domains": [
+        "land"
+      ],
+      "depthRating": 0
+    },
+    "tags": [
+      "hexmobile",
+      "faction-starter",
+      "personal",
+      "land"
+    ],
+    "actions": {
+      "movementUsedFt": 0,
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementBudgetFt": 30
+    },
+    "resources": {
+      "surge": {
+        "value": 1
+      }
+    }
+  },
+  "prototypeToken": {
+    "actorLink": true,
+    "disposition": 1,
+    "name": "Nyoom",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/hex_mobile_6.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      },
+      "tokenflip": {
+        "tokenfaces": [
+          {
+            "actorId": "eq4YqNrdav8m3c7b",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/hex_mobile_6.png",
+            "id": "Y4NWBS7zBZMJJ9BzCMHJ",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 1,
+            "height": 1,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          },
+          {
+            "actorId": "eq4YqNrdav8m3c7b",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/hex_mobile_6.png",
+            "id": "8i4wkUYAFHX8hoWczO5H",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 0.5,
+            "height": 0.5,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          }
+        ]
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "eq4YqNrdav8m3c7b",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/hex_mobile_6.png",
+  "items": [
+    {
+      "name": "Hexmobile Frame",
+      "type": "gear",
+      "img": "icons/svg/oak.svg",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "<p>Synthetic frame authored by the Rig Builder. Bracket: personal. Pilot Mount enabled — one pilot-fired weapon.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-frame"
+          },
+          "rigFrame": {
+            "bracket": "personal",
+            "baseIntegrity": 14,
+            "tierStep": 4,
+            "pilotMount": true,
+            "mobilityAllowed": [
+              "mobile"
+            ],
+            "slots": {
+              "weapon": 0,
+              "system": 1,
+              "output": 0
+            },
+            "capacity": {
+              "pilot": {
+                "min": 1,
+                "max": 1
+              },
+              "gunner": {
+                "min": 0,
+                "max": 0
+              },
+              "engineer": {
+                "min": 0,
+                "max": 0
+              },
+              "crew": {
+                "min": 0,
+                "max": 1
+              }
+            },
+            "actions": {
+              "pilot": [
+                "steer",
+                "evasive",
+                "swerve",
+                "fire-weapon"
+              ],
+              "gunner": [],
+              "engineer": [],
+              "crew": [
+                "brace",
+                "hold-on"
+              ]
+            },
+            "travel": {
+              "speed": 5,
+              "range": 10
+            }
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool × 0.60",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "_id": "HePnZXYpzk394Sxj",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518629,
+        "modifiedTime": 1784177518629,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!eq4YqNrdav8m3c7b.HePnZXYpzk394Sxj"
+    },
+    {
+      "name": "Sensor Suite",
+      "type": "gear",
+      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-system",
+            "passive": true
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 300000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518629,
+        "modifiedTime": 1784177518629,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "m5ehwl7EChZFRFqL",
+      "_key": "!actors.items!eq4YqNrdav8m3c7b.m5ehwl7EChZFRFqL"
+    },
+    {
+      "name": "Twin Autocannons",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_2.png",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "2d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 4,
+          "long": 12
+        },
+        "tags": [
+          "suppression",
+          "light"
+        ],
+        "effect": "",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>Belt-fed twin barrels. Less aimed than <em>insisted upon</em>. Suppression in service of statement.</p>"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-weapon"
+          },
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "frame": "weapon",
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "8b5ab879-3a84-4f1a-a5cd-955c3e7f2368",
+          "label": "Twin Autocannons",
+          "levels3d": {
+            "type": "explosion",
+            "data": {
+              "color01": "#FFFFFF",
+              "color02": "#FFFFFF",
+              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+            },
+            "sound": {
+              "enable": false
+            },
+            "secondary": {
+              "enable": false,
+              "data": {
+                "color01": "#FFFFFF",
+                "color02": "#FFFFFF",
+                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+              }
+            }
+          },
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "lasershot",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isReturning": false,
+              "isWait": false,
+              "onlyX": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.items.Item.H8o7ANSnEzum0J8C"
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 1800000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518629,
+        "modifiedTime": 1784177518629,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": "Compendium.bbttcc-master-content.items.Item.H8o7ANSnEzum0J8C",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "ufZCmobSOEjpA8dS",
+      "_key": "!actors.items!eq4YqNrdav8m3c7b.ufZCmobSOEjpA8dS"
+    },
+    {
+      "name": "Twin Autocannons",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_2.png",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "2d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 4,
+          "long": 12
+        },
+        "tags": [
+          "suppression",
+          "light"
+        ],
+        "effect": "",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>Belt-fed twin barrels. Less aimed than <em>insisted upon</em>. Suppression in service of statement.</p>"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-weapon"
+          },
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "frame": "weapon",
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "8b5ab879-3a84-4f1a-a5cd-955c3e7f2368",
+          "label": "Twin Autocannons",
+          "levels3d": {
+            "type": "explosion",
+            "data": {
+              "color01": "#FFFFFF",
+              "color02": "#FFFFFF",
+              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+            },
+            "sound": {
+              "enable": false
+            },
+            "secondary": {
+              "enable": false,
+              "data": {
+                "color01": "#FFFFFF",
+                "color02": "#FFFFFF",
+                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+              }
+            }
+          },
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "lasershot",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isReturning": false,
+              "isWait": false,
+              "onlyX": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.items.Item.H8o7ANSnEzum0J8C"
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 1800000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518629,
+        "modifiedTime": 1784177518629,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": "Compendium.bbttcc-master-content.items.Item.H8o7ANSnEzum0J8C",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "xlGqY3wQZrHAmv9c",
+      "_key": "!actors.items!eq4YqNrdav8m3c7b.xlGqY3wQZrHAmv9c"
+    }
+  ],
+  "effects": [],
+  "folder": "Khbibuaxxz1XieoW",
+  "sort": -150000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3,
+    "hnBU2gRBiyC5OEaO": 3,
+    "tuQB41n558gWyKyz": 2
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177518629,
+    "modifiedTime": 1784177518629,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!eq4YqNrdav8m3c7b"
+}

@@ -1,0 +1,45 @@
+{
+  "name": "Wedge of Doubt",
+  "type": "feat",
+  "img": "icons/skills/social/intimidation-impressing.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Wedge of Doubt.</strong> Sow distrust in the gallery. <em>Play:</em> −1 Favor with two courtiers toward your opponent.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "favorShift",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "_id": "pL7PI9u3D4DqvEw1",
+  "effects": [],
+  "folder": null,
+  "sort": 2100000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782065103711,
+    "modifiedTime": 1784079176431,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!pL7PI9u3D4DqvEw1"
+}

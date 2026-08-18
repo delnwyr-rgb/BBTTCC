@@ -1,0 +1,93 @@
+{
+  "name": "Communion Tea",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_rad_bloom_injector.jpeg",
+  "system": {
+    "slot": "consumable",
+    "tags": [
+      "consumable",
+      "tier-ii"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>Brewed at sept-houses and shared on the road. Settles the nerves, brightens the inner light. Three doses to a thermos.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>On use:</strong> Inflict <strong>5</strong> Stress; Restore <strong>1</strong> Clarity</p></li><li><p><strong>Charges:</strong> 3 (consumed on use)</p></li><li><p><strong>Target:</strong> Self</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 30 Economy marks</p></li></ul>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "consumable",
+          "signature": "Three sips. Three returns to yourself.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "Brewed at sept-houses and shared on the road. Settles the nerves, brightens the inner light. Three doses to a thermos.",
+          "charges": 3,
+          "consume": {
+            "effects": [
+              {
+                "kind": "track",
+                "op": "add",
+                "track": "stress",
+                "formula": "5"
+              },
+              {
+                "kind": "track",
+                "op": "add",
+                "track": "clarity",
+                "formula": "1"
+              }
+            ],
+            "decrement": true
+          },
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII consumable stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "folder": "guHYjt0gjPLU2wCs",
+  "_id": "RivQWhju3LC9srxP",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777096380555,
+    "modifiedTime": 1781745164619,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!RivQWhju3LC9srxP"
+}

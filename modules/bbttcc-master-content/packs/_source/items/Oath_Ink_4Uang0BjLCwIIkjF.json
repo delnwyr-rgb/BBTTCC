@@ -1,0 +1,81 @@
+{
+  "name": "Oath-Ink",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_ink.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "oath-ink",
+      "ink",
+      "pact",
+      "ritual"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Vegetal ink mixed with a drop of the writer's blood and a sept-witness's tear. Used in pact-styluses and notarized vows.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Ink that won't let the page lie.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Vegetal ink mixed with a drop of the writer's blood and a sept-witness's tear. Used in pact-styluses and notarized vows.</p>",
+          "charges": 3,
+          "materialKey": "oath-ink",
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII material stamp",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "4Uang0BjLCwIIkjF",
+  "effects": [],
+  "sort": 470313,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137194185,
+    "modifiedTime": 1782156674939,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!4Uang0BjLCwIIkjF"
+}

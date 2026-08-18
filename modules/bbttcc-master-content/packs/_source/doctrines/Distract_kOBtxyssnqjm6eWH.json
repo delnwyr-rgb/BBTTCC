@@ -1,0 +1,62 @@
+{
+  "name": "Distract",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_single_eye.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Hey — look over THERE! Works on guards, works on me, works on alarmingly many of you.</p><p><b>−2 alarm.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "distract",
+      "meta": {
+        "tier": 2,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "intrigue",
+        "layer": "tactical",
+        "costBand": "medium",
+        "raidTypes": [
+          "infiltration_alarm"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "intrigue": 2
+        },
+        "authoredSprint": "3a"
+      },
+      "effects": {
+        "text": "Pull attention away: -2 alarm."
+      }
+    }
+  },
+  "_id": "kOBtxyssnqjm6eWH",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 4825000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778965786765,
+    "modifiedTime": 1780163526215,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!kOBtxyssnqjm6eWH"
+}

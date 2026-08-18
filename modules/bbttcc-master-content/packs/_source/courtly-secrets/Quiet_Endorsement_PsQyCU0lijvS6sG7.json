@@ -1,0 +1,45 @@
+{
+  "name": "Quiet Endorsement",
+  "type": "feat",
+  "img": "icons/sundries/documents/document-sealed-brown-red.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Quiet Endorsement.</strong> A nod from the right box. <em>Play:</em> +1 Favor with a chosen courtier toward your side.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "favorPlus1",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "_id": "PsQyCU0lijvS6sG7",
+  "effects": [],
+  "folder": null,
+  "sort": 1000000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782065103711,
+    "modifiedTime": 1784079176429,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!PsQyCU0lijvS6sG7"
+}

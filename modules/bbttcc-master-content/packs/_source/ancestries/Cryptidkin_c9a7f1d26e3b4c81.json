@@ -1,0 +1,125 @@
+{
+  "_id": "c9a7f1d26e3b4c81",
+  "name": "Cryptidkin",
+  "type": "species",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Brennan.png",
+  "system": {
+    "category": "ancestry",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin.</strong> Normalized Bad Eden ancestry root.</p><p>Select one subspecies when building the character: <strong>Chupacabra, Jackalope, Furrykin</strong>.</p><p>This root grants the shared Cryptidkin core trait package. Subspecies layer flavor, size, and Tier powers on top.</p><p><em>“Every settlement has a story about you. None of them are accurate. All of them are useful.”</em></p><hr><p><em><strong>Cryptidkin Core Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (set by subspecies).</p></li><li><p><strong>Speed.</strong> 6 squares (subspecies may override).</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Cryptidkin does not grant fixed bonuses. Subspecies lean expressed through Tier powers.</p></li></ul><p><strong>Folklore Presence.</strong> When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as <em>omen</em>, <em>trophy</em>, or <em>legend</em>. It is never neutral. People have heard of your kind. They are almost always wrong, and that is almost always useful.</p><p><strong>Wasteland Adapted.</strong> You reroll the lowest die on checks against disease and environmental poison. You ignore the first nonmagical environmental hazard you encounter each Strategic Turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor’s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 12 squares You cannot be surprised while conscious.</p><p><strong>Subspecies.</strong> Choose one Cryptidkin subspecies (Chupacabra, Jackalope, Furrykin). Your subspecies grants Tier powers as you level (Tier I at creation, then 5/11/17).</p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "CKSIZE0000000001",
+        "type": "Size",
+        "configuration": {
+          "sizes": [
+            "sm",
+            "med"
+          ]
+        },
+        "level": 0,
+        "title": "",
+        "hint": "Small or Medium (set by subspecies).",
+        "value": {}
+      },
+      {
+        "_id": "CKCORE0000000001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.CKCORETRAITPLACE",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Folklore & Frame",
+        "hint": "Gain the core Cryptidkin ancestry traits."
+      }
+    ],
+    "movement": {
+      "walk": "30",
+      "units": null,
+      "hover": false,
+      "ignoredDifficultTerrain": []
+    },
+    "senses": {
+      "darkvision": 60,
+      "blindsight": null,
+      "tremorsense": null,
+      "truesight": null,
+      "units": null,
+      "special": "Folklore Presence; Survivor's Instinct."
+    },
+    "type": {
+      "value": "humanoid",
+      "custom": "",
+      "subtype": "Cryptidkin"
+    },
+    "identifier": "cryptidkin"
+  },
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestry",
+      "family": "cryptidkin",
+      "version": "2.0.0",
+      "date": "2026-04-18",
+      "absorbed": [
+        "jackalope",
+        "furrykin"
+      ]
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "effects": [],
+  "folder": "f95fcfa18822c4e3",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-ancestry-v2",
+      "uuid": "Item.c9a7f1d26e3b4c81",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1744977600000,
+    "modifiedTime": 1782167240130,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 1500000,
+  "_key": "!items!c9a7f1d26e3b4c81"
+}

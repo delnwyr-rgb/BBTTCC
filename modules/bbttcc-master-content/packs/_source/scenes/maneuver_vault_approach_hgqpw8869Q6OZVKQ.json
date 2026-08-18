@@ -1,0 +1,686 @@
+{
+  "folder": "OZ16qBcycY8DOdRW",
+  "name": "maneuver_vault_approach",
+  "_id": "hgqpw8869Q6OZVKQ",
+  "active": false,
+  "navigation": true,
+  "navOrder": 0,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-SVuoUDqSJartK063RYYrwA.webp",
+  "width": 3840,
+  "height": 2160,
+  "padding": 0.25,
+  "initial": {
+    "x": null,
+    "y": null,
+    "scale": null
+  },
+  "grid": {
+    "type": 1,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 1,
+    "color": "#000000",
+    "alpha": 0.2,
+    "distance": 5,
+    "units": "ft"
+  },
+  "tokenVision": true,
+  "fog": {
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    },
+    "mode": 1
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": true,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "drawings": [],
+  "tokens": [
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/patrolpersons_plate.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "name": "Thaarlbriindt",
+      "displayName": 30,
+      "actorLink": true,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "lockRotation": false,
+      "rotation": 180,
+      "alpha": 1,
+      "disposition": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": "derived.integrity"
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        }
+      },
+      "actorId": "YK2PSxphYxXQYm8B",
+      "hidden": false,
+      "sort": 14,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "pOtKyStnSruf7hFB",
+      "delta": null,
+      "x": 2600,
+      "y": 2300,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!hgqpw8869Q6OZVKQ.pOtKyStnSruf7hFB"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/verity_token.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "name": "Verity F",
+      "displayName": 30,
+      "actorLink": true,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "lockRotation": false,
+      "rotation": 180,
+      "alpha": 1,
+      "disposition": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": "derived.integrity"
+      },
+      "bar2": {
+        "attribute": "derived.stress"
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        }
+      },
+      "actorId": "kJMVlYmzQCd6K3aE",
+      "hidden": false,
+      "sort": 15,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "71rAuIfu4KjKSnX1",
+      "delta": null,
+      "x": 2800,
+      "y": 2600,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!hgqpw8869Q6OZVKQ.71rAuIfu4KjKSnX1"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/j355i3_token.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "name": "New Operative",
+      "displayName": 30,
+      "actorLink": true,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "lockRotation": false,
+      "rotation": 180,
+      "alpha": 1,
+      "disposition": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 1,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {},
+      "actorId": "mPbKcQt8WtTdCjdT",
+      "hidden": false,
+      "sort": 16,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "mJQAAHQtPKM02Lsj",
+      "delta": null,
+      "x": 2900,
+      "y": 2100,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!hgqpw8869Q6OZVKQ.mJQAAHQtPKM02Lsj"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/zirene_hold.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "name": "Zirene Holde (20)",
+      "displayName": 30,
+      "actorLink": true,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "lockRotation": false,
+      "rotation": 180,
+      "alpha": 1,
+      "disposition": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 1,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {},
+      "actorId": "cM55QgMC1c5XqHmz",
+      "hidden": false,
+      "sort": 17,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "kcYTWJOkHA9SSYDk",
+      "delta": null,
+      "x": 3000,
+      "y": 2600,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!hgqpw8869Q6OZVKQ.kcYTWJOkHA9SSYDk"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/vila_pov_2.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "name": "Vila",
+      "displayName": 30,
+      "actorLink": true,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "lockRotation": false,
+      "rotation": 180,
+      "alpha": 1,
+      "disposition": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        }
+      },
+      "actorId": "edSS8IM8W2IRIKrz",
+      "hidden": false,
+      "sort": 18,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "6EaEIlseSHJBxMfC",
+      "delta": null,
+      "x": 3000,
+      "y": 2200,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!hgqpw8869Q6OZVKQ.6EaEIlseSHJBxMfC"
+    }
+  ],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [],
+  "walls": [],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "wall-height": {
+      "advancedVision": true
+    },
+    "bbttcc-raid": {
+      "battleScene": true
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982526226,
+    "modifiedTime": 1783982526226,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "navName": "",
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "maneuver_vault_approach",
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/GOTTGAITbeat23423Vault1US.mp4",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!hgqpw8869Q6OZVKQ.defaultLevel0000"
+    }
+  ],
+  "shiftX": 0,
+  "shiftY": 0,
+  "initialLevel": "defaultLevel0000",
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "_key": "!scenes!hgqpw8869Q6OZVKQ",
+  "templates": []
+}

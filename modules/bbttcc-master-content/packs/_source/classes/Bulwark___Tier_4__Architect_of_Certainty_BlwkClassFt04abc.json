@@ -1,0 +1,64 @@
+{
+  "name": "Bulwark — Tier 4: Architect of Certainty",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_4.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>You no longer push against the world's resistances. They simply do not apply to you.</em></p><p><strong>At Bulwark Initiation 16</strong>, both poles of your inevitability harden:</p><ul><li><p><strong>Ruin bypass.</strong> Damage you deal as part of any feature that explicitly spends a Ruin Charge ignores all <em>kinetic</em>-type resistance and any cover/structure damage-reduction the target would otherwise apply. (Energy/Sephirotic/etc. resistances still apply.)</p></li><li><p><strong>Frame absorption.</strong> When a Frame Die you spend reduces incoming damage (per a doctrine feature or Tier 2 Anchor stance), reduce the incoming damage by an additional <strong>Violence value</strong> points before the Frame Die roll is added.</p></li></ul>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "bulwark_tier4_architect_of_certainty",
+    "requirements": "Bulwark Initiation 16",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 16
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "classfeat",
+      "classIdentifier": "bulwark",
+      "tierLevel": 4,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {}
+    }
+  },
+  "folder": "rWwlRrTVc3OdPSZA",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777003646532,
+    "modifiedTime": 1781116125972,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BlwkClassFt04abc",
+  "sort": 0,
+  "_key": "!items!BlwkClassFt04abc"
+}

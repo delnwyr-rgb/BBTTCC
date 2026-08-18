@@ -1,0 +1,145 @@
+{
+  "name": "Menhirkin: Stone Memory",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cracked_stone.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You don’t just see walls. You see what they remember.”</em></p><p>Your mind thinks like a load-bearing structure: you notice stress, fault-lines, and the way pressure travels through stone, metal, and people.</p><ul><li>You gain a small bonus to Perception and Insight checks, and your passive Perception and passive Insight improve.</li><li>You are especially good at spotting structural weakness, traps, and bad reinforcement.</li><li>In Bad Eden strategic play, your presence nudges Stabilize Landform and Patch-the-Breach type actions toward cheaper, smarter outcomes (handled via flags).</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "menhirkin-stone-memory",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Menhirkin",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Menhirkin: Stone Memory (Passive)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blood_hymn_1.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.perception.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 10
+          },
+          {
+            "key": "system.skills.insight.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 10
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1777346196629,
+        "modifiedTime": 1786827858208
+      },
+      "_id": "jg5Vn6ueqqlYB0rk",
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!9FYdCvbdlRMxZEcG.jg5Vn6ueqqlYB0rk"
+    }
+  ],
+  "folder": "9ZAaSSW35KsYH2F1",
+  "flags": {
+    "bbttcc": {
+      "menhirkinFeature": "stone_memory",
+      "opDiscounts": {
+        "stabilizeLandform": 1,
+        "patchBreach": 1
+      }
+    },
+    "dnd5e": {},
+    "bbttcc-character-options": {
+      "option": {}
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.xc0fKcrjWNDZFVDK",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1775004111090,
+    "modifiedTime": 1781116070507,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "9FYdCvbdlRMxZEcG",
+  "sort": 75000,
+  "_key": "!items!9FYdCvbdlRMxZEcG"
+}

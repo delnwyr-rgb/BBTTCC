@@ -1,0 +1,5436 @@
+{
+  "name": "Borgus",
+  "type": "character",
+  "img": "art/bbttcc/GOTTGAIT/ArtForBBTTCCModule/Gloomgill.png",
+  "prototypeToken": {
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/ArtForBBTTCCModule/Gloomgill.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "name": "Borgus",
+    "displayName": 30,
+    "actorLink": true,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 1,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1,
+      "alignment": ""
+    },
+    "attributes": {
+      "violence": {
+        "value": 5
+      },
+      "intrigue": {
+        "value": 4
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 1
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 1
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 1
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 1
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 5
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 1
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 3
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 0
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 1
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 0
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 1
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 16,
+        "max": 16
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 2
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": "Xi3jch9jJokVzp32",
+      "loyalty": 0,
+      "name": "Sylvio's Faction"
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "_id": "lqHGrqsjinf4giQh",
+  "items": [
+    {
+      "name": "Qliph-Scarred",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Qliph-Scarred4.png",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Qliph-Scarred.</strong> You walked out of a place that should have unmade you. The hollows and fractures in your soul never fully closed, and the world can feel the pressure leaking out.</p><hr><p><em><strong>Qliph-Scarred Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</p></li><li><p><strong>Size.</strong> You are Medium.</p></li><li><p><strong>Speed.</strong> Your walking speed is 6 squares</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Qliph-Scarred does not grant any attribute bonuses.</p></li></ul><p>Your Qliph-Scarred heritage grants you additional features through advancements (Item Grants) added during character creation.</p>",
+          "chat": ""
+        },
+        "advancement": {
+          "QLSIZ00000000001": {
+            "_id": "QLSIZ00000000001",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium Qliph-Scarred.",
+            "value": {},
+            "flags": {}
+          },
+          "QLSCAR0000000001": {
+            "_id": "QLSCAR0000000001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.PFguHdcJ3AbtSDhx",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Shadow Resilience",
+            "hint": "Gain the Qliph-Scarred: Shadow Resilience feature.",
+            "flags": {}
+          },
+          "QLSCAR0000000002": {
+            "_id": "QLSCAR0000000002",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.AC1pQoGk2r1JsO1t",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Qliphothic Saturation",
+            "hint": "Gain the Qliph-Scarred: Qliphothic Saturation feature.",
+            "flags": {}
+          },
+          "QLSCAR0000000003": {
+            "_id": "QLSCAR0000000003",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.0Jar440SAvE96hdE",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Hunger Mask",
+            "hint": "Gain the Qliph-Scarred: Hunger Mask feature.",
+            "flags": {}
+          },
+          "QLSCAR0000000004": {
+            "_id": "QLSCAR0000000004",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.bLbk3JlqcS1MfBcn",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Shadow-Wake",
+            "hint": "Gain the Qliph-Scarred: Shadow-Wake feature.",
+            "flags": {}
+          },
+          "QLSCAR0000000005": {
+            "_id": "QLSCAR0000000005",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.JYdGhXK2dKB1wEg6",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Strategic Hooks (Qliph-Scarred)",
+            "hint": "Grants OP and corruption hooks used by Bad Eden faction and world systems.",
+            "flags": {}
+          }
+        },
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": ""
+        },
+        "type": {
+          "value": "humanoid",
+          "custom": "",
+          "subtype": "Qliph-Scarred"
+        },
+        "identifier": "qliph-scarred"
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "race",
+          "version": "1.0.0",
+          "date": "2025-12-08",
+          "ancestryKey": "qliph_scarred"
+        },
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.rMuXXItrEQDROPEP"
+        }
+      },
+      "folder": "j42C7j9nQ8gpXSoM",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.rMuXXItrEQDROPEP",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "sort": 100000,
+      "_id": "hbcb1tnYpYm5Gjle",
+      "_key": "!actors.items!lqHGrqsjinf4giQh.hbcb1tnYpYm5Gjle"
+    },
+    {
+      "name": "Qliph-Scarred: Shadow Resilience",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“Darkness climbed into your bones and decided to stay.”</em></p><p><strong>Shadow Resilience.</strong> Your scars drink in hostile power instead of letting it tear you apart.</p><ul><li>You have resistance to <strong>qliphothic damage</strong>.</li><li>Your presence carries a subtle, unsettling weight; you gain a small bonus to Intimidation checks.</li><li>The deeper interactions with corruption, Qliphothic zones, and Darkness tracks are handled by Bad Eden engines and GM judgment.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "qliph-scarred-shadow-resilience",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Qliph-Scarred",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Qliph-Scarred: Shadow Resilience",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.traits.dr.value",
+                "type": "add",
+                "value": "necrotic",
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.intimidation.value",
+                "type": "add",
+                "value": "+1",
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>You have resistance to necrotic damage and a +1 bonus to Intimidation checks. Any extra “corruption handling” stays narrative/BBTTCC-engine side, not automated rolls.</p>",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177518786,
+            "modifiedTime": 1784177518786
+          },
+          "_id": "DKqezshCK0IgSxRg",
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lqHGrqsjinf4giQh.5bMc0MLwoJ3Xz7yR.DKqezshCK0IgSxRg"
+        }
+      ],
+      "folder": "k2E5xzg6QsIqtHKN",
+      "flags": {
+        "bbttcc": {
+          "speciesTrait": "qliph_scar_resilience"
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.PFguHdcJ3AbtSDhx"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.PFguHdcJ3AbtSDhx",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.pyafqkOEGubL4kPj",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "sort": 50000,
+      "_id": "5bMc0MLwoJ3Xz7yR",
+      "_key": "!actors.items!lqHGrqsjinf4giQh.5bMc0MLwoJ3Xz7yR"
+    },
+    {
+      "name": "Qliph-Scarred: Qliphothic Saturation",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_6.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Qliphothic Saturation.</strong> The hollows in you are already full of poison light.</p><ul><li>You have resistance to <strong>poison damage</strong>.</li><li>You often sense when a place is spiritually “overclocked” or unsafe; your scars hum in high-corruption zones.</li><li>Any radiation/corruption hooks in Bad Eden are driven by flags on this feature rather than automatic rolls.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "qliph-scarred-qliphothic-saturation",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Qliph-Scarred",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Qliph-Scarred: Qliphothic Saturation (Resist Poison)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blood_hymn_2.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.traits.dr.value",
+                "value": "poison",
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>You have resistance to poison damage. Advantage on saves vs the poisoned condition is adjudicated by the GM.</p>",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177518786,
+            "modifiedTime": 1784177518786
+          },
+          "_id": "qqzfey89d0lMavVJ",
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lqHGrqsjinf4giQh.KNxSfg72cNvOxARY.qqzfey89d0lMavVJ"
+        }
+      ],
+      "folder": "k2E5xzg6QsIqtHKN",
+      "flags": {
+        "bbttcc": {
+          "qliphFeature": "qliphothic_saturation",
+          "radiation": {
+            "corruptionResilience": 1
+          }
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.AC1pQoGk2r1JsO1t"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.AC1pQoGk2r1JsO1t",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.tRwLiTlpPCaTblAF",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "sort": 0,
+      "_id": "KNxSfg72cNvOxARY",
+      "_key": "!actors.items!lqHGrqsjinf4giQh.KNxSfg72cNvOxARY"
+    },
+    {
+      "name": "Qliph-Scarred: Hunger Mask",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_helmet_7.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Hunger Mask.</strong> You learned to wear your appetites like armor.</p><ul><li>You gain a small bonus to Stealth checks when hiding fear, pain, or desire.</li><li>Your body handles starvation, deprivation, and toxic cravings slightly better than most (handled narratively).</li><li>In Qliphothic zones, your mask sometimes slips, revealing the hollow radiance beneath.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "qliph-scarred-hunger-mask",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Qliph-Scarred",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Qliph-Scarred: Hunger Mask (Social Edge)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bite_animal_3.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.stealth.value",
+                "type": "add",
+                "value": "+1",
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>You gain a +1 bonus to Deception checks when concealing your true intentions or emotional state.</p>",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177518786,
+            "modifiedTime": 1784177518786
+          },
+          "_id": "Hrvkk9sBKFEAQP51",
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lqHGrqsjinf4giQh.RMCo6kVibbl5ZMUp.Hrvkk9sBKFEAQP51"
+        }
+      ],
+      "folder": "k2E5xzg6QsIqtHKN",
+      "flags": {
+        "bbttcc": {
+          "qliphFeature": "hunger_mask"
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16",
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.0Jar440SAvE96hdE"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.0Jar440SAvE96hdE",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.pOSdGDldqmRWAc1t",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "sort": 100000,
+      "_id": "RMCo6kVibbl5ZMUp",
+      "_key": "!actors.items!lqHGrqsjinf4giQh.RMCo6kVibbl5ZMUp"
+    },
+    {
+      "name": "Qliph-Scarred: Shadow-Wake",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_8.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Shadow-Wake.</strong> Wherever you go, the shadows remember.</p><ul><li>You leave behind subtle impressions in darkness and ruin; tracking you by mundane means is slightly harder.</li><li>You gain a small bonus to Stealth checks while in dim light or darkness.</li><li>Qliphothic entities may recognize the wake you leave, for better or worse (handled narratively).</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "qliph-scarred-shadow-wake",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Qliph-Scarred",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Qliph-Scarred: Shadow-Wake (Stealth Edge)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bow.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.stealth.value",
+                "type": "add",
+                "value": "+1",
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>You gain a +1 bonus to Stealth checks, especially when moving through dim light or deeper shadow.</p>",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177518786,
+            "modifiedTime": 1784177518786
+          },
+          "_id": "28LN8m7xQcrOl9LS",
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lqHGrqsjinf4giQh.NRSCFSgYUCdF2Ww1.28LN8m7xQcrOl9LS"
+        }
+      ],
+      "folder": "k2E5xzg6QsIqtHKN",
+      "flags": {
+        "bbttcc": {
+          "qliphFeature": "shadow_wake"
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.bLbk3JlqcS1MfBcn"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.bLbk3JlqcS1MfBcn",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.KCZHNg0m80kvPSlT",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "sort": 25000,
+      "_id": "NRSCFSgYUCdF2Ww1",
+      "_key": "!actors.items!lqHGrqsjinf4giQh.NRSCFSgYUCdF2Ww1"
+    },
+    {
+      "name": "Qliph-Scarred: Strategic Hooks (Qliph-Scarred)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_1.png.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“Send the Qliph-Scarred into the bad places. If they come back smiling, it means the rest of probably can still come back.”</em></p><p><strong>OP Edge.</strong> Your faction leans toward problem-solving in corrupted zones, containment operations, and subtle social pressure.</p><p><strong>Corruption-Tuned.</strong> You help keep others steady in the presence of Darkness, even when it whispers to you first.</p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "qliph-scarred-strategic-hooks",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Qliph-Scarred",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Qliph-Scarred: Strategic Hooks (Bad Eden OP Flags)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_book_1.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "flags.bbttcc.op.intrigue.baseBonus",
+                "value": 1,
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.bbttcc.op.nonLethal.baseBonus",
+                "value": 1,
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "<p>Data-only for your Bad Eden OP and world engines: Qliph-Scarred factions lean toward Intrigue and Non-Lethal lines, especially in corrupted or unstable zones.</p>",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177518786,
+            "modifiedTime": 1784177518786
+          },
+          "_id": "peAXJ5Bzbrimm4Tc",
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lqHGrqsjinf4giQh.Sx0OqcpQEYgaxV42.peAXJ5Bzbrimm4Tc"
+        }
+      ],
+      "folder": "k2E5xzg6QsIqtHKN",
+      "flags": {
+        "bbttcc": {
+          "kind": "ancestryHooks",
+          "opEffects": {
+            "intrigue": 1,
+            "nonLethal": 1
+          },
+          "corruptionSpecialist": 1,
+          "version": "1.0.0"
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.JYdGhXK2dKB1wEg6"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.JYdGhXK2dKB1wEg6",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.7omOVWI5D3ujtxpg",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "sort": 200000,
+      "_id": "Sx0OqcpQEYgaxV42",
+      "_key": "!actors.items!lqHGrqsjinf4giQh.Sx0OqcpQEYgaxV42"
+    },
+    {
+      "name": "Qliph-Scarred Heritage: Chthonic",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_monster_1.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Qliph-Scarred heritage: Chthonic.</p><p><em>“There is a place older than Hell. You remember being there. It remembers you back.”</em></p><p><strong>Qliph-Scarred (Chthonic).</strong> Your scar is a root. The unmaking that almost took you went down, not sideways — into strata of reality older than the gods that eventually got around to naming them. You walked out up through something that shouldn’t have had a staircase. Parts of that staircase are still in your legs.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Qliph-Scarred does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Body</strong> in fiction and through Tier powers.</p></li></ul><h3>Qliph-Scarred Core: What Walked Out</h3><p><em>Shared across all Qliph-Scarred heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Shadow Resilience.</strong> You have resistance to qliphothic damage. You reroll the lowest die on Body checks against effects that would drain, wither, or corrupt your body.</p></li><li><p><strong>Qliphothic Saturation.</strong> Once per scene, when you fail a Soul check, you may reroll it — but your scene's Darkness-gain count increases by 1. The scar pays for what the scar saves.</p></li><li><p><strong>Hunger Mask.</strong> You can suppress a bodily need (hunger, thirst, sleep, breath) for up to 24 hours by deciding to; you do not suffer its penalties during that window. At the end of the 24 hours, all deferred needs strike you at once, each as a separate Stress-class consequence.</p></li><li><p><strong>Shadow-Wake.</strong> Creatures with qliphothic attunement (demons, corrupt sephirot, Radiation-warped entities) can sense you at 12 squares and know you have been marked. They may not know how to read the mark.</p></li></ul><h3>Chthonic Traits</h3><ul><li><p><strong>Old-Dark Vision.</strong> You have low-light vision to 12 squares, and in darkness you see in color rather than greyscale. You have been in a dark older than eyes, and it taught you how.</p></li><li><p><strong>Root-Bound.</strong> Once per Soma Break, you may spend 10 minutes in physical contact with uncut earth or unworked stone. Until your next Soma Break, you gain a +1 rank bonus on all Body checks. The depth is lending you some of itself.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Violence OP</strong> and <strong>+1 Faith OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Underground / Sunken / Primordial</em> hexes, your faction's excavation, exhumation, and deep-passage operations cost 1 fewer OP.</p></li><li><p><strong>Downward Witness.</strong> Once per Strategic Turn, you may consult the depth beneath any hex your faction occupies. The GM answers one question about what lies structurally or historically below the surface. The depth does not lie; the depth is also not always relevant.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Qliphothic Saturation</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Free  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Reroll a failed Soul check. Cost: scene's Darkness-gain count goes up by 1.</span></p></div>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "6c5aa51c8a90c6a8",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.PL8ziBJUUMdeiFN0",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Chthonic Tier I",
+            "hint": "Gain your Chthonic Tier I feat."
+          }
+        ],
+        "identifier": "qliph_scarred_chthonic_heritage",
+        "requirements": "Qliph-Scarred",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "qliph_scarred",
+          "lineage": "Chthonic",
+          "version": "1.1.0",
+          "date": "2026-04-19",
+          "rfiNative": true,
+          "opEffects": {
+            "violence": 2,
+            "faith": 1
+          }
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "vs": "vs:effects that would drain",
+              "note": "on Body checks against effects that would drain, wither, or corrupt your body"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "vs": "vs:effects that would drain",
+              "note": "Body checks against effects that would drain, wither, or corrupt your body"
+            }
+          ],
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "violence-op",
+              "amount": 2
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "faith-op",
+              "amount": 2
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-skill-fail",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Qliphothic Saturation. Once per scene, when you fail a Soul check, you may reroll it"
+                }
+              }
+            }
+          ]
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.60MZEDvlJZr1oZPg"
+        }
+      },
+      "folder": "B4rzG2etCobsfOlP",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.60MZEDvlJZr1oZPg",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-heritages-v1.1",
+          "uuid": "Item.60MZEDvlJZr1oZPg",
+          "coreVersion": "13.351",
+          "systemId": "fourththing",
+          "systemVersion": "0.6.0"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "sort": 0,
+      "_id": "O3qOx8VqsDP1DiRS",
+      "_key": "!actors.items!lqHGrqsjinf4giQh.O3qOx8VqsDP1DiRS"
+    },
+    {
+      "name": "Qliph-Scarred (Chthonic): What the Deep Dark Taught You",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_monster.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-canon-qliph-scarred=\"v1\" style=\"display:none\"></div><p><em>\"There are ways to move that the sun never got to review.\"</em></p><p><strong>What the Deep Dark Taught You (1/Soma Break).</strong> Bonus action — sink partially into shadow, earth, or stone. For up to 1 minute, while sunken you gain:</p><ul><li><p>Reroll the lowest die on Stealth (Intrigue) checks.</p></li><li><p>Difficult terrain costs you no extra movement.</p></li><li><p>You can move through spaces 1 square wide.</p></li><li><p>Resistance to qliphothic damage.</p></li></ul><p>The effect ends early if you are fully submerged in running water or take sephirotic damage.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"qliphChthonicDeepDark\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>What the Deep Dark Taught You</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Bonus action (1-min duration)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Sink into shadow/earth/stone for up to 1 min: reroll-lowest on Stealth · ignore difficult terrain · squeeze through 1 square gaps · resist qliphothic damage. Ends early on running water or sephirotic damage.</span></p></div>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "qliph_scarred_chthonic_tier1",
+        "requirements": "Qliph-Scarred (Chthonic)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [
+            {
+              "period": "sr",
+              "type": "recoverAll",
+              "formula": ""
+            }
+          ],
+          "max": "1"
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "qliph_scarred",
+          "feature": "what_the_deep_dark_taught_you",
+          "lineage": "Chthonic",
+          "tierLevel": 1,
+          "version": "1.1.0",
+          "date": "2026-04-19",
+          "rfiNative": true
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "skill": "stealth",
+              "mode": "reroll-lowest"
+            },
+            {
+              "context": "check",
+              "attribute": "intrigue",
+              "mode": "reroll-lowest"
+            }
+          ],
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.PL8ziBJUUMdeiFN0"
+        }
+      },
+      "folder": "i2LJtRQvaflkhVMU",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.PL8ziBJUUMdeiFN0",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-heritages-v1.1",
+          "uuid": "Item.PL8ziBJUUMdeiFN0",
+          "coreVersion": "13.351",
+          "systemId": "fourththing",
+          "systemVersion": "0.6.0"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "sort": 0,
+      "_id": "GXCHNCLx8T7DbANv",
+      "_key": "!actors.items!lqHGrqsjinf4giQh.GXCHNCLx8T7DbANv"
+    },
+    {
+      "name": "Bulwark",
+      "type": "class",
+      "system": {
+        "category": "path",
+        "identifier": "bulwark",
+        "source": "",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">⚙ ENGINE NOTE — Frame &amp; Ruin are now ◆ Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the ◆ Surge menu. Automated: Polarity Mastery (melee strike, base die ≥ 8 → +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p><em>\"Set your feet. The line forms on you.\"</em></p>\n<p>The Bulwark is the wall — and the wall runs on <strong>Surge</strong>, like everyone, but yours arrives the hard way: every time you <strong>take Integrity damage you bank +1 Surge</strong> (max +2/round). You eat the blow and turn it into the power to anchor, erupt, or hold. At zero Surge you still stand in the way; soak one hit and your turn opens up.</p>\n<h3>The Fortress (spent via Surge — Bulwark only)</h3>\n<ul>\n  <li><strong>Brace Wall</strong> (1) — you and adjacent allies gain DR equal to Tier this round.</li>\n  <li><strong>Bulwark Stance</strong> (6) — adjacent allies share your defenses until your next turn.</li>\n  <li><strong>Anchor</strong> (5) — you and one ally become immune to forced movement and crowd-control until next round.</li>\n  <li><strong>Mass Aegis</strong> (8) — allies within Tier squares gain +Tier to every defense this round.</li>\n  <li><strong>Sanctum</strong> (9) — immune to one damage type for a round.</li>\n  <li><strong>Mythic Stand</strong> (10) — invulnerable until the start of your next turn.</li>\n</ul>\n<p>These were always the Bulwark's birthright; they no longer leak into everyone else's menu. <strong>Frame Dice</strong> and <strong>Ruin Charges</strong> endure as the strategic layer — Catastrophic Entry still sunders armor and breaches structures, Ruin still cuts a Siege's cost — and both refill on a Soma Break.</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "2nStBOaROOJFmDVk",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.BlwkClassFt01abc",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 1,
+            "title": "Bulwark — Tier 1: Founding Stance"
+          },
+          {
+            "_id": "xMkzggxhV7D4dlsW",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.BlwkClassFt02abc",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 6,
+            "title": "Bulwark — Tier 2: Anchor or Advance"
+          },
+          {
+            "_id": "1pk6AixW41XX5BKD",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.BlwkClassFt03abc",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 11,
+            "title": "Bulwark — Tier 3: Polarity Mastery"
+          },
+          {
+            "_id": "7ATFRxDnwerU82M0",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.BlwkClassFt04abc",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 16,
+            "title": "Bulwark — Tier 4: Architect of Certainty"
+          }
+        ]
+      },
+      "flags": {
+        "bbttcc": {
+          "primary": "strength",
+          "opBonus": {
+            "violence": 3,
+            "siege": 2
+          }
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.XVCamqENQpSFYQOS"
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Warlord2.png",
+      "effects": [],
+      "folder": "UMEcF0hVGEJ9UeD2",
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "sort": 100000,
+      "_stats": {
+        "systemId": "fourththing",
+        "coreVersion": "14.364",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.1",
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.XVCamqENQpSFYQOS",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "khtBMt44zZkXwFHM",
+      "_key": "!actors.items!lqHGrqsjinf4giQh.khtBMt44zZkXwFHM"
+    },
+    {
+      "name": "Bulwark — Tier 1: Founding Stance",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_10.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">⚙ ENGINE NOTE — Frame &amp; Ruin are now ◆ Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the ◆ Surge menu. Automated: Polarity Mastery (melee strike, base die ≥ 8 → +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p><em>The world has two ways of saying no to change. You learn one of them today.</em></p><p><strong>On gaining Bulwark Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Athletics (Violence)</strong>.</p></li><li><p>Skill rank +1 in <strong>one tool of your choice</strong> (any single tool tracked as a skill on your sheet).</p></li><li><p><strong>Violence OP cap +3</strong> and <strong>Siege OP cap +2</strong> on the faction your character belongs to.</p></li><li><p>Your <strong>Frame Dice</strong> pool comes online (persistence — d8 dice, spend to absorb hits or fuel doctrine effects). Pool max = max(2, ceil((Violence value + Bulwark Initiation) / 3)), capped at 8.</p></li><li><p>Your <strong>Ruin Charges</strong> pool comes online (inevitability — single-use charges, spend to fuel offensive doctrine effects). Same pool-size formula.</p></li></ul><p>Both pools refill on a Soma Break. How you generate them depends on your chosen Path; see your doctrine's L1 feature.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "bulwark_tier1_founding_stance",
+        "requirements": "Bulwark Initiation 1",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [
+        {
+          "name": "Founding Stance: Athletics +1",
+          "img": "icons/skills/melee/shield-block-bash-yellow.webp",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.athletics.value",
+                "value": 1,
+                "type": "add",
+                "priority": 10,
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Passive: Founding Stance: Athletics +1",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "sprint": "passive-ae-2026-04-28"
+            }
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "_id": "WRxpkdXH7WzavuRw",
+          "showIcon": 1,
+          "folder": null,
+          "_stats": {
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "createdTime": 1784177518786,
+            "modifiedTime": 1784177518786,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!lqHGrqsjinf4giQh.7yzb9Wyk7jRUVIls.WRxpkdXH7WzavuRw"
+        }
+      ],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "classfeat",
+          "classIdentifier": "bulwark",
+          "tierLevel": 1,
+          "version": "1.0.0",
+          "date": "2026-04-23",
+          "rfiNative": true,
+          "opEffects": {
+            "capDelta": {
+              "violence": 3,
+              "siege": 2
+            }
+          }
+        },
+        "fourththing": {
+          "grants": {},
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.BlwkClassFt01abc"
+        }
+      },
+      "folder": "rWwlRrTVc3OdPSZA",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.BlwkClassFt01abc",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "sort": 0,
+      "_id": "7yzb9Wyk7jRUVIls",
+      "_key": "!actors.items!lqHGrqsjinf4giQh.7yzb9Wyk7jRUVIls"
+    },
+    {
+      "name": "Path of the Cataclyst (Bad Eden)",
+      "type": "subclass",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_atom_1.png",
+      "system": {
+        "category": "doctrine",
+        "classIdentifier": "bulwark",
+        "source": "Bad Eden Originals — Sprint F (2026 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"Something gives way. You aim where.\"</em></p>\n<p><strong>Doctrine:</strong> Controlled eruption — trade stability for force on purpose.</p>\n<p>The Cataclyst is the wall that decides to come down on someone. Your Surge spends turn your own stored impact into offense: a strike that erupts, a seam found in anything, a moment where the ground itself gives up standing still.</p>\n<h3>Path (spent via Surge)</h3>\n<ul>\n  <li><strong>Erupt</strong> (1) — your next Strike blazes (+Tier d6 exploding) and hurls the target back.</li>\n  <li><strong>Shatter</strong> (3) — your next Strike ignores resistances; the target is Staggered.</li>\n  <li><strong>Cataclysm</strong> (5) — your next Strike lands as a max-die crit, and foes in reach are knocked Prone.</li>\n</ul>",
+          "chat": ""
+        },
+        "identifier": "bbttcc-bulwark-cataclyst",
+        "advancement": [],
+        "spellcasting": {
+          "progression": "none",
+          "preparation": {}
+        }
+      },
+      "effects": [],
+      "folder": "HmbujXzEJL7v48Q9",
+      "flags": {
+        "fourththing": {
+          "principleSource": "subclass"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.TymJux36egJ8oH6o"
+        }
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "sort": 100000,
+      "_stats": {
+        "systemId": "fourththing",
+        "coreVersion": "14.364",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.1",
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.TymJux36egJ8oH6o",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "2N0hFrkLmzg6CGSH",
+      "_key": "!actors.items!lqHGrqsjinf4giQh.2N0hFrkLmzg6CGSH"
+    },
+    {
+      "name": "Archetype: The Emperor (Administrator)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_emperor.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Order is not an idea. It is a budget, a road network, and somebody staying late to sign the papers.”</em></p>\n<p><strong>Archetype (Bad Eden): The Emperor (Administrator).</strong> Civic architect, system-builder, and keeper of functional continuity. You turn collapse into policy and policy into Athletics.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your faction’s economy stretches farther around you. This Archetype is associated with <strong>+3 Economy OPs</strong> in faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of logistics, management, civic control, and state capacity.</li>\n</ul>\n<h3>attributes (Archetype ASI)</h3>\n<p>When you choose this Archetype, you gain <strong>3 attribute points</strong> to distribute using the 2024 rules (no more than +2 to any one score). Common patterns include:</p>\n<ul>\n  <li><strong>Infrastructure First:</strong> +2 Mind, +1 Soul</li>\n  <li><strong>Silver-Tongued Bureaucrat:</strong> +2 Presence, +1 Mind</li>\n  <li><strong>Crisis Manager:</strong> +1 Mind, +1 Soul, +1 Presence</li>\n</ul>\n<p>These are suggestions, not shackles. Any valid 3-point distribution is allowed.</p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {
+          "emperorArcanaASI": {
+            "_id": "emperorArcanaASI",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 3,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 1,
+            "title": "Archetype Ability Scores",
+            "hint": "Gain 3 ability score points (max +2 to any one score). See the Archetype text for recommended arrays.",
+            "flags": {}
+          }
+        },
+        "identifier": "archetype-emperor",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "ZpijzDYpj6Zza5am",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "character-archetypes",
+          "bonuses": {
+            "economy": 3
+          },
+          "option": {
+            "category": "archetype",
+            "key": "mayor_administrator",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:emperor",
+              "bbttcc:expression:mayor_administrator",
+              "bbttcc:base"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "_id": "0NhSz2K4W8x2tNRB",
+      "sort": 100000,
+      "_key": "!actors.items!lqHGrqsjinf4giQh.0NhSz2K4W8x2tNRB"
+    },
+    {
+      "name": "Crew Type: Ironbound Ascendants",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 2,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Crew Type (Bad Eden): Ironbound Ascendants.</em></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Logistics OPs.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "crew-ironbound-ascendants",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "wmqio7Q7DY1BZeRJ",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "logistics": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "ironbound-ascendants",
+            "progressionType": "level",
+            "domains": [
+              "op",
+              "logistics",
+              "defense"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:ironbound-ascendants",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:domain:logistics",
+              "bbttcc:domain:defense",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:logistics:+8",
+              "bbttcc:theme:elevation",
+              "bbttcc:theme:fortification",
+              "bbttcc:theme:chokepoints",
+              "bbttcc:theme:mountain-discipline"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Item.mJaJH0EW1yEKJcGd",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.mJaJH0EW1yEKJcGd",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "_id": "f6fxzaxXuExp2bii",
+      "sort": 100000,
+      "_key": "!actors.items!lqHGrqsjinf4giQh.f6fxzaxXuExp2bii"
+    },
+    {
+      "name": "Occult Association: Exorcist / Purifier",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Occult Association (Bad Eden): Exorcist / Purifier.</em></p><p><strong>“You don’t negotiate with the darkness. You end it.”</strong></p><p>Exorcists do not bargain. They do not reinterpret. They do not accept corruption as a usable state.</p><p>To an Exorcist, the Great Work is not about managing the broken world. It is about <strong>removing what should not be there</strong> and restoring the conditions under which something honest can exist again.</p><p>Where Goetics bind, Exorcists sever. Where Shamans listen, Exorcists intervene. Where Kabbalists align, Exorcists cleanse.</p><p><strong>How Exorcists pursue the Great Work:</strong></p><ul><li>By removing Qliphothic influence and corruption</li><li>By stabilizing Hexes under Darkness pressure</li><li>By preventing the spread of systemic decay</li><li>By refusing to let harmful systems persist just because they are useful</li></ul><p><strong>Resonance:</strong> <strong>Tiferet / Purity</strong> — clarity, balance, and the reassertion of what should be.</p><p><strong>Tell-tales:</strong> still air where there should be movement, silence after tension, things that stop being wrong without explanation.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on actions involving stabilization, cleansing, or anti-corruption pressure</strong></li></ul><p><strong>Cost Principle:</strong> removal is violent in its own way. Expect rigidity, collateral suppression, and consequences when something removed turns out to have been holding something worse in place.</p>",
+          "chat": ""
+        },
+        "identifier": "occult-association-exorcist",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "option": {
+            "category": "occult",
+            "key": "exorcist",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:exorcist",
+              "bbttcc:base",
+              "bbttcc:domain:anti-darkness",
+              "bbttcc:domain:cleansing",
+              "bbttcc:domain:stabilization",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op_roll:stabilization:+1",
+              "bbttcc:resonance:tiferet",
+              "bbttcc:drift:rigid-order",
+              "bbttcc:cost:rigidity",
+              "bbttcc:cost:overcorrection",
+              "bbttcc:theme:purification",
+              "bbttcc:theme:removal"
+            ]
+          }
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "effects": [],
+      "folder": "eZrB95VvJnQ4Pb77",
+      "_stats": {
+        "compendiumSource": "Item.0QIZuwvwNB201K3d",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.0QIZuwvwNB201K3d",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "_id": "GzNRvy3U6JFbM8TU",
+      "sort": 100000,
+      "_key": "!actors.items!lqHGrqsjinf4giQh.GzNRvy3U6JFbM8TU"
+    },
+    {
+      "name": "Alignment: Geburah",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "Judgment - Necessary force. +1 Violence, +1 Logistics OPs\n\nGeburah draws the line. It rewards discipline, enforcement, and decisive action against fortified problems, but always risks becoming cruelty if severity outruns wisdom.",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "alignment-geburah",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sword_1.png",
+      "effects": [],
+      "folder": "RAOWJYon3t34M5XY",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "violence": 1,
+            "logistics": 1
+          },
+          "option": {}
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.dlAJf2LhJ540QdTn",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.cKJbvIdeHnFrBJvq",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 2,
+        "tuQB41n558gWyKyz": 3
+      },
+      "_id": "PzLMnEAvgy0AsFez",
+      "sort": 400000,
+      "_key": "!actors.items!lqHGrqsjinf4giQh.PzLMnEAvgy0AsFez"
+    },
+    {
+      "name": "Archetype: The Emperor (Administrator) (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_emperor.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden – Archetype: The Emperor (Administrator) (Tier 1)",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 (Level 1) — The Emperor</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain a skill rank in Investigation and Diplomacy.</li>\n<li><strong>Strategic:</strong> Your faction's Economy OP cap increases by 3.</li>\n</ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "archetype-emperor-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Level 1+",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "name": "Archetype Tier 1 Proficiencies",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_alien.png",
+          "_id": "emperorTier1Prof",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.investigation.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.diplomacy.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177518786,
+            "modifiedTime": 1784177518786
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lqHGrqsjinf4giQh.1IQ7qt8kEKkzsKok.emperorTier1Prof"
+        }
+      ],
+      "folder": "ZpijzDYpj6Zza5am",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {
+            "economy": 3
+          },
+          "option": {
+            "category": "archetype",
+            "key": "mayor_administrator",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:emperor",
+              "bbttcc:expression:mayor_administrator",
+              "bbttcc:tier:1",
+              "bbttcc:economy_op_cap:+3"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "_id": "1IQ7qt8kEKkzsKok",
+      "sort": 200000,
+      "_key": "!actors.items!lqHGrqsjinf4giQh.1IQ7qt8kEKkzsKok"
+    },
+    {
+      "name": "Crew Type: Ironbound Ascendants (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden – Crew Type: Ironbound Ascendants (Tier 1)",
+          "revision": 2,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You’ve learned the first law of altitude: the hill fights for whoever arrives prepared.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic:</strong> In Mountains and Highlands, travel is more efficient for your faction and elevation penalties are easier to manage.</li></ul>",
+          "chat": ""
+        },
+        "identifier": "crew-ironbound-ascendants-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "requirements": "Level 1+",
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        }
+      },
+      "effects": [
+        {
+          "_id": "9e8c1c03e6d14b51",
+          "name": "Ironbound Ascendants T1 Skills",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_armor_2.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.athletics.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.athletics.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "dnd5e": {
+              "riders": {
+                "statuses": []
+              }
+            }
+          },
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177518786,
+            "modifiedTime": 1784177518786
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lqHGrqsjinf4giQh.0jIgK71xrHnBHpUt.9e8c1c03e6d14b51"
+        }
+      ],
+      "folder": "wmqio7Q7DY1BZeRJ",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "ironbound-ascendants",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "travel",
+              "logistics",
+              "defense"
+            ],
+            "terrains": [
+              "mountain",
+              "highlands"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:ironbound-ascendants",
+              "bbttcc:tier:1",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:logistics",
+              "bbttcc:domain:defense",
+              "bbttcc:terrain:mountain",
+              "bbttcc:terrain:highlands",
+              "bbttcc:scope:hex",
+              "bbttcc:when:origin_terrain:mountain",
+              "bbttcc:when:origin_terrain:highlands",
+              "bbttcc:effect:travel:cost_reduction:+1step",
+              "bbttcc:effect:travel:elevation_penalty:-1step",
+              "bbttcc:theme:elevation",
+              "bbttcc:theme:mountain-discipline",
+              "bbttcc:theme:chokepoints"
+            ]
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Item.uTTREaIGmbvryPE3",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.uTTREaIGmbvryPE3",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "_id": "0jIgK71xrHnBHpUt",
+      "sort": 0,
+      "_key": "!actors.items!lqHGrqsjinf4giQh.0jIgK71xrHnBHpUt"
+    },
+    {
+      "name": "Occult Association: Exorcist / Purifier (Tier 1)",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Exorcist</strong></p><p><strong>“That should not be here.”</strong></p><p>You can identify corruption, spiritual pressure, and Qliphothic influence.</p><p><strong>Tactical</strong></p><ul><li>reroll-lowest on checks vs corruption, fear, or possession</li></ul><p><strong>Strategic</strong></p><ul><li>When entering a Hex, automatically detect presence of corruption or unnatural influence</li></ul><p><strong>Cost:</strong> constant awareness of corruption creates strain and intolerance for ambiguity.</p>",
+          "chat": ""
+        },
+        "identifier": "occult-association-exorcist-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "option": {
+            "tags": [
+              "bbttcc:tier:1",
+              "bbttcc:effect:detect:corruption",
+              "bbttcc:effect:advantage:saves:corruption",
+              "bbttcc:cost:strain"
+            ],
+            "category": "occult",
+            "key": "exorcist",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1
+          },
+          "category": "occult"
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+      "effects": [],
+      "folder": "eZrB95VvJnQ4Pb77",
+      "_stats": {
+        "compendiumSource": "Item.HkKJUdADMuiHexr5",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.HkKJUdADMuiHexr5",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "_id": "gKcdVHR2bMHydPBy",
+      "sort": 0,
+      "_key": "!actors.items!lqHGrqsjinf4giQh.gKcdVHR2bMHydPBy"
+    },
+    {
+      "name": "Cataclyst L1: The Exchange",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_gauntlet_2.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">⚙ ENGINE NOTE — Frame &amp; Ruin are now ◆ Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the ◆ Surge menu. Automated: Polarity Mastery (melee strike, base die ≥ 8 → +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p><em>Polarity is a pose. The hinge is what does the work.</em></p><p><strong>Mode: Hinge / drift: Sideways.</strong></p><p>As a <strong>bonus action</strong>, you may convert <strong>1 Frame Die into 1 Ruin Charge</strong> or <strong>1 Ruin Charge into 1 Frame Die</strong>. You may use this conversion up to <strong>your Initiation tier</strong> times per Soma Break (1 at T1, 2 at T2, 3 at T3, 4 at T4).</p><p><strong>Charged.</strong> When you convert this way, the resulting die or charge becomes <em>charged</em> until spent. The next time it's used:</p><ul><li><p><strong>Frame Die (charged) spent on absorption:</strong> grants +1 die step on the absorption roll (d8 → d10).</p></li><li><p><strong>Ruin Charge (charged) spent on damage:</strong> deals +1 die step of damage (replace one d6 with a d8, or one d8 with a d10, in the spending feature's damage expression).</p></li></ul><p>Charged status is consumed by the spend whether the spend produces a roll or a flat effect.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "bulwark_cataclyst_l1_the_exchange",
+        "requirements": "Path of the Cataclyst, Bulwark Initiation 1",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "subclassfeat",
+          "classIdentifier": "bulwark",
+          "subclassIdentifier": "bbttcc-bulwark-cataclyst",
+          "subclassLevel": 1,
+          "version": "1.0.0",
+          "date": "2026-04-23",
+          "rfiNative": true
+        },
+        "fourththing": {
+          "grants": {}
+        }
+      },
+      "folder": "HmbujXzEJL7v48Q9",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "tuQB41n558gWyKyz": 3
+      },
+      "sort": 0,
+      "_id": "pinWeGiSDwp8yVVY",
+      "_key": "!actors.items!lqHGrqsjinf4giQh.pinWeGiSDwp8yVVY"
+    },
+    {
+      "name": "Bulwark Hauberk",
+      "type": "armor",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/bulwark_hauberk.png",
+      "system": {
+        "guardBonus": 2,
+        "evasionBonus": 0,
+        "resolveBonus": 1,
+        "resistances": [],
+        "armorSkill": "plating",
+        "equipped": true,
+        "tags": [
+          "t1-baseline",
+          "heavy",
+          "mail",
+          "plate"
+        ],
+        "category": "armor",
+        "source": "",
+        "description": {
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">⚙ ENGINE NOTE — Frame &amp; Ruin are now ◆ Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the ◆ Surge menu. Automated: Polarity Mastery (melee strike, base die ≥ 8 → +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p>A long mail hauberk over a padded coat, with riveted plate at the chest and shoulders. The standard heavy issue for Bulwarks who haven't earned signature plate yet. Weight you have to carry. Weight that carries back.</p><p><strong>Standard Issue.</strong> Path-defining silhouette without path-defining cost. Frame Dice and Ruin Charges still come from your Bulwark features — the hauberk is just the surface they sit on.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "footprint": 1,
+              "reach": "self",
+              "frame": "armor",
+              "signature": "Heavy enough to remind you you're standing somewhere on purpose.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>A long mail hauberk over a padded coat, with riveted plate at the chest and shoulders. The standard heavy issue for Bulwarks who haven't earned signature plate yet. Weight you have to carry. Weight that carries back.</p><p><b>Standard Issue.</b> Path-defining silhouette without path-defining cost. Frame Dice and Ruin Charges still come from your Bulwark features — the hauberk is just the surface they sit on.</p>",
+              "materialOf": [
+                "mail",
+                "rivet-plate",
+                "padded-coat"
+              ],
+              "price": {
+                "marks": 75,
+                "currency": "nonlethal",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI armor stamp",
+                "bound": "free",
+                "saleBack": 30
+              }
+            }
+          }
+        }
+      },
+      "folder": "2yW6O57xUFtROfpB",
+      "_id": "LVggimsPptKRQDpW",
+      "effects": [
+        {
+          "name": "⚙️ Defense Grant",
+          "transfer": false,
+          "disabled": false,
+          "flags": {
+            "fourththing": {
+              "defenseGrant": true
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "flags.fourththing.grant.guard",
+                "value": 2,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.resolve",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "2eZJSwZ0viBDiwPu",
+          "img": "icons/svg/aura.svg",
+          "type": "base",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "createdTime": 1784177518786,
+            "modifiedTime": 1784177518786,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!lqHGrqsjinf4giQh.LVggimsPptKRQDpW.2eZJSwZ0viBDiwPu"
+        }
+      ],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": "Compendium.bbttcc-master-content.items.Item.SkiS0zmiSHSy37Vb",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!lqHGrqsjinf4giQh.LVggimsPptKRQDpW"
+    },
+    {
+      "name": "Pressed Buckler",
+      "type": "armor",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/pressed_buckler.png",
+      "system": {
+        "guardBonus": 1,
+        "evasionBonus": 0,
+        "resolveBonus": 0,
+        "resistances": [],
+        "armorSkill": "warding",
+        "equipped": true,
+        "tags": [
+          "t1-baseline",
+          "shield",
+          "buckler"
+        ],
+        "category": "armor",
+        "source": "",
+        "description": {
+          "value": "<p>A small round buckler stamped from sheet steel and laced to a leather forearm cuff. Faction-pressed in batches of a thousand and handed out to whoever could close their fingers around the grip. Half ward, half noisemaker — the dent in the front is where someone else's mistake stopped.</p><p><strong>Standard Issue.</strong> Pairs with any one-handed weapon. No signature, no attunement, no apologies for the dent.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "footprint": 1,
+              "reach": "self",
+              "frame": "shield",
+              "signature": "A round of stamped steel and the conviction to hold it up.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>A small round buckler stamped from sheet steel and laced to a leather forearm cuff. Faction-pressed in batches of a thousand and handed out to whoever could close their fingers around the grip. Half ward, half noisemaker — the dent in the front is where someone else's mistake stopped.</p><p><b>Standard Issue.</b> Pairs with any one-handed weapon. No signature, no attunement, no apologies for the dent.</p>",
+              "materialOf": [
+                "sheet-steel",
+                "leather-cuff"
+              ],
+              "price": {
+                "marks": 50,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI shield stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        }
+      },
+      "folder": "2yW6O57xUFtROfpB",
+      "_id": "EBjYBftA5qJV8Yld",
+      "effects": [
+        {
+          "name": "⚙️ Defense Grant",
+          "transfer": false,
+          "disabled": false,
+          "flags": {
+            "fourththing": {
+              "defenseGrant": true
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "flags.fourththing.grant.guard",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "0PAxzbY0wHR6GSES",
+          "img": "icons/svg/aura.svg",
+          "type": "base",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "createdTime": 1784177518786,
+            "modifiedTime": 1784177518786,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!lqHGrqsjinf4giQh.EBjYBftA5qJV8Yld.0PAxzbY0wHR6GSES"
+        }
+      ],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": "Compendium.bbttcc-master-content.items.Item.v8lCNPyjVbfVTkir",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!lqHGrqsjinf4giQh.EBjYBftA5qJV8Yld"
+    },
+    {
+      "name": "Anvil Stance",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_1.png.png",
+      "system": {
+        "category": "unarmed",
+        "intent": "violence",
+        "skill": "brawl",
+        "damage": {
+          "formula": "1d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "ground-driven",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "bulwark",
+          "stance",
+          "anchor",
+          "denial"
+        ],
+        "effect": "",
+        "flavor": "He sets his feet. The argument changes.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "You plant. The earth recognizes you. Forces that would move you are returned to whatever sent them.",
+          "form": "vestment",
+          "function": "protect",
+          "stability": "sustained",
+          "interactionModel": "worn",
+          "costType": "stress",
+          "costValue": 1,
+          "costText": "1 Stress to enter the stance.",
+          "duration": "scene",
+          "durationText": "While you choose not to move.",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "Cannot move from your hex while stance is active.",
+          "riskText": "If forced to move (legitimate breakthrough, called shot, narrative consequence), you lose 1 Integrity from the violation.",
+          "pathResonance": "Bulwark — a body that has decided it is now geography.",
+          "fictionalPermission": "You are an immovable feature of this scene. The fight has to flow around you.",
+          "gmCalibration": "Tier-1 Form. Lasts as long as you remain stationary. Common-knowledge once another Bulwark sees it.",
+          "mechanicalHook": "While stance is active, you cannot be moved against your will and you have +2 to Guard. Counter-attack any failed shove with the listed damage.",
+          "signature": "A faint outline of footprints in stone where you have stood. Even on wood floors. Even on grass.",
+          "thirdThing": "When something tries to push you and fails, you can hear what it was hoping for.",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterManifestation": true,
+          "path": "bulwark",
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "5858c57d-bde3-4612-93dc-4bb0f598b09a",
+          "label": "Anvil Stance",
+          "levels3d": {
+            "type": "explosion",
+            "data": {
+              "color01": "#FFFFFF",
+              "color02": "#FFFFFF",
+              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+            },
+            "sound": {
+              "enable": false
+            },
+            "secondary": {
+              "enable": false,
+              "data": {
+                "color01": "#FFFFFF",
+                "color02": "#FFFFFF",
+                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+              }
+            }
+          },
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "impact",
+              "animation": "groundcrack",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": false,
+              "opacity": 1,
+              "persistent": false,
+              "playbackRate": 1,
+              "playOn": "default",
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_id": "g4Ad18cD0IDhbX0j",
+      "effects": [],
+      "folder": "9XpFvtHwMo9sUQQC",
+      "sort": 175000,
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": "Compendium.fourththing.starter-manifestations.Item.b2dN2kJUUBWBz5jZ",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!lqHGrqsjinf4giQh.g4Ad18cD0IDhbX0j"
+    },
+    {
+      "name": "Borrowed Bastion",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_breaker_wall_1.png",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "starter",
+          "manifestation",
+          "bulwark",
+          "stable",
+          "cover"
+        ],
+        "effect": "Manifest a portable slab of impossible fortification. It can be wielded as a crushing wall or planted to make a lane, ally, or doorway suddenly much harder to move through.",
+        "flavor": "The air folds into a brutalist plate of force, as if a building loaned you one of its convictions.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "A portable wall-frame that can be carried, planted, or driven forward.",
+          "form": "construct",
+          "function": "protect",
+          "stability": "bound",
+          "interactionModel": "structure",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "Stays for the scene while carried or planted.",
+          "triggerText": "If planted in a chokepoint, it counts as there until destroyed or dismissed.",
+          "scale": "scene",
+          "targetText": "Yourself, one ally, or one chokepoint.",
+          "rangeAreaText": "Adjacent zone, doorway, short lane, or cover position.",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "Every impact it absorbs teaches it the shape of that violence.",
+          "pathResonance": "Bulwark / Mountain doctrine / refusal made useful.",
+          "fictionalPermission": "You can shelter allies, deny passage, brace failing structures, or shove through lesser obstacles.",
+          "gmCalibration": "Let it be strong at shape and denial, not a universal answer to siege logic.",
+          "mechanicalHook": "Stable protective form; cover, lane control, battering pressure, and brace fiction.",
+          "signature": "It arrives with the bass note of a building deciding not to fall.",
+          "thirdThing": "Each face of the bastion remembers one blow it has already survived.",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        }
+      },
+      "_id": "cJfjAb5dJGnm6IFz",
+      "folder": "9XpFvtHwMo9sUQQC",
+      "sort": 200000,
+      "effects": [],
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "starterDeck": "rfi-v1.0",
+          "importedFrom": "rfi-starter-manifestations-pack",
+          "manifestSheetMode": {
+            "bytUGWIOqq9eT7Or": "edit"
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "b8c19673-a57c-496d-af86-5a291ca19af3",
+          "label": "Borrowed Bastion",
+          "levels3d": {
+            "type": "explosion",
+            "data": {
+              "color01": "#FFFFFF",
+              "color02": "#FFFFFF",
+              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+            },
+            "sound": {
+              "enable": false
+            },
+            "secondary": {
+              "enable": false,
+              "data": {
+                "color01": "#FFFFFF",
+                "color02": "#FFFFFF",
+                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+              }
+            }
+          },
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "shieldspell",
+              "animation": "complete",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": false,
+              "opacity": 1,
+              "persistent": false,
+              "playbackRate": 1,
+              "playOn": "default",
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.fourththing.starter-manifestations.Item.eFF9oIrW8HbdqUqL",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_key": "!actors.items!lqHGrqsjinf4giQh.cJfjAb5dJGnm6IFz"
+    },
+    {
+      "name": "Pressure Front",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fire_cone_1.png",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "athletics",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "advancing weight",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "bulwark",
+          "advance",
+          "shove",
+          "loud"
+        ],
+        "effect": "",
+        "flavor": "She walked at them. They moved.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "A moving wedge of pressurized air and intent that walks where you walk. Whatever it touches has to choose: yield or be moved.",
+          "form": "construct",
+          "function": "move",
+          "stability": "enduring",
+          "interactionModel": "structure",
+          "costType": "stress",
+          "costValue": 2,
+          "costText": "2 Stress to manifest.",
+          "duration": "scene",
+          "durationText": "Walks with you for the scene.",
+          "triggerText": "",
+          "scale": "scene",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "1 Stress per scene maintained.",
+          "riskText": "Cannot be subtle. Any stealth or social stakes in the scene are renegotiated downward as soon as it appears.",
+          "pathResonance": "Bulwark — a fortification that walks.",
+          "fictionalPermission": "You are not just hard to move. You are now the thing doing the moving.",
+          "gmCalibration": "Tier-2 Form. Reads as a small siege weapon to anyone with military experience.",
+          "mechanicalHook": "Once per turn while active, push a creature within Near range one zone away from you, dealing the listed damage if they collide with cover.",
+          "signature": "Loose paper, dust, and small debris drift toward you as if you are very gently inhaling the room.",
+          "thirdThing": "The front cannot be made silent. It always sounds like a held breath about to release.",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterManifestation": true,
+          "path": "bulwark",
+          "manifestSheetMode": {
+            "bytUGWIOqq9eT7Or": "edit"
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "11b596f4-50d6-497e-a186-be8a3b8f8697",
+          "label": "Pressure Front",
+          "levels3d": {
+            "type": "explosion",
+            "data": {
+              "color01": "#FFFFFF",
+              "color02": "#FFFFFF",
+              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+            },
+            "sound": {
+              "enable": false
+            },
+            "secondary": {
+              "enable": false,
+              "data": {
+                "color01": "#FFFFFF",
+                "color02": "#FFFFFF",
+                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+              }
+            }
+          },
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "thunderwave",
+              "variant": "center",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": false,
+              "opacity": 1,
+              "persistent": false,
+              "playbackRate": 1,
+              "playOn": "default",
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_id": "WWXMZjQr9bLR3XcU",
+      "effects": [],
+      "folder": "9XpFvtHwMo9sUQQC",
+      "sort": 150000,
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": "Compendium.fourththing.starter-manifestations.Item.UzJlpyqgMrBjKsux",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!lqHGrqsjinf4giQh.WWXMZjQr9bLR3XcU"
+    },
+    {
+      "name": "Wall of My People",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wall_hex_1.png",
+      "system": {
+        "category": "ranged",
+        "intent": "presence",
+        "skill": "athletics",
+        "damage": {
+          "formula": "0",
+          "attribute": "presence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "bulwark",
+          "ward",
+          "shelter",
+          "audible"
+        ],
+        "effect": "",
+        "flavor": "She doesn't even raise her voice. The wall hears her perfectly.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "A translucent curtain of refusal raised between threat and ward. It does not stop blades — it stops what blades mean.",
+          "form": "field",
+          "function": "protect",
+          "stability": "sustained",
+          "interactionModel": "zone",
+          "costType": "stress",
+          "costValue": 2,
+          "costText": "2 Stress to raise.",
+          "duration": "scene",
+          "durationText": "While you sing the wall standing.",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "1 Stress per scene maintained past the first.",
+          "riskText": "The wall is visible and audible to everyone in Far range. Anyone tracking you at the strategic level knows where you are.",
+          "pathResonance": "Bulwark — denial is shelter for those it shelters.",
+          "fictionalPermission": "You declare a side of the conflict. People who were unsure step over to your side.",
+          "gmCalibration": "Tier-2 Form. Wall is one zone wide. Drops if you fall unconscious or stop singing.",
+          "mechanicalHook": "Allies on your side of the wall have +2 Resolve and reroll the lowest die against fear, charm, and intimidation. Hostile manifestations targeting them cost +1 Clarity to push through.",
+          "signature": "The wall hums with the vowels of a language none of your enemies speak.",
+          "thirdThing": "Children, the elderly, and the surrendered who pass through it report a moment of perfect quiet.",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "starterManifestation": true,
+          "path": "bulwark",
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "84791c1f-3258-46ef-9488-685cf95be34a",
+          "label": "Wall of My People",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "aura",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "wallofforce",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": true,
+              "alpha": false,
+              "alphaMax": 0.5,
+              "alphaMin": -0.5,
+              "alphaDuration": 1000,
+              "breath": false,
+              "breathMax": 1.05,
+              "breathMin": 0.95,
+              "breathDuration": 1000,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "playOn": "source",
+              "size": 3,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "tintSaturate": 0,
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_id": "WDbrOpmrBU1KKdcO",
+      "effects": [],
+      "folder": "9XpFvtHwMo9sUQQC",
+      "sort": 125000,
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": "Compendium.fourththing.starter-manifestations.Item.aqrITX3h8rGQDvmZ",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!lqHGrqsjinf4giQh.WDbrOpmrBU1KKdcO"
+    },
+    {
+      "name": "Slug Pistol",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_lazer_pistol_2.png",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "1d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "ballistic",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 20,
+          "long": 80
+        },
+        "tags": [
+          "t1-baseline",
+          "pistol",
+          "ballistic",
+          "sidearm"
+        ],
+        "effect": "Standard ballistic sidearm. No signature ability.",
+        "flavor": "Boring. Reliable. The two best things a pistol can be.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "footprint": 1,
+              "reach": "5",
+              "frame": "weapon",
+              "signature": "Six rounds, one trigger, no opinions.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>Standard-pattern slug-throwing sidearm. Iron sights, six-round chamber, kicks like a polite mule. The most common ranged weapon in Bad Eden — the kind of pistol you find in a glove box, a holster, or the bottom of a trade-post crate.</p><p><b>Standard Issue.</b> No signature, no electronics, no hum. It just shoots.</p>",
+              "materialOf": [
+                "scrap-steel",
+                "casing-brass"
+              ],
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "53aa0b6b-d75b-4b4b-b207-c7e9acd1d303",
+          "label": "Slug Pistol",
+          "levels3d": {
+            "type": "explosion",
+            "data": {
+              "color01": "#FFFFFF",
+              "color02": "#FFFFFF",
+              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+            },
+            "sound": {
+              "enable": false
+            },
+            "secondary": {
+              "enable": false,
+              "data": {
+                "color01": "#FFFFFF",
+                "color02": "#FFFFFF",
+                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+              }
+            }
+          },
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "bullet",
+              "variant": "1",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isReturning": false,
+              "isWait": false,
+              "onlyX": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "bQhXd1gwJXtaVLGh",
+      "_id": "Smj3J4BXS2eaBIXS",
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": "Compendium.bbttcc-master-content.items.Item.u48N4WMCJOM9lWHe",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!lqHGrqsjinf4giQh.Smj3J4BXS2eaBIXS"
+    },
+    {
+      "name": "Hand Axe",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_axe.png",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "chop",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "t1-baseline",
+          "axe",
+          "versatile",
+          "thrown"
+        ],
+        "effect": "Versatile. May be thrown at short range as an improvised ranged attack.",
+        "flavor": "Equally good at cordwood and conversation.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "footprint": 1,
+              "reach": "5",
+              "frame": "weapon",
+              "signature": "Splits firewood in the morning, splits opinions in the evening.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>Single-bit utility axe with a hickory haft and a leather wrist-thong. Cuts kindling, cuts cord, cuts targets that get within arm's reach. Throws acceptably for short distances.</p><p><b>Standard Issue.</b> Pulls double duty as a tool. No signature, no surprise — just dependable weight.</p>",
+              "materialOf": [
+                "scrap-steel",
+                "hickory-haft"
+              ],
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "ba39b415-c1aa-4828-8ec8-3e184eb852e9",
+          "label": "Hand Axe",
+          "levels3d": {
+            "type": "explosion",
+            "data": {
+              "color01": "#FFFFFF",
+              "color02": "#FFFFFF",
+              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+            },
+            "sound": {
+              "enable": false
+            },
+            "secondary": {
+              "enable": false,
+              "data": {
+                "color01": "#FFFFFF",
+                "color02": "#FFFFFF",
+                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+              }
+            }
+          },
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "meleeSwitch": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "arrow",
+              "variant": "regular",
+              "color": "regular"
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "detect": "automatic",
+              "range": 2,
+              "returning": false,
+              "switchType": "on"
+            }
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "greataxe",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "bQhXd1gwJXtaVLGh",
+      "_id": "jSljXKB3XlDqtsIB",
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177518786,
+        "modifiedTime": 1784177518786,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": "Compendium.bbttcc-master-content.items.Item.uIi6K3WMK1fF7EWw",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!lqHGrqsjinf4giQh.jSljXKB3XlDqtsIB"
+    }
+  ],
+  "effects": [],
+  "folder": "0jdwcnhkdlLFLmfU",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "tuQB41n558gWyKyz": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "bbttcc-factions": {
+      "factionId": "Xi3jch9jJokVzp32",
+      "warLogs": [
+        {
+          "ts": 1780167118694,
+          "date": "5/30/2026, 1:51:58 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780167949384,
+          "date": "5/30/2026, 2:05:49 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780168659260,
+          "date": "5/30/2026, 2:17:39 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780168729353,
+          "date": "5/30/2026, 2:18:49 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780173118211,
+          "date": "5/30/2026, 3:31:58 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780178447479,
+          "date": "5/30/2026, 5:00:47 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780179931472,
+          "date": "5/30/2026, 5:25:31 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780211884762,
+          "date": "5/31/2026, 2:18:04 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780211930015,
+          "date": "5/31/2026, 2:18:50 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780211975854,
+          "date": "5/31/2026, 2:19:35 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780212021863,
+          "date": "5/31/2026, 2:20:21 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780212068325,
+          "date": "5/31/2026, 2:21:08 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780212106546,
+          "date": "5/31/2026, 2:21:46 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780212169514,
+          "date": "5/31/2026, 2:22:49 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780336213953,
+          "date": "6/1/2026, 12:50:13 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780336445059,
+          "date": "6/1/2026, 12:54:05 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780462181182,
+          "date": "6/2/2026, 11:49:41 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780462376016,
+          "date": "6/2/2026, 11:52:56 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780500418330,
+          "date": "6/3/2026, 10:26:58 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780510405396,
+          "date": "6/3/2026, 1:13:25 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780510512594,
+          "date": "6/3/2026, 1:15:12 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780510580238,
+          "date": "6/3/2026, 1:16:20 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780510689747,
+          "date": "6/3/2026, 1:18:09 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780510764916,
+          "date": "6/3/2026, 1:19:24 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780513604588,
+          "date": "6/3/2026, 2:06:44 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780521930967,
+          "date": "6/3/2026, 4:25:30 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780522369362,
+          "date": "6/3/2026, 4:32:49 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780522587840,
+          "date": "6/3/2026, 4:36:27 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780522851273,
+          "date": "6/3/2026, 4:40:51 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1780599532130,
+          "date": "6/4/2026, 1:58:52 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781056406948,
+          "date": "6/9/2026, 8:53:26 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781559150210,
+          "date": "6/15/2026, 4:32:30 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781562199593,
+          "date": "6/15/2026, 5:23:19 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781567048234,
+          "date": "6/15/2026, 6:44:08 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781567252005,
+          "date": "6/15/2026, 6:47:32 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781567793983,
+          "date": "6/15/2026, 6:56:33 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781568793571,
+          "date": "6/15/2026, 7:13:13 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781570756244,
+          "date": "6/15/2026, 7:45:56 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781573108267,
+          "date": "6/15/2026, 8:25:08 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781573242877,
+          "date": "6/15/2026, 8:27:22 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781580443127,
+          "date": "6/15/2026, 10:27:23 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781580916937,
+          "date": "6/15/2026, 10:35:16 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781637131393,
+          "date": "6/16/2026, 2:12:11 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781736333337,
+          "date": "6/17/2026, 5:45:33 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781837274562,
+          "date": "6/18/2026, 9:47:54 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1783979396645,
+          "date": "7/13/2026, 4:49:56 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        }
+      ]
+    },
+    "bbttcc-territory": {
+      "faction": "Sylvio's Faction"
+    },
+    "bbttcc-character-options": {
+      "identity": {
+        "archetype": {
+          "key": "c2FVJMXGkoyIYhzh",
+          "id": "c2FVJMXGkoyIYhzh",
+          "pack": "bbttcc-character-options.character-archetypes",
+          "category": "character-archetypes",
+          "optionKey": "mayor_administrator",
+          "identifier": "archetype-emperor",
+          "name": "Archetype: The Emperor (Administrator)",
+          "currentTier": 1,
+          "displayName": "The Emperor (Administrator)"
+        },
+        "crew": {
+          "key": "brAELAWiggUsnsox",
+          "id": "brAELAWiggUsnsox",
+          "pack": "bbttcc-character-options.crew-types",
+          "category": "crew-types",
+          "optionKey": "ironbound-ascendants",
+          "identifier": "crew-ironbound-ascendants",
+          "name": "Crew Type: Ironbound Ascendants",
+          "currentTier": 1,
+          "displayName": "Ironbound Ascendants"
+        },
+        "sephirothicAlignment": {
+          "key": "iMPSWMqenjUBpnMd",
+          "id": "iMPSWMqenjUBpnMd",
+          "pack": "bbttcc-character-options.sephirothic-alignments",
+          "category": "sephirothic-alignments",
+          "optionKey": "alignment-geburah",
+          "identifier": "alignment-geburah",
+          "name": "Alignment: Geburah"
+        },
+        "occult": {
+          "key": "uzklMVc8EUDpGBA7",
+          "id": "uzklMVc8EUDpGBA7",
+          "pack": "bbttcc-character-options.occult-associations",
+          "category": "occult-associations",
+          "optionKey": "exorcist",
+          "identifier": "occult-association-exorcist",
+          "name": "Occult Association: Exorcist / Purifier",
+          "currentTier": 1,
+          "displayName": "Exorcist / Purifier"
+        }
+      },
+      "archetype": {
+        "pack": "bbttcc-character-options.character-archetypes",
+        "id": "c2FVJMXGkoyIYhzh",
+        "name": "Archetype: The Emperor (Administrator)",
+        "identifier": "archetype-emperor"
+      },
+      "crew": {
+        "pack": "bbttcc-character-options.crew-types",
+        "id": "brAELAWiggUsnsox",
+        "name": "Crew Type: Ironbound Ascendants",
+        "identifier": "crew-ironbound-ascendants"
+      },
+      "sephirot": {
+        "pack": "bbttcc-character-options.sephirothic-alignments",
+        "id": "iMPSWMqenjUBpnMd",
+        "name": "Alignment: Geburah",
+        "identifier": "alignment-geburah"
+      },
+      "occult": {
+        "pack": "bbttcc-character-options.occult-associations",
+        "id": "uzklMVc8EUDpGBA7",
+        "name": "Occult Association: Exorcist / Purifier",
+        "identifier": "occult-association-exorcist"
+      },
+      "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.rMuXXItrEQDROPEP",
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.60MZEDvlJZr1oZPg",
+      "classUuid": "Compendium.bbttcc-master-content.classes.Item.XVCamqENQpSFYQOS",
+      "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.TymJux36egJ8oH6o",
+      "nativeLinks": {
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.rMuXXItrEQDROPEP",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.60MZEDvlJZr1oZPg",
+        "classUuid": "Compendium.bbttcc-master-content.classes.Item.XVCamqENQpSFYQOS",
+        "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.TymJux36egJ8oH6o",
+        "ancestryApplied": true,
+        "heritageApplied": true,
+        "classApplied": true,
+        "subclassApplied": true,
+        "ancestryName": "Qliph-Scarred",
+        "heritageName": "Qliph-Scarred Heritage: Chthonic",
+        "className": "Bulwark",
+        "subclassName": "Path of the Cataclyst (BBTTCC)"
+      },
+      "calculatedOPs": {
+        "violence": 10,
+        "nonlethal": 1,
+        "intrigue": 1,
+        "economy": 12,
+        "softpower": 0,
+        "diplomacy": 0,
+        "logistics": 4,
+        "culture": 0,
+        "faith": 1
+      },
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      }
+    },
+    "bbttcc-aae": {
+      "politicalPhilosophy": "fascist"
+    },
+    "bbttcc-auto-link": {
+      "guidedCharacterCreation": {
+        "stage": "complete",
+        "name": "New Operative",
+        "factionId": "",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.rMuXXItrEQDROPEP",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.60MZEDvlJZr1oZPg",
+        "classUuid": "Compendium.bbttcc-master-content.classes.Item.XVCamqENQpSFYQOS",
+        "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.TymJux36egJ8oH6o",
+        "picks": {
+          "archetype": {
+            "pack": "bbttcc-character-options.character-archetypes",
+            "id": "c2FVJMXGkoyIYhzh"
+          },
+          "crew": {
+            "pack": "bbttcc-character-options.crew-types",
+            "id": "brAELAWiggUsnsox"
+          },
+          "sephirot": {
+            "pack": "bbttcc-character-options.sephirothic-alignments",
+            "id": "iMPSWMqenjUBpnMd"
+          },
+          "occult": {
+            "pack": "bbttcc-character-options.occult-associations",
+            "id": "uzklMVc8EUDpGBA7"
+          },
+          "political": {
+            "id": "fascist"
+          }
+        },
+        "baseStats": {
+          "violence": 5,
+          "intrigue": 4,
+          "presence": 3,
+          "body": 3,
+          "mind": 2,
+          "soul": 2,
+          "_playerPick": true
+        }
+      }
+    },
+    "bbttcc-sorting-engine": {
+      "pillarTally": {
+        "mercy": 6,
+        "severity": 6,
+        "neutral": 8
+      },
+      "lastDescent": {
+        "timestamp": 1779213664179,
+        "confirmedBuild": {
+          "archetype": {
+            "name": "The Emperor",
+            "score": 52
+          },
+          "ancestry": {
+            "name": "Qliph-Scarred",
+            "score": 22
+          },
+          "heritage": {
+            "name": "Qliph-Scarred Heritage: Chthonic",
+            "_playerPick": true
+          },
+          "crew": {
+            "name": "Ironbound Ascendants",
+            "score": 42
+          },
+          "path": {
+            "name": "Bulwark",
+            "score": 36
+          },
+          "doctrine": {
+            "name": "Path of the Cataclyst",
+            "score": 40
+          },
+          "philosophy": {
+            "name": "Fascist",
+            "score": 46
+          },
+          "occult": {
+            "name": "Exorcist/Purifier",
+            "score": 35
+          },
+          "alignment": {
+            "name": "Gevurah",
+            "score": 27
+          },
+          "faculties": {
+            "violence": 5,
+            "intrigue": 4,
+            "presence": 3,
+            "body": 3,
+            "mind": 2,
+            "soul": 2,
+            "_playerPick": true
+          }
+        },
+        "traitMap": {
+          "ambition": 7,
+          "risk": 6,
+          "independence": 8,
+          "keter_signal": 2,
+          "speech": 2,
+          "severity": 12,
+          "violence": 7,
+          "chokhmah_signal": 2,
+          "gevurah_signal": 7,
+          "discipline": 9,
+          "hierarchy": 4,
+          "binah_signal": 2,
+          "sorrow": 4,
+          "chesed_signal": 1,
+          "faith": 2,
+          "tiphareth_signal": 3,
+          "ritual": 6,
+          "netzach_signal": 4,
+          "dread": 1,
+          "hod_signal": 3,
+          "study": 2,
+          "stealth": 1,
+          "mercy": 1,
+          "yesod_signal": 4,
+          "malkuth_signal": 4
+        },
+        "classification": "Balanced",
+        "mode": "sorting"
+      }
+    },
+    "fourththing": {
+      "kind": "steward"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177518786,
+    "modifiedTime": 1784177518930,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!lqHGrqsjinf4giQh"
+}

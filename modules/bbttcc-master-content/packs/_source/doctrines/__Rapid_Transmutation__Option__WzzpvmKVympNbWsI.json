@@ -1,0 +1,40 @@
+{
+  "name": "⭐ Rapid Transmutation [Option]",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_atom_1.png",
+  "system": {
+    "category": "maneuver",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Rapid Transmutation [Option]</h3><p><em>No rules text registered.</em></p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> option</p><p><strong>Raid Types:</strong> assault, infiltration, occupation, liberation, espionage, propaganda, siege, ritual, assault_defense, courtly</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "opt_rapid_transmutation"
+    }
+  },
+  "_id": "WzzpvmKVympNbWsI",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601759,
+    "modifiedTime": 1782703702689,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!WzzpvmKVympNbWsI"
+}

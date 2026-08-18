@@ -1,0 +1,76 @@
+{
+  "name": "Ghost-Slip Infiltration",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_ghost_slip_protocol.jpeg",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p>Be where the wall isn't. Be quiet about it now. Be smug about it later, with me, over a drink.</p><p><b>Ignore one defensive circumstance this round (GM adjudicates).</b></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "ghost-slip-infiltration",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "ghost_slip_infiltration",
+      "meta": {
+        "tier": 1,
+        "rarity": "uncommon",
+        "minFactionTier": 1,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "raidTypes": [
+          "intrigue"
+        ],
+        "engine": "intrigue"
+      }
+    }
+  },
+  "_id": "7xnpQAe6mpHOl05h",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 2200000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1771977107845,
+    "modifiedTime": 1779731346028,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS"
+  },
+  "_key": "!items!7xnpQAe6mpHOl05h"
+}

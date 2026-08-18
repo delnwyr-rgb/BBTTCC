@@ -1,0 +1,23 @@
+{
+  "type": "Scene",
+  "folder": null,
+  "name": "Siege of Perspicacity Fortress",
+  "color": null,
+  "sorting": "a",
+  "_id": "ugp9iPJLjOyRsM2G",
+  "description": "",
+  "sort": 1200000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982549858,
+    "modifiedTime": 1783982550051,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!ugp9iPJLjOyRsM2G"
+}

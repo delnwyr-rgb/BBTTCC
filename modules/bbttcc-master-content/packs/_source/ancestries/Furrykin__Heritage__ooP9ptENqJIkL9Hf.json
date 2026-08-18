@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "f95fcfa18822c4e3",
+  "name": "Furrykin (Heritage)",
+  "color": null,
+  "sorting": "a",
+  "_id": "ooP9ptENqJIkL9Hf",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776573787307,
+    "modifiedTime": 1776573787307,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!ooP9ptENqJIkL9Hf"
+}

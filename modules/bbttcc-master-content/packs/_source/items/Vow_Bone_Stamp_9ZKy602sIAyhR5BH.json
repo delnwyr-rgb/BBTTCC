@@ -1,0 +1,83 @@
+{
+  "name": "Vow-Bone Stamp",
+  "type": "gear",
+  "img": "icons/sundries/documents/document-sealed-tan.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [
+      "tech"
+    ],
+    "category": "gear",
+    "source": "Phase 7 Seed (2026-05-10)",
+    "description": {
+      "value": "<p>Press the carved bone into oath-ink and a document becomes a vow. Breaking the vow blackens the seal — and the breaker.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "frame": "sigil",
+          "bound": "free",
+          "materialOf": [
+            {
+              "key": "vow-bone",
+              "qty": 1
+            },
+            {
+              "key": "oath-ink",
+              "qty": 1
+            },
+            {
+              "key": "witness-glass",
+              "qty": 1
+            }
+          ],
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 1,
+              "max": 1,
+              "recoverPer": "soma-break"
+            },
+            "failure": "drain",
+            "origin": "septcraft"
+          },
+          "price": {
+            "marks": 120,
+            "currency": "softpower",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI sigil × 1.20 × tech 2.0",
+            "bound": "free",
+            "saleBack": 48
+          }
+        }
+      }
+    }
+  },
+  "_id": "9ZKy602sIAyhR5BH",
+  "effects": [],
+  "folder": "Wxh1A343inwTUeoo",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778963370893,
+    "modifiedTime": 1778963370893,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 0,
+  "_key": "!items!9ZKy602sIAyhR5BH"
+}

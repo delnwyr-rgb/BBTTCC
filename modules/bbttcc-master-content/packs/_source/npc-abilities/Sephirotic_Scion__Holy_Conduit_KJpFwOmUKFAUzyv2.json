@@ -1,0 +1,79 @@
+{
+  "name": "Sephirotic Scion: Holy Conduit",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_4.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Holy Conduit.</strong> Your body routes excess metaphysical charge safely.</p><ul><li>You have resistance to <strong>psychic damage</strong>.</li><li>Your presence stabilizes magically turbulent areas.</li><li>Bad Eden engines treat you as a low-level metaphysical conductor (see world logic).</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "holy-conduit",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Sephirotic Scion",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "speciesTrait": "scion_conduit",
+      "sparkAffinity": 1,
+      "npcAbility": {
+        "sources": [
+          "Dreamie"
+        ],
+        "worlds": [
+          "ember"
+        ]
+      }
+    },
+    "dnd5e": {},
+    "bbttcc-character-options": {
+      "option": {}
+    },
+    "fourththing": {
+      "principleSource": "ancestry"
+    }
+  },
+  "sort": 0,
+  "_id": "KJpFwOmUKFAUzyv2",
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1781116229615,
+    "modifiedTime": 1781116229615,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!KJpFwOmUKFAUzyv2"
+}

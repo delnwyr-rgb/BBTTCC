@@ -1,0 +1,1067 @@
+{
+  "name": "Evil Bad Gossip",
+  "type": "character",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc",
+      "createdViaNPCBuilder": true,
+      "createdAt": 1784062885370
+    },
+    "bbttcc-factions": {
+      "factionId": "oK7VitQikQ6FN3PI"
+    },
+    "fourththing": {
+      "kind": "npc",
+      "surgeEnabled": false
+    },
+    "bbttcc-character-options": {
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "heritageUuid": "",
+      "nativeLinks": {
+        "heritageName": "",
+        "heritageUuid": "",
+        "heritageApplied": false,
+        "ancestryName": "Devil (Infernal)",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.tIPJVAeBzZypZ0iR",
+        "ancestryApplied": true
+      }
+    },
+    "tokenflip": {
+      "unfuck": false
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "secretsUsed": {}
+      }
+    }
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 1,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1
+    },
+    "attributes": {
+      "violence": {
+        "value": 2
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 2
+      },
+      "body": {
+        "value": 2
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 0
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 0
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 0
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 1
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 0
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 0
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 16,
+        "max": 16
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 3,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": 1,
+    "name": "Evil Bad Gossip",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/aurablade_florensis.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      },
+      "tokenflip": {
+        "tokenfaces": [
+          {
+            "actorId": "hVcnrqYBtJ6UX8jA",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/aurablade_florensis.png",
+            "id": "kjUeJHuKTsPfDsK5N7j8",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 1,
+            "height": 1,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          },
+          {
+            "actorId": "hVcnrqYBtJ6UX8jA",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/aurablade_florensis.png",
+            "id": "HthEh7IbqNLpuX9JE8C2",
+            "scaleX": 3,
+            "scaleY": 3,
+            "width": 6,
+            "height": 6,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          }
+        ]
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "hVcnrqYBtJ6UX8jA",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/aurablade_florensis.png",
+  "items": [
+    {
+      "_id": "MQW5ji6jQpkKYHBW",
+      "name": "Broker",
+      "type": "class",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/acolyte.webp",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-broker",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "broker",
+          "presence"
+        ],
+        "description": {
+          "value": "<p><em>\"There is no problem two reasonable parties can't monetize.\"</em></p><p><strong>Broker</strong> is the Presence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: merchant, envoy, entertainer, cult recruiter, gang face. A profession is a flavor label on the Calling.</p><p><strong>Knack — Fair Price:</strong> The Broker moves any negotiated price <strong>5% per tier</strong> in their side's favor inside the ±25% tolerance band (Tier IV: the full ±20% swing).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Diplomacy</strong> rank = tier; secondary <strong>Empathy</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Diplomacy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Harmony Marshal. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "broker",
+            "faculty": "presence",
+            "signature": "diplomacy",
+            "secondary": "empathy",
+            "pool": "Diplomacy or Soft Power (GM picks by job)",
+            "awakens": "Harmony Marshal"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534412,
+        "modifiedTime": 1784177534412,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!hVcnrqYBtJ6UX8jA.MQW5ji6jQpkKYHBW"
+    },
+    {
+      "_id": "pWQD9trX5k3p0a2G",
+      "name": "Broker — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/acolyte.webp",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "broker",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Broker — Apprentice</strong> (Tier I).</p><p><strong>Trade — Word on the street:</strong> Current prices, current rumors, who's buying. <span style=\"opacity:0.7\">Standard fee 10 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Read the Room</strong> <em>(1/scene)</em>: GM truthfully answers: who here has the real power, and what do they want right now?</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 301000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "broker",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534412,
+        "modifiedTime": 1784177534412,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!hVcnrqYBtJ6UX8jA.pWQD9trX5k3p0a2G"
+    },
+    {
+      "name": "Devil (Infernal)",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_1.png",
+      "system": {
+        "category": "ancestry",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Infernal bloodline — bound to the Hells through pact, descent, or curse. Cunning negotiators whose smiles always cost more than the asking price.</em></p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "2hc7h6bhj7p3q8n4",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Devil (Infernal) (size: med).",
+            "value": {}
+          },
+          {
+            "_id": "qtrumj4txosved6l",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.q75tTwN1LB4N62Ut",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Devil (Infernal) Tier 1",
+            "hint": "Grants the tier 1 Devil (Infernal) feature."
+          },
+          {
+            "_id": "1v7iba3u03us5qb2",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.CfW5Jb0k5WpdJpwL",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Devil (Infernal) Tier 2",
+            "hint": "Grants the tier 2 Devil (Infernal) feature."
+          },
+          {
+            "_id": "9yxhhwuhs1g7r8lj",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.aoCij1hBhm0FJk9e",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Devil (Infernal) Tier 3",
+            "hint": "Grants the tier 3 Devil (Infernal) feature."
+          },
+          {
+            "_id": "idi2m6he6uwjuop7",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.PasUt27Ca35sKyQB",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Devil (Infernal) Tier 4",
+            "hint": "Grants the tier 4 Devil (Infernal) feature."
+          }
+        ],
+        "identifier": "devil",
+        "properties": [],
+        "type": {
+          "value": "humanoid",
+          "subtype": "Devil (Infernal)"
+        }
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "lineage": "devil",
+          "version": "1.0.0",
+          "date": "2026-05-15",
+          "npAncestry": true
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool × 0.60",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "grantedByAncestry": "Devil (Infernal)"
+        },
+        "bbttcc-factions": {
+          "opContribution": {
+            "violence": 1,
+            "intrigue": 1
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534412,
+        "modifiedTime": 1784177534412,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "folder": "tOM0KLv9UgMPUDOT",
+      "sort": 100000,
+      "_id": "3SzSnVaeSt03RzCz",
+      "_key": "!actors.items!hVcnrqYBtJ6UX8jA.3SzSnVaeSt03RzCz"
+    },
+    {
+      "name": "Devil: Lesser Brand",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sigil_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Lesser Brand.</strong> You know the Infernal language and gain a skill rank in Diplomacy or Stealth (your choice). Resistance to thermal damage.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "devil-lesser",
+        "requirements": "Devil (Infernal)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "devil",
+          "lineage": "Devil (Infernal)",
+          "feature": "lesser",
+          "tierLevel": 1,
+          "version": "1.0.0",
+          "date": "2026-05-15",
+          "npAncestry": true
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "vocabScrub": "2026-05-16",
+          "grantedByAncestry": "Devil (Infernal)"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534412,
+        "modifiedTime": 1784177534412,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "folder": "tOM0KLv9UgMPUDOT",
+      "sort": 300000,
+      "_id": "cJ8He2cOFHaOYBvf",
+      "_key": "!actors.items!hVcnrqYBtJ6UX8jA.cJ8He2cOFHaOYBvf"
+    },
+    {
+      "name": "Devil: Pactbinder",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quill_sigil.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Pactbinder (1/Soma Break).</strong> When you secure a willing verbal agreement with a creature, both parties become magically bound for 24 hours. Breaking the pact deals 4d6 psychic damage to the breaker.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "devil-pactbinder",
+        "requirements": "Devil (Infernal)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "devil",
+          "lineage": "Devil (Infernal)",
+          "feature": "pactbinder",
+          "tierLevel": 2,
+          "version": "1.0.0",
+          "date": "2026-05-15",
+          "npAncestry": true
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "grantedByAncestry": "Devil (Infernal)"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534412,
+        "modifiedTime": 1784177534412,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "folder": "tOM0KLv9UgMPUDOT",
+      "sort": 400000,
+      "_id": "8uS9tR7zwXg90a6e",
+      "_key": "!actors.items!hVcnrqYBtJ6UX8jA.8uS9tR7zwXg90a6e"
+    },
+    {
+      "name": "Devil: Archduke's Tongue",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mask.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Archduke's Tongue.</strong> When you make a Presence (Diplomacy or Stealth) check, you may roll twice and take the better. You also know whenever a creature within 6 squares tells a deliberate lie.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "devil-archduke",
+        "requirements": "Devil (Infernal)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "devil",
+          "lineage": "Devil (Infernal)",
+          "feature": "archduke",
+          "tierLevel": 3,
+          "version": "1.0.0",
+          "date": "2026-05-15",
+          "npAncestry": true
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "vocabScrub": "2026-05-16",
+          "grantedByAncestry": "Devil (Infernal)"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534412,
+        "modifiedTime": 1784177534412,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "folder": "tOM0KLv9UgMPUDOT",
+      "sort": 200000,
+      "_id": "epPBJV0OPCb0MBzq",
+      "_key": "!actors.items!hVcnrqYBtJ6UX8jA.epPBJV0OPCb0MBzq"
+    },
+    {
+      "name": "Devil: Sovereign of Hells",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_eyes_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Sovereign of Hells (1/Soma Break).</strong> Compel a creature you have made eye contact with to obey one direct command (Soul check DC 8 + Tier + Presence to resist). The command must not be self-destructive. Your fire resistance becomes immunity.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "devil-sovereign",
+        "requirements": "Devil (Infernal)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "devil",
+          "lineage": "Devil (Infernal)",
+          "feature": "sovereign",
+          "tierLevel": 4,
+          "version": "1.0.0",
+          "date": "2026-05-15",
+          "npAncestry": true
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "grantedByAncestry": "Devil (Infernal)"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534412,
+        "modifiedTime": 1784177534412,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "folder": "tOM0KLv9UgMPUDOT",
+      "sort": 500000,
+      "_id": "iTHdqQ9fqapj9Q3S",
+      "_key": "!actors.items!hVcnrqYBtJ6UX8jA.iTHdqQ9fqapj9Q3S"
+    }
+  ],
+  "effects": [],
+  "folder": "q161mthKFcQADAdV",
+  "sort": 325000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177534412,
+    "modifiedTime": 1784177534412,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!hVcnrqYBtJ6UX8jA"
+}

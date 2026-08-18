@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Wyrdlens Adept",
+  "color": null,
+  "sorting": "a",
+  "_id": "AnlupqhUqRCmEi6Q",
+  "description": "",
+  "sort": 1500000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984325,
+    "modifiedTime": 1776459984412,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+  },
+  "_key": "!folders!AnlupqhUqRCmEi6Q"
+}

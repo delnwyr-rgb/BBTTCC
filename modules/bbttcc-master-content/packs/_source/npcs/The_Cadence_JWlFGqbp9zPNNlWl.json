@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": "ZiFLx2LEOrGxvEmc",
+  "name": "The Cadence",
+  "color": null,
+  "sorting": "a",
+  "_id": "JWlFGqbp9zPNNlWl",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177533967,
+    "modifiedTime": 1784177533967,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!JWlFGqbp9zPNNlWl"
+}

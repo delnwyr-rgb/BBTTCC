@@ -1,0 +1,45 @@
+{
+  "name": "Stillheart (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stillheart.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "aurablade",
+    "source": {
+      "custom": "Bad Eden Originals — Sprint F",
+      "revision": 1,
+      "rules": "2026"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>The calm is the discipline.</em></p>\n<p><strong>Mode:</strong> Protector · <strong>Drift:</strong> Away</p>\n<p>Stillheart Aurablades hold the aura instead of feeding it. Burn arrives by stillness rather than damage; the doctrine extends safety outward, denies panic to the people you stand near, and refuses disruption when the field starts to fray.</p>\n<h3>Doctrine Features</h3>\n<ul>\n  <li><strong>Level 3 — Centered Breath.</strong> Reduce Burn gained by 1 per encounter (minimum 0). Once per round when you would gain Burn you may decline. Allies within 2 squares reroll the lowest die on their first check vs fear or charm each scene.</li>\n  <li><strong>Level 6 — Shared Aura.</strong> Extend stability outward. While at Burn 1–3, allies within 2 squares gain half your Aura's passive benefit (Fury: +1 dmg once/turn; Resolve: +1 Guard while stationary; Mercy: free nonlethal choice; Dread: resistance to fear).</li>\n  <li><strong>Level 10 — Quiet Mind.</strong> You and allies within 2 squares are immune to being Shaken and reroll the lowest die on checks vs charm, confusion, or morale. At Burn 3+ you may spend your reaction to cancel one fear or charm effect on an ally.</li>\n  <li><strong>Level 14 — Emotional Lock.</strong> Your Aura cannot be forcibly changed. As a bonus action, freeze your current Burn level — it cannot increase or decrease until the start of your next turn. At Burn 3+ you may ignore one backlash trigger entirely.</li>\n  <li><strong>Level 18 — Eye of the Storm (Capstone).</strong> Once per Soma Break, for 1 minute in a 4 squares radius: Burn does not increase for you or allies; fear, charm, and morale effects are suppressed; ongoing emotional effects pause. After it ends, you gain 1 Burn.</li>\n</ul>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-aurablade-stillheart",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "Tp2149safpsn0Bmg",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "G8w6bdMHO6lOUeiH",
+  "sort": 109375,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.364",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1782167240813,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.1",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!G8w6bdMHO6lOUeiH"
+}

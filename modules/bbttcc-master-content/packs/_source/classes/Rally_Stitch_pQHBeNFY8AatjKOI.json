@@ -1,0 +1,121 @@
+{
+  "name": "Rally Stitch",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_flag_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Hold still, I’m sewing your courage back on.”</em></p><p>When a friendly creature you can see within <strong>6 squares</strong> fails a defense check, you can use your <strong>reaction</strong> to tug on the invisible seams.</p><ul><li>The ally <strong>rerolls</strong> the defense check and must use the new result.</li><li>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</li></ul><p><em>Sometimes all a comeback is missing is one stitch in the right place.</em></p>",
+      "chat": ""
+    },
+    "activities": {
+      "rallyStitch": {
+        "type": "utility",
+        "activation": {
+          "type": "reaction",
+          "condition": "When an ally within 30 ft fails a defense check.",
+          "override": false
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "range": {
+          "value": "30",
+          "units": "ft",
+          "override": false
+        },
+        "description": {},
+        "_id": "IW52pBKc2Tr0CLKm",
+        "sort": 0,
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "@prof"
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-victory-rally-stitch",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 3, Forge of Victory",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "dsO4fBFdVXDt6vRA",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_victory",
+      "featureKey": "rally_stitch"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459996554,
+    "modifiedTime": 1782167240828,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "pQHBeNFY8AatjKOI",
+  "sort": 300000,
+  "_key": "!items!pQHBeNFY8AatjKOI"
+}

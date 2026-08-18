@@ -1,0 +1,118 @@
+{
+  "name": "Forge-Blessed Tools",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_forge_blessed_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Forge-Blessed Tools.</strong> Your kit knows your hands and your hands know the kit.</p><ul><li>When you make checks using <strong>the Plating aptitude</strong> to craft, repair, reinforce, or sanctify items and structures, you are treated as especially capable. The GM may reroll the lowest die or a small bonus when the work is aligned with healing or protecting people (armor repair, shelter reinforcement, ritual fittings, etc.).</li><li>This feat marks you as a specialist Smith for the purposes of Bad Eden systems and any future automation that keys off Soul-Smith flags.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "forge-blessed-tools",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 2
+    },
+    "properties": [],
+    "requirements": "Soul-Smith (2nd level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Forge-Blessed Tools",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_forge_blessed_1.png",
+      "origin": null,
+      "transfer": false,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459996555,
+        "modifiedTime": 1777346199870
+      },
+      "_id": "GmMlFvSFe43sJ9Yd",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.soulSmith.forgeBlessedTools",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!wd1Dl74TN1trKqhw.GmMlFvSFe43sJ9Yd"
+    }
+  ],
+  "folder": "qdqMhHfZdVgUs1gN",
+  "flags": {
+    "bbttcc": {
+      "soulSmith": {
+        "forgeBlessedTools": true
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459996555,
+    "modifiedTime": 1782167240831,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "wd1Dl74TN1trKqhw",
+  "sort": 258594,
+  "_key": "!items!wd1Dl74TN1trKqhw"
+}

@@ -1,0 +1,65 @@
+{
+  "name": "Wayfarer Tongue L9: The Protected Word",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quantum_5.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>The word inside you cannot be opened by force.</em></p><p>A Message you are carrying cannot be:</p><ul><li><p><strong>Stolen</strong> from you by mundane or magical means</p></li><li><p><strong>Compelled</strong> out of you by manifestation, ritual, condition, or torture</p></li><li><p><strong>Read</strong> by divination, scrying, telepathic, or empathic effect</p></li></ul><p>This protection holds <strong>until you deliver the Message</strong> or <strong>willingly reveal it</strong>. If you are killed before delivery, the Message becomes <strong>inert</strong> rather than extractable — the contents dissolve from any vessel that might have carried them.</p><p><strong>Feedback bite.</strong> If a creature attempts to compel speech from you about a Protected Message and fails its caster check (or equivalent), it takes <strong>1d10x10 psychic damage</strong> as the refusal recoils through its working.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "shadow_courier_wayfarer_l9_protected_word",
+    "requirements": "Route of the Wayfarer Tongue, Shadow Courier Initiation 9",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 9
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "shadow_courier",
+      "subclassIdentifier": "bbttcc-shadow-courier-courier-wayfarer-tongue",
+      "subclassLevel": 9,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {}
+    }
+  },
+  "folder": "W1e3ZXUelQ4D70io",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777005233959,
+    "modifiedTime": 1782167240820,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ShdwWayFtL09abcd",
+  "sort": 400000,
+  "_key": "!items!ShdwWayFtL09abcd"
+}

@@ -1,0 +1,87 @@
+{
+  "name": "Antidote Cartridge",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_serum_1.png",
+  "system": {
+    "slot": "consumable",
+    "tags": [
+      "consumable",
+      "tier-i"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Auto-injector loaded with broad-spectrum counteragent. Clears poisoned in a single press.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Cure <strong>Poisoned</strong></li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 10 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "consumable",
+          "signature": "The poison releases its grip and is forgotten.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "Auto-injector loaded with broad-spectrum counteragent. Clears poisoned in a single press.",
+          "charges": 1,
+          "consume": {
+            "effects": [
+              {
+                "kind": "condition",
+                "op": "remove",
+                "condition": "poisoned"
+              }
+            ],
+            "decrement": true
+          },
+          "price": {
+            "marks": 10,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI consumable stamp",
+            "bound": "free",
+            "saleBack": 4
+          }
+        }
+      }
+    }
+  },
+  "folder": "guHYjt0gjPLU2wCs",
+  "_id": "oUyt4doBdoGK7KxJ",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777096380579,
+    "modifiedTime": 1782160020991,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!oUyt4doBdoGK7KxJ"
+}

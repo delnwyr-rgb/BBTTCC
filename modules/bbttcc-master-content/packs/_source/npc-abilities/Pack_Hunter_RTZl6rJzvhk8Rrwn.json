@@ -1,0 +1,49 @@
+{
+  "name": "Pack Hunter",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_people_1.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "5e-port"
+    ],
+    "description": {
+      "value": "<p>The stalker reroll the lowest die on attack rolls against a creature if at least one ally stalker is within 1 square of the target and not Staggered.</p>",
+      "chat": ""
+    }
+  },
+  "_id": "RTZl6rJzvhk8Rrwn",
+  "effects": [],
+  "sort": 0,
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Tier 2 Predator (Wastes Stalker)"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782167244998,
+    "modifiedTime": 1782167244998,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!RTZl6rJzvhk8Rrwn"
+}

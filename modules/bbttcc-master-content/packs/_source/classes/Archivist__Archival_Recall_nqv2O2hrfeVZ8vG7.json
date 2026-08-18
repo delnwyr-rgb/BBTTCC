@@ -1,0 +1,71 @@
+{
+  "name": "Archivist: Archival Recall",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_inspire.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"2492\" data-end=\"2505\"><em data-start=\"2492\" data-end=\"2505\">(6th Level)</em></p><p><strong>Administrative Pressure:</strong> +1</p><p data-start=\"2507\" data-end=\"2528\"><em data-start=\"2507\" data-end=\"2528\">“Pull the minutes.”</em></p><p data-start=\"2530\" data-end=\"2647\">Once per Soma Break, you may consult the Akashic record and ask the GM one question about <strong data-start=\"2620\" data-end=\"2632\">patterns</strong> (not secrets).</p><p data-start=\"2649\" data-end=\"2658\">Examples:</p><ul data-start=\"2659\" data-end=\"2772\"><li data-start=\"2659\" data-end=\"2701\"><p data-start=\"2661\" data-end=\"2701\">Has something like this happened before?</p></li><li data-start=\"2702\" data-end=\"2737\"><p data-start=\"2704\" data-end=\"2737\">What precedent is being violated?</p></li><li data-start=\"2738\" data-end=\"2772\"><p data-start=\"2740\" data-end=\"2772\">What does the world expect here?</p></li></ul><p data-start=\"2774\" data-end=\"2848\">You are not uncovering hidden facts—you are reading structural repetition.</p><h3 data-start=\"2850\" data-end=\"2858\">Cost</h3><p data-start=\"2859\" data-end=\"2884\">No Civic Charge required.</p><h3 data-start=\"2886\" data-end=\"2898\">Pushback</h3><p data-start=\"2899\" data-end=\"2966\">None. Observation does not ossify narrative. Only enforcement does.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "identifier": "archivist_archival_recall",
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pushback": {
+        "track": "pressure",
+        "on": "use",
+        "amount": 1,
+        "_taggedBy": "bbttcc-pressure-tagger",
+        "_ts": 1770862584131
+      }
+    }
+  },
+  "folder": "eNi1uCWJUfkKDdUU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776481562690,
+    "modifiedTime": 1782167240827,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "nqv2O2hrfeVZ8vG7",
+  "sort": 300000,
+  "_key": "!items!nqv2O2hrfeVZ8vG7"
+}

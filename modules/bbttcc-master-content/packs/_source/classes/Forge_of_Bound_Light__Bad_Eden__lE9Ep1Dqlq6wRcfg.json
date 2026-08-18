@@ -1,0 +1,41 @@
+{
+  "name": "Forge of Bound Light (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_forge.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "soul-smith",
+    "source": "Bad Eden Originals — Sprint F (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"Containment is the first virtue.\"</em></p>\n<p><strong>Mode:</strong> Disciplined · <strong>Drift:</strong> Away</p>\n<p>The Forge of Bound Light holds things so they stop hurting people — Sparks, mostly, but also the general principle. You bank a <strong>Spark</strong> when you contain harm (when an ally near you takes a hit, you catch what spills) — cap = tier + 1 — and spend Sparks + Surge to ward, seal, and bless. The least flashy forge, and the one that keeps the party breathing.</p>\n<h3>Doctrine (Spark-fueled, spent via Surge)</h3>\n<ul>\n  <li><strong>The First Vessel.</strong> When an ally near you is hurt, you catch the released energy and bank a Spark — a vessel waiting to be filled.</li>\n  <li><strong>Bound Vessel.</strong> Spark + Surge: ward an ally — DR equal to your tier plus poison/qliphothic resistance for three rounds. A safe place to put the danger.</li>\n  <li><strong>The Sealed Work.</strong> Spark + Surge: ward an ally with DR <em>and</em> a seal — the next hit that would drop them is held at 1. Sealed against breaking, briefly, by stubbornness rendered in metal.</li>\n  <li><strong>Blessed Weapon.</strong> Spark: your weapon blazes with bound light — your next Strike deals +tier d6. The light remembers what it was given to hold, and it is not happy about it.</li>\n  <li><strong>The Living Library (Capstone).</strong> Once per session, become a vessel yourself for 24 hours — carry any Spark instantly, craft on demand, transfer Sparks between allies as a free action. Costs Stress you get back in about a week. Worth it.</li>\n</ul>\n<p><em>Out-of-combat:</em> <strong>Pattern of Mercy</strong> (convert Economy → Soft Power after a Parley) and the <strong>Cathedral Vessel</strong> (a building or shrine that stabilizes a hex and dampens Darkness) remain the strategic flourishes.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-soul-smith-smith-bound-light",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "JaASOItbL0tB8Z9y",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "lE9Ep1Dqlq6wRcfg",
+  "sort": 400000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.364",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1782167240827,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.1",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!lE9Ep1Dqlq6wRcfg"
+}

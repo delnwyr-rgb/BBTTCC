@@ -1,0 +1,67 @@
+{
+  "name": "Kind Light",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Mercy leaves a glow.</em></p><p>Whenever you <strong>heal</strong> a creature or successfully <strong>stabilize</strong> a dying creature using a manifestation, feature, or skill check, that creature also gains <strong>temporary Integrity equal to your tier</strong>.</p><ul><li>These temp Integrity last until the creature finishes a short or a Soma Break.</li><li>This applies once per instance of healing or stabilization.</li></ul><p>People walk away from your care buffered, not just patched.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "wyrdlens-refraction-mercy-kind-light",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept 6, Refraction of Mercy",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "pKuSnWKpU0fVPuje",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "wyrdlens_refraction_mercy",
+      "featureKey": "kind_light"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984387,
+    "modifiedTime": 1781116168461,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "aql8Vmo2b84DXnid",
+  "sort": 300000,
+  "_key": "!items!aql8Vmo2b84DXnid"
+}

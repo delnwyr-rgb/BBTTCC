@@ -1,0 +1,105 @@
+{
+  "name": "Radcloth Hood",
+  "type": "equipment",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_rad_cloth_hood.jpeg",
+  "system": {
+    "description": {
+      "value": "<p>Provides reroll the lowest die on saves vs [TODO(adv-call)]. mild radiation &amp; spores; reduces Swamp/Mire and Wasteland exposure checks.</p>",
+      "chat": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1,
+      "units": "lb"
+    },
+    "price": {
+      "value": 50,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "attunement": "",
+    "identified": true,
+    "type": {
+      "value": "",
+      "baseItem": ""
+    },
+    "equipped": false,
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "radcloth-hood",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "attuned": false,
+    "crewed": false,
+    "armor": {
+      "value": null,
+      "dex": null
+    },
+    "proficient": null,
+    "properties": [],
+    "strength": null
+  },
+  "flags": {
+    "bbttcc": {
+      "hazardResist": [
+        "radiation",
+        "spores"
+      ],
+      "tags": [
+        "radiation"
+      ]
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          },
+          "legacySystem": {
+            "description": {
+              "value": "<p>Provides reroll the lowest die on checks vs. mild radiation &amp; spores; reduces Swamp/Mire and Wasteland exposure checks.</p>"
+            }
+          }
+        }
+      }
+    }
+  },
+  "effects": [],
+  "folder": "Wxh1A343inwTUeoo",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1767834192697,
+    "modifiedTime": 1782164185970,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "5QBwdykQq1D2ZKaY",
+  "sort": 1600000,
+  "_key": "!items!5QBwdykQq1D2ZKaY"
+}

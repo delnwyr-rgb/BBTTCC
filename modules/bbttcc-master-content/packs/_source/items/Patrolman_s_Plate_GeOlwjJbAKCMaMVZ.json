@@ -1,0 +1,137 @@
+{
+  "name": "Patrolman's Plate",
+  "type": "armor",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/patrolpersons_plate.png",
+  "system": {
+    "guardBonus": 2,
+    "evasionBonus": 0,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "plating",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "medium",
+      "plate"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A studded breastplate over a gambeson, with shoulder pauldrons that fit at least three different body types badly. Worn by faction patrols, hex constables, and anyone who needs to look like they have authority without carrying signature gear. Cheap, repairable, and forgivingly average.</p><p><strong>Standard Issue.</strong> No signature, no harmonization, no questions asked at the gate.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Medium</li>\n  <li><strong>Defense:</strong> Guard +2</li>\n  <li><strong>Requires:</strong> Plating (trained)</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 75 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Issued, dented, returned, reissued. Honest metal.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A studded breastplate over a gambeson, with shoulder pauldrons that fit at least three different body types badly. Worn by faction patrols, hex constables, and anyone who needs to look like they have authority without carrying signature gear. Cheap, repairable, and forgivingly average.</p><p><b>Standard Issue.</b> No signature, no harmonization, no questions asked at the gate.</p>",
+          "materialOf": [
+            "scrap-steel",
+            "gambeson",
+            "leather-strap"
+          ],
+          "price": {
+            "marks": 75,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI armor stamp",
+            "bound": "free",
+            "saleBack": 30
+          }
+        }
+      }
+    }
+  },
+  "folder": "2yW6O57xUFtROfpB",
+  "_id": "GeOlwjJbAKCMaMVZ",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 2,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "kiVk8sdosX8dblYu",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781726106580,
+        "modifiedTime": 1781726106580,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!GeOlwjJbAKCMaMVZ.kiVk8sdosX8dblYu"
+    }
+  ],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777862455158,
+    "modifiedTime": 1782160020986,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!GeOlwjJbAKCMaMVZ"
+}

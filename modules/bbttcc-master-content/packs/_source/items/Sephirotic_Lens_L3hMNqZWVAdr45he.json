@@ -1,0 +1,84 @@
+{
+  "name": "Sephirotic Lens",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/sephirotic_hex.png",
+  "system": {
+    "slot": "lens",
+    "tags": [
+      "lens",
+      "sephirotic",
+      "attunement"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Crystal lens carved with a single sefirot glyph at the rim. Hold it up and only that emanation passes through.</p><p><b>Aligned Sight.</b> While attuned, equipped, and tuned to a sephirah you've named, you reroll the lowest die on magic tests aligned to that sephirah.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "tool",
+          "signature": "One sephirah at a time, held clean.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {
+            "sephirotic_aligned": true
+          },
+          "lore": "<p>Crystal lens carved with a single sefirot glyph at the rim. Hold it up and only that emanation passes through.</p><p><b>Aligned Sight.</b> While attuned, equipped, and tuned to a sephirah you've named, you reroll the lowest die on magic tests aligned to that sephirah.</p>",
+          "materialOf": [
+            "tree-of-life-shard",
+            "focusing-lens",
+            "prayer-binding"
+          ],
+          "price": {
+            "marks": 90,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII tool stamp",
+            "bound": "attuned",
+            "saleBack": 36
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "L3hMNqZWVAdr45he",
+  "effects": [],
+  "sort": 500000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137142782,
+    "modifiedTime": 1782156674945,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!L3hMNqZWVAdr45he"
+}

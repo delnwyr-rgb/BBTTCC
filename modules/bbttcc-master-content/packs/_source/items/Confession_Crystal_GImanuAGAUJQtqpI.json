@@ -1,0 +1,87 @@
+{
+  "name": "Confession Crystal",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_crystal_4.png",
+  "system": {
+    "slot": "wondrous",
+    "tags": [
+      "wondrous",
+      "crystal",
+      "attunement",
+      "record"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Palm-sized crystal of fogged quartz. Records the most recent admission of guilt or truth spoken within 6 squares</p><p><b>Replay (1/Scene).</b> As an action, the wearer may play the recording back in the original speaker's voice. Useful for negotiations, blackmail, and very awkward weddings.</p><p><i>Charges refresh on Soma Break.</i></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "tool",
+          "signature": "What was admitted is never lost.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {
+            "record": true
+          },
+          "lore": "<p>Palm-sized crystal of fogged quartz. Records the most recent admission of guilt or truth spoken within 6 squares</p><p><b>Replay (1/Scene).</b> As an action, the wearer may play the recording back in the original speaker's voice. Useful for negotiations, blackmail, and very awkward weddings.</p><p><i>Charges refresh on Soma Break.</i></p>",
+          "materialOf": [
+            "fogged-quartz",
+            "memory-resin",
+            "witness-glass"
+          ],
+          "charges": 1,
+          "rechargesOn": "soma-break",
+          "price": {
+            "marks": 270,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII tool stamp",
+            "bound": "attuned",
+            "saleBack": 108
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "GImanuAGAUJQtqpI",
+  "effects": [],
+  "sort": 500000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137142786,
+    "modifiedTime": 1782164185972,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!GImanuAGAUJQtqpI"
+}

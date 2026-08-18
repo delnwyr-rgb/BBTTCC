@@ -1,0 +1,166 @@
+{
+  "name": "Rad Suit (Mk I)",
+  "type": "equipment",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/radsuit_mk_1.png",
+  "system": {
+    "description": {
+      "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Resistance:</strong> Radiation, Qliphothic</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 225 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 10,
+      "units": "lb"
+    },
+    "price": {
+      "value": 500,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "attunement": "",
+    "identified": true,
+    "type": {
+      "value": "light",
+      "baseItem": "leather"
+    },
+    "equipped": false,
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "rad-suit-mk-iii",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "attuned": false,
+    "crewed": false,
+    "armor": {
+      "value": 12,
+      "dex": null
+    },
+    "proficient": null,
+    "properties": [],
+    "strength": null,
+    "guardBonus": 2,
+    "evasionBonus": 1,
+    "resolveBonus": 1,
+    "resistances": [
+      "radiation",
+      "necrotic"
+    ],
+    "tags": [
+      "hazmat",
+      "rad-shielded"
+    ]
+  },
+  "flags": {
+    "bbttcc": {
+      "radiationResist": true,
+      "tags": [
+        "radiation"
+      ]
+    },
+    "rfi": {
+      "item": {
+        "tier": "II",
+        "footprint": 1,
+        "reach": "self",
+        "frame": "armor",
+        "signature": "",
+        "origin": "looted",
+        "originator": null,
+        "bound": "free",
+        "upkeep": {
+          "mode": "passive",
+          "per": "scene"
+        },
+        "misfire": {
+          "tierClamp": true,
+          "table": null
+        },
+        "signals": {}
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Sealed against the unseen.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "legacySystem": {
+            "guardBonus": 0,
+            "evasionBonus": 0,
+            "resolveBonus": 0,
+            "resistances": [],
+            "armorSkill": "weave",
+            "equipped": true,
+            "tags": []
+          },
+          "lore": "<p>Light hazmat liner. Flexible, shielded weave keeps the slow death out without slowing the wearer down.</p>",
+          "price": {
+            "marks": 225,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII armor stamp",
+            "bound": "free",
+            "saleBack": 90
+          }
+        }
+      },
+      "grants": {
+        "resistances": [
+          {
+            "type": "radiation"
+          },
+          {
+            "type": "qliphothic"
+          }
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "folder": "Iyyec8ij0PAfdLBd",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1767834190022,
+    "modifiedTime": 1782158151707,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "9n6Vssc8uTEuA2xj",
+  "sort": -100000,
+  "_key": "!items!9n6Vssc8uTEuA2xj"
+}

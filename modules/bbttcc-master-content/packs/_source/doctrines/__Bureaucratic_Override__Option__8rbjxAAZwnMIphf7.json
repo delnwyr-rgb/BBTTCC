@@ -1,0 +1,40 @@
+{
+  "name": "⭐ Bureaucratic Override [Option]",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scroll_2.png",
+  "system": {
+    "category": "maneuver",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Bureaucratic Override [Option]</h3><p><em>No rules text registered.</em></p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> option</p><p><strong>Raid Types:</strong> assault, infiltration, occupation, liberation, espionage, propaganda, siege, ritual, assault_defense, courtly</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "opt_bureaucratic_override"
+    }
+  },
+  "_id": "8rbjxAAZwnMIphf7",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601758,
+    "modifiedTime": 1782703702687,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!8rbjxAAZwnMIphf7"
+}

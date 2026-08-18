@@ -1,0 +1,62 @@
+{
+  "name": "Plant a Doubt",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_compulsion_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>One muttered question at exactly the wrong moment. The doubt does the rest. It always does the rest.</p><p><b>Pick a courtier: −1 Favor toward your opponent; +1 Suspicion.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "courtly_plant_a_doubt",
+      "meta": {
+        "tier": 2,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "courtly",
+        "layer": "tactical",
+        "costBand": "light",
+        "raidTypes": [
+          "presence"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "intrigue": 1
+        },
+        "authoredSprint": "courtly-d"
+      },
+      "effects": {
+        "text": "Pick a courtier. −1 Favor to opponent's side. Suspicion +1."
+      }
+    }
+  },
+  "_id": "FWamjyY4SGuHHtXU",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "6ut7GT8pCAhpdWjS": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1779731271079,
+    "modifiedTime": 1780163523506,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!FWamjyY4SGuHHtXU"
+}

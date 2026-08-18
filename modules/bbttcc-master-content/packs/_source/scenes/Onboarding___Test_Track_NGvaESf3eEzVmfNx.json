@@ -1,0 +1,1681 @@
+{
+  "name": "Onboarding — Test Track",
+  "width": 3000,
+  "height": 1800,
+  "padding": 0.2,
+  "grid": {
+    "type": 1,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 1,
+    "color": "#000000",
+    "alpha": 0.2,
+    "distance": 1,
+    "units": "m"
+  },
+  "initial": {
+    "x": null,
+    "y": null,
+    "scale": null
+  },
+  "navigation": false,
+  "flags": {
+    "bbttcc-onboarding": {
+      "tutorialScene": "driving-course"
+    },
+    "wall-height": {
+      "advancedVision": true
+    }
+  },
+  "_id": "NGvaESf3eEzVmfNx",
+  "active": false,
+  "navOrder": 0,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-j5P6E12yuAMYqtHfLYX_Fw.webp",
+  "shiftX": 0,
+  "shiftY": 0,
+  "initialLevel": "defaultLevel0000",
+  "tokenVision": true,
+  "fog": {
+    "mode": 1,
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    }
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": true,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "drawings": [],
+  "tokens": [
+    {
+      "name": "Wasteland Shack",
+      "displayName": 0,
+      "actorLink": true,
+      "width": 4,
+      "height": 4,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_1.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": -1,
+      "displayBars": 0,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        }
+      },
+      "actorId": "43fKY4WrzxxyVYUd",
+      "hidden": false,
+      "sort": 1,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "delta": null,
+      "x": 2600,
+      "y": 1200,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_id": "VNmlbYw73WhXwgco",
+      "_key": "!scenes.tokens!NGvaESf3eEzVmfNx.VNmlbYw73WhXwgco"
+    },
+    {
+      "name": "Generator Hut",
+      "displayName": 0,
+      "actorLink": true,
+      "width": 4,
+      "height": 4,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_4.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": -1,
+      "displayBars": 0,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        }
+      },
+      "actorId": "3Oth1OqkHthCeoKp",
+      "hidden": false,
+      "sort": 3,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "delta": null,
+      "x": 1900,
+      "y": 1600,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_id": "4ECzI21hP6LZ5sOH",
+      "_key": "!scenes.tokens!NGvaESf3eEzVmfNx.4ECzI21hP6LZ5sOH"
+    },
+    {
+      "name": "Generator Hut",
+      "displayName": 0,
+      "actorLink": true,
+      "width": 4,
+      "height": 4,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_4.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": -1,
+      "displayBars": 0,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        }
+      },
+      "actorId": "3Oth1OqkHthCeoKp",
+      "hidden": false,
+      "sort": 7,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "delta": null,
+      "x": 1500,
+      "y": 1400,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_id": "ALVxCLl1dgb8k5pk",
+      "_key": "!scenes.tokens!NGvaESf3eEzVmfNx.ALVxCLl1dgb8k5pk"
+    },
+    {
+      "name": "Junk Barricade",
+      "displayName": 30,
+      "actorLink": true,
+      "width": 2,
+      "height": 2,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Structures/wasteland_wall_5.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 45,
+      "alpha": 1,
+      "disposition": -1,
+      "displayBars": 0,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        },
+        "tokenflip": {
+          "tokenfaces": [
+            {
+              "actorId": "RuWuBKyB1SpmP8uO",
+              "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_wall_5.png",
+              "id": "H9Ux1tmrX4jBv1WRi8LB",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 2,
+              "height": 2,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "RuWuBKyB1SpmP8uO",
+              "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_wall_1.png",
+              "id": "VzhXdtLLPptbqQsWtxmN",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 2,
+              "height": 2,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "RuWuBKyB1SpmP8uO",
+              "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_wall_2.png",
+              "id": "NnxUHDf7G1pYD6AnWn0a",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 2,
+              "height": 2,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            }
+          ]
+        }
+      },
+      "actorId": "RuWuBKyB1SpmP8uO",
+      "hidden": false,
+      "sort": 8,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "delta": null,
+      "x": 1800,
+      "y": 1600,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_id": "sO4uTLIDbdjC9VLM",
+      "_key": "!scenes.tokens!NGvaESf3eEzVmfNx.sO4uTLIDbdjC9VLM"
+    },
+    {
+      "name": "Fuel Shed",
+      "displayName": 0,
+      "actorLink": true,
+      "width": 4,
+      "height": 4,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_3.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": -1,
+      "displayBars": 0,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        }
+      },
+      "actorId": "yv3VHAwUP05IKnBC",
+      "hidden": false,
+      "sort": 9,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "delta": null,
+      "x": 2100,
+      "y": 1700,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_id": "O6dtIvEObxoXWaoc",
+      "_key": "!scenes.tokens!NGvaESf3eEzVmfNx.O6dtIvEObxoXWaoc"
+    },
+    {
+      "name": "Fuel Shed",
+      "displayName": 0,
+      "actorLink": true,
+      "width": 4,
+      "height": 4,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_3.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 45,
+      "alpha": 1,
+      "disposition": -1,
+      "displayBars": 0,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        }
+      },
+      "actorId": "yv3VHAwUP05IKnBC",
+      "hidden": false,
+      "sort": 10,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "delta": null,
+      "x": 1200,
+      "y": 1000,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_id": "bhf95cdHZ4WGTlpo",
+      "_key": "!scenes.tokens!NGvaESf3eEzVmfNx.bhf95cdHZ4WGTlpo"
+    },
+    {
+      "name": "Watchtower",
+      "displayName": 0,
+      "actorLink": true,
+      "width": 4,
+      "height": 4,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Structures/wasteland_tower_mini_2.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": -1,
+      "displayBars": 0,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        },
+        "tokenflip": {
+          "tokenfaces": [
+            {
+              "actorId": "XGk8Y8AXJFwn8k9q",
+              "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_tower_mini.png",
+              "id": "PaDYacqm8UkTUJ9FjPfS",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 4,
+              "height": 4,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "XGk8Y8AXJFwn8k9q",
+              "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_tower_mini_2.png",
+              "id": "yrG08qTH8hw7GEndRBH7",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 4,
+              "height": 4,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            }
+          ],
+          "currentId": "yrG08qTH8hw7GEndRBH7"
+        }
+      },
+      "actorId": "XGk8Y8AXJFwn8k9q",
+      "hidden": false,
+      "sort": 12,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "delta": null,
+      "x": 2500,
+      "y": 500,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_id": "4BmUAxMtYSyBicVT",
+      "_key": "!scenes.tokens!NGvaESf3eEzVmfNx.4BmUAxMtYSyBicVT"
+    },
+    {
+      "name": "Wasteland Shack",
+      "displayName": 0,
+      "actorLink": true,
+      "width": 2,
+      "height": 2,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_2.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": -1,
+      "displayBars": 0,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        },
+        "tokenflip": {
+          "tokenfaces": [
+            {
+              "actorId": "43fKY4WrzxxyVYUd",
+              "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_1.png",
+              "id": "ta3BhlkFW2GImZWLRF5e",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 4,
+              "height": 4,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "43fKY4WrzxxyVYUd",
+              "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_2.png",
+              "id": "9wK6oXdHO49KfGor6fE1",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 2,
+              "height": 2,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "43fKY4WrzxxyVYUd",
+              "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_3.png",
+              "id": "3rplyCMiG5hZlqTlEFBH",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 4,
+              "height": 4,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            }
+          ],
+          "currentId": "9wK6oXdHO49KfGor6fE1"
+        }
+      },
+      "actorId": "43fKY4WrzxxyVYUd",
+      "hidden": false,
+      "sort": 13,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "delta": null,
+      "x": 2400,
+      "y": 1600,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_id": "8fF4aP6VjiMAtxVz",
+      "_key": "!scenes.tokens!NGvaESf3eEzVmfNx.8fF4aP6VjiMAtxVz"
+    },
+    {
+      "name": "Wasteland Shack",
+      "displayName": 0,
+      "actorLink": true,
+      "width": 2,
+      "height": 2,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_2.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": -1,
+      "displayBars": 0,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        },
+        "tokenflip": {
+          "tokenfaces": [
+            {
+              "actorId": "43fKY4WrzxxyVYUd",
+              "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_1.png",
+              "id": "ta3BhlkFW2GImZWLRF5e",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 4,
+              "height": 4,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "43fKY4WrzxxyVYUd",
+              "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_2.png",
+              "id": "9wK6oXdHO49KfGor6fE1",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 2,
+              "height": 2,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "43fKY4WrzxxyVYUd",
+              "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_shack_3.png",
+              "id": "3rplyCMiG5hZlqTlEFBH",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 4,
+              "height": 4,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            }
+          ],
+          "currentId": "9wK6oXdHO49KfGor6fE1"
+        }
+      },
+      "actorId": "43fKY4WrzxxyVYUd",
+      "hidden": false,
+      "sort": 14,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "delta": null,
+      "x": 2500,
+      "y": 1800,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_id": "DmeXsWt7iCEItH3u",
+      "_key": "!scenes.tokens!NGvaESf3eEzVmfNx.DmeXsWt7iCEItH3u"
+    },
+    {
+      "name": "Watchtower",
+      "displayName": 0,
+      "actorLink": true,
+      "width": 8,
+      "height": 8,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Structures/wasteland_tower_mini.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": -1,
+      "displayBars": 0,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        },
+        "tokenflip": {
+          "tokenfaces": [
+            {
+              "actorId": "XGk8Y8AXJFwn8k9q",
+              "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_tower_mini.png",
+              "id": "PaDYacqm8UkTUJ9FjPfS",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 8,
+              "height": 8,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "XGk8Y8AXJFwn8k9q",
+              "img": "art/bbttcc/GOTTGAIT/Structures/wasteland_tower_mini_2.png",
+              "id": "yrG08qTH8hw7GEndRBH7",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 4,
+              "height": 4,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            }
+          ]
+        }
+      },
+      "actorId": "XGk8Y8AXJFwn8k9q",
+      "hidden": false,
+      "sort": 15,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "delta": null,
+      "x": 700,
+      "y": 1200,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_id": "EZP5jSZV5C4EjKpR",
+      "_key": "!scenes.tokens!NGvaESf3eEzVmfNx.EZP5jSZV5C4EjKpR"
+    },
+    {
+      "name": "Junk Barricade",
+      "displayName": 0,
+      "actorLink": true,
+      "width": 8,
+      "height": 8,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/trash_barrier_2a.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": -1,
+      "displayBars": 0,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        }
+      },
+      "actorId": "srPvqJbIAt0UdLBs",
+      "hidden": false,
+      "sort": 17,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "delta": null,
+      "x": 1800,
+      "y": 700,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_id": "yZt8XweyDKUaNkm7",
+      "_key": "!scenes.tokens!NGvaESf3eEzVmfNx.yZt8XweyDKUaNkm7"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Aurablade.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "name": "Toblerone",
+      "displayName": 30,
+      "actorLink": true,
+      "width": 0.25,
+      "height": 0.25,
+      "depth": 1,
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": "derived.integrity"
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        },
+        "tokenflip": {
+          "tokenfaces": [
+            {
+              "actorId": "GpOORLTg9fSxAqDW",
+              "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Aurablade.png",
+              "id": "S0nyKMbuODaz0pbX9ult",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 1,
+              "height": 1,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "GpOORLTg9fSxAqDW",
+              "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Aurablade.png",
+              "id": "NMnACZQ6nUdFDowCoVcJ",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 0.25,
+              "height": 0.25,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            }
+          ],
+          "currentId": "NMnACZQ6nUdFDowCoVcJ"
+        },
+        "fourththing": {}
+      },
+      "actorId": "GpOORLTg9fSxAqDW",
+      "hidden": false,
+      "sort": 18,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "KVGN0zgkcjy6JPO0",
+      "delta": null,
+      "x": 1650,
+      "y": 900,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!NGvaESf3eEzVmfNx.KVGN0zgkcjy6JPO0"
+    }
+  ],
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "Level",
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/wasteland_road_empty.jpeg",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!NGvaESf3eEzVmfNx.defaultLevel0000"
+    }
+  ],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [],
+  "walls": [],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "folder": "VhwCVQiwIRmTpe7h",
+  "sort": 500000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982547076,
+    "modifiedTime": 1783982547076,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "navName": "",
+  "_key": "!scenes!NGvaESf3eEzVmfNx",
+  "templates": []
+}

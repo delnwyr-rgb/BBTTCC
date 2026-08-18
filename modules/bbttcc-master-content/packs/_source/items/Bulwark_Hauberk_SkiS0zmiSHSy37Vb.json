@@ -1,0 +1,145 @@
+{
+  "name": "Bulwark Hauberk",
+  "type": "armor",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/bulwark_hauberk.png",
+  "system": {
+    "guardBonus": 2,
+    "evasionBonus": 0,
+    "resolveBonus": 1,
+    "resistances": [],
+    "armorSkill": "plating",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "heavy",
+      "mail",
+      "plate"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A long mail hauberk over a padded coat, with riveted plate at the chest and shoulders. The standard heavy issue for Bulwarks who haven't earned signature plate yet. Weight you have to carry. Weight that carries back.</p><p><strong>Standard Issue.</strong> Path-defining silhouette without path-defining cost. Frame Dice and Ruin Charges still come from your Bulwark features — the hauberk is just the surface they sit on.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Heavy</li>\n  <li><strong>Defense:</strong> Guard +2, Resolve +1</li>\n  <li><strong>Requires:</strong> Plating (trained)</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 75 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Heavy enough to remind you you're standing somewhere on purpose.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A long mail hauberk over a padded coat, with riveted plate at the chest and shoulders. The standard heavy issue for Bulwarks who haven't earned signature plate yet. Weight you have to carry. Weight that carries back.</p><p><b>Standard Issue.</b> Path-defining silhouette without path-defining cost. Frame Dice and Ruin Charges still come from your Bulwark features — the hauberk is just the surface they sit on.</p>",
+          "materialOf": [
+            "mail",
+            "rivet-plate",
+            "padded-coat"
+          ],
+          "price": {
+            "marks": 75,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI armor stamp",
+            "bound": "free",
+            "saleBack": 30
+          }
+        }
+      }
+    }
+  },
+  "folder": "2yW6O57xUFtROfpB",
+  "_id": "SkiS0zmiSHSy37Vb",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 2,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.resolve",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "w9TSUIQMRqMZqzXV",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781726107462,
+        "modifiedTime": 1781726107462,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!SkiS0zmiSHSy37Vb.w9TSUIQMRqMZqzXV"
+    }
+  ],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777862455202,
+    "modifiedTime": 1782160020988,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!SkiS0zmiSHSy37Vb"
+}

@@ -1,0 +1,76 @@
+{
+  "name": "Cataclyst L5: Stance Dance",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_11.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>The hinge swings either way. You decide which way every turn.</em></p><p>At the start of each of your turns, declare a stance for that turn — <strong>Advance</strong> or <strong>Anchor</strong>. The chosen stance ends at the start of your next turn.</p><ul><li><p><strong>Advance.</strong> All Ruin Charge spends made this turn are reduced by <strong>1 (minimum 1)</strong>. You also gain <strong>+2 squares of movement</strong> on this turn.</p></li><li><p><strong>Anchor.</strong> Each Frame Die spent on absorption this turn grants an additional <strong>1d4</strong> of conversion value (added to the d8 base). You cannot be moved against your will until the start of your next turn (no defense check required by you).</p></li></ul><p>You may change stance once during your turn as a free action; the new stance applies retroactively to spends made this turn (refunds the cost difference if applicable).</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "bulwark_cataclyst_l5_stance_dance",
+    "requirements": "Path of the Cataclyst, Bulwark Initiation 5",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "bulwark",
+      "subclassIdentifier": "bbttcc-bulwark-cataclyst",
+      "subclassLevel": 5,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {},
+      "triggers": [
+        {
+          "event": "on-turn-start",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "The hinge swings either way. You decide which way every turn. At the start of each of your turns, declare a stance for that turn"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "HmbujXzEJL7v48Q9",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777004380778,
+    "modifiedTime": 1782167240811,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BlwkCataFtL05abc",
+  "sort": 0,
+  "_key": "!items!BlwkCataFtL05abc"
+}

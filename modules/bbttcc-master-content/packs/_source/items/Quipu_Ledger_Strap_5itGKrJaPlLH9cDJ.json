@@ -1,0 +1,94 @@
+{
+  "name": "Quipu Ledger Strap",
+  "type": "equipment",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_quipu_ledger_strap.jpeg",
+  "system": {
+    "description": {
+      "value": "<p>Knotted cord mnemonic. You always recall last 10 War Log entries precisely; +1 to Economy checks to audit supplies.</p>",
+      "chat": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 0.2,
+      "units": "lb"
+    },
+    "price": {
+      "value": 10,
+      "denomination": "gp"
+    },
+    "rarity": "common",
+    "attunement": "",
+    "identified": true,
+    "type": {
+      "value": "",
+      "baseItem": ""
+    },
+    "equipped": false,
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "quipu-ledger-strap",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "attuned": false,
+    "crewed": false,
+    "armor": {
+      "value": null,
+      "dex": null
+    },
+    "proficient": null,
+    "properties": [],
+    "strength": null
+  },
+  "flags": {
+    "bbttcc": {
+      "tags": []
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "effects": [],
+  "folder": "Wxh1A343inwTUeoo",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1767834189046,
+    "modifiedTime": 1782156674940,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "5itGKrJaPlLH9cDJ",
+  "sort": 1500000,
+  "_key": "!items!5itGKrJaPlLH9cDJ"
+}

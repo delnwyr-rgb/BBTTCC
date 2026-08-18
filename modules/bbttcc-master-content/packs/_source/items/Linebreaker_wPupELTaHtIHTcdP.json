@@ -1,0 +1,66 @@
+{
+  "name": "Linebreaker",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_linebreaker.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Core Feats (Batch 3)",
+      "revision": 1,
+      "rules": "2026"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Linebreaker</h2><p><em>Formations exist to be disrespected.</em></p><hr /><h3>Rules</h3><p>When you move at least 3 squares straight toward an enemy and hit with a melee attack, that enemy roll 3d10 keep lowest 2 on reaction strikes until the end of its next turn.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_linebreaker",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-batch3",
+      "featNumber": 43,
+      "generatedAt": "2026-01-19T05:04:20.693394Z"
+    }
+  },
+  "_id": "wPupELTaHtIHTcdP",
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 400000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.wPupELTaHtIHTcdP",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1782164185981,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!wPupELTaHtIHTcdP"
+}

@@ -1,0 +1,71 @@
+{
+  "name": "Pactkeeper: Civic Charge",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_city_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Civic Charge</strong> is permission, credibility, and stabilizing authority made spendable. This is your display item for current Civic Charge and Administrative Pressure on the Features tab.</p>",
+      "chat": ""
+    },
+    "identifier": "pactkeeper_civic_charge",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "pactkeeper_civic_charge",
+      "resourceAction": false,
+      "resourceDisplay": true,
+      "engine": "dicePool",
+      "classId": "pactkeeper",
+      "pool": "civic",
+      "track": "pressure"
+    }
+  },
+  "folder": "WEL7mlledpAPLjnP",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776481562695,
+    "modifiedTime": 1781116197126,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "zpU69a8E5XlWdjy7",
+  "sort": 225000,
+  "_key": "!items!zpU69a8E5XlWdjy7"
+}

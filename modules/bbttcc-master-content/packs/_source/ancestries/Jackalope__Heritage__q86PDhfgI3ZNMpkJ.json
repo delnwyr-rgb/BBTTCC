@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "f95fcfa18822c4e3",
+  "name": "Jackalope (Heritage)",
+  "color": null,
+  "sorting": "a",
+  "_id": "q86PDhfgI3ZNMpkJ",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776573868282,
+    "modifiedTime": 1776573868282,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!q86PDhfgI3ZNMpkJ"
+}

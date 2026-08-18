@@ -1,0 +1,80 @@
+{
+  "name": "Circuitborn (Salvage Line): Built-In Tools",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_btools_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You were born with a wrench in your soul.”</em></p>\n        <p><strong>Built-In Tools.</strong> You gain a skill rank with the Tinkering aptitude and one artisan tool set of your choice. As part of a Soma Break, you can repair a damaged object or patch armor (GM adjudicates small benefit).</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "circuitborn-salvage-built_in_tools",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Circuitborn",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "circuitborn",
+      "feature": "built_in_tools",
+      "chassis": "Salvage Line",
+      "tierLevel": 0,
+      "version": "1.0.0"
+    },
+    "bbttcc-character-options": {
+      "option": {}
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "effects": [],
+  "folder": "gHKcv0ocAA3itByJ",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.wlig7TfgJmsUlJY6",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1775004099337,
+    "modifiedTime": 1782167240123,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "IpH5YnkELogyOyQw",
+  "sort": 100000,
+  "_key": "!items!IpH5YnkELogyOyQw"
+}

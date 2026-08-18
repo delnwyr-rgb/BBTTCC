@@ -1,0 +1,277 @@
+{
+  "_id": "a43ad11ab145202a",
+  "name": "Cryptidkin (Furrykin): Pack Tongue",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_furrykin.png",
+  "system": {
+    "category": "feature",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 2,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“The folklore in your blood is older than language. You don’t need to speak to be heard.”</em></p>\n<p><strong>Pack Tongue (1/Soma Break).</strong> As a bonus action, choose one ally within 6 squares who can see or hear you. They reroll the lowest die on the next Diplomacy, Intimidation, Stealth, or Animal Handling check they make before the start of your next turn.</p>\n<p><strong>Den-Sign.</strong> You can leave a small mark — scent, claw notch, fur knot — that other Furrykin and most beasts will recognize. The GM tells you what kind of marks have already been left in any area you spend 10 minutes searching.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"crypFurPackTongue\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Pack Tongue</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Bonus action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Pick one ally within 6 squares who can see or hear you. They reroll the lowest die on the next Diplomacy, Intimidation, Stealth, or Empathy check before the start of your next turn.</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "cryptidkin-furrykin-pack-tongue",
+    "requirements": "Cryptidkin (Furrykin)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "cryptidkin",
+      "feature": "pack_tongue",
+      "lineage": "Furrykin",
+      "tierLevel": 5,
+      "version": "2.0.0",
+      "date": "2026-04-19"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "skill": "stealth",
+          "mode": "reroll-lowest",
+          "note": "on the next Diplomacy (Presence), Intimidation (Presence) (Presence) (Presenc…"
+        },
+        {
+          "context": "check",
+          "skill": "intimidation",
+          "mode": "reroll-lowest",
+          "note": "on the next Diplomacy (Presence), Intimidation (Presence) (Presence) (Presenc…"
+        },
+        {
+          "context": "check",
+          "skill": "diplomacy",
+          "mode": "reroll-lowest",
+          "note": "on the next Diplomacy (Presence), Intimidation (Presence) (Presence) (Presenc…"
+        },
+        {
+          "context": "check",
+          "skill": "empathy",
+          "mode": "reroll-lowest",
+          "note": "on the next Diplomacy (Presence), Intimidation (Presence) (Presence) (Presenc…"
+        }
+      ],
+      "vocabScrub": "2026-05-16"
+    },
+    "autoanimations": {
+      "id": "727ebbf7-01b2-4ca6-a7b1-09ba93b8ba88",
+      "label": "Cryptidkin (Furrykin): Pack Tongue",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "intro",
+          "color": "yellow",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "sdEPUmGLjvHEFLp6",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776600000000,
+    "modifiedTime": 1782167240129,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 300000,
+  "_key": "!items!a43ad11ab145202a"
+}

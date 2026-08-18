@@ -1,0 +1,77 @@
+{
+  "_id": "q75tTwN1LB4N62Ut",
+  "name": "Devil: Lesser Brand",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sigil_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Lesser Brand.</strong> You know the Infernal language and gain a skill rank in Diplomacy or Stealth (your choice). Resistance to thermal damage.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "devil-lesser",
+    "requirements": "Devil (Infernal)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "devil",
+      "lineage": "Devil (Infernal)",
+      "feature": "lesser",
+      "tierLevel": 1,
+      "version": "1.0.0",
+      "date": "2026-05-15",
+      "npAncestry": true
+    },
+    "fourththing": {
+      "principleSource": "ancestry",
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1778961511654,
+    "modifiedTime": 1782167240136,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "folder": "tOM0KLv9UgMPUDOT",
+  "sort": 300000,
+  "_key": "!items!q75tTwN1LB4N62Ut"
+}

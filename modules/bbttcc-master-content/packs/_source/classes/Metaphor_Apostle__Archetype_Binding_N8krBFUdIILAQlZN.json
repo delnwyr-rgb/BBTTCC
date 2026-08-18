@@ -1,0 +1,65 @@
+{
+  "_id": "N8krBFUdIILAQlZN",
+  "name": "Metaphor Apostle: Archetype Binding",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quantum_computer_5.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"1845\" data-end=\"1858\"><em data-start=\"1845\" data-end=\"1858\">(6th Level)</em></p><p data-start=\"1860\" data-end=\"1893\">You bind behavior to story roles.</p><p data-start=\"1895\" data-end=\"1915\">Choose an archetype:</p><ul data-start=\"1917\" data-end=\"2009\"><li data-start=\"1917\" data-end=\"1933\"><p data-start=\"1919\" data-end=\"1933\">The Betrayer</p></li><li data-start=\"1934\" data-end=\"1948\"><p data-start=\"1936\" data-end=\"1948\">The Tyrant</p></li><li data-start=\"1949\" data-end=\"1963\"><p data-start=\"1951\" data-end=\"1963\">The Martyr</p></li><li data-start=\"1964\" data-end=\"1976\"><p data-start=\"1966\" data-end=\"1976\">The Fool</p></li><li data-start=\"1977\" data-end=\"1993\"><p data-start=\"1979\" data-end=\"1993\">The Guardian</p></li><li data-start=\"1994\" data-end=\"2009\"><p data-start=\"1996\" data-end=\"2009\">The Tempter</p></li></ul><p data-start=\"2011\" data-end=\"2043\">The target must <em data-start=\"2027\" data-end=\"2042\">play the role</em>:</p><ul data-start=\"2045\" data-end=\"2124\"><li data-start=\"2045\" data-end=\"2055\"><p data-start=\"2047\" data-end=\"2055\">Hesitate</p></li><li data-start=\"2056\" data-end=\"2067\"><p data-start=\"2058\" data-end=\"2067\">Monologue</p></li><li data-start=\"2068\" data-end=\"2077\"><p data-start=\"2070\" data-end=\"2077\">Retreat</p></li><li data-start=\"2078\" data-end=\"2087\"><p data-start=\"2080\" data-end=\"2087\">Confess</p></li><li data-start=\"2088\" data-end=\"2099\"><p data-start=\"2090\" data-end=\"2099\">Overreach</p></li><li data-start=\"2100\" data-end=\"2124\"><p data-start=\"2102\" data-end=\"2124\">Submit to a constraint</p></li></ul><h3 data-start=\"2126\" data-end=\"2134\">Cost</h3><p data-start=\"2135\" data-end=\"2175\">Generates Strain if forced aggressively.</p><h3 data-start=\"2177\" data-end=\"2194\">Clarification</h3><p data-start=\"2195\" data-end=\"2277\">This does not override free will.<br />It constrains choices within archetypal gravity.</p><p data-start=\"2279\" data-end=\"2338\">The more resistant the target, the greater the Strain risk.</p>",
+      "chat": ""
+    },
+    "identifier": "metaphor_archetype_binding",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "metaphor_archetype_binding"
+    }
+  },
+  "folder": "kW6Z4Tf29UMVg49o",
+  "sort": 200000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.N8krBFUdIILAQlZN",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923344,
+    "modifiedTime": 1781116143553,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!N8krBFUdIILAQlZN"
+}

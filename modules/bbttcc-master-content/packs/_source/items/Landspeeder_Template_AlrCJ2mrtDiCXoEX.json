@@ -1,0 +1,58 @@
+{
+  "name": "Landspeeder Template",
+  "type": "feature",
+  "img": "icons/sundries/scrolls/scroll-bound-sealed-red.webp",
+  "folder": "0JDB983lzPepXXNe",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Solo scout speeder with a hardpoint. Drop on a blank Rig actor.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "rig-template"
+      },
+      "rigTemplate": {
+        "config": {
+          "identity": {
+            "mobility": "mobile",
+            "state": "parked",
+            "archetype": "landspeeder"
+          },
+          "frame": "Landspeeder Frame",
+          "gear": {
+            "weapons": [
+              "Twin Autocannons"
+            ],
+            "systems": [],
+            "outputs": []
+          }
+        }
+      }
+    }
+  },
+  "_id": "AlrCJ2mrtDiCXoEX",
+  "effects": [],
+  "sort": 1000000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778961742440,
+    "modifiedTime": 1778963271955,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!AlrCJ2mrtDiCXoEX"
+}

@@ -1,0 +1,71 @@
+{
+  "name": "Archivist: Cross-Reference Reality",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_7.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h1 data-start=\"3012\" data-end=\"3042\">📚 Cross-Reference Reality</h1><p data-start=\"3043\" data-end=\"3056\"><em data-start=\"3043\" data-end=\"3056\">(6th Level)</em></p><p><strong>Administrative Pressure:</strong> +1</p><p data-start=\"3058\" data-end=\"3089\"><em data-start=\"3058\" data-end=\"3089\">“This pattern is documented.”</em></p><p data-start=\"3091\" data-end=\"3157\">You may link two or more active Precedents as supporting evidence.</p><p data-start=\"3159\" data-end=\"3197\">By spending <strong data-start=\"3171\" data-end=\"3187\">Civic Charge</strong>, you may:</p><ul data-start=\"3199\" data-end=\"3380\"><li data-start=\"3199\" data-end=\"3256\"><p data-start=\"3201\" data-end=\"3256\">Extend a Precedent’s influence to an analogous target</p></li><li data-start=\"3257\" data-end=\"3324\"><p data-start=\"3259\" data-end=\"3324\">Impose roll 3d10 keep lowest 2 on actions that contradict multiple records</p></li><li data-start=\"3325\" data-end=\"3380\"><p data-start=\"3327\" data-end=\"3380\">Propagate a recorded aspect into a similar scenario</p></li></ul><p data-start=\"3382\" data-end=\"3441\">The more aligned the pattern, the stronger the enforcement.</p><h3 data-start=\"3443\" data-end=\"3451\">Cost</h3><p data-start=\"3452\" data-end=\"3477\">Spend 1 Civic Charge die.</p><h3 data-start=\"3479\" data-end=\"3491\">Pushback</h3><p data-start=\"3492\" data-end=\"3637\">Aggressive cross-referencing increases <strong data-start=\"3531\" data-end=\"3558\">Administrative Pressure</strong>, especially when used to override player agency or freeze evolving situations.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "identifier": "archivist_cross_reference_reality",
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pushback": {
+        "track": "pressure",
+        "on": "use",
+        "amount": 1,
+        "_taggedBy": "bbttcc-pressure-tagger",
+        "_ts": 1770862583400
+      }
+    }
+  },
+  "folder": "eNi1uCWJUfkKDdUU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776481562686,
+    "modifiedTime": 1781116164727,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "YBPdGZOMsKxUiQit",
+  "sort": 250000,
+  "_key": "!items!YBPdGZOMsKxUiQit"
+}

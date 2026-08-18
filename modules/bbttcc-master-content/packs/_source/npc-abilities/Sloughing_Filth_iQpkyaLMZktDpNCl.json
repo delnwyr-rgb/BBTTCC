@@ -1,0 +1,49 @@
+{
+  "name": "Sloughing Filth",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_gas_mask_1.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "5e-port"
+    ],
+    "description": {
+      "value": "<p>When the shambler first drops below half its Integrity, each hostile creature within 2 squares must succeed on a DC 14 Body check or be poisoned until the end of its next turn.</p>",
+      "chat": ""
+    }
+  },
+  "_id": "iQpkyaLMZktDpNCl",
+  "effects": [],
+  "sort": 0,
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Qlipothic Shambler"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782167245006,
+    "modifiedTime": 1782167245006,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!iQpkyaLMZktDpNCl"
+}

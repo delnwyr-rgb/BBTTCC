@@ -1,0 +1,63 @@
+{
+  "name": "Pay the Toll",
+  "type": "feat",
+  "img": "icons/magic/death/skull-energy-light-purple.webp",
+  "folder": "QbGNBV70xh9pF0eh",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC Manifestation Techniques v1",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2>Pay the Toll</h2><p><em>You have made your peace with the price of reaching.</em></p><hr /><h3>Rules</h3><p>The <strong>Blood-Debt</strong> cost of reaching beyond your grasp is reduced by <strong>1</strong> (minimum&nbsp;0).</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">⚙ Applies automatically: reach Blood-Debt cost −1.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_pay_the_toll",
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-manifestation-techniques-v1",
+      "theme": "Misfire & risk"
+    },
+    "fourththing": {
+      "discipline": {
+        "passive": {
+          "reachDiscount": 1
+        }
+      }
+    }
+  },
+  "_id": "JDyAHWnRzcJOiEbh",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782190568352,
+    "modifiedTime": 1782190568353,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!JDyAHWnRzcJOiEbh"
+}

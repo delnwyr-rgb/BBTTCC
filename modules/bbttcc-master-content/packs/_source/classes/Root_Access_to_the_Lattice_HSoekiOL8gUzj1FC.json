@@ -1,0 +1,133 @@
+{
+  "name": "Root Access to the Lattice",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_5.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Root Access to the Lattice.</strong> You don’t just <em>look</em> at the underlying structure of the world anymore. You log in.</p><ul><li>Once per <strong>strategic turn</strong>, when your faction undertakes an operation or encounters an event that clearly hinges on <strong>Sparks, Tikkun, hex-tilt, or metaphysical backlash</strong>, you may invoke this feature.</li><li>The GM rewrites one key metaphysical line-item in the resolution: a catastrophic tilt becomes a severe one, a severe one becomes mild, a Spark backlash becomes a warning, or a dangerous corruption roll is upgraded to a partial or clean result.</li><li>In mechanical terms, this acts like a once-per-turn <strong>metaphysical failsafe / uplift</strong> for Tikkun- and anomaly-heavy operations, similar in scale to your other classes’ capstones. It cannot guarantee success, but it can <em>guarantee that the worst outcome is taken off the table</em>.</li><li>On the story level, this is your graduation: reality now treats you as someone who can file tickets against fundamental behavior and expect them to be respected—eventually.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "root-access-to-the-lattice",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 20
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (20th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Root Access to the Lattice (Capstone)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_city_hex.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984384,
+        "modifiedTime": 1777346198358
+      },
+      "_id": "VEFvGK7oCttSmRQF",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.rootAccessToTheLattice",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.capstone",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.tikkunHooks.latticeRootUpliftPerTurn",
+            "value": 1,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!HSoekiOL8gUzj1FC.VEFvGK7oCttSmRQF"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "rootAccessToTheLattice": true
+      },
+      "tikkunHooks": {
+        "latticeRootUpliftPerTurn": 1
+      },
+      "capstone": true
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984384,
+    "modifiedTime": 1781116135031,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "HSoekiOL8gUzj1FC",
+  "sort": 559375,
+  "_key": "!items!HSoekiOL8gUzj1FC"
+}

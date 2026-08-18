@@ -1,0 +1,81 @@
+{
+  "name": "Texas-Shaped Belt Buckle of Mild Authority",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/texas_belt_buckle.png",
+  "system": {
+    "slot": "trinket",
+    "tags": [
+      "mal-voiced",
+      "authority",
+      "brass"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>A belt buckle in the shape of the Frontier Formerly Known As Texas. Cast brass, slightly tarnished, the panhandle a little crooked because nobody really knows where the panhandle WAS, alright? The maps are vague. The buckle is more confident than the maps. People notice.</p><p><strong>Mild Authority.</strong> While worn (visibly), once per scene you may extend a social interaction by one sentence. The other party will hear you out. They are not obligated to agree. (Mal: \"This is, technically, a magic item. Mostly it's brass and audacity.\")</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "talisman",
+          "signature": "Brass. Heavy. Vaguely accurate to the original border. People defer for exactly one sentence longer than usual.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A belt buckle in the shape of the Frontier Formerly Known As Texas. Cast brass, slightly tarnished, the panhandle a little crooked because nobody really knows where the panhandle WAS, alright? The maps are vague. The buckle is more confident than the maps. People notice.</p><p><b>Mild Authority.</b> While worn (visibly), once per scene you may extend a social interaction by one sentence. The other party will hear you out. They are not obligated to agree. (Mal: \"This is, technically, a magic item. Mostly it's brass and audacity.\")</p>",
+          "materialOf": [
+            "sacred-gold",
+            "borderline-irrational-state-pride",
+            "brass"
+          ],
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII talisman stamp",
+            "bound": "attuned",
+            "saleBack": 60
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "JALcmVdk7JC0bcVI",
+  "effects": [],
+  "sort": 600294,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725660,
+    "modifiedTime": 1778541962250,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!JALcmVdk7JC0bcVI"
+}

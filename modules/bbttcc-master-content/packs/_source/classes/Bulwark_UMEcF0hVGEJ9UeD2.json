@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Bulwark",
+  "color": null,
+  "sorting": "a",
+  "_id": "UMEcF0hVGEJ9UeD2",
+  "description": "",
+  "sort": 900000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459321409,
+    "modifiedTime": 1776459931900,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!UMEcF0hVGEJ9UeD2"
+}

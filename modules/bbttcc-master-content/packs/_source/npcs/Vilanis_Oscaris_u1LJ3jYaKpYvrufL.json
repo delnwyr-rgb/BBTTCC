@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": "FBhV32XeCO4JNcym",
+  "name": "Vilanis Oscaris",
+  "color": null,
+  "sorting": "a",
+  "_id": "u1LJ3jYaKpYvrufL",
+  "description": "",
+  "sort": 500000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177517980,
+    "modifiedTime": 1784177517980,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!u1LJ3jYaKpYvrufL"
+}

@@ -1,0 +1,62 @@
+{
+  "name": "Forged Letter",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quill_design.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>The right seal, the right hand, words that were never written by who they claim. Risky — forgery always leaves prints.</p><p><b>Acquire 1 Stolen secret; +2 Suspicion.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "courtly_forged_letter",
+      "meta": {
+        "tier": 3,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "courtly",
+        "layer": "tactical",
+        "costBand": "medium",
+        "raidTypes": [
+          "presence"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "intrigue": 2
+        },
+        "authoredSprint": "courtly-d"
+      },
+      "effects": {
+        "text": "Acquire 1 Stolen secret. Suspicion +2."
+      }
+    }
+  },
+  "_id": "ZOXjSLICc9d2cICM",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "6ut7GT8pCAhpdWjS": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1779731271080,
+    "modifiedTime": 1780163525468,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ZOXjSLICc9d2cICM"
+}

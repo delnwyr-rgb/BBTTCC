@@ -1,0 +1,621 @@
+{
+  "name": "Aslı's First Map",
+  "_id": "mGVIhz93ZvBjGfK1",
+  "active": false,
+  "navigation": true,
+  "navOrder": 0,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-Q46MFT6mSWHNnDUOXTGpGA.webp",
+  "width": 3840,
+  "height": 2160,
+  "padding": 0.25,
+  "shiftX": 0,
+  "shiftY": 0,
+  "initial": {
+    "x": null,
+    "y": null,
+    "scale": null
+  },
+  "initialLevel": "defaultLevel0000",
+  "grid": {
+    "type": 1,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 1,
+    "color": "#000000",
+    "alpha": 0.2,
+    "distance": 1,
+    "units": "m"
+  },
+  "tokenVision": false,
+  "fog": {
+    "mode": 1,
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    }
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": false,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0.4,
+      "luminosity": 0.1,
+      "saturation": -0.1,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "drawings": [],
+  "tokens": [
+    {
+      "actorLink": false,
+      "disposition": 1,
+      "name": "Mara Quickhands",
+      "displayName": 30,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Mara%20Quickhands.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        }
+      },
+      "actorId": "GTX6S0gtzoJ7OeSE",
+      "hidden": false,
+      "sort": 0,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "NvztSKtk1f8JcR5T",
+      "delta": {
+        "_id": "NvztSKtk1f8JcR5T",
+        "name": null,
+        "type": null,
+        "img": null,
+        "system": {},
+        "items": [],
+        "effects": [
+          {
+            "name": "Clarity (Aura)",
+            "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+            "duration": {
+              "value": null,
+              "units": "seconds",
+              "expiry": null,
+              "expired": false
+            },
+            "flags": {
+              "bbttcc-character-options": {
+                "auraClarityGrant": true
+              }
+            },
+            "system": {
+              "changes": [
+                {
+                  "key": "flags.dnd5e.skills.prc.adv",
+                  "value": true,
+                  "priority": 20,
+                  "type": "override",
+                  "phase": "initial"
+                },
+                {
+                  "key": "flags.dnd5e.skills.ins.adv",
+                  "value": true,
+                  "priority": 20,
+                  "type": "override",
+                  "phase": "initial"
+                }
+              ]
+            },
+            "_id": "cS9OyfyaK0xTESdz",
+            "type": "base",
+            "disabled": false,
+            "start": {
+              "time": 0,
+              "combat": "QA0W2dp4ktbV6dBx",
+              "combatant": "tA2vckTuBiKKCfz4",
+              "initiative": 25,
+              "round": 3,
+              "turn": 0
+            },
+            "description": "",
+            "origin": null,
+            "tint": "#ffffff",
+            "transfer": false,
+            "statuses": [],
+            "showIcon": 1,
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "createdTime": 1783982539869,
+              "modifiedTime": 1783982539869,
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null
+            },
+            "_key": "!scenes.tokens.delta.effects!mGVIhz93ZvBjGfK1.NvztSKtk1f8JcR5T.NvztSKtk1f8JcR5T.cS9OyfyaK0xTESdz"
+          }
+        ],
+        "ownership": null,
+        "flags": {
+          "bbttcc-mal-voice": {
+            "dialogue": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Toblerone: Heya Mara! Who is Dougan?",
+                  "speaker": "Toblerone",
+                  "ts": 1783103572498
+                },
+                {
+                  "role": "assistant",
+                  "content": "Dougan Marsh — runs the Gullywasher. Chupacabra, if you can believe it, but not the kind that'll give you nightmares. Fair dealer, slow to anger, gets along with near everybody, which frankly makes him a bit of an oddball in his own family tree. If he tells you a price, it's the real price. Why, you looking to do business with him?",
+                  "speaker": "Mara Quickhands",
+                  "ts": 1783103575969
+                },
+                {
+                  "role": "user",
+                  "content": "Toblerone: Maybe! Also, do you have a leygate stabilizer that we might be able to negotiate for? Ours in Allesh Gilliam is kaput!",
+                  "speaker": "Toblerone",
+                  "ts": 1783105101376
+                },
+                {
+                  "role": "assistant",
+                  "content": "Slow down there. We've got a stabilizer — Young Gearbox is the one actually holding it, out at the Arc Bay, and he'll tell you same as I will: anything serious, I'm at that table too. It's not a spare part, Toblerone, it's the only reason our own Gate isn't spitting out something with too many teeth.\n\nSo before we start talking trade — what's Allesh-Gilliam putting on the table? And I don't mean coin. I mean *weight*. What have you got that tells me you'll still be good for the debt a year from now?",
+                  "speaker": "Mara Quickhands",
+                  "ts": 1783105105887
+                }
+              ]
+            }
+          }
+        },
+        "_key": "!scenes.tokens.delta!mGVIhz93ZvBjGfK1.NvztSKtk1f8JcR5T.NvztSKtk1f8JcR5T"
+      },
+      "x": 3200,
+      "y": 1400,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!mGVIhz93ZvBjGfK1.NvztSKtk1f8JcR5T"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tb_facing_away.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "name": "Thaarlbriindt",
+      "displayName": 30,
+      "actorLink": true,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": "derived.integrity"
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        },
+        "tokenflip": {
+          "tokenfaces": [
+            {
+              "actorId": "YK2PSxphYxXQYm8B",
+              "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/patrolpersons_plate.png",
+              "id": "WJRqRlfzmdU8Byk8qez9",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 1,
+              "height": 1,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "YK2PSxphYxXQYm8B",
+              "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/patrolpersons_plate.png",
+              "id": "EEM8s1kXTJwLMIJPcjdA",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 1,
+              "height": 1,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            }
+          ]
+        },
+        "bbttcc-raid": {
+          "directionalArt": {
+            "facing": "north"
+          }
+        }
+      },
+      "actorId": "YK2PSxphYxXQYm8B",
+      "hidden": false,
+      "sort": 1,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "EEtcAlp9ZcBFUZJV",
+      "delta": null,
+      "x": 3200,
+      "y": 1500,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!mGVIhz93ZvBjGfK1.EEtcAlp9ZcBFUZJV"
+    }
+  ],
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "Level",
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/civil_unrest_top_down_scene_battlemap%20FI%CC%87NN.png",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!mGVIhz93ZvBjGfK1.defaultLevel0000"
+    }
+  ],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [],
+  "walls": [
+    {
+      "levels": [],
+      "light": 20,
+      "move": 20,
+      "sight": 20,
+      "sound": 20,
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "c": [
+        1000,
+        600,
+        4840,
+        600
+      ],
+      "_id": "hMMs57Q1CqDK0il4",
+      "_key": "!scenes.walls!mGVIhz93ZvBjGfK1.hMMs57Q1CqDK0il4"
+    },
+    {
+      "levels": [],
+      "light": 20,
+      "move": 20,
+      "sight": 20,
+      "sound": 20,
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "c": [
+        4840,
+        600,
+        4840,
+        2760
+      ],
+      "_id": "FNqkwI5K6TnaQTeJ",
+      "_key": "!scenes.walls!mGVIhz93ZvBjGfK1.FNqkwI5K6TnaQTeJ"
+    },
+    {
+      "levels": [],
+      "light": 20,
+      "move": 20,
+      "sight": 20,
+      "sound": 20,
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "c": [
+        4840,
+        2760,
+        1000,
+        2760
+      ],
+      "_id": "2bCXPU47v1beNGsr",
+      "_key": "!scenes.walls!mGVIhz93ZvBjGfK1.2bCXPU47v1beNGsr"
+    },
+    {
+      "levels": [],
+      "light": 20,
+      "move": 20,
+      "sight": 20,
+      "sound": 20,
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "c": [
+        1000,
+        2760,
+        1000,
+        600
+      ],
+      "_id": "3rlhrspsrX4YKbNB",
+      "_key": "!scenes.walls!mGVIhz93ZvBjGfK1.3rlhrspsrX4YKbNB"
+    }
+  ],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "folder": "D9vWezvOmZN5tvmD",
+  "sort": 250000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "wall-height": {
+      "advancedVision": true
+    },
+    "bbttcc-raid": {
+      "battleScene": true
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982539869,
+    "modifiedTime": 1783982539869,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "navName": "",
+  "_key": "!scenes!mGVIhz93ZvBjGfK1",
+  "templates": []
+}

@@ -1,0 +1,188 @@
+{
+  "name": "Yesodic Plating",
+  "type": "armor",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Old%20God.png",
+  "system": {
+    "guardBonus": 3,
+    "evasionBonus": 0,
+    "resolveBonus": 2,
+    "resistances": [
+      "kinetic",
+      "sephirotic"
+    ],
+    "armorSkill": "plating",
+    "equipped": false,
+    "tags": [
+      "yesodic",
+      "plate",
+      "ley-gate-aware",
+      "attunement"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Heavy plate forged from Yesodium over hex-glyph plates, ballasted at the joints with anchor quartz.</p><p><strong>Memory of Protection.</strong> Once per raid, reduce incoming margin by 1.</p><p><strong>Flow Plating.</strong> May convert one structural damageStep into narrative strain (cosmetic, no track loss).</p><p><strong>Gate Attunement.</strong> +1 defensive bonus when operating near Ley Gates.</p><p><em>Unharmonized: stats apply, signal abilities dormant.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Plate that argues with its own injuries.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {
+            "memoryOfProtection": true,
+            "flowPlating": true,
+            "gateAttunement": true
+          },
+          "requiresHarmonization": true,
+          "lore": "<p>Heavy plate forged from Yesodium over hex-glyph plates, ballasted at the joints with anchor quartz.</p><p><b>Memory of Protection.</b> Once per raid, reduce incoming margin by 1.</p><p><b>Flow Plating.</b> May convert one structural damageStep into narrative strain (cosmetic, no track loss).</p><p><b>Gate Attunement.</b> +1 defensive bonus when operating near Ley Gates.</p><p><i>Unharmonized: stats apply, signal abilities dormant.</i></p>",
+          "materialOf": [
+            {
+              "key": "yesodium",
+              "qty": 3
+            },
+            {
+              "key": "hex-glyph-plate",
+              "qty": 2
+            },
+            {
+              "key": "anchor-quartz",
+              "qty": 1
+            }
+          ],
+          "grants": {
+            "resistances": [
+              "kinetic",
+              "sephirotic"
+            ]
+          },
+          "price": {
+            "marks": 2025,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV armor stamp",
+            "bound": "attuned",
+            "saleBack": 810
+          }
+        }
+      },
+      "grants": {
+        "resistances": [
+          "kinetic",
+          "sephirotic"
+        ]
+      }
+    }
+  },
+  "folder": "Iyyec8ij0PAfdLBd",
+  "_id": "NVIHxTblMitmvktF",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.resists",
+            "value": "kinetic",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.resists",
+            "value": "sephirotic",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 3,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.resolve",
+            "value": 2,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "4BMkgmBgb1yURpA9",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781726106932,
+        "modifiedTime": 1781726106932,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!NVIHxTblMitmvktF.4BMkgmBgb1yURpA9"
+    }
+  ],
+  "sort": 50000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777137210130,
+    "modifiedTime": 1778541964198,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!NVIHxTblMitmvktF"
+}

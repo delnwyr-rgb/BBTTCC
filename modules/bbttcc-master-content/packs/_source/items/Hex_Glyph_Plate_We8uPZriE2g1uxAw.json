@@ -1,0 +1,81 @@
+{
+  "name": "Hex-Glyph Plate",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_iron.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "hex-glyph-plate",
+      "hex",
+      "armor-plate",
+      "warded"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Sheet steel pre-engraved with hex-warding glyphs by an apprentice scribe. Each plate covers about a forearm's worth of armor; the glyph chosen at engraving decides what it deflects.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Steel that argues with the weather.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Sheet steel pre-engraved with hex-warding glyphs by an apprentice scribe. Each plate covers about a forearm's worth of armor; the glyph chosen at engraving decides what it deflects.</p>",
+          "charges": 2,
+          "materialKey": "hex-glyph-plate",
+          "price": {
+            "marks": 675,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1.5,
+            "notes": "TIII material stamp × rarity 1.5",
+            "bound": "free",
+            "saleBack": 270
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "We8uPZriE2g1uxAw",
+  "effects": [],
+  "sort": 271094,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137194178,
+    "modifiedTime": 1782156674948,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!We8uPZriE2g1uxAw"
+}

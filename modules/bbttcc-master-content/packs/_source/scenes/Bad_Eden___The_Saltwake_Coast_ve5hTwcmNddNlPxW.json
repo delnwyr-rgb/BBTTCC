@@ -1,0 +1,4275 @@
+{
+  "name": "Bad Eden — The Saltwake Coast",
+  "width": 1920,
+  "height": 1440,
+  "padding": 0.25,
+  "grid": {
+    "type": 2,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 5,
+    "color": "#ddbf4a",
+    "alpha": 0.2,
+    "distance": 1,
+    "units": "m"
+  },
+  "initial": {
+    "x": 2079,
+    "y": 855,
+    "scale": 1.693
+  },
+  "tokenVision": false,
+  "flags": {
+    "bbttcc-travel": {
+      "regionDetail": "r3",
+      "hubSceneUuid": "Scene.33tzk6HzDEgHzYri"
+    },
+    "wall-height": {
+      "advancedVision": true
+    }
+  },
+  "_id": "ve5hTwcmNddNlPxW",
+  "navigation": false,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-bWCXKA_6a_UWfXs0TqSP4Q.webp",
+  "shiftX": 0,
+  "shiftY": 0,
+  "initialLevel": "defaultLevel0000",
+  "fog": {
+    "mode": 1,
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    }
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": false,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "drawings": [
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844425,
+          25,
+          86.60254037844425,
+          75,
+          43.30127018922212,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.30127018922212,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 2056.698729810778,
+      "y": 1046.9655114602888,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Saltwake Reach d",
+      "fontSize": 9,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Saltwake Reach d",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933528621,
+          "notes": "Tidal route hex feeding the eastern coast.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777758567475,
+          "resourceNodes": [
+            {
+              "id": "rn_09031946e16c1af2",
+              "materialKey": "prayer-resin",
+              "materialName": "Prayer Resin",
+              "materialUuid": "Compendium.bbttcc-master-content.items.prayer-resin",
+              "tier": "II",
+              "dc": 13,
+              "skill": "soul",
+              "yieldFormula": "1d4+1",
+              "charges": 3,
+              "maxCharges": 3,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_f28e33c81e79fb17",
+              "materialKey": "bog-iron",
+              "materialName": "Bog-Iron",
+              "materialUuid": "Compendium.bbttcc-master-content.items.bog-iron",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 5,
+              "maxCharges": 5,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "RqO6srQGO0I1HcjF",
+      "elevation": 0,
+      "sort": 105,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.RqO6srQGO0I1HcjF"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844425,
+          25,
+          86.60254037844425,
+          75,
+          43.30127018922212,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.30127018922212,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 2156.698729810778,
+      "y": 1046.9655114602888,
+      "fillAlpha": 0.14,
+      "fillColor": "#2b3d4c",
+      "strokeColor": "#cfe6f4",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Saltwake Reach e",
+      "fontSize": 9,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Saltwake Reach e",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933530297,
+          "notes": "Tidal route hex feeding the eastern coast.",
+          "modifiers": [],
+          "terrain": {
+            "key": "ocean",
+            "label": "Sea / Ocean"
+          },
+          "terrainType": "ocean",
+          "terrainKey": "ocean",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777748353667,
+          "resourceNodes": [
+            {
+              "id": "rn_86fe0d745d31a03b",
+              "materialKey": "salt-block",
+              "materialName": "Salt Block",
+              "materialUuid": "Compendium.bbttcc-master-content.items.salt-block",
+              "tier": "I",
+              "dc": 10,
+              "skill": "body",
+              "yieldFormula": "1d4",
+              "charges": 6,
+              "maxCharges": 6,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "6qqvm809SYdc2TSn",
+      "elevation": 0,
+      "sort": 106,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.6qqvm809SYdc2TSn"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844425,
+          25,
+          86.60254037844425,
+          75,
+          43.30127018922212,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.30127018922212,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 2206.698729810778,
+      "y": 960.362971081845,
+      "fillAlpha": 0.14,
+      "fillColor": "#2b3d4c",
+      "strokeColor": "#cfe6f4",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Saltwake Reach f",
+      "fontSize": 9,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Saltwake Reach f",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933537513,
+          "notes": "Tidal route hex feeding the eastern coast.",
+          "modifiers": [],
+          "terrain": {
+            "key": "ocean",
+            "label": "Sea / Ocean"
+          },
+          "terrainType": "ocean",
+          "terrainKey": "ocean",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777748360714,
+          "resourceNodes": [
+            {
+              "id": "rn_a55e9041f71f8764",
+              "materialKey": "freshwater-pearl",
+              "materialName": "Freshwater Pearl",
+              "materialUuid": "Compendium.bbttcc-master-content.items.freshwater-pearl",
+              "tier": "II",
+              "dc": 13,
+              "skill": "body",
+              "yieldFormula": "1d4+1",
+              "charges": 2,
+              "maxCharges": 2,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "wNH0nNFZUcCk4QJM",
+      "elevation": 0,
+      "sort": 108,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.wNH0nNFZUcCk4QJM"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844425,
+          25,
+          86.60254037844425,
+          75,
+          43.30127018922212,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.30127018922212,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 2106.698729810778,
+      "y": 960.362971081845,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Saltwake Reach g",
+      "fontSize": 9,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Saltwake Reach g",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933539710,
+          "notes": "Tidal route hex feeding the eastern coast.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777758361809,
+          "resourceNodes": [
+            {
+              "id": "rn_df24b2c5b321ce41",
+              "materialKey": "bog-iron",
+              "materialName": "Bog-Iron",
+              "materialUuid": "Compendium.bbttcc-master-content.items.bog-iron",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 5,
+              "maxCharges": 5,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_adb82e956ceaf92d",
+              "materialKey": "bog-iron",
+              "materialName": "Bog-Iron",
+              "materialUuid": "Compendium.bbttcc-master-content.items.bog-iron",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 5,
+              "maxCharges": 5,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "t9fWciLwyZLtqjAg",
+      "elevation": 0,
+      "sort": 109,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.t9fWciLwyZLtqjAg"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844425,
+          25,
+          86.60254037844425,
+          75,
+          43.30127018922212,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.30127018922212,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 2156.698729810778,
+      "y": 873.7604307034012,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Hexen Myre.l",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Hexen Myre.l",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933543273,
+          "notes": "Coastal mire country with intermittent wrong signals.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777758170759,
+          "resourceNodes": [
+            {
+              "id": "rn_dadcc540466aba8c",
+              "materialKey": "mire-resin",
+              "materialName": "Mire-Resin",
+              "materialUuid": "Compendium.bbttcc-master-content.items.mire-resin",
+              "tier": "II",
+              "dc": 13,
+              "skill": "soul",
+              "yieldFormula": "1d4+1",
+              "charges": 4,
+              "maxCharges": 4,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_df489cd12d33442f",
+              "materialKey": "bog-iron",
+              "materialName": "Bog-Iron",
+              "materialUuid": "Compendium.bbttcc-master-content.items.bog-iron",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 5,
+              "maxCharges": 5,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_929570201c2cf72f",
+              "materialKey": "mire-resin",
+              "materialName": "Mire-Resin",
+              "materialUuid": "Compendium.bbttcc-master-content.items.mire-resin",
+              "tier": "II",
+              "dc": 13,
+              "skill": "soul",
+              "yieldFormula": "1d4+1",
+              "charges": 4,
+              "maxCharges": 4,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "2nQ7aqdoEGOPlh5k",
+      "elevation": 0,
+      "sort": 110,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.2nQ7aqdoEGOPlh5k"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844402,
+          25,
+          86.60254037844402,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 2006.698729810778,
+      "y": 960.362971081845,
+      "fillAlpha": 0.14,
+      "fillColor": "#2b3d4c",
+      "strokeColor": "#cfe6f4",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Saltwake Reach h",
+      "fontSize": 9,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Saltwake Reach h",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933545706,
+          "notes": "Tidal route hex feeding the eastern coast.",
+          "modifiers": [],
+          "terrain": {
+            "key": "river",
+            "label": "River / Lake"
+          },
+          "terrainType": "river",
+          "terrainKey": "river",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777758267592,
+          "resourceNodes": [
+            {
+              "id": "rn_4a3a788a9e7e194d",
+              "materialKey": "salt-block",
+              "materialName": "Salt Block",
+              "materialUuid": "Compendium.bbttcc-master-content.items.salt-block",
+              "tier": "I",
+              "dc": 10,
+              "skill": "body",
+              "yieldFormula": "1d4",
+              "charges": 6,
+              "maxCharges": 6,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_356fc221b118d693",
+              "materialKey": "salt-block",
+              "materialName": "Salt Block",
+              "materialUuid": "Compendium.bbttcc-master-content.items.salt-block",
+              "tier": "I",
+              "dc": 10,
+              "skill": "body",
+              "yieldFormula": "1d4",
+              "charges": 6,
+              "maxCharges": 6,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_15db91cd0e538640",
+              "materialKey": "river-clay",
+              "materialName": "River Clay",
+              "materialUuid": "Compendium.bbttcc-master-content.items.river-clay",
+              "tier": "I",
+              "dc": 10,
+              "skill": "body",
+              "yieldFormula": "1d4",
+              "charges": 8,
+              "maxCharges": 8,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "P1QHSr0vNtqLBvJs",
+      "elevation": 0,
+      "sort": 111,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.P1QHSr0vNtqLBvJs"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1806.698729810778,
+      "y": 960.362971081845,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Saltwake Reach j",
+      "fontSize": 9,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Saltwake Reach j",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933555799,
+          "notes": "Tidal route hex feeding the eastern coast.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777758245052,
+          "resourceNodes": [
+            {
+              "id": "rn_280d24b6ab0a037e",
+              "materialKey": "reagent-moss",
+              "materialName": "Reagent Moss",
+              "materialUuid": "Compendium.bbttcc-master-content.items.reagent-moss",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 8,
+              "maxCharges": 8,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "B8BJcRGFWv7GJ7KQ",
+      "elevation": 0,
+      "sort": 113,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.B8BJcRGFWv7GJ7KQ"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1906.698729810778,
+      "y": 960.362971081845,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Saltwake Reach k",
+      "fontSize": 9,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Saltwake Reach k",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933557522,
+          "notes": "Tidal route hex feeding the eastern coast.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777758261979,
+          "resourceNodes": [
+            {
+              "id": "rn_300d6f4d03c6b011",
+              "materialKey": "mire-resin",
+              "materialName": "Mire-Resin",
+              "materialUuid": "Compendium.bbttcc-master-content.items.mire-resin",
+              "tier": "II",
+              "dc": 13,
+              "skill": "soul",
+              "yieldFormula": "1d4+1",
+              "charges": 8,
+              "maxCharges": 8,
+              "rich": true,
+              "discovered": false
+            },
+            {
+              "id": "rn_407298a1914548fe",
+              "materialKey": "mire-resin",
+              "materialName": "Mire-Resin",
+              "materialUuid": "Compendium.bbttcc-master-content.items.mire-resin",
+              "tier": "II",
+              "dc": 13,
+              "skill": "soul",
+              "yieldFormula": "1d4+1",
+              "charges": 4,
+              "maxCharges": 4,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "V4aSM3rgvv9nnLWl",
+      "elevation": 0,
+      "sort": 114,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.V4aSM3rgvv9nnLWl"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1956.698729810778,
+      "y": 873.7604307034012,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Hexen Myre.m",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Hexen Myre.m",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933558934,
+          "notes": "Coastal mire country with intermittent wrong signals.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777758163472,
+          "resourceNodes": [
+            {
+              "id": "rn_ccccb5df37ec68ef",
+              "materialKey": "reagent-moss",
+              "materialName": "Reagent Moss",
+              "materialUuid": "Compendium.bbttcc-master-content.items.reagent-moss",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 8,
+              "maxCharges": 8,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_310a9b76fc5019fd",
+              "materialKey": "fogged-quartz",
+              "materialName": "Fogged Quartz",
+              "materialUuid": "Compendium.bbttcc-master-content.items.fogged-quartz",
+              "tier": "II",
+              "dc": 13,
+              "skill": "soul",
+              "yieldFormula": "1d4+1",
+              "charges": 3,
+              "maxCharges": 3,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "Q7wynL3hQnBGGCA9",
+      "elevation": 0,
+      "sort": 115,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.Q7wynL3hQnBGGCA9"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844425,
+          25,
+          86.60254037844425,
+          75,
+          43.30127018922212,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.30127018922212,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 2056.698729810778,
+      "y": 873.7604307034012,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Hexen Myre.n",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Hexen Myre.n",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933560089,
+          "notes": "Coastal mire country with intermittent wrong signals.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777758167650,
+          "resourceNodes": [
+            {
+              "id": "rn_1edaa78e259f5be8",
+              "materialKey": "bog-iron",
+              "materialName": "Bog-Iron",
+              "materialUuid": "Compendium.bbttcc-master-content.items.bog-iron",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 5,
+              "maxCharges": 5,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_9c66e3242e27de2e",
+              "materialKey": "bog-iron",
+              "materialName": "Bog-Iron",
+              "materialUuid": "Compendium.bbttcc-master-content.items.bog-iron",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 5,
+              "maxCharges": 5,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "ieGVOcqxlWHsF4Gu",
+      "elevation": 0,
+      "sort": 116,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.ieGVOcqxlWHsF4Gu"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844425,
+          25,
+          86.60254037844425,
+          75,
+          43.30127018922212,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.30127018922212,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 2206.698729810778,
+      "y": 787.1578903249573,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Hexen Myre.o",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Hexen Myre.o",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933561649,
+          "notes": "Coastal mire country with intermittent wrong signals.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777758088443,
+          "resourceNodes": [
+            {
+              "id": "rn_dfdd27ffe2720fb0",
+              "materialKey": "fogged-quartz",
+              "materialName": "Fogged Quartz",
+              "materialUuid": "Compendium.bbttcc-master-content.items.fogged-quartz",
+              "tier": "II",
+              "dc": 13,
+              "skill": "soul",
+              "yieldFormula": "1d4+1",
+              "charges": 3,
+              "maxCharges": 3,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_2f510f02bff75ae5",
+              "materialKey": "bog-iron",
+              "materialName": "Bog-Iron",
+              "materialUuid": "Compendium.bbttcc-master-content.items.bog-iron",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 10,
+              "maxCharges": 10,
+              "rich": true,
+              "discovered": false
+            },
+            {
+              "id": "rn_625b5672e5031dc3",
+              "materialKey": "reagent-moss",
+              "materialName": "Reagent Moss",
+              "materialUuid": "Compendium.bbttcc-master-content.items.reagent-moss",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 8,
+              "maxCharges": 8,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "lTgks2dfBN8uk3SN",
+      "elevation": 0,
+      "sort": 117,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.lTgks2dfBN8uk3SN"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1856.698729810778,
+      "y": 873.7604307034012,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Hexen Myre.q",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Hexen Myre.q",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933564271,
+          "notes": "Coastal mire country with intermittent wrong signals.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777758116856,
+          "resourceNodes": [
+            {
+              "id": "rn_4900cff22ca9dc03",
+              "materialKey": "reagent-moss",
+              "materialName": "Reagent Moss",
+              "materialUuid": "Compendium.bbttcc-master-content.items.reagent-moss",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 8,
+              "maxCharges": 8,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "RZQC8og6AENz9tOG",
+      "elevation": 0,
+      "sort": 119,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.RZQC8og6AENz9tOG"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1906.698729810778,
+      "y": 787.1578903249573,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Hexen Myre.r",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Hexen Myre.r",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933565247,
+          "notes": "Coastal mire country with intermittent wrong signals.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777758074097,
+          "resourceNodes": [
+            {
+              "id": "rn_25326833c6f96d94",
+              "materialKey": "reagent-moss",
+              "materialName": "Reagent Moss",
+              "materialUuid": "Compendium.bbttcc-master-content.items.reagent-moss",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 8,
+              "maxCharges": 8,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_3af9b89383f0fd87",
+              "materialKey": "mire-resin",
+              "materialName": "Mire-Resin",
+              "materialUuid": "Compendium.bbttcc-master-content.items.mire-resin",
+              "tier": "II",
+              "dc": 13,
+              "skill": "soul",
+              "yieldFormula": "1d4+1",
+              "charges": 4,
+              "maxCharges": 4,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_c1af36a2561e5fc7",
+              "materialKey": "mire-resin",
+              "materialName": "Mire-Resin",
+              "materialUuid": "Compendium.bbttcc-master-content.items.mire-resin",
+              "tier": "II",
+              "dc": 13,
+              "skill": "soul",
+              "yieldFormula": "1d4+1",
+              "charges": 4,
+              "maxCharges": 4,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "JYpgIBYQQDQkr7IV",
+      "elevation": 0,
+      "sort": 120,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.JYpgIBYQQDQkr7IV"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844402,
+          25,
+          86.60254037844402,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 2006.698729810778,
+      "y": 787.1578903249573,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Hexen Myre.s",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Hexen Myre.s",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933573922,
+          "notes": "Coastal mire country with intermittent wrong signals.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777758077826,
+          "resourceNodes": [
+            {
+              "id": "rn_dd2abb5a4fa0e549",
+              "materialKey": "reagent-moss",
+              "materialName": "Reagent Moss",
+              "materialUuid": "Compendium.bbttcc-master-content.items.reagent-moss",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 8,
+              "maxCharges": 8,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_6c92598a5f599dea",
+              "materialKey": "bog-iron",
+              "materialName": "Bog-Iron",
+              "materialUuid": "Compendium.bbttcc-master-content.items.bog-iron",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 5,
+              "maxCharges": 5,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "8I4FOaZhU0KPXWQ7",
+      "elevation": 0,
+      "sort": 121,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.8I4FOaZhU0KPXWQ7"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1806.698729810778,
+      "y": 787.1578903249573,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Hexen Myre.t",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Hexen Myre.t",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933576701,
+          "notes": "Coastal mire country with intermittent wrong signals.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777758070473,
+          "resourceNodes": [
+            {
+              "id": "rn_3a991fe93ae965df",
+              "materialKey": "reagent-moss",
+              "materialName": "Reagent Moss",
+              "materialUuid": "Compendium.bbttcc-master-content.items.reagent-moss",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 8,
+              "maxCharges": 8,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_90f6ba505f5c9075",
+              "materialKey": "mire-resin",
+              "materialName": "Mire-Resin",
+              "materialUuid": "Compendium.bbttcc-master-content.items.mire-resin",
+              "tier": "II",
+              "dc": 13,
+              "skill": "soul",
+              "yieldFormula": "1d4+1",
+              "charges": 4,
+              "maxCharges": 4,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_1829e684827c074e",
+              "materialKey": "mire-resin",
+              "materialName": "Mire-Resin",
+              "materialUuid": "Compendium.bbttcc-master-content.items.mire-resin",
+              "tier": "II",
+              "dc": 13,
+              "skill": "soul",
+              "yieldFormula": "1d4+1",
+              "charges": 4,
+              "maxCharges": 4,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "vud6KUkAqN2fkzY7",
+      "elevation": 0,
+      "sort": 122,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.vud6KUkAqN2fkzY7"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1856.698729810778,
+      "y": 700.5553499465135,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Static Coast c",
+      "fontSize": 10,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Static Coast c",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933603135,
+          "notes": "Windblown outer coast and later-wave expansion country.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777756750639,
+          "resourceNodes": [
+            {
+              "id": "rn_01eabcc5cc447292",
+              "materialKey": "reagent-moss",
+              "materialName": "Reagent Moss",
+              "materialUuid": "Compendium.bbttcc-master-content.items.reagent-moss",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 8,
+              "maxCharges": 8,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_589348c449f1e276",
+              "materialKey": "bog-iron",
+              "materialName": "Bog-Iron",
+              "materialUuid": "Compendium.bbttcc-master-content.items.bog-iron",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 5,
+              "maxCharges": 5,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "YlbT8FDC6uVXFxeQ",
+      "elevation": 0,
+      "sort": 126,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.YlbT8FDC6uVXFxeQ"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1956.698729810778,
+      "y": 700.5553499465135,
+      "fillAlpha": 0.14,
+      "fillColor": "#2b3343",
+      "strokeColor": "#d5dcf5",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Crown Mall",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Crown Mall",
+          "status": "unclaimed",
+          "type": "ruins",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "Scene.X7XmEyebKXwjMlTW.Drawing.p6CEZgngzC3d5R2E",
+              "strength": 0.8,
+              "minFactionTier": "T3",
+              "locked": true
+            }
+          },
+          "createdAt": 1775933605751,
+          "notes": "That 90s Coalition / Tannerito mall enclave. Archive, tapes, old route memory.",
+          "modifiers": [],
+          "terrain": {
+            "key": "ruins",
+            "label": "Ruins / Urban"
+          },
+          "terrainType": "ruins",
+          "terrainKey": "ruins",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777756764952,
+          "resourceNodes": [
+            {
+              "id": "rn_5934a3d0c2eb7864",
+              "materialKey": "prefall-component",
+              "materialName": "Pre-Fall Component",
+              "materialUuid": "Compendium.bbttcc-master-content.items.prefall-component",
+              "tier": "III",
+              "dc": 16,
+              "skill": "mind",
+              "yieldFormula": "1d6+1",
+              "charges": 1,
+              "maxCharges": 1,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_0d28629f8c603425",
+              "materialKey": "prefall-component",
+              "materialName": "Pre-Fall Component",
+              "materialUuid": "Compendium.bbttcc-master-content.items.prefall-component",
+              "tier": "III",
+              "dc": 16,
+              "skill": "mind",
+              "yieldFormula": "1d6+1",
+              "charges": 1,
+              "maxCharges": 1,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          },
+          "campaign": {
+            "onEnterBeatId": "map_crown_mall_intro"
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "Qbtvp6wc31GKjykM",
+      "elevation": 0,
+      "sort": 127,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.Qbtvp6wc31GKjykM"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844425,
+          25,
+          86.60254037844425,
+          75,
+          43.30127018922212,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.30127018922212,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 2056.698729810778,
+      "y": 700.5553499465135,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Static Coast d",
+      "fontSize": 10,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Static Coast d",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933607453,
+          "notes": "Windblown outer coast and later-wave expansion country.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777756780572,
+          "resourceNodes": [
+            {
+              "id": "rn_b7d9989db69bc5f3",
+              "materialKey": "mire-resin",
+              "materialName": "Mire-Resin",
+              "materialUuid": "Compendium.bbttcc-master-content.items.mire-resin",
+              "tier": "II",
+              "dc": 13,
+              "skill": "soul",
+              "yieldFormula": "1d4+1",
+              "charges": 4,
+              "maxCharges": 4,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "gHgjPdeTymSPYtY2",
+      "elevation": 0,
+      "sort": 128,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.gHgjPdeTymSPYtY2"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844425,
+          25,
+          86.60254037844425,
+          75,
+          43.30127018922212,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.30127018922212,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 2156.698729810778,
+      "y": 700.5553499465135,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Static Coast e",
+      "fontSize": 10,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Static Coast e",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933609101,
+          "notes": "Windblown outer coast and later-wave expansion country.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777748325002,
+          "resourceNodes": [
+            {
+              "id": "rn_170a9b3bcd69a215",
+              "materialKey": "bog-iron",
+              "materialName": "Bog-Iron",
+              "materialUuid": "Compendium.bbttcc-master-content.items.bog-iron",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 5,
+              "maxCharges": 5,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_60fefdddcbf8916a",
+              "materialKey": "prayer-resin",
+              "materialName": "Prayer Resin",
+              "materialUuid": "Compendium.bbttcc-master-content.items.prayer-resin",
+              "tier": "II",
+              "dc": 13,
+              "skill": "soul",
+              "yieldFormula": "1d4+1",
+              "charges": 3,
+              "maxCharges": 3,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          },
+          "campaign": {
+            "onEnterBeatId": "founders_garden_approach"
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "6VYSgoYcytEXxUoN",
+      "elevation": 0,
+      "sort": 129,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.6VYSgoYcytEXxUoN"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844425,
+          25,
+          86.60254037844425,
+          75,
+          43.30127018922212,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.30127018922212,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 2106.698729810778,
+      "y": 787.1578903249573,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Hexen Myre.u",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Hexen Myre.u",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933610556,
+          "notes": "Coastal mire country with intermittent wrong signals.",
+          "modifiers": [],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777758082385,
+          "resourceNodes": [
+            {
+              "id": "rn_8a786cd92586627c",
+              "materialKey": "bog-iron",
+              "materialName": "Bog-Iron",
+              "materialUuid": "Compendium.bbttcc-master-content.items.bog-iron",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 5,
+              "maxCharges": 5,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_a9f7ae0844fb6139",
+              "materialKey": "bog-iron",
+              "materialName": "Bog-Iron",
+              "materialUuid": "Compendium.bbttcc-master-content.items.bog-iron",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 10,
+              "maxCharges": 10,
+              "rich": true,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "XNlAwaLj6GRmHuLu",
+      "elevation": 0,
+      "sort": 130,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.XNlAwaLj6GRmHuLu"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844425,
+          25,
+          86.60254037844425,
+          75,
+          43.30127018922212,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.30127018922212,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 2206.698729810778,
+      "y": 613.9528095680696,
+      "fillAlpha": 0.14,
+      "fillColor": "#2b3d4c",
+      "strokeColor": "#cfe6f4",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Static Coast f",
+      "fontSize": 10,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Static Coast f",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933615520,
+          "notes": "Windblown outer coast and later-wave expansion country.",
+          "modifiers": [],
+          "terrain": {
+            "key": "ocean",
+            "label": "Sea / Ocean"
+          },
+          "terrainType": "ocean",
+          "terrainKey": "ocean",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777748315556,
+          "resourceNodes": [
+            {
+              "id": "rn_e6e97c869df93801",
+              "materialKey": "salt-block",
+              "materialName": "Salt Block",
+              "materialUuid": "Compendium.bbttcc-master-content.items.salt-block",
+              "tier": "I",
+              "dc": 10,
+              "skill": "body",
+              "yieldFormula": "1d4",
+              "charges": 6,
+              "maxCharges": 6,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "J3z8xctcQgaAT9Uf",
+      "elevation": 0,
+      "sort": 131,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.J3z8xctcQgaAT9Uf"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844425,
+          25,
+          86.60254037844425,
+          75,
+          43.30127018922212,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.30127018922212,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 2106.698729810778,
+      "y": 613.9528095680696,
+      "fillAlpha": 0.14,
+      "fillColor": "#2b3d4c",
+      "strokeColor": "#cfe6f4",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Static Coast g",
+      "fontSize": 10,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Static Coast g",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933617789,
+          "notes": "Windblown outer coast and later-wave expansion country.",
+          "modifiers": [],
+          "terrain": {
+            "key": "river",
+            "label": "River / Lake"
+          },
+          "terrainType": "river",
+          "terrainKey": "river",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777748298178,
+          "resourceNodes": [
+            {
+              "id": "rn_9fa1d221543d93f2",
+              "materialKey": "salt-block",
+              "materialName": "Salt Block",
+              "materialUuid": "Compendium.bbttcc-master-content.items.salt-block",
+              "tier": "I",
+              "dc": 10,
+              "skill": "body",
+              "yieldFormula": "1d4",
+              "charges": 6,
+              "maxCharges": 6,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "Il7XoVoZTdXUrf5t",
+      "elevation": 0,
+      "sort": 132,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.Il7XoVoZTdXUrf5t"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844402,
+          25,
+          86.60254037844402,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 2006.698729810778,
+      "y": 613.9528095680696,
+      "fillAlpha": 0.14,
+      "fillColor": "#2b3d4c",
+      "strokeColor": "#cfe6f4",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Static Coast h",
+      "fontSize": 10,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Static Coast h",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933620374,
+          "notes": "Windblown outer coast and later-wave expansion country.",
+          "modifiers": [],
+          "terrain": {
+            "key": "river",
+            "label": "River / Lake"
+          },
+          "terrainType": "river",
+          "terrainKey": "river",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777748292892,
+          "resourceNodes": [
+            {
+              "id": "rn_e382319bb3f7e639",
+              "materialKey": "river-clay",
+              "materialName": "River Clay",
+              "materialUuid": "Compendium.bbttcc-master-content.items.river-clay",
+              "tier": "I",
+              "dc": 10,
+              "skill": "body",
+              "yieldFormula": "1d4",
+              "charges": 8,
+              "maxCharges": 8,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "k98cxyANQK7VIRlD",
+      "elevation": 0,
+      "sort": 133,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.k98cxyANQK7VIRlD"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1906.698729810778,
+      "y": 613.9528095680696,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Static Coast j",
+      "fontSize": 10,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Static Coast j",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "B",
+              "locked": false
+            }
+          },
+          "createdAt": 1775933623961,
+          "notes": "Windblown outer coast and later-wave expansion country.",
+          "modifiers": [
+            "Hidden Resources"
+          ],
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "factionId": "",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [
+              "Hidden Resources"
+            ],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1777489847874,
+          "modifierHistory": {
+            "Hidden Resources": {
+              "addedTs": 1777489667744,
+              "addedTurn": 1,
+              "addedBy": "bytUGWIOqq9eT7Or",
+              "source": {
+                "activity": "hex_editor_save",
+                "factionId": "bytUGWIOqq9eT7Or"
+              },
+              "removedTs": null
+            }
+          },
+          "improvements": [
+            {
+              "id": "Wn41rS4OoxuuAPb9",
+              "ts": 1777489667791,
+              "turn": 1,
+              "kind": "modifier_added",
+              "label": "Modifier added: Hidden Resources",
+              "description": "Hidden Resources — Stable per-hex bonus to a single resource (deterministic by hex id)",
+              "source": {
+                "activity": "hex_editor_save",
+                "factionId": "bytUGWIOqq9eT7Or"
+              },
+              "before": null,
+              "after": null,
+              "reversible": true,
+              "dedupeKey": "editor:KlvJUvYT35qp1wgo:1777489667744:add:Hidden Resources"
+            }
+          ],
+          "resourceNodes": [
+            {
+              "id": "rn_4dd326427e2766c9",
+              "materialKey": "mire-resin",
+              "materialName": "Mire-Resin",
+              "materialUuid": "Compendium.bbttcc-master-content.items.mire-resin",
+              "tier": "II",
+              "dc": 13,
+              "skill": "soul",
+              "yieldFormula": "1d4+1",
+              "charges": 8,
+              "maxCharges": 8,
+              "rich": true,
+              "discovered": false
+            },
+            {
+              "id": "rn_c590bd74bd7e2373",
+              "materialKey": "mire-resin",
+              "materialName": "Mire-Resin",
+              "materialUuid": "Compendium.bbttcc-master-content.items.mire-resin",
+              "tier": "II",
+              "dc": 13,
+              "skill": "soul",
+              "yieldFormula": "1d4+1",
+              "charges": 4,
+              "maxCharges": 4,
+              "rich": false,
+              "discovered": false
+            },
+            {
+              "id": "rn_50d736faa2163f2b",
+              "materialKey": "bog-iron",
+              "materialName": "Bog-Iron",
+              "materialUuid": "Compendium.bbttcc-master-content.items.bog-iron",
+              "tier": "I",
+              "dc": 10,
+              "skill": "soul",
+              "yieldFormula": "1d4",
+              "charges": 5,
+              "maxCharges": 5,
+              "rich": false,
+              "discovered": false
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-travel": {
+          "regionKey": "r3",
+          "originSceneUuid": "Scene.K5IFzXw6DK5HqgYH"
+        }
+      },
+      "_id": "KlvJUvYT35qp1wgo",
+      "elevation": 0,
+      "sort": 135,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "Signika",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": true,
+      "locked": true,
+      "interface": false,
+      "levels": [],
+      "author": "bytUGWIOqq9eT7Or",
+      "_key": "!scenes.drawings!ve5hTwcmNddNlPxW.KlvJUvYT35qp1wgo"
+    }
+  ],
+  "tokens": [],
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "Level",
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/bad_eden_new_v2.webp",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!ve5hTwcmNddNlPxW.defaultLevel0000"
+    }
+  ],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [],
+  "walls": [],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "folder": "STndwgHlZB2v21rM",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982581336,
+    "modifiedTime": 1783982592909,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "navName": "",
+  "active": false,
+  "navOrder": 0,
+  "sort": 106250,
+  "_key": "!scenes!ve5hTwcmNddNlPxW",
+  "templates": []
+}

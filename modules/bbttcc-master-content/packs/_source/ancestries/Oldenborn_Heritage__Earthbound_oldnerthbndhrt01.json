@@ -1,0 +1,83 @@
+{
+  "_id": "oldnerthbndhrt01",
+  "name": "Oldenborn Heritage: Earthbound",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Earthbound_3.png",
+  "system": {
+    "category": "heritage",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Oldenborn Heritage.</strong> The branch that stayed in the dirt. Bone of the bedrock, slow blood, slow grudge. The land remembers your name and answers when you call.</p><p><em>“The world remembered old names. You answered.”</em></p><p><strong>Earthbound.</strong> You are the place-soul that put down roots and refused to be moved. Folks call you a stout one—dwarf, gnome, hill spirit, depending on the dialect. The truth is older than any of those words.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Fey).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>BOD (Body)</strong>—expressed primarily through Tier powers.</p></li><li><p><strong>Stoneborn.</strong> You reroll the lowest die on checks to resist being knocked prone or forcibly moved while you stand on natural ground.</p></li></ul>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "oldnearthbndad1",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.U7HTnVoBSl8paTqw",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Earthbound Tier I",
+        "hint": "Gain your Earthbound Tier I lineage power (Stonecall)."
+      }
+    ],
+    "identifier": "oldenborn_earthbound_heritage",
+    "requirements": "Oldenborn",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "oldenborn",
+      "lineage": "Earthbound",
+      "version": "2.0.0",
+      "date": "2026-04-18"
+    }
+  },
+  "folder": "wt1y7NqX1Jj3gucj",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776543000000,
+    "modifiedTime": 1782167240134,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 100000,
+  "_key": "!items!oldnerthbndhrt01"
+}

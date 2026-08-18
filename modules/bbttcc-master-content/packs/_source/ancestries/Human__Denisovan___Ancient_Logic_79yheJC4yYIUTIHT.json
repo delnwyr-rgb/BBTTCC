@@ -1,0 +1,139 @@
+{
+  "name": "Human (Denisovan): Ancient Logic",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_10.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You solve geometry the way others solve feelings.”</em></p>\n        <p><strong>Ancient Logic.</strong> You reroll the lowest die on Investigation and Occult checks involving structures, mechanisms, or ruins. When you succeed on such a check, you can share the insight to grant an ally advantage once before the end of the scene.</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "human-denisovan-ancient_logic",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Human",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "human",
+      "feature": "ancient_logic",
+      "lineage": "Denisovan",
+      "tierLevel": 11,
+      "version": "1.0.0"
+    },
+    "bbttcc-character-options": {
+      "option": {}
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "effects": [
+    {
+      "_id": "ff107197d9dc4a18",
+      "name": "Denisovan: Investigation +1",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blade_2.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.investigation.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 10
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Small automation: +1 Investigation checks.",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776540642443,
+        "modifiedTime": 1777433398726
+      },
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!79yheJC4yYIUTIHT.ff107197d9dc4a18"
+    }
+  ],
+  "folder": "YEloYY4YXYyWatRb",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "fourth-thing-sandbox",
+      "uuid": "Item.79yheJC4yYIUTIHT",
+      "coreVersion": "14.360",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776540642443,
+    "modifiedTime": 1781116068673,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "79yheJC4yYIUTIHT",
+  "sort": 100000,
+  "_key": "!items!79yheJC4yYIUTIHT"
+}

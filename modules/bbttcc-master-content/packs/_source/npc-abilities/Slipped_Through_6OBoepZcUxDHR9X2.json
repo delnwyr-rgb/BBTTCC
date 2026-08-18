@@ -1,0 +1,50 @@
+{
+  "name": "Slipped Through",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_ghostly_runner_1.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "5e-port",
+      "phase2-narrative"
+    ],
+    "description": {
+      "value": "<p><strong>Reaction.</strong> When struck, the Wraith may displace 1 hex / 1 square The attacker briefly forgets which target they aimed at — they take Disadvantage (reroll-lowest) on their next attack roll this exchange.</p>",
+      "chat": ""
+    }
+  },
+  "_id": "6OBoepZcUxDHR9X2",
+  "effects": [],
+  "sort": 0,
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Slippage Wraith"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782167244987,
+    "modifiedTime": 1782167244987,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!6OBoepZcUxDHR9X2"
+}

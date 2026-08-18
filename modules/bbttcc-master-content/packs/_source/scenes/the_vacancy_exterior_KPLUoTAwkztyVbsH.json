@@ -1,0 +1,2369 @@
+{
+  "folder": "ZjlMCyl32BJTXn9l",
+  "name": "the_vacancy_exterior",
+  "_id": "KPLUoTAwkztyVbsH",
+  "active": false,
+  "navigation": true,
+  "navOrder": 0,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-0iL-C8JXCWMtP9sFAKQSxQ.webp",
+  "width": 3840,
+  "height": 2160,
+  "padding": 0.25,
+  "shiftX": 0,
+  "shiftY": 0,
+  "initial": {
+    "x": 2970,
+    "y": 1678,
+    "scale": 0.787
+  },
+  "initialLevel": "defaultLevel0000",
+  "grid": {
+    "type": 0,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 1,
+    "color": "#000000",
+    "alpha": 0.2,
+    "distance": 1,
+    "units": "m"
+  },
+  "tokenVision": false,
+  "fog": {
+    "mode": 1,
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    }
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": true,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "drawings": [],
+  "tokens": [],
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "Level",
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/the_vacancy_exterior.mp4",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!KPLUoTAwkztyVbsH.defaultLevel0000"
+    }
+  ],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/vacancy.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 2055,
+      "y": 1346,
+      "width": 267,
+      "height": 150,
+      "rotation": 20,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": true,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "_id": "4UqXPgbAd5hoj483",
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.4UqXPgbAd5hoj483"
+    },
+    {
+      "name": "",
+      "levels": [
+        "defaultLevel0000"
+      ],
+      "x": 2947,
+      "y": 1649,
+      "width": 50,
+      "height": 50,
+      "rotation": 0,
+      "elevation": 0,
+      "sort": 0,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/enochian_patch%20Background%20Removed.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75,
+        "fit": "fill"
+      },
+      "alpha": 1,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "flags": {
+        "betterroofs": {
+          "brMode": false,
+          "occlusionLinkId": "",
+          "occlusionLinkSource": false
+        }
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "_id": "hCwFOuYYDDEgmiE5",
+      "hidden": false,
+      "locked": false,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.hCwFOuYYDDEgmiE5"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/EnochianPantangle-overlay-glow.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 1607,
+      "y": 1460,
+      "width": 150,
+      "height": 150,
+      "rotation": 0,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": true,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "_id": "PcsPbuPYPIr5G2XR",
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.PcsPbuPYPIr5G2XR"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/circuitry-overlay-glow.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 1201,
+      "y": 1158,
+      "width": 356,
+      "height": 200,
+      "rotation": 10,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "_id": "ADd6DsPyLaZOpJK9",
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.ADd6DsPyLaZOpJK9"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/circuit_2-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 4052,
+      "y": 1574,
+      "width": 356,
+      "height": 200,
+      "rotation": 90,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "_id": "Gza3n2zbNTTx5hew",
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.Gza3n2zbNTTx5hew"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/enochian_sigil_1-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 1898,
+      "y": 1011,
+      "width": 100,
+      "height": 100,
+      "rotation": 0,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": true,
+            "spinMode": "ccw",
+            "spinSpeed": -30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "_id": "Mn815rf75eurbfIf",
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.Mn815rf75eurbfIf"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/circuit_2-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 1268,
+      "y": 1566,
+      "width": 450,
+      "height": 253,
+      "rotation": 40,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "oA3kyzwFlrRGBFiG",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.oA3kyzwFlrRGBFiG"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/small_circuit-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 3752,
+      "y": 1123,
+      "width": 200,
+      "height": 200,
+      "rotation": 0,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "_id": "SbneYlLzTcz73qJs",
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.SbneYlLzTcz73qJs"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/small_circuit-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 3575,
+      "y": 1049,
+      "width": 200,
+      "height": 200,
+      "rotation": 145,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "7pUgTEh4E8kl6G8Q",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.7pUgTEh4E8kl6G8Q"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/Large_HEX_1-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 1172,
+      "y": 2045,
+      "width": 350,
+      "height": 197,
+      "rotation": 0,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "_id": "TTeQNGo1uMU7bPJY",
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.TTeQNGo1uMU7bPJY"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/HEX1-overlay-glow.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 2225,
+      "y": 2225,
+      "width": 350,
+      "height": 197,
+      "rotation": 10,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "_id": "eL0EEQp1Exy4QE62",
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.eL0EEQp1Exy4QE62"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/single_HExyellow-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 3802,
+      "y": 1944,
+      "width": 200,
+      "height": 113,
+      "rotation": 0,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "_id": "7TXpgGJnWihDPIIz",
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.7TXpgGJnWihDPIIz"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/Large_Hex_Blue-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 2092,
+      "y": 2035,
+      "width": 150,
+      "height": 84,
+      "rotation": 0,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "_id": "TRVbe5Q3dQrulzru",
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.TRVbe5Q3dQrulzru"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/Large_Hex_Blue-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 1664,
+      "y": 2254,
+      "width": 268,
+      "height": 150,
+      "rotation": 330,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "UJ9hp5qmrr6xcaS3",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.UJ9hp5qmrr6xcaS3"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/circuit1-overlay-glow.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 2733,
+      "y": 1128,
+      "width": 350,
+      "height": 197,
+      "rotation": 15,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "_id": "vxaerTLVNphSfbOF",
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.vxaerTLVNphSfbOF"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/small_circuit-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 1664,
+      "y": 1069,
+      "width": 100,
+      "height": 100,
+      "rotation": 45,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "IUMerLYc78PcjU4I",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.IUMerLYc78PcjU4I"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/small_circuit-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 1697,
+      "y": 1073,
+      "width": 100,
+      "height": 100,
+      "rotation": 45,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "EOeRL5JFkhXpm8bq",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.EOeRL5JFkhXpm8bq"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/small_circuit-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 1731,
+      "y": 1070,
+      "width": 100,
+      "height": 100,
+      "rotation": 45,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "5OrhzFEs5QMmn6lE",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.5OrhzFEs5QMmn6lE"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/small_circuit-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 1770,
+      "y": 1067,
+      "width": 100,
+      "height": 100,
+      "rotation": 45,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "Acbue6Dt6rIyKQhe",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.Acbue6Dt6rIyKQhe"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/small_circuit-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 1810,
+      "y": 1060,
+      "width": 100,
+      "height": 100,
+      "rotation": 45,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "lN8ogEiVzqjJSbIW",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.lN8ogEiVzqjJSbIW"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/Large_HEX_1-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 3010,
+      "y": 2213,
+      "width": 350,
+      "height": 197,
+      "rotation": 185,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "rXcK8z2Um7QVWH5d",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.rXcK8z2Um7QVWH5d"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/single_HExyellow-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 3666,
+      "y": 2178,
+      "width": 400,
+      "height": 226,
+      "rotation": 0,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "6YDq3gN9gzT9D3A3",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.6YDq3gN9gzT9D3A3"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/EnochianPantangle-overlay-glow.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 3736,
+      "y": 1645,
+      "width": 150,
+      "height": 150,
+      "rotation": 0,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": true,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "AOravNXYrnUxWUsw",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.AOravNXYrnUxWUsw"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/circuit_drapes-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 2318,
+      "y": 1475,
+      "width": 178,
+      "height": 100,
+      "rotation": 5,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "_id": "XvYeGNLk5YzAgevp",
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.XvYeGNLk5YzAgevp"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/enochian_sigil_1-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 2053,
+      "y": 1636,
+      "width": 100,
+      "height": 100,
+      "rotation": 0,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": true,
+            "spinMode": "ccw",
+            "spinSpeed": -30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "eI69fmPIeZUfJDCR",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.eI69fmPIeZUfJDCR"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/circuit_drapes-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 2542,
+      "y": 1427,
+      "width": 200,
+      "height": 112,
+      "rotation": 90,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "CePwl9YAzoga5UZU",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.CePwl9YAzoga5UZU"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/circuit_drapes-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 2549,
+      "y": 1620,
+      "width": 200,
+      "height": 112,
+      "rotation": 270,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "lYZCCiMIG3vhZc2U",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.lYZCCiMIG3vhZc2U"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/small_circuit-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 2551,
+      "y": 1939,
+      "width": 100,
+      "height": 100,
+      "rotation": 45,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "uJefIobTOfNoh603",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.uJefIobTOfNoh603"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/small_circuit-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 2645,
+      "y": 1938,
+      "width": 100,
+      "height": 100,
+      "rotation": 45,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "9dSiyuOnzeMImXtj",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.9dSiyuOnzeMImXtj"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/small_circuit-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 1838,
+      "y": 1860,
+      "width": 100,
+      "height": 100,
+      "rotation": 45,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "ZgDzrtSlNcAVj9TS",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.ZgDzrtSlNcAVj9TS"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/circuitry-overlay-glow.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 3221,
+      "y": 1187,
+      "width": 150,
+      "height": 84,
+      "rotation": 350,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "zEgBnWVYtuPIhmBm",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.zEgBnWVYtuPIhmBm"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/circuit_2-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 3206,
+      "y": 1375,
+      "width": 150,
+      "height": 84,
+      "rotation": 175,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "B8QFjeaCiuXTTmxk",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.B8QFjeaCiuXTTmxk"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/small_circuit-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 3455,
+      "y": 1597,
+      "width": 100,
+      "height": 100,
+      "rotation": 0,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "rlrI8wo3JQl4CawP",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.rlrI8wo3JQl4CawP"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/small_circuit-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 3470,
+      "y": 1658,
+      "width": 50,
+      "height": 50,
+      "rotation": 120,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "iltNUTCTngsAYSQv",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.iltNUTCTngsAYSQv"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/circuit_drapes-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 3263,
+      "y": 1584,
+      "width": 200,
+      "height": 112,
+      "rotation": 265,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "dNjIIASeaQUNIeDG",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.dNjIIASeaQUNIeDG"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/ASSURE-overlay-glow.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 4534,
+      "y": 1636,
+      "width": 533,
+      "height": 300,
+      "rotation": 0,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "_id": "5Y9KbXHfsslOwoWv",
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.5Y9KbXHfsslOwoWv"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/small_circuit-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 3766,
+      "y": 1304,
+      "width": 200,
+      "height": 200,
+      "rotation": 90,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "Yjk5aQeFYIEyBKXS",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.Yjk5aQeFYIEyBKXS"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/small_circuit-overlay-glow_f.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 3580,
+      "y": 1349,
+      "width": 200,
+      "height": 200,
+      "rotation": 165,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "SejLniVI2CKlxPrx",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.SejLniVI2CKlxPrx"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/Circuits%20and%20Sigils/circuitry-overlay-glow.png",
+        "scaleX": 1,
+        "scaleY": 1,
+        "alphaThreshold": 0,
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "fill",
+        "tint": "#ffffff"
+      },
+      "x": 4536,
+      "y": 1035,
+      "width": 300,
+      "height": 168,
+      "rotation": 345,
+      "elevation": 0,
+      "sort": -10,
+      "hidden": false,
+      "locked": false,
+      "occlusion": {
+        "modes": [],
+        "alpha": 0
+      },
+      "restrictions": {
+        "light": false,
+        "weather": false
+      },
+      "flags": {
+        "bbttcc-travel": {
+          "overlay": {
+            "blend": "add",
+            "baseAlpha": 0.85,
+            "tint": null,
+            "pulse": true,
+            "pulseAmp": 0.2,
+            "pulseSpeed": 1.2,
+            "spin": false,
+            "spinMode": "cw",
+            "spinSpeed": 30,
+            "spinArc": 60,
+            "frame": false,
+            "frameColor": 14723118,
+            "frameGlow": 1
+          }
+        }
+      },
+      "levels": [],
+      "alpha": 1,
+      "video": {
+        "loop": true,
+        "autoplay": true,
+        "volume": 0
+      },
+      "_id": "j3TBhMKHdNOILEtr",
+      "_key": "!scenes.tiles!KPLUoTAwkztyVbsH.j3TBhMKHdNOILEtr"
+    }
+  ],
+  "walls": [],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "wall-height": {
+      "advancedVision": true
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982536027,
+    "modifiedTime": 1783982536027,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "navName": "",
+  "_key": "!scenes!KPLUoTAwkztyVbsH",
+  "templates": []
+}

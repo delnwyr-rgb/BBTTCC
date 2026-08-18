@@ -1,0 +1,62 @@
+{
+  "name": "War Rig Template",
+  "type": "feature",
+  "img": "icons/sundries/scrolls/scroll-bound-sealed-red.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Pre-rolled war rig: heavy frame, two autocannons, plating, repair bay. Drop onto a blank Rig actor to populate.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "rig-template"
+      },
+      "rigTemplate": {
+        "config": {
+          "identity": {
+            "mobility": "mobile",
+            "state": "parked",
+            "archetype": "war-rig"
+          },
+          "frame": "War Rig Frame",
+          "gear": {
+            "weapons": [
+              "Twin Autocannons",
+              "Twin Autocannons"
+            ],
+            "systems": [
+              "Reinforced Plating",
+              "Repair Bay"
+            ],
+            "outputs": []
+          }
+        }
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "KRGPX9wpeUwsnX4n",
+  "effects": [],
+  "sort": 2200000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205374851,
+    "modifiedTime": 1778963271956,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!KRGPX9wpeUwsnX4n"
+}

@@ -1,0 +1,62 @@
+{
+  "name": "Sidle Closer",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_step_2.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Drift toward the center of the room like you've every right to be there. Nobody stops the one who walks like they belong.</p><p><b>Approach the center: +1 to your next Persuade or Inspire.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "courtly_sidle_closer",
+      "meta": {
+        "tier": 1,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "courtly",
+        "layer": "tactical",
+        "costBand": "light",
+        "raidTypes": [
+          "presence"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "diplomacy": 1
+        },
+        "authoredSprint": "courtly-d"
+      },
+      "effects": {
+        "text": "Approach the center. +1 to your next Persuade or Inspire."
+      }
+    }
+  },
+  "_id": "s4Gy8IYVzB62NBPg",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "6ut7GT8pCAhpdWjS": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1779731271080,
+    "modifiedTime": 1780163527042,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!s4Gy8IYVzB62NBPg"
+}

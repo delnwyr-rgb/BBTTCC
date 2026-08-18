@@ -1,0 +1,78 @@
+{
+  "name": "Scribed Steel",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/valhaualan_seals_1.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "scribed-steel"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Forge-blank steel inscribed with sept-canon glyphs along the fuller. Holds blessing in the cut.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Steel etched with a rule.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Forge-blank steel inscribed with sept-canon glyphs along the fuller. Holds blessing in the cut.</p>",
+          "charges": 2,
+          "materialKey": "scribed-steel",
+          "price": {
+            "marks": 450,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII material stamp",
+            "bound": "free",
+            "saleBack": 180
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "xAh6YSL5lKiKmBNy",
+  "effects": [],
+  "sort": 474903,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137161794,
+    "modifiedTime": 1782156674955,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!xAh6YSL5lKiKmBNy"
+}

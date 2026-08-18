@@ -1,0 +1,739 @@
+{
+  "name": "Soul-Smith",
+  "type": "class",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/SoulSmith3.png",
+  "system": {
+    "category": "path",
+    "identifier": "soul-smith",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"Give me time, a fire, and something to hit — and then we'll see.\"</em></p>\n<p>The Soul-Smith runs a forge that does not much care whether you call it a person or a furnace; it answers to heat and intention either way. Mechanically you ride <strong>Burn</strong> — a 0→8 heat track that climbs when you or a nearby ally takes a hit (the forge stokes itself on other people's bad days) and banks <strong>Surge</strong> right alongside it. You spend that Surge on four forge-works, and the hotter you run, the harder they land — right up until the furnace bites back.</p>\n<h3>The Four Works (spent via Surge)</h3>\n<ul>\n  <li><strong>Forge-Weld.</strong> Lay hands on the breakage and repair an ally — 1d8 + tier integrity. <em>Stoked</em> (Burn 2–3) ×1.5; <em>Overheated</em> (Burn 4+) ×2, and Overheated also costs you 1d6 Stress, because an open forge has opinions about being grabbed.</li>\n  <li><strong>Atonement Crucible.</strong> Cleanse a condition off an ally (two while Stoked or hotter) and temper the wound into armor — they gain DR equal to your tier. The bad thing that happened to them is now load-bearing.</li>\n  <li><strong>Furnace of Renewal.</strong> Light the aura: allies within 6 squares heal (Burn-scaled) and share your poison/qliphothic resistance for three rounds. Stand near the fire. It is rude not to.</li>\n  <li><strong>Relic of Rebirth.</strong> Forge a ward on an ally — the next hit that would drop them is held at 1. While Overheated, instead reforge a fallen ally back to half integrity (once per fight). The forge does not accept \"dead\" as a final answer. It considers it a draft.</li>\n</ul>\n<p><strong>Vent</strong> to cool Burn. Out of combat, <strong>Forge Works</strong> still does the slow miracles — repairing hexes, purifying corrupted Sparks, restoring ruined regions. Those take time, the way good welds do.</p>",
+      "chat": ""
+    },
+    "advancement": {
+      "SS00000000000001": {
+        "_id": "SS00000000000001",
+        "type": "HitPoints",
+        "configuration": {},
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000002": {
+        "_id": "SS00000000000002",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.6Xip1ZQnwdQxH1NT",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.GtHwLgIINvuwnDaS",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 1,
+        "title": "Sanctified Forge Initiate & Tempered Vitality",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000003": {
+        "_id": "SS00000000000003",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.wd1Dl74TN1trKqhw",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.c3SGRC6iD8IfSvgQ",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 2,
+        "title": "Forge-Blessed Tools & Salvage the Ruined",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000004": {
+        "_id": "SS00000000000004",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.klRphUtmspLgzfuk",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.oboBZdhZSALUPSQl",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 3,
+        "title": "Ember of Restoration & Ironbedside Manner",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000005": {
+        "_id": "SS00000000000005",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 4,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000006": {
+        "_id": "SS00000000000006",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.iu7VwRpspt8PQiQq",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.AZBKHygc9jDdoKnf",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 4,
+        "title": "Harmonic Heat-Treat & Grief-Smith's Insight (Soul) (Soul)",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000007": {
+        "_id": "SS00000000000007",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.VeS1RrzxJigTndDQ",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.d9TIJgni8NyP5wlx",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 5,
+        "title": "Atonement Crucible & Alloy of Trust",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000008": {
+        "_id": "SS00000000000008",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 8,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000009": {
+        "_id": "SS00000000000009",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.TMty5yDlJ5phz8PU",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 7,
+        "title": "Anvil of Refuge",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000010": {
+        "_id": "SS00000000000010",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 12,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000011": {
+        "_id": "SS00000000000011",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.1hLZoXj1Z7QG7XiV",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 8,
+        "title": "Living Relic Artificer",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000012": {
+        "_id": "SS00000000000012",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.bGiwWDTZdX7dL2gb",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 9,
+        "title": "Hardened Frame",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000013": {
+        "_id": "SS00000000000013",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.PTpqbnvq5fjx7gml",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 10,
+        "title": "Pulse of the Forge",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000014": {
+        "_id": "SS00000000000014",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.WBGRGFsQqlOfRko6",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 11,
+        "title": "Furnace of Renewal",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000015": {
+        "_id": "SS00000000000015",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 16,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000016": {
+        "_id": "SS00000000000016",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.CqmrIvo0IQakcb2K",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 12,
+        "title": "Bastion-Shell Plating",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000017": {
+        "_id": "SS00000000000017",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.yFxfw7v0s2QoD6DW",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.XzsCfMiujDhD8025",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 13,
+        "title": "Hex-Ward Filigree & Shared Burden Harness",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000018": {
+        "_id": "SS00000000000018",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.88mkkYlf7ZdEVN3d",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 14,
+        "title": "Structural Empathy",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000019": {
+        "_id": "SS00000000000019",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 19,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000020": {
+        "_id": "SS00000000000020",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Y5FmTZirpltzNl0B",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 15,
+        "title": "Workshop Demi-Sanctum",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000022": {
+        "_id": "SS00000000000022",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.f4Uwgx2uJKycEuYd",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 16,
+        "title": "Forge-Line Stabilizer",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000023": {
+        "_id": "SS00000000000023",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Jl1bLrihM0go0cwL",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.BfltBCy8eAXNUt7y",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 17,
+        "title": "Relic of Rebirth & Great Work Keystone",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000024": {
+        "_id": "SS00000000000024",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.GmEfI92deKC7vx4w",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 18,
+        "title": "Forge-Heart Anchor",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000026": {
+        "_id": "SS00000000000026",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Kf2znx20cboaME3H",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 20,
+        "title": "Heartforge of the Great Work",
+        "flags": {},
+        "hint": ""
+      },
+      "SS00000000000027": {
+        "_id": "SS00000000000027",
+        "type": "Subclass",
+        "configuration": {},
+        "value": {
+          "document": null,
+          "uuid": null
+        },
+        "level": 3,
+        "title": "",
+        "hint": "",
+        "flags": {}
+      },
+      "SS00000000000028": {
+        "_id": "SS00000000000028",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "saves:con",
+            "saves:wis"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "defense check Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "SS00000000000029": {
+        "_id": "SS00000000000029",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "skills:med"
+          ],
+          "choices": [
+            {
+              "count": 2,
+              "pool": [
+                "skills:ins",
+                "skills:rel",
+                "skills:inv",
+                "skills:prc"
+              ]
+            }
+          ]
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Skill Proficiencies",
+        "hint": "Gain Faith (Soul) automatically, then choose two from Insight (Soul) (Soul), Faith (Soul), Investigation (Mind) (Mind), Perception (Mind) (Mind).",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "SS00000000000030": {
+        "_id": "SS00000000000030",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "weapon:sim",
+            "weapon:mar"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Weapon Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "SS00000000000031": {
+        "_id": "SS00000000000031",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "armor:lgt",
+            "armor:med",
+            "armor:shl"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Armor Training",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "SS00000000000032": {
+        "_id": "SS00000000000032",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "defense check Proficiencies",
+        "hint": "",
+        "classRestriction": "secondary",
+        "flags": {}
+      },
+      "SS00000000000033": {
+        "_id": "SS00000000000033",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "weapon:sim"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Weapon Proficiencies",
+        "hint": "",
+        "classRestriction": "secondary",
+        "flags": {}
+      },
+      "SS00000000000034": {
+        "_id": "SS00000000000034",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "armor:lgt"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Armor Training",
+        "hint": "",
+        "classRestriction": "secondary",
+        "flags": {}
+      }
+    },
+    "startingEquipment": [],
+    "hd": {
+      "denomination": "d10",
+      "spent": 0,
+      "additional": ""
+    },
+    "levels": 1,
+    "primaryAbility": {
+      "value": [
+        "con"
+      ],
+      "all": false
+    },
+    "properties": [],
+    "spellcasting": {
+      "progression": "half",
+      "ability": "con",
+      "preparation": {
+        "formula": "@con.mod + floor(@classes.soul_smith.levels/2)"
+      }
+    },
+    "wealth": ""
+  },
+  "effects": [],
+  "folder": "e0QBxXMScwOJA8aO",
+  "flags": {
+    "bbttcc": {
+      "primary": "constitution",
+      "opBonus": {
+        "economy": 3
+      }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459996550,
+    "modifiedTime": 1782167240812,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "DkuvglxCjNy2tmnL",
+  "sort": 100000,
+  "_key": "!items!DkuvglxCjNy2tmnL"
+}

@@ -1,0 +1,81 @@
+{
+  "name": "Buc-ee's Beaver Talisman (Tarnished Gold)",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bucees_talisman.png",
+  "system": {
+    "slot": "trinket",
+    "tags": [
+      "mal-voiced",
+      "talisman",
+      "trade"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>A small, slightly tacky golden beaver pendant on a brass chain. The smile is wide. The teeth are alarming. Several Frontier-Formerly-Known cults consider this a holy relic. Several other Frontier-Formerly-Known cults consider this an insult. Nobody is neutral. The beaver doesn't care.</p><p><strong>Cleanest Bathrooms in the Wasteland.</strong> +1 to wasteland-market negotiation rolls. Once per session, when a deal would fall through, you may invoke the Beaver — quote a pre-Fall slogan, gesture at the pendant, look serious. The deal goes through, but you owe the merchant a small future favor. Mal: \"That's the Beaver's contract. He always gets paid.\"</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "talisman",
+          "signature": "Pre-Fall mascot. Considered sacred by certain wasteland cults. Extremely good at negotiating.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A small, slightly tacky golden beaver pendant on a brass chain. The smile is wide. The teeth are alarming. Several Frontier-Formerly-Known cults consider this a holy relic. Several other Frontier-Formerly-Known cults consider this an insult. Nobody is neutral. The beaver doesn't care.</p><p><b>Cleanest Bathrooms in the Wasteland.</b> +1 to wasteland-market negotiation rolls. Once per session, when a deal would fall through, you may invoke the Beaver — quote a pre-Fall slogan, gesture at the pendant, look serious. The deal goes through, but you owe the merchant a small future favor. Mal: \"That's the Beaver's contract. He always gets paid.\"</p>",
+          "materialOf": [
+            "sacred-gold",
+            "borderline-irrational-state-pride",
+            "mascot-energy"
+          ],
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII talisman stamp",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "ooEjOFD1J4Hl2Van",
+  "effects": [],
+  "sort": 2600000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725666,
+    "modifiedTime": 1778541977403,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ooEjOFD1J4Hl2Van"
+}

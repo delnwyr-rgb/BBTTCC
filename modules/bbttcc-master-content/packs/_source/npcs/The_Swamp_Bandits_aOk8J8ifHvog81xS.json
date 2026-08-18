@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": "ZiFLx2LEOrGxvEmc",
+  "name": "The Swamp Bandits",
+  "color": null,
+  "sorting": "a",
+  "_id": "aOk8J8ifHvog81xS",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177533967,
+    "modifiedTime": 1784177533967,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!aOk8J8ifHvog81xS"
+}

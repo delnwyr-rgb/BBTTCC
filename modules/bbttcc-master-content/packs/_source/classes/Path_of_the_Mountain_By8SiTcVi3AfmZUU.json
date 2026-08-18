@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "C6ZQ5Y62R4hqOwPP",
+  "name": "Path of the Mountain",
+  "color": null,
+  "sorting": "a",
+  "_id": "By8SiTcVi3AfmZUU",
+  "description": "",
+  "sort": -100000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776460231873,
+    "modifiedTime": 1777392585830,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!By8SiTcVi3AfmZUU"
+}

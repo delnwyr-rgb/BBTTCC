@@ -1,0 +1,65 @@
+{
+  "_id": "pLQ1qEff2IhNFCVk",
+  "name": "Redactor: Redaction Savant",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p data-start=\"2120\" data-end=\"2133\"><em data-start=\"2120\" data-end=\"2133\">(6th Level)</em></p><p data-start=\"2135\" data-end=\"2166\">You specialize in interruption.</p><ul data-start=\"2168\" data-end=\"2315\"><li data-start=\"2168\" data-end=\"2246\"><p data-start=\"2170\" data-end=\"2246\">reroll the lowest die on Counterspell, Dispel Magic, and equivalent negation tests.</p></li><li data-start=\"2247\" data-end=\"2315\"><p data-start=\"2249\" data-end=\"2315\">When you successfully negate an effect, you may leave <strong data-start=\"2303\" data-end=\"2314\">Residue</strong>.</p></li></ul><p data-start=\"2317\" data-end=\"2342\">Residue creates friction:</p><ul data-start=\"2344\" data-end=\"2427\"><li data-start=\"2344\" data-end=\"2396\"><p data-start=\"2346\" data-end=\"2396\">Recasting the same effect in this scene is harder.</p></li><li data-start=\"2397\" data-end=\"2427\"><p data-start=\"2399\" data-end=\"2427\">The conceptual scar lingers.</p></li></ul><p data-start=\"2429\" data-end=\"2457\">Residue does not add damage.</p><p data-start=\"2459\" data-end=\"2475\">It adds silence.</p>",
+      "chat": ""
+    },
+    "identifier": "redactor_redaction_savant",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "redactor_redaction_savant"
+    }
+  },
+  "folder": "pcv0zMJZU8aoEMQc",
+  "sort": 300000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.pLQ1qEff2IhNFCVk",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459923345,
+    "modifiedTime": 1782167240828,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!pLQ1qEff2IhNFCVk"
+}

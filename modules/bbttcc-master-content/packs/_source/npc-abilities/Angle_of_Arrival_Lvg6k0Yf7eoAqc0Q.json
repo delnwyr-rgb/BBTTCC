@@ -1,0 +1,295 @@
+{
+  "name": "Angle of Arrival",
+  "type": "power",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_2.png",
+  "system": {
+    "intent": "intrigue",
+    "channel": "mind",
+    "sephirah": "hod",
+    "mode": "working",
+    "clarityRequired": 1,
+    "noiseGain": 0,
+    "activation": "action",
+    "target": "self",
+    "range": "near",
+    "damage": "",
+    "damageType": "energy",
+    "damageFlavor": "",
+    "damageRoll": {
+      "op": "none",
+      "number": 0,
+      "die": "d6",
+      "attribute": "",
+      "type": "kinetic",
+      "flavor": "",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "effect": "Move along an impossible chord; reappear at any point within near. The Serpent's next attack this turn rolls 2d10x10 with reroll-lowest.",
+    "tags": [
+      "translated",
+      "5e-port",
+      "phase2-narrative",
+      "manifestation"
+    ],
+    "category": "manifestation",
+    "flavor": "The room briefly grows a corner that wasn't drawn.",
+    "manifestation": {
+      "tier": 1,
+      "family": "working",
+      "concept": "Travel along a line nobody drew.",
+      "form": "movement",
+      "function": "reposition",
+      "stability": "instant",
+      "interactionModel": "passive",
+      "costType": "clarity",
+      "costValue": 1,
+      "costText": "1 Clarity",
+      "duration": "instant",
+      "durationText": "One repositioning.",
+      "triggerText": "Activated as an Action.",
+      "scale": "personal",
+      "targetText": "Self.",
+      "rangeAreaText": "Near; any visible point.",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "The Serpent appears unarmored for the moment of arrival.",
+      "pathResonance": "Hod — splendor of pure form.",
+      "fictionalPermission": "May appear at impossible angles.",
+      "gmCalibration": "Movement only; sets up the next attack with reroll-lowest.",
+      "mechanicalHook": "Free reposition near + advantage on next attack.",
+      "signature": "A corner appears that wasn't drawn.",
+      "thirdThing": "Geometry textbooks within 30 ft. develop new errata.",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "area": {
+        "shape": "none",
+        "size": 0
+      },
+      "activation": {
+        "type": "action",
+        "consumePool": true
+      },
+      "save": {
+        "enabled": false,
+        "defense": "evasion",
+        "attribute": "",
+        "dcMode": "derived",
+        "dcFixed": 15
+      }
+    },
+    "description": {
+      "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Free reposition near + reroll the lowest die on next attack.</p>\n<ul>\n  <li><strong>Intent:</strong> Intrigue</li>\n  <li><strong>Action:</strong> Action</li>\n  <li><strong>Range:</strong> Near</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Target:</strong> Self.</li>\n  <li><strong>Cost:</strong> 1 Clarity, Clarity 1, 1 Clarity</li>\n  <li><strong>Duration:</strong> One repositioning.</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<p><strong>Risk:</strong> The Serpent appears unarmored for the moment of arrival.</p>\n<!-- BBTTCC:MECHANICS:END -->"
+    }
+  },
+  "_id": "Lvg6k0Yf7eoAqc0Q",
+  "effects": [],
+  "sort": 0,
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Jommetry Serpent"
+        ],
+        "worlds": [
+          "ember"
+        ]
+      }
+    },
+    "autoanimations": {
+      "id": "01ddac0e-448c-4884-ad2c-bae81cb59a5b",
+      "label": "Angle of Arrival",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "darkpurple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1781024231012,
+    "modifiedTime": 1782167244996,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!Lvg6k0Yf7eoAqc0Q"
+}

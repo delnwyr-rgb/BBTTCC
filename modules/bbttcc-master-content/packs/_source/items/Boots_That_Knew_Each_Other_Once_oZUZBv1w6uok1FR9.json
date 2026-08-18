@@ -1,0 +1,136 @@
+{
+  "name": "Boots That Knew Each Other Once",
+  "type": "armor",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_boots.png",
+  "system": {
+    "guardBonus": 0,
+    "evasionBonus": 1,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "weave",
+    "equipped": false,
+    "tags": [
+      "mal-voiced",
+      "footwear",
+      "salvaged"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Salvaged from two different abandoned trucks at two different crossroads. The left boot was loved very much. The right boot was loved less, but more recently. Together they make a pair that walks faster than either of them used to. The previous owners are not asking for them back.</p><p><strong>Mismatched Stride.</strong> +1 zone to your standard Move action. Stealth checks reroll the lowest die because nobody expects a person walking this fast to be sneaky. (Mal: \"It's psychological. They're so confused they don't notice you.\")</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "footwear",
+          "signature": "Left boot from one couple. Right boot from another. They get along well enough.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Salvaged from two different abandoned trucks at two different crossroads. The left boot was loved very much. The right boot was loved less, but more recently. Together they make a pair that walks faster than either of them used to. The previous owners are not asking for them back.</p><p><b>Mismatched Stride.</b> +1 zone to your standard Move action. Stealth checks reroll the lowest die because nobody expects a person walking this fast to be sneaky. (Mal: \"It's psychological. They're so confused they don't notice you.\")</p>",
+          "materialOf": [
+            "road-leather",
+            "two-different-stories"
+          ],
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI footwear stamp",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "oZUZBv1w6uok1FR9",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.evasion",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "Gq8bPauNUHFffc5T",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781726107904,
+        "modifiedTime": 1781726107904,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!oZUZBv1w6uok1FR9.Gq8bPauNUHFffc5T"
+    }
+  ],
+  "sort": 650000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725654,
+    "modifiedTime": 1778541977258,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!oZUZBv1w6uok1FR9"
+}

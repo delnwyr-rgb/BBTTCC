@@ -1,0 +1,65 @@
+{
+  "_id": "Zrv0q6PgygEWtxta",
+  "name": "Medic of the Wastes",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_medic_of_the_wastes.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2>Medic of the Wastes</h2><p><em>Out here, healing is logistics.</em></p><hr /><h3>Rules</h3><p>You gain a skill rank in Faith (Soul). If you already have it, you gain mastery.</p><p>When you use a medkit to stabilize a creature, it also regains Integrity equal to your skill rank bonus.</p><p>Additionally, during a Respite, you may allow up to two creatures to regain additional Integrity equal to your skill rank bonus. A creature can benefit from this principle only once per Respite.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_medic_of_the_wastes",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-expansion-v1",
+      "generatedAt": "2026-01-18T20:40:44.997674+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 3100000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1781116208386,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!Zrv0q6PgygEWtxta"
+}

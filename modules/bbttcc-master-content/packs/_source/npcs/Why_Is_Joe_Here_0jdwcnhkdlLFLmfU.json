@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": "FBhV32XeCO4JNcym",
+  "name": "Why Is Joe Here",
+  "color": null,
+  "sorting": "a",
+  "_id": "0jdwcnhkdlLFLmfU",
+  "description": "",
+  "sort": 600000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177517981,
+    "modifiedTime": 1784177517981,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!0jdwcnhkdlLFLmfU"
+}

@@ -1,0 +1,81 @@
+{
+  "name": "Witness-Glass",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_lens.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "witness-glass",
+      "witness",
+      "glass",
+      "memory"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Slag glass cooled too slow at a sept-trial. Holds an impression of the testimony given over it. Used in recording crystals and oath-styluses.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Glass that won't forget what it has seen.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Slag glass cooled too slow at a sept-trial. Holds an impression of the testimony given over it. Used in recording crystals and oath-styluses.</p>",
+          "charges": 3,
+          "materialKey": "witness-glass",
+          "price": {
+            "marks": 225,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1.5,
+            "notes": "TII material stamp × rarity 1.5",
+            "bound": "free",
+            "saleBack": 90
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "qe6plabYk1YG1VT8",
+  "effects": [],
+  "sort": 100782,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137194163,
+    "modifiedTime": 1782156674954,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!qe6plabYk1YG1VT8"
+}

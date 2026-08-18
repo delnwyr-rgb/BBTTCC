@@ -1,0 +1,121 @@
+{
+  "name": "Measured Command",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_helmet_4.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2025",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“We move, but we do not break.”</em></p><p>As a <strong>bonus action</strong>, you can mark one ally within <strong>6 squares</strong> who can see or hear you.</p><ul><li>Until the start of your next turn, that ally gains a <strong>+1 bonus to Guard</strong> and a <strong>+1 bonus to all defense check against being Shaken or charmed</strong>.</li><li>If they succeed on any such save while this bonus is active, they also gain <strong>temporary Integrity equal to your tier</strong>.</li></ul><p>You can use this feature a number of times equal to your <strong>tier</strong>, regaining all expended uses when you finish a <strong>a Soma Break</strong>.</p>",
+      "chat": ""
+    },
+    "activities": {
+      "measuredCommand": {
+        "type": "utility",
+        "activation": {
+          "type": "bonus",
+          "condition": "",
+          "override": false
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "range": {
+          "value": "30",
+          "units": "ft",
+          "override": false
+        },
+        "description": {},
+        "_id": "tRt2lQB61C5OKj9I",
+        "sort": 0,
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "@prof"
+    },
+    "advancement": {},
+    "identifier": "harmmarshal-resolve-measured-command",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Harmony Marshal 3, Mandate of Resolve",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "FLlH96uJfBcVDu4s",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "harmmarshal_resolve",
+      "featureKey": "measured_command"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776467813568,
+    "modifiedTime": 1782167240813,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "G5I7VankzaP4L0Pf",
+  "sort": 150000,
+  "_key": "!items!G5I7VankzaP4L0Pf"
+}

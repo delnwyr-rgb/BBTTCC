@@ -1,0 +1,327 @@
+{
+  "name": "Sap",
+  "type": "weapon",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_quarterstaff%20Background%20Removed.png",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "melee",
+    "damage": {
+      "formula": "1d6",
+      "attribute": "violence",
+      "type": "kinetic",
+      "damageFlavor": "subdual",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1
+    },
+    "tags": [
+      "t1-baseline",
+      "sap",
+      "concealable",
+      "subdual"
+    ],
+    "effect": "Concealable. Damage easily declared nonlethal at the wielder's option.",
+    "flavor": "Compact. Apologetic. Functional.",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "<p>Leather-wrapped lead-shot bludgeon, palm-sized. Lives in a pocket or a sleeve. Designed to put someone out without breaking anything that won't heal in a week.</p><p><b>Standard Issue (Subdual).</b> Damage is subdual-flavored — narratively kinetic but easy to declare nonlethal. Useful for Couriers, intriguers, and anyone whose plan ended with \"and then we walk away.\"</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Concealable. Damage easily declared nonlethal at the wielder's option.</p>\n<ul>\n <li><strong>Damage:</strong> 1d6 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(subdual)</span></li>\n <li><strong>Faculty:</strong> Violence</li>\n <li><strong>Attack:</strong> Melee (Violence)</li>\n <li><strong>Reach:</strong> Melee</li>\n <li><strong>Duration:</strong> Scene</li>\n <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "5",
+          "frame": "weapon",
+          "signature": "A short conversation about the back of a head.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Leather-wrapped lead-shot bludgeon, palm-sized. Lives in a pocket or a sleeve. Designed to put someone out without breaking anything that won't heal in a week.</p><p><b>Standard Issue (Subdual).</b> Damage is subdual-flavored — narratively kinetic but easy to declare nonlethal. Useful for Couriers, intriguers, and anyone whose plan ended with \"and then we walk away.\"</p>",
+          "materialOf": [
+            "lead-shot",
+            "wrapped-leather"
+          ],
+          "price": {
+            "marks": 50,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI weapon stamp",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    },
+    "autoanimations": {
+      "id": "d645f26d-5cd9-4627-8990-7fdd643d681e",
+      "label": "Sap",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "melee",
+      "primary": {
+        "video": {
+          "dbSection": "melee",
+          "menuType": "weapon",
+          "animation": "club",
+          "variant": "01",
+          "color": "white",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5,
+      "meleeSwitch": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "weapon",
+          "animation": "arrow",
+          "variant": "regular",
+          "color": "regular",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "detect": "automatic",
+          "range": 2,
+          "returning": false,
+          "switchType": "on"
+        }
+      }
+    }
+  },
+  "folder": "bQhXd1gwJXtaVLGh",
+  "_id": "HQw3eCJtEaawswAn",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777869584374,
+    "modifiedTime": 1782159946541,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!HQw3eCJtEaawswAn"
+}

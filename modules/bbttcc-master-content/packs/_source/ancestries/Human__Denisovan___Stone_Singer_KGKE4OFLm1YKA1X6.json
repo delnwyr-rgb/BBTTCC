@@ -1,0 +1,79 @@
+{
+  "name": "Human (Denisovan): Stone-Singer",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cracked_stone_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Walls are stories. You can read them.”</em></p>\n        <p><strong>Stone-Singer.</strong> You gain a skill rank with the Plating aptitude. 1/Soma Break, you can reinforce a structure or barrier over 1 minute, granting it temporary durability (GM adjudicates).</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "human-denisovan-stone_singer",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Human",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "human",
+      "feature": "stone_singer",
+      "lineage": "Denisovan",
+      "tierLevel": 5,
+      "version": "1.0.0"
+    },
+    "bbttcc-character-options": {
+      "option": {}
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "effects": [],
+  "folder": "YEloYY4YXYyWatRb",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "fourth-thing-sandbox",
+      "uuid": "Item.KGKE4OFLm1YKA1X6",
+      "coreVersion": "14.360",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776540642443,
+    "modifiedTime": 1782167240123,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "KGKE4OFLm1YKA1X6",
+  "sort": 400000,
+  "_key": "!items!KGKE4OFLm1YKA1X6"
+}

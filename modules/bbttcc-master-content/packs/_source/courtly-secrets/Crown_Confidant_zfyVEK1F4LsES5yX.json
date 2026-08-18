@@ -1,0 +1,45 @@
+{
+  "name": "Crown Confidant",
+  "type": "feat",
+  "img": "icons/equipment/head/crown-gold-laurel.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Crown Confidant.</strong> The sovereign's own ear. <em>Play:</em> queue +3 to your next courtly exchange roll.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "rollPlus3",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "_id": "zfyVEK1F4LsES5yX",
+  "effects": [],
+  "folder": null,
+  "sort": 2800000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782065103711,
+    "modifiedTime": 1784079176431,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!zfyVEK1F4LsES5yX"
+}

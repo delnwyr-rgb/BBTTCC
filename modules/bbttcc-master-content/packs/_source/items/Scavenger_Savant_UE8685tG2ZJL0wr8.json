@@ -1,0 +1,65 @@
+{
+  "_id": "UE8685tG2ZJL0wr8",
+  "name": "Scavenger Savant",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_scavnger_savant.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Scavenger Savant</h2><p><em>Every ruin is a pantry if you know where to pry.</em></p><hr /><h3>Rules</h3><p>You gain a skill rank in Investigation (Mind). If you already have it, you gain mastery.</p><p>When you spend at least 10 minutes searching a wreck, ruin, or battlefield, you may declare what you are looking for (ammo, medicine, parts, food, trade goods). You then make an Investigation (Mind) check. On a success (DC set by the GM), you find something relevant and useful; on a failure, you still find something, but it comes with a complication (noise, contamination, time loss, or unwanted attention).</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_scavenger_savant",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-expansion-v1",
+      "generatedAt": "2026-01-18T20:40:44.997829+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 2600000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1781116206770,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!UE8685tG2ZJL0wr8"
+}

@@ -1,0 +1,63 @@
+{
+  "name": "Shore the Gate",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rampart_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Beams, rubble, and pure stubbornness jammed against the failing gate. Hold it, poor dears. Hold it.</p><p><b>Friendly tokens gain Braced (+1 defense) for 1 round.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "shore_the_gate",
+      "meta": {
+        "tier": 1,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "violence",
+        "layer": "tactical-down",
+        "costBand": "light",
+        "raidTypes": [
+          "siege",
+          "violence"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "logistics": 2
+        },
+        "authoredSprint": "balance-w1"
+      },
+      "effects": {
+        "text": "Defenders brace the gate: friendly tokens gain 'Braced' for 1 round."
+      }
+    }
+  },
+  "_id": "lqRyKOQcQFdhTpyl",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "6ut7GT8pCAhpdWjS": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1779731207891,
+    "modifiedTime": 1780163526430,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!lqRyKOQcQFdhTpyl"
+}

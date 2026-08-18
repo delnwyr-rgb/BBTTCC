@@ -1,0 +1,75 @@
+{
+  "name": "Cataclyst L17: Both Things At Once (Capstone)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wall_cut.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "RFI-native",
+      "revision": 1,
+      "book": "Bulwark + Shadow Courier v1.0",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>You no longer have separate Frame and Ruin pools. Other Bulwarks find you slightly unsettling. They are not wrong to.</em></p><p>Your Frame Dice and Ruin Charges merge into a single pool of <strong>Inevitability Dice</strong>. The merged pool's max equals the sum of your Frame max and Ruin max (so up to 16 at full progression).</p><p>You may spend Inevitability Dice for any Frame Die or Ruin Charge effect anywhere in your class or doctrine, on any turn, in any combination, without declaring which is which until the spend resolves. Polarity Mastery (Bulwark Tier 3 — Cataclyst variant) and The Third Door (L13) continue to work as written, with Inevitability Dice substituting for either type.</p><p><strong>Charged dice from L1 The Exchange</strong> remain charged in the merged pool and apply their bonus to whichever side of the spend you choose at resolution time.</p><p><em>(System note: this feature sets the actor flag <code>flags.fourththing.bulwark.inevitabilityMerged = true</code>. Sheet UI for the merged pool ships in a follow-up sprint; until then, treat the merged pool as the sum of the visible Frame + Ruin chips and track spends manually.)</em></p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "bulwark_cataclyst_l17_both_things_at_once",
+    "requirements": "Path of the Cataclyst, Bulwark Initiation 17",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "bulwark",
+      "subclassIdentifier": "bbttcc-bulwark-cataclyst",
+      "subclassLevel": 17,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true,
+      "capstone": true
+    },
+    "fourththing": {
+      "grants": {},
+      "bulwark": {
+        "inevitabilityMerged": true
+      }
+    }
+  },
+  "folder": "HmbujXzEJL7v48Q9",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777004380865,
+    "modifiedTime": 1781116124881,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BlwkCataFtL17abc",
+  "sort": 0,
+  "_key": "!items!BlwkCataFtL17abc"
+}

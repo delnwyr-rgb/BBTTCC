@@ -1,0 +1,71 @@
+{
+  "name": "Mountain L5: Denial",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "RFI-native",
+      "revision": 1,
+      "book": "Bulwark + Shadow Courier v1.0",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>You decide which side of you is the wall.</em></p><p><strong>Reaction.</strong> When a creature within <strong>1 square</strong> of you attempts to move past you (toward an adjacent square that would put you between them and their previous position), you may spend <strong>1 Ruin Charge</strong> as a reaction. Their movement <strong>simply ends</strong> in their current square — no attack roll, no defense check. They have not yet spent the movement and may use it to retreat or move along a different path next turn.</p><p>Limit: <strong>once per target per encounter</strong>. The same creature cannot be Denied a second time in the same encounter, but may move past once Denial has resolved on a different opponent.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "bulwark_mountain_l5_denial",
+    "requirements": "Path of the Mountain, Bulwark Initiation 5",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "bulwark",
+      "subclassIdentifier": "bbttcc-bulwark-mountain",
+      "subclassLevel": 5,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {}
+    }
+  },
+  "folder": "By8SiTcVi3AfmZUU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777004380927,
+    "modifiedTime": 1782167240811,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BlwkMtnFtL05abcd",
+  "sort": 0,
+  "_key": "!items!BlwkMtnFtL05abcd"
+}

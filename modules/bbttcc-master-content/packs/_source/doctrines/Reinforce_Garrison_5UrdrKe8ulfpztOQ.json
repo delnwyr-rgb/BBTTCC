@@ -1,0 +1,40 @@
+{
+  "name": "Reinforce Garrison",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rampart_2.png",
+  "system": {
+    "category": "strategic",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Reinforce Garrison</h3><p>Defender stiffens the defence: +1 Anytime budget per round AND +1 Renewal pool for the duration. Played by the besieged faction; target the besieged hex.</p><p><strong>OP Cost:</strong> violence 15, logistics 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> uncommon</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "reinforce_garrison"
+    }
+  },
+  "_id": "5UrdrKe8ulfpztOQ",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601766,
+    "modifiedTime": 1782703702694,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!5UrdrKe8ulfpztOQ"
+}

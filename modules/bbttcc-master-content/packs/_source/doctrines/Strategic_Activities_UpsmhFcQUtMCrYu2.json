@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Strategic Activities",
+  "color": null,
+  "sorting": "a",
+  "_id": "UpsmhFcQUtMCrYu2",
+  "description": "",
+  "sort": 200000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1771977109710,
+    "modifiedTime": 1771977109710,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!folders!UpsmhFcQUtMCrYu2"
+}

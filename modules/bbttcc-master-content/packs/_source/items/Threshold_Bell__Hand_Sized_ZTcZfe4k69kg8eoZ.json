@@ -1,0 +1,83 @@
+{
+  "name": "Threshold Bell, Hand-Sized",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_bell_2.png",
+  "system": {
+    "slot": "ritual-tool",
+    "tags": [
+      "bell",
+      "ritual",
+      "courier"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Brass thumb-bell on a hex-rope cord. Couriers and sept-witnesses ring it once before crossing a threshold that matters; the sound marks the door for return.</p><p>Mundane bell. Ritual matters. Foley for fiction.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "sigil",
+          "signature": "Ring it once. Mean it.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {
+            "ritual": true
+          },
+          "lore": "<p>Brass thumb-bell on a hex-rope cord. Couriers and sept-witnesses ring it once before crossing a threshold that matters; the sound marks the door for return.</p><p>Mundane bell. Ritual matters. Foley for fiction.</p>",
+          "materialOf": [
+            "brass-thumb-bell",
+            "hex-rope"
+          ],
+          "price": {
+            "marks": 60,
+            "currency": "softpower",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI sigil stamp",
+            "bound": "free",
+            "saleBack": 24
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "ZTcZfe4k69kg8eoZ",
+  "effects": [],
+  "sort": 474848,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137142789,
+    "modifiedTime": 1782156674949,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ZTcZfe4k69kg8eoZ"
+}

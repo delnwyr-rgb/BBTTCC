@@ -1,0 +1,65 @@
+{
+  "_id": "gAEdwjTv0hK1LaMS",
+  "name": "Relentless Advance",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_relentless_advance.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Core Feats v1",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2>Relentless Advance</h2><p><em>You do not circle. You close.</em></p><hr /><h3>Rules</h3><p>Once per turn, when you move at least 2 squares straight toward a creature before hitting it with a melee attack, you gain temporary Integrity equal to your skill rank bonus.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_relentless_advance",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-core-v1",
+      "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 2800000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1782164185978,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!gAEdwjTv0hK1LaMS"
+}

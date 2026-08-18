@@ -1,0 +1,560 @@
+{
+  "folder": "QLkQ6AYisOyXkJg1",
+  "name": "fixit_general_store_interior",
+  "_id": "vDm9dc2LFRq2NIZK",
+  "active": false,
+  "navigation": true,
+  "navOrder": 0,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb--BAZiTppCaSbq3nApOiA5A.webp",
+  "width": 3840,
+  "height": 2160,
+  "padding": 0.25,
+  "initial": {
+    "x": null,
+    "y": null,
+    "scale": null
+  },
+  "grid": {
+    "type": 1,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 1,
+    "color": "#000000",
+    "alpha": 0.2,
+    "distance": 5,
+    "units": "ft"
+  },
+  "tokenVision": true,
+  "fog": {
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    },
+    "mode": 1
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": true,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "drawings": [],
+  "tokens": [
+    {
+      "actorLink": false,
+      "disposition": 1,
+      "name": "Mara Quickhands",
+      "displayName": 30,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Mara%20Quickhands.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        }
+      },
+      "actorId": "GTX6S0gtzoJ7OeSE",
+      "hidden": false,
+      "sort": 0,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "hliPI2ySWfHhzBZ6",
+      "delta": {
+        "flags": {
+          "bbttcc-mal-voice": {
+            "dialogue": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Toblerone: Hello Miss Mara! Hope you are awesome! I hear tell that you've got a leygate stabilizer available, and it just so happens that we need one back in Allesh Gilliam. Our gate is busted.",
+                  "speaker": "Toblerone",
+                  "ts": 1783106734691
+                },
+                {
+                  "role": "assistant",
+                  "content": "*ear flicks, augmetic thumb clicking once*\n\nToblerone — don't believe we've met, and you're already asking me for the good stuff. Bold. I like bold, sometimes.\n\nThing is, I don't know any Allesh Gilliam, and I definitely don't hand out gate stabilizers on the strength of \"hear tell.\" That's not a piece of kit you trade for a smile and a promise — that's the kind of thing that keeps a whole gate from remembering wrong and spitting out something none of us want to meet. So before we talk price, weight, or favor — who sent you, and what's a gate like yours worth to me?",
+                  "speaker": "Mara Quickhands",
+                  "ts": 1783106740346
+                },
+                {
+                  "role": "user",
+                  "content": "Toblerone: We're the new Stewards who have come to take command of the Avuncular Order outpost a few hexes over. We're strong allies of the Jackalopes, and would like to continue that relationship. We could trade services - if you have anything that needs doing here that we could help with?",
+                  "speaker": "Toblerone",
+                  "ts": 1783106870435
+                },
+                {
+                  "role": "assistant",
+                  "content": "Mara studies him a long moment, thumb clicking twice — slow, thinking rhythm.\n\nAvuncular Order, huh. Don't know the name, don't know the outpost, and I definitely don't know you — which means far as I'm concerned you walked in off the horizon with an empty hand and a big ask. No offense. That's just how the Ledger sees it too.\n\n\"Strong allies of the Jackalopes\" is a nice thing to say. Doesn't make it true yet. Trust's not a toll you pay once at the gate — it's built one job at a time, and I've got no shortage of jobs that need doing around here if you're serious about starting that account.\n\nBut a stabilizer's not floor stock, Toblerone. That's Young Gearbox's to hand over, and he won't even look at you twice without me at the table. So here's where we're really standing —",
+                  "speaker": "Mara Quickhands",
+                  "ts": 1783106876190
+                },
+                {
+                  "role": "user",
+                  "content": "Toblerone: Where are we standing Mara?",
+                  "speaker": "Toblerone",
+                  "ts": 1783106930319
+                },
+                {
+                  "role": "assistant",
+                  "content": "We're standing nowhere, yet. You've got an empty hand, a story I can't check, and a piece of gear that if it goes to the wrong outfit and gets misused — or worse, dropped somewhere it turns into somebody's problem — that's on my name in the Ledger, not yours.\n\nSo here's how it goes, if you want it to go anywhere at all. You do something real for us first — I don't care what shape it takes, muscle, a run, information, doesn't matter, so long as it's worth something and I can see it with my own eyes. You build a little weight behind your name. Then we talk stabilizers, and even then it's Young Gearbox's call to make, with me leaning on the scale.\n\nOr — you keep pushing on a deal I already told you isn't sitting on the table today, and I start finding reasons to be busy elsewhere. Your pick, hon.",
+                  "speaker": "Mara Quickhands",
+                  "ts": 1783106936515
+                },
+                {
+                  "role": "user",
+                  "content": "Toblerone: Howdy Mara! Really appreciate the deal we made - shared ownership of the gates will be great for everyone. Where was I supposed to go next?",
+                  "speaker": "Toblerone",
+                  "ts": 1783110724815
+                },
+                {
+                  "role": "assistant",
+                  "content": "Mara's brow ticks up, thumb going still for half a second — recalibrating.\n\nShared oversight, that's right, that's the deal we shook on — you, us, hands on the same wheel, nobody pretending they don't need the other. Good arrangement. Cozy, even. *small smirk, gone fast*\n\nAs for where you're headed next — that's not really mine to point you at, Toblerone. I run the Counter, not your itinerary. You came in asking after a gate stabilizer, we settled that. Unless there's something else sitting on your mind, or you're looking to square up more business while you're standing here?",
+                  "speaker": "Mara Quickhands",
+                  "ts": 1783110729648
+                },
+                {
+                  "role": "user",
+                  "content": "Toblerone: What's happening with the prisoner that's at the Arc Bay?",
+                  "speaker": "Toblerone",
+                  "ts": 1783110963421
+                },
+                {
+                  "role": "assistant",
+                  "content": "Mara's smile drops clean off her face. She glances toward the back rooms, then back at Toblerone.\n\nThat's not really Arc Bay business, that's ours. We picked him up trying to lift parts he had no business touching, and he's sitting in a back room now — hands bound, bled some but nothing that'll kill him. Nobody's roughed him up past what it took to stop him.\n\n*she gestures lightly, an open hand toward the back*\n\nThis is your territory now too, seeing as we're shaking hands on shared arrangements. So I'll ask you the same thing I was fixing to ask myself. He says it wasn't for him — for somebody else, hungry mouths, that kind of story. Might be true. What does justice look like to you, Toblerone?",
+                  "speaker": "Mara Quickhands",
+                  "ts": 1783110968694
+                },
+                {
+                  "role": "user",
+                  "content": "Toblerone: Well Mara, I like to think that we're fair, and merciful, and not afraid of hard calls.",
+                  "speaker": "Toblerone",
+                  "ts": 1783112460429
+                },
+                {
+                  "role": "assistant",
+                  "content": "Mara nods slow, watching him — weighing that answer same as she'd weigh a coin.\n\nFair and merciful. That's a nice combination, don't always see 'em traveling together. But you said it, not me — so which one wins today, when they don't agree? 'Cause I can hear a man tell me he's fair AND merciful all day long. Doesn't tell me what happens to the fella in the back room.\n\nHe's got a story about hungry mouths and bad luck. Might be true, might be the oldest excuse in the Thatwards. So — you want him working off what he took, square and slow? You want to make an example so nobody else on this Farm thinks stealing's a light matter? Or you want to let it go soft, on account of there but for the grace of God? Tell me straight, Toblerone. This one's on your ledger now, not just mine.",
+                  "speaker": "Mara Quickhands",
+                  "ts": 1783112466290
+                },
+                {
+                  "role": "user",
+                  "content": "Toblerone: I want to talk to the prisoner first, before making my judgements.",
+                  "speaker": "Toblerone",
+                  "ts": 1783112497649
+                },
+                {
+                  "role": "assistant",
+                  "content": "Mara considers that, then gives a short nod — approving, almost.\n\nFair enough. That's more sense than half the folks who come through here asking to play judge. *she tips her head toward the back room* He's through there, hands still bound, and he's been crying on and off since we brought him in — hence \"weeping,\" in case the name didn't tip you off. Won't lie to you and won't run either, far as I can tell.\n\nGo on and talk to him, Toblerone. I'll be right here when you've got your answer.",
+                  "speaker": "Mara Quickhands",
+                  "ts": 1783112501500
+                },
+                {
+                  "role": "user",
+                  "content": "Toblerone: Apologies Mara, can you point me in the right direction for the prisoner?",
+                  "speaker": "Toblerone",
+                  "ts": 1783112647096
+                },
+                {
+                  "role": "assistant",
+                  "content": "Mara points, thumb clicking once.\n\nBack through that door there, past the crates — small room off the Arc Bay, Young Gearbox usually keeps spare parts in it, we cleared a corner for him. You'll hear him before you see him, probably. Go on, I'll wait.",
+                  "speaker": "Mara Quickhands",
+                  "ts": 1783112650611
+                },
+                {
+                  "role": "user",
+                  "content": "Toblerone: Actually Mara, I think I'd really like to have you there while I do this. I'm ready to go see the prisoner now!",
+                  "speaker": "Toblerone",
+                  "ts": 1783113179640
+                },
+                {
+                  "role": "assistant",
+                  "content": "Mara's mouth quirks — half surprise, half something like respect.\n\nSuits me fine. This is the kind of thing I like to see with my own eyes anyway, not just hear about after. Come on then.\n\n*she leads him back through the crates and the noise of the Arc Bay, to the small room where the bound man sits, red-eyed, breath still hitching. She stops in the doorway, gestures lightly toward him.*\n\nThere he is. This is your territory now, Toblerone. Go on — ask him what you came to ask.",
+                  "speaker": "Mara Quickhands",
+                  "ts": 1783113183250
+                },
+                {
+                  "role": "user",
+                  "content": "Toblerone: Can you please take me to the Arc Bay to see the prisoner?",
+                  "speaker": "Toblerone",
+                  "ts": 1783113253262
+                },
+                {
+                  "role": "assistant",
+                  "content": "Mara: Already headed that way, hon — this is it. *she nods at the doorway they're standing in* Right through here, past the crates. That's Young Gearbox's corner we borrowed for him.\n\n*she steps aside, gesturing into the room where the bound man sits, eyes red, shoulders hunched*\n\nThere he is. Go on, ask your questions. I'm staying right here for this one.",
+                  "speaker": "Mara Quickhands",
+                  "ts": 1783113258255
+                },
+                {
+                  "role": "user",
+                  "content": "Toblerone: Hi Miss Mara! Apologies, can you take me to the Arc Bay to see the prisoner? I love this General Store, but we should head out!",
+                  "speaker": "Toblerone",
+                  "ts": 1783113504023
+                },
+                {
+                  "role": "assistant",
+                  "content": "Mara raises a brow, thumb clicking once — patient, but only just.\n\nWe're already there in all but name, Toblerone — the room's right through that door, past the crates. But sure, if you want it proper — follow me.\n\n*she walks him the short stretch through the noise and sparks of the Arc Bay, stops at the small room off to the side, and gestures lightly at the bound man inside, eyes red, breath still hitching*\n\nHere he is. This is your territory now. Go on — ask him what you came to ask.",
+                  "speaker": "Mara Quickhands",
+                  "ts": 1783113507968
+                },
+                {
+                  "role": "user",
+                  "content": "Toblerone: Alright ma'am! Take us to him please!",
+                  "speaker": "Toblerone",
+                  "ts": 1783114652953
+                },
+                {
+                  "role": "assistant",
+                  "content": "Mara steps through with him, boots quiet on the old factory floor, and stops at the threshold of the little room. The bound man looks up — eyes red, wrists raw, breath still catching like he's been at it a while.\n\nShe gestures lightly, an open hand toward him.\n\nThis is your territory now, Toblerone. He's not going anywhere, and he's not going to lie about the wanting, far as I've heard so far. So go on — ask him what you came here to ask. I'm right here.",
+                  "speaker": "Mara Quickhands",
+                  "ts": 1783114659199
+                }
+              ]
+            }
+          }
+        },
+        "_id": "hliPI2ySWfHhzBZ6",
+        "name": null,
+        "type": null,
+        "img": null,
+        "system": {},
+        "items": [],
+        "effects": [],
+        "ownership": null,
+        "_key": "!scenes.tokens.delta!vDm9dc2LFRq2NIZK.hliPI2ySWfHhzBZ6.hliPI2ySWfHhzBZ6"
+      },
+      "x": 3900,
+      "y": 1300,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!vDm9dc2LFRq2NIZK.hliPI2ySWfHhzBZ6"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Aurablade.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "name": "Toblerone",
+      "displayName": 30,
+      "actorLink": true,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": "derived.integrity"
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        },
+        "tokenflip": {
+          "tokenfaces": [
+            {
+              "actorId": "GpOORLTg9fSxAqDW",
+              "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Aurablade.png",
+              "id": "S0nyKMbuODaz0pbX9ult",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 1,
+              "height": 1,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "GpOORLTg9fSxAqDW",
+              "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Aurablade.png",
+              "id": "NMnACZQ6nUdFDowCoVcJ",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 0.25,
+              "height": 0.25,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            }
+          ]
+        }
+      },
+      "actorId": "GpOORLTg9fSxAqDW",
+      "hidden": false,
+      "sort": 1,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "shSyelNSpuIsDKdZ",
+      "delta": null,
+      "x": 3900,
+      "y": 1400,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!vDm9dc2LFRq2NIZK.shSyelNSpuIsDKdZ"
+    }
+  ],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [],
+  "walls": [],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "sort": 300000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982536072,
+    "modifiedTime": 1783982536072,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "navName": "",
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "fixit_general_store_interior",
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/fixit_the_counter_intrerior_battlemap.webm",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!vDm9dc2LFRq2NIZK.defaultLevel0000"
+    }
+  ],
+  "shiftX": 0,
+  "shiftY": 0,
+  "initialLevel": "defaultLevel0000",
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "_key": "!scenes!vDm9dc2LFRq2NIZK",
+  "templates": []
+}

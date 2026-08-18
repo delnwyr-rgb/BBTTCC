@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": null,
+  "name": "Bad Eden Monsters",
+  "color": null,
+  "sorting": "a",
+  "_id": "uMhSIaldbbcnBh0H",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783219891567,
+    "modifiedTime": 1783219891567,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!uMhSIaldbbcnBh0H"
+}

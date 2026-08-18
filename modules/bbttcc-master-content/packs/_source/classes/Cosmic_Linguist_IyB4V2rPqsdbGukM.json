@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Cosmic Linguist",
+  "color": null,
+  "sorting": "a",
+  "_id": "IyB4V2rPqsdbGukM",
+  "description": "",
+  "sort": 1300000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923315,
+    "modifiedTime": 1776459931900,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+  },
+  "_key": "!folders!IyB4V2rPqsdbGukM"
+}

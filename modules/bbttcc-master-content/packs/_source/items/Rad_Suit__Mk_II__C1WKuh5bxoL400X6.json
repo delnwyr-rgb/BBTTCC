@@ -1,0 +1,166 @@
+{
+  "folder": "Iyyec8ij0PAfdLBd",
+  "name": "Rad Suit (Mk II)",
+  "type": "equipment",
+  "_id": "C1WKuh5bxoL400X6",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/radsuit_mk_2.png",
+  "system": {
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "description": {
+      "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Resistance:</strong> Radiation, Qliphothic, Poison</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 675 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    },
+    "identifier": "equipment",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "identified": true,
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "",
+    "attunement": "",
+    "attuned": false,
+    "equipped": false,
+    "crew": {
+      "value": []
+    },
+    "armor": {
+      "value": 16,
+      "dex": 2
+    },
+    "proficient": null,
+    "properties": [],
+    "strength": null,
+    "type": {
+      "value": "medium",
+      "baseItem": "chainshirt"
+    },
+    "guardBonus": 3,
+    "resolveBonus": 2,
+    "armorSkill": "warding",
+    "resistances": [
+      "radiation",
+      "necrotic",
+      "poison"
+    ],
+    "tags": [
+      "hazmat",
+      "rad-shielded"
+    ]
+  },
+  "effects": [],
+  "sort": 200000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "flags": {
+    "rfi": {
+      "item": {
+        "tier": "II",
+        "footprint": 1,
+        "reach": "self",
+        "frame": "armor",
+        "signature": "",
+        "origin": "looted",
+        "originator": null,
+        "bound": "free",
+        "upkeep": {
+          "mode": "passive",
+          "per": "scene"
+        },
+        "misfire": {
+          "tierClamp": true,
+          "table": null
+        },
+        "signals": {}
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Containment, standard issue.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "legacySystem": {
+            "guardBonus": 0,
+            "evasionBonus": 0,
+            "resolveBonus": 0,
+            "resistances": [],
+            "armorSkill": "weave",
+            "equipped": true,
+            "tags": []
+          },
+          "lore": "<p>Standard hazmat suit. Layered warding shrugs off creeping toxins; a vow not to flinch when the geiger sings.</p>",
+          "price": {
+            "marks": 675,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII armor stamp",
+            "bound": "free",
+            "saleBack": 270
+          }
+        }
+      },
+      "grants": {
+        "resistances": [
+          {
+            "type": "radiation"
+          },
+          {
+            "type": "qliphothic"
+          },
+          {
+            "type": "poison"
+          }
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1772307963063,
+    "modifiedTime": 1782158151708,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!C1WKuh5bxoL400X6"
+}

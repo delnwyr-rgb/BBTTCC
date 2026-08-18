@@ -1,0 +1,121 @@
+{
+  "name": "Overwatch (Bad Eden)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_satellite_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2025",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Your vantage is systems-level; your voice, the signal.</em></p><p>When an ally within <strong>6 squares</strong> makes a key roll directly tied to the current objective (attack on a critical target, clutch save, investigation breakthrough, negotiation pivot), you may use your <strong>reaction</strong> to steady the moment.</p><ul><li>The ally adds your <strong>tier</strong> to the roll.</li><li>You may use this feature a number of times equal to your <strong>tier</strong>, regaining all uses on a <strong>a Soma Break</strong>.</li></ul><p><strong>Strategic Layer.</strong> When you lead a diplomatic, social, or morale-driven <em>scenario</em>, the <strong>first Soft Power OP spend</strong> your faction makes during that scenario is reduced by <strong>1 OP</strong> (minimum 1). This can occur once per scenario you lead.</p>",
+      "chat": ""
+    },
+    "activities": {
+      "overwatchReaction": {
+        "type": "utility",
+        "activation": {
+          "type": "reaction",
+          "condition": "Ally within 30 ft makes a key roll.",
+          "override": false
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "range": {
+          "value": "30",
+          "units": "ft",
+          "override": false
+        },
+        "description": {},
+        "_id": "EquvelwQdn0LtRn9",
+        "sort": 0,
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "@prof"
+    },
+    "advancement": {},
+    "identifier": "harmmarshal-overwatch-overwatch",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Harmony Marshal 3, Mandate of Overwatch",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "2lNXuSAY9vKC4tM0",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "harmmarshal_overwatch",
+      "featureKey": "overwatch"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776467813567,
+    "modifiedTime": 1782167240812,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "F1v4HlcgD5xEXcuj",
+  "sort": 150000,
+  "_key": "!items!F1v4HlcgD5xEXcuj"
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Pray for Omen",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_3.png",
+  "system": {
+    "category": "strategic",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Pray for Omen</h3><p>Beseech the powers: the next Event Deck draw re-rolls in the defender's favour (consumed when the deck fires, Phase F). Target the besieged hex.</p><p><strong>OP Cost:</strong> faith 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> uncommon</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "pray_for_omen"
+    }
+  },
+  "_id": "kROykDTHnUvPJRCp",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601767,
+    "modifiedTime": 1782703702693,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!kROykDTHnUvPJRCp"
+}

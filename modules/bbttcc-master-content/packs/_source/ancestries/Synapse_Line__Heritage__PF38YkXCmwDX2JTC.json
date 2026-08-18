@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "3H6h9q66XbEDFtAN",
+  "name": "Synapse Line (Heritage)",
+  "color": null,
+  "sorting": "a",
+  "_id": "PF38YkXCmwDX2JTC",
+  "description": "",
+  "sort": 400000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1775004099277,
+    "modifiedTime": 1775008584486,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!folders!PF38YkXCmwDX2JTC"
+}

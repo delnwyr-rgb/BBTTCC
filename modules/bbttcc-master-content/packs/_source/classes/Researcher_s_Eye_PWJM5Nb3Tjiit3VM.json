@@ -1,0 +1,70 @@
+{
+  "name": "Researcher's Eye",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_14.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You see which parts of the page are lying.</em></p><p>You have <strong>advantage</strong> on <strong>Occult (Mind)</strong>, <strong>Faith (Soul)</strong>, and <strong>Investigation (Mind)</strong> checks made to analyze:</p><ul><li>Occult texts, grimoires, and sephirothic diagrams</li><li>Spark-related artifacts or devices</li><li>Glyphs, wards, and Qliphothic sigils</li></ul><p>In addition, when you spend at least <strong>10 minutes</strong> studying such a subject, the GM should offer you at least one <strong>solid, non-misleading clue</strong> about its Lore, function, or risk, even on a low roll, unless the truth is explicitly warded or hidden by higher powers.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlTruthEye\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Researcher's Eye</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Passive + 10-min study &nbsp;·&nbsp; <strong>Action:</strong> Passive / Downtime &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Reroll the lowest die on Occult (Mind), Faith (Soul), and Investigation (Mind) checks analyzing occult texts, Spark artifacts, glyphs/wards/Qliphothic sigils. After 10 min of study, GM owes at least one solid clue even on a low roll.</div>\n</div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "wyrdlens-refraction-truth-researchers-eye",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept 3, Refraction of Truth",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "4SZvMbYoYLB4LZnj",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "wyrdlens_refraction_truth",
+      "featureKey": "researchers_eye"
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459984386,
+    "modifiedTime": 1782167240818,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "PWJM5Nb3Tjiit3VM",
+  "sort": 300000,
+  "_key": "!items!PWJM5Nb3Tjiit3VM"
+}

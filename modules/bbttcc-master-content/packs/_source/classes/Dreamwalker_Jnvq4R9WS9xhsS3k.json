@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Dreamwalker",
+  "color": null,
+  "sorting": "a",
+  "_id": "Jnvq4R9WS9xhsS3k",
+  "description": "",
+  "sort": 1400000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459926968,
+    "modifiedTime": 1776459931900,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+  },
+  "_key": "!folders!Jnvq4R9WS9xhsS3k"
+}

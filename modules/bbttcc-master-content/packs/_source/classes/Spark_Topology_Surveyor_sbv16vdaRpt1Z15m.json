@@ -1,0 +1,139 @@
+{
+  "name": "Spark Topology Surveyor",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_8.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Spark Topology Surveyor.</strong> You have developed an intuition for how Sparks clump, cascade, and echo across the map.</p><ul><li>When you spend time studying a <strong>region of hexes</strong> (in person or via good data), you gain a small mechanical edge on <strong>Mind-based checks</strong> (Occult (Mind), Lore (Mind), Investigation (Mind)) to predict <strong>where Sparks are likely to appear</strong> next or how an existing Spark field will spread.</li><li>The GM may grant you extra information about <strong>Spark density, likely migration paths,</strong> or <strong>hexes at risk</strong> when you perform such surveys.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "spark-topology-surveyor",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 10
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (10th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Spark Topology Surveyor",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_monster.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984389,
+        "modifiedTime": 1777433398887
+      },
+      "_id": "FXYSBWT66zNeD9aF",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.occult.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "system.skills.lore.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.sparkTopologySurveyor",
+            "type": "custom",
+            "value": true,
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "flags.bbttcc.hexHooks.sparkTopologyBonus",
+            "type": "custom",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!sbv16vdaRpt1Z15m.FXYSBWT66zNeD9aF"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "sparkTopologySurveyor": true
+      },
+      "hexHooks": {
+        "sparkTopologyBonus": 1
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984389,
+    "modifiedTime": 1781116188877,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "sbv16vdaRpt1Z15m",
+  "sort": 225000,
+  "_key": "!items!sbv16vdaRpt1Z15m"
+}

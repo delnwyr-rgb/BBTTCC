@@ -1,0 +1,139 @@
+{
+  "name": "Symbolic Cartographer's Eye",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_18.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Symbolic Cartographer's Eye.</strong> You don’t just see terrain—you see where the story is leaking out of it.</p><ul><li>You gain a small mechanical bonus on <strong>Perception (Mind)</strong> and <strong>Athletics (Violence)</strong> checks made to identify <strong>ley-lines, Spark resonances, and metaphysical hotspots</strong> in a hex or scene.</li><li>When you successfully map or scout a hex, the GM may reveal one additional <strong>symbolic or Tikkun-relevant detail</strong> (where Sparks might settle, where Qliphothic seepage is strongest, etc.).</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "symbolic-cartographers-eye",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (3rd level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Symbolic Cartographer's Eye (Perception (Mind) & Athletics (Violence) (Body) Edge)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_city.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1776459984384,
+        "modifiedTime": 1786827857504
+      },
+      "_id": "JabwznUKqXik9J0w",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.perception.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "system.skills.athletics.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.symbolicCartographersEye",
+            "type": "custom",
+            "value": true,
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "flags.bbttcc.hexHooks.symbolMapClueBonus",
+            "type": "custom",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!HBqlIr3lDYCtGaZn.JabwznUKqXik9J0w"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "symbolicCartographersEye": true
+      },
+      "hexHooks": {
+        "symbolMapClueBonus": 1
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459984384,
+    "modifiedTime": 1782167240814,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "HBqlIr3lDYCtGaZn",
+  "sort": 500000,
+  "_key": "!items!HBqlIr3lDYCtGaZn"
+}

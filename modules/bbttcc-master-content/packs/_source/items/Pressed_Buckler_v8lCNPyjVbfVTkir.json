@@ -1,0 +1,136 @@
+{
+  "name": "Pressed Buckler",
+  "type": "armor",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/pressed_buckler.png",
+  "system": {
+    "guardBonus": 1,
+    "evasionBonus": 0,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "warding",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "shield",
+      "buckler"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A small round buckler stamped from sheet steel and laced to a leather forearm cuff. Faction-pressed in batches of a thousand and handed out to whoever could close their fingers around the grip. Half ward, half noisemaker — the dent in the front is where someone else's mistake stopped.</p><p><strong>Standard Issue.</strong> Pairs with any one-handed weapon. No signature, no attunement, no apologies for the dent.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Shield</li>\n  <li><strong>Defense:</strong> Guard +1</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 50 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "shield",
+          "signature": "A round of stamped steel and the conviction to hold it up.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A small round buckler stamped from sheet steel and laced to a leather forearm cuff. Faction-pressed in batches of a thousand and handed out to whoever could close their fingers around the grip. Half ward, half noisemaker — the dent in the front is where someone else's mistake stopped.</p><p><b>Standard Issue.</b> Pairs with any one-handed weapon. No signature, no attunement, no apologies for the dent.</p>",
+          "materialOf": [
+            "sheet-steel",
+            "leather-cuff"
+          ],
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI shield stamp",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "folder": "2yW6O57xUFtROfpB",
+  "_id": "v8lCNPyjVbfVTkir",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "b98pmTJcgrdTPnbI",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781726108075,
+        "modifiedTime": 1781726108075,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!v8lCNPyjVbfVTkir.b98pmTJcgrdTPnbI"
+    }
+  ],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777862455244,
+    "modifiedTime": 1782160020993,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!v8lCNPyjVbfVTkir"
+}

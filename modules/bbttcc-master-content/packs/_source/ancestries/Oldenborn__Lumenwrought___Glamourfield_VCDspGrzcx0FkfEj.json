@@ -1,0 +1,133 @@
+{
+  "name": "Oldenborn (Lumenwrought): Glamourfield",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rainbow.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You were not beautiful. You were <strong>wanted</strong>.”</em></p>\n        <p><strong>Glamourfield (At Will, Minor).</strong> You can create subtle illusions affecting light, sound, scent, or emotional tone. It never overwhelms; it always influences.</p>\n        <p><strong>Dream Anchor.</strong> You have a +1 bonus to checks against metaphysical hazards (slippage, dream traps, Spark backlash).</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "oldenborn-lumenwrought-glamourfield",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Oldenborn",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "oldenborn",
+      "feature": "glamourfield",
+      "lineage": "Lumenwrought",
+      "tierLevel": 0,
+      "version": "1.0.0"
+    }
+  },
+  "effects": [
+    {
+      "_id": "9b52887635e340da",
+      "name": "Lumenwrought: Dream Anchor (+1 saves)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_4.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.bonuses.abilities.save",
+            "value": "+1",
+            "priority": 10,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Represents anchoring presence.",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346197030,
+        "modifiedTime": 1777346197030
+      },
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!VCDspGrzcx0FkfEj.9b52887635e340da"
+    }
+  ],
+  "folder": "AZpEGZW4ZA1Kjb9K",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.0QQRNxNGttQFVSHj",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1775004114716,
+    "modifiedTime": 1782167240128,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "VCDspGrzcx0FkfEj",
+  "sort": 100000,
+  "_key": "!items!VCDspGrzcx0FkfEj"
+}

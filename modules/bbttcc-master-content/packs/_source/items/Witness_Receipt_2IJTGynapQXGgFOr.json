@@ -1,0 +1,81 @@
+{
+  "name": "Witness Receipt",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_receipt.png",
+  "system": {
+    "slot": "trinket",
+    "tags": [
+      "mal-voiced",
+      "talisman",
+      "soulbound"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>You're not sure when it started. You found one in your jacket after a fight you survived. Then another after a deal you regretted. Then another after a kindness you forgot you'd done. The receipts are itemized, dated, and printed in a font that doesn't quite exist. They are addressed to you. They are sometimes harsh. They are never wrong.</p><p><strong>The Ledger Knows.</strong> Soulbound to you the moment you accept the first receipt. Once per session, present a recent receipt to a Pactkeeper, an archivist, or a sufficiently old institutional NPC. They treat the receipt as legitimate testimony. (Mal: \"Yes. They will. I don't know why. Don't ask. Just use it sparingly.\")</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "talisman",
+          "signature": "An itemized receipt appears in your pocket every time you witness something significant. They are usually unflattering.",
+          "origin": "found",
+          "originator": null,
+          "bound": "soulbound",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>You're not sure when it started. You found one in your jacket after a fight you survived. Then another after a deal you regretted. Then another after a kindness you forgot you'd done. The receipts are itemized, dated, and printed in a font that doesn't quite exist. They are addressed to you. They are sometimes harsh. They are never wrong.</p><p><b>The Ledger Knows.</b> Soulbound to you the moment you accept the first receipt. Once per session, present a recent receipt to a Pactkeeper, an archivist, or a sufficiently old institutional NPC. They treat the receipt as legitimate testimony. (Mal: \"Yes. They will. I don't know why. Don't ask. Just use it sparingly.\")</p>",
+          "materialOf": [
+            "receipt-paper",
+            "metaphysical-bookkeeping",
+            "cosmic-petty"
+          ],
+          "price": {
+            "marks": 225,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII talisman stamp × soulbound 1.5",
+            "bound": "soulbound",
+            "saleBack": 0
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "2IJTGynapQXGgFOr",
+  "effects": [],
+  "sort": 600282,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725678,
+    "modifiedTime": 1778541951708,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!2IJTGynapQXGgFOr"
+}

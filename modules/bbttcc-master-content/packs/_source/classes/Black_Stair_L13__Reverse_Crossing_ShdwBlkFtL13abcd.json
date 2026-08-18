@@ -1,0 +1,65 @@
+{
+  "name": "Black Stair L13: Reverse Crossing",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dagger_1.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>The door you came through is also the door you can leave through.</em></p><p>You may use your class's <strong>The Crossing</strong> ability to <strong>leave</strong> a location you should not be able to leave. This includes:</p><ul><li><p>Prisons, oubliettes, sealed rooms</p></li><li><p>Dimensional traps and pocket planes</p></li><li><p>Banishment effects targeting you</p></li><li><p>Political or ritual exile bound to a specific place</p></li></ul><p>You may bring up to <strong>your Initiation tier</strong> willing allies along (1 at T1, 2 at T2, 3 at T3, 4 at T4 — note this feature unlocks at T3, so you can always bring at least 3).</p><p>You arrive at <strong>a location you have personally visited before</strong>. The destination is a player choice from your previously-visited locations, with GM right of refusal for narrative impossibilities.</p><p><strong>Limit:</strong> Reverse Crossing cannot be used to escape an active combat round (you must be out of initiative). It still consumes The Crossing's 1/scene use.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "shadow_courier_blackstair_l13_reverse_crossing",
+    "requirements": "Route of the Black Stair, Shadow Courier Initiation 13",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 13
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "shadow_courier",
+      "subclassIdentifier": "bbttcc-shadow-courier-courier-black-stair",
+      "subclassLevel": 13,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {}
+    }
+  },
+  "folder": "eQl1GnJxLhG4BD19",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777005233917,
+    "modifiedTime": 1781116151734,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ShdwBlkFtL13abcd",
+  "sort": 400000,
+  "_key": "!items!ShdwBlkFtL13abcd"
+}

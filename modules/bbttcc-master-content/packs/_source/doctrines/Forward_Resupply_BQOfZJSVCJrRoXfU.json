@@ -1,0 +1,62 @@
+{
+  "name": "Forward Resupply",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_box_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Fresh mags, warm batteries, somebody's grandma's cookies in the ammo crate. Morale runs on cookies, stewards. Always has.</p><p><b>Friendly tokens gain Resupplied (+1 attack) for 1 round.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "forward_resupply",
+      "meta": {
+        "tier": 1,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "violence",
+        "layer": "tactical-down",
+        "costBand": "light",
+        "raidTypes": [
+          "violence"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "logistics": 2
+        },
+        "authoredSprint": 2
+      },
+      "effects": {
+        "text": "Cache drop: all friendly tokens on the battle scene gain 'Resupplied' (+1 attack) for 1 round."
+      }
+    }
+  },
+  "_id": "BQOfZJSVCJrRoXfU",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 100391,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778964846637,
+    "modifiedTime": 1780163522963,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!BQOfZJSVCJrRoXfU"
+}

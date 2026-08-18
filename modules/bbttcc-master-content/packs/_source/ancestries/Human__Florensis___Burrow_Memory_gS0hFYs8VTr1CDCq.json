@@ -1,0 +1,84 @@
+{
+  "name": "Human (Florensis): Burrow Memory",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tunnel_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You can smell safe paths.”</em></p>\n        <p><strong>Burrow Memory.</strong> You reroll the lowest die on Athletics checks, and you ignore difficult terrain in caves, tunnels, and ruins.</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "human-florensis-burrow_memory",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Human",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "human",
+      "feature": "burrow_memory",
+      "lineage": "Florensis",
+      "tierLevel": 11,
+      "version": "1.0.0"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "skill": "athletics",
+          "mode": "reroll-lowest"
+        }
+      ],
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "effects": [],
+  "folder": "5uWwAnq69wld1Rkg",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.UQHqZHEeDPV4ywAG",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1775004105807,
+    "modifiedTime": 1781116091806,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "gS0hFYs8VTr1CDCq",
+  "sort": 100000,
+  "_key": "!items!gS0hFYs8VTr1CDCq"
+}

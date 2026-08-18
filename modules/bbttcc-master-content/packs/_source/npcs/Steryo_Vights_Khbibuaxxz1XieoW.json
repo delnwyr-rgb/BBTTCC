@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": "FBhV32XeCO4JNcym",
+  "name": "Steryo Vights",
+  "color": null,
+  "sorting": "a",
+  "_id": "Khbibuaxxz1XieoW",
+  "description": "",
+  "sort": 200000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177517980,
+    "modifiedTime": 1784177517980,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!Khbibuaxxz1XieoW"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Warding & Shields",
+  "type": "Item",
+  "color": "#4a6f8c",
+  "_id": "gD1WklJiuS6Vg2p3",
+  "description": "",
+  "folder": null,
+  "sorting": "a",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782150390801,
+    "modifiedTime": 1782150390801,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!gD1WklJiuS6Vg2p3"
+}

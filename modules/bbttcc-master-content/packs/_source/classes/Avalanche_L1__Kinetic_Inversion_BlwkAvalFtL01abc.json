@@ -1,0 +1,82 @@
+{
+  "name": "Avalanche L1: Kinetic Inversion",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_breaker_wall_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "RFI-native",
+      "revision": 1,
+      "book": "Bulwark + Shadow Courier v1.0",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Nothing that moves can be stopped — and movement, for you, is what makes you real.</em></p><p><strong>Mode: Unstoppable Force / drift: Toward.</strong></p><p>You generate <strong>Frame Dice</strong> when you <em>end</em> a movement, not when you start one. When you move at least half your speed in a turn and end that turn with a successful Violence-attribute action or weapon strike, gain <strong>1 Frame Die</strong>. Maximum 1 Frame Die generated per turn from this feature.</p><p>Your Frame pool refreshes on a Soma Break. Pool max comes from your Bulwark class feature: <strong>max(2, ceil((Violence value + Bulwark Initiation) / 3))</strong>, capped at 8.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "bulwark_avalanche_l1_kinetic_inversion",
+    "requirements": "Path of the Avalanche, Bulwark Initiation 1",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "bulwark",
+      "subclassIdentifier": "bbttcc-bulwark-avalanche",
+      "subclassLevel": 1,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {},
+      "triggers": [
+        {
+          "event": "on-move",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "You generate Frame Dice when you end a movement, not when you start one. When you move at least half your speed in a turn and end that turn with a successful Violence-attribute action or weapon strike, gain 1 F..."
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "agkQNnsVjul6ZPYs",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777003646536,
+    "modifiedTime": 1781116122402,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BlwkAvalFtL01abc",
+  "sort": 0,
+  "_key": "!items!BlwkAvalFtL01abc"
+}

@@ -1,0 +1,71 @@
+{
+  "_id": "JApf1VTCVsYh01CB",
+  "name": "Void Edge: Null Field",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_force_field_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2 data-start=\"5948\" data-end=\"5975\">Level 3 — <strong data-start=\"5961\" data-end=\"5975\">Null Field</strong></h2><p data-start=\"5977\" data-end=\"6009\">Your blade suppresses advantage.</p><h3 data-start=\"6011\" data-end=\"6033\">Mechanical Effects</h3><p data-start=\"6034\" data-end=\"6079\">When you hit a creature while at <strong data-start=\"6067\" data-end=\"6078\">Burn 1+</strong>:</p><ul data-start=\"6080\" data-end=\"6219\"><li data-start=\"6080\" data-end=\"6219\"><p data-start=\"6082\" data-end=\"6143\">Suppress one of the following until the end of its next turn:</p><ul data-start=\"6146\" data-end=\"6219\"><li data-start=\"6146\" data-end=\"6168\"><p data-start=\"6148\" data-end=\"6168\">reroll the lowest die on attacks</p></li><li data-start=\"6171\" data-end=\"6185\"><p data-start=\"6173\" data-end=\"6185\">Bonus damage</p></li><li data-start=\"6188\" data-end=\"6219\"><p data-start=\"6190\" data-end=\"6219\">Morale or inspiration effects</p></li></ul></li></ul><p data-start=\"6221\" data-end=\"6236\">At <strong data-start=\"6224\" data-end=\"6235\">Burn 3+</strong>:</p><ul data-start=\"6237\" data-end=\"6274\"><li data-start=\"6237\" data-end=\"6274\"><p data-start=\"6239\" data-end=\"6274\">The target also loses <strong data-start=\"6261\" data-end=\"6274\">reactions</strong></p></li></ul><p data-start=\"6276\" data-end=\"6303\">Hope falters where you cut.</p>",
+      "chat": ""
+    },
+    "identifier": "voidedge_null_field",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "voidedge_null_field",
+      "burn": {
+        "min": 1,
+        "_taggedBy": "bbttcc-burn-batch-tagger",
+        "_ts": 1770856290770,
+        "_from": "Void Edge: Null Field"
+      }
+    }
+  },
+  "folder": "640HHePTVNcMB98C",
+  "sort": 112500,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459909020,
+    "modifiedTime": 1781116137377,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!JApf1VTCVsYh01CB"
+}

@@ -1,0 +1,41 @@
+{
+  "name": "Mandate of Overwatch (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_globe_2.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "harmonymarshal",
+    "source": "Bad Eden Originals — Sprint F (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"Nothing unobserved.\"</em></p>\n<p><strong>Mode:</strong> Tactical discipline · <strong>Drift:</strong> Sideways</p>\n<p>Overwatch is the Marshal who already saw the ambush and is faintly bored by it. Your Surge spends are reactive armor — covering allies the instant they're threatened, countering the enemy's tricks, and drawing a line nobody crosses for free.</p>\n<h3>Doctrine (spent via Surge)</h3>\n<ul>\n  <li><strong>Covered</strong> (1) — an ally gains DR equal to your tier this round (the Network has them).</li>\n  <li><strong>Counter-Discord</strong> (2) — strip a debuff off an ally and hand them a reroll. The lie stops working.</li>\n  <li><strong>Locked Perimeter</strong> (4) — allies within 6 squares gain DR. Hold the ground.</li>\n</ul>\n<p><em>Out-of-combat:</em> the per-use Counter-Discord reaction (cancel a deceit-based reroll within 12 squares) and the hex-scale All-Seeing Eye remain the strategic flourishes.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-harmony-marshal-marshal-overwatch",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "2lNXuSAY9vKC4tM0",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "QD5j4evrltooNtY1",
+  "sort": 400000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.364",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1782167240818,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.1",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!QD5j4evrltooNtY1"
+}

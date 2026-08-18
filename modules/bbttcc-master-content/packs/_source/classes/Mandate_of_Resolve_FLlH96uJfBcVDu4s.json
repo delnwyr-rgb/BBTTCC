@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "xHpkCqdNQ5hS8De8",
+  "name": "Mandate of Resolve",
+  "color": null,
+  "sorting": "a",
+  "_id": "FLlH96uJfBcVDu4s",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "createdTime": 1776467813538,
+    "modifiedTime": 1776467813538
+  },
+  "_key": "!folders!FLlH96uJfBcVDu4s"
+}

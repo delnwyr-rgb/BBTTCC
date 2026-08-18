@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Qliph-Scarred",
+  "color": null,
+  "sorting": "a",
+  "_id": "j42C7j9nQ8gpXSoM",
+  "description": "",
+  "sort": 800000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1775004117270,
+    "modifiedTime": 1777520249023,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!folders!j42C7j9nQ8gpXSoM"
+}

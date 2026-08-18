@@ -1,0 +1,40 @@
+{
+  "name": "Champion Withdraws",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_run.png",
+  "system": {
+    "category": "strategic",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Withdraws</h3><p>A named attacker Champion withdraws from the siege (status Absent) — the Achilles-in-his-tent lever. Optional note {\"championId\":\"...\"}; otherwise the first active. Target the besieged hex.</p><p><strong>OP Cost:</strong> softPower 15, diplomacy 10</p><p><strong>Tier:</strong> 2</p><p><strong>Rarity:</strong> rare</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "champion_withdraws"
+    }
+  },
+  "_id": "ngbaj2Ye8Ap70sh3",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601766,
+    "modifiedTime": 1782703702691,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ngbaj2Ye8Ap70sh3"
+}

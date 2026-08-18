@@ -1,0 +1,160 @@
+{
+  "name": "Gloomgill Boss Template",
+  "type": "feature",
+  "img": "icons/creatures/abilities/dragon-breath-purple.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Port of the existing <code>bosses.gloomgill.js</code> canonical boss into the new Boss actor schema. Drop onto a blank Boss actor to populate identity, raid profile, manifestations, and phase ladder.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "boss-template"
+      },
+      "bossTemplate": {
+        "config": {
+          "identity": {
+            "archetype": "qliphothic_warden"
+          },
+          "raidProfile": {
+            "key": "gloomgill",
+            "mode": "hybrid",
+            "moraleHits": 4,
+            "hitTrack": "observed, pressured, compromised, expelled",
+            "tagsRaw": "qliphothic, warden, void",
+            "opStats": {
+              "violence": 10,
+              "nonlethal": 0,
+              "intrigue": 4,
+              "economy": 0,
+              "softpower": 0,
+              "diplomacy": 0,
+              "logistics": 0,
+              "culture": 0,
+              "faith": 2
+            }
+          },
+          "doctrine": {
+            "maneuverKeys": [
+              "void_signal_collapse",
+              "suppressive_fire",
+              "qliphothic_gambit",
+              "psychic_disruption"
+            ]
+          },
+          "integrity": {
+            "value": 80,
+            "max": 80,
+            "tier": 3,
+            "bracket": "siege"
+          },
+          "manifestations": {
+            "surge": {
+              "current": 0,
+              "max": 8,
+              "exploded": 0
+            },
+            "momentum": 2
+          },
+          "phases": {
+            "currentPhase": 0,
+            "ladder": [
+              {
+                "label": "Observed",
+                "integrityThreshold": 100,
+                "surgeBoost": 0,
+                "manifestationGrants": []
+              },
+              {
+                "label": "Pressured",
+                "integrityThreshold": 75,
+                "surgeBoost": 1,
+                "manifestationGrants": []
+              },
+              {
+                "label": "Compromised",
+                "integrityThreshold": 40,
+                "surgeBoost": 2,
+                "manifestationGrants": []
+              },
+              {
+                "label": "Expelled",
+                "integrityThreshold": 10,
+                "surgeBoost": 3,
+                "manifestationGrants": []
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "92rNBW1YfczhzciF",
+  "effects": [
+    {
+      "name": "New Effect",
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "source": "manual"
+        }
+      },
+      "system": {
+        "changes": []
+      },
+      "_id": "TKU917RAG7LhCUy3",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.361",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1778958727245,
+        "modifiedTime": 1778958727245,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!92rNBW1YfczhzciF.TKU917RAG7LhCUy3"
+    }
+  ],
+  "sort": 900000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205375026,
+    "modifiedTime": 1778963271955,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!92rNBW1YfczhzciF"
+}

@@ -1,0 +1,67 @@
+{
+  "name": "Steel & Velvet",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fist_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2025",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You know exactly how hard to squeeze before something breaks.”</em></p><p>Once per <strong>scene</strong>, when a battle or tense confrontation was clearly on track to become a <strong>rout, massacre, or catastrophic collapse</strong> but is instead stabilized into a <strong>stalemate, surrender, or negotiated withdrawal</strong> because of your actions, you may invoke Steel &amp; Velvet.</p><ul><li>Your faction gains <strong>+1 Soft Power OP</strong> for the next Strategic Turn.</li><li>Your faction also gains <strong>+1 Diplomacy OP</strong> for that turn.</li></ul><p>People remember that you could have crushed them, and chose not to.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "harmmarshal-resolve-steel-velvet",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 14
+    },
+    "properties": [],
+    "requirements": "Harmony Marshal 14, Mandate of Resolve",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "FLlH96uJfBcVDu4s",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "harmmarshal_resolve",
+      "featureKey": "steel_velvet"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776467813568,
+    "modifiedTime": 1781116165212,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ZGGK780iG7Pjm2Jz",
+  "sort": 250000,
+  "_key": "!items!ZGGK780iG7Pjm2Jz"
+}

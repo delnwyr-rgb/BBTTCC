@@ -1,0 +1,44 @@
+{
+  "_id": "wjeZFaW0AzaFK2aP",
+  "name": "Buried Betrothal",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_3.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Buried Betrothal.</strong> A marriage promised before the Shattering, never formally dissolved. Wave it gently and watch a cold courtier suddenly find you fascinating.</p><p><em>Play:</em> +2 favor with a courtier of your choice toward your side.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "favorPlus2",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2600000,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1780000000000,
+    "modifiedTime": 1784079176431,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!wjeZFaW0AzaFK2aP"
+}

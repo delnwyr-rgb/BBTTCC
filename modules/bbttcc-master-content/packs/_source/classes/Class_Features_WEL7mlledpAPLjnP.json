@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "kaIqMuIOHeaj1T71",
+  "name": "Class Features",
+  "color": null,
+  "sorting": "a",
+  "_id": "WEL7mlledpAPLjnP",
+  "description": "",
+  "sort": 100000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776481562235,
+    "modifiedTime": 1776481562235,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+  },
+  "_key": "!folders!WEL7mlledpAPLjnP"
+}

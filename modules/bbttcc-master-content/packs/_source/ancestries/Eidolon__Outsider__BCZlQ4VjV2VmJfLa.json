@@ -1,0 +1,169 @@
+{
+  "_id": "BCZlQ4VjV2VmJfLa",
+  "name": "Eidolon (Outsider)",
+  "type": "species",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_5.png",
+  "system": {
+    "category": "ancestry",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Catch-all lineage for things from outside — dream-born, void-touched, conceptual entities wearing flesh as costume. Reality is a suggestion they entertain politely.</em></p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "s3zgn2pcmi2h5zrv",
+        "type": "Size",
+        "configuration": {
+          "sizes": [
+            "med"
+          ]
+        },
+        "level": 0,
+        "title": "",
+        "hint": "Eidolon (Outsider) (size: med).",
+        "value": {}
+      },
+      {
+        "_id": "rt9ljm6axyt8gq7h",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.hJXotYgtWluZjB3x",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Eidolon (Outsider) Tier 1",
+        "hint": "Grants the tier 1 Eidolon (Outsider) feature."
+      },
+      {
+        "_id": "idnxy4uh7fvjqxyv",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.a5bLYSYYvDXrExmV",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Eidolon (Outsider) Tier 2",
+        "hint": "Grants the tier 2 Eidolon (Outsider) feature."
+      },
+      {
+        "_id": "hta2989is9wdf7mm",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.ZzAKltsuvOW93ERl",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Eidolon (Outsider) Tier 3",
+        "hint": "Grants the tier 3 Eidolon (Outsider) feature."
+      },
+      {
+        "_id": "pkseaq7jfjzhev2k",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.SIvgKN1y7E045DAX",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Eidolon (Outsider) Tier 4",
+        "hint": "Grants the tier 4 Eidolon (Outsider) feature."
+      }
+    ],
+    "identifier": "eidolon",
+    "properties": [],
+    "type": {
+      "value": "humanoid",
+      "subtype": "Eidolon (Outsider)"
+    }
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestry",
+      "lineage": "eidolon",
+      "version": "1.0.0",
+      "date": "2026-05-15",
+      "npAncestry": true
+    },
+    "fourththing": {
+      "principleSource": "ancestry",
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool × 0.60",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    },
+    "bbttcc-factions": {
+      "opContribution": {
+        "intrigue": 1,
+        "faith": 1
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778961512938,
+    "modifiedTime": 1781116071344,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "folder": "xEjihJm7wSmcGO1b",
+  "sort": 100000,
+  "_key": "!items!BCZlQ4VjV2VmJfLa"
+}

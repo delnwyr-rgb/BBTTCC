@@ -1,0 +1,63 @@
+{
+  "name": "Impersonate",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Borrow a uniform, borrow a swagger, borrow a whole personality. Returning it is, ah, optional.</p><p><b>+2 progress; −1 alarm.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "impersonate",
+      "meta": {
+        "tier": 3,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "intrigue",
+        "layer": "tactical",
+        "costBand": "medium",
+        "raidTypes": [
+          "infiltration_alarm"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "diplomacy": 2,
+          "intrigue": 1
+        },
+        "authoredSprint": "3a"
+      },
+      "effects": {
+        "text": "Bluff past a checkpoint: +2 progress, -1 alarm."
+      }
+    }
+  },
+  "_id": "f1trPfwvad85jtCt",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 4812500,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778965786768,
+    "modifiedTime": 1780163525735,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!f1trPfwvad85jtCt"
+}

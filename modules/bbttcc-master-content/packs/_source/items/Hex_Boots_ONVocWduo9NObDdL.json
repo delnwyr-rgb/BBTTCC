@@ -1,0 +1,100 @@
+{
+  "name": "Hex Boots",
+  "type": "equipment",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_hex_boots.jpeg",
+  "system": {
+    "description": {
+      "value": "<p>Boosters tuned for hex-crawl reality.\n\n<b>Travel Assist.</b> Once per travel leg, you may reduce the Travel Check DC by 2 (to a minimum of 10) for the party’s movement. This does not change faction OP costs.\n\n<i>Playtest note:</i> If you want the old behavior, add a GM-only tag and let the travel engine read it later.</p>",
+      "chat": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 2,
+      "units": "lb"
+    },
+    "price": {
+      "value": 300,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "attunement": "",
+    "identified": true,
+    "type": {
+      "value": "",
+      "baseItem": ""
+    },
+    "equipped": false,
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "hex-boots",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "attuned": false,
+    "crewed": false,
+    "armor": {
+      "value": null,
+      "dex": null
+    },
+    "proficient": null,
+    "properties": [],
+    "strength": null
+  },
+  "flags": {
+    "bbttcc": {
+      "travelOPReduce": 1,
+      "tags": [
+        "travel"
+      ],
+      "travel": {
+        "dcDeltaOncePerLeg": -2
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "effects": [],
+  "folder": "Wxh1A343inwTUeoo",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1767834175491,
+    "modifiedTime": 1782156674946,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "ONVocWduo9NObDdL",
+  "sort": 100000,
+  "_key": "!items!ONVocWduo9NObDdL"
+}

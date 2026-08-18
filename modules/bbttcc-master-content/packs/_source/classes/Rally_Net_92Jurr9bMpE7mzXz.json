@@ -1,0 +1,67 @@
+{
+  "name": "Rally Net",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_flag_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2025",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Your voice becomes a tactical relay.</em></p><p>Allies who can hear you may treat <strong>your space</strong> as the <strong>origin point</strong> for any ability they use that requires verbal projection, including:</p><ul><li>Shouts, commands, speeches</li><li>Inspiring or intimidating effects</li><li>Sound-based class features</li></ul><p>This allows allies to affect targets they could not normally reach, as long as <em>you</em> are within range of them, even if they are not.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "harmmarshal-overwatch-rally-net",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 10
+    },
+    "properties": [],
+    "requirements": "Harmony Marshal 10, Mandate of Overwatch",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "2lNXuSAY9vKC4tM0",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "harmmarshal_overwatch",
+      "featureKey": "rally_net"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776467813567,
+    "modifiedTime": 1781116118128,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "92Jurr9bMpE7mzXz",
+  "sort": 300000,
+  "_key": "!items!92Jurr9bMpE7mzXz"
+}

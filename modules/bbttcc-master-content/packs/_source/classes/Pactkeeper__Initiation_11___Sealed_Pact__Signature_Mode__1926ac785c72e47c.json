@@ -1,0 +1,74 @@
+{
+  "name": "Pactkeeper: Initiation 11 — Sealed Pact (Signature Mode)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_book_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Initiation 11 — Sealed Pact (Signature Mode).</strong> Stance. While the Seal holds, your concurrent-manifestation cap is +2, and you cannot voluntarily drop a manifestation sustained on a pact-bound subject (the seal carries the upkeep, not your moment-to-moment will). Pays ongoing upkeep against your Clarity.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (mode <code>pkSealedPact</code>): while ON, Upkeep ×0.5 (round up) on every active manifestation, and Concurrency +2 (informational). Click this feature on the sheet to toggle the stance.</p>\n<p><em>Pilot: lock exact upkeep curve and break condition after one playtest cycle.</em></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"pkMode\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Sealed Pact</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Stance (signature) &nbsp;·&nbsp; <strong>Action:</strong> Action (open / drop) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">While the Seal holds, your concurrent-manifestation cap is +2; you cannot voluntarily drop a manifestation sustained on a pact-bound subject. Pays ongoing upkeep against Clarity.</div>\n</div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "pk_mode_sealed_pact",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "properties": [],
+    "requirements": "Pactkeeper (11th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "WEL7mlledpAPLjnP",
+  "flags": {
+    "fourththing": {
+      "discipline": {
+        "mode": {
+          "key": "pkSealedPact",
+          "grants": {
+            "upkeepScale": 0.5,
+            "concurrencyBonus": 2
+          }
+        }
+      }
+    },
+    "bbttcc": {},
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777312943677,
+    "modifiedTime": 1781116108313,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "1926ac785c72e47c",
+  "sort": 218750,
+  "_key": "!items!1926ac785c72e47c"
+}

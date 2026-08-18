@@ -1,0 +1,76 @@
+{
+  "name": "Harmonic Chant",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_harmonic_chant.jpeg",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p>Everybody humming the same note at the same time. Spooky. Effective. The dark genuinely HATES a choir.</p><p><b>Allies reroll the lowest die; Darkness −1.</b></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "harmonic-chant",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "harmonic_chant",
+      "meta": {
+        "tier": 3,
+        "rarity": "very rare",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "presence",
+        "raidTypes": [
+          "presence"
+        ]
+      }
+    }
+  },
+  "_id": "ukxfNHqfwBaNlRxV",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 2000000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1771977107845,
+    "modifiedTime": 1782167245446,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!ukxfNHqfwBaNlRxV"
+}

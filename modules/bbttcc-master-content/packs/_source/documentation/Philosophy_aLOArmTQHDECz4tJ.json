@@ -1,0 +1,23 @@
+{
+  "type": "JournalEntry",
+  "folder": "e0c5229rfLkdfWvo",
+  "name": "Philosophy",
+  "color": null,
+  "sorting": "a",
+  "_id": "aLOArmTQHDECz4tJ",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784077421293,
+    "modifiedTime": 1784077421293,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!folders!aLOArmTQHDECz4tJ"
+}

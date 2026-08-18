@@ -1,0 +1,2288 @@
+{
+  "name": "Furrier",
+  "type": "character",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc",
+      "createdViaNPCBuilder": true,
+      "createdAt": 1782773835436
+    },
+    "bbttcc-factions": {
+      "factionId": "U5YaO2p189LBMvVq",
+      "warLogs": [
+        {
+          "ts": 1783979398165,
+          "date": "7/13/2026, 4:49:58 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        }
+      ]
+    },
+    "fourththing": {
+      "kind": "npc",
+      "surgeEnabled": false
+    },
+    "bbttcc-character-options": {
+      "nativeLinks": {
+        "subclassName": "",
+        "subclassUuid": "",
+        "subclassApplied": false,
+        "className": "",
+        "classUuid": "",
+        "classApplied": false,
+        "heritageName": "Cryptidkin Heritage: Jackalope",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.yiZiL1OaWx9qX5bF",
+        "heritageApplied": true,
+        "ancestryName": "Cryptidkin",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.c9a7f1d26e3b4c81",
+        "ancestryApplied": true
+      },
+      "enlightenment": {
+        "level": "wisdom",
+        "display": "Wisdom"
+      },
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.yiZiL1OaWx9qX5bF",
+      "archetype": {
+        "pack": "bbttcc-character-options.character-archetypes",
+        "id": "yBGS562D4hxSSohx",
+        "key": "squad_leader",
+        "name": "Archetype: The Chariot (Squad Leader)",
+        "identifier": "archetype-chariot",
+        "category": "character-archetypes"
+      },
+      "identity": {
+        "archetype": {
+          "key": "yBGS562D4hxSSohx",
+          "id": "yBGS562D4hxSSohx",
+          "pack": "bbttcc-character-options.character-archetypes",
+          "category": "character-archetypes",
+          "optionKey": "squad_leader",
+          "identifier": "archetype-chariot",
+          "name": "Archetype: The Chariot (Squad Leader)",
+          "currentTier": 1,
+          "displayName": "The Chariot (Squad Leader)"
+        },
+        "crew": {
+          "key": "XYipYcYWz96JtbLX",
+          "id": "XYipYcYWz96JtbLX",
+          "pack": "bbttcc-character-options.crew-types",
+          "optionKey": "diplomatic-envoys",
+          "identifier": "crew-diplomatic-envoys",
+          "name": "Crew Type: Diplomatic Envoys",
+          "displayName": "Diplomatic Envoys",
+          "currentTier": 1
+        },
+        "occult": {
+          "key": "OyXYbyCH9EeK2Cl4",
+          "id": "OyXYbyCH9EeK2Cl4",
+          "pack": "bbttcc-character-options.occult-associations",
+          "optionKey": "alchemist",
+          "identifier": "occult-association-alchemist",
+          "name": "Occult Association: Alchemist",
+          "displayName": "Alchemist",
+          "currentTier": 1
+        },
+        "sephirothicAlignment": {
+          "key": "xUnl5SPUxJmY3241",
+          "id": "xUnl5SPUxJmY3241",
+          "pack": "bbttcc-character-options.sephirothic-alignments",
+          "category": "sephirothic-alignments",
+          "optionKey": null,
+          "identifier": "alignment-chesed",
+          "name": "Alignment: Chesed"
+        }
+      },
+      "calculatedOPs": {
+        "violence": 2,
+        "nonlethal": 1,
+        "intrigue": 4,
+        "economy": 0,
+        "softpower": 4,
+        "diplomacy": 4,
+        "logistics": 0,
+        "culture": 2,
+        "faith": 2
+      },
+      "crew": {
+        "pack": "bbttcc-character-options.crew-types",
+        "id": "XYipYcYWz96JtbLX",
+        "name": "Crew Type: Diplomatic Envoys",
+        "identifier": "crew-diplomatic-envoys"
+      },
+      "occult": {
+        "pack": "bbttcc-character-options.occult-associations",
+        "id": "OyXYbyCH9EeK2Cl4",
+        "name": "Occult Association: Alchemist",
+        "identifier": "occult-association-alchemist"
+      },
+      "sephirot": {
+        "pack": "bbttcc-character-options.sephirothic-alignments",
+        "id": "xUnl5SPUxJmY3241",
+        "key": null,
+        "name": "Alignment: Chesed",
+        "identifier": "alignment-chesed",
+        "category": "sephirothic-alignments"
+      }
+    },
+    "bbttcc-aae": {
+      "politicalPhilosophy": "marxist"
+    }
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 1,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1
+    },
+    "attributes": {
+      "violence": {
+        "value": 2
+      },
+      "intrigue": {
+        "value": 3
+      },
+      "presence": {
+        "value": 2
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 4
+      },
+      "soul": {
+        "value": 5
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 0
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 0
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 1
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 1
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 3
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 1
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 1
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 1
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 1
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 1
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 1
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 5
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 19,
+        "max": 16
+      },
+      "stress": {
+        "value": 23,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 3,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": 1,
+    "name": "Furrier",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Local%20Factions/Jackalope%20-%20Torkata.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "lENyHLvpkJqL54Cy",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Local%20Factions/Jackalope%20-%20Torkata.png",
+  "items": [
+    {
+      "name": "Cryptidkin",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Brennan.png",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin.</strong> Normalized Bad Eden ancestry root.</p><p>Select one subspecies when building the character: <strong>Chupacabra, Jackalope, Furrykin</strong>.</p><p>This root grants the shared Cryptidkin core trait package. Subspecies layer flavor, size, and Tier powers on top.</p><p><em>“Every settlement has a story about you. None of them are accurate. All of them are useful.”</em></p><hr><p><em><strong>Cryptidkin Core Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (set by subspecies).</p></li><li><p><strong>Speed.</strong> 6 squares (subspecies may override).</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Cryptidkin does not grant fixed bonuses. Subspecies lean expressed through Tier powers.</p></li></ul><p><strong>Folklore Presence.</strong> When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as <em>omen</em>, <em>trophy</em>, or <em>legend</em>. It is never neutral. People have heard of your kind. They are almost always wrong, and that is almost always useful.</p><p><strong>Wasteland Adapted.</strong> You reroll the lowest die on checks against disease and environmental poison. You ignore the first nonmagical environmental hazard you encounter each Strategic Turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor’s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 12 squares You cannot be surprised while conscious.</p><p><strong>Subspecies.</strong> Choose one Cryptidkin subspecies (Chupacabra, Jackalope, Furrykin). Your subspecies grants Tier powers as you level (Tier I at creation, then 5/11/17).</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "CKSIZE0000000001",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "sm",
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Small or Medium (set by subspecies).",
+            "value": {}
+          },
+          {
+            "_id": "CKCORE0000000001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.CKCORETRAITPLACE",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Folklore & Frame",
+            "hint": "Gain the core Cryptidkin ancestry traits."
+          }
+        ],
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": 60,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": "Folklore Presence; Survivor's Instinct."
+        },
+        "type": {
+          "value": "humanoid",
+          "custom": "",
+          "subtype": "Cryptidkin"
+        },
+        "identifier": "cryptidkin"
+      },
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "family": "cryptidkin",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "absorbed": [
+            "jackalope",
+            "furrykin"
+          ]
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "grantedByAncestry": "Cryptidkin"
+        }
+      },
+      "effects": [],
+      "folder": "f95fcfa18822c4e3",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.c9a7f1d26e3b4c81",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534437,
+        "modifiedTime": 1784177534437,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 1500000,
+      "_id": "vCM7CgsOCqq4rapT",
+      "_key": "!actors.items!lENyHLvpkJqL54Cy.vCM7CgsOCqq4rapT"
+    },
+    {
+      "name": "Cryptidkin: Folklore & Frame",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "system": {
+        "category": "feature",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-canon-cryptidkin-folklore-frame=\"v1\" style=\"display:none\"></div><p><em>\"You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.\"</em></p><p><strong>Folklore Presence.</strong> 1/Soma Break, when you first meet a community, decide whether the rumors about you arrived first. If yes, reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering — the GM gets to colour it.</p><p><strong>Wasteland Adapted.</strong> Reroll the lowest die on defense checks against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh).</p><p><strong>Survivor's Instinct.</strong> 1/Soma Break, when you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "cryptidkin-folklore-frame",
+        "requirements": "Cryptidkin",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "cryptidkin",
+          "feature": "folklore_frame",
+          "family": "cryptidkin",
+          "tierLevel": 0,
+          "version": "2.0.0",
+          "date": "2026-04-18"
+        },
+        "fourththing": {
+          "triggers": [
+            {
+              "event": "on-would-drop-to-zero",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Survivor’s Instinct. When you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress"
+                }
+              }
+            }
+          ],
+          "grantedByAncestry": "Cryptidkin"
+        },
+        "autoanimations": {
+          "id": "1ef467b8-6eb3-4e41-b1cc-5c1e27f370ac",
+          "label": "Cryptidkin: Folklore & Frame",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "loop",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "f95fcfa18822c4e3",
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534437,
+        "modifiedTime": 1784177534437,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "TclFZwPwZzMaLguE",
+      "_key": "!actors.items!lENyHLvpkJqL54Cy.TclFZwPwZzMaLguE"
+    },
+    {
+      "name": "Cryptidkin Heritage: Jackalope",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Verity_Furlong_screenshot%20Background%20Removed.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin Subspecies.</strong> This heritage preserves the original UUID for <em>Jackalope (Bad Eden)</em> while converting it from a species-root to a Cryptidkin subspecies.</p><p><em>“You don’t spot a Jackalope. You notice the world flinch, and then realize why.”</em></p><p><strong>Jackalope.</strong> Fast because they have to be. Twitchy because the world has trained them that stillness is how you die. Half-remembered pre-Shattering folklore, half radiation-assembled rumor, and fully people.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium.</p></li><li><p><strong>Speed.</strong> 7 squares</p></li><li><p><strong>Subspecies Lean.</strong> Your subspecies leans toward <strong>INTR (Intrigue)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor’s Instinct).</p><h3>Jackalope Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Jackalope powers emphasize: <em>Startle Reflex</em> (can’t-be-caught-flat burst), <em>Wasteland Bound</em> (long-distance run), <em>Horns of Bad Luck</em> (jinx aura), <em>Can’t Catch Me</em> (evasion), and strategic <em>Bad Omen Runner</em> faction hooks.</p><h3>Strategic Hooks (Foundry / Bad Eden)</h3><p>If you see Jackalope tracks circling your hex, you are not under attack. You are being <em>advised</em>.</p><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+1 Soft Power OP</strong> and <strong>+1 Non-Lethal OP</strong> at campaign start.</p></li><li><p><strong>Trail Whisper.</strong> Once per Strategic Turn, your faction can reroll a single Travel or Scout check made in a hex adjacent to your home territory.</p></li></ul>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "ckjackalopeadv01",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.KvTZJ08kUbqxRijn",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Jackalope Tier I",
+            "hint": "Gain your Jackalope Tier I subspecies power (maps to legacy Startle Reflex)."
+          },
+          {
+            "_id": "ckjackhornsadv01",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.items.Item.HORNSBADLUCK0001",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Horns of Bad Luck (Manifestation)",
+            "hint": "Grant the Jackalope-only Tier I natural-weapon manifestation."
+          }
+        ],
+        "identifier": "cryptidkin_jackalope_heritage",
+        "requirements": "Cryptidkin",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "cryptidkin",
+          "lineage": "Jackalope",
+          "opEffects": {
+            "softPower": 1,
+            "nonLethal": 1
+          },
+          "travelRerollAdjacent": true,
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "normalizedFrom": "Jackalope (Bad Eden) [species]"
+        },
+        "fourththing": {
+          "grantedByHeritage": "Jackalope"
+        }
+      },
+      "folder": "q86PDhfgI3ZNMpkJ",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.yiZiL1OaWx9qX5bF",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534437,
+        "modifiedTime": 1784177534437,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "K7cCPyJJ0ezEW1eI",
+      "_key": "!actors.items!lENyHLvpkJqL54Cy.K7cCPyJJ0ezEW1eI"
+    },
+    {
+      "name": "Cryptidkin (Jackalope): Startle Reflex",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dodge.png",
+      "folder": "sU5wM5ZUL33lrQxV",
+      "system": {
+        "category": "feature",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-canon-startle-reflex=\"v1\" style=\"display:none\"></div><p><em>\"You aren't fast because you're fast. You're fast because the world keeps deciding to miss.\"</em></p><p><strong>Startle Reflex (1/Soma Break).</strong> Reaction when you are targeted by an attack roll or fail an Intrigue check — move up to 2 squares without provoking opportunity attacks.</p><p><strong>Horns of Bad Luck.</strong> Your natural horns ship as a Jackalope-only Manifestation when you take the heritage — see your Manifestations tab. When violence escalates around you, the GM may describe unsettling omens tied to your presence — a mirror crack, a dropped knife, a candle going out the wrong direction.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"crypJackStartleReflex\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Startle Reflex</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Reaction  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When targeted by an attack roll or you fail an Intrigue check, move up to 2 squares without provoking opportunity attacks.</span></p></div>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "cryptidkin-jackalope-startle-reflex",
+        "requirements": "Cryptidkin (Jackalope)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "cryptidkin",
+          "feature": "startle_reflex",
+          "lineage": "Jackalope",
+          "tierLevel": 0,
+          "version": "2.0.0",
+          "date": "2026-04-29"
+        },
+        "autoanimations": {
+          "id": "b14167e6-e987-47e9-afc1-a57cb12c2222",
+          "label": "Cryptidkin (Jackalope): Startle Reflex",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "loop",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "grantedByHeritage": "Jackalope"
+        }
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 150000,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534437,
+        "modifiedTime": 1784177534437,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "DyPPIuaklnSwL7dn",
+      "_key": "!actors.items!lENyHLvpkJqL54Cy.DyPPIuaklnSwL7dn"
+    },
+    {
+      "name": "Archetype: The Chariot (Squad Leader)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_chariot.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Velocity is not speed. It is direction maintained under pressure.”</em></p>\n<p><strong>Archetype (Bad Eden): The Chariot (Squad Leader).</strong> Field commander, momentum-anchor, and small-unit tactician. You turn chaos into movement and movement into victory.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> This Archetype is associated with <strong>+1 Violence</strong> and <strong>+1 Intrigue</strong> in faction calculus, reflecting mixed-method tactical control.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of squad command, coordinated action, and breach momentum.</li>\n</ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {
+          "chariotArcanaASI": {
+            "_id": "chariotArcanaASI",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 3,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 1,
+            "title": "Archetype Ability Scores",
+            "hint": "Gain 3 ability score points (max +2 to any one score). See the Archetype text for recommended arrays.",
+            "flags": {}
+          }
+        },
+        "identifier": "archetype-chariot",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "m93q8DdEmPo4OCnE",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "character-archetypes",
+          "bonuses": {
+            "violence": 1,
+            "intrigue": 1
+          },
+          "option": {
+            "category": "archetype",
+            "key": "squad_leader",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:chariot",
+              "bbttcc:expression:squad_leader",
+              "bbttcc:base"
+            ]
+          }
+        },
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.3x7FpZZLch3mYzNe",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534437,
+        "modifiedTime": 1784177534437,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "KEsniwn42WJpbp0E",
+      "sort": 100000,
+      "_key": "!actors.items!lENyHLvpkJqL54Cy.KEsniwn42WJpbp0E"
+    },
+    {
+      "name": "Archetype: The Chariot (Squad Leader) (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_chariot.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden – Archetype: The Chariot (Squad Leader) (Tier 1)",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 (Level 1) — The Chariot</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain a skill rank in Athletics and Perception.</li>\n<li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li>\n</ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "archetype-chariot-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Level 1+",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "name": "Archetype Tier 1 Proficiencies",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_8.png",
+          "_id": "chariotTier1Prof",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.athletics.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.perception.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177534437,
+            "modifiedTime": 1784177534437
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lENyHLvpkJqL54Cy.nim2Y5edDDrP3vHr.chariotTier1Prof"
+        }
+      ],
+      "folder": "m93q8DdEmPo4OCnE",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "squad_leader",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:chariot",
+              "bbttcc:expression:squad_leader",
+              "bbttcc:tier:1",
+              "bbttcc:violence_op_cap:+1",
+              "bbttcc:intrigue_op_cap:+1"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.515BFKFhTMNsXar7",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534437,
+        "modifiedTime": 1784177534437,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "nim2Y5edDDrP3vHr",
+      "sort": 200000,
+      "_key": "!actors.items!lENyHLvpkJqL54Cy.nim2Y5edDDrP3vHr"
+    },
+    {
+      "name": "Alignment: Chesed",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "Mercy - Expansion without fear. +1 Diplomacy, +1 Culture OPs\n\nChesed creates room for others to live, recover, and belong. It rewards community-building, morale recovery, and factions that grow stronger by sheltering rather than merely surviving.",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "alignment-chesed",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dwarf.png",
+      "effects": [],
+      "folder": "RAOWJYon3t34M5XY",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "diplomacy": 1,
+            "culture": 1
+          },
+          "option": {}
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.aickB2gnSqzrWmze",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.EwCwwr9w1kap3UD3",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534437,
+        "modifiedTime": 1784177534437,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "QqusYbjBQpBfDJfS",
+      "sort": 200000,
+      "_key": "!actors.items!lENyHLvpkJqL54Cy.QqusYbjBQpBfDJfS"
+    },
+    {
+      "name": "Crew Type: Diplomatic Envoys (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden – Crew Type: Diplomatic Envoys (Tier 1)",
+          "revision": 2,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Diplomatic Envoys</strong></p><p><strong>“We are here in peace. Don’t make that embarrassing.”</strong></p><p>Diplomatic Envoys are the faction’s public face and private threat. They shake hands with one hand and count exits with the other. Their talent is making every negotiation feel like the only sensible outcome was the one they wanted.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Insight and Diplomacy, and you learn one extra language.</li><li><strong>Strategic:</strong> Your faction starts with +1 Diplomacy OPs.</li></ul>",
+          "chat": ""
+        },
+        "identifier": "crew-diplomatic-envoys-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "requirements": "Level 1+",
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        }
+      },
+      "effects": [
+        {
+          "_id": "ea6238af2d9b4b8c",
+          "name": "Diplomatic Envoys T1 Skills",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.insight.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.diplomacy.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "dnd5e": {
+              "riders": {
+                "statuses": []
+              }
+            }
+          },
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177534437,
+            "modifiedTime": 1784177534437
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!lENyHLvpkJqL54Cy.M52vtk8Vp0owQakB.ea6238af2d9b4b8c"
+        }
+      ],
+      "folder": "IFHZoz9eqRJSNEWx",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "diplomatic-envoys",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "op",
+              "social",
+              "negotiation",
+              "intel"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:diplomatic-envoys",
+              "bbttcc:tier:1",
+              "bbttcc:domain:op",
+              "bbttcc:domain:social",
+              "bbttcc:domain:negotiation",
+              "bbttcc:domain:intel",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:diplomacy:+8",
+              "bbttcc:effect:intel:read_intent:true",
+              "bbttcc:effect:social:extra_language:+1",
+              "bbttcc:theme:diplomacy",
+              "bbttcc:theme:negotiation",
+              "bbttcc:theme:soft-control",
+              "bbttcc:theme:integration"
+            ]
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Item.MZMoGbKjGBRpGVc3",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.MZMoGbKjGBRpGVc3",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534437,
+        "modifiedTime": 1784177534437,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "M52vtk8Vp0owQakB",
+      "sort": 0,
+      "_key": "!actors.items!lENyHLvpkJqL54Cy.M52vtk8Vp0owQakB"
+    },
+    {
+      "name": "Occult Association: Alchemist (Tier 1)",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 2,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Alchemist</strong></p><p><strong>“You’re not powerful yet. You’re noticeable.”</strong></p><p>At Tier 1, you learn the first dangerous lesson: <strong>matter listens</strong>.</p><p>You are not generating value yet. You are accelerating reactions, shortening timelines, and making crude but effective substitutions when a system would otherwise stall out.</p><p>People start bringing you problems that smell like “this should not work.”</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank with <strong>the Occult aptitude</strong></li><li>When crafting basic alchemical items, the time required is halved</li><li>You can identify substances, compounds, and chemical hazards in minutes instead of hours</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Production Reliability:</strong> once per Strategic Turn, when your faction spends <strong>Economy OP</strong> on production, infrastructure, or supply stabilization, reduce that spend by <strong>1</strong> (minimum 1)</li></ul><p><strong>Cost:</strong> every use leaves evidence — fumes, scarcity elsewhere, suspicious efficiency, or a process that now depends on you.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"alchT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Production Reliability</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When faction spends Economy OP on production / infrastructure / supply, reduce spend by 1 (min 1).</div>\n</div>",
+          "chat": ""
+        },
+        "advancement": {},
+        "requirements": "Level 1+",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": "1"
+        },
+        "identifier": "occult-association-alchemist-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "alchemist",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:alchemist",
+              "bbttcc:tier:1",
+              "bbttcc:domain:transmutation",
+              "bbttcc:domain:economy",
+              "bbttcc:domain:craft",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:crafting",
+              "bbttcc:when:strategic_turn:once",
+              "bbttcc:effect:craft_time:basic-alchemy:half",
+              "bbttcc:effect:identify:substances:rapid",
+              "bbttcc:effect:op_cost:economy:-1",
+              "bbttcc:resonance:yesod",
+              "bbttcc:drift:utilitarian",
+              "bbttcc:cost:attention",
+              "bbttcc:cost:dependency",
+              "bbttcc:theme:throughput",
+              "bbttcc:theme:reactive-systems"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        },
+        "autoanimations": {
+          "id": "401d7c21-eb0b-4d51-b568-79aabdef17ec",
+          "label": "Occult Association: Alchemist (Tier 1)",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "spell",
+              "animation": "guidingbolt",
+              "variant": "02",
+              "color": "random",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "effects": [],
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+      "folder": "zganGfpVDhLbTMgv",
+      "_stats": {
+        "compendiumSource": "Item.mQMir5AHapvMbEBc",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.mQMir5AHapvMbEBc",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534437,
+        "modifiedTime": 1784177534437,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "sPwVBZXPv6PyUJRu",
+      "sort": 0,
+      "_key": "!actors.items!lENyHLvpkJqL54Cy.sPwVBZXPv6PyUJRu"
+    },
+    {
+      "name": "Enlightenment: Wisdom",
+      "type": "feat",
+      "img": "systems/dnd5e/icons/svg/items/feature.svg",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "enlightenment-levels",
+          "bonuses": {
+            "diplomacy": 1,
+            "intrigue": 1,
+            "softpower": 1
+          }
+        }
+      },
+      "_id": "uaRUFdkBCnM6I0Yz",
+      "system": {
+        "category": "technique",
+        "source": "",
+        "tags": [],
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534437,
+        "modifiedTime": 1784177534437,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!lENyHLvpkJqL54Cy.uaRUFdkBCnM6I0Yz"
+    },
+    {
+      "_id": "IGzs3ryBws9Uf628",
+      "name": "Keeper — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/svg/temple.svg",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "keeper",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Keeper — Apprentice</strong> (Tier I).</p><p><strong>Trade — The rites:</strong> Weddings, funerals, blessings; participants recover 2×tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick — Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 601000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534437,
+        "modifiedTime": 1784177534437,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!lENyHLvpkJqL54Cy.IGzs3ryBws9Uf628"
+    },
+    {
+      "_id": "sE1qrbIOf50gJReD",
+      "name": "Keeper",
+      "type": "class",
+      "img": "icons/svg/temple.svg",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-keeper",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "keeper",
+          "soul"
+        ],
+        "description": {
+          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling — the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "faculty": "soul",
+            "signature": "faith",
+            "secondary": "insight",
+            "pool": "Soft Power",
+            "awakens": "Pactkeeper or Dreamwalker"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534437,
+        "modifiedTime": 1784177534437,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!lENyHLvpkJqL54Cy.sE1qrbIOf50gJReD"
+    }
+  ],
+  "effects": [
+    {
+      "name": "Bad Eden: Wisdom",
+      "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+      "origin": "Actor.lENyHLvpkJqL54Cy",
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "enlightenment": true,
+          "level": "wisdom"
+        },
+        "bbttcc": {
+          "enlightenment": {
+            "auraClarity": true,
+            "auraRange": 10
+          }
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "system.bonuses.abilities.check",
+            "value": "+1",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "vLtjIwJc3kLjhvyF",
+      "type": "base",
+      "start": {
+        "time": 0,
+        "combat": "QA0W2dp4ktbV6dBx",
+        "combatant": "tA2vckTuBiKKCfz4",
+        "initiative": 25,
+        "round": 3,
+        "turn": 0
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "transfer": false,
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534437,
+        "modifiedTime": 1784177534437,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.effects!lENyHLvpkJqL54Cy.vLtjIwJc3kLjhvyF"
+    }
+  ],
+  "folder": "gzB3pxl3G3vzIO5V",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177534437,
+    "modifiedTime": 1784177534437,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!lENyHLvpkJqL54Cy"
+}

@@ -1,0 +1,61 @@
+{
+  "_id": "XUe79LAOnCNHkdlk",
+  "name": "Combat Instinct",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_combat_instinct.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Core Feats v1 (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><h2>Combat Instinct</h2><p><em>You are already moving when the noise begins.</em></p><hr><h3>Rules</h3><p>You reroll the lowest die on Initiative (Intrigue) rolls. You cannot be surprised while conscious. During the first round of combat, you may draw or stow any number of weapons as part of your movement.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_combat_instinct",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-core-v1",
+      "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 4800000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1782159946546,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!XUe79LAOnCNHkdlk"
+}

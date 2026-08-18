@@ -1,0 +1,99 @@
+{
+  "name": "Proselyte Recon Drone",
+  "type": "equipment",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_proselyte_recon_drone.jpeg",
+  "system": {
+    "description": {
+      "value": "<p>Orb drone with omnidirectional eyes. reroll the lowest die on Stealth (Intrigue) (Intrigue) while surveilling; can project Minor Illusion (at will) [TODO(adv-call)].</p>",
+      "chat": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1,
+      "units": "lb"
+    },
+    "price": {
+      "value": 2200,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "attunement": "",
+    "identified": true,
+    "type": {
+      "value": "",
+      "baseItem": ""
+    },
+    "equipped": false,
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "proselyte-recon-drone",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "attuned": false,
+    "crewed": false,
+    "armor": {
+      "value": null,
+      "dex": null
+    },
+    "proficient": null,
+    "properties": [],
+    "strength": null
+  },
+  "flags": {
+    "bbttcc": {
+      "tags": []
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          },
+          "legacySystem": {
+            "description": {
+              "value": "<p>Orb drone with omnidirectional eyes. reroll the lowest die on Stealth (Intrigue) while surveilling; can project Minor Illusion (at will).</p>"
+            }
+          }
+        }
+      }
+    }
+  },
+  "effects": [],
+  "folder": "Wxh1A343inwTUeoo",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1767834186563,
+    "modifiedTime": 1782164185973,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "KBpHCLKxMMlDte4S",
+  "sort": 1400000,
+  "_key": "!items!KBpHCLKxMMlDte4S"
+}

@@ -1,0 +1,143 @@
+{
+  "name": "Wyrdlens Adept: Tier 3 — Refraction (Signature Mode)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_alien.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 3 — Refraction (Signature Mode).</strong> Stance. While Refraction is held, you declare your manifestation last in the round, after seeing what allies and enemies commit to. Pays ongoing upkeep against your Clarity.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (mode <code>wlRefraction</code>): while ON, additional Misfire shift −2 (stacks with passive shifts from Tier 1+2). Click this feature on the sheet to toggle the stance.</p>\n<p><em>Pilot: exact upkeep curve and break-condition to be locked after one playtest cycle. Treat as a stance the Adept can drop freely on their turn.</em></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlMode\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Refraction</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Stance (signature) &nbsp;·&nbsp; <strong>Action:</strong> Action (open / drop) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">While held, declare your manifestation last in the round, after seeing what allies and enemies commit to. Pays ongoing upkeep against Clarity.</div>\n</div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "wl_mode_refraction",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (11th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Oracle of the Algorithm (Lore Autosuccess Hook)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_castle_2.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984383,
+        "modifiedTime": 1777346197861
+      },
+      "_id": "xkp3J8k8OvD5O8vJ",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.tier3",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.oracleOfTheAlgorithm",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.tikkunHooks.loreAutosuccessPerRest",
+            "value": 1,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!8DQbUpylbqTBzkl0.xkp3J8k8OvD5O8vJ"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "tier3": true,
+        "oracleOfTheAlgorithm": true
+      },
+      "tikkunHooks": {
+        "loreAutosuccessPerRest": 1
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "discipline": {
+        "mode": {
+          "key": "wlRefraction",
+          "grants": {
+            "misfireBandShift": -2
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984383,
+    "modifiedTime": 1781116116298,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "8DQbUpylbqTBzkl0",
+  "sort": 275000,
+  "_key": "!items!8DQbUpylbqTBzkl0"
+}

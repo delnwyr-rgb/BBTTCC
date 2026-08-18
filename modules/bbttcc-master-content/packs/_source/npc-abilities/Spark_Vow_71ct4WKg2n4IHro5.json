@@ -1,0 +1,296 @@
+{
+  "name": "Spark Vow",
+  "type": "power",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_1.png",
+  "system": {
+    "intent": "violence",
+    "channel": "presence",
+    "sephirah": "geburah",
+    "mode": "working",
+    "clarityRequired": 2,
+    "noiseGain": 1,
+    "activation": "action",
+    "target": "single",
+    "range": "far",
+    "damage": "2d8",
+    "damageType": "energy",
+    "damageFlavor": "",
+    "damageRoll": {
+      "op": "none",
+      "number": 0,
+      "die": "d6",
+      "attribute": "",
+      "type": "kinetic",
+      "flavor": "",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "effect": "Name a target and speak a vow against them. The next time that target misses an attack against you or an ally, lightning answers — they take 2d8 energy to Integrity. Vow lasts one scene; only one Spark Vow may be active at a time.",
+    "tags": [
+      "translated",
+      "5e-port",
+      "phase2-narrative",
+      "manifestation"
+    ],
+    "category": "manifestation",
+    "flavor": "Ozone smell, and a bell rings somewhere in Valhaul.",
+    "manifestation": {
+      "tier": 1,
+      "family": "working",
+      "concept": "A martial pact with a sky that owes you.",
+      "form": "vow",
+      "function": "punish",
+      "stability": "bound",
+      "interactionModel": "trigger",
+      "costType": "clarity",
+      "costValue": 2,
+      "costText": "2 Clarity",
+      "duration": "scene",
+      "durationText": "Until paid out or scene ends.",
+      "triggerText": "When the named target misses an attack against the Adept or an ally.",
+      "scale": "personal",
+      "targetText": "One creature within far range.",
+      "rangeAreaText": "Far; sightline.",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "If the named target dies before the vow pays out, the Adept takes 1 Stress.",
+      "pathResonance": "Geburah — severity, the answer that comes back.",
+      "fictionalPermission": "May call lightning on a missed attack.",
+      "gmCalibration": "Resolves once and ends; one Spark Vow at a time.",
+      "mechanicalHook": "2d8 energy on triggered miss.",
+      "signature": "Ozone, then a distant bell.",
+      "thirdThing": "The struck target's hair stands up for an hour after.",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "area": {
+        "shape": "none",
+        "size": 0
+      },
+      "activation": {
+        "type": "action",
+        "consumePool": true
+      },
+      "save": {
+        "enabled": false,
+        "defense": "evasion",
+        "attribute": "",
+        "dcMode": "derived",
+        "dcFixed": 15
+      }
+    },
+    "description": {
+      "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>2d8 electrical on triggered miss.</p>\n<ul>\n  <li><strong>Damage:</strong> 2d8 Electrical damage</li>\n  <li><strong>Intent:</strong> Violence</li>\n  <li><strong>Action:</strong> Action</li>\n  <li><strong>Range:</strong> Far</li>\n  <li><strong>Target:</strong> Single</li>\n  <li><strong>Target:</strong> One creature within far range.</li>\n  <li><strong>Cost:</strong> 2 Clarity, Clarity 2, +1 Noise, 2 Clarity</li>\n  <li><strong>Duration:</strong> Until paid out or scene ends.</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<p><strong>Risk:</strong> If the named target dies before the vow pays out, the Adept takes 1 Stress.</p>\n<!-- BBTTCC:MECHANICS:END -->"
+    }
+  },
+  "_id": "71ct4WKg2n4IHro5",
+  "effects": [],
+  "sort": 0,
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Valhaulan Spark Adept"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    },
+    "autoanimations": {
+      "id": "3ea30735-f041-4139-95c7-a8f26f7230ac",
+      "label": "Spark Vow",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "range",
+      "primary": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "spell",
+          "animation": "magicmissile",
+          "variant": "01",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1781024225321,
+    "modifiedTime": 1782167283966,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!71ct4WKg2n4IHro5"
+}

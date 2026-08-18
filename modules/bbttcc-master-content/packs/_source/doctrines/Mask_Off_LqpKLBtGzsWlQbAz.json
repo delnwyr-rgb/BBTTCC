@@ -1,0 +1,62 @@
+{
+  "name": "Mask Off",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_mask_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Drop the smile. Let them see the thing underneath — the scar you usually keep powdered over. The room goes very, very quiet.</p><p><strong>Burn a Scandal Scar → +2 to one Intimidate; +2 Suspicion.</strong></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "courtly_mask_off",
+      "meta": {
+        "tier": 4,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "courtly",
+        "layer": "tactical",
+        "costBand": "heavy",
+        "raidTypes": [
+          "presence"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "violence": 1
+        },
+        "authoredSprint": "courtly-d"
+      },
+      "effects": {
+        "text": "Burn a Scandal Scar → +2 to one Intimidate. Suspicion +2."
+      }
+    }
+  },
+  "_id": "LqpKLBtGzsWlQbAz",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "6ut7GT8pCAhpdWjS": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1779731271081,
+    "modifiedTime": 1781402998087,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!LqpKLBtGzsWlQbAz"
+}

@@ -1,0 +1,66 @@
+{
+  "name": "Forge Facility Template",
+  "type": "feature",
+  "img": "icons/sundries/scrolls/scroll-bound-sealed-red.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Pre-rolled stationary forge facility: siege frame, four output modules. The classic stationary 'rig' = facility.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "rig-template"
+      },
+      "rigTemplate": {
+        "config": {
+          "identity": {
+            "mobility": "stationary",
+            "state": "parked",
+            "archetype": "forge-facility"
+          },
+          "frame": "Forge Facility Frame",
+          "gear": {
+            "weapons": [
+              "Twin Autocannons"
+            ],
+            "systems": [
+              "Reinforced Plating",
+              "Phase Cloak"
+            ],
+            "outputs": [
+              "Mounted Forge",
+              "Mounted Forge",
+              "Hunter Pen",
+              "Quartermaster Dispenser"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "ZorepCPrkcUUZYo1",
+  "effects": [],
+  "sort": 3200000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205374936,
+    "modifiedTime": 1778963271958,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ZorepCPrkcUUZYo1"
+}

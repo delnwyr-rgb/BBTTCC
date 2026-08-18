@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "XtVszfKGXh1D3T29",
+  "name": "Ancestry Features",
+  "color": null,
+  "sorting": "a",
+  "_id": "r7CgO2S66OLymyWz",
+  "description": "",
+  "sort": 100000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1775004097404,
+    "modifiedTime": 1776574205026,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+  },
+  "_key": "!folders!r7CgO2S66OLymyWz"
+}

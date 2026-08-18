@@ -1,0 +1,72 @@
+{
+  "name": "Clean Extraction",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_peace_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You can pull the teeth out of a monster without waking it up.”</em></p><p>Once per <strong>a Soma Break</strong>, when a <strong>salvage, demolition, or deconstruction</strong> project you orchestrate would advance the <strong>Darkness Track</strong> (or an equivalent corruption flag) because of collateral harm, spiritual noise, or ecological fallout, you can choose to blunt that blow.</p><ul><li>You may <strong>negate</strong> one such Darkness increase entirely, representing careful rituals, shielding, or ethical disassembly.</li><li>This decision must be made at the moment the Darkness increase would be applied.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-spark-reclaimer-clean-extraction",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 14, Forge of the Spark Reclaimer",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "BvmSP1PPc1ABT2OO",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_sparkreclaimer",
+      "featureKey": "clean_extraction"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996548,
+    "modifiedTime": 1781116115542,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "7scacP0UzmEK1r5z",
+  "sort": 100000,
+  "_key": "!items!7scacP0UzmEK1r5z"
+}

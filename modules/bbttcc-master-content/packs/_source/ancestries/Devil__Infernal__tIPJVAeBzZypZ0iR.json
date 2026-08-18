@@ -1,0 +1,169 @@
+{
+  "_id": "tIPJVAeBzZypZ0iR",
+  "name": "Devil (Infernal)",
+  "type": "species",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_1.png",
+  "system": {
+    "category": "ancestry",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Infernal bloodline — bound to the Hells through pact, descent, or curse. Cunning negotiators whose smiles always cost more than the asking price.</em></p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "2hc7h6bhj7p3q8n4",
+        "type": "Size",
+        "configuration": {
+          "sizes": [
+            "med"
+          ]
+        },
+        "level": 0,
+        "title": "",
+        "hint": "Devil (Infernal) (size: med).",
+        "value": {}
+      },
+      {
+        "_id": "qtrumj4txosved6l",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.q75tTwN1LB4N62Ut",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Devil (Infernal) Tier 1",
+        "hint": "Grants the tier 1 Devil (Infernal) feature."
+      },
+      {
+        "_id": "1v7iba3u03us5qb2",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.CfW5Jb0k5WpdJpwL",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Devil (Infernal) Tier 2",
+        "hint": "Grants the tier 2 Devil (Infernal) feature."
+      },
+      {
+        "_id": "9yxhhwuhs1g7r8lj",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.aoCij1hBhm0FJk9e",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Devil (Infernal) Tier 3",
+        "hint": "Grants the tier 3 Devil (Infernal) feature."
+      },
+      {
+        "_id": "idi2m6he6uwjuop7",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.PasUt27Ca35sKyQB",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Devil (Infernal) Tier 4",
+        "hint": "Grants the tier 4 Devil (Infernal) feature."
+      }
+    ],
+    "identifier": "devil",
+    "properties": [],
+    "type": {
+      "value": "humanoid",
+      "subtype": "Devil (Infernal)"
+    }
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestry",
+      "lineage": "devil",
+      "version": "1.0.0",
+      "date": "2026-05-15",
+      "npAncestry": true
+    },
+    "fourththing": {
+      "principleSource": "ancestry",
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool × 0.60",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    },
+    "bbttcc-factions": {
+      "opContribution": {
+        "violence": 1,
+        "intrigue": 1
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778961512040,
+    "modifiedTime": 1781116100836,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "folder": "tOM0KLv9UgMPUDOT",
+  "sort": 100000,
+  "_key": "!items!tIPJVAeBzZypZ0iR"
+}

@@ -1,0 +1,45 @@
+{
+  "name": "Burned Ledger",
+  "type": "feat",
+  "img": "icons/sundries/books/book-burning-orange.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Burned Ledger.</strong> The evidence is ash. <em>Play:</em> −2 Suspicion.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "coverTracks",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "_id": "9bJtNR1GCUxd56H7",
+  "effects": [],
+  "folder": null,
+  "sort": 2700000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782065103711,
+    "modifiedTime": 1784079176431,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!9bJtNR1GCUxd56H7"
+}

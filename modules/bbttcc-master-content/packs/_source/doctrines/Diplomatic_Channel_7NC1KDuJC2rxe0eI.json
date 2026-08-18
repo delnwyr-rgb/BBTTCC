@@ -1,0 +1,62 @@
+{
+  "name": "Diplomatic Channel",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scroll_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>A sealed envelope, a quiet room, the frankly radical suggestion that maybe nobody bleeds today. Maybe.</p><p><b>Defender may opt into a negotiated outcome (GM adjudicates).</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "diplomatic_channel",
+      "meta": {
+        "tier": 2,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "universal",
+        "layer": "strategic",
+        "costBand": "medium",
+        "raidTypes": [
+          "any"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "diplomacy": 4
+        },
+        "authoredSprint": 2
+      },
+      "effects": {
+        "text": "Open a back-channel: defender may opt-in to a negotiated outcome (GM adjudicates)."
+      }
+    }
+  },
+  "_id": "7NC1KDuJC2rxe0eI",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 101563,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778964846636,
+    "modifiedTime": 1780163521987,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!7NC1KDuJC2rxe0eI"
+}

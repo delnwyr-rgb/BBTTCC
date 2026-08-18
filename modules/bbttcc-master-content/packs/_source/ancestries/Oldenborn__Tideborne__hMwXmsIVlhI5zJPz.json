@@ -1,0 +1,177 @@
+{
+  "name": "Oldenborn (Tideborne)",
+  "type": "race",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Tideborne_1.png",
+  "system": {
+    "category": "ancestry",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Oldenborn (Tideborne).</strong> You are a diminished god-fragment, an ancestor-spirit, a genius loci clawing back into embodiment. Folk might call you an elf, a dwarf, a sylph, a goblin—because mortals label what scares them. But you know the truth: you are a place-soul wearing legs.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Fey).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>attributes.</strong> Oldenborn does not grant fixed attribute bonuses; your background handles increases. Your lineage leans toward <strong>SOUL</strong> in fiction and mechanics via Tier powers.</p></li></ul><h3>Oldenborn Core</h3><p>At character creation, you gain <strong>Old Memory, Old Flesh</strong> (Dream-Flesh, Old Paths, Veil-Sight, You Are Remembered).</p><h3>Tideborne Tier Powers</h3><p>You gain your Tier I power at creation, then additional Tier powers as you level (5/11/17). These are granted as features and are intentionally light on automation—Bad Eden loves table truth more than rules-lawyering.</p>",
+      "chat": ""
+    },
+    "advancement": {
+      "63144ce715da4f84": {
+        "_id": "63144ce715da4f84",
+        "type": "Size",
+        "configuration": {
+          "sizes": [
+            "med"
+          ]
+        },
+        "level": 0,
+        "title": "",
+        "hint": "Medium.",
+        "value": {},
+        "flags": {}
+      },
+      "ef3922c878384029": {
+        "_id": "ef3922c878384029",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.J40U8Ik2NXJolIVN",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Old Memory, Old Flesh",
+        "hint": "Gain the Oldenborn core traits.",
+        "flags": {}
+      },
+      "63de5bc27e794999": {
+        "_id": "63de5bc27e794999",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.8UYks5io6jCDVlxN",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Tideborne Tier I",
+        "hint": "Gain your Tideborne Tier I power.",
+        "flags": {}
+      },
+      "f850212641f3476f": {
+        "_id": "f850212641f3476f",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.pwKKGwQL1INvuLhV",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 5,
+        "title": "Tideborne Tier II",
+        "hint": "Gain your Tideborne Tier II power at level 5.",
+        "flags": {}
+      },
+      "57b7ac8483e44e62": {
+        "_id": "57b7ac8483e44e62",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.4gyfxSRFhWseSZx8",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 11,
+        "title": "Tideborne Tier III",
+        "hint": "Gain your Tideborne Tier III power at level 11.",
+        "flags": {}
+      },
+      "433a1077c3f84ffd": {
+        "_id": "433a1077c3f84ffd",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.0WrxHnjhQhl8KOC4",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 17,
+        "title": "Tideborne Tier IV",
+        "hint": "Gain your Tideborne Tier IV power at level 17.",
+        "flags": {}
+      }
+    },
+    "movement": {
+      "walk": "30",
+      "units": null,
+      "hover": false,
+      "ignoredDifficultTerrain": []
+    },
+    "senses": {
+      "darkvision": null,
+      "blindsight": null,
+      "tremorsense": null,
+      "truesight": null,
+      "units": null,
+      "special": "Veil-Sight (awareness of spirits, Spark echoes, noospheric constructs)."
+    },
+    "type": {
+      "value": "humanoid",
+      "custom": "",
+      "subtype": "Oldenborn"
+    },
+    "identifier": "oldenborn-tideborne"
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "race",
+      "family": "oldenborn",
+      "lineage": "Tideborne",
+      "version": "1.0.0",
+      "date": "2026-01-06"
+    }
+  },
+  "folder": "r4F3WD3V7iSDDkkD",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1775015130990,
+    "modifiedTime": 1782167240131,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "hMwXmsIVlhI5zJPz",
+  "sort": 100000,
+  "_key": "!items!hMwXmsIVlhI5zJPz"
+}

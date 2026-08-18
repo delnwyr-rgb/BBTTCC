@@ -1,0 +1,128 @@
+{
+  "name": "Wardstone of Gevurah",
+  "type": "equipment",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_wardstone_of_gevurah.jpeg",
+  "system": {
+    "description": {
+      "value": "<p>Socketed stone. Allies within 30 ft gain +1 to Guard while defending a hex; counts as 'fortified' for one encounter.</p>",
+      "chat": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 1,
+      "units": "lb"
+    },
+    "price": {
+      "value": 2000,
+      "denomination": "gp"
+    },
+    "rarity": "rare",
+    "attunement": "",
+    "identified": true,
+    "type": {
+      "value": "",
+      "baseItem": ""
+    },
+    "equipped": false,
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "wardstone-of-gevurah",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "attuned": false,
+    "crewed": false,
+    "armor": {
+      "value": null,
+      "dex": null
+    },
+    "proficient": null,
+    "properties": [],
+    "strength": null
+  },
+  "flags": {
+    "bbttcc": {
+      "tags": [
+        "darkness"
+      ]
+    },
+    "rfi": {
+      "item": {
+        "tier": "III",
+        "footprint": 1,
+        "reach": "self",
+        "frame": "armor",
+        "signature": "",
+        "origin": "looted",
+        "originator": null,
+        "bound": "free",
+        "upkeep": {
+          "mode": "passive",
+          "per": "scene"
+        },
+        "misfire": {
+          "tierClamp": true,
+          "table": null
+        },
+        "signals": {}
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          },
+          "tier": "III",
+          "frame": "armor",
+          "origin": "looted",
+          "bound": "free",
+          "reach": "self",
+          "footprint": 1,
+          "legacySystem": {
+            "description": {
+              "value": "<p>Socketed stone. Allies within 6 squares gain +1 to Guard while defending a hex; counts as 'fortified' for one encounter.</p>"
+            }
+          }
+        }
+      }
+    }
+  },
+  "effects": [],
+  "folder": "TNrB6kEiHS0KwwJT",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1767834213235,
+    "modifiedTime": 1782164185977,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "XhKIDuz578PgNYrp",
+  "sort": 2600000,
+  "_key": "!items!XhKIDuz578PgNYrp"
+}

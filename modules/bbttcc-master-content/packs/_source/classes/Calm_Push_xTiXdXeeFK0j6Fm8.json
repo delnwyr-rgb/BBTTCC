@@ -1,0 +1,116 @@
+{
+  "name": "Calm Push",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_push_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2025",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“We’re going to step forward now. No one panics.”</em></p><p>As a <strong>bonus action</strong>, you may choose one ally within <strong>6 squares</strong> who can see or hear you.</p><ul><li>That ally can immediately move up to <strong>2 squares</strong> without provoking opportunity attacks.</li><li>Until the start of your next turn, that ally gains a <strong>+1 bonus to Guard</strong>.</li></ul><p>This is not a charge; it’s a deliberate advance.</p>",
+      "chat": ""
+    },
+    "activities": {
+      "calmPush": {
+        "type": "utility",
+        "activation": {
+          "type": "bonus",
+          "condition": "",
+          "override": false
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "range": {
+          "value": "30",
+          "units": "ft",
+          "override": false
+        },
+        "description": {},
+        "_id": "D8N22OIFLLRxJ64P",
+        "sort": 0,
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "harmmarshal-resolve-calm-push",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 10
+    },
+    "properties": [],
+    "requirements": "Harmony Marshal 10, Mandate of Resolve",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "FLlH96uJfBcVDu4s",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "harmmarshal_resolve",
+      "featureKey": "calm_push"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776467813568,
+    "modifiedTime": 1782167240831,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "xTiXdXeeFK0j6Fm8",
+  "sort": 100000,
+  "_key": "!items!xTiXdXeeFK0j6Fm8"
+}

@@ -1,0 +1,3559 @@
+{
+  "name": "The Siege of Perspicacity Fortress - Hex Map",
+  "_id": "EPrIyhHJQxy2REce",
+  "active": false,
+  "navigation": true,
+  "navOrder": 0,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-BN0FAzHjLEwLi__Sc3GiGw.webp",
+  "width": 1408,
+  "height": 768,
+  "padding": 0.25,
+  "shiftX": 0,
+  "shiftY": 0,
+  "initial": {
+    "x": null,
+    "y": null,
+    "scale": null
+  },
+  "initialLevel": "defaultLevel0000",
+  "grid": {
+    "type": 2,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 5,
+    "color": "#ddbf4a",
+    "alpha": 0.4,
+    "distance": 1,
+    "units": "m"
+  },
+  "tokenVision": false,
+  "fog": {
+    "mode": 1,
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    }
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": false,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "drawings": [
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1006.6987298107781,
+      "y": 613.9528095680696,
+      "fillAlpha": 0.22,
+      "fillColor": "#5b1a1a",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Perspicacity Fortress",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Perspicacity Fortress",
+          "status": "occupied",
+          "type": "fortress",
+          "size": "city",
+          "population": "thriving",
+          "capital": true,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "T2",
+              "locked": false
+            }
+          },
+          "createdAt": 1780111760437,
+          "factionId": "oK7VitQikQ6FN3PI",
+          "terrain": {
+            "key": "mountains",
+            "label": "Mountains / Highlands"
+          },
+          "terrainType": "mountains",
+          "terrainKey": "mountains",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1780111768661,
+          "modifiers": [
+            "Fortified",
+            "Capital"
+          ],
+          "notes": "",
+          "structureActorIds": [
+            "NP0kpBvtERMeTqPo",
+            "vnHo9J78GcGOyEmr",
+            "EoTOcbq23sljFQqV"
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          },
+          "improvements": [
+            {
+              "id": "imp-mpspzkc6-oqo3",
+              "ts": 1780167871158,
+              "turn": 2,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mpspzk5k-oxplcg",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "0fyZKLo85Dl22PYZ",
+              "ts": 1780168942126,
+              "turn": 5,
+              "kind": "siege_storm",
+              "label": "Siege resolved — Carried by Storm",
+              "description": "Siege siege-mpspzk5k-oxplcg ended on turn 5 (Carried by Storm). 5 beats in the saga.",
+              "source": {
+                "activity": "siege_resolve",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "siegeId": "siege-mpspzk5k-oxplcg"
+              },
+              "before": null,
+              "after": {
+                "status": "won_storm",
+                "beats": [
+                  {
+                    "turn": 2,
+                    "kind": "siege_declared",
+                    "title": "Siege declared on Perspicacity Fortress",
+                    "description": "The Unmoved Movers commits 60 OP to siege. Size: standard. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q. Bulwark discount: none.",
+                    "payload": {
+                      "bulwarkDiscount": false
+                    }
+                  },
+                  {
+                    "turn": 5,
+                    "kind": "layer_breached",
+                    "title": "Outer Curtain Wall — Perspicacity falls",
+                    "description": "Layer 1 of 3 breached (razed) on turn 5.",
+                    "payload": {
+                      "layerIdx": 0,
+                      "layerName": "Outer Curtain Wall — Perspicacity",
+                      "rule": "razed"
+                    }
+                  },
+                  {
+                    "turn": 5,
+                    "kind": "layer_breached",
+                    "title": "The Barbican Gate — Perspicacity falls",
+                    "description": "Layer 2 of 3 breached (razed) on turn 5.",
+                    "payload": {
+                      "layerIdx": 1,
+                      "layerName": "The Barbican Gate — Perspicacity",
+                      "rule": "razed"
+                    }
+                  },
+                  {
+                    "turn": 5,
+                    "kind": "layer_breached",
+                    "title": "The Inner Keep — Perspicacity falls",
+                    "description": "Layer 3 of 3 breached (razed) on turn 5.",
+                    "payload": {
+                      "layerIdx": 2,
+                      "layerName": "The Inner Keep — Perspicacity",
+                      "rule": "razed"
+                    }
+                  },
+                  {
+                    "turn": 5,
+                    "kind": "siege_storm",
+                    "title": "The last layer falls — the place is carried by storm",
+                    "description": "All 3 layer(s) breached. Outcome: won_storm (ownership / morale / war-log write-back lands in Phase F)."
+                  }
+                ]
+              },
+              "reversible": false,
+              "dedupeKey": "siege:siege-mpspzk5k-oxplcg:won_storm"
+            },
+            {
+              "id": "imp-mpsx5p1o-um1o",
+              "ts": 1780179914508,
+              "turn": 7,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mpsx5ouu-kcnext",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "r6mqLWkfiIbTxFKO",
+              "ts": 1780212165372,
+              "turn": 15,
+              "kind": "siege_hold",
+              "label": "Siege resolved — The Siege is Broken",
+              "description": "Siege siege-mpsx5ouu-kcnext ended on turn 15 (The Siege is Broken). 15 beats in the saga.",
+              "source": {
+                "activity": "siege_resolve",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "siegeId": "siege-mpsx5ouu-kcnext"
+              },
+              "before": null,
+              "after": {
+                "status": "lost_hold",
+                "beats": [
+                  {
+                    "turn": 7,
+                    "kind": "siege_declared",
+                    "title": "Siege declared on Perspicacity Fortress",
+                    "description": "The Unmoved Movers commits 60 OP to siege. Size: standard. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q. Bulwark discount: none.",
+                    "payload": {
+                      "bulwarkDiscount": false
+                    }
+                  },
+                  {
+                    "turn": 8,
+                    "kind": "tick_drain",
+                    "title": "Tick 8: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 52 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 3,
+                        "logistics": 3,
+                        "economy": 2,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 52
+                    }
+                  },
+                  {
+                    "turn": null,
+                    "kind": "convene",
+                    "title": "Breach Scene convened — layer 1",
+                    "description": "GM convened the tactical breach on Outer Curtain Wall — Perspicacity."
+                  },
+                  {
+                    "turn": 9,
+                    "kind": "tick_drain",
+                    "title": "Tick 9: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 44 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 3,
+                        "logistics": 3,
+                        "economy": 2,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 44
+                    }
+                  },
+                  {
+                    "turn": 10,
+                    "kind": "tick_drain",
+                    "title": "Tick 10: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 36 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 3,
+                        "logistics": 3,
+                        "economy": 2,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 36
+                    }
+                  },
+                  {
+                    "turn": 10,
+                    "kind": "event_deck",
+                    "title": "Event: Reinforcements Arrive",
+                    "description": "A column arrives bearing supplies. — Buffer +20.",
+                    "payload": {
+                      "eventId": "reinforcements",
+                      "deckId": "generic",
+                      "gateRoll": {
+                        "fired": true,
+                        "roll": 15,
+                        "threshold": 14,
+                        "dice": [
+                          5,
+                          10
+                        ],
+                        "deckId": "generic"
+                      },
+                      "omenUsed": false
+                    }
+                  },
+                  {
+                    "turn": 11,
+                    "kind": "tick_drain",
+                    "title": "Tick 11: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 48 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 3,
+                        "logistics": 3,
+                        "economy": 2,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 48
+                    }
+                  },
+                  {
+                    "turn": 12,
+                    "kind": "tick_drain",
+                    "title": "Tick 12: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 40 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 3,
+                        "logistics": 3,
+                        "economy": 2,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 40
+                    }
+                  },
+                  {
+                    "turn": 12,
+                    "kind": "event_deck",
+                    "title": "Event: Bad Omen",
+                    "description": "The augurs spoke ill. — random morale -1; defender Anytime -1.",
+                    "payload": {
+                      "eventId": "bad_omen",
+                      "deckId": "generic",
+                      "gateRoll": {
+                        "fired": true,
+                        "roll": 14,
+                        "threshold": 14,
+                        "dice": [
+                          7,
+                          7
+                        ],
+                        "deckId": "generic"
+                      },
+                      "omenUsed": false
+                    }
+                  },
+                  {
+                    "turn": 13,
+                    "kind": "tick_drain",
+                    "title": "Tick 13: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 32 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 4,
+                        "logistics": 4,
+                        "economy": 0,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 32
+                    }
+                  },
+                  {
+                    "turn": 14,
+                    "kind": "tick_drain",
+                    "title": "Tick 14: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 24 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 4,
+                        "logistics": 4,
+                        "economy": 0,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 24
+                    }
+                  },
+                  {
+                    "turn": 14,
+                    "kind": "trojan_failed",
+                    "title": "The ruse is discovered",
+                    "description": "Trojan Horse FAILS (Sneak past the watch, Sabotage the defences). Forces halved (−0 OP), Buffer −24, attacker −2 morale (applied in Phase F).",
+                    "payload": {
+                      "results": [
+                        {
+                          "key": "sneak",
+                          "label": "Sneak past the watch",
+                          "cat": "Intrigue",
+                          "dc": 13,
+                          "auto": false,
+                          "base": 11,
+                          "bonus": 0,
+                          "total": 11,
+                          "pass": false
+                        },
+                        {
+                          "key": "sabotage",
+                          "label": "Sabotage the defences",
+                          "cat": "Faith",
+                          "dc": 12,
+                          "auto": false,
+                          "base": 9,
+                          "bonus": 0,
+                          "total": 9,
+                          "pass": false
+                        },
+                        {
+                          "key": "breach",
+                          "label": "Breach from within",
+                          "cat": "Violence",
+                          "dc": 12,
+                          "auto": false,
+                          "base": 15,
+                          "bonus": 0,
+                          "total": 15,
+                          "pass": true
+                        }
+                      ],
+                      "sinon": false,
+                      "bufferShaved": 24,
+                      "halved": 0
+                    }
+                  },
+                  {
+                    "turn": 14,
+                    "kind": "trojan_failed",
+                    "title": "The ruse is discovered",
+                    "description": "Trojan Horse FAILS (Sabotage the defences, Breach from within). Forces halved (−0 OP), Buffer −0, attacker −2 morale (applied in Phase F).",
+                    "payload": {
+                      "results": [
+                        {
+                          "key": "sneak",
+                          "label": "Sneak past the watch",
+                          "cat": "Intrigue",
+                          "dc": 13,
+                          "auto": false,
+                          "base": 18,
+                          "bonus": 0,
+                          "total": 18,
+                          "pass": true
+                        },
+                        {
+                          "key": "sabotage",
+                          "label": "Sabotage the defences",
+                          "cat": "Faith",
+                          "dc": 12,
+                          "auto": false,
+                          "base": 6,
+                          "bonus": 0,
+                          "total": 6,
+                          "pass": false
+                        },
+                        {
+                          "key": "breach",
+                          "label": "Breach from within",
+                          "cat": "Violence",
+                          "dc": 12,
+                          "auto": false,
+                          "base": 5,
+                          "bonus": 0,
+                          "total": 5,
+                          "pass": false
+                        }
+                      ],
+                      "sinon": false,
+                      "bufferShaved": 0,
+                      "halved": 0
+                    }
+                  },
+                  {
+                    "turn": 15,
+                    "kind": "tick_drain",
+                    "title": "Tick 15: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 0 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 0,
+                        "logistics": 0,
+                        "economy": 0,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 0
+                    }
+                  },
+                  {
+                    "turn": 15,
+                    "kind": "siege_hold",
+                    "title": "Buffer exhausted — attacker breaks the siege",
+                    "description": "Attacker's commitment depleted. Orderly withdrawal."
+                  }
+                ]
+              },
+              "reversible": false,
+              "dedupeKey": "siege:siege-mpsx5ouu-kcnext:lost_hold"
+            },
+            {
+              "id": "imp-mpvicd1r-z9o6",
+              "ts": 1780336429839,
+              "turn": 16,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mpviccvv-f3e369",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "imp-mpxl7b1q-b8u0",
+              "ts": 1780462165166,
+              "turn": 17,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mpxl7b0g-t50g3e",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "RDoKQsoa6eu9TVJi",
+              "ts": 1780462176516,
+              "turn": 18,
+              "kind": "siege_hold",
+              "label": "Siege resolved — The Siege is Broken",
+              "description": "Siege siege-mpxl7b0g-t50g3e ended on turn 18 (The Siege is Broken). 3 beats in the saga.",
+              "source": {
+                "activity": "siege_resolve",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "siegeId": "siege-mpxl7b0g-t50g3e"
+              },
+              "before": null,
+              "after": {
+                "status": "lost_hold",
+                "beats": [
+                  {
+                    "turn": 17,
+                    "kind": "siege_declared",
+                    "title": "Siege declared on Perspicacity Fortress",
+                    "description": "The Unmoved Movers commits 6 OP to siege. Size: standard. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q. Bulwark discount: none.",
+                    "payload": {
+                      "bulwarkDiscount": false
+                    }
+                  },
+                  {
+                    "turn": 18,
+                    "kind": "tick_drain",
+                    "title": "Tick 18: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 0 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 2,
+                        "logistics": 2,
+                        "economy": 2,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 0
+                    }
+                  },
+                  {
+                    "turn": 18,
+                    "kind": "siege_hold",
+                    "title": "Buffer exhausted — attacker breaks the siege",
+                    "description": "Attacker's commitment depleted. Orderly withdrawal."
+                  }
+                ]
+              },
+              "reversible": false,
+              "dedupeKey": "siege:siege-mpxl7b0g-t50g3e:lost_hold"
+            },
+            {
+              "id": "imp-mpxlbhxf-n13h",
+              "ts": 1780462360707,
+              "turn": 18,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mpxlbhsn-rrkpy6",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "BQuRe0sAqgfXh2t2",
+              "ts": 1780462371351,
+              "turn": 19,
+              "kind": "siege_hold",
+              "label": "Siege resolved — The Siege is Broken",
+              "description": "Siege siege-mpxlbhsn-rrkpy6 ended on turn 19 (The Siege is Broken). 3 beats in the saga.",
+              "source": {
+                "activity": "siege_resolve",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "siegeId": "siege-mpxlbhsn-rrkpy6"
+              },
+              "before": null,
+              "after": {
+                "status": "lost_hold",
+                "beats": [
+                  {
+                    "turn": 18,
+                    "kind": "siege_declared",
+                    "title": "Siege declared on Perspicacity Fortress",
+                    "description": "The Unmoved Movers commits 0 OP to siege. Size: standard. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q. Bulwark discount: none.",
+                    "payload": {
+                      "bulwarkDiscount": false
+                    }
+                  },
+                  {
+                    "turn": 19,
+                    "kind": "tick_drain",
+                    "title": "Tick 19: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 0 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 0,
+                        "logistics": 0,
+                        "economy": 0,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 0
+                    }
+                  },
+                  {
+                    "turn": 19,
+                    "kind": "siege_hold",
+                    "title": "Buffer exhausted — attacker breaks the siege",
+                    "description": "Attacker's commitment depleted. Orderly withdrawal."
+                  }
+                ]
+              },
+              "reversible": false,
+              "dedupeKey": "siege:siege-mpxlbhsn-rrkpy6:lost_hold"
+            },
+            {
+              "id": "imp-mpy7yv3r-qjpk",
+              "ts": 1780500402423,
+              "turn": 19,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mpy7yuwg-4xtuik",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "imp-mpydwxhb-erej",
+              "ts": 1780510389887,
+              "turn": 20,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mpydwxfl-3axmg9",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "Bjqxq2doiWUvPWhM",
+              "ts": 1780513599490,
+              "turn": 26,
+              "kind": "siege_hold",
+              "label": "Siege resolved — The Siege is Broken",
+              "description": "Siege siege-mpydwxfl-3axmg9 ended on turn 26 (The Siege is Broken). 28 beats in the saga.",
+              "source": {
+                "activity": "siege_resolve",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "siegeId": "siege-mpydwxfl-3axmg9"
+              },
+              "before": null,
+              "after": {
+                "status": "lost_hold",
+                "beats": [
+                  {
+                    "turn": 20,
+                    "kind": "siege_declared",
+                    "title": "Siege declared on Perspicacity Fortress",
+                    "description": "The Unmoved Movers commits 60 OP to siege. Size: standard. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q. Bulwark discount: none.",
+                    "payload": {
+                      "bulwarkDiscount": false
+                    }
+                  },
+                  {
+                    "turn": 21,
+                    "kind": "tick_drain",
+                    "title": "Tick 21: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 52 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 3,
+                        "logistics": 3,
+                        "economy": 2,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 52
+                    }
+                  },
+                  {
+                    "turn": 21,
+                    "kind": "bombard",
+                    "title": "Bombardment",
+                    "description": "The Unmoved Movers bombard Outer Curtain Wall — Perspicacity for 25 structure damage.",
+                    "payload": {
+                      "layerIdx": 0,
+                      "dmg": 25
+                    }
+                  },
+                  {
+                    "turn": 22,
+                    "kind": "tick_drain",
+                    "title": "Tick 22: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 44 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 3,
+                        "logistics": 3,
+                        "economy": 2,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 44
+                    }
+                  },
+                  {
+                    "turn": 22,
+                    "kind": "event_deck",
+                    "title": "Event: Bad Omen",
+                    "description": "The augurs spoke ill. — random morale -1; defender Anytime -1.",
+                    "payload": {
+                      "eventId": "bad_omen",
+                      "deckId": "generic",
+                      "gateRoll": {
+                        "fired": true,
+                        "roll": 20,
+                        "threshold": 14,
+                        "dice": [
+                          10,
+                          10
+                        ],
+                        "deckId": "generic"
+                      },
+                      "omenUsed": false
+                    }
+                  },
+                  {
+                    "turn": 22,
+                    "kind": "bombard",
+                    "title": "Bombardment",
+                    "description": "The Unmoved Movers bombard Outer Curtain Wall — Perspicacity for 27 structure damage.",
+                    "payload": {
+                      "layerIdx": 0,
+                      "dmg": 27
+                    }
+                  },
+                  {
+                    "turn": 23,
+                    "kind": "tick_drain",
+                    "title": "Tick 23: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 36 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 3,
+                        "logistics": 3,
+                        "economy": 2,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 36
+                    }
+                  },
+                  {
+                    "turn": 23,
+                    "kind": "event_deck",
+                    "title": "Event: Bad Omen",
+                    "description": "The augurs spoke ill. — random morale -1; defender Anytime -1.",
+                    "payload": {
+                      "eventId": "bad_omen",
+                      "deckId": "generic",
+                      "gateRoll": {
+                        "fired": true,
+                        "roll": 18,
+                        "threshold": 14,
+                        "dice": [
+                          8,
+                          10
+                        ],
+                        "deckId": "generic"
+                      },
+                      "omenUsed": false
+                    }
+                  },
+                  {
+                    "turn": 23,
+                    "kind": "bombard",
+                    "title": "Bombardment",
+                    "description": "The Unmoved Movers bombard Outer Curtain Wall — Perspicacity for 25 structure damage.",
+                    "payload": {
+                      "layerIdx": 0,
+                      "dmg": 25
+                    }
+                  },
+                  {
+                    "turn": 24,
+                    "kind": "tick_drain",
+                    "title": "Tick 24: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 28 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 3,
+                        "logistics": 3,
+                        "economy": 2,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 28
+                    }
+                  },
+                  {
+                    "turn": 24,
+                    "kind": "bombard",
+                    "title": "Bombardment",
+                    "description": "The Unmoved Movers bombard Outer Curtain Wall — Perspicacity for 29 structure damage.",
+                    "payload": {
+                      "layerIdx": 0,
+                      "dmg": 29
+                    }
+                  },
+                  {
+                    "turn": 25,
+                    "kind": "tick_drain",
+                    "title": "Tick 25: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 20 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 3,
+                        "logistics": 3,
+                        "economy": 2,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 20
+                    }
+                  },
+                  {
+                    "turn": 25,
+                    "kind": "event_deck",
+                    "title": "Event: Prophet's Visitation",
+                    "description": "An oracle delivers a word — welcome to one camp, bitter to the other. — attacker morale +1, defender −1.",
+                    "payload": {
+                      "eventId": "prophets_visitation",
+                      "deckId": "generic",
+                      "gateRoll": {
+                        "fired": true,
+                        "roll": 14,
+                        "threshold": 14,
+                        "dice": [
+                          6,
+                          8
+                        ],
+                        "deckId": "generic"
+                      },
+                      "omenUsed": false
+                    }
+                  },
+                  {
+                    "turn": 25,
+                    "kind": "clash_maneuver",
+                    "title": "Bombard — in the moment",
+                    "description": "Fired during the clash (tactical tempo). Buffer −1.5 OP."
+                  },
+                  {
+                    "turn": 25,
+                    "kind": "bombard",
+                    "title": "Bombardment",
+                    "description": "The Unmoved Movers bombard Outer Curtain Wall — Perspicacity for 26 structure damage.",
+                    "payload": {
+                      "layerIdx": 0,
+                      "dmg": 26
+                    }
+                  },
+                  {
+                    "turn": 25,
+                    "kind": "garrison_culled",
+                    "title": "The garrison falls with the wall",
+                    "description": "Defenders caught in the collapse — −46, defender muster down to 20."
+                  },
+                  {
+                    "turn": 25,
+                    "kind": "convene",
+                    "title": "Breach Scene convened — layer 1",
+                    "description": "GM convened the tactical breach on Outer Curtain Wall — Perspicacity."
+                  },
+                  {
+                    "turn": 25,
+                    "kind": "garrison_culled",
+                    "title": "The garrison falls with the wall",
+                    "description": "Defenders caught in the collapse — −22, defender muster down to 20."
+                  },
+                  {
+                    "turn": 25,
+                    "kind": "garrison_culled",
+                    "title": "The garrison falls with the wall",
+                    "description": "Defenders caught in the collapse — −12, defender muster down to 8."
+                  },
+                  {
+                    "turn": 25,
+                    "kind": "garrison_culled",
+                    "title": "The garrison falls with the wall",
+                    "description": "Defenders caught in the collapse — −14, defender muster down to 6."
+                  },
+                  {
+                    "turn": 25,
+                    "kind": "garrison_culled",
+                    "title": "The garrison falls with the wall",
+                    "description": "Defenders caught in the collapse — −14, defender muster down to 6."
+                  },
+                  {
+                    "turn": 25,
+                    "kind": "champion_duel",
+                    "title": "Evil Bad Rig bests Evan",
+                    "description": "Duel rolls — Evan 13 vs Evil Bad Rig 18. Evan is wounded.",
+                    "actorIds": [
+                      "KX1SHfWr8mN6DOeq",
+                      "UIKwMI31eQtRXSj0"
+                    ],
+                    "payload": {
+                      "winnerId": "KX1SHfWr8mN6DOeq",
+                      "loserId": "UIKwMI31eQtRXSj0",
+                      "winnerSide": "defender",
+                      "loserSide": "attacker",
+                      "fate": "wounded",
+                      "rolls": {
+                        "attacker": 13,
+                        "defender": 18
+                      }
+                    }
+                  },
+                  {
+                    "turn": 25,
+                    "kind": "champion_status",
+                    "title": "Champion active → wounded",
+                    "description": "",
+                    "actorIds": [
+                      "UIKwMI31eQtRXSj0"
+                    ],
+                    "payload": {
+                      "prev": "active",
+                      "next": "wounded",
+                      "source": "champion_duel"
+                    }
+                  },
+                  {
+                    "turn": 26,
+                    "kind": "tick_drain",
+                    "title": "Tick 26: −8 OP from Buffer",
+                    "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 0 OP total.",
+                    "payload": {
+                      "drain": 8,
+                      "deducted": {
+                        "violence": 5,
+                        "logistics": 0,
+                        "economy": 0,
+                        "softPower": 0,
+                        "diplomacy": 0,
+                        "faith": 0,
+                        "intrigue": 0
+                      },
+                      "remaining": 0
+                    }
+                  },
+                  {
+                    "turn": 26,
+                    "kind": "siege_hold",
+                    "title": "Buffer exhausted — attacker breaks the siege",
+                    "description": "Attacker's commitment depleted. Orderly withdrawal."
+                  },
+                  {
+                    "turn": 26,
+                    "kind": "event_deck",
+                    "title": "Event: Champion Wounded",
+                    "description": "Misfortune strikes a champion — illness or a training mishap. — Evil Bad Rig wounded.",
+                    "payload": {
+                      "eventId": "champion_wounded",
+                      "deckId": "generic",
+                      "gateRoll": {
+                        "fired": true,
+                        "roll": 17,
+                        "threshold": 14,
+                        "dice": [
+                          8,
+                          9
+                        ],
+                        "deckId": "generic"
+                      },
+                      "omenUsed": false
+                    }
+                  },
+                  {
+                    "turn": 26,
+                    "kind": "champion_recovered",
+                    "title": "Evan recovers",
+                    "description": "Wounded → active.",
+                    "actorIds": [
+                      "UIKwMI31eQtRXSj0"
+                    ],
+                    "payload": {
+                      "side": "attacker"
+                    }
+                  },
+                  {
+                    "turn": 26,
+                    "kind": "butchers_bill",
+                    "title": "The butcher's bill",
+                    "description": "Muster losses — attacker 0, defender 108 over 0 clashes."
+                  }
+                ]
+              },
+              "reversible": false,
+              "dedupeKey": "siege:siege-mpydwxfl-3axmg9:lost_hold"
+            },
+            {
+              "id": "imp-mpyl1bwp-8vox",
+              "ts": 1780522352521,
+              "turn": 27,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mpyl1bqg-w93e4j",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "imp-mpzuz7ik-htv2",
+              "ts": 1780599515852,
+              "turn": 30,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: skirmish. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mpzuz7gn-r0v1vj",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "imp-mq7ezl3d-ihw8",
+              "ts": 1781056389001,
+              "turn": 31,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mq7ezl1m-72f26a",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "imp-mqfqb6bi-vur7",
+              "ts": 1781559134910,
+              "turn": 32,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mqfqb69o-z7il1z",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "imp-mqfs4jjp-iqge",
+              "ts": 1781562184693,
+              "turn": 33,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mqfs4jhw-dwycqo",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "imp-mqfv0gwb-k1xv",
+              "ts": 1781567033483,
+              "turn": 34,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mqfv0guy-7zhc2y",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "imp-mqfv4tqm-d4n0",
+              "ts": 1781567236750,
+              "turn": 35,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mqfv4tp9-8ba3vr",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "imp-mqfvgg98-7ull",
+              "ts": 1781567779148,
+              "turn": 36,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mqfvgg7x-574f7f",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "imp-mqfyp90z-sem1",
+              "ts": 1781573228531,
+              "turn": 40,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mqfyp8xq-ob9j95",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "imp-mqg2zjsv-hxt8",
+              "ts": 1781580427519,
+              "turn": 41,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mqg2zjqt-sxxv0l",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "imp-mqg39puz-fs1j",
+              "ts": 1781580901931,
+              "turn": 42,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mqg39ptn-2fmk6r",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "imp-mqh0qkyv-27aa",
+              "ts": 1781637116071,
+              "turn": 43,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mqh0qkvy-za34po",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            },
+            {
+              "id": "imp-mqkbwbiq-f3r1",
+              "ts": 1781837258066,
+              "turn": 45,
+              "kind": "siege_started",
+              "label": "Siege started by The Unmoved Movers",
+              "description": "Size: standard. Layers: 3. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q.",
+              "source": {
+                "siegeId": "siege-mqkbwbgk-g4frgg",
+                "factionId": "Zsn8DO6cpTuHHexS",
+                "activity": "begin_siege"
+              },
+              "reversible": false
+            }
+          ],
+          "modifierHistory": {
+            "Sacked": {
+              "addedTurn": 5,
+              "addedTs": 1780168942041,
+              "source": "siege"
+            }
+          },
+          "holdings": {
+            "rigIds": [
+              "NP0kpBvtERMeTqPo",
+              "vnHo9J78GcGOyEmr",
+              "EoTOcbq23sljFQqV"
+            ],
+            "bossIds": [],
+            "notes": "",
+            "lastUpdated": 1780536798691
+          }
+        },
+        "bbttcc-raid": {
+          "battleScenes": [
+            {
+              "sceneId": "fuXr6FAkbGiG323F",
+              "label": "The Siege of Perspicacity Fortress -",
+              "order": 0
+            }
+          ]
+        }
+      },
+      "_id": "RQ40Tai3G7s9opal",
+      "author": "bytUGWIOqq9eT7Or",
+      "elevation": 0,
+      "levels": [],
+      "sort": 0,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!EPrIyhHJQxy2REce.RQ40Tai3G7s9opal"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 956.6987298107781,
+      "y": 527.3502691896257,
+      "fillAlpha": 0.2,
+      "fillColor": "#301e3c",
+      "strokeColor": "#e573d2",
+      "strokeAlpha": 1,
+      "strokeWidth": 7,
+      "text": "Northwood Camp",
+      "fontSize": 10,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Northwood Camp",
+          "status": "occupied",
+          "type": "settlement",
+          "size": "outpost",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 1,
+            "materials": 1,
+            "trade": 2,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "T2",
+              "locked": false
+            }
+          },
+          "createdAt": 1780111785603,
+          "factionId": "",
+          "terrain": {
+            "key": "forest",
+            "label": "Forest / Jungle"
+          },
+          "terrainType": "forest",
+          "terrainKey": "forest",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 1,
+              "materials": 1,
+              "trade": 2,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 0.75,
+              "mTrade": 1
+            },
+            "modifiers": [
+              "Hostile Population"
+            ],
+            "effective": {
+              "food": 1,
+              "materials": 1,
+              "trade": 2,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 3,
+            "violence": 1,
+            "nonLethal": 1,
+            "intrigue": 1,
+            "diplomacy": 1,
+            "softPower": 1
+          },
+          "effectiveAt": 1783976314531,
+          "modifiers": [
+            "Hostile Population"
+          ],
+          "notes": "",
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          },
+          "modifierHistory": {
+            "Hostile Population": {
+              "addedTs": 1780167112916,
+              "addedTurn": 2,
+              "addedBy": "H8sSXuuoTZIJKCXP",
+              "source": {
+                "activity": "loyalty_unrest",
+                "factionId": "H8sSXuuoTZIJKCXP"
+              },
+              "removedTs": null
+            }
+          },
+          "improvements": [
+            {
+              "id": "BUeKk21Dnb1gwmwC",
+              "ts": 1780167112995,
+              "turn": 2,
+              "kind": "modifier_added",
+              "label": "Modifier added: Hostile Population",
+              "description": "Hostile Population — −25% production, −2 loyalty",
+              "source": {
+                "activity": "loyalty_unrest",
+                "factionId": "H8sSXuuoTZIJKCXP"
+              },
+              "before": null,
+              "after": null,
+              "reversible": true,
+              "dedupeKey": "unrest:0LOFYSAIAoyrF0ch:1780167112916"
+            },
+            {
+              "id": "EJv9Emhph5CCOQ28",
+              "ts": 1783976314877,
+              "turn": 46,
+              "kind": "owner_action",
+              "label": "Population: sparse → uninhabited",
+              "description": "Population class set via editor.",
+              "source": {
+                "activity": "hex_editor_save",
+                "factionId": "bytUGWIOqq9eT7Or"
+              },
+              "before": {
+                "population": "sparse"
+              },
+              "after": {
+                "population": "uninhabited"
+              },
+              "reversible": true,
+              "dedupeKey": null
+            }
+          ]
+        }
+      },
+      "_id": "0LOFYSAIAoyrF0ch",
+      "author": "bytUGWIOqq9eT7Or",
+      "elevation": 0,
+      "levels": [],
+      "sort": 1,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textColor": "#fff4fc",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!EPrIyhHJQxy2REce.0LOFYSAIAoyrF0ch"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1056.698729810778,
+      "y": 527.3502691896257,
+      "fillAlpha": 0.2,
+      "fillColor": "#35213d",
+      "strokeColor": "#e573d2",
+      "strokeAlpha": 1,
+      "strokeWidth": 7,
+      "text": "Northfield Camp",
+      "fontSize": 10,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Northfield Camp",
+          "status": "occupied",
+          "type": "settlement",
+          "size": "outpost",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 1,
+            "materials": 1,
+            "trade": 2,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "T2",
+              "locked": false
+            }
+          },
+          "createdAt": 1780111789964,
+          "factionId": "",
+          "terrain": {
+            "key": "plains",
+            "label": "Plains / Grasslands"
+          },
+          "terrainType": "plains",
+          "terrainKey": "plains",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 1,
+              "materials": 1,
+              "trade": 2,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 1,
+              "materials": 1,
+              "trade": 2,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 3,
+            "violence": 1,
+            "nonLethal": 1,
+            "intrigue": 1,
+            "diplomacy": 1,
+            "softPower": 1
+          },
+          "effectiveAt": 1783976320314,
+          "modifiers": [],
+          "notes": "",
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          },
+          "improvements": [
+            {
+              "id": "8MztcviSY4HiefEH",
+              "ts": 1783976320692,
+              "turn": 46,
+              "kind": "owner_action",
+              "label": "Population: sparse → uninhabited",
+              "description": "Population class set via editor.",
+              "source": {
+                "activity": "hex_editor_save",
+                "factionId": "bytUGWIOqq9eT7Or"
+              },
+              "before": {
+                "population": "sparse"
+              },
+              "after": {
+                "population": "uninhabited"
+              },
+              "reversible": true,
+              "dedupeKey": null
+            }
+          ]
+        }
+      },
+      "_id": "2mZaAuiHVclMrOR3",
+      "author": "bytUGWIOqq9eT7Or",
+      "elevation": 0,
+      "levels": [],
+      "sort": 2,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textColor": "#fff4fc",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!EPrIyhHJQxy2REce.2mZaAuiHVclMrOR3"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1106.698729810778,
+      "y": 613.9528095680696,
+      "fillAlpha": 0.2,
+      "fillColor": "#301e3c",
+      "strokeColor": "#e573d2",
+      "strokeAlpha": 1,
+      "strokeWidth": 7,
+      "text": "Eastwood Camp",
+      "fontSize": 11,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Eastwood Camp",
+          "status": "occupied",
+          "type": "settlement",
+          "size": "outpost",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 1,
+            "materials": 1,
+            "trade": 2,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "T2",
+              "locked": false
+            }
+          },
+          "createdAt": 1780111798857,
+          "factionId": "",
+          "terrain": {
+            "key": "forest",
+            "label": "Forest / Jungle"
+          },
+          "terrainType": "forest",
+          "terrainKey": "forest",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 1,
+              "materials": 1,
+              "trade": 2,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 1,
+              "materials": 1,
+              "trade": 2,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 3,
+            "violence": 1,
+            "nonLethal": 1,
+            "intrigue": 1,
+            "diplomacy": 1,
+            "softPower": 1
+          },
+          "effectiveAt": 1783976324931,
+          "modifiers": [],
+          "notes": "",
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          },
+          "improvements": [
+            {
+              "id": "7M7VUNeosrcV3uKo",
+              "ts": 1783976325271,
+              "turn": 46,
+              "kind": "owner_action",
+              "label": "Population: sparse → uninhabited",
+              "description": "Population class set via editor.",
+              "source": {
+                "activity": "hex_editor_save",
+                "factionId": "bytUGWIOqq9eT7Or"
+              },
+              "before": {
+                "population": "sparse"
+              },
+              "after": {
+                "population": "uninhabited"
+              },
+              "reversible": true,
+              "dedupeKey": null
+            }
+          ]
+        }
+      },
+      "_id": "q0KTbAhiodo6UCnP",
+      "author": "bytUGWIOqq9eT7Or",
+      "elevation": 0,
+      "levels": [],
+      "sort": 3,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textColor": "#fff4fc",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!EPrIyhHJQxy2REce.q0KTbAhiodo6UCnP"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 906.6987298107781,
+      "y": 613.9528095680696,
+      "fillAlpha": 0.2,
+      "fillColor": "#361d3a",
+      "strokeColor": "#e573d2",
+      "strokeAlpha": 1,
+      "strokeWidth": 7,
+      "text": "West Scar Camp",
+      "fontSize": 10,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "West Scar Camp",
+          "status": "occupied",
+          "type": "settlement",
+          "size": "outpost",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 1,
+            "materials": 1,
+            "trade": 2,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "T2",
+              "locked": false
+            }
+          },
+          "createdAt": 1780111803830,
+          "factionId": "",
+          "terrain": {
+            "key": "canyons",
+            "label": "Canyons / Badlands"
+          },
+          "terrainType": "canyons",
+          "terrainKey": "canyons",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 1,
+              "materials": 1,
+              "trade": 2,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 1,
+              "materials": 1,
+              "trade": 2,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 3,
+            "violence": 1,
+            "nonLethal": 1,
+            "intrigue": 1,
+            "diplomacy": 1,
+            "softPower": 1
+          },
+          "effectiveAt": 1783976309181,
+          "modifiers": [],
+          "notes": "",
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          },
+          "improvements": [
+            {
+              "id": "F6I6nS5JG7n89VKP",
+              "ts": 1783976309689,
+              "turn": 46,
+              "kind": "owner_action",
+              "label": "Population: sparse → uninhabited",
+              "description": "Population class set via editor.",
+              "source": {
+                "activity": "hex_editor_save",
+                "factionId": "bytUGWIOqq9eT7Or"
+              },
+              "before": {
+                "population": "sparse"
+              },
+              "after": {
+                "population": "uninhabited"
+              },
+              "reversible": true,
+              "dedupeKey": null
+            }
+          ]
+        }
+      },
+      "_id": "7uonLzoLzAn4wCuS",
+      "author": "bytUGWIOqq9eT7Or",
+      "elevation": 0,
+      "levels": [],
+      "sort": 4,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textColor": "#fff4fc",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!EPrIyhHJQxy2REce.7uonLzoLzAn4wCuS"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1156.698729810778,
+      "y": 700.5553499465135,
+      "fillAlpha": 0.2,
+      "fillColor": "#3a2644",
+      "strokeColor": "#ff5ac8",
+      "strokeAlpha": 1,
+      "strokeWidth": 7,
+      "text": "Tangle Road",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Tangle Road",
+          "status": "occupied",
+          "type": "wilderness",
+          "size": "outpost",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 1,
+            "materials": 1,
+            "trade": 2,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "T2",
+              "locked": false
+            }
+          },
+          "createdAt": 1780111809633,
+          "factionId": "",
+          "terrain": {
+            "key": "forest",
+            "label": "Forest / Jungle"
+          },
+          "terrainType": "forest",
+          "terrainKey": "forest",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 1,
+              "materials": 1,
+              "trade": 2,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 1,
+              "materials": 1,
+              "trade": 2,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 3,
+            "violence": 1,
+            "nonLethal": 1,
+            "intrigue": 1,
+            "diplomacy": 1,
+            "softPower": 1
+          },
+          "effectiveAt": 1783976331043,
+          "modifiers": [],
+          "notes": "",
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          },
+          "improvements": [
+            {
+              "id": "BbyF6FBiBbahp0xe",
+              "ts": 1783976331607,
+              "turn": 46,
+              "kind": "owner_action",
+              "label": "Population: sparse → uninhabited",
+              "description": "Population class set via editor.",
+              "source": {
+                "activity": "hex_editor_save",
+                "factionId": "bytUGWIOqq9eT7Or"
+              },
+              "before": {
+                "population": "sparse"
+              },
+              "after": {
+                "population": "uninhabited"
+              },
+              "reversible": true,
+              "dedupeKey": null
+            },
+            {
+              "id": "LJF8cwDfmGlnChsc",
+              "ts": 1783976331699,
+              "turn": 46,
+              "kind": "modifier_removed",
+              "label": "Modifier removed: Supply Line",
+              "description": "Supply Line removed.",
+              "source": {
+                "activity": "hex_editor_save",
+                "factionId": "bytUGWIOqq9eT7Or"
+              },
+              "before": null,
+              "after": null,
+              "reversible": true,
+              "dedupeKey": "editor:f7TEJV1A0a1grTdJ:1783976331653:rm:Supply Line"
+            }
+          ],
+          "modifierHistory": {
+            "Supply Line": {
+              "addedTs": null,
+              "addedTurn": null,
+              "addedBy": null,
+              "source": {
+                "activity": "hex_editor_save",
+                "factionId": "bytUGWIOqq9eT7Or"
+              },
+              "removedTs": 1783976331653,
+              "removedTurn": 46,
+              "removedBy": "bytUGWIOqq9eT7Or"
+            }
+          }
+        }
+      },
+      "_id": "f7TEJV1A0a1grTdJ",
+      "author": "bytUGWIOqq9eT7Or",
+      "elevation": 0,
+      "levels": [],
+      "sort": 5,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textColor": "#fff4fc",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!EPrIyhHJQxy2REce.f7TEJV1A0a1grTdJ"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1206.698729810778,
+      "y": 787.1578903249573,
+      "fillAlpha": 0.14,
+      "fillColor": "#33424b",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "The Scarlands",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "The Scarlands",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "T2",
+              "locked": false
+            }
+          },
+          "createdAt": 1780111813697,
+          "factionId": "",
+          "terrain": {
+            "key": "badlands",
+            "label": "Badlands"
+          },
+          "terrainType": "badlands",
+          "terrainKey": "badlands",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1780111815396,
+          "modifiers": [],
+          "notes": "",
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        }
+      },
+      "_id": "IkStj2ohyzUl9Q2j",
+      "author": "bytUGWIOqq9eT7Or",
+      "elevation": 0,
+      "levels": [],
+      "sort": 6,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!EPrIyhHJQxy2REce.IkStj2ohyzUl9Q2j"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1156.698729810778,
+      "y": 873.7604307034012,
+      "fillAlpha": 0.14,
+      "fillColor": "#33424b",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Greenmaw",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Greenmaw",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "T2",
+              "locked": false
+            }
+          },
+          "createdAt": 1780111822537,
+          "factionId": "",
+          "terrain": {
+            "key": "jungle",
+            "label": "Jungle"
+          },
+          "terrainType": "jungle",
+          "terrainKey": "jungle",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1780111824250,
+          "modifiers": [],
+          "notes": "",
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        }
+      },
+      "_id": "8LRPuH9Zmjdwi1ln",
+      "author": "bytUGWIOqq9eT7Or",
+      "elevation": 0,
+      "levels": [],
+      "sort": 7,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!EPrIyhHJQxy2REce.8LRPuH9Zmjdwi1ln"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1306.698729810778,
+      "y": 787.1578903249573,
+      "fillAlpha": 0.14,
+      "fillColor": "#354048",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Ashreach",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Ashreach",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "T2",
+              "locked": false
+            }
+          },
+          "createdAt": 1780111827580,
+          "factionId": "",
+          "terrain": {
+            "key": "desert",
+            "label": "Desert / Ash Wastes"
+          },
+          "terrainType": "desert",
+          "terrainKey": "desert",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1783976354906,
+          "modifiers": [],
+          "notes": "",
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        }
+      },
+      "_id": "9gZjcU8cOgVQCOSJ",
+      "author": "bytUGWIOqq9eT7Or",
+      "elevation": 0,
+      "levels": [],
+      "sort": 8,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!EPrIyhHJQxy2REce.9gZjcU8cOgVQCOSJ"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1256.698729810778,
+      "y": 873.7604307034012,
+      "fillAlpha": 0.14,
+      "fillColor": "#2b3d4c",
+      "strokeColor": "#cfe6f4",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "The Shallows",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "The Shallows",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "T2",
+              "locked": false
+            }
+          },
+          "createdAt": 1780111882732,
+          "factionId": "",
+          "terrain": {
+            "key": "ocean",
+            "label": "Sea / Ocean"
+          },
+          "terrainType": "ocean",
+          "terrainKey": "ocean",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1783976359711,
+          "modifiers": [],
+          "notes": "",
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        }
+      },
+      "_id": "GTIFianjCfKFcDSG",
+      "author": "bytUGWIOqq9eT7Or",
+      "elevation": 0,
+      "levels": [],
+      "sort": 9,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!EPrIyhHJQxy2REce.GTIFianjCfKFcDSG"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1106.698729810778,
+      "y": 787.1578903249573,
+      "fillAlpha": 0.14,
+      "fillColor": "#2e3e49",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Miremouth",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Miremouth",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "T2",
+              "locked": false
+            }
+          },
+          "createdAt": 1780111887757,
+          "factionId": "",
+          "terrain": {
+            "key": "swamp",
+            "label": "Swamp / Mire"
+          },
+          "terrainType": "swamp",
+          "terrainKey": "swamp",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1782685944980,
+          "modifiers": [],
+          "notes": "",
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        }
+      },
+      "_id": "bnyVpjNXwnVcQsRN",
+      "author": "bytUGWIOqq9eT7Or",
+      "elevation": 0,
+      "levels": [],
+      "sort": 10,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!EPrIyhHJQxy2REce.bnyVpjNXwnVcQsRN"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1256.698729810778,
+      "y": 700.5553499465135,
+      "fillAlpha": 0.14,
+      "fillColor": "#293943",
+      "strokeColor": "#c6e6f4",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Movers' Depot",
+      "fontSize": 11,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Movers' Depot",
+          "status": "unclaimed",
+          "type": "settlement",
+          "size": "town",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 2,
+            "materials": 1,
+            "trade": 3,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "T2",
+              "locked": false
+            }
+          },
+          "createdAt": 1780111892790,
+          "factionId": "",
+          "terrain": {
+            "key": "plains",
+            "label": "Plains / Grasslands"
+          },
+          "terrainType": "plains",
+          "terrainKey": "plains",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 2,
+              "materials": 1,
+              "trade": 3,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 2,
+              "materials": 1,
+              "trade": 3,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 5,
+            "violence": 1,
+            "nonLethal": 1,
+            "intrigue": 2,
+            "diplomacy": 2,
+            "softPower": 2
+          },
+          "effectiveAt": 1783976337575,
+          "modifiers": [],
+          "notes": "",
+          "holdings": {
+            "rigIds": [
+              "A3JxXSAdgpCjxgnm"
+            ],
+            "bossIds": [],
+            "notes": "",
+            "lastUpdated": 1780599438162
+          },
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          },
+          "conditions": [
+            "Purified"
+          ],
+          "integration": {
+            "progress": 1
+          },
+          "improvements": [
+            {
+              "id": "3qrRfokxmJf88Ulz",
+              "ts": 1783976338041,
+              "turn": 46,
+              "kind": "owner_action",
+              "label": "Population: settled → uninhabited",
+              "description": "Population class set via editor.",
+              "source": {
+                "activity": "hex_editor_save",
+                "factionId": "bytUGWIOqq9eT7Or"
+              },
+              "before": {
+                "population": "settled"
+              },
+              "after": {
+                "population": "uninhabited"
+              },
+              "reversible": true,
+              "dedupeKey": null
+            },
+            {
+              "id": "nYxISrQW4KPN8ewi",
+              "ts": 1783976338146,
+              "turn": 46,
+              "kind": "modifier_removed",
+              "label": "Modifier removed: Major Settlement",
+              "description": "Major Settlement removed.",
+              "source": {
+                "activity": "hex_editor_save",
+                "factionId": "bytUGWIOqq9eT7Or"
+              },
+              "before": null,
+              "after": null,
+              "reversible": true,
+              "dedupeKey": "editor:8fAbe55kZfhkJ07Q:1783976338100:rm:Major Settlement"
+            },
+            {
+              "id": "qUDDu8OSIwKzzZme",
+              "ts": 1783976338239,
+              "turn": 46,
+              "kind": "modifier_removed",
+              "label": "Modifier removed: Supply Line",
+              "description": "Supply Line removed.",
+              "source": {
+                "activity": "hex_editor_save",
+                "factionId": "bytUGWIOqq9eT7Or"
+              },
+              "before": null,
+              "after": null,
+              "reversible": true,
+              "dedupeKey": "editor:8fAbe55kZfhkJ07Q:1783976338100:rm:Supply Line"
+            }
+          ],
+          "modifierHistory": {
+            "Major Settlement": {
+              "addedTs": null,
+              "addedTurn": null,
+              "addedBy": null,
+              "source": {
+                "activity": "hex_editor_save",
+                "factionId": "bytUGWIOqq9eT7Or"
+              },
+              "removedTs": 1783976338100,
+              "removedTurn": 46,
+              "removedBy": "bytUGWIOqq9eT7Or"
+            },
+            "Supply Line": {
+              "addedTs": null,
+              "addedTurn": null,
+              "addedBy": null,
+              "source": {
+                "activity": "hex_editor_save",
+                "factionId": "bytUGWIOqq9eT7Or"
+              },
+              "removedTs": 1783976338191,
+              "removedTurn": 46,
+              "removedBy": "bytUGWIOqq9eT7Or"
+            }
+          }
+        }
+      },
+      "_id": "8fAbe55kZfhkJ07Q",
+      "author": "bytUGWIOqq9eT7Or",
+      "elevation": 0,
+      "levels": [],
+      "sort": 11,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!EPrIyhHJQxy2REce.8fAbe55kZfhkJ07Q"
+    },
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          86.60254037844379,
+          25,
+          86.60254037844379,
+          75,
+          43.301270189221896,
+          100,
+          0,
+          75,
+          0,
+          25,
+          43.301270189221896,
+          0
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1056.698729810778,
+      "y": 700.5553499465135,
+      "fillAlpha": 0.22,
+      "fillColor": "#3d275b",
+      "strokeColor": "#d9e6f2",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "The Approaches",
+      "fontSize": 12,
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "The Approaches",
+          "status": "occupied",
+          "type": "wilderness",
+          "size": "outpost",
+          "population": "sparse",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "T2",
+              "locked": false
+            }
+          },
+          "createdAt": 1780111896077,
+          "factionId": "Zsn8DO6cpTuHHexS",
+          "terrain": {
+            "key": "plains",
+            "label": "Plains / Grasslands"
+          },
+          "terrainType": "plains",
+          "terrainKey": "plains",
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1780111897359,
+          "modifiers": [
+            "Supply Line",
+            "Hostile Population"
+          ],
+          "notes": "",
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          },
+          "modifierHistory": {
+            "Hostile Population": {
+              "addedTs": 1780167944354,
+              "addedTurn": 3,
+              "addedBy": "Zsn8DO6cpTuHHexS",
+              "source": {
+                "activity": "loyalty_unrest",
+                "factionId": "Zsn8DO6cpTuHHexS"
+              },
+              "removedTs": null
+            }
+          },
+          "improvements": [
+            {
+              "id": "gblCrRuzDmUUzk7F",
+              "ts": 1780167944478,
+              "turn": 3,
+              "kind": "modifier_added",
+              "label": "Modifier added: Hostile Population",
+              "description": "Hostile Population — −25% production, −2 loyalty",
+              "source": {
+                "activity": "loyalty_unrest",
+                "factionId": "Zsn8DO6cpTuHHexS"
+              },
+              "before": null,
+              "after": null,
+              "reversible": true,
+              "dedupeKey": "unrest:zlVcQaTtVGxSPQxl:1780167944354"
+            }
+          ]
+        }
+      },
+      "_id": "zlVcQaTtVGxSPQxl",
+      "author": "bytUGWIOqq9eT7Or",
+      "elevation": 0,
+      "levels": [],
+      "sort": 12,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textColor": "#f8fbff",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!EPrIyhHJQxy2REce.zlVcQaTtVGxSPQxl"
+    }
+  ],
+  "tokens": [],
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "Level",
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/siege_of_the_cineplecks.png",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!EPrIyhHJQxy2REce.defaultLevel0000"
+    }
+  ],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [],
+  "walls": [
+    {
+      "levels": [],
+      "light": 10,
+      "move": 20,
+      "sight": 10,
+      "sound": 10,
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "c": [
+        450,
+        260,
+        1858,
+        260
+      ],
+      "_id": "L9C4dxtrgbBY1TrT",
+      "_key": "!scenes.walls!EPrIyhHJQxy2REce.L9C4dxtrgbBY1TrT"
+    },
+    {
+      "levels": [],
+      "light": 10,
+      "move": 20,
+      "sight": 10,
+      "sound": 10,
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "c": [
+        1858,
+        260,
+        1858,
+        1028
+      ],
+      "_id": "9M8YjJpLAwE7y42m",
+      "_key": "!scenes.walls!EPrIyhHJQxy2REce.9M8YjJpLAwE7y42m"
+    },
+    {
+      "levels": [],
+      "light": 10,
+      "move": 20,
+      "sight": 10,
+      "sound": 10,
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "c": [
+        1858,
+        1028,
+        450,
+        1028
+      ],
+      "_id": "I7CzPvZW3Xy72JEt",
+      "_key": "!scenes.walls!EPrIyhHJQxy2REce.I7CzPvZW3Xy72JEt"
+    },
+    {
+      "levels": [],
+      "light": 10,
+      "move": 20,
+      "sight": 10,
+      "sound": 10,
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "c": [
+        450,
+        1028,
+        450,
+        260
+      ],
+      "_id": "kiPKyFbGkjqMJb3u",
+      "_key": "!scenes.walls!EPrIyhHJQxy2REce.kiPKyFbGkjqMJb3u"
+    }
+  ],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "folder": "ugp9iPJLjOyRsM2G",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "wall-height": {
+      "advancedVision": true
+    },
+    "bbttcc-raid": {
+      "tableau": {
+        "enabled": false,
+        "frontY": 800,
+        "backY": 200,
+        "minScale": 0.25,
+        "maxScale": 1,
+        "curve": 1.8,
+        "zSortByY": true
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982549950,
+    "modifiedTime": 1783982549950,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "roll-for-initiation-bad-eden",
+      "uuid": "Scene.EPrIyhHJQxy2REce",
+      "coreVersion": "14.363",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    }
+  },
+  "navName": "",
+  "_key": "!scenes!EPrIyhHJQxy2REce",
+  "templates": []
+}

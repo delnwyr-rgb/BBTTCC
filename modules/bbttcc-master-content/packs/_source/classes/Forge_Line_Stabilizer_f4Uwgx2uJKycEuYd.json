@@ -1,0 +1,125 @@
+{
+  "name": "Forge-Line Stabilizer",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Forge-Line Stabilizer.</strong> You can tune whole lines of fortifications, roads, and depots so they share the load of stress.</p><ul><li>When your faction maintains a continuous line of <strong>fortified hexes, strongpoints, or infrastructure nodes</strong> that you have personally helped reinforce, their <strong>upkeep costs</strong> (in Economy OP or equivalent) are reduced by a small amount, or their <strong>chance of catastrophic failure</strong> is reduced (GM decides the exact numbers.)</li><li>This effect is active as long as you’re part of the faction and regularly tending the network.</li></ul><p>In fiction, your work shows up as smart bracing, shared load paths, firebreaks, and subtle rituals that let places hold each other up.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "forge-line-stabilizer",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 16
+    },
+    "properties": [],
+    "requirements": "Soul-Smith (16th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Forge-Line Stabilizer (Upkeep Hook)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_dissolve.png",
+      "origin": null,
+      "transfer": false,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459996552,
+        "modifiedTime": 1777346199420
+      },
+      "_id": "H4tVHxcSUNZLV3yU",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.soulSmith.forgeLineStabilizer",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.opHooks.infrastructureUpkeepReduction",
+            "value": 1,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!f4Uwgx2uJKycEuYd.H4tVHxcSUNZLV3yU"
+    }
+  ],
+  "folder": "qdqMhHfZdVgUs1gN",
+  "flags": {
+    "bbttcc": {
+      "soulSmith": {
+        "forgeLineStabilizer": true
+      },
+      "opHooks": {
+        "infrastructureUpkeepReduction": 1
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996552,
+    "modifiedTime": 1781116174151,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "f4Uwgx2uJKycEuYd",
+  "sort": 257813,
+  "_key": "!items!f4Uwgx2uJKycEuYd"
+}

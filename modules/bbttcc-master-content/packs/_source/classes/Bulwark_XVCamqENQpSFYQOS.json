@@ -1,0 +1,113 @@
+{
+  "name": "Bulwark",
+  "type": "class",
+  "system": {
+    "category": "path",
+    "identifier": "bulwark",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"Set your feet. The line forms on you.\"</em></p>\n<p>The Bulwark is the wall — and the wall runs on <strong>Surge</strong>, like everyone, but yours arrives the hard way: every time you <strong>take Integrity damage you bank +1 Surge</strong> (max +2/round). You eat the blow and turn it into the power to anchor, erupt, or hold. At zero Surge you still stand in the way; soak one hit and your turn opens up.</p>\n<h3>The Fortress (spent via Surge — Bulwark only)</h3>\n<ul>\n  <li><strong>Brace Wall</strong> (1) — you and adjacent allies gain DR equal to Tier this round.</li>\n  <li><strong>Bulwark Stance</strong> (6) — adjacent allies share your defenses until your next turn.</li>\n  <li><strong>Anchor</strong> (5) — you and one ally become immune to forced movement and crowd-control until next round.</li>\n  <li><strong>Mass Aegis</strong> (8) — allies within Tier squares gain +Tier to every defense this round.</li>\n  <li><strong>Sanctum</strong> (9) — immune to one damage type for a round.</li>\n  <li><strong>Mythic Stand</strong> (10) — invulnerable until the start of your next turn.</li>\n</ul>\n<p>These were always the Bulwark's birthright; they no longer leak into everyone else's menu. <strong>Frame Dice</strong> and <strong>Ruin Charges</strong> endure as the strategic layer — Catastrophic Entry still sunders armor and breaches structures, Ruin still cuts a Siege's cost — and both refill on a Soma Break.</p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "2nStBOaROOJFmDVk",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.BlwkClassFt01abc",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 1,
+        "title": "Bulwark — Tier 1: Founding Stance"
+      },
+      {
+        "_id": "xMkzggxhV7D4dlsW",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.BlwkClassFt02abc",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 6,
+        "title": "Bulwark — Tier 2: Anchor or Advance"
+      },
+      {
+        "_id": "1pk6AixW41XX5BKD",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.BlwkClassFt03abc",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 11,
+        "title": "Bulwark — Tier 3: Polarity Mastery"
+      },
+      {
+        "_id": "7ATFRxDnwerU82M0",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.BlwkClassFt04abc",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 16,
+        "title": "Bulwark — Tier 4: Architect of Certainty"
+      }
+    ]
+  },
+  "flags": {
+    "bbttcc": {
+      "primary": "strength",
+      "opBonus": {
+        "violence": 3,
+        "siege": 2
+      }
+    }
+  },
+  "_id": "XVCamqENQpSFYQOS",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Warlord2.png",
+  "effects": [],
+  "folder": "UMEcF0hVGEJ9UeD2",
+  "ownership": {
+    "default": 0
+  },
+  "sort": 100000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1780007572121,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!XVCamqENQpSFYQOS"
+}

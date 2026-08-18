@@ -1,0 +1,67 @@
+{
+  "name": "Luminous Intercession",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_energy_blast_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Kindness bends trajectories.”</em></p><p>You can interpose raw, forged radiance between violence and its target.</p><ul><li>When a creature within <strong>6 squares</strong> of you takes damage, you can use your <strong>reaction</strong> to flare your forge-light in a defensive pattern.</li><li>Reduce the damage taken by that creature by <strong>2d8 + your tier</strong>.</li><li>The attacker must make a <strong>Soul check</strong> (DC = your Resolve DC). On a failure, the next attack they make before the end of their next turn is made with <strong>disadvantage</strong>.</li><li>Any damage prevented in this way becomes <strong>temporary Integrity</strong> that you may distribute among allies of your choice within 2 squares of the protected creature.</li></ul><p><strong>OP Echo.</strong> If your intercession prevents at least 10 total damage, your faction gains <strong>+1 Soft Power OP</strong> for the next strategic turn (once per scenario).</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-bound-light-luminous-intercession",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 15, Forge of Bound Light",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "JaASOItbL0tB8Z9y",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_boundlight",
+      "featureKey": "luminous_intercession"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459996555,
+    "modifiedTime": 1782167240831,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "xZVPsLEiyE6JEkAD",
+  "sort": 300000,
+  "_key": "!items!xZVPsLEiyE6JEkAD"
+}

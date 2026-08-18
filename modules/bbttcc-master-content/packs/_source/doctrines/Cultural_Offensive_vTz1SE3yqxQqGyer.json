@@ -1,0 +1,63 @@
+{
+  "name": "Cultural Offensive",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_music.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Songs, stories, the right gift pressed into the right hand. Win the ground AND the legend they'll tell about the ground.</p><p><strong>On Success: faction morale +2.</strong></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "cultural_offensive",
+      "meta": {
+        "tier": 2,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "universal",
+        "layer": "strategic",
+        "costBand": "medium",
+        "raidTypes": [
+          "any"
+        ],
+        "fireMode": "post-commit",
+        "opCosts": {
+          "culture": 3,
+          "softpower": 1
+        },
+        "authoredSprint": "balance-w1"
+      },
+      "effects": {
+        "text": "On success: win hearts as well as ground — faction morale +2."
+      }
+    }
+  },
+  "_id": "vTz1SE3yqxQqGyer",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "6ut7GT8pCAhpdWjS": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1779731207893,
+    "modifiedTime": 1781402929823,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!vTz1SE3yqxQqGyer"
+}

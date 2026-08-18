@@ -1,0 +1,296 @@
+{
+  "name": "Hollow Hunger",
+  "type": "power",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_1.png",
+  "system": {
+    "intent": "violence",
+    "channel": "soul",
+    "sephirah": "malkuth",
+    "mode": "working",
+    "clarityRequired": 2,
+    "noiseGain": 2,
+    "activation": "action",
+    "target": "burst",
+    "range": "near",
+    "damage": "2d6",
+    "damageType": "energy",
+    "damageFlavor": "",
+    "damageRoll": {
+      "op": "none",
+      "number": 0,
+      "die": "d6",
+      "attribute": "",
+      "type": "kinetic",
+      "flavor": "",
+      "track": "integrity"
+    },
+    "damageParts": [],
+    "effect": "The Shambler's mouth opens onto a place that isn't here. Each creature within near makes a Resolve check; on a failure, take 2d6 qliphothic damage to Stress and become Shaken until the start of their next turn.",
+    "tags": [
+      "translated",
+      "5e-port",
+      "phase2-narrative",
+      "manifestation"
+    ],
+    "category": "manifestation",
+    "flavor": "The room briefly tastes of iron and a memory you didn't have.",
+    "manifestation": {
+      "tier": 1,
+      "family": "working",
+      "concept": "Ambient hunger spilled outward from a wound that doesn't close.",
+      "form": "aura",
+      "function": "harm",
+      "stability": "instant",
+      "interactionModel": "save",
+      "costType": "noise",
+      "costValue": 2,
+      "costText": "2 Noise",
+      "duration": "instant",
+      "durationText": "One pulse.",
+      "triggerText": "When the Shambler is engaged in melee.",
+      "scale": "scene",
+      "targetText": "All creatures within near.",
+      "rangeAreaText": "Near burst.",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "The Shambler takes 1 Stress per pulse.",
+      "pathResonance": "Malkuth corrupted — kingdom of consumption.",
+      "fictionalPermission": "Players may be Shaken by what's behind the teeth.",
+      "gmCalibration": "Resolve check; qliphothic to Stress.",
+      "mechanicalHook": "AOE Resolve save; 2d6 qliphothic to Stress + Shaken.",
+      "signature": "The room tastes of iron.",
+      "thirdThing": "Whoever fails remembers a death that wasn't theirs.",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      },
+      "area": {
+        "shape": "none",
+        "size": 0
+      },
+      "activation": {
+        "type": "action",
+        "consumePool": true
+      },
+      "save": {
+        "enabled": false,
+        "defense": "evasion",
+        "attribute": "",
+        "dcMode": "derived",
+        "dcFixed": 15
+      }
+    },
+    "description": {
+      "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>AOE Resolve save; 2d6 qliphothic to Stress + Shaken.</p>\n<ul>\n  <li><strong>Damage:</strong> 2d6 Qliphothic damage</li>\n  <li><strong>Intent:</strong> Violence</li>\n  <li><strong>Action:</strong> Action</li>\n  <li><strong>Range:</strong> Near</li>\n  <li><strong>Target:</strong> Burst</li>\n  <li><strong>Target:</strong> All creatures within near.</li>\n  <li><strong>Cost:</strong> 2 Noise, Clarity 2, +2 Noise, 2 Noise</li>\n  <li><strong>Duration:</strong> One pulse.</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<p><strong>Risk:</strong> The Shambler takes 1 Stress per pulse.</p>\n<!-- BBTTCC:MECHANICS:END -->"
+    }
+  },
+  "_id": "H448xt5Lxk3s6YGm",
+  "effects": [],
+  "sort": 0,
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Qlipothic Shambler"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    },
+    "autoanimations": {
+      "id": "591c47b7-fcdb-4c51-a4a5-32f1e5724a6f",
+      "label": "Hollow Hunger",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "range",
+      "primary": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "spell",
+          "animation": "eldritchblast",
+          "variant": "01",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1781024228979,
+    "modifiedTime": 1782167283967,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!H448xt5Lxk3s6YGm"
+}

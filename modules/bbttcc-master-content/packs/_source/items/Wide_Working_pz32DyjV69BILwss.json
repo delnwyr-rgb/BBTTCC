@@ -1,0 +1,53 @@
+{
+  "name": "Wide Working",
+  "type": "feat",
+  "img": "icons/magic/light/explosion-star-glow-orange.webp",
+  "folder": "QbGNBV70xh9pF0eh",
+  "system": {
+    "category": "technique",
+    "source": "BBTTCC Manifestation Techniques v1 (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<h2>Wide Working</h2><p><em>What you shape, you shape broadly.</em></p><hr><h3>Rules</h3><p>Increase the <strong>area size</strong> of any area-of-effect manifestation you cast by one step (e.g. a 10 ft burst becomes 15 ft; a 15 ft cone becomes 20 ft).</p><p><span style=\"opacity: 0.7; margin: 0.5rem 0 0; font-size: 0.74rem\">✍ Applied by the GM/player — no automatic engine effect.</span></p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_wide_working",
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-manifestation-techniques-v1",
+      "theme": "Reach, scale & signature"
+    },
+    "fourththing": {}
+  },
+  "_id": "pz32DyjV69BILwss",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782190568573,
+    "modifiedTime": 1782190840468,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!pz32DyjV69BILwss"
+}

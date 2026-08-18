@@ -1,0 +1,41 @@
+{
+  "name": "Wrath Resistance",
+  "type": "feature",
+  "img": "icons/magic/symbols/runes-etched-steel-orange.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>From Phase 3 onward, kinetic damage hits for 1 less per die. Skin hardens with the situation.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "boss-augment"
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "BVWCczqT8ILFfjWY",
+  "effects": [],
+  "sort": 1200000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205374716,
+    "modifiedTime": 1778963271955,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!BVWCczqT8ILFfjWY"
+}

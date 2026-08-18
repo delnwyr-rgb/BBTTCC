@@ -1,0 +1,171 @@
+{
+  "name": "Null-Field Tower Shield",
+  "type": "armor",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shield_4.png",
+  "_id": "HCW2UhXkxV6J62lM",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.resists",
+            "value": "qliphothic",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 3,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.evasion",
+            "value": -1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.resolve",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "8kIuh6s8OsmPf32P",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781726106756,
+        "modifiedTime": 1781726106756,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!HCW2UhXkxV6J62lM.8kIuh6s8OsmPf32P"
+    }
+  ],
+  "folder": "TNrB6kEiHS0KwwJT",
+  "sort": 112500,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1780000000000,
+    "modifiedTime": 1782160020986,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "system": {
+    "guardBonus": 3,
+    "evasionBonus": -1,
+    "resolveBonus": 1,
+    "resistances": [
+      "qliphothic"
+    ],
+    "armorSkill": "plating",
+    "equipped": false,
+    "tags": [
+      "t3",
+      "shield",
+      "tower",
+      "null-field",
+      "attunement"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A slab of scribed steel and hex-glyph plate that projects a small reality-stabilizing null field. The broken, corrupted, please-stop-hitting-yourself things of the Qliphoth can't get a grip on what stands behind it. Heavy. Slow. Worth it.</p><p><strong>Null Field.</strong> Resists qliphothic damage and, while braced, extends the steadying field to one adjacent ally (they ignore Compelled until they move away).</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Shield</li>\n  <li><strong>Defense:</strong> Guard +3, Evasion -1, Resolve +1</li>\n  <li><strong>Requires:</strong> Plating (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 720 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          "qliphothic"
+        ]
+      },
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 2,
+          "reach": "self",
+          "frame": "shield",
+          "signature": "Behind it, the world stops glitching.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "",
+          "materialOf": [
+            "scribed-steel",
+            "hex-glyph-plate",
+            "focusing-lens"
+          ],
+          "price": {
+            "marks": 720,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII tower shield — qliphothic null field",
+            "bound": "attuned",
+            "saleBack": 288
+          },
+          "grants": {
+            "resistances": [
+              "qliphothic"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "_key": "!items!HCW2UhXkxV6J62lM"
+}

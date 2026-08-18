@@ -1,0 +1,45 @@
+{
+  "name": "Compromising Letter",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_3.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Compromising Letter.</strong> A private correspondence — leaked at exactly the wrong moment for someone, exactly the right moment for you.</p><p><em>Play:</em> deal 2 Influence damage to your opponent outside an exchange.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "influenceDmg2",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "_id": "rwO9dAOOhBr0clvr",
+  "effects": [],
+  "folder": null,
+  "sort": 2300000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1779393195599,
+    "modifiedTime": 1784079176431,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!rwO9dAOOhBr0clvr"
+}

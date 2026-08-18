@@ -1,0 +1,65 @@
+{
+  "_id": "6AVSK4jCoGlGzevR",
+  "name": "Leyline Attunement",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_leyline_attunement.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Leyline Attunement</h2><p><em>You don’t just cross the world. You listen to it.</em></p><hr /><h3>Rules</h3><p>When you take a Respite, you may attune to the local flow. Until your next Sanctuary, you gain one of the following benefits (choose when you attune):</p><ul><li><strong>Guidance of the Current:</strong> You reroll the lowest die on one Athletics (Violence) checks you make each hour of travel.</li><li><strong>Quiet Step:</strong> You reroll the lowest die on one Stealth (Intrigue) checks you make each hour of travel.</li><li><strong>Resonant Warning:</strong> You reroll the lowest die on Initiative (Intrigue) rolls made in the first combat after you begin travel.</li></ul><p>You can change the chosen benefit each time you attune.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_leyline_attunement",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-expansion-v1",
+      "generatedAt": "2026-01-18T20:40:44.996669+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 3200000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1782164185970,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!6AVSK4jCoGlGzevR"
+}

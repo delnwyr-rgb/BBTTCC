@@ -1,0 +1,115 @@
+{
+  "name": "Garrison Fort Frame",
+  "type": "gear",
+  "img": "icons/environment/settlement/wagon-black.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>Stone, sandbags, and the kind of stubborn that calcifies into law. Crewed by gunners and held by quartermasters. Output is reputation: nothing crosses without a paper trail.</p><p><b>Frame · Heavy · Stationary</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "rig-frame"
+      },
+      "rigFrame": {
+        "bracket": "heavy",
+        "baseIntegrity": 56,
+        "tierStep": 16,
+        "mobilityAllowed": [
+          "stationary"
+        ],
+        "slots": {
+          "weapon": 4,
+          "system": 3,
+          "output": 1
+        },
+        "capacity": {
+          "pilot": {
+            "min": 0,
+            "max": 0
+          },
+          "gunner": {
+            "min": 0,
+            "max": 3
+          },
+          "engineer": {
+            "min": 0,
+            "max": 1
+          },
+          "crew": {
+            "min": 0,
+            "max": 4
+          }
+        },
+        "actions": {
+          "pilot": [],
+          "gunner": [
+            "fire-weapon",
+            "aimed-shot",
+            "suppression",
+            "reload",
+            "opportunity-fire"
+          ],
+          "engineer": [
+            "repair",
+            "boost-system",
+            "counter-sabotage"
+          ],
+          "crew": [
+            "operate-module",
+            "reload",
+            "brace",
+            "signal",
+            "hold-on"
+          ]
+        },
+        "travel": {
+          "speed": 0,
+          "range": 0
+        },
+        "visualFrame": "anchor-corners"
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "RwlwxgdYBCf3f9Xl",
+  "effects": [],
+  "sort": 2500000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205373804,
+    "modifiedTime": 1778963271956,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!RwlwxgdYBCf3f9Xl"
+}

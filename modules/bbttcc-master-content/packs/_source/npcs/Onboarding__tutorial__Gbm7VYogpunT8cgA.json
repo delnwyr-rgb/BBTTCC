@@ -1,0 +1,23 @@
+{
+  "name": "Onboarding (tutorial)",
+  "type": "Actor",
+  "_id": "Gbm7VYogpunT8cgA",
+  "description": "",
+  "folder": null,
+  "sorting": "a",
+  "sort": 600000,
+  "color": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177926293,
+    "modifiedTime": 1784177926405,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!Gbm7VYogpunT8cgA"
+}

@@ -1,0 +1,113 @@
+{
+  "_id": "0030cd75eb3ea792",
+  "name": "Circuitborn Heritage: Synapse",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_Synapse_1.png",
+  "system": {
+    "category": "heritage",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 2,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn Line.</strong> The ghost-in-the-protocol. The chassis that thinks faster than the network it’s plugged into, and feels the noosphere the way a swimmer feels the current.</p><p><em>“You don’t use the network. The network uses you, and that’s the only relationship that doesn’t collapse.”</em></p><p><strong>Synapse.</strong> You are a sentient chassis built around the principle of <em>inference</em>. Information is your home. Other people travel through it. You live there.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>MND (Mind)</strong>—expressed primarily through Tier powers.</li><li><strong>Predictive Cache.</strong> 1/Soma Break, when an enemy you can see takes an action, you may have anticipated it: reroll the lowest die on the next reaction or attack you make against that enemy this round.</li></ul>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "cbsynapseadv0001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.SvHyGSSUNq8UmDUM",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Synapse Tier I",
+        "hint": "Gain your Synapse Line Tier I power (Yesod-Diver)."
+      }
+    ],
+    "identifier": "circuitborn_synapse_heritage",
+    "requirements": "Circuitborn",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "circuitborn",
+      "lineage": "Synapse",
+      "version": "2.0.0",
+      "date": "2026-04-18"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "attack",
+          "mode": "reroll-lowest",
+          "note": "on the next reaction or attack you make against that enemy this round [TODO(a…"
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-enemy-action",
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Predictive Cache. Once per a Soma Break, when an enemy you can see takes an action, you may have anticipated it: gain reroll the lowest die on the next reaction or attack you mak..."
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "PF38YkXCmwDX2JTC",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776541800000,
+    "modifiedTime": 1781116062953,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 100000,
+  "_key": "!items!0030cd75eb3ea792"
+}

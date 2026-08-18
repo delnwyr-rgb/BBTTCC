@@ -1,0 +1,620 @@
+{
+  "name": "Jommetry Serpent",
+  "type": "npc",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/GEOMETRY%20SERPENT1.png",
+  "system": {
+    "role": "Geometric Predator (Vector-Reader)",
+    "tier": 1,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 2
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 2
+      },
+      "body": {
+        "value": 2
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 10,
+        "max": 10
+      },
+      "stress": {
+        "value": 5,
+        "max": 5
+      },
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 16
+      },
+      "resolve": {
+        "value": 10
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "hod"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [
+      "5e-port",
+      "cr-1",
+      "phase2-narrative-applied"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "items": [
+    {
+      "name": "Angle of Arrival",
+      "type": "power",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_2.png",
+      "system": {
+        "intent": "intrigue",
+        "channel": "mind",
+        "sephirah": "hod",
+        "mode": "working",
+        "clarityRequired": 1,
+        "noiseGain": 0,
+        "activation": "action",
+        "target": "self",
+        "range": "near",
+        "damage": "",
+        "damageType": "energy",
+        "damageFlavor": "",
+        "damageRoll": {
+          "op": "none",
+          "number": 0,
+          "die": "d6",
+          "attribute": "",
+          "type": "kinetic",
+          "flavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "effect": "Move along an impossible chord; reappear at any point within near. The Serpent's next attack this turn rolls 2d10x10 with reroll-lowest.",
+        "tags": [
+          "translated",
+          "5e-port",
+          "phase2-narrative",
+          "manifestation"
+        ],
+        "category": "manifestation",
+        "flavor": "The room briefly grows a corner that wasn't drawn.",
+        "manifestation": {
+          "tier": 1,
+          "family": "working",
+          "concept": "Travel along a line nobody drew.",
+          "form": "movement",
+          "function": "reposition",
+          "stability": "instant",
+          "interactionModel": "passive",
+          "costType": "clarity",
+          "costValue": 1,
+          "costText": "1 Clarity",
+          "duration": "instant",
+          "durationText": "One repositioning.",
+          "triggerText": "Activated as an Action.",
+          "scale": "personal",
+          "targetText": "Self.",
+          "rangeAreaText": "Near; any visible point.",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "The Serpent appears unarmored for the moment of arrival.",
+          "pathResonance": "Hod — splendor of pure form.",
+          "fictionalPermission": "May appear at impossible angles.",
+          "gmCalibration": "Movement only; sets up the next attack with reroll-lowest.",
+          "mechanicalHook": "Free reposition near + advantage on next attack.",
+          "signature": "A corner appears that wasn't drawn.",
+          "thirdThing": "Geometry textbooks within 30 ft. develop new errata.",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          },
+          "area": {
+            "shape": "none",
+            "size": 0
+          },
+          "activation": {
+            "type": "action",
+            "consumePool": true
+          },
+          "save": {
+            "enabled": false,
+            "defense": "evasion",
+            "attribute": "",
+            "dcMode": "derived",
+            "dcFixed": 15
+          }
+        }
+      },
+      "_id": "Gwewt1W1juBAecHE",
+      "effects": [],
+      "sort": 0,
+      "flags": {
+        "bbttcc": {
+          "npcAbility": {
+            "sources": [
+              "Jommetry Serpent"
+            ],
+            "worlds": [
+              "ember"
+            ]
+          }
+        },
+        "autoanimations": {
+          "id": "ft-angle-of-arrival",
+          "label": "Angle of Arrival",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "darkpurple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": null,
+        "systemVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!xCHciB6b5HEF5926.Gwewt1W1juBAecHE"
+    },
+    {
+      "name": "Read the Vector",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_single_eye.png",
+      "system": {
+        "category": "principle",
+        "source": "",
+        "tags": [
+          "translated",
+          "5e-port",
+          "phase2-narrative"
+        ],
+        "description": {
+          "value": "<p><strong>Passive.</strong> Once per scene, the Serpent may reroll-lowest one defense check by reading where the strike was going to swing.</p>",
+          "chat": ""
+        }
+      },
+      "_id": "3pmEP9XBFJ0rwwVI",
+      "effects": [],
+      "sort": 0,
+      "flags": {
+        "bbttcc": {
+          "npcAbility": {
+            "sources": [
+              "Jommetry Serpent"
+            ],
+            "worlds": [
+              "ember"
+            ]
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": null,
+        "systemVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "folder": null,
+      "ownership": {
+        "default": 0
+      },
+      "_key": "!actors.items!xCHciB6b5HEF5926.3pmEP9XBFJ0rwwVI"
+    }
+  ],
+  "effects": [],
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "xCHciB6b5HEF5926",
+  "prototypeToken": {
+    "name": "Jommetry Serpent",
+    "displayName": 0,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/GEOMETRY%20SERPENT1.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "folder": "uMhSIaldbbcnBh0H",
+  "sort": 1000000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777700829135,
+    "modifiedTime": 1783219918008,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!xCHciB6b5HEF5926"
+}

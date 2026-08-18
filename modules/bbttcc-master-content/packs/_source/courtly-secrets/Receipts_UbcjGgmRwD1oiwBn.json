@@ -1,0 +1,44 @@
+{
+  "_id": "UbcjGgmRwD1oiwBn",
+  "name": "Receipts",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_3.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Receipts.</strong> Not a metaphor. Actual receipts. Itemized. Someone bought something they should not have, and kept the little slip of paper like an idiot.</p><p><em>Play:</em> Deal 2 Influence damage to your opponent outside an exchange.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "influenceDmg2",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1200000,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1780000000000,
+    "modifiedTime": 1784079176430,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!UbcjGgmRwD1oiwBn"
+}

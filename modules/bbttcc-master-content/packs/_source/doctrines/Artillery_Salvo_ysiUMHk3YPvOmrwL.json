@@ -1,0 +1,63 @@
+{
+  "name": "Artillery Salvo",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_explosion_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Somebody back home found the BIG tubes. I love the big tubes. Hot metal, screaming air, the ground suddenly remembering it has opinions.</p><p><b>11 damage (~3d6) to all enemy tokens; the scene flashes orange.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "artillery_salvo",
+      "meta": {
+        "tier": 3,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "violence",
+        "layer": "tactical-out",
+        "costBand": "medium",
+        "raidTypes": [
+          "violence"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "violence": 3,
+          "logistics": 2
+        },
+        "authoredSprint": 2
+      },
+      "effects": {
+        "text": "Devastating barrage: 11 damage (3d6 avg) to all enemy tokens; orange impact VFX across the scene."
+      }
+    }
+  },
+  "_id": "ysiUMHk3YPvOmrwL",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 106250,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778964846638,
+    "modifiedTime": 1780163528004,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ysiUMHk3YPvOmrwL"
+}

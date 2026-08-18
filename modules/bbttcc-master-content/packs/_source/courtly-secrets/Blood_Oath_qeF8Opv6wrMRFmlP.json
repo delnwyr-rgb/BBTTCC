@@ -1,0 +1,45 @@
+{
+  "name": "Blood Oath",
+  "type": "feat",
+  "img": "icons/skills/wounds/blood-drip-droplet-red.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Blood Oath.</strong> A binding promise in red. <em>Play:</em> +2 Favor with a chosen courtier toward your side.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "favorPlus2",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "_id": "qeF8Opv6wrMRFmlP",
+  "effects": [],
+  "folder": null,
+  "sort": 2200000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782065103712,
+    "modifiedTime": 1784079176431,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!qeF8Opv6wrMRFmlP"
+}

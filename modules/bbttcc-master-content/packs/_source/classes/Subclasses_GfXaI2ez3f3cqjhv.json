@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "e0QBxXMScwOJA8aO",
+  "name": "Subclasses",
+  "color": null,
+  "sorting": "a",
+  "_id": "GfXaI2ez3f3cqjhv",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "createdTime": 1776459996495,
+    "modifiedTime": 1776459996495
+  },
+  "_key": "!folders!GfXaI2ez3f3cqjhv"
+}

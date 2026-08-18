@@ -1,0 +1,91 @@
+{
+  "name": "Apex Hex-Engine",
+  "type": "gear",
+  "img": "icons/magic/lightning/orb-ball-blue.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [
+      "tech"
+    ],
+    "category": "gear",
+    "source": "Phase 7 Seed (2026-05-10)",
+    "description": {
+      "value": "<p>A drum-sized core of Yesodium and pre-Fall salvage. Installed in a war-rig, it transforms the chassis into something the world remembers.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "sigil",
+          "bound": "attuned",
+          "materialOf": [
+            {
+              "key": "yesodium",
+              "qty": 2
+            },
+            {
+              "key": "pre-fall-component",
+              "qty": 1
+            },
+            {
+              "key": "heart-coil",
+              "qty": 2
+            },
+            {
+              "key": "soft-alloy",
+              "qty": 3
+            }
+          ],
+          "tech": {
+            "kind": "fueled",
+            "fuel": {
+              "materialKey": "yesodium",
+              "perActivation": 1
+            },
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "failure": "drain",
+            "origin": "pre-fall",
+            "signature": "apex-core"
+          },
+          "price": {
+            "marks": 3240,
+            "currency": "softpower",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV sigil × 1.20 × tech 2.0",
+            "bound": "attuned",
+            "saleBack": 1296
+          }
+        }
+      }
+    }
+  },
+  "_id": "f8klMJgdUcrg2BK7",
+  "effects": [],
+  "folder": "0JDB983lzPepXXNe",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778963271750,
+    "modifiedTime": 1778963271958,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 3400000,
+  "_key": "!items!f8klMJgdUcrg2BK7"
+}

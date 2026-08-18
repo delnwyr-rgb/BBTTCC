@@ -1,0 +1,58 @@
+{
+  "name": "Already Left",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_invisible_1.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "seed-bestiary-attacks",
+      "tier-iii",
+      "role-stealth"
+    ],
+    "description": {
+      "value": "<p><strong>Passive.</strong> If reduced below half Integrity, the lieutenant may use a reaction to vanish into a prepared egress — leaving combat entirely. Witnesses always have an exit. The exit was prepared before combat began.</p><p><em>Mid-tier commander. The 'mid' means she's high enough to leave.</em></p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "frame": "feature"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Witness-Warden Lieutenant"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "sort": 0,
+  "_id": "HwluxFOkC8dXsaFU",
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": null,
+    "modifiedTime": null,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!HwluxFOkC8dXsaFU"
+}

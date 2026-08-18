@@ -1,0 +1,150 @@
+{
+  "name": "Sept-Hush Amulet",
+  "type": "armor",
+  "img": "icons/equipment/neck/amulet-runed-tan.webp",
+  "system": {
+    "guardBonus": 0,
+    "evasionBonus": 1,
+    "resolveBonus": 1,
+    "resistances": [],
+    "armorSkill": "weave",
+    "equipped": false,
+    "tags": [
+      "tech"
+    ],
+    "category": "armor",
+    "source": "Phase 7 Seed (2026-05-10)",
+    "description": {
+      "value": "<p>A worn amulet that swallows sound around the wearer. Three scenes of silence per Soma Break; speech still passes, but boots and breath do not.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Evasion +1, Resolve +1</li>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 450 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "frame": "armor",
+          "bound": "attuned",
+          "materialOf": [
+            {
+              "key": "witness-glass",
+              "qty": 1
+            },
+            {
+              "key": "sept-tuning-fork",
+              "qty": 1
+            },
+            {
+              "key": "memory-resin",
+              "qty": 1
+            }
+          ],
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 3,
+              "max": 3,
+              "recoverPer": "soma-break"
+            },
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "failure": "drain",
+            "origin": "septcraft"
+          },
+          "price": {
+            "marks": 450,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII armor × 1.50 × tech 2.0",
+            "bound": "attuned",
+            "saleBack": 180
+          }
+        }
+      }
+    }
+  },
+  "_id": "P84sMMxWAAWvMjyz",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.evasion",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.resolve",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "qZp6BPMi04Ogh7ww",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781726107108,
+        "modifiedTime": 1781726107108,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!P84sMMxWAAWvMjyz.qZp6BPMi04Ogh7ww"
+    }
+  ],
+  "folder": "Wxh1A343inwTUeoo",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1778963351715,
+    "modifiedTime": 1782160020987,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 0,
+  "_key": "!items!P84sMMxWAAWvMjyz"
+}

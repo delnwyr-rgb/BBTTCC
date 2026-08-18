@@ -1,0 +1,589 @@
+{
+  "folder": "ZjlMCyl32BJTXn9l",
+  "name": "allesh_gilliam_hq_pov",
+  "_id": "X9YsVXIV1Sl9sAtO",
+  "active": false,
+  "navigation": true,
+  "navOrder": 0,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-xeX_zqguMNXseEGIlHw1vQ.webp",
+  "width": 3840,
+  "height": 2160,
+  "padding": 0.25,
+  "initial": {
+    "x": 2855,
+    "y": 1988,
+    "scale": 0.814
+  },
+  "grid": {
+    "type": 0,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 1,
+    "color": "#000000",
+    "alpha": 0.2,
+    "distance": 5,
+    "units": "ft"
+  },
+  "tokenVision": false,
+  "fog": {
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    },
+    "mode": 1
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": true,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "drawings": [],
+  "tokens": [
+    {
+      "actorLink": false,
+      "disposition": 1,
+      "name": "Etta Bloom",
+      "displayName": 30,
+      "width": 8,
+      "height": 8,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/etta_bloom_pov_2.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 3,
+        "scaleY": 3,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "tokenflip": {
+          "tokenfaces": [
+            {
+              "actorId": "O6QOjE1ZJ9Ef7e7k",
+              "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/etta_bloom_pov_2.png",
+              "id": "Y8fBLAQPAN7RLQki8mgC",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 1,
+              "height": 1,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "O6QOjE1ZJ9Ef7e7k",
+              "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/etta_bloom_token.png",
+              "id": "DNxhK2iXoEDDyicAWEer",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 1,
+              "height": 1,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "O6QOjE1ZJ9Ef7e7k",
+              "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/etta_bloom_pov_2.png",
+              "id": "dfX9B1BxY3nD0ZneuDuy",
+              "scaleX": 3,
+              "scaleY": 3,
+              "width": 8,
+              "height": 8,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            }
+          ],
+          "currentId": "dfX9B1BxY3nD0ZneuDuy"
+        },
+        "wall-height": {
+          "tokenHeight": 0
+        },
+        "bbttcc-raid": {
+          "tableauActor": true
+        }
+      },
+      "actorId": "O6QOjE1ZJ9Ef7e7k",
+      "hidden": false,
+      "sort": 1,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "JileC0t5Q6KlBJVW",
+      "delta": null,
+      "x": 3205,
+      "y": 1228,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!X9YsVXIV1Sl9sAtO.JileC0t5Q6KlBJVW"
+    },
+    {
+      "actorLink": false,
+      "disposition": 1,
+      "name": "Marshal Yarrow Pike",
+      "displayName": 30,
+      "width": 4,
+      "height": 4,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/marshal_yarrow_pike_TOM%20Background%20Removed.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 3,
+        "scaleY": 3,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "tokenflip": {
+          "tokenfaces": [
+            {
+              "actorId": "jldEh2mZeZ2YlYic",
+              "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/marshal_yarrow_pike_TOM%20Background%20Removed.png",
+              "id": "A8ve9FxA4d0g51IY7U2J",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 1,
+              "height": 1,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "jldEh2mZeZ2YlYic",
+              "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Marshall%20Yarrow%20Pike%20Background%20Removed.png",
+              "id": "WvgWhawRZ20YAfbxZY3j",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 1,
+              "height": 1,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "jldEh2mZeZ2YlYic",
+              "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/marshal_yarrow_pike_TOM%20Background%20Removed.png",
+              "id": "nENDE7GQhnnt7fNVVqIN",
+              "scaleX": 3,
+              "scaleY": 3,
+              "width": 4,
+              "height": 4,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            }
+          ],
+          "currentId": "nENDE7GQhnnt7fNVVqIN"
+        },
+        "wall-height": {
+          "tokenHeight": 0
+        },
+        "bbttcc-raid": {
+          "tableauActor": true
+        }
+      },
+      "actorId": "jldEh2mZeZ2YlYic",
+      "hidden": false,
+      "sort": 2,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "TCuqV8R3580iUVNJ",
+      "delta": null,
+      "x": 2000,
+      "y": 2130,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!X9YsVXIV1Sl9sAtO.TCuqV8R3580iUVNJ"
+    }
+  ],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [],
+  "walls": [
+    {
+      "light": 20,
+      "sight": 20,
+      "sound": 20,
+      "move": 20,
+      "c": [
+        1043,
+        607,
+        4809,
+        601
+      ],
+      "_id": "O7hlMKK0YaqquJxP",
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "levels": [],
+      "_key": "!scenes.walls!X9YsVXIV1Sl9sAtO.O7hlMKK0YaqquJxP"
+    },
+    {
+      "light": 20,
+      "sight": 20,
+      "sound": 20,
+      "move": 20,
+      "c": [
+        1041,
+        2762,
+        4815,
+        2767
+      ],
+      "_id": "l4zdRy61E7cFcdcR",
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "levels": [],
+      "_key": "!scenes.walls!X9YsVXIV1Sl9sAtO.l4zdRy61E7cFcdcR"
+    },
+    {
+      "light": 20,
+      "sight": 20,
+      "sound": 20,
+      "move": 20,
+      "c": [
+        1044,
+        2760,
+        1041,
+        605
+      ],
+      "_id": "0I1WXniSzfFUqJlO",
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "levels": [],
+      "_key": "!scenes.walls!X9YsVXIV1Sl9sAtO.0I1WXniSzfFUqJlO"
+    },
+    {
+      "light": 20,
+      "sight": 20,
+      "sound": 20,
+      "move": 20,
+      "c": [
+        4807,
+        600,
+        4817,
+        2766
+      ],
+      "_id": "YR9QWUYrdwbkJO2x",
+      "dir": 0,
+      "door": 0,
+      "ds": 0,
+      "threshold": {
+        "light": null,
+        "sight": null,
+        "sound": null,
+        "attenuation": false
+      },
+      "animation": null,
+      "flags": {},
+      "levels": [],
+      "_key": "!scenes.walls!X9YsVXIV1Sl9sAtO.YR9QWUYrdwbkJO2x"
+    }
+  ],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "sort": 300000,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "tableau": {
+        "enabled": true,
+        "axis": "y",
+        "frontY": 2140,
+        "backY": 1628,
+        "nearElev": 40,
+        "farElev": -40,
+        "depthSource": "elevation",
+        "depthFlag": "tableauDepth",
+        "baseElevation": 0,
+        "minScale": 0.5,
+        "maxScale": 1,
+        "curve": 1.8,
+        "zSortByY": true
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982535935,
+    "modifiedTime": 1783982535935,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "navName": "",
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "allesh_gilliam_hq_pov",
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/allesh_gilliam_HQ_pov.webm",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!X9YsVXIV1Sl9sAtO.defaultLevel0000"
+    }
+  ],
+  "shiftX": 0,
+  "shiftY": 0,
+  "initialLevel": "defaultLevel0000",
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "_key": "!scenes!X9YsVXIV1Sl9sAtO",
+  "templates": []
+}

@@ -1,0 +1,74 @@
+{
+  "_id": "efPyWiwjZhMPlPs2",
+  "name": "Blood Hymn: Escalation",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blood_hymn_hex.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2 data-start=\"995\" data-end=\"1022\">Level 3 — <strong data-start=\"1008\" data-end=\"1022\">Escalation</strong></h2><p data-start=\"1024\" data-end=\"1047\">Your Burn feeds itself.</p><h3 data-start=\"1049\" data-end=\"1071\">Mechanical Effects</h3><p data-start=\"1072\" data-end=\"1112\">While you are at <strong data-start=\"1089\" data-end=\"1111\">Burn 2–3 (Engaged)</strong>:</p><ul data-start=\"1113\" data-end=\"1220\"><li data-start=\"1113\" data-end=\"1154\"><p data-start=\"1115\" data-end=\"1154\">Your weapon attacks deal <strong data-start=\"1140\" data-end=\"1154\">+tier damage</strong></p></li><li data-start=\"1155\" data-end=\"1220\"><p data-start=\"1157\" data-end=\"1220\">Each hit that gains this bonus <strong data-start=\"1188\" data-end=\"1204\">adds +1 Burn</strong> (once per turn)</p></li></ul><p data-start=\"1222\" data-end=\"1264\">While you are at <strong data-start=\"1239\" data-end=\"1263\">Burn 4+ (Overheated)</strong>:</p><ul data-start=\"1265\" data-end=\"1449\"><li data-start=\"1265\" data-end=\"1331\"><p data-start=\"1267\" data-end=\"1331\">Your weapon attacks deal <strong data-start=\"1292\" data-end=\"1317\">+tier additional damage</strong> (total +2×tier)</p></li><li data-start=\"1332\" data-end=\"1449\"><p data-start=\"1334\" data-end=\"1449\">Each hit automatically forces a <strong data-start=\"1366\" data-end=\"1387\">Body check</strong> or the target is <strong data-start=\"1405\" data-end=\"1415\">shaken</strong> (roll 3d10 keep lowest 2 on its next attack)</p></li></ul><p data-start=\"1451\" data-end=\"1462\">⚠️ <strong data-start=\"1454\" data-end=\"1462\">Risk</strong></p><ul data-start=\"1463\" data-end=\"1532\"><li data-start=\"1463\" data-end=\"1532\"><p data-start=\"1465\" data-end=\"1532\">Each missed attack at Burn 4+ allows the GM to trigger <strong data-start=\"1520\" data-end=\"1532\">backlash</strong></p></li></ul><p data-start=\"1534\" data-end=\"1599\">Escalation is not optional.<br data-start=\"1561\" data-end=\"1564\" />If you hit harder, you burn hotter.</p>",
+      "chat": ""
+    },
+    "identifier": "bloodhymn_escalation",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "bloodhymn_escalation",
+      "burn": {
+        "range": {
+          "min": 2,
+          "max": 3
+        },
+        "_taggedBy": "bbttcc-burn-batch-tagger",
+        "_ts": 1770856291812,
+        "_from": "Blood Hymn: Escalation"
+      }
+    }
+  },
+  "folder": "KPLHk8VtCoaVM95K",
+  "sort": 150000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459909021,
+    "modifiedTime": 1782167240825,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!efPyWiwjZhMPlPs2"
+}

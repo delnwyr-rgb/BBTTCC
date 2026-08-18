@@ -1,0 +1,66 @@
+{
+  "folder": "dIbTKQdDuf3aez6C",
+  "name": "Yesodium",
+  "_id": "DAzwc4Y1RajRgx5l",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "Yesodium Is A Hell Of A Drug",
+      "type": "text",
+      "_id": "UXKQR0j4uNh58L0g",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h1 data-start=\"113\" data-end=\"128\">⛏️ YESODIUM</h1><h2 data-start=\"129\" data-end=\"167\">(Canonical Resource Block — BBTTCC)</h2><div class=\"no-scrollbar flex min-h-36 flex-nowrap gap-0.5 overflow-auto sm:gap-1 sm:overflow-hidden xl:min-h-44 mt-1 mb-5 [&amp;:not(:first-child)]:mt-4\"><div class=\"border-token-border-default relative w-32 shrink-0 overflow-hidden rounded-xl border-[0.5px] md:shrink max-h-64 sm:w-[calc((100%-0.5rem)/3)] rounded-e-xl\"><p></p></div></div><hr data-start=\"211\" data-end=\"214\"><h2 data-start=\"216\" data-end=\"245\">🜂 Resource Classification</h2><p data-start=\"247\" data-end=\"412\"><strong data-start=\"247\" data-end=\"256\">Type:</strong> Metastable Proto-Ore<br data-start=\"277\" data-end=\"280\"><strong data-start=\"280\" data-end=\"291\">Origin:</strong> Yesod Impact Strata<br data-start=\"311\" data-end=\"314\"><strong data-start=\"314\" data-end=\"325\">Rarity:</strong> Rare (Hex-Unique: Khezek-Tor Primary Vein)<br data-start=\"368\" data-end=\"371\"><strong data-start=\"371\" data-end=\"381\">State:</strong> Narrative-Responsive Mineral</p><p data-start=\"414\" data-end=\"525\">Yesodium is matter that has not fully collapsed into identity.<br data-start=\"476\" data-end=\"479\">It remembers being ore before it chose a form.</p><p data-start=\"527\" data-end=\"557\">It may be convinced to become:</p><ul data-start=\"559\" data-end=\"655\"><li data-start=\"559\" data-end=\"567\"><p data-start=\"561\" data-end=\"567\">Iron</p></li><li data-start=\"568\" data-end=\"577\"><p data-start=\"570\" data-end=\"577\">Steel</p></li><li data-start=\"578\" data-end=\"588\"><p data-start=\"580\" data-end=\"588\">Copper</p></li><li data-start=\"589\" data-end=\"599\"><p data-start=\"591\" data-end=\"599\">Silver</p></li><li data-start=\"600\" data-end=\"608\"><p data-start=\"602\" data-end=\"608\">Gold</p></li><li data-start=\"609\" data-end=\"626\"><p data-start=\"611\" data-end=\"626\">Exotic alloys</p></li><li data-start=\"627\" data-end=\"655\"><p data-start=\"629\" data-end=\"655\">Conductive arcane metals</p></li></ul><p data-start=\"657\" data-end=\"674\">It cannot become:</p><ul data-start=\"676\" data-end=\"767\"><li data-start=\"676\" data-end=\"694\"><p data-start=\"678\" data-end=\"694\">Organic matter</p></li><li data-start=\"695\" data-end=\"747\"><p data-start=\"697\" data-end=\"747\">Complex composites (without additional crafting)</p></li><li data-start=\"748\" data-end=\"767\"><p data-start=\"750\" data-end=\"767\">Living material</p></li></ul><p data-start=\"769\" data-end=\"806\">It must be stabilized during shaping.</p><hr data-start=\"808\" data-end=\"811\"><h1 data-start=\"813\" data-end=\"832\">⚙️ CORE MECHANICS</h1><h2 data-start=\"834\" data-end=\"875\">🧠 Stabilization Check (Crafting Gate)</h2><p data-start=\"877\" data-end=\"923\">When forging Yesodium into a defined material:</p><p data-start=\"925\" data-end=\"988\">Make a Stabilization Roll using the dominant crafting approach:</p><div class=\"TyagGW_tableContainer\"><div tabindex=\"-1\" class=\"group TyagGW_tableWrapper flex flex-col-reverse w-fit\"><table data-start=\"990\" data-end=\"1213\" class=\"w-fit min-w-(--thread-content-width)\"><thead data-start=\"990\" data-end=\"1017\"><tr data-start=\"990\" data-end=\"1017\"><th data-start=\"990\" data-end=\"1001\" data-col-size=\"sm\">Approach</th><th data-start=\"1001\" data-end=\"1017\" data-col-size=\"sm\">OP Pool Used</th></tr></thead><tbody data-start=\"1045\" data-end=\"1213\"><tr data-start=\"1045\" data-end=\"1075\"><td data-start=\"1045\" data-end=\"1066\" data-col-size=\"sm\">Ritualized Forging</td><td data-col-size=\"sm\" data-start=\"1066\" data-end=\"1075\">Faith</td></tr><tr data-start=\"1076\" data-end=\"1111\"><td data-start=\"1076\" data-end=\"1100\" data-col-size=\"sm\">Precision Engineering</td><td data-col-size=\"sm\" data-start=\"1100\" data-end=\"1111\">Economy</td></tr><tr data-start=\"1112\" data-end=\"1145\"><td data-start=\"1112\" data-end=\"1133\" data-col-size=\"sm\">Coercive Hammering</td><td data-col-size=\"sm\" data-start=\"1133\" data-end=\"1145\">Violence</td></tr><tr data-start=\"1146\" data-end=\"1178\"><td data-start=\"1146\" data-end=\"1166\" data-col-size=\"sm\">Whispered Binding</td><td data-col-size=\"sm\" data-start=\"1166\" data-end=\"1178\">Intrigue</td></tr><tr data-start=\"1179\" data-end=\"1213\"><td data-start=\"1179\" data-end=\"1199\" data-col-size=\"sm\">Cultural Songwork</td><td data-col-size=\"sm\" data-start=\"1199\" data-end=\"1213\">Soft Power</td></tr></tbody></table></div></div><p data-start=\"1215\" data-end=\"1253\"><strong data-start=\"1215\" data-end=\"1222\">DC:</strong> Based on material complexity</p><ul data-start=\"1254\" data-end=\"1368\"><li data-start=\"1254\" data-end=\"1287\"><p data-start=\"1256\" data-end=\"1287\">Common metal (Iron/Steel): 10</p></li><li data-start=\"1288\" data-end=\"1324\"><p data-start=\"1290\" data-end=\"1324\">Precious metal (Silver/Gold): 12</p></li><li data-start=\"1325\" data-end=\"1368\"><p data-start=\"1327\" data-end=\"1368\">Alloy / Exotic (Starsteel, etc.): 14–16</p></li></ul><h3 data-start=\"1370\" data-end=\"1382\">Outcomes</h3><p data-start=\"1384\" data-end=\"1401\"><strong data-start=\"1384\" data-end=\"1401\">Great Success</strong></p><ul data-start=\"1402\" data-end=\"1494\"><li data-start=\"1402\" data-end=\"1459\"><p data-start=\"1404\" data-end=\"1459\">Material gains +1 margin bonus to its primary function.</p></li><li data-start=\"1460\" data-end=\"1494\"><p data-start=\"1462\" data-end=\"1494\">Counts as \"Harmonized Yesodium.\"</p></li></ul><p data-start=\"1496\" data-end=\"1507\"><strong data-start=\"1496\" data-end=\"1507\">Success</strong></p><ul data-start=\"1508\" data-end=\"1539\"><li data-start=\"1508\" data-end=\"1539\"><p data-start=\"1510\" data-end=\"1539\">Material stabilizes normally.</p></li></ul><p data-start=\"1541\" data-end=\"1552\"><strong data-start=\"1541\" data-end=\"1552\">Failure</strong></p><ul data-start=\"1553\" data-end=\"1642\"><li data-start=\"1553\" data-end=\"1610\"><p data-start=\"1555\" data-end=\"1610\">Material stabilizes with a flaw (hairline instability).</p></li><li data-start=\"1611\" data-end=\"1642\"><p data-start=\"1613\" data-end=\"1642\">GM adds minor narrative risk.</p></li></ul><p data-start=\"1644\" data-end=\"1664\"><strong data-start=\"1644\" data-end=\"1664\">Critical Failure</strong></p><ul data-start=\"1665\" data-end=\"1730\"><li data-start=\"1665\" data-end=\"1683\"><p data-start=\"1667\" data-end=\"1683\">Reversion event.</p></li><li data-start=\"1684\" data-end=\"1730\"><p data-start=\"1686\" data-end=\"1730\">Slag collapse or dream fracture (see below).</p></li></ul><hr data-start=\"1732\" data-end=\"1735\"><h1 data-start=\"1737\" data-end=\"1756\">⚠️ Reversion Risk</h1><p data-start=\"1758\" data-end=\"1782\">Yesodium retains memory.</p><p data-start=\"1784\" data-end=\"1877\">When subjected to extreme stress (raid great failure, catastrophic damage, magical backlash):</p><p data-start=\"1879\" data-end=\"1907\">Roll a Reversion Check (d6):</p><p data-start=\"1909\" data-end=\"2058\">1–2: Stable<br data-start=\"1920\" data-end=\"1923\">3–4: Flicker (temporary disadvantage next round)<br data-start=\"1971\" data-end=\"1974\">5: Structural Weakening (damageStep +1)<br data-start=\"2013\" data-end=\"2016\">6: Reversion Event (material destabilizes)</p><p data-start=\"2060\" data-end=\"2085\">Reversion Event examples:</p><ul data-start=\"2086\" data-end=\"2210\"><li data-start=\"2086\" data-end=\"2116\"><p data-start=\"2088\" data-end=\"2116\">Weapon loses form mid-swing.</p></li><li data-start=\"2117\" data-end=\"2144\"><p data-start=\"2119\" data-end=\"2144\">Armor softens under blow.</p></li><li data-start=\"2145\" data-end=\"2182\"><p data-start=\"2147\" data-end=\"2182\">Structure partially dematerializes.</p></li><li data-start=\"2183\" data-end=\"2210\"><p data-start=\"2185\" data-end=\"2210\">Rig plating destabilizes.</p></li></ul><p data-start=\"2212\" data-end=\"2240\">Rare, but narratively spicy.</p><hr data-start=\"2242\" data-end=\"2245\"><h1 data-start=\"2247\" data-end=\"2268\">🗡️ YESODIC WEAPONS</h1><p data-start=\"2270\" data-end=\"2315\">Weapons forged from Harmonized Yesodium gain:</p><h3 data-start=\"2317\" data-end=\"2334\">✦ Memory Edge</h3><p data-start=\"2335\" data-end=\"2367\">On Great Success during forging:</p><p data-start=\"2369\" data-end=\"2383\">Once per raid:</p><ul data-start=\"2384\" data-end=\"2422\"><li data-start=\"2384\" data-end=\"2422\"><p data-start=\"2386\" data-end=\"2422\">Add +1 margin after roll resolution.</p></li></ul><h3 data-start=\"2424\" data-end=\"2445\">✦ Adaptive Weight</h3><p data-start=\"2446\" data-end=\"2533\">Counts as optimal metal for the wielder’s build.<br>(No mechanical encumbrance penalties.)</p><h3 data-start=\"2535\" data-end=\"2553\">✦ Identity Cut</h3><p data-start=\"2554\" data-end=\"2607\">If used against constructs, gates, or dream-entities:</p><ul data-start=\"2608\" data-end=\"2634\"><li data-start=\"2608\" data-end=\"2634\"><p data-start=\"2610\" data-end=\"2634\">+1 effective damageStep.</p></li></ul><p data-start=\"2636\" data-end=\"2664\">⚠️ If improperly stabilized:</p><ul data-start=\"2665\" data-end=\"2710\"><li data-start=\"2665\" data-end=\"2710\"><p data-start=\"2667\" data-end=\"2710\">Reversion check triggered on Great Failure.</p></li></ul><hr data-start=\"2712\" data-end=\"2715\"><h1 data-start=\"2717\" data-end=\"2736\">🛡️ YESODIC ARMOR</h1><h3 data-start=\"2738\" data-end=\"2764\">✦ Memory of Protection</h3><p data-start=\"2765\" data-end=\"2779\">Once per raid:</p><ul data-start=\"2780\" data-end=\"2810\"><li data-start=\"2780\" data-end=\"2810\"><p data-start=\"2782\" data-end=\"2810\">Reduce incoming margin by 1.</p></li></ul><h3 data-start=\"2812\" data-end=\"2830\">✦ Flow Plating</h3><p data-start=\"2831\" data-end=\"2917\">May convert one structural damageStep into narrative strain (cosmetic, no track loss).</p><h3 data-start=\"2919\" data-end=\"2940\">✦ Gate Attunement</h3><p data-start=\"2941\" data-end=\"2990\">+1 defensive bonus when operating near Ley Gates.</p><p data-start=\"2992\" data-end=\"3067\">⚠️ Instability:<br>On catastrophic failure, armor may partially dematerialize.</p><hr data-start=\"3069\" data-end=\"3072\"><h1 data-start=\"3074\" data-end=\"3098\">🏗️ YESODIC STRUCTURES</h1><p data-start=\"3100\" data-end=\"3108\">Used in:</p><ul data-start=\"3110\" data-end=\"3190\"><li data-start=\"3110\" data-end=\"3125\"><p data-start=\"3112\" data-end=\"3125\">Gate frames</p></li><li data-start=\"3126\" data-end=\"3147\"><p data-start=\"3128\" data-end=\"3147\">Rig reinforcement</p></li><li data-start=\"3148\" data-end=\"3167\"><p data-start=\"3150\" data-end=\"3167\">Ritual chambers</p></li><li data-start=\"3168\" data-end=\"3190\"><p data-start=\"3170\" data-end=\"3190\">Defensive bastions</p></li></ul><p data-start=\"3192\" data-end=\"3200\">Benefit:</p><ul data-start=\"3201\" data-end=\"3303\"><li data-start=\"3201\" data-end=\"3261\"><p data-start=\"3203\" data-end=\"3261\">+1 to stabilization checks when interacting with Leylines.</p></li><li data-start=\"3262\" data-end=\"3303\"><p data-start=\"3264\" data-end=\"3303\">Reduced Gate travel instability chance.</p></li></ul><p data-start=\"3305\" data-end=\"3410\">Danger:<br>If Khezek-Tor’s main vein destabilizes, all Yesodic structures globally must roll Reversion once.</p><p data-start=\"3412\" data-end=\"3426\">Yes. Globally.</p>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1784077421476,
+        "modifiedTime": 1784077421476
+      },
+      "_key": "!journal.pages!DAzwc4Y1RajRgx5l.UXKQR0j4uNh58L0g"
+    }
+  ],
+  "categories": [],
+  "sort": 150000,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784077421476,
+    "modifiedTime": 1784077421476,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!journal!DAzwc4Y1RajRgx5l"
+}

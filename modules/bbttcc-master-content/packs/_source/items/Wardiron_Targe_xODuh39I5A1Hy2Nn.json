@@ -1,0 +1,95 @@
+{
+  "name": "Wardiron Targe",
+  "type": "armor",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "guardBonus": 2,
+    "evasionBonus": 0,
+    "resolveBonus": 1,
+    "resistances": [
+      "kinetic"
+    ],
+    "armorSkill": "warding",
+    "equipped": false,
+    "tags": [
+      "shield",
+      "warding",
+      "wardiron"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A heavy round targe banded in wardiron — anchorstone smelted with the steel so the metal sits a half-beat ahead of the blow. Favored by faction line-holders who'd rather lose the shield than the arm behind it.</p><p><strong>Wardiron.</strong> The banding grounds raw force. Resists kinetic. No attunement — the iron does the remembering.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +2, Resolve +1</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Kinetic</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 150 Economy marks</p></li></ul>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "shield",
+          "signature": "Cold-forged to take the hit you didn't see.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A heavy round targe banded in wardiron — anchorstone smelted with the steel so the metal sits a half-beat ahead of the blow. Favored by faction line-holders who'd rather lose the shield than the arm behind it.</p><p><b>Wardiron.</b> The banding grounds raw force. Resists kinetic. No attunement — the iron does the remembering.</p>",
+          "materialOf": [
+            "wardiron",
+            "anchorstone",
+            "oak-core"
+          ],
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII shield × 1",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      },
+      "grants": {
+        "resistances": [
+          {
+            "type": "kinetic"
+          }
+        ]
+      }
+    }
+  },
+  "folder": "gD1WklJiuS6Vg2p3",
+  "_id": "xODuh39I5A1Hy2Nn",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782150391352,
+    "modifiedTime": 1782189781869,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!xODuh39I5A1Hy2Nn"
+}

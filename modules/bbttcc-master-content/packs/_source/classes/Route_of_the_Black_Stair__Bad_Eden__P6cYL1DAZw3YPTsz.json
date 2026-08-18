@@ -1,0 +1,41 @@
+{
+  "name": "Route of the Black Stair (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_7.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "shadow_courier",
+    "source": "Bad Eden Originals — Sprint F (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"You came through a door that wasn't for them.\"</em></p><p><strong>Doctrine:</strong> Thresholds weaponized — covert, predatory; who gets through and who really, really doesn't.</p><p>The Black Stair is the courier as ambush. Your Surge spends turn crossings into kills: strike from where they weren't watching, slam the threshold shut on a foe, and spring the stair that does not end.</p><h3>Route (spent via Surge)</h3><ul><li><p><strong>Ambush</strong> (1) — your next Strike +Tier d6; the target's next attack is at disadvantage.</p></li><li><p><strong>Cut Off</strong> (2) — a foe is Staggered and cannot take reactions until your next turn.</p></li><li><p><strong>Stair-Trap</strong> (5) — your next Strike lands as a max-die crit and knocks the target Prone; if it drops them, you regain a freed action.</p></li></ul>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-shadow-courier-courier-black-stair",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "eQl1GnJxLhG4BD19",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "P6cYL1DAZw3YPTsz",
+  "sort": 700000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1781116145007,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!P6cYL1DAZw3YPTsz"
+}

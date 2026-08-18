@@ -1,0 +1,65 @@
+{
+  "_id": "nmO1GPJJb6QVG6RX",
+  "name": "Improvised Engineer",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_improvised_engineer.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2>Improvised Engineer</h2><p><em>If you can’t fix it, you can at least make it dangerous.</em></p><hr /><h3>Rules</h3><p>You gain skill rank with artisan’s tools of your choice. If you already have it, you gain mastery.</p><p>During a Respite, you can craft one improvised device from scrap (choose one):</p><ul><li><strong>Flash-burn:</strong> A thrown device (20/60) that sheds bright light in a 2 squares radius for 1 minute; creatures that rely on invisibility have their invisibility suppressed while in the light (GM adjudication).</li><li><strong>Snareline:</strong> A 2 squares tripline trap you can set in 1 minute; the first creature to cross it must succeed on a Intrigue check (DC = 8 + your skill rank bonus + your Mind value) or fall prone.</li><li><strong>Signal Screamer:</strong> A noisemaker you can place; it triggers on contact, audible out to 60 squares</li></ul><p>A device becomes inert after 8 hours or after triggering once.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_improvised_engineer",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-expansion-v1",
+      "generatedAt": "2026-01-18T20:40:45.006058+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 3700000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1782164185979,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!nmO1GPJJb6QVG6RX"
+}

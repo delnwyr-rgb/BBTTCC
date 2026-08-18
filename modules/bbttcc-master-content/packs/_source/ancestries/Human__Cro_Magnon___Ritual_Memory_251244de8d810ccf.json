@@ -1,0 +1,92 @@
+{
+  "_id": "251244de8d810ccf",
+  "name": "Human (Cro-Magnon): Ritual Memory",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+  "system": {
+    "category": "feature",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 2,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“The first ritual was just the second time anyone agreed to do something on purpose.”</em></p>\n<p><strong>Ritual Memory.</strong> During a Soma Break, you can lead your party in a 30-minute coalition ritual — a song, a meal, a story, a marking. At the end of the rest, each willing creature who participated gains a single d4 they may add to one attribute check, attack roll, or check before the next Soma Break. Once the d4 is used or the next Soma Break begins, it is spent.</p>\n<p><strong>Coalition Calm.</strong> While you are within 1 square of an ally, that ally rerolls the lowest die on checks against being frightened.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "human-cro-magnon-ritual-memory",
+    "requirements": "Human (Cro-Magnon)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "human",
+      "feature": "ritual_memory",
+      "lineage": "Cro-Magnon",
+      "tierLevel": 5,
+      "version": "2.0.0",
+      "date": "2026-04-19"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "defense",
+          "mode": "reroll-lowest",
+          "vs": "vs:shaken",
+          "note": "on defense checks [TODO(adv-call)] against being Shaken"
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-soma-break",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Ritual Memory. During a Soma Break, you can lead your party in a 30-minute coalition ritual"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "r7CgO2S66OLymyWz",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776600000000,
+    "modifiedTime": 1782167240110,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 300000,
+  "_key": "!items!251244de8d810ccf"
+}

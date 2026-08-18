@@ -1,0 +1,87 @@
+{
+  "name": "Oath-Anchor Stone",
+  "type": "gear",
+  "img": "icons/sundries/gaming/rune-stone-tan.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [
+      "tech"
+    ],
+    "category": "gear",
+    "source": "Phase 7 Seed (2026-05-10)",
+    "description": {
+      "value": "<p>A carved anchorstone bound to a treaty. While the stone is intact, the treaty holds; cracking it pings every signatory across the hex.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "frame": "sigil",
+          "bound": "free",
+          "materialOf": [
+            {
+              "key": "vow-bone",
+              "qty": 1
+            },
+            {
+              "key": "anchorstone",
+              "qty": 2
+            },
+            {
+              "key": "sacred-gold",
+              "qty": 1
+            },
+            {
+              "key": "witness-glass",
+              "qty": 1
+            }
+          ],
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 1,
+              "max": 1,
+              "recoverPer": "week"
+            },
+            "failure": "drain",
+            "origin": "septcraft"
+          },
+          "price": {
+            "marks": 1080,
+            "currency": "softpower",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII sigil × 1.20 × tech 2.0",
+            "bound": "free",
+            "saleBack": 432
+          }
+        }
+      }
+    }
+  },
+  "_id": "eQ2MM4KYseBGqYv2",
+  "effects": [],
+  "folder": "Wxh1A343inwTUeoo",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778963325935,
+    "modifiedTime": 1778963325935,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 0,
+  "_key": "!items!eQ2MM4KYseBGqYv2"
+}

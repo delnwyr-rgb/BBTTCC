@@ -1,0 +1,1034 @@
+{
+  "name": "Mutagenic 2",
+  "_id": "YqMTNoh16gMukXza",
+  "active": false,
+  "navigation": true,
+  "navOrder": 0,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-8AjudQ8BV4t5sXHxMdvtgw.webp",
+  "width": 1920,
+  "height": 1088,
+  "padding": 0.25,
+  "initial": {
+    "x": null,
+    "y": null,
+    "scale": null
+  },
+  "grid": {
+    "type": 1,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 1,
+    "color": "#000000",
+    "alpha": 0.2,
+    "distance": 5,
+    "units": "ft"
+  },
+  "tokenVision": true,
+  "fog": {
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    },
+    "mode": 1
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": true,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "drawings": [],
+  "tokens": [
+    {
+      "name": "Tier 2 Predator (Wastes Stalker)",
+      "disposition": -1,
+      "displayName": 20,
+      "displayBars": 40,
+      "bar1": {
+        "attribute": "attributes.hp"
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/T3Predator2.png",
+        "scaleX": 3,
+        "scaleY": 3,
+        "tint": "#ffffff",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "alphaThreshold": 0.75
+      },
+      "width": 2,
+      "height": 2,
+      "actorLink": false,
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {},
+      "actorId": "9wqT4irs3EM9NJpW",
+      "hidden": false,
+      "sort": 0,
+      "shape": 4,
+      "_id": "aLRSQqsmMg6GXl9r",
+      "delta": {
+        "_id": "1L4y24X4VEo8aYD6",
+        "system": {},
+        "items": [
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p>The stalker has reroll the lowest die on attack rolls against a creature if at least one ally stalker is within 5 ft [TODO(adv-call)]. of the target and not Staggered.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "n3c6AYNVlez8E1E1",
+            "name": "Pack Hunter",
+            "type": "feat",
+            "img": "icons/svg/upgrade.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553742,
+              "modifiedTime": 1783982553742
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!YqMTNoh16gMukXza.aLRSQqsmMg6GXl9r.1L4y24X4VEo8aYD6.n3c6AYNVlez8E1E1"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p>The stalker has reroll the lowest die on Intrigue (Stealth (Intrigue) (Intrigue)) checks [TODO(adv-call)] made to hide in rubble, brush, or ruined interiors.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "9c2zFez7LEa0xtLv",
+            "name": "Camouflage",
+            "type": "feat",
+            "img": "icons/svg/upgrade.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553742,
+              "modifiedTime": 1783982553742
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!YqMTNoh16gMukXza.aLRSQqsmMg6GXl9r.1L4y24X4VEo8aYD6.9c2zFez7LEa0xtLv"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p><strong>Attack.</strong> +6 to hit, reach 5 ft., one target. Hit: 10 (1d10+5) slashing.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {
+                "dnd5eactivity000": {
+                  "_id": "dnd5eactivity000",
+                  "type": "attack",
+                  "activation": {
+                    "type": "action",
+                    "value": 1,
+                    "condition": "",
+                    "override": false
+                  },
+                  "consumption": {
+                    "targets": [],
+                    "scaling": {
+                      "allowed": false,
+                      "max": ""
+                    },
+                    "spellSlot": true
+                  },
+                  "description": {
+                    "chatFlavor": ""
+                  },
+                  "duration": {
+                    "concentration": false,
+                    "units": "inst",
+                    "special": "",
+                    "override": false
+                  },
+                  "effects": [],
+                  "range": {
+                    "units": "ft",
+                    "override": false,
+                    "special": "",
+                    "value": "5"
+                  },
+                  "target": {
+                    "template": {
+                      "count": "",
+                      "contiguous": false,
+                      "type": "",
+                      "size": "",
+                      "width": "",
+                      "height": "",
+                      "units": "ft",
+                      "stationary": false
+                    },
+                    "affects": {
+                      "count": "1",
+                      "type": "creature",
+                      "choice": false,
+                      "special": ""
+                    },
+                    "prompt": true,
+                    "override": false
+                  },
+                  "uses": {
+                    "spent": 0,
+                    "max": "",
+                    "recovery": []
+                  },
+                  "attack": {
+                    "ability": "",
+                    "bonus": "6",
+                    "critical": {},
+                    "flat": false,
+                    "type": {
+                      "value": "melee",
+                      "classification": "weapon"
+                    }
+                  },
+                  "damage": {
+                    "critical": {},
+                    "includeBase": true,
+                    "parts": [
+                      {
+                        "number": 1,
+                        "denomination": 10,
+                        "bonus": "5",
+                        "types": [
+                          "slashing"
+                        ],
+                        "custom": {
+                          "enabled": false,
+                          "formula": ""
+                        },
+                        "scaling": {
+                          "mode": "whole",
+                          "number": null,
+                          "formula": ""
+                        }
+                      }
+                    ]
+                  },
+                  "sort": 0,
+                  "flags": {},
+                  "visibility": {
+                    "level": {},
+                    "requireAttunement": false,
+                    "requireIdentification": false,
+                    "requireMagic": false
+                  },
+                  "img": null
+                }
+              },
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "D5mo2aZ8AiPHjyBs",
+            "name": "Claws",
+            "type": "feat",
+            "img": "icons/svg/sword.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553742,
+              "modifiedTime": 1783982553742
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!YqMTNoh16gMukXza.aLRSQqsmMg6GXl9r.1L4y24X4VEo8aYD6.D5mo2aZ8AiPHjyBs"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p><strong>Attack.</strong> If the stalker is hidden from a target when it hits it, the hit deals an extra 7 (2d6) damage and the target must succeed on a DC 13 Str save or be knocked prone.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "kQiiR9US1ykXmfaz",
+            "name": "Ambush Strike",
+            "type": "feat",
+            "img": "icons/svg/sword.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553742,
+              "modifiedTime": 1783982553742
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!YqMTNoh16gMukXza.aLRSQqsmMg6GXl9r.1L4y24X4VEo8aYD6.kQiiR9US1ykXmfaz"
+          }
+        ],
+        "effects": [],
+        "flags": {},
+        "name": null,
+        "type": null,
+        "img": null,
+        "ownership": null,
+        "_key": "!scenes.tokens.delta!YqMTNoh16gMukXza.aLRSQqsmMg6GXl9r.1L4y24X4VEo8aYD6"
+      },
+      "x": 1100,
+      "y": 700,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "depth": 2,
+      "level": "defaultLevel0000",
+      "_key": "!scenes.tokens!YqMTNoh16gMukXza.aLRSQqsmMg6GXl9r"
+    },
+    {
+      "name": "Tier 2 Predator (Wastes Stalker)",
+      "disposition": -1,
+      "displayName": 20,
+      "displayBars": 40,
+      "bar1": {
+        "attribute": "attributes.hp"
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/T3Predator2.png",
+        "scaleX": 3,
+        "scaleY": 3,
+        "tint": "#ffffff",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "alphaThreshold": 0.75
+      },
+      "width": 2,
+      "height": 2,
+      "actorLink": false,
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {},
+      "actorId": "9wqT4irs3EM9NJpW",
+      "hidden": false,
+      "sort": 1,
+      "shape": 4,
+      "_id": "Cr6s7k4IheLeYHbD",
+      "delta": {
+        "_id": "ARK13WFf7YpQpmFe",
+        "system": {},
+        "items": [
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p>The stalker has reroll the lowest die on attack rolls against a creature if at least one ally stalker is within 5 ft [TODO(adv-call)]. of the target and not Staggered.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "n3c6AYNVlez8E1E1",
+            "name": "Pack Hunter",
+            "type": "feat",
+            "img": "icons/svg/upgrade.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553742,
+              "modifiedTime": 1783982553742
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!YqMTNoh16gMukXza.Cr6s7k4IheLeYHbD.ARK13WFf7YpQpmFe.n3c6AYNVlez8E1E1"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p>The stalker has reroll the lowest die on Intrigue (Stealth (Intrigue) (Intrigue)) checks [TODO(adv-call)] made to hide in rubble, brush, or ruined interiors.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "9c2zFez7LEa0xtLv",
+            "name": "Camouflage",
+            "type": "feat",
+            "img": "icons/svg/upgrade.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553742,
+              "modifiedTime": 1783982553742
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!YqMTNoh16gMukXza.Cr6s7k4IheLeYHbD.ARK13WFf7YpQpmFe.9c2zFez7LEa0xtLv"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p><strong>Attack.</strong> +6 to hit, reach 5 ft., one target. Hit: 10 (1d10+5) slashing.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {
+                "dnd5eactivity000": {
+                  "_id": "dnd5eactivity000",
+                  "type": "attack",
+                  "activation": {
+                    "type": "action",
+                    "value": 1,
+                    "condition": "",
+                    "override": false
+                  },
+                  "consumption": {
+                    "targets": [],
+                    "scaling": {
+                      "allowed": false,
+                      "max": ""
+                    },
+                    "spellSlot": true
+                  },
+                  "description": {
+                    "chatFlavor": ""
+                  },
+                  "duration": {
+                    "concentration": false,
+                    "units": "inst",
+                    "special": "",
+                    "override": false
+                  },
+                  "effects": [],
+                  "range": {
+                    "units": "ft",
+                    "override": false,
+                    "special": "",
+                    "value": "5"
+                  },
+                  "target": {
+                    "template": {
+                      "count": "",
+                      "contiguous": false,
+                      "type": "",
+                      "size": "",
+                      "width": "",
+                      "height": "",
+                      "units": "ft",
+                      "stationary": false
+                    },
+                    "affects": {
+                      "count": "1",
+                      "type": "creature",
+                      "choice": false,
+                      "special": ""
+                    },
+                    "prompt": true,
+                    "override": false
+                  },
+                  "uses": {
+                    "spent": 0,
+                    "max": "",
+                    "recovery": []
+                  },
+                  "attack": {
+                    "ability": "",
+                    "bonus": "6",
+                    "critical": {},
+                    "flat": false,
+                    "type": {
+                      "value": "melee",
+                      "classification": "weapon"
+                    }
+                  },
+                  "damage": {
+                    "critical": {},
+                    "includeBase": true,
+                    "parts": [
+                      {
+                        "number": 1,
+                        "denomination": 10,
+                        "bonus": "5",
+                        "types": [
+                          "slashing"
+                        ],
+                        "custom": {
+                          "enabled": false,
+                          "formula": ""
+                        },
+                        "scaling": {
+                          "mode": "whole",
+                          "number": null,
+                          "formula": ""
+                        }
+                      }
+                    ]
+                  },
+                  "sort": 0,
+                  "flags": {},
+                  "visibility": {
+                    "level": {},
+                    "requireAttunement": false,
+                    "requireIdentification": false,
+                    "requireMagic": false
+                  },
+                  "img": null
+                }
+              },
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "D5mo2aZ8AiPHjyBs",
+            "name": "Claws",
+            "type": "feat",
+            "img": "icons/svg/sword.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553742,
+              "modifiedTime": 1783982553742
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!YqMTNoh16gMukXza.Cr6s7k4IheLeYHbD.ARK13WFf7YpQpmFe.D5mo2aZ8AiPHjyBs"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p><strong>Attack.</strong> If the stalker is hidden from a target when it hits it, the hit deals an extra 7 (2d6) damage and the target must succeed on a DC 13 Str save or be knocked prone.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "kQiiR9US1ykXmfaz",
+            "name": "Ambush Strike",
+            "type": "feat",
+            "img": "icons/svg/sword.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553742,
+              "modifiedTime": 1783982553742
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!YqMTNoh16gMukXza.Cr6s7k4IheLeYHbD.ARK13WFf7YpQpmFe.kQiiR9US1ykXmfaz"
+          }
+        ],
+        "effects": [],
+        "flags": {},
+        "name": null,
+        "type": null,
+        "img": null,
+        "ownership": null,
+        "_key": "!scenes.tokens.delta!YqMTNoh16gMukXza.Cr6s7k4IheLeYHbD.ARK13WFf7YpQpmFe"
+      },
+      "x": 1700,
+      "y": 900,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "depth": 2,
+      "level": "defaultLevel0000",
+      "_key": "!scenes.tokens!YqMTNoh16gMukXza.Cr6s7k4IheLeYHbD"
+    }
+  ],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [],
+  "walls": [],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "folder": "eMpeqwnjtn1E4Fzp",
+  "sort": 235938,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982553742,
+    "modifiedTime": 1783982553742,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "navName": "",
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "Mutagenic 2",
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/GOTTGAIT%20Scenes/MutagenicFightT3US.mp4",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!YqMTNoh16gMukXza.defaultLevel0000"
+    }
+  ],
+  "shiftX": 0,
+  "shiftY": 0,
+  "initialLevel": "defaultLevel0000",
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "_key": "!scenes!YqMTNoh16gMukXza",
+  "templates": []
+}

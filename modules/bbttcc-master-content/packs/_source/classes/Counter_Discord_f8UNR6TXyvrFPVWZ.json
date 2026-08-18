@@ -1,0 +1,72 @@
+{
+  "name": "Counter-Discord",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_5.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2025",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>You silence manipulation mid-note.</em></p><p>When a creature within <strong>12 squares</strong> uses a deceit-based tactic—such as imposing disadvantage through misinformation, illusions, fear propaganda, or a charm-adjacent mental effect—you may use your <strong>reaction</strong> to nullify that interference.</p><ul><li>The disadvantage or imposed reroll is <strong>canceled</strong>.</li><li>You can use this feature <strong>once per Soma Break</strong>.</li></ul><p>In Bad Eden terms: you jam the signal.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "harmmarshal-overwatch-counter-discord",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": [],
+    "requirements": "Harmony Marshal 6, Mandate of Overwatch",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "2lNXuSAY9vKC4tM0",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "harmmarshal_overwatch",
+      "featureKey": "counter_discord"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776467813568,
+    "modifiedTime": 1782167240825,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "f8UNR6TXyvrFPVWZ",
+  "sort": 200000,
+  "_key": "!items!f8UNR6TXyvrFPVWZ"
+}

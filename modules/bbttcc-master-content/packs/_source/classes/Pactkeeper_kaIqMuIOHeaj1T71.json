@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Pactkeeper",
+  "color": null,
+  "sorting": "a",
+  "_id": "kaIqMuIOHeaj1T71",
+  "description": "",
+  "sort": 1900000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776481562235,
+    "modifiedTime": 1776481562807,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+  },
+  "_key": "!folders!kaIqMuIOHeaj1T71"
+}

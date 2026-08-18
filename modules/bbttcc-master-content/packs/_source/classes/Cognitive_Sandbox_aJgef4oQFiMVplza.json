@@ -1,0 +1,129 @@
+{
+  "name": "Cognitive Sandbox",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_symbolism.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Cognitive Sandbox.</strong> You have learned to keep the part of your mind that looks at things separate from the part that <em>is</em> those things.</p><ul><li>You gain a small mechanical bonus on <strong>Mind and Soul check</strong> against <strong>illusions, psychic damage, possession, or Tikkun/Qliphothic mind-effects</strong>.</li><li>When you succeed on such a save, the GM may grant you additional diagnostic detail about the effect (what layer it’s coming from, what it’s trying to do, what it’s keyed to).</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "cognitive-sandbox",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 4
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (4th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Cognitive Sandbox (Int & Wis Save Edge)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dragon_2.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984387,
+        "modifiedTime": 1777346199134
+      },
+      "_id": "jJU1tL4DZDsXsKFT",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.abilities.int.bonuses.save",
+            "value": "+1",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.abilities.wis.bonuses.save",
+            "value": "+1",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.cognitiveSandbox",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!aJgef4oQFiMVplza.jJU1tL4DZDsXsKFT"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "cognitiveSandbox": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984387,
+    "modifiedTime": 1781116167183,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "aJgef4oQFiMVplza",
+  "sort": 125000,
+  "_key": "!items!aJgef4oQFiMVplza"
+}

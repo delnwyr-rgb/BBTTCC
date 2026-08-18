@@ -1,0 +1,63 @@
+{
+  "name": "Archivist: Immutable Record",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_4.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"1855\" data-end=\"1868\"><em data-start=\"1855\" data-end=\"1868\">(3rd Level)</em></p><p data-start=\"1870\" data-end=\"1891\"><em data-start=\"1870\" data-end=\"1891\">“Nice try. Logged.”</em></p><p data-start=\"1893\" data-end=\"1929\">Once per Soma Break, when an effect would:</p><ul data-start=\"1931\" data-end=\"2034\"><li data-start=\"1931\" data-end=\"1949\"><p data-start=\"1933\" data-end=\"1949\">Rewrite memory</p></li><li data-start=\"1950\" data-end=\"1978\"><p data-start=\"1952\" data-end=\"1978\">Alter historical meaning</p></li><li data-start=\"1979\" data-end=\"2000\"><p data-start=\"1981\" data-end=\"2000\">Retcon an outcome</p></li><li data-start=\"2001\" data-end=\"2034\"><p data-start=\"2003\" data-end=\"2034\">Falsify an established record</p></li></ul><p data-start=\"2036\" data-end=\"2052\">You may declare:</p><blockquote data-start=\"2054\" data-end=\"2078\"><p data-start=\"2056\" data-end=\"2078\"><strong data-start=\"2056\" data-end=\"2078\">The record stands.</strong></p></blockquote><p data-start=\"2080\" data-end=\"2209\">The effect may function locally (illusion, altered perception, etc.), but it <strong data-start=\"2157\" data-end=\"2209\">cannot alter Precedent or long-term consequence.</strong></p><h3 data-start=\"2211\" data-end=\"2219\">Cost</h3><p data-start=\"2220\" data-end=\"2259\">No Civic Charge required (limited use).</p><h3 data-start=\"2261\" data-end=\"2273\">Pushback</h3><p data-start=\"2274\" data-end=\"2423\">Using Immutable Record against major narrative forces may accelerate <strong data-start=\"2343\" data-end=\"2370\">Administrative Pressure</strong>, especially if overused to block organic resolution.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "identifier": "archivist_immutable_record",
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {}
+  },
+  "folder": "eNi1uCWJUfkKDdUU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776481562683,
+    "modifiedTime": 1782167240799,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "AqhTYuO3LLYro1nS",
+  "sort": 400000,
+  "_key": "!items!AqhTYuO3LLYro1nS"
+}

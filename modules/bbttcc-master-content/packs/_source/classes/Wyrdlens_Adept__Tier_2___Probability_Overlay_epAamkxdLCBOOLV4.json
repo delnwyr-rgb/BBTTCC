@@ -1,0 +1,140 @@
+{
+  "name": "Wyrdlens Adept: Tier 2 — Probability Overlay",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hourglass_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 — Probability Overlay.</strong> Reroll the lowest die on any manifestation roll — yours, or an adjacent ally's — once per round. (This is the Tikkun Identification bonus refracted through the universal manifestation system: same arithmetic, same once-per-round cadence, applied wherever dice are read for manifestation.)</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (passive): Misfire shift −1 (stacks with Tier 1 to total −2).</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlT2\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Probability Overlay</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/round &nbsp;·&nbsp; <strong>Action:</strong> Free (after roll) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Reroll the lowest die on any manifestation roll — yours, or an adjacent ally's.</div>\n</div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "wyrdlens_adept_tier_2_probability_overlay",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (5th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Identification Overclock (Tier 2 ID Boost)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_12.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984388,
+        "modifiedTime": 1777346199416
+      },
+      "_id": "fezr6p8Kf6dTvcn0",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.tier2",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.identificationOverclock",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.tikkunHooks.identificationOverclockBonus",
+            "value": 2,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!epAamkxdLCBOOLV4.fezr6p8Kf6dTvcn0"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "tier2": true,
+        "identificationOverclock": true
+      },
+      "tikkunHooks": {
+        "identificationOverclockBonus": 2
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "discipline": {
+        "passive": {
+          "misfireBandShift": -1
+        }
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984388,
+    "modifiedTime": 1781116173527,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "epAamkxdLCBOOLV4",
+  "sort": 350000,
+  "_key": "!items!epAamkxdLCBOOLV4"
+}

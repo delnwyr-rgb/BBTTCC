@@ -1,0 +1,62 @@
+{
+  "name": "War Chest",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_safe.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Coin talks, stewards. Fresh pay, fresh boots, fresh nerve, all bought at the last possible second. Money's a hell of a drug.</p><p><b>+1 to the attacker's roll this round.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "war_chest",
+      "meta": {
+        "tier": 1,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "universal",
+        "layer": "strategic",
+        "costBand": "light",
+        "raidTypes": [
+          "any"
+        ],
+        "fireMode": "pre-roll",
+        "opCosts": {
+          "economy": 2
+        },
+        "authoredSprint": "balance-w1"
+      },
+      "effects": {
+        "text": "Bankroll the push: +1 to the attacker's roll this round."
+      }
+    }
+  },
+  "_id": "qK8kIMU7ihnz2WYm",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "6ut7GT8pCAhpdWjS": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1779731207892,
+    "modifiedTime": 1780163526563,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!qK8kIMU7ihnz2WYm"
+}

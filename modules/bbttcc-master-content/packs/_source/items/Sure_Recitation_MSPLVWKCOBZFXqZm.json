@@ -1,0 +1,65 @@
+{
+  "name": "Sure Recitation",
+  "type": "feat",
+  "img": "icons/magic/symbols/runes-triangle-orange.webp",
+  "folder": "QbGNBV70xh9pF0eh",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC Manifestation Techniques v1",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2>Sure Recitation</h2><p><em>You speak your workings cleanly, even under pressure.</em></p><hr /><h3>Rules</h3><p>On any manifestation <strong>cast roll</strong>, you may <strong>reroll the lowest die</strong>, keeping the new result if it is higher.</p><p style=\"font-size:0.8rem;opacity:0.85;margin:0.5rem 0 0\"><strong>Requires:</strong> General — Tier 2+</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">⚙ Applies automatically: reroll the lowest die on every manifestation cast.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_sure_recitation",
+    "requirements": "General — Tier 2+",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": []
+  },
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-manifestation-techniques-v1",
+      "theme": "Reach, scale & signature"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "caster-check",
+          "mode": "reroll-lowest",
+          "note": "Sure Recitation"
+        }
+      ]
+    }
+  },
+  "_id": "MSPLVWKCOBZFXqZm",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782190568486,
+    "modifiedTime": 1782190568486,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!MSPLVWKCOBZFXqZm"
+}

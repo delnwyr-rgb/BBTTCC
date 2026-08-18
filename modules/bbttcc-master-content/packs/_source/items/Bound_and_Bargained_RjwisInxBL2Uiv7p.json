@@ -1,0 +1,62 @@
+{
+  "name": "Bound and Bargained",
+  "type": "feat",
+  "img": "icons/magic/symbols/runes-carved-stone-purple.webp",
+  "folder": "QbGNBV70xh9pF0eh",
+  "system": {
+    "category": "technique",
+    "source": "BBTTCC Manifestation Techniques v1 (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<h2>Bound and Bargained</h2><p><em>A sealed pact holds itself; you need only keep the terms.</em></p><hr><h3>Rules</h3><p>While your <strong>Sealed Pact</strong> stance is active, the bindings carry their own weight: the <strong>upkeep</strong> cost of your sustained manifestations is <strong>halved</strong>.</p><p><span style=\"opacity: 0.85; margin: 0.5rem 0 0; font-size: 0.8rem\"><strong>Requires:</strong> Pactkeeper</span><span style=\"opacity: 0.7; margin: 0.5rem 0 0; font-size: 0.74rem\">⚙ Applies automatically while the Sealed Pact stance is active: upkeep ×0.5.</span></p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_bound_and_bargained",
+    "requirements": "Pactkeeper",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-manifestation-techniques-v1",
+      "theme": "Concurrency & upkeep"
+    },
+    "fourththing": {
+      "discipline": {
+        "mode": {
+          "key": "pkSealedPact",
+          "grants": {
+            "upkeepScale": 0.5
+          }
+        }
+      }
+    }
+  },
+  "_id": "RjwisInxBL2Uiv7p",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782190568205,
+    "modifiedTime": 1782190647022,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!RjwisInxBL2Uiv7p"
+}

@@ -1,0 +1,156 @@
+{
+  "name": "Static Aegis",
+  "type": "armor",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shield_2.png",
+  "_id": "kEqCA4dy4Z3rxaZw",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.resists",
+            "value": "energy",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 2,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "YgBWQqvo9Ns2YDeX",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781726107815,
+        "modifiedTime": 1781726107815,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!kEqCA4dy4Z3rxaZw.YgBWQqvo9Ns2YDeX"
+    }
+  ],
+  "folder": "TNrB6kEiHS0KwwJT",
+  "sort": 100782,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1780000000000,
+    "modifiedTime": 1782167282786,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "system": {
+    "guardBonus": 2,
+    "evasionBonus": 0,
+    "resolveBonus": 0,
+    "resistances": [
+      "energy"
+    ],
+    "armorSkill": "warding",
+    "equipped": false,
+    "tags": [
+      "t2-baseline",
+      "shield",
+      "techno",
+      "energy-ward"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A salvaged pre-Fall riot shield with the emitter coil still good. Thumb the stud and a crackling static field sheets across the face — it grounds incoming electrical and stands the hair up on everyone within arm's reach. Pairs with any one-handed weapon.</p><p><b>Active Ward.</b> While raised, the field bleeds off electrical damage; a melee attacker that hits you takes 1 electrical from the discharge.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Shield</li>\n  <li><strong>Defense:</strong> Guard +2</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Electrical</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 280 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          "energy"
+        ]
+      },
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "shield",
+          "signature": "A riot-shield that learned to bite back.",
+          "origin": "crafted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "",
+          "materialOf": [
+            "pre-fall-component",
+            "heart-coil",
+            "sun-glass"
+          ],
+          "price": {
+            "marks": 280,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII techno-shield — energy ward",
+            "bound": "free",
+            "saleBack": 112
+          },
+          "grants": {
+            "resistances": [
+              "energy"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "_key": "!items!kEqCA4dy4Z3rxaZw"
+}

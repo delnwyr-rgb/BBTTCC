@@ -1,0 +1,65 @@
+{
+  "_id": "o2BssJu9XhrDFBgV",
+  "name": "Disciplined Fire",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_disciplined_fire.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Disciplined Fire</h2><p><em>It’s not about more shots. It’s about the right shot.</em></p><hr /><h3>Rules</h3><p>Once per turn when you hit with a ranged weapon attack, you may choose one:</p><ul><li><strong>Pin:</strong> The target’s movement is reduced by 2 squares until the start of your next turn.</li><li><strong>Disrupt:</strong> The next attack roll the target makes before the end of its next turn is made with keep-lowest.</li></ul><p>A creature can be affected by this principle only once per round.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_disciplined_fire",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-expansion-v1",
+      "generatedAt": "2026-01-18T20:40:45.007450+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 4300000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1782164185980,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!o2BssJu9XhrDFBgV"
+}

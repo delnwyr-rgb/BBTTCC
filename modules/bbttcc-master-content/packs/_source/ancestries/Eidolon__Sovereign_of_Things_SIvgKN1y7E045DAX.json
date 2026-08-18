@@ -1,0 +1,76 @@
+{
+  "_id": "SIvgKN1y7E045DAX",
+  "name": "Eidolon: Sovereign of Things",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_psychic_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Sovereign of Things (1/Soma Break).</strong> Declare an object within 12 squares to be 'one of yours.' For 24 hours that object cannot be used effectively against you (attack rolls with it roll 3d10 keep lowest 2; manifestations cast through it must check vs your manifestation DC or fizzle). Your psychic resistance becomes immunity.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "eidolon-sovereign",
+    "requirements": "Eidolon (Outsider)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "eidolon",
+      "lineage": "Eidolon (Outsider)",
+      "feature": "sovereign",
+      "tierLevel": 4,
+      "version": "1.0.0",
+      "date": "2026-05-15",
+      "npAncestry": true
+    },
+    "fourththing": {
+      "principleSource": "ancestry"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1778961512781,
+    "modifiedTime": 1782167240127,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "folder": "xEjihJm7wSmcGO1b",
+  "sort": 125000,
+  "_key": "!items!SIvgKN1y7E045DAX"
+}

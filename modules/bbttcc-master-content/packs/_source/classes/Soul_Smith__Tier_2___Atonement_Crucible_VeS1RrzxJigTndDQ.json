@@ -1,0 +1,72 @@
+{
+  "name": "Soul-Smith: Tier 2 — Atonement Crucible",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_crucible_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Atonement Crucible.</strong> You can build a forge hot enough to burn the worst parts off a story.</p><ul><li>Once per <strong>campaign arc</strong> (or other large narrative unit, at the GM’s discretion), you may lead a special <strong>atonement crafting</strong> project focused on a single <strong>Corrupted Spark</strong>.</li><li>Through days or weeks of work, ritual, and hard choices, you can attempt to <strong>purify</strong> that Corrupted Spark, transforming it into a <strong>redeemed</strong> or <strong>stabilized</strong> form instead of destroying it outright.</li><li>The exact mechanical consequences (Spark tags, Tikkun phases, Darkness shifts, faction reactions) are governed by your Spark/Tikkun engine, but this feature is the narrative permission slip: your forge can <em>save</em> a Spark instead of just breaking it.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "soul-smith-tier-2--atonement-crucible",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "requirements": "Soul-Smith (5th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "qdqMhHfZdVgUs1gN",
+  "flags": {
+    "bbttcc": {
+      "soulSmith": {
+        "tier2": true,
+        "atonementCrucible": true
+      },
+      "tikkunHooks": {
+        "sparkPurificationPerArc": 1
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996551,
+    "modifiedTime": 1781116160739,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "VeS1RrzxJigTndDQ",
+  "sort": 600000,
+  "_key": "!items!VeS1RrzxJigTndDQ"
+}

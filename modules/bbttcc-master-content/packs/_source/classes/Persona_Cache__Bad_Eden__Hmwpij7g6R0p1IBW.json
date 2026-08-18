@@ -1,0 +1,67 @@
+{
+  "name": "Persona Cache (Bad Eden)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_music_5.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Identity is a toolkit. So is hope.</em></p><p>You maintain a cache of prepared personas—faces, voices, and micro-histories.</p><ul><li>You can keep a number of <strong>personas</strong> equal to your <strong>tier</strong> “ready to run” at any given time, each with a name, demeanor, and short cover story.</li><li>During a <strong>Courtly Intrigue</strong>, infiltration, or social scene, you may spend <strong>1 Soft Power OP</strong> to switch into one of your cached personas as a <strong>bonus action</strong>.</li><li>When you do, you gain <strong>advantage</strong> on your next <strong>Stealth (Intrigue)</strong> or <strong>Diplomacy (Presence)</strong> check in that scene.</li></ul><p>Personas do not grant mechanical disguises by themselves, but stack with mundane or magical disguise as the table allows.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwThousandPersona\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Persona Cache</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Per-scene swap (1 Soft Power OP) &nbsp;·&nbsp; <strong>Action:</strong> Bonus action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Maintain `tier` cached personas (name, demeanor, short cover). In a Courtly Intrigue / infiltration / social scene, spend 1 Soft Power OP to swap into a cached persona; reroll the lowest die on your next Stealth (Intrigue/Presence) or Diplomacy (Presence) check that scene.</div>\n</div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "dreamwalker-thousand-persona-cache",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Dreamwalker 3, Trance of the Thousand Faces",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "ElDtbAjWdrLjiz5K",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "dreamwalker_thousand_faces",
+      "featureKey": "persona_cache"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459927032,
+    "modifiedTime": 1782167240815,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "Hmwpij7g6R0p1IBW",
+  "sort": 250000,
+  "_key": "!items!Hmwpij7g6R0p1IBW"
+}

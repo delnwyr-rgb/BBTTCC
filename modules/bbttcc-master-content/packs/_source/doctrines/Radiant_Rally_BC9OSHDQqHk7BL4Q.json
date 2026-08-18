@@ -1,0 +1,76 @@
+{
+  "name": "Radiant Rally",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_radiant_rally.jpeg",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><b>Radiant Rally</b></p><p>On Success: +2 Morale (or negate Morale loss); Darkness −1.</p><p><b>Cost:</b> Softpower 1</p><hr /><p class=\"hint\"><i>BBTTCC Doctrine</i> • <code>maneuver</code> • <code>radiant_rally</code></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "radiant-rally",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "radiant_rally",
+      "meta": {
+        "tier": 1,
+        "rarity": "common",
+        "minFactionTier": 1,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "raidTypes": [
+          "violence"
+        ],
+        "engine": "violence"
+      }
+    }
+  },
+  "_id": "BC9OSHDQqHk7BL4Q",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 900000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.361",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1771977107845,
+    "modifiedTime": 1778877671525,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+  },
+  "_key": "!items!BC9OSHDQqHk7BL4Q"
+}

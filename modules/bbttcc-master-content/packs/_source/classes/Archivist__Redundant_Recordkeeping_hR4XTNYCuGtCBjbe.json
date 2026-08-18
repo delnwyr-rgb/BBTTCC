@@ -1,0 +1,63 @@
+{
+  "name": "Archivist: Redundant Recordkeeping",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"4355\" data-end=\"4369\"><em data-start=\"4355\" data-end=\"4369\">(10th Level)</em></p><p data-start=\"4371\" data-end=\"4412\"><em data-start=\"4371\" data-end=\"4412\">“You can’t delete what I’ve backed up.”</em></p><p data-start=\"4414\" data-end=\"4512\">If a Precedent would be erased, overwritten, or forgotten, it instead becomes a <strong data-start=\"4494\" data-end=\"4511\">Latent Record</strong>.</p><p data-start=\"4514\" data-end=\"4529\">Latent Records:</p><ul data-start=\"4530\" data-end=\"4639\"><li data-start=\"4530\" data-end=\"4551\"><p data-start=\"4532\" data-end=\"4551\">Persist invisibly</p></li><li data-start=\"4552\" data-end=\"4600\"><p data-start=\"4554\" data-end=\"4600\">May be reactivated later at reduced strength</p></li><li data-start=\"4601\" data-end=\"4639\"><p data-start=\"4603\" data-end=\"4639\">Represent buried truth resurfacing</p></li></ul><h3 data-start=\"4641\" data-end=\"4649\">Cost</h3><p data-start=\"4650\" data-end=\"4719\">No Civic Charge required to preserve. Reactivation may require 1 die.</p><h3 data-start=\"4721\" data-end=\"4733\">Pushback</h3><p data-start=\"4734\" data-end=\"4792\">Too many Latent Records can destabilize narrative clarity.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "identifier": "archivist_redundant_recordkeeping",
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 10
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {}
+  },
+  "folder": "eNi1uCWJUfkKDdUU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776481562690,
+    "modifiedTime": 1781116175960,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "hR4XTNYCuGtCBjbe",
+  "sort": 275000,
+  "_key": "!items!hR4XTNYCuGtCBjbe"
+}

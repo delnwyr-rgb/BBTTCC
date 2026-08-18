@@ -1,0 +1,63 @@
+{
+  "name": "Light Footprint",
+  "type": "feat",
+  "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+  "folder": "QbGNBV70xh9pF0eh",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC Manifestation Techniques v1",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2>Light Footprint</h2><p><em>Your sustained workings sit lightly on the world.</em></p><hr /><h3>Rules</h3><p>The ongoing <strong>upkeep</strong> cost of maintaining your sustained manifestations is <strong>halved</strong>.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">⚙ Applies automatically: upkeep cost ×0.5.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_light_footprint",
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-manifestation-techniques-v1",
+      "theme": "Concurrency & upkeep"
+    },
+    "fourththing": {
+      "discipline": {
+        "passive": {
+          "upkeepScale": 0.5
+        }
+      }
+    }
+  },
+  "_id": "WBLGGnfoBCuALb7Z",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782190568115,
+    "modifiedTime": 1782190568116,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!WBLGGnfoBCuALb7Z"
+}

@@ -1,0 +1,41 @@
+{
+  "name": "Final Roar",
+  "type": "feature",
+  "img": "icons/magic/symbols/runes-etched-steel-orange.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>On entering the final phase: +1 Momentum, +2 Surge, all manifestations re-armed. The cornered animal speaks.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "boss-augment"
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "dIjTggVnADhcxTRO",
+  "effects": [],
+  "sort": 3300000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205374757,
+    "modifiedTime": 1778963271958,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!dIjTggVnADhcxTRO"
+}

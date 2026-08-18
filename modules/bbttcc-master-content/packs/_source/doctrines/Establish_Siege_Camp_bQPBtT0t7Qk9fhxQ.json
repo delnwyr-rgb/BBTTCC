@@ -1,0 +1,40 @@
+{
+  "name": "Establish Siege Camp",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_camp.png",
+  "system": {
+    "category": "strategic",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Siege Camp</h3><p>Stamp the 'Beached Camp' modifier on a target hex (must be owned, neutral, or claimable by the attacker). Hex qualifies as a temporary siege depot for the duration of the attacker's active siege; auto-clears on siege resolution. Used for naval/wilderness sieges where no permanent depot is in range.</p><p><strong>OP Cost:</strong> violence 10, logistics 20</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> uncommon</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "establish_siege_camp"
+    }
+  },
+  "_id": "bQPBtT0t7Qk9fhxQ",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601763,
+    "modifiedTime": 1782703702692,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!bQPBtT0t7Qk9fhxQ"
+}

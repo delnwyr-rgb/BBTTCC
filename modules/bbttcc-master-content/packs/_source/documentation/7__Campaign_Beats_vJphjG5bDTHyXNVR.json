@@ -1,0 +1,65 @@
+{
+  "folder": "GruW1UQmcpIS9hgw",
+  "name": "7. Campaign Beats",
+  "_id": "vJphjG5bDTHyXNVR",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "The Story Continues",
+      "type": "text",
+      "_id": "LbPoTbO6SZZmsPD2",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<img src=\"art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/TheRedHerring.png\"><h1>Where the Story Moves Forward</h1><p data-start=\"570\" data-end=\"687\">As players explore the world and develop their faction, they will encounter moments when something important happens.</p><p data-start=\"689\" data-end=\"769\">A mysterious discovery.<br data-start=\"712\" data-end=\"715\">A dangerous decision.<br data-start=\"736\" data-end=\"739\">A problem that demands action.</p><p data-start=\"771\" data-end=\"815\">These moments are called <strong data-start=\"796\" data-end=\"814\">Campaign Beats</strong>.</p><p data-start=\"817\" data-end=\"879\">Campaign Beats are the engine that drives the story of Bad Eden.</p><p data-start=\"881\" data-end=\"1000\">They present situations that require players to <strong data-start=\"929\" data-end=\"956\">make meaningful choices</strong>, and those choices shape what happens next.</p><hr data-start=\"1002\" data-end=\"1005\"><h1 data-section-id=\"1bnuhyo\" data-start=\"1007\" data-end=\"1031\">What a Beat Represents</h1><p data-start=\"1033\" data-end=\"1097\">A Campaign Beat represents a <strong data-start=\"1062\" data-end=\"1096\">turning point in the narrative</strong>.</p><p data-start=\"1099\" data-end=\"1116\">It may introduce:</p><p data-start=\"1118\" data-end=\"1215\">• a new mystery<br data-start=\"1133\" data-end=\"1136\">• a difficult moral choice<br data-start=\"1162\" data-end=\"1165\">• a dangerous threat<br data-start=\"1185\" data-end=\"1188\">• an unexpected opportunity</p><p data-start=\"1217\" data-end=\"1262\">Each beat asks the players a simple question:</p><p data-start=\"1264\" data-end=\"1285\"><strong data-start=\"1264\" data-end=\"1285\">“What do you do?”</strong></p><p data-start=\"1287\" data-end=\"1331\">The answer determines how the world changes.</p><hr data-start=\"1333\" data-end=\"1336\"><h1 data-section-id=\"1xi3x6j\" data-start=\"1338\" data-end=\"1356\">When Beats Occur</h1><p data-start=\"1358\" data-end=\"1411\">Campaign Beats can occur at many moments during play.</p><p data-start=\"1413\" data-end=\"1444\">They often happen when players:</p><p data-start=\"1446\" data-end=\"1581\">• enter a new hex<br data-start=\"1463\" data-end=\"1466\">• investigate a location<br data-start=\"1490\" data-end=\"1493\">• encounter a strange phenomenon<br data-start=\"1525\" data-end=\"1528\">• confront an important NPC<br data-start=\"1555\" data-end=\"1558\">• trigger a story event</p><p data-start=\"1583\" data-end=\"1648\">Beats can appear during exploration, travel, or faction activity.</p><p data-start=\"1650\" data-end=\"1730\">They help ensure that <strong data-start=\"1672\" data-end=\"1729\">player actions always lead to meaningful consequences</strong>.</p><hr data-start=\"1732\" data-end=\"1735\"><h1 data-section-id=\"1lhqe3f\" data-start=\"1737\" data-end=\"1763\">Choices and Consequences</h1><p data-start=\"1765\" data-end=\"1805\">Every beat presents one or more choices.</p><p data-start=\"1807\" data-end=\"1845\">Players may need to decide whether to:</p><p data-start=\"1847\" data-end=\"1990\">• negotiate or confront<br data-start=\"1870\" data-end=\"1873\">• investigate further or move on<br data-start=\"1905\" data-end=\"1908\">• help a community or protect their faction<br data-start=\"1951\" data-end=\"1954\">• risk danger for a potential reward</p><p data-start=\"1992\" data-end=\"2032\">Each choice leads to different outcomes.</p><p data-start=\"2034\" data-end=\"2111\">Some choices create immediate results.<br data-start=\"2072\" data-end=\"2075\">Others shape the campaign over time.</p><p data-start=\"2113\" data-end=\"2168\">In Bad Eden, the world <strong data-start=\"2134\" data-end=\"2167\">remembers what players decide</strong>.</p><hr data-start=\"2170\" data-end=\"2173\"><img src=\"art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/BunkerOverlay.png\"><h1 data-section-id=\"13khuon\" data-start=\"2175\" data-end=\"2196\">Beats and the World</h1><p data-start=\"2198\" data-end=\"2259\">The outcomes of Campaign Beats often produce lasting changes.</p><p data-start=\"2261\" data-end=\"2287\">These changes may include:</p><p data-start=\"2289\" data-end=\"2449\">• new allies or enemies<br data-start=\"2312\" data-end=\"2315\">• shifts in faction reputation<br data-start=\"2345\" data-end=\"2348\">• discoveries about the world<br data-start=\"2377\" data-end=\"2380\">• alterations to hex conditions<br data-start=\"2411\" data-end=\"2414\">• new opportunities for exploration</p><p data-start=\"2451\" data-end=\"2592\">Because of this, Campaign Beats help transform the campaign map from a static environment into a <strong data-start=\"2548\" data-end=\"2591\">living world shaped by player decisions</strong>.</p><hr data-start=\"2594\" data-end=\"2597\"><h1 data-section-id=\"1mut2f5\" data-start=\"2599\" data-end=\"2616\">Beats and Raids</h1><p data-start=\"2618\" data-end=\"2679\">Sometimes a Campaign Beat leads directly to a major conflict.</p><p data-start=\"2681\" data-end=\"2754\">If a powerful threat must be confronted, the beat may trigger a <strong data-start=\"2745\" data-end=\"2753\">Raid</strong>.</p><p data-start=\"2756\" data-end=\"2827\">In these cases, the narrative situation created by the beat determines:</p><p data-start=\"2829\" data-end=\"2911\">• why the conflict occurs<br data-start=\"2854\" data-end=\"2857\">• what the objectives are<br data-start=\"2882\" data-end=\"2885\">• what consequences follow</p><p data-start=\"2913\" data-end=\"2991\">This allows raids to feel like part of the story rather than isolated battles.</p><hr data-start=\"2993\" data-end=\"2996\"><h1 data-section-id=\"1myeqh9\" data-start=\"2998\" data-end=\"3021\">Beats and Exploration</h1><p data-start=\"3023\" data-end=\"3092\">Exploration is one of the most common ways to trigger Campaign Beats.</p><p data-start=\"3094\" data-end=\"3155\">When players enter new regions of the map, they may discover:</p><p data-start=\"3157\" data-end=\"3248\">• ancient ruins<br data-start=\"3172\" data-end=\"3175\">• struggling communities<br data-start=\"3199\" data-end=\"3202\">• strange magical phenomena<br data-start=\"3229\" data-end=\"3232\">• hidden dangers</p><p data-start=\"3250\" data-end=\"3330\">Each discovery may create a beat that asks the players how they wish to respond.</p><hr data-start=\"3332\" data-end=\"3335\"><h1 data-section-id=\"ppub3x\" data-start=\"3337\" data-end=\"3353\">The Beat Cycle</h1><p data-start=\"3355\" data-end=\"3411\">Most Campaign Beats follow a simple narrative structure.</p><pre class=\"overflow-visible! px-0!\" data-start=\"3413\" data-end=\"3588\"><code>Situation Appears\n      ↓\nPlayers Investigate\n      ↓\nChoices Are Presented\n      ↓\nPlayers Decide\n      ↓\nConsequences Occur\n      ↓\nThe World Changes</code></pre><p data-start=\"3590\" data-end=\"3663\">This cycle allows the campaign to evolve naturally through player action.</p><hr data-start=\"3665\" data-end=\"3668\"><h1 data-section-id=\"uatuw9\" data-start=\"3670\" data-end=\"3699\">Small Beats and Major Beats</h1><p data-start=\"3701\" data-end=\"3740\">Not every beat carries the same weight.</p><p data-start=\"3742\" data-end=\"3827\">Some beats represent small moments, such as meeting a traveler or discovering a clue.</p><p data-start=\"3829\" data-end=\"3911\">Others represent major turning points that may affect entire regions of the world.</p><p data-start=\"3913\" data-end=\"3938\">Both types are important.</p><p data-start=\"3940\" data-end=\"4037\">Small beats create atmosphere and discovery.<br data-start=\"3984\" data-end=\"3987\">Major beats reshape the direction of the campaign.</p><hr data-start=\"4039\" data-end=\"4042\"><h1 data-section-id=\"mdf3xt\" data-start=\"4044\" data-end=\"4070\">Beats and the Great Work</h1><p data-start=\"4072\" data-end=\"4159\">Campaign Beats are the moments where players decide <strong data-start=\"4124\" data-end=\"4158\">how they will repair the world</strong>.</p><p data-start=\"4161\" data-end=\"4198\">Through these decisions, players may:</p><p data-start=\"4200\" data-end=\"4322\">• stabilize fragile communities<br data-start=\"4231\" data-end=\"4234\">• confront sources of corruption<br data-start=\"4266\" data-end=\"4269\">• recover lost knowledge<br data-start=\"4293\" data-end=\"4296\">• strengthen their faction</p><p data-start=\"4324\" data-end=\"4392\">Each beat becomes another step toward completing the <strong data-start=\"4377\" data-end=\"4391\">Great Work</strong>.</p><hr data-start=\"4394\" data-end=\"4397\"><h1 data-section-id=\"jr4o1u\" data-start=\"4399\" data-end=\"4429\">What Players Should Remember</h1><p data-start=\"4431\" data-end=\"4465\">Three ideas define Campaign Beats.</p><p data-start=\"4467\" data-end=\"4506\"><strong data-start=\"4467\" data-end=\"4506\">1 — Beats create meaningful choices</strong></p><p data-start=\"4508\" data-end=\"4562\">They present situations where player decisions matter.</p><p data-start=\"4564\" data-end=\"4593\"><strong data-start=\"4564\" data-end=\"4593\">2 — Beats drive the story</strong></p><p data-start=\"4595\" data-end=\"4649\">They introduce problems, mysteries, and opportunities.</p><p data-start=\"4651\" data-end=\"4681\"><strong data-start=\"4651\" data-end=\"4681\">3 — Beats change the world</strong></p><p data-start=\"4683\" data-end=\"4746\">The consequences of each beat shape the future of the campaign.</p><hr data-start=\"4748\" data-end=\"4751\"><h1 data-section-id=\"ex09de\" data-start=\"4753\" data-end=\"4770\">In Simple Terms</h1><p data-start=\"4772\" data-end=\"4858\">Campaign Beats are the moments where <strong data-start=\"4809\" data-end=\"4857\">the story asks the players what happens next</strong>.</p><p data-start=\"4860\" data-end=\"4905\">Your choices determine how the world evolves.</p><p data-start=\"4907\" data-end=\"4961\">Every decision becomes part of the campaign’s history.</p><img src=\"art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/CityOverlay.png\">"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116258038,
+        "modifiedTime": 1781116258038
+      },
+      "_key": "!journal.pages!vJphjG5bDTHyXNVR.LbPoTbO6SZZmsPD2"
+    }
+  ],
+  "categories": [],
+  "sort": 0,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775619852110,
+    "modifiedTime": 1781116258038,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!journal!vJphjG5bDTHyXNVR"
+}

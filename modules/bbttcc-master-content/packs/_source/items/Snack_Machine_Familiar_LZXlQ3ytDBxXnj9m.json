@@ -1,0 +1,393 @@
+{
+  "name": "Snack Machine Familiar",
+  "type": "equipment",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_snack_machine_familiar.jpeg",
+  "system": {
+    "description": {
+      "value": "<p>Tiny construct. Display of impossible snacks. Temperament like a disgruntled cashier.</p><p><b>Familiar (Action, 8 hours or until dismissed).</b> Deploy as a familiar. Acts on your initiative. Speed 25 ft (no fly). Can take Help; cannot Attack.</p><p><b>Snack Dispense (3/Day, bonus action while within 5 ft).</b> Choose one:</p><ul><li><b>Sugar Rush.</b> Gain 1d4 temporary Integrity.</li><li><b>Salt &amp; Focus.</b> +1 to your next attribute check within 1 minute.</li><li><b>Caffeine Bolt.</b> Walking speed +10 ft for 1 minute.</li></ul><p><b>Stat Block (quick).</b> Tiny construct; Guard 13; Integrity 5; Str 6 Dex 14 Con 10 Int 4 Wis 10 Cha 5; darkvision 60 ft; immune poison; condition immune poisoned. Perception (Mind) +2; Stealth (Intrigue) +4.</p><p><b>Dismiss.</b> Action — recall into the item. If it drops to 0 Integrity, it vanishes; redeploys after a Soma Break.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC That 90's Faction Encounters",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 5,
+      "units": "lb"
+    },
+    "price": {
+      "value": 1200,
+      "denomination": "gp"
+    },
+    "attunement": "required",
+    "equipped": false,
+    "rarity": "rare",
+    "identified": true,
+    "uses": {
+      "max": "1",
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "spent": 0
+    },
+    "identifier": "bbttcc_item_snack_machine_familiar",
+    "type": {
+      "value": "wondrous",
+      "baseItem": ""
+    },
+    "properties": [
+      "mgc"
+    ],
+    "activities": {
+      "dnd5eactivity000": {
+        "_id": "dnd5eactivity000",
+        "type": "utility",
+        "activation": {
+          "type": "action",
+          "value": 1,
+          "condition": "Wind the coin-slot crank and speak the activation phrase.",
+          "override": false
+        },
+        "consumption": {
+          "targets": [
+            {
+              "type": "itemUses",
+              "target": "",
+              "value": "1",
+              "scaling": {
+                "mode": "",
+                "formula": ""
+              }
+            }
+          ],
+          "scaling": {
+            "allowed": false,
+            "max": ""
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "concentration": false,
+          "value": "8",
+          "units": "hour",
+          "special": "",
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "units": "self",
+          "special": "",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "count": "",
+            "contiguous": false,
+            "type": "",
+            "size": "",
+            "width": "",
+            "height": "",
+            "units": "ft"
+          },
+          "affects": {
+            "count": "",
+            "type": "self",
+            "choice": false,
+            "special": ""
+          },
+          "prompt": true,
+          "override": false
+        },
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "roll": {
+          "formula": "",
+          "name": "",
+          "prompt": false,
+          "visible": false
+        },
+        "sort": 0,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        }
+      }
+    },
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "attuned": false,
+    "crewed": false,
+    "armor": {
+      "value": null,
+      "dex": null,
+      "magicalBonus": null
+    },
+    "proficient": null,
+    "strength": null,
+    "crew": {
+      "value": []
+    },
+    "slot": "wondrous",
+    "tags": [
+      "wondrous",
+      "familiar",
+      "attunement",
+      "construct"
+    ]
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {},
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "tool",
+          "signature": "A vending machine with legs and opinions about you.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Tiny construct. Display of impossible snacks. Temperament like a disgruntled cashier.</p><p><b>Familiar (Action, 8 hours or until dismissed).</b> Deploy as a familiar. Acts on your initiative. Speed 5 squares (no fly). Can take Help; cannot Attack.</p><p><b>Snack Dispense (3/Day, bonus action while within 1 square).</b> Choose one:</p><ul><li><b>Sugar Rush.</b> Gain 1d4 temporary Integrity.</li><li><b>Salt &amp; Focus.</b> +1 to your next attribute check within 1 minute.</li><li><b>Caffeine Bolt.</b> Walking speed +2 squares for 1 minute.</li></ul><p><b>Stat Block (quick).</b> Tiny construct; Guard 13; Integrity 5; Violence 6 Intrigue 14 Body 10 Mind 4 Soul 10 Presence 5; darkvision 12 squares; immune poison; condition immune poisoned. Perception (Mind) +2; Stealth (Intrigue) +4.</p><p><b>Dismiss.</b> Action — recall into the item. If it drops to 0 Integrity, it vanishes; redeploys after a Soma Break.</p>",
+          "legacySystem": {
+            "slot": "misc",
+            "tags": []
+          },
+          "price": {
+            "marks": 270,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII tool stamp",
+            "bound": "attuned",
+            "saleBack": 108
+          }
+        }
+      }
+    },
+    "autoanimations": {
+      "id": "f4f46fbb-c587-4072-aa80-524acf2984ba",
+      "label": "Snack Machine Familiar",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "intro",
+          "color": "yellow",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1768451471393,
+    "modifiedTime": 1782164185973,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "LZXlQ3ytDBxXnj9m",
+  "sort": 2500000,
+  "_key": "!items!LZXlQ3ytDBxXnj9m"
+}

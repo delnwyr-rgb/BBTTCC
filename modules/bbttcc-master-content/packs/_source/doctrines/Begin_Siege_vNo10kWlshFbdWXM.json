@@ -1,0 +1,40 @@
+{
+  "name": "Begin Siege",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_siege_2.png",
+  "system": {
+    "category": "strategic",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Begin Siege</h3><p>Establish a multi-turn siege on a target hex. Layers are drawn from the hex's structureActorIds (or GM override at planning time). Commits an OP-denominated Supply Buffer that ticks down per turn from the derived Siege Cost (terrain + supply-chain length + harassment, less Bulwark discount). Resolves over multiple campaign turns until a layer is breached, defender surrenders, attacker withdraws, or Buffer is exhausted. See bbttcc-raid/SIEGE_RAID_TYPE_SPEC.md.</p><p><strong>OP Cost:</strong> violence 30, logistics 20, economy 10</p><p><strong>Tier:</strong> 2</p><p><strong>Rarity:</strong> rare</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "begin_siege"
+    }
+  },
+  "_id": "vNo10kWlshFbdWXM",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601763,
+    "modifiedTime": 1782703702690,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!vNo10kWlshFbdWXM"
+}

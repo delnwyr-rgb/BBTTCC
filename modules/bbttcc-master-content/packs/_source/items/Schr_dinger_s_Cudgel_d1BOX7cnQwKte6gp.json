@@ -1,0 +1,331 @@
+{
+  "name": "Schrödinger's Cudgel",
+  "type": "weapon",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_atom_1.png",
+  "_id": "d1BOX7cnQwKte6gp",
+  "effects": [],
+  "folder": "TNrB6kEiHS0KwwJT",
+  "sort": 103125,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1780000000000,
+    "modifiedTime": 1782160020989,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "system": {
+    "category": "melee",
+    "intent": "presence",
+    "skill": "channel",
+    "damage": {
+      "formula": "1d12",
+      "attribute": "presence",
+      "type": "psychic",
+      "damageFlavor": "the hit you don't know the size of until it's over",
+      "track": "stress"
+    },
+    "damageParts": [],
+    "range": {
+      "short": 5,
+      "long": 5
+    },
+    "tags": [
+      "staff",
+      "quantum",
+      "probability",
+      "techno",
+      "wacky"
+    ],
+    "effect": "On a hit, roll the 1d12 twice — the wielder chooses which result the universe collapses to (cat alive / cat extremely not). Observers describe the noise differently afterward and are always certain they're right.",
+    "flavor": "Mal: 'I peeked. It's both. It's so both.'",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "description": {
+      "value": "<p>A sealed box on the end of a stick. Do not open the box. Inside is, allegedly, a probability core and, allegedly, a cat, and the staff's whole function is to refuse to tell you which until the swing lands. Hits with the confidence of something that already knows how this ends.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>On a hit, roll the 1d12 twice — the wielder chooses which result the universe collapses to (cat alive / cat extremely not). Observers describe the noise differently afterward and are always certain they're right.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d12 Psychic damage to <em>Stress</em> <span style=\"opacity:.75\">(the hit you don't know the size of until it's over)</span></li>\n  <li><strong>Faculty:</strong> Presence</li>\n  <li><strong>Attack:</strong> Channel (Presence)</li>\n  <li><strong>Range:</strong> 5</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "5",
+          "frame": "weapon",
+          "signature": "The damage is undecided until somebody looks.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A sealed box on the end of a stick. Do not open the box. Inside is, allegedly, a probability core and, allegedly, a cat, and the staff's whole function is to refuse to tell you which until the swing lands. Hits with the confidence of something that already knows how this ends.</p>",
+          "materialOf": [
+            "pre-fall-component",
+            "fogged-quartz",
+            "memory-resin"
+          ],
+          "price": {
+            "marks": 300,
+            "currency": "softpower",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII probability staff",
+            "bound": "free",
+            "saleBack": 120
+          }
+        }
+      },
+      "manifestSheetMode": {
+        "bytUGWIOqq9eT7Or": "display"
+      }
+    },
+    "autoanimations": {
+      "id": "8a248a83-5588-4a52-8c18-7ddae7099d3f",
+      "label": "Schrödinger's Cudgel",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "melee",
+      "primary": {
+        "video": {
+          "dbSection": "melee",
+          "menuType": "weapon",
+          "animation": "staff",
+          "variant": "02",
+          "color": "green",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5,
+      "meleeSwitch": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "weapon",
+          "animation": "arrow",
+          "variant": "regular",
+          "color": "regular",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "detect": "automatic",
+          "range": 2,
+          "returning": false,
+          "switchType": "on"
+        }
+      }
+    }
+  },
+  "_key": "!items!d1BOX7cnQwKte6gp"
+}

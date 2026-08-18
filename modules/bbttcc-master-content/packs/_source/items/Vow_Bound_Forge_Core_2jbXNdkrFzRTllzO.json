@@ -1,0 +1,91 @@
+{
+  "name": "Vow-Bound Forge Core",
+  "type": "gear",
+  "img": "icons/sundries/lights/candle-pillar-white.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [
+      "tech"
+    ],
+    "category": "gear",
+    "source": "Phase 7 Seed (2026-05-10)",
+    "description": {
+      "value": "<p>A siege-class forge core, bound by oath to a single faction. Installed in a hex, it grants forge-wide crafting bonuses and a Yesodium-burning hum that locals can hear from a mile out.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "sigil",
+          "bound": "soulbound",
+          "materialOf": [
+            {
+              "key": "yesodium",
+              "qty": 3
+            },
+            {
+              "key": "tree-of-life-shard",
+              "qty": 1
+            },
+            {
+              "key": "pre-fall-component",
+              "qty": 1
+            },
+            {
+              "key": "vow-bone",
+              "qty": 1
+            }
+          ],
+          "tech": {
+            "kind": "fueled",
+            "fuel": {
+              "materialKey": "yesodium",
+              "perActivation": 3
+            },
+            "attunement": {
+              "required": true,
+              "slots": 2
+            },
+            "failure": "drain",
+            "origin": "witness-forge",
+            "signature": "siege-bond"
+          },
+          "price": {
+            "marks": 4860,
+            "currency": "softpower",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIV sigil × 1.20 × tech 2.0 × soulbound 1.5",
+            "bound": "soulbound",
+            "saleBack": 0
+          }
+        }
+      }
+    }
+  },
+  "_id": "2jbXNdkrFzRTllzO",
+  "effects": [],
+  "folder": "0JDB983lzPepXXNe",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778963404582,
+    "modifiedTime": 1778963404582,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 0,
+  "_key": "!items!2jbXNdkrFzRTllzO"
+}

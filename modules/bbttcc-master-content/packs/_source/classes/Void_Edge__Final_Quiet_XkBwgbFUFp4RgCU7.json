@@ -1,0 +1,249 @@
+{
+  "_id": "XkBwgbFUFp4RgCU7",
+  "name": "Void Edge: Final Quiet",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_5.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2 data-start=\"7309\" data-end=\"7338\">Level 18 — <strong data-start=\"7323\" data-end=\"7338\">Final Quiet</strong></h2><p data-start=\"7340\" data-end=\"7366\">You end escalation itself.</p><h3 data-start=\"7368\" data-end=\"7390\">Once per Soma Break</h3><p data-start=\"7391\" data-end=\"7424\">Create a 6 squares zone for 1 minute:</p><ul data-start=\"7425\" data-end=\"7563\"><li data-start=\"7425\" data-end=\"7445\"><p data-start=\"7427\" data-end=\"7445\">Morale cannot rise</p></li><li data-start=\"7446\" data-end=\"7465\"><p data-start=\"7448\" data-end=\"7465\">Inspiration fails</p></li><li data-start=\"7466\" data-end=\"7518\"><p data-start=\"7468\" data-end=\"7518\">Buffs tied to hope, unity, or courage do not apply</p></li><li data-start=\"7519\" data-end=\"7563\"><p data-start=\"7521\" data-end=\"7563\">Enemies roll 3d10 keep lowest 2 on checks vs fear</p></li></ul><p data-start=\"7565\" data-end=\"7575\">Afterward:</p><ul data-start=\"7576\" data-end=\"7672\"><li data-start=\"7576\" data-end=\"7602\"><p data-start=\"7578\" data-end=\"7602\">Your Burn drops to <strong data-start=\"7597\" data-end=\"7602\">0</strong></p></li><li data-start=\"7603\" data-end=\"7672\"><p data-start=\"7605\" data-end=\"7672\">You gain <strong data-start=\"7614\" data-end=\"7653\">2 Burn at the end of the next round</strong> (delayed backlash)</p></li></ul><p data-start=\"7674\" data-end=\"7701\">Victories here feel hollow.</p>",
+      "chat": ""
+    },
+    "identifier": "voidedge_final_quiet",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 18
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "voidedge_final_quiet",
+      "burn": {
+        "delta": 2,
+        "set": 0,
+        "_taggedBy": "bbttcc-burn-batch-tagger",
+        "_ts": 1770856291594,
+        "_from": "Void Edge: Final Quiet"
+      }
+    },
+    "autoanimations": {
+      "id": "bedf9352-b659-404c-aaa7-cde9935372f2",
+      "label": "Void Edge: Final Quiet",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "darkpurple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "640HHePTVNcMB98C",
+  "sort": 125000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459909021,
+    "modifiedTime": 1782167240822,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!XkBwgbFUFp4RgCU7"
+}

@@ -1,0 +1,126 @@
+{
+  "name": "Unicorn Ramming Module",
+  "type": "equipment",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_unicorn_ramming_module.jpeg",
+  "system": {
+    "description": {
+      "value": "<p>Vehicle upgrade: grants Energy Ramming Horn action (6d10 force; push 30 ft; recharge 5‑6).</p>",
+      "chat": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 40,
+      "units": "lb"
+    },
+    "price": {
+      "value": 8000,
+      "denomination": "gp"
+    },
+    "rarity": "veryRare",
+    "attunement": "",
+    "identified": true,
+    "type": {
+      "value": "trinket",
+      "baseItem": ""
+    },
+    "equipped": false,
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "unicorn-ramming-module",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "attuned": false,
+    "crewed": false,
+    "armor": {
+      "value": null,
+      "dex": null
+    },
+    "proficient": null,
+    "properties": [],
+    "strength": null
+  },
+  "flags": {
+    "bbttcc": {
+      "tags": []
+    },
+    "rfi": {
+      "item": {
+        "tier": "II",
+        "footprint": 1,
+        "reach": "self",
+        "frame": "armor",
+        "signature": "",
+        "origin": "looted",
+        "originator": null,
+        "bound": "free",
+        "upkeep": {
+          "mode": "passive",
+          "per": "scene"
+        },
+        "misfire": {
+          "tierClamp": true,
+          "table": null
+        },
+        "signals": {}
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          },
+          "tier": "II",
+          "frame": "armor",
+          "origin": "looted",
+          "bound": "free",
+          "reach": "self",
+          "footprint": 1,
+          "legacySystem": {
+            "description": {
+              "value": "<p>Vehicle upgrade: grants Energy Ramming Horn action (6d10 force; push 2 squares; recharge 5‑6).</p>"
+            }
+          }
+        }
+      }
+    }
+  },
+  "effects": [],
+  "folder": "TNrB6kEiHS0KwwJT",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1767834208387,
+    "modifiedTime": 1782164185981,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "swOGTOEnEx2jVq1z",
+  "sort": 2200000,
+  "_key": "!items!swOGTOEnEx2jVq1z"
+}

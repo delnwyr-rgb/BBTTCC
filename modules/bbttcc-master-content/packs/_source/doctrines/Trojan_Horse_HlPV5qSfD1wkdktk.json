@@ -1,0 +1,40 @@
+{
+  "name": "Trojan Horse",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_mystic_thief_2.png",
+  "system": {
+    "category": "strategic",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Trojan Horse</h3><p>A T4 Intrigue gambit: a 3-roll gate (sneak/sabotage/breach) that can end a siege from within. Sinon Mode sacrifices a Champion for a force multiplier.</p><p><strong>OP Cost:</strong> intrigue 40, diplomacy 20, softPower 20</p><p><strong>Tier:</strong> 4</p><p><strong>Rarity:</strong> legendary</p><p><strong>Raid Types:</strong> siege</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "trojan_horse"
+    }
+  },
+  "_id": "HlPV5qSfD1wkdktk",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601773,
+    "modifiedTime": 1782703702694,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!HlPV5qSfD1wkdktk"
+}

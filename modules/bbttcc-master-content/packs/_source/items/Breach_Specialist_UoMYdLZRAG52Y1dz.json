@@ -1,0 +1,61 @@
+{
+  "_id": "UoMYdLZRAG52Y1dz",
+  "name": "Breach Specialist",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_breach_specialist.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Feats Expansion v1 (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<h2>Breach Specialist</h2><p><em>Everything has a seam. Most people just don’t look.</em></p><hr><h3>Rules</h3><p>You gain skill rank with thieves’ tools. If you already have it, you gain mastery.</p><p>When you hit an object, door, barrier, or construct with a weapon attack, you may treat the attack as dealing maximum damage to the target’s objects-only resistances (GM adjudication). Once you do, you can’t do so again until the start of your next turn.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_breach_specialist",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-expansion-v1",
+      "generatedAt": "2026-01-18T20:40:44.997510+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 5100000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1781116207308,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!UoMYdLZRAG52Y1dz"
+}

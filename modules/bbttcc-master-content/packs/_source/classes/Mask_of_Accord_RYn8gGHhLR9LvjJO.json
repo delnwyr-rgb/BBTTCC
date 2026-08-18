@@ -1,0 +1,72 @@
+{
+  "name": "Mask of Accord",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_mask_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>You lend someone the mask that fits the moment.</em></p><p>Once per <strong>a Soma Break</strong>, when an ally you can see within <strong>6 squares</strong> makes a critical <strong>negotiation, Parley, or social check</strong> and is rolling with <strong>disadvantage</strong>, you may intervene:</p><ul><li>You <strong>remove the disadvantage</strong> from that roll.</li><li>After the roll is resolved, if it still fails, the ally may immediately <strong>reroll</strong> the same check with your persona guidance, keeping the new result.</li></ul><p>You essentially let them borrow one of your faces at the table.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "dreamwalker-thousand-mask-accord",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 14
+    },
+    "properties": [],
+    "requirements": "Dreamwalker 14, Trance of the Thousand Faces",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "ElDtbAjWdrLjiz5K",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "dreamwalker_thousand_faces",
+      "featureKey": "mask_of_accord"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459927034,
+    "modifiedTime": 1782167240819,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "RYn8gGHhLR9LvjJO",
+  "sort": 200000,
+  "_key": "!items!RYn8gGHhLR9LvjJO"
+}

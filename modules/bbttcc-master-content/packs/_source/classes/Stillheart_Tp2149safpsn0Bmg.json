@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "pHQXAVyxV1CiOGpY",
+  "name": "Stillheart",
+  "color": null,
+  "sorting": "a",
+  "_id": "Tp2149safpsn0Bmg",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459908963,
+    "modifiedTime": 1776459908963,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+  },
+  "_key": "!folders!Tp2149safpsn0Bmg"
+}

@@ -1,0 +1,71 @@
+{
+  "name": "Dreamwalker: Tier 3 — The Walking Lane (Signature Mode)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 3 — The Walking Lane (Signature Mode).</strong> Stance. While the Lane is open, your sustained manifestations reach into adjacent realms (astral / dream / memory) — ignore one band of cover or distance for any one effect per round, and the GM is invited to attach a narrative hook (someone notices you went somewhere). Pays ongoing upkeep.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (mode <code>dwWalkingLane</code>): while ON, no engine deltas (the Lane is narrative reach + GM hint at this pilot stage). Click this feature on the sheet to toggle the stance.</p>\n<p><em>Pilot: lock exact upkeep curve and break condition after one playtest cycle.</em></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwMode\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>The Walking Lane</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Stance (signature) &nbsp;·&nbsp; <strong>Action:</strong> Action (open / drop) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">While open, sustained manifestations reach into adjacent realms — ignore one band of cover or distance for one effect per round. GM may attach a narrative hook (someone notices you went somewhere). Pays ongoing upkeep.</div>\n</div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "dw_mode_walking_lane",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "properties": [],
+    "requirements": "Dreamwalker (11th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "YLUIFZ5nPOUSaSH2",
+  "flags": {
+    "fourththing": {
+      "discipline": {
+        "mode": {
+          "key": "dwWalkingLane",
+          "grants": {}
+        }
+      }
+    },
+    "bbttcc": {},
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777312943677,
+    "modifiedTime": 1781116112715,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "4ea57d63c8f5db28",
+  "sort": 359375,
+  "_key": "!items!4ea57d63c8f5db28"
+}

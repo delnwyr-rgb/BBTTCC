@@ -1,0 +1,397 @@
+{
+  "_id": "nKHhfdL3U98tJj6r",
+  "name": "Oldenborn Heritage: Stormborn Nomad",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/StormbornNomad2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": "",
+      "custom": "Bad Eden",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-canon-oldenborn-furrykin=\"v1\" style=\"display:none\"></div>\n<p><em>\"Yesod fell. The world remembered old names. You answered.\"</em></p><p>Your place-soul is a weather front. You are the caravan memory of every tribe that crossed the ash squalls and came out the other side. When you walk, the wind remembers that you used to be the reason it had a name.</p><p><strong>Heritage signature (1/Soma Break).</strong> Surfaces the Stormborn Nomad Tier-I Wind-Read reaction (energy lightning/cold or kinetic electrical damage halved) directly from the heritage card. See the Tier-I feat for full mechanics.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"oldStormbornNomadHeritage\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Stormborn Nomad Heritage</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Reaction (mirrors Wind-Read) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Heritage card surfaces Wind-Read (Tier-I): halve incoming lightning/cold/electrical damage as a reaction.</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "STORMADVH0000001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.QBioiHJ2FkGqTYGi",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Stormborn Tier I",
+        "hint": "Gain your Stormborn Tier I power (maps to legacy Weatherwise grant)."
+      }
+    ],
+    "identifier": "oldenborn_stormborn_nomad_heritage",
+    "requirements": "Oldenborn",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [
+    {
+      "name": "Weatherwise: Athletics +1",
+      "img": "icons/magic/lightning/bolt-strike-yellow.webp",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.athletics.value",
+            "value": 1,
+            "type": "add",
+            "priority": 10,
+            "phase": "initial"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Passive: Weatherwise: Athletics +1",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "sprint": "passive-ae-2026-04-28",
+          "batch": 2
+        }
+      },
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "_id": "mQnjMrKLIIARncu6",
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777395948573,
+        "modifiedTime": 1777395948573,
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!nKHhfdL3U98tJj6r.mQnjMrKLIIARncu6"
+    }
+  ],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "oldenborn",
+      "lineage": "Stormborn Nomad",
+      "opEffects": {
+        "nonLethal": 2,
+        "faith": 1
+      },
+      "terrainSynergy": [
+        "Desert / Ash Wastes",
+        "Swamp / Mire"
+      ],
+      "preventHazardOncePerTurn": true,
+      "darknessRite": {
+        "cost": {
+          "faith": 1
+        },
+        "dc": 15,
+        "delta": -1,
+        "scope": "regional"
+      },
+      "version": "2.0.0",
+      "date": "2026-04-18",
+      "normalizedFrom": "Stormborn Nomad [species]"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "attribute": "soul",
+          "mode": "reroll-lowest",
+          "note": "on Presence and Soul checks to locate water, shelter, or safe passage in Dese…"
+        },
+        {
+          "context": "check",
+          "attribute": "soul",
+          "mode": "reroll-lowest",
+          "note": "Presence and Soul checks to locate water, shelter, or safe passage in Desert,…"
+        }
+      ],
+      "resourceGrants": [
+        {
+          "cadence": "per-campaign-start",
+          "resource": "non-lethal-op",
+          "amount": 2
+        },
+        {
+          "cadence": "per-campaign-start",
+          "resource": "faith-op",
+          "amount": 2
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-damage-taken",
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "shallow snow, high winds, ash drifts). Ward of the Gale. Once per Soma Break, when you would take damage from an environmental source (storm, heat, cold, falling debris, pressure change), you may use your reaction t..."
+            }
+          }
+        },
+        {
+          "event": "on-move",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "When you walk, the wind remembers that you used to be the reason it had a name"
+            }
+          }
+        }
+      ]
+    },
+    "autoanimations": {
+      "id": "e6fbba5a-95e1-4ae1-a19d-8ae34a9e8ebb",
+      "label": "Oldenborn Heritage: Stormborn Nomad",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "loop",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "tOhJngjYdqMlM2Xz",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-ancestry-v2",
+      "uuid": "Item.nKHhfdL3U98tJj6r",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1773192872324,
+    "modifiedTime": 1782167240134,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 100000,
+  "_key": "!items!nKHhfdL3U98tJj6r"
+}

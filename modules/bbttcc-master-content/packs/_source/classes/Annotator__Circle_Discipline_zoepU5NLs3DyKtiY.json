@@ -1,0 +1,65 @@
+{
+  "_id": "zoepU5NLs3DyKtiY",
+  "name": "Annotator: Circle Discipline",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quill_circle.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"1073\" data-end=\"1086\"><em data-start=\"1073\" data-end=\"1086\">(3rd Level)</em></p><p data-start=\"1088\" data-end=\"1133\">You reduce Strain through formal preparation.</p><p data-start=\"1135\" data-end=\"1155\">When you cast using:</p><ul data-start=\"1157\" data-end=\"1241\"><li data-start=\"1157\" data-end=\"1169\"><p data-start=\"1159\" data-end=\"1169\">Diagrams</p></li><li data-start=\"1170\" data-end=\"1181\"><p data-start=\"1172\" data-end=\"1181\">Circles</p></li><li data-start=\"1182\" data-end=\"1215\"><p data-start=\"1184\" data-end=\"1215\">Correspondence-correct timing</p></li><li data-start=\"1216\" data-end=\"1241\"><p data-start=\"1218\" data-end=\"1241\">Proper ritual framing</p></li></ul><p data-start=\"1243\" data-end=\"1297\">Reduce Strain gained (GM adjudicated; typically by 1).</p><p data-start=\"1299\" data-end=\"1369\">This applies only when the preparation meaningfully exists in fiction.</p><p data-start=\"1371\" data-end=\"1400\">You are not suppressing risk.</p><p data-start=\"1402\" data-end=\"1422\">You are managing it.</p>",
+      "chat": ""
+    },
+    "identifier": "annotator_circle_discipline",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "annotator_circle_discipline"
+    }
+  },
+  "folder": "7fCEbHBaAKFkEuHN",
+  "sort": 400000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.zoepU5NLs3DyKtiY",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923346,
+    "modifiedTime": 1781116196636,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!zoepU5NLs3DyKtiY"
+}

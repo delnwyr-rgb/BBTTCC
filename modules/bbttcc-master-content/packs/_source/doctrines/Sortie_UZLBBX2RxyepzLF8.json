@@ -1,0 +1,40 @@
+{
+  "name": "Sortie",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_castle_1.png",
+  "system": {
+    "category": "strategic",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Sortie</h3><p>Defender sallies out to strike an adjacent attacker supply hex. Severs the 'Supply Line' modifier and shaves 15 OP from the besieger's Buffer. Risk: 1d4 of your own garrison holdings are lost (+2 if the hex is escort-protected). Played by the besieged faction. Target the attacker's supply-road hex.</p><p><strong>OP Cost:</strong> violence 20</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> uncommon</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "sortie"
+    }
+  },
+  "_id": "UZLBBX2RxyepzLF8",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601764,
+    "modifiedTime": 1782703702694,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!UZLBBX2RxyepzLF8"
+}

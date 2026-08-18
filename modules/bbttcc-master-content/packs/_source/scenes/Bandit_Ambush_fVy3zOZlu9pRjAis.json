@@ -1,0 +1,3378 @@
+{
+  "name": "Bandit Ambush",
+  "_id": "fVy3zOZlu9pRjAis",
+  "active": false,
+  "navigation": true,
+  "navOrder": 0,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-F7k5cX87_73VZCSpU1WZtw.webp",
+  "width": 3840,
+  "height": 2160,
+  "padding": 0.25,
+  "initial": {
+    "x": null,
+    "y": null,
+    "scale": null
+  },
+  "grid": {
+    "type": 1,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 1,
+    "color": "#000000",
+    "alpha": 0.2,
+    "distance": 5,
+    "units": "ft"
+  },
+  "tokenVision": false,
+  "fog": {
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    },
+    "mode": 1
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": true,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "drawings": [],
+  "tokens": [
+    {
+      "name": "Road Bandit",
+      "disposition": -1,
+      "displayName": 20,
+      "displayBars": 40,
+      "bar1": {
+        "attribute": "attributes.hp"
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Close-Combat%20Raider2.png",
+        "scaleX": 1.8,
+        "scaleY": 1.8,
+        "tint": "#ffffff",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "alphaThreshold": 0.75
+      },
+      "width": 1,
+      "height": 1,
+      "actorLink": false,
+      "lockRotation": false,
+      "rotation": 135,
+      "alpha": 1,
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {},
+      "actorId": "9dXb2FwXHGlXhzTc",
+      "hidden": false,
+      "sort": 0,
+      "shape": 4,
+      "_id": "hPTQFjoTN9WilGkR",
+      "delta": {
+        "_id": "AwY9Tt8H7J4eOYLm",
+        "system": {},
+        "items": [
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p>In the first round of combat, the bandit has reroll the lowest die on attack rolls against any creature that hasn’t taken a turn yet [TODO(adv-call)].</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "yYHJQa2U2qnBQaup",
+            "name": "Ambush Crew",
+            "type": "feat",
+            "img": "icons/svg/upgrade.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.hPTQFjoTN9WilGkR.AwY9Tt8H7J4eOYLm.yYHJQa2U2qnBQaup"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p>If reduced below half Integrity, the bandit must succeed on a DC 12 Wis save at the start of its turn or take the Disengage action and move away.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "FZFXo3o0VM67opef",
+            "name": "Poor Discipline",
+            "type": "feat",
+            "img": "icons/svg/upgrade.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.hPTQFjoTN9WilGkR.AwY9Tt8H7J4eOYLm.FZFXo3o0VM67opef"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p><strong>Attack.</strong> +4 to hit, range 60/180 ft., one target. Hit: 7 (1d8+3) piercing.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {
+                "dnd5eactivity000": {
+                  "_id": "dnd5eactivity000",
+                  "type": "attack",
+                  "activation": {
+                    "type": "action",
+                    "value": 1,
+                    "condition": "",
+                    "override": false
+                  },
+                  "consumption": {
+                    "targets": [],
+                    "scaling": {
+                      "allowed": false,
+                      "max": ""
+                    },
+                    "spellSlot": true
+                  },
+                  "description": {
+                    "chatFlavor": ""
+                  },
+                  "duration": {
+                    "concentration": false,
+                    "units": "inst",
+                    "special": "",
+                    "override": false
+                  },
+                  "effects": [],
+                  "range": {
+                    "units": "ft",
+                    "override": false,
+                    "special": "60/180",
+                    "value": "60"
+                  },
+                  "target": {
+                    "template": {
+                      "count": "",
+                      "contiguous": false,
+                      "type": "",
+                      "size": "",
+                      "width": "",
+                      "height": "",
+                      "units": "ft",
+                      "stationary": false
+                    },
+                    "affects": {
+                      "count": "1",
+                      "type": "creature",
+                      "choice": false,
+                      "special": ""
+                    },
+                    "prompt": true,
+                    "override": false
+                  },
+                  "uses": {
+                    "spent": 0,
+                    "max": "",
+                    "recovery": []
+                  },
+                  "attack": {
+                    "ability": "",
+                    "bonus": "4",
+                    "critical": {},
+                    "flat": false,
+                    "type": {
+                      "value": "ranged",
+                      "classification": "weapon"
+                    }
+                  },
+                  "damage": {
+                    "critical": {},
+                    "includeBase": true,
+                    "parts": [
+                      {
+                        "number": 1,
+                        "denomination": 8,
+                        "bonus": "3",
+                        "types": [
+                          "piercing"
+                        ],
+                        "custom": {
+                          "enabled": false,
+                          "formula": ""
+                        },
+                        "scaling": {
+                          "mode": "whole",
+                          "number": null,
+                          "formula": ""
+                        }
+                      }
+                    ]
+                  },
+                  "sort": 0,
+                  "flags": {},
+                  "visibility": {
+                    "level": {},
+                    "requireAttunement": false,
+                    "requireIdentification": false,
+                    "requireMagic": false
+                  },
+                  "img": null
+                }
+              },
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "uQSKFIUEfu87t96n",
+            "name": "Pipe Rifle",
+            "type": "feat",
+            "img": "icons/svg/sword.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.hPTQFjoTN9WilGkR.AwY9Tt8H7J4eOYLm.uQSKFIUEfu87t96n"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p><strong>Attack.</strong> +3 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) piercing.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {
+                "dnd5eactivity000": {
+                  "_id": "dnd5eactivity000",
+                  "type": "attack",
+                  "activation": {
+                    "type": "action",
+                    "value": 1,
+                    "condition": "",
+                    "override": false
+                  },
+                  "consumption": {
+                    "targets": [],
+                    "scaling": {
+                      "allowed": false,
+                      "max": ""
+                    },
+                    "spellSlot": true
+                  },
+                  "description": {
+                    "chatFlavor": ""
+                  },
+                  "duration": {
+                    "concentration": false,
+                    "units": "inst",
+                    "special": "",
+                    "override": false
+                  },
+                  "effects": [],
+                  "range": {
+                    "units": "ft",
+                    "override": false,
+                    "special": "",
+                    "value": "5"
+                  },
+                  "target": {
+                    "template": {
+                      "count": "",
+                      "contiguous": false,
+                      "type": "",
+                      "size": "",
+                      "width": "",
+                      "height": "",
+                      "units": "ft",
+                      "stationary": false
+                    },
+                    "affects": {
+                      "count": "1",
+                      "type": "creature",
+                      "choice": false,
+                      "special": ""
+                    },
+                    "prompt": true,
+                    "override": false
+                  },
+                  "uses": {
+                    "spent": 0,
+                    "max": "",
+                    "recovery": []
+                  },
+                  "attack": {
+                    "ability": "",
+                    "bonus": "3",
+                    "critical": {},
+                    "flat": false,
+                    "type": {
+                      "value": "melee",
+                      "classification": "weapon"
+                    }
+                  },
+                  "damage": {
+                    "critical": {},
+                    "includeBase": true,
+                    "parts": [
+                      {
+                        "number": 1,
+                        "denomination": 6,
+                        "bonus": "2",
+                        "types": [
+                          "piercing"
+                        ],
+                        "custom": {
+                          "enabled": false,
+                          "formula": ""
+                        },
+                        "scaling": {
+                          "mode": "whole",
+                          "number": null,
+                          "formula": ""
+                        }
+                      }
+                    ]
+                  },
+                  "sort": 0,
+                  "flags": {},
+                  "visibility": {
+                    "level": {},
+                    "requireAttunement": false,
+                    "requireIdentification": false,
+                    "requireMagic": false
+                  },
+                  "img": null
+                }
+              },
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "tznhTUidqBIBw9wg",
+            "name": "Shiv",
+            "type": "feat",
+            "img": "icons/svg/sword.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.hPTQFjoTN9WilGkR.AwY9Tt8H7J4eOYLm.tznhTUidqBIBw9wg"
+          }
+        ],
+        "effects": [],
+        "flags": {},
+        "name": null,
+        "type": null,
+        "img": null,
+        "ownership": null,
+        "_key": "!scenes.tokens.delta!fVy3zOZlu9pRjAis.hPTQFjoTN9WilGkR.AwY9Tt8H7J4eOYLm"
+      },
+      "x": 3500,
+      "y": 2300,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "depth": 1,
+      "level": "defaultLevel0000",
+      "_key": "!scenes.tokens!fVy3zOZlu9pRjAis.hPTQFjoTN9WilGkR"
+    },
+    {
+      "name": "Road Bandit",
+      "disposition": -1,
+      "displayName": 20,
+      "displayBars": 40,
+      "bar1": {
+        "attribute": "attributes.hp"
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Close-Combat%20Raider2.png",
+        "scaleX": 1.8,
+        "scaleY": 1.8,
+        "tint": "#ffffff",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "alphaThreshold": 0.75
+      },
+      "width": 1,
+      "height": 1,
+      "actorLink": false,
+      "lockRotation": false,
+      "rotation": 225,
+      "alpha": 1,
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {},
+      "actorId": "9dXb2FwXHGlXhzTc",
+      "hidden": false,
+      "sort": 0,
+      "shape": 4,
+      "delta": {
+        "_id": "AwY9Tt8H7J4eOYLm",
+        "system": {},
+        "items": [
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p>In the first round of combat, the bandit has reroll the lowest die on attack rolls against any creature that hasn’t taken a turn yet [TODO(adv-call)].</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "yYHJQa2U2qnBQaup",
+            "name": "Ambush Crew",
+            "type": "feat",
+            "img": "icons/svg/upgrade.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.P131QzeGhGGywcLJ.AwY9Tt8H7J4eOYLm.yYHJQa2U2qnBQaup"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p>If reduced below half Integrity, the bandit must succeed on a DC 12 Wis save at the start of its turn or take the Disengage action and move away.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "FZFXo3o0VM67opef",
+            "name": "Poor Discipline",
+            "type": "feat",
+            "img": "icons/svg/upgrade.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.P131QzeGhGGywcLJ.AwY9Tt8H7J4eOYLm.FZFXo3o0VM67opef"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p><strong>Attack.</strong> +4 to hit, range 60/180 ft., one target. Hit: 7 (1d8+3) piercing.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {
+                "dnd5eactivity000": {
+                  "_id": "dnd5eactivity000",
+                  "type": "attack",
+                  "activation": {
+                    "type": "action",
+                    "value": 1,
+                    "condition": "",
+                    "override": false
+                  },
+                  "consumption": {
+                    "targets": [],
+                    "scaling": {
+                      "allowed": false,
+                      "max": ""
+                    },
+                    "spellSlot": true
+                  },
+                  "description": {
+                    "chatFlavor": ""
+                  },
+                  "duration": {
+                    "concentration": false,
+                    "units": "inst",
+                    "special": "",
+                    "override": false
+                  },
+                  "effects": [],
+                  "range": {
+                    "units": "ft",
+                    "override": false,
+                    "special": "60/180",
+                    "value": "60"
+                  },
+                  "target": {
+                    "template": {
+                      "count": "",
+                      "contiguous": false,
+                      "type": "",
+                      "size": "",
+                      "width": "",
+                      "height": "",
+                      "units": "ft",
+                      "stationary": false
+                    },
+                    "affects": {
+                      "count": "1",
+                      "type": "creature",
+                      "choice": false,
+                      "special": ""
+                    },
+                    "prompt": true,
+                    "override": false
+                  },
+                  "uses": {
+                    "spent": 0,
+                    "max": "",
+                    "recovery": []
+                  },
+                  "attack": {
+                    "ability": "",
+                    "bonus": "4",
+                    "critical": {},
+                    "flat": false,
+                    "type": {
+                      "value": "ranged",
+                      "classification": "weapon"
+                    }
+                  },
+                  "damage": {
+                    "critical": {},
+                    "includeBase": true,
+                    "parts": [
+                      {
+                        "number": 1,
+                        "denomination": 8,
+                        "bonus": "3",
+                        "types": [
+                          "piercing"
+                        ],
+                        "custom": {
+                          "enabled": false,
+                          "formula": ""
+                        },
+                        "scaling": {
+                          "mode": "whole",
+                          "number": null,
+                          "formula": ""
+                        }
+                      }
+                    ]
+                  },
+                  "sort": 0,
+                  "flags": {},
+                  "visibility": {
+                    "level": {},
+                    "requireAttunement": false,
+                    "requireIdentification": false,
+                    "requireMagic": false
+                  },
+                  "img": null
+                }
+              },
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "uQSKFIUEfu87t96n",
+            "name": "Pipe Rifle",
+            "type": "feat",
+            "img": "icons/svg/sword.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.P131QzeGhGGywcLJ.AwY9Tt8H7J4eOYLm.uQSKFIUEfu87t96n"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p><strong>Attack.</strong> +3 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) piercing.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {
+                "dnd5eactivity000": {
+                  "_id": "dnd5eactivity000",
+                  "type": "attack",
+                  "activation": {
+                    "type": "action",
+                    "value": 1,
+                    "condition": "",
+                    "override": false
+                  },
+                  "consumption": {
+                    "targets": [],
+                    "scaling": {
+                      "allowed": false,
+                      "max": ""
+                    },
+                    "spellSlot": true
+                  },
+                  "description": {
+                    "chatFlavor": ""
+                  },
+                  "duration": {
+                    "concentration": false,
+                    "units": "inst",
+                    "special": "",
+                    "override": false
+                  },
+                  "effects": [],
+                  "range": {
+                    "units": "ft",
+                    "override": false,
+                    "special": "",
+                    "value": "5"
+                  },
+                  "target": {
+                    "template": {
+                      "count": "",
+                      "contiguous": false,
+                      "type": "",
+                      "size": "",
+                      "width": "",
+                      "height": "",
+                      "units": "ft",
+                      "stationary": false
+                    },
+                    "affects": {
+                      "count": "1",
+                      "type": "creature",
+                      "choice": false,
+                      "special": ""
+                    },
+                    "prompt": true,
+                    "override": false
+                  },
+                  "uses": {
+                    "spent": 0,
+                    "max": "",
+                    "recovery": []
+                  },
+                  "attack": {
+                    "ability": "",
+                    "bonus": "3",
+                    "critical": {},
+                    "flat": false,
+                    "type": {
+                      "value": "melee",
+                      "classification": "weapon"
+                    }
+                  },
+                  "damage": {
+                    "critical": {},
+                    "includeBase": true,
+                    "parts": [
+                      {
+                        "number": 1,
+                        "denomination": 6,
+                        "bonus": "2",
+                        "types": [
+                          "piercing"
+                        ],
+                        "custom": {
+                          "enabled": false,
+                          "formula": ""
+                        },
+                        "scaling": {
+                          "mode": "whole",
+                          "number": null,
+                          "formula": ""
+                        }
+                      }
+                    ]
+                  },
+                  "sort": 0,
+                  "flags": {},
+                  "visibility": {
+                    "level": {},
+                    "requireAttunement": false,
+                    "requireIdentification": false,
+                    "requireMagic": false
+                  },
+                  "img": null
+                }
+              },
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "tznhTUidqBIBw9wg",
+            "name": "Shiv",
+            "type": "feat",
+            "img": "icons/svg/sword.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.P131QzeGhGGywcLJ.AwY9Tt8H7J4eOYLm.tznhTUidqBIBw9wg"
+          }
+        ],
+        "effects": [],
+        "flags": {},
+        "name": null,
+        "type": null,
+        "img": null,
+        "ownership": null,
+        "_key": "!scenes.tokens.delta!fVy3zOZlu9pRjAis.P131QzeGhGGywcLJ.AwY9Tt8H7J4eOYLm"
+      },
+      "x": 2300,
+      "y": 2200,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_id": "P131QzeGhGGywcLJ",
+      "depth": 1,
+      "level": "defaultLevel0000",
+      "_key": "!scenes.tokens!fVy3zOZlu9pRjAis.P131QzeGhGGywcLJ"
+    },
+    {
+      "name": "Road Bandit",
+      "disposition": -1,
+      "displayName": 20,
+      "displayBars": 40,
+      "bar1": {
+        "attribute": "attributes.hp"
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Close-Combat%20Raider2.png",
+        "scaleX": 1.8,
+        "scaleY": 1.8,
+        "tint": "#ffffff",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "alphaThreshold": 0.75
+      },
+      "width": 1,
+      "height": 1,
+      "actorLink": false,
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {},
+      "actorId": "9dXb2FwXHGlXhzTc",
+      "hidden": false,
+      "sort": 1,
+      "shape": 4,
+      "_id": "DO32fEJ1eisCmpz0",
+      "delta": {
+        "_id": "bJuLVTDcK4SW1OLd",
+        "system": {},
+        "items": [
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p>In the first round of combat, the bandit has reroll the lowest die on attack rolls against any creature that hasn’t taken a turn yet [TODO(adv-call)].</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "yYHJQa2U2qnBQaup",
+            "name": "Ambush Crew",
+            "type": "feat",
+            "img": "icons/svg/upgrade.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.DO32fEJ1eisCmpz0.bJuLVTDcK4SW1OLd.yYHJQa2U2qnBQaup"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p>If reduced below half Integrity, the bandit must succeed on a DC 12 Wis save at the start of its turn or take the Disengage action and move away.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "FZFXo3o0VM67opef",
+            "name": "Poor Discipline",
+            "type": "feat",
+            "img": "icons/svg/upgrade.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.DO32fEJ1eisCmpz0.bJuLVTDcK4SW1OLd.FZFXo3o0VM67opef"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p><strong>Attack.</strong> +4 to hit, range 60/180 ft., one target. Hit: 7 (1d8+3) piercing.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {
+                "dnd5eactivity000": {
+                  "_id": "dnd5eactivity000",
+                  "type": "attack",
+                  "activation": {
+                    "type": "action",
+                    "value": 1,
+                    "condition": "",
+                    "override": false
+                  },
+                  "consumption": {
+                    "targets": [],
+                    "scaling": {
+                      "allowed": false,
+                      "max": ""
+                    },
+                    "spellSlot": true
+                  },
+                  "description": {
+                    "chatFlavor": ""
+                  },
+                  "duration": {
+                    "concentration": false,
+                    "units": "inst",
+                    "special": "",
+                    "override": false
+                  },
+                  "effects": [],
+                  "range": {
+                    "units": "ft",
+                    "override": false,
+                    "special": "60/180",
+                    "value": "60"
+                  },
+                  "target": {
+                    "template": {
+                      "count": "",
+                      "contiguous": false,
+                      "type": "",
+                      "size": "",
+                      "width": "",
+                      "height": "",
+                      "units": "ft",
+                      "stationary": false
+                    },
+                    "affects": {
+                      "count": "1",
+                      "type": "creature",
+                      "choice": false,
+                      "special": ""
+                    },
+                    "prompt": true,
+                    "override": false
+                  },
+                  "uses": {
+                    "spent": 0,
+                    "max": "",
+                    "recovery": []
+                  },
+                  "attack": {
+                    "ability": "",
+                    "bonus": "4",
+                    "critical": {},
+                    "flat": false,
+                    "type": {
+                      "value": "ranged",
+                      "classification": "weapon"
+                    }
+                  },
+                  "damage": {
+                    "critical": {},
+                    "includeBase": true,
+                    "parts": [
+                      {
+                        "number": 1,
+                        "denomination": 8,
+                        "bonus": "3",
+                        "types": [
+                          "piercing"
+                        ],
+                        "custom": {
+                          "enabled": false,
+                          "formula": ""
+                        },
+                        "scaling": {
+                          "mode": "whole",
+                          "number": null,
+                          "formula": ""
+                        }
+                      }
+                    ]
+                  },
+                  "sort": 0,
+                  "flags": {},
+                  "visibility": {
+                    "level": {},
+                    "requireAttunement": false,
+                    "requireIdentification": false,
+                    "requireMagic": false
+                  },
+                  "img": null
+                }
+              },
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "uQSKFIUEfu87t96n",
+            "name": "Pipe Rifle",
+            "type": "feat",
+            "img": "icons/svg/sword.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.DO32fEJ1eisCmpz0.bJuLVTDcK4SW1OLd.uQSKFIUEfu87t96n"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p><strong>Attack.</strong> +3 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) piercing.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {
+                "dnd5eactivity000": {
+                  "_id": "dnd5eactivity000",
+                  "type": "attack",
+                  "activation": {
+                    "type": "action",
+                    "value": 1,
+                    "condition": "",
+                    "override": false
+                  },
+                  "consumption": {
+                    "targets": [],
+                    "scaling": {
+                      "allowed": false,
+                      "max": ""
+                    },
+                    "spellSlot": true
+                  },
+                  "description": {
+                    "chatFlavor": ""
+                  },
+                  "duration": {
+                    "concentration": false,
+                    "units": "inst",
+                    "special": "",
+                    "override": false
+                  },
+                  "effects": [],
+                  "range": {
+                    "units": "ft",
+                    "override": false,
+                    "special": "",
+                    "value": "5"
+                  },
+                  "target": {
+                    "template": {
+                      "count": "",
+                      "contiguous": false,
+                      "type": "",
+                      "size": "",
+                      "width": "",
+                      "height": "",
+                      "units": "ft",
+                      "stationary": false
+                    },
+                    "affects": {
+                      "count": "1",
+                      "type": "creature",
+                      "choice": false,
+                      "special": ""
+                    },
+                    "prompt": true,
+                    "override": false
+                  },
+                  "uses": {
+                    "spent": 0,
+                    "max": "",
+                    "recovery": []
+                  },
+                  "attack": {
+                    "ability": "",
+                    "bonus": "3",
+                    "critical": {},
+                    "flat": false,
+                    "type": {
+                      "value": "melee",
+                      "classification": "weapon"
+                    }
+                  },
+                  "damage": {
+                    "critical": {},
+                    "includeBase": true,
+                    "parts": [
+                      {
+                        "number": 1,
+                        "denomination": 6,
+                        "bonus": "2",
+                        "types": [
+                          "piercing"
+                        ],
+                        "custom": {
+                          "enabled": false,
+                          "formula": ""
+                        },
+                        "scaling": {
+                          "mode": "whole",
+                          "number": null,
+                          "formula": ""
+                        }
+                      }
+                    ]
+                  },
+                  "sort": 0,
+                  "flags": {},
+                  "visibility": {
+                    "level": {},
+                    "requireAttunement": false,
+                    "requireIdentification": false,
+                    "requireMagic": false
+                  },
+                  "img": null
+                }
+              },
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "tznhTUidqBIBw9wg",
+            "name": "Shiv",
+            "type": "feat",
+            "img": "icons/svg/sword.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.DO32fEJ1eisCmpz0.bJuLVTDcK4SW1OLd.tznhTUidqBIBw9wg"
+          }
+        ],
+        "effects": [],
+        "flags": {},
+        "name": null,
+        "type": null,
+        "img": null,
+        "ownership": null,
+        "_key": "!scenes.tokens.delta!fVy3zOZlu9pRjAis.DO32fEJ1eisCmpz0.bJuLVTDcK4SW1OLd"
+      },
+      "x": 2400,
+      "y": 900,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "depth": 1,
+      "level": "defaultLevel0000",
+      "_key": "!scenes.tokens!fVy3zOZlu9pRjAis.DO32fEJ1eisCmpz0"
+    },
+    {
+      "name": "Road Bandit",
+      "disposition": -1,
+      "displayName": 20,
+      "displayBars": 40,
+      "bar1": {
+        "attribute": "attributes.hp"
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Close-Combat%20Raider2.png",
+        "scaleX": 1.8,
+        "scaleY": 1.8,
+        "tint": "#ffffff",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "alphaThreshold": 0.75
+      },
+      "width": 1,
+      "height": 1,
+      "actorLink": false,
+      "lockRotation": false,
+      "rotation": 45,
+      "alpha": 1,
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {},
+      "actorId": "9dXb2FwXHGlXhzTc",
+      "hidden": false,
+      "sort": 2,
+      "shape": 4,
+      "_id": "mczf5T91OmiChpH5",
+      "delta": {
+        "_id": "0S7rfPhl8riSIzfM",
+        "system": {},
+        "items": [
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p>In the first round of combat, the bandit has reroll the lowest die on attack rolls against any creature that hasn’t taken a turn yet [TODO(adv-call)].</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "yYHJQa2U2qnBQaup",
+            "name": "Ambush Crew",
+            "type": "feat",
+            "img": "icons/svg/upgrade.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.mczf5T91OmiChpH5.0S7rfPhl8riSIzfM.yYHJQa2U2qnBQaup"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p>If reduced below half Integrity, the bandit must succeed on a DC 12 Wis save at the start of its turn or take the Disengage action and move away.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "FZFXo3o0VM67opef",
+            "name": "Poor Discipline",
+            "type": "feat",
+            "img": "icons/svg/upgrade.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.mczf5T91OmiChpH5.0S7rfPhl8riSIzfM.FZFXo3o0VM67opef"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p><strong>Attack.</strong> +4 to hit, range 60/180 ft., one target. Hit: 7 (1d8+3) piercing.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {
+                "dnd5eactivity000": {
+                  "_id": "dnd5eactivity000",
+                  "type": "attack",
+                  "activation": {
+                    "type": "action",
+                    "value": 1,
+                    "condition": "",
+                    "override": false
+                  },
+                  "consumption": {
+                    "targets": [],
+                    "scaling": {
+                      "allowed": false,
+                      "max": ""
+                    },
+                    "spellSlot": true
+                  },
+                  "description": {
+                    "chatFlavor": ""
+                  },
+                  "duration": {
+                    "concentration": false,
+                    "units": "inst",
+                    "special": "",
+                    "override": false
+                  },
+                  "effects": [],
+                  "range": {
+                    "units": "ft",
+                    "override": false,
+                    "special": "60/180",
+                    "value": "60"
+                  },
+                  "target": {
+                    "template": {
+                      "count": "",
+                      "contiguous": false,
+                      "type": "",
+                      "size": "",
+                      "width": "",
+                      "height": "",
+                      "units": "ft",
+                      "stationary": false
+                    },
+                    "affects": {
+                      "count": "1",
+                      "type": "creature",
+                      "choice": false,
+                      "special": ""
+                    },
+                    "prompt": true,
+                    "override": false
+                  },
+                  "uses": {
+                    "spent": 0,
+                    "max": "",
+                    "recovery": []
+                  },
+                  "attack": {
+                    "ability": "",
+                    "bonus": "4",
+                    "critical": {},
+                    "flat": false,
+                    "type": {
+                      "value": "ranged",
+                      "classification": "weapon"
+                    }
+                  },
+                  "damage": {
+                    "critical": {},
+                    "includeBase": true,
+                    "parts": [
+                      {
+                        "number": 1,
+                        "denomination": 8,
+                        "bonus": "3",
+                        "types": [
+                          "piercing"
+                        ],
+                        "custom": {
+                          "enabled": false,
+                          "formula": ""
+                        },
+                        "scaling": {
+                          "mode": "whole",
+                          "number": null,
+                          "formula": ""
+                        }
+                      }
+                    ]
+                  },
+                  "sort": 0,
+                  "flags": {},
+                  "visibility": {
+                    "level": {},
+                    "requireAttunement": false,
+                    "requireIdentification": false,
+                    "requireMagic": false
+                  },
+                  "img": null
+                }
+              },
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "uQSKFIUEfu87t96n",
+            "name": "Pipe Rifle",
+            "type": "feat",
+            "img": "icons/svg/sword.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.mczf5T91OmiChpH5.0S7rfPhl8riSIzfM.uQSKFIUEfu87t96n"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p><strong>Attack.</strong> +3 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) piercing.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {
+                "dnd5eactivity000": {
+                  "_id": "dnd5eactivity000",
+                  "type": "attack",
+                  "activation": {
+                    "type": "action",
+                    "value": 1,
+                    "condition": "",
+                    "override": false
+                  },
+                  "consumption": {
+                    "targets": [],
+                    "scaling": {
+                      "allowed": false,
+                      "max": ""
+                    },
+                    "spellSlot": true
+                  },
+                  "description": {
+                    "chatFlavor": ""
+                  },
+                  "duration": {
+                    "concentration": false,
+                    "units": "inst",
+                    "special": "",
+                    "override": false
+                  },
+                  "effects": [],
+                  "range": {
+                    "units": "ft",
+                    "override": false,
+                    "special": "",
+                    "value": "5"
+                  },
+                  "target": {
+                    "template": {
+                      "count": "",
+                      "contiguous": false,
+                      "type": "",
+                      "size": "",
+                      "width": "",
+                      "height": "",
+                      "units": "ft",
+                      "stationary": false
+                    },
+                    "affects": {
+                      "count": "1",
+                      "type": "creature",
+                      "choice": false,
+                      "special": ""
+                    },
+                    "prompt": true,
+                    "override": false
+                  },
+                  "uses": {
+                    "spent": 0,
+                    "max": "",
+                    "recovery": []
+                  },
+                  "attack": {
+                    "ability": "",
+                    "bonus": "3",
+                    "critical": {},
+                    "flat": false,
+                    "type": {
+                      "value": "melee",
+                      "classification": "weapon"
+                    }
+                  },
+                  "damage": {
+                    "critical": {},
+                    "includeBase": true,
+                    "parts": [
+                      {
+                        "number": 1,
+                        "denomination": 6,
+                        "bonus": "2",
+                        "types": [
+                          "piercing"
+                        ],
+                        "custom": {
+                          "enabled": false,
+                          "formula": ""
+                        },
+                        "scaling": {
+                          "mode": "whole",
+                          "number": null,
+                          "formula": ""
+                        }
+                      }
+                    ]
+                  },
+                  "sort": 0,
+                  "flags": {},
+                  "visibility": {
+                    "level": {},
+                    "requireAttunement": false,
+                    "requireIdentification": false,
+                    "requireMagic": false
+                  },
+                  "img": null
+                }
+              },
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "tznhTUidqBIBw9wg",
+            "name": "Shiv",
+            "type": "feat",
+            "img": "icons/svg/sword.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.mczf5T91OmiChpH5.0S7rfPhl8riSIzfM.tznhTUidqBIBw9wg"
+          }
+        ],
+        "effects": [],
+        "flags": {},
+        "name": null,
+        "type": null,
+        "img": null,
+        "ownership": null,
+        "_key": "!scenes.tokens.delta!fVy3zOZlu9pRjAis.mczf5T91OmiChpH5.0S7rfPhl8riSIzfM"
+      },
+      "x": 3800,
+      "y": 1200,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "depth": 1,
+      "level": "defaultLevel0000",
+      "_key": "!scenes.tokens!fVy3zOZlu9pRjAis.mczf5T91OmiChpH5"
+    },
+    {
+      "name": "Commander Road Bandit",
+      "disposition": -1,
+      "displayName": 20,
+      "displayBars": 40,
+      "bar1": {
+        "attribute": "attributes.hp"
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Close-Combat%20Raider1.png",
+        "scaleX": 2,
+        "scaleY": 2,
+        "tint": "#ffffff",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "alphaThreshold": 0.75
+      },
+      "width": 1,
+      "height": 1,
+      "actorLink": false,
+      "lockRotation": false,
+      "rotation": 135,
+      "alpha": 1,
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": false,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {},
+      "actorId": "55dIJGTB5c47Oy7Z",
+      "hidden": false,
+      "sort": 4,
+      "shape": 4,
+      "_id": "3B5C8D52MtVhKIwV",
+      "delta": {
+        "_id": "QIc0J2ZmXql1N12O",
+        "system": {},
+        "items": [
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p>In the first round of combat, the bandit has reroll the lowest die on attack rolls against any creature that hasn’t taken a turn yet [TODO(adv-call)].</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "yYHJQa2U2qnBQaup",
+            "name": "Ambush Crew",
+            "type": "feat",
+            "img": "icons/svg/upgrade.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.3B5C8D52MtVhKIwV.QIc0J2ZmXql1N12O.yYHJQa2U2qnBQaup"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p>If reduced below half Integrity, the bandit must succeed on a DC 12 Wis save at the start of its turn or take the Disengage action and move away.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {},
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "FZFXo3o0VM67opef",
+            "name": "Poor Discipline",
+            "type": "feat",
+            "img": "icons/svg/upgrade.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.3B5C8D52MtVhKIwV.QIc0J2ZmXql1N12O.FZFXo3o0VM67opef"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p><strong>Attack.</strong> +9 to hit, range 60/180 ft., one target. Hit: 11 (1d8+6) piercing.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {
+                "dnd5eactivity000": {
+                  "_id": "dnd5eactivity000",
+                  "type": "attack",
+                  "activation": {
+                    "type": "action",
+                    "value": 1,
+                    "condition": "",
+                    "override": false
+                  },
+                  "consumption": {
+                    "targets": [],
+                    "scaling": {
+                      "allowed": false,
+                      "max": ""
+                    },
+                    "spellSlot": true
+                  },
+                  "description": {
+                    "chatFlavor": ""
+                  },
+                  "duration": {
+                    "concentration": false,
+                    "units": "inst",
+                    "special": "",
+                    "override": false
+                  },
+                  "effects": [],
+                  "range": {
+                    "units": "ft",
+                    "override": false,
+                    "special": "60/180",
+                    "value": "60"
+                  },
+                  "target": {
+                    "template": {
+                      "count": "",
+                      "contiguous": false,
+                      "type": "",
+                      "size": "",
+                      "width": "",
+                      "height": "",
+                      "units": "ft",
+                      "stationary": false
+                    },
+                    "affects": {
+                      "count": "1",
+                      "type": "creature",
+                      "choice": false,
+                      "special": ""
+                    },
+                    "prompt": true,
+                    "override": false
+                  },
+                  "uses": {
+                    "spent": 0,
+                    "max": "",
+                    "recovery": []
+                  },
+                  "attack": {
+                    "ability": "",
+                    "bonus": "4",
+                    "critical": {
+                      "threshold": null
+                    },
+                    "flat": false,
+                    "type": {
+                      "value": "ranged",
+                      "classification": "weapon"
+                    }
+                  },
+                  "damage": {
+                    "critical": {
+                      "bonus": ""
+                    },
+                    "includeBase": true,
+                    "parts": [
+                      {
+                        "custom": {
+                          "enabled": false,
+                          "formula": ""
+                        },
+                        "number": 1,
+                        "denomination": 8,
+                        "bonus": "3+@mod",
+                        "types": [
+                          "piercing"
+                        ],
+                        "scaling": {
+                          "number": 1
+                        }
+                      }
+                    ]
+                  },
+                  "sort": 0,
+                  "flags": {},
+                  "visibility": {
+                    "level": {
+                      "min": null,
+                      "max": null
+                    },
+                    "requireAttunement": false,
+                    "requireIdentification": false,
+                    "requireMagic": false,
+                    "identifier": ""
+                  },
+                  "name": "",
+                  "img": ""
+                }
+              },
+              "uses": {
+                "spent": 0,
+                "recovery": [],
+                "max": ""
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false,
+                "level": null
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "uQSKFIUEfu87t96n",
+            "name": "Pipe Rifle",
+            "type": "feat",
+            "img": "icons/svg/sword.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.3B5C8D52MtVhKIwV.QIc0J2ZmXql1N12O.uQSKFIUEfu87t96n"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p><strong>Attack.</strong> +3 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) piercing.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {
+                "dnd5eactivity000": {
+                  "_id": "dnd5eactivity000",
+                  "type": "attack",
+                  "activation": {
+                    "type": "action",
+                    "value": 1,
+                    "condition": "",
+                    "override": false
+                  },
+                  "consumption": {
+                    "targets": [],
+                    "scaling": {
+                      "allowed": false,
+                      "max": ""
+                    },
+                    "spellSlot": true
+                  },
+                  "description": {
+                    "chatFlavor": ""
+                  },
+                  "duration": {
+                    "concentration": false,
+                    "units": "inst",
+                    "special": "",
+                    "override": false
+                  },
+                  "effects": [],
+                  "range": {
+                    "units": "ft",
+                    "override": false,
+                    "special": "",
+                    "value": "5"
+                  },
+                  "target": {
+                    "template": {
+                      "count": "",
+                      "contiguous": false,
+                      "type": "",
+                      "size": "",
+                      "width": "",
+                      "height": "",
+                      "units": "ft",
+                      "stationary": false
+                    },
+                    "affects": {
+                      "count": "1",
+                      "type": "creature",
+                      "choice": false,
+                      "special": ""
+                    },
+                    "prompt": true,
+                    "override": false
+                  },
+                  "uses": {
+                    "spent": 0,
+                    "max": "",
+                    "recovery": []
+                  },
+                  "attack": {
+                    "ability": "",
+                    "bonus": "3",
+                    "critical": {
+                      "threshold": null
+                    },
+                    "flat": false,
+                    "type": {
+                      "value": "melee",
+                      "classification": "weapon"
+                    }
+                  },
+                  "damage": {
+                    "critical": {
+                      "bonus": ""
+                    },
+                    "includeBase": true,
+                    "parts": [
+                      {
+                        "custom": {
+                          "enabled": false,
+                          "formula": ""
+                        },
+                        "number": 1,
+                        "denomination": 6,
+                        "bonus": "2+@mod",
+                        "types": [
+                          "piercing"
+                        ],
+                        "scaling": {
+                          "number": 1
+                        }
+                      }
+                    ]
+                  },
+                  "sort": 0,
+                  "flags": {},
+                  "visibility": {
+                    "level": {
+                      "min": null,
+                      "max": null
+                    },
+                    "requireAttunement": false,
+                    "requireIdentification": false,
+                    "requireMagic": false,
+                    "identifier": ""
+                  },
+                  "name": "",
+                  "img": ""
+                }
+              },
+              "uses": {
+                "spent": 0,
+                "recovery": []
+              },
+              "identifier": "",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "tznhTUidqBIBw9wg",
+            "name": "Shiv",
+            "type": "feat",
+            "img": "icons/svg/sword.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.3B5C8D52MtVhKIwV.QIc0J2ZmXql1N12O.tznhTUidqBIBw9wg"
+          },
+          {
+            "system": {
+              "category": "technique",
+              "source": {
+                "revision": 1,
+                "rules": "2024"
+              },
+              "tags": [],
+              "description": {
+                "value": "<p><strong>Attack.</strong> +3 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) piercing.</p>",
+                "chat": ""
+              },
+              "advancement": {},
+              "activities": {
+                "dnd5eactivity000": {
+                  "_id": "dnd5eactivity000",
+                  "type": "attack",
+                  "activation": {
+                    "type": "action",
+                    "value": 1,
+                    "condition": "",
+                    "override": false
+                  },
+                  "consumption": {
+                    "targets": [],
+                    "scaling": {
+                      "allowed": false,
+                      "max": ""
+                    },
+                    "spellSlot": true
+                  },
+                  "description": {
+                    "chatFlavor": ""
+                  },
+                  "duration": {
+                    "concentration": false,
+                    "units": "inst",
+                    "special": "",
+                    "override": false
+                  },
+                  "effects": [],
+                  "range": {
+                    "units": "ft",
+                    "override": false,
+                    "special": "",
+                    "value": "5"
+                  },
+                  "target": {
+                    "template": {
+                      "count": "",
+                      "contiguous": false,
+                      "type": "",
+                      "size": "",
+                      "width": "",
+                      "height": "",
+                      "units": "ft",
+                      "stationary": false
+                    },
+                    "affects": {
+                      "count": "1",
+                      "type": "creature",
+                      "choice": false,
+                      "special": ""
+                    },
+                    "prompt": true,
+                    "override": false
+                  },
+                  "uses": {
+                    "spent": 0,
+                    "max": "",
+                    "recovery": []
+                  },
+                  "attack": {
+                    "ability": "",
+                    "bonus": "3",
+                    "critical": {
+                      "threshold": null
+                    },
+                    "flat": false,
+                    "type": {
+                      "value": "melee",
+                      "classification": "weapon"
+                    }
+                  },
+                  "damage": {
+                    "critical": {
+                      "bonus": ""
+                    },
+                    "includeBase": true,
+                    "parts": [
+                      {
+                        "custom": {
+                          "enabled": false,
+                          "formula": ""
+                        },
+                        "number": 1,
+                        "denomination": 6,
+                        "bonus": "2+@mod",
+                        "types": [
+                          "piercing"
+                        ],
+                        "scaling": {
+                          "number": 1
+                        }
+                      }
+                    ]
+                  },
+                  "sort": 0,
+                  "flags": {},
+                  "visibility": {
+                    "level": {
+                      "min": null,
+                      "max": null
+                    },
+                    "requireAttunement": false,
+                    "requireIdentification": false,
+                    "requireMagic": false,
+                    "identifier": ""
+                  },
+                  "name": "",
+                  "img": ""
+                }
+              },
+              "uses": {
+                "spent": 0,
+                "recovery": [],
+                "max": ""
+              },
+              "identifier": "shiv-copy",
+              "crewed": false,
+              "enchant": {},
+              "prerequisites": {
+                "items": [],
+                "repeatable": false,
+                "level": null
+              },
+              "properties": [],
+              "requirements": "",
+              "type": {
+                "value": "",
+                "subtype": ""
+              }
+            },
+            "_id": "NMFXEO0xd5CTZjbf",
+            "name": "Shiv (Offhand)",
+            "type": "feat",
+            "img": "icons/svg/sword.svg",
+            "effects": [],
+            "flags": {},
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "compendiumSource": null,
+              "duplicateSource": "Actor.55dIJGTB5c47Oy7Z.Item.tznhTUidqBIBw9wg",
+              "exportSource": null,
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726
+            },
+            "ownership": {
+              "default": 0,
+              "vmUfDuSYUIe7V5uB": 3
+            },
+            "_key": "!scenes.tokens.delta.items!fVy3zOZlu9pRjAis.3B5C8D52MtVhKIwV.QIc0J2ZmXql1N12O.NMFXEO0xd5CTZjbf"
+          }
+        ],
+        "effects": [],
+        "flags": {},
+        "name": null,
+        "type": null,
+        "img": null,
+        "ownership": null,
+        "_key": "!scenes.tokens.delta!fVy3zOZlu9pRjAis.3B5C8D52MtVhKIwV.QIc0J2ZmXql1N12O"
+      },
+      "x": 3200,
+      "y": 2500,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "depth": 1,
+      "level": "defaultLevel0000",
+      "_key": "!scenes.tokens!fVy3zOZlu9pRjAis.3B5C8D52MtVhKIwV"
+    },
+    {
+      "actorLink": false,
+      "disposition": 1,
+      "name": "Mara Quickhands",
+      "displayName": 30,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Mara%20Quickhands.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": null
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        }
+      },
+      "actorId": "GTX6S0gtzoJ7OeSE",
+      "hidden": false,
+      "sort": 5,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "PuYIjYWjEbGJ0sEC",
+      "delta": {
+        "_id": "PuYIjYWjEbGJ0sEC",
+        "name": null,
+        "type": null,
+        "img": null,
+        "system": {},
+        "items": [],
+        "effects": [
+          {
+            "name": "Clarity (Aura)",
+            "img": "icons/magic/holy/meditation-chi-focus-blue.webp",
+            "duration": {
+              "value": null,
+              "units": "seconds",
+              "expiry": null,
+              "expired": false
+            },
+            "flags": {
+              "bbttcc-character-options": {
+                "auraClarityGrant": true
+              }
+            },
+            "system": {
+              "changes": [
+                {
+                  "key": "flags.dnd5e.skills.prc.adv",
+                  "value": true,
+                  "priority": 20,
+                  "type": "override",
+                  "phase": "initial"
+                },
+                {
+                  "key": "flags.dnd5e.skills.ins.adv",
+                  "value": true,
+                  "priority": 20,
+                  "type": "override",
+                  "phase": "initial"
+                }
+              ]
+            },
+            "_id": "YKLUqmDhQArXvvS8",
+            "type": "base",
+            "disabled": false,
+            "start": {
+              "time": 0,
+              "combat": "QA0W2dp4ktbV6dBx",
+              "combatant": "tA2vckTuBiKKCfz4",
+              "initiative": 25,
+              "round": 3,
+              "turn": 0
+            },
+            "description": "",
+            "origin": null,
+            "tint": "#ffffff",
+            "transfer": false,
+            "statuses": [],
+            "showIcon": 1,
+            "folder": null,
+            "sort": 0,
+            "_stats": {
+              "coreVersion": "14.364",
+              "systemId": "fourththing",
+              "systemVersion": "0.6.1",
+              "createdTime": 1783982553726,
+              "modifiedTime": 1783982553726,
+              "lastModifiedBy": "bytUGWIOqq9eT7Or",
+              "compendiumSource": null,
+              "duplicateSource": null,
+              "exportSource": null
+            },
+            "_key": "!scenes.tokens.delta.effects!fVy3zOZlu9pRjAis.PuYIjYWjEbGJ0sEC.PuYIjYWjEbGJ0sEC.YKLUqmDhQArXvvS8"
+          }
+        ],
+        "ownership": null,
+        "flags": {},
+        "_key": "!scenes.tokens.delta!fVy3zOZlu9pRjAis.PuYIjYWjEbGJ0sEC.PuYIjYWjEbGJ0sEC"
+      },
+      "x": 3000,
+      "y": 1400,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!fVy3zOZlu9pRjAis.PuYIjYWjEbGJ0sEC"
+    },
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tb_facing_right.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "name": "Thaarlbriindt",
+      "displayName": 30,
+      "actorLink": true,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": "derived.integrity"
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        },
+        "tokenflip": {
+          "tokenfaces": [
+            {
+              "actorId": "YK2PSxphYxXQYm8B",
+              "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/patrolpersons_plate.png",
+              "id": "WJRqRlfzmdU8Byk8qez9",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 1,
+              "height": 1,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "YK2PSxphYxXQYm8B",
+              "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/patrolpersons_plate.png",
+              "id": "EEM8s1kXTJwLMIJPcjdA",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 1,
+              "height": 1,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            }
+          ]
+        },
+        "bbttcc-raid": {
+          "directionalArt": {
+            "facing": "east"
+          }
+        }
+      },
+      "actorId": "YK2PSxphYxXQYm8B",
+      "hidden": false,
+      "sort": 7,
+      "shape": 4,
+      "level": "defaultLevel0000",
+      "_id": "jeoEZVuQxvOKpFSE",
+      "delta": null,
+      "x": 2900,
+      "y": 1500,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!fVy3zOZlu9pRjAis.jeoEZVuQxvOKpFSE"
+    }
+  ],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [],
+  "walls": [],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "folder": "eMpeqwnjtn1E4Fzp",
+  "sort": 300000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982553726,
+    "modifiedTime": 1783982553726,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "navName": "",
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "Bandit Ambush",
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/GOTTGAIT%20Scenes/bandit_ambush_1.mp4",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!fVy3zOZlu9pRjAis.defaultLevel0000"
+    }
+  ],
+  "shiftX": 0,
+  "shiftY": 0,
+  "initialLevel": "defaultLevel0000",
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "_key": "!scenes!fVy3zOZlu9pRjAis",
+  "templates": []
+}

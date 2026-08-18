@@ -1,0 +1,125 @@
+{
+  "name": "Predictive Convergence Map",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_28.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Predictive Convergence Map.</strong> You can sketch a route that passes through where the plot <em>will</em> be, not just where it is.</p><ul><li>When you plan a <strong>Travel route</strong> with an eye toward encountering (or avoiding) Sparks, Tikkun events, or specific factions, you gain a small mechanical edge on <strong>Travel planning checks</strong> (Athletics (Violence), relevant Bad Eden travel skills, or your Travel Console abstractions).</li><li>On a success, the GM may shift the encounter tables or event probabilities slightly in your favor: making desired events more likely and unwanted ones slightly less likely.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "predictive-convergence-map",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 12
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (12th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Predictive Convergence Map",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_attack.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984387,
+        "modifiedTime": 1777346199302
+      },
+      "_id": "P5jjumoEyiMC7zRd",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.predictiveConvergenceMap",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.opHooks.travelEventBias",
+            "value": 1,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!dbmGJcTgEiHCiFe4.P5jjumoEyiMC7zRd"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "predictiveConvergenceMap": true
+      },
+      "opHooks": {
+        "travelEventBias": 1
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459984387,
+    "modifiedTime": 1782167240825,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "dbmGJcTgEiHCiFe4",
+  "sort": 140625,
+  "_key": "!items!dbmGJcTgEiHCiFe4"
+}

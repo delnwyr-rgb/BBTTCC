@@ -1,0 +1,2462 @@
+{
+  "name": "\"Doc\"Vess Greeley",
+  "type": "character",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc",
+      "createdViaNPCBuilder": true,
+      "createdAt": 1783312689820
+    },
+    "bbttcc-factions": {
+      "factionId": "91Kwu7Vgf11vqxuj",
+      "warLogs": [
+        {
+          "ts": 1783979396252,
+          "date": "7/13/2026, 4:49:56 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        }
+      ]
+    },
+    "fourththing": {
+      "kind": "npc",
+      "surgeEnabled": false
+    },
+    "bbttcc-character-options": {
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "nativeLinks": {
+        "subclassName": "",
+        "subclassUuid": "",
+        "subclassApplied": false,
+        "className": "",
+        "classUuid": "",
+        "classApplied": false,
+        "heritageName": "",
+        "heritageUuid": "",
+        "heritageApplied": false,
+        "ancestryName": "Eidolon (Outsider)",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.BCZlQ4VjV2VmJfLa",
+        "ancestryApplied": true
+      },
+      "heritageUuid": "",
+      "archetype": {
+        "pack": "bbttcc-character-options.character-archetypes",
+        "id": "ZglOBfB8VnrfFn0f",
+        "key": "temperance",
+        "name": "Archetype: Temperance",
+        "identifier": "archetype-temperance",
+        "category": "character-archetypes"
+      },
+      "identity": {
+        "archetype": {
+          "key": "ZglOBfB8VnrfFn0f",
+          "id": "ZglOBfB8VnrfFn0f",
+          "pack": "bbttcc-character-options.character-archetypes",
+          "category": "character-archetypes",
+          "optionKey": "temperance",
+          "identifier": "archetype-temperance",
+          "name": "Archetype: Temperance",
+          "currentTier": 1,
+          "displayName": "Temperance"
+        },
+        "sephirothicAlignment": {
+          "key": "aYGsfvm8EuKcBjLP",
+          "id": "aYGsfvm8EuKcBjLP",
+          "pack": "bbttcc-character-options.sephirothic-alignments",
+          "category": "sephirothic-alignments",
+          "optionKey": null,
+          "identifier": "alignment-hod",
+          "name": "Alignment: Hod"
+        }
+      },
+      "calculatedOPs": {
+        "violence": 0,
+        "nonlethal": 0,
+        "intrigue": 3,
+        "economy": 3,
+        "softpower": 0,
+        "diplomacy": 2,
+        "logistics": 2,
+        "culture": 0,
+        "faith": 1
+      },
+      "sephirot": {
+        "pack": "bbttcc-character-options.sephirothic-alignments",
+        "id": "aYGsfvm8EuKcBjLP",
+        "key": null,
+        "name": "Alignment: Hod",
+        "identifier": "alignment-hod",
+        "category": "sephirothic-alignments"
+      }
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "The Waiting Room, Allesh-Gilliam, Father Tamsin, the Night the Mountain Coughed, St Gilliam's, the Long Market, Marshal Yarrow Pike",
+        "notes": "[AG-TREATMENT-2026-07-04] PRIVATE TRUTH — Vess Greeley. Voice: dry, precise, warm underneath like a heat lamp you can't see. Bar patter is triage — she sorts everyone who walks in by how much trouble they're carrying, and pours accordingly. SECRET: the night the Mountain Coughed she finished a stitch in the dark and the patient lived — but she had already CHOSEN, in the dark, who she'd have let go if it came to two. The patient was Father Tamsin's brother. Tamsin knows what she almost chose. She knows he once withheld mercy outright. Neither will EVER say it; if pressed about Tamsin she deflects with professional courtesy and changes the drink. The back room (\"the good room\") is kept surgical-clean because she still expects the bad night to come back for a rematch — do not joke in there, and she will eject anyone who does, politely, once. STAGING: never leaves the bar during conversation; the bar comes to her. Rumors she deals out one at a time, best material last, and she always names her source's reliability like a diagnosis (\"that one's a sprain, not a break\")."
+      }
+    },
+    "bbttcc-aae": {
+      "politicalPhilosophy": "social_democratic"
+    },
+    "tokenflip": {
+      "unfuck": false
+    }
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 4,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1
+    },
+    "attributes": {
+      "violence": {
+        "value": 4
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 5
+      },
+      "mind": {
+        "value": 4
+      },
+      "soul": {
+        "value": 5
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 1
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 2
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 1
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 1
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 0
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 1
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 1
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 1
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 1
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 0
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 1
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 1
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 1
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 40,
+        "max": 16
+      },
+      "stress": {
+        "value": 38,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 3,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": 1,
+    "name": "\"Doc\"Vess Greeley",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/doc_vess_greeley_pov.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "tokenflip": {
+        "tokenfaces": [
+          {
+            "actorId": "DSppSI2lCnin4Y1O",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/doc_vess_greeley_pov.png",
+            "id": "ZgNx7YSmbi7W7lseJk6I",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 1,
+            "height": 1,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          },
+          {
+            "actorId": "DSppSI2lCnin4Y1O",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/doc_vess_greeley.png",
+            "id": "YyJ5qzdvhbHdN3WnMG6Y",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 1,
+            "height": 1,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          },
+          {
+            "actorId": "DSppSI2lCnin4Y1O",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/doc_greeley_bar_pov.png",
+            "id": "BZ1PUzHTCWiTOuj7vWAi",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 4,
+            "height": 4,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          }
+        ]
+      },
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "DSppSI2lCnin4Y1O",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/doc_vess_greeley_pov.png",
+  "items": [
+    {
+      "name": "Eidolon (Outsider)",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_5.png",
+      "system": {
+        "category": "ancestry",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Catch-all lineage for things from outside — dream-born, void-touched, conceptual entities wearing flesh as costume. Reality is a suggestion they entertain politely.</em></p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "s3zgn2pcmi2h5zrv",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Eidolon (Outsider) (size: med).",
+            "value": {}
+          },
+          {
+            "_id": "rt9ljm6axyt8gq7h",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.hJXotYgtWluZjB3x",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Eidolon (Outsider) Tier 1",
+            "hint": "Grants the tier 1 Eidolon (Outsider) feature."
+          },
+          {
+            "_id": "idnxy4uh7fvjqxyv",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.a5bLYSYYvDXrExmV",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Eidolon (Outsider) Tier 2",
+            "hint": "Grants the tier 2 Eidolon (Outsider) feature."
+          },
+          {
+            "_id": "hta2989is9wdf7mm",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.ZzAKltsuvOW93ERl",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Eidolon (Outsider) Tier 3",
+            "hint": "Grants the tier 3 Eidolon (Outsider) feature."
+          },
+          {
+            "_id": "pkseaq7jfjzhev2k",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.SIvgKN1y7E045DAX",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Eidolon (Outsider) Tier 4",
+            "hint": "Grants the tier 4 Eidolon (Outsider) feature."
+          }
+        ],
+        "identifier": "eidolon",
+        "properties": [],
+        "type": {
+          "value": "humanoid",
+          "subtype": "Eidolon (Outsider)"
+        }
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "lineage": "eidolon",
+          "version": "1.0.0",
+          "date": "2026-05-15",
+          "npAncestry": true
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool × 0.60",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "grantedByAncestry": "Eidolon (Outsider)"
+        },
+        "bbttcc-factions": {
+          "opContribution": {
+            "intrigue": 1,
+            "faith": 1
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "folder": "xEjihJm7wSmcGO1b",
+      "sort": 100000,
+      "_id": "Fc8Y5G8gJBVV7DMc",
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.Fc8Y5G8gJBVV7DMc"
+    },
+    {
+      "name": "Eidolon: Outsider Cast",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_alien.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Outsider Cast.</strong> You do not need to eat, sleep, or breathe. You appear subtly wrong to careful observers (Perception DC 15 to notice). Resistance to psychic damage.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "eidolon-lesser",
+        "requirements": "Eidolon (Outsider)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "eidolon",
+          "lineage": "Eidolon (Outsider)",
+          "feature": "lesser",
+          "tierLevel": 1,
+          "version": "1.0.0",
+          "date": "2026-05-15",
+          "npAncestry": true
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "grantedByAncestry": "Eidolon (Outsider)"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "folder": "xEjihJm7wSmcGO1b",
+      "sort": 150000,
+      "_id": "74Me7FwNesIG9fQT",
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.74Me7FwNesIG9fQT"
+    },
+    {
+      "name": "Eidolon: Whisper Walk",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_ghostly_runner_invisible.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Whisper Walk (1/Scene Break).</strong> Step sideways out of consensus reality as a bonus action; you become invisible and pass through one wall up to 1 square thick before reappearing on the other side. Concentration not required.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "eidolon-whisper",
+        "requirements": "Eidolon (Outsider)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "eidolon",
+          "lineage": "Eidolon (Outsider)",
+          "feature": "whisper",
+          "tierLevel": 2,
+          "version": "1.0.0",
+          "date": "2026-05-15",
+          "npAncestry": true
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "grantedByAncestry": "Eidolon (Outsider)"
+        },
+        "autoanimations": {
+          "id": "579201fb-5213-4176-871a-97a1ad571c79",
+          "label": "Eidolon: Whisper Walk",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "loop",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "folder": "xEjihJm7wSmcGO1b",
+      "sort": 112500,
+      "_id": "JXnn3XWJL3dxQyHa",
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.JXnn3XWJL3dxQyHa"
+    },
+    {
+      "name": "Eidolon: Concept-Voice",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mental.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Concept-Voice (1/Scene Break).</strong> Name a single concept as an action (a fear, a memory, a desire). One creature within 6 squares that can hear you takes 4d6 psychic damage and is Charmed or Frightened by the named concept until the end of your next turn (Soul check DC 8 + Tier + Presence for half damage and to negate the condition).</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "eidolon-voice",
+        "requirements": "Eidolon (Outsider)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "eidolon",
+          "lineage": "Eidolon (Outsider)",
+          "feature": "voice",
+          "tierLevel": 3,
+          "version": "1.0.0",
+          "date": "2026-05-15",
+          "npAncestry": true
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "grantedByAncestry": "Eidolon (Outsider)"
+        },
+        "autoanimations": {
+          "id": "30379c94-71af-470e-9862-4751d2823888",
+          "label": "Eidolon: Concept-Voice",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "folder": "xEjihJm7wSmcGO1b",
+      "sort": 200000,
+      "_id": "vMRd5O4uIyLldNHO",
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.vMRd5O4uIyLldNHO"
+    },
+    {
+      "name": "Eidolon: Sovereign of Things",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_psychic_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Sovereign of Things (1/Soma Break).</strong> Declare an object within 12 squares to be 'one of yours.' For 24 hours that object cannot be used effectively against you (attack rolls with it roll 3d10 keep lowest 2; manifestations cast through it must check vs your manifestation DC or fizzle). Your psychic resistance becomes immunity.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "eidolon-sovereign",
+        "requirements": "Eidolon (Outsider)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "eidolon",
+          "lineage": "Eidolon (Outsider)",
+          "feature": "sovereign",
+          "tierLevel": 4,
+          "version": "1.0.0",
+          "date": "2026-05-15",
+          "npAncestry": true
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "grantedByAncestry": "Eidolon (Outsider)"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "folder": "xEjihJm7wSmcGO1b",
+      "sort": 125000,
+      "_id": "fq2C4D1ynsXbTiNW",
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.fq2C4D1ynsXbTiNW"
+    },
+    {
+      "name": "Archetype: Temperance",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_temperance.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“Too much breaks. Too little fails. You are the line between.”</em></p><p><strong>Temperance</strong> stabilizes extremes and converts volatility into control.</p>",
+          "chat": ""
+        },
+        "identifier": "archetype-temperance",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "bonuses": {
+            "logistics": 1
+          },
+          "option": {
+            "key": "temperance",
+            "tags": [
+              "bbttcc:temperance",
+              "bbttcc:base"
+            ]
+          }
+        }
+      },
+      "effects": [],
+      "folder": "oS7yNriqw8Jq5RHo",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.lyYccsUlWl6hmhHJ",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "Gdc253EIlJbffr7k",
+      "sort": 100000,
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.Gdc253EIlJbffr7k"
+    },
+    {
+      "name": "Archetype: Temperance (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_temperance.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Temperance</strong></p><ul><li><strong>Tactical:</strong> Faith + Insight, Resistance Tier-0 manifestation.</li><li><strong>Strategic:</strong> +2 Logistics OP cap.</li></ul>",
+          "chat": ""
+        },
+        "identifier": "archetype-temperance-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "bonuses": {},
+          "option": {
+            "key": "temperance",
+            "tier": 1,
+            "tags": [
+              "bbttcc:temperance",
+              "bbttcc:logistics_op_cap:+2"
+            ],
+            "category": "archetype",
+            "progressionType": "level",
+            "levelMin": 1,
+            "levelMax": 1
+          },
+          "category": "archetype"
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "effects": [],
+      "folder": "oS7yNriqw8Jq5RHo",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.xb7fQgNMbM3XetEZ",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "6iG4PPhHEnVFvIXe",
+      "sort": 200000,
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.6iG4PPhHEnVFvIXe"
+    },
+    {
+      "name": "Alignment: Hod",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "Splendor - Meaning made visible. +1 Intrigue, +1 Diplomacy OPs\n\nHod renders truth through language, symbol, and presentation. It rewards courtly play, ritual precision, and the ability to turn naming, framing, and interpretation into strategic force.",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "alignment-hod",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunrise_1.png",
+      "effects": [],
+      "folder": "RAOWJYon3t34M5XY",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "intrigue": 1,
+            "diplomacy": 1
+          },
+          "option": {}
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.gQ3cnx3Xxpo7uDNJ",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.7PnQ9KPy78glfod2",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "pBdRH5HyaJbXUMGc",
+      "sort": 500000,
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.pBdRH5HyaJbXUMGc"
+    },
+    {
+      "name": "Forge Blessing",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_3.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2025",
+          "custom": "Bad Eden Originals"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Hold still, I’m putting feelings on this.”</em></p><p>As a <strong>bonus action</strong>, you can bless a weapon or shield you can touch.</p><ul><li>For the next minute, the blessed item stores one pulse of your intent. Once during that duration, when its wielder makes an attack roll or is targeted by an attack, they can add their <strong>tier</strong> to either the attack roll or their Guard against that one attack (their choice).</li><li>Once the extra bonus is used, the blessing fades.</li><li>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": "@prof"
+        },
+        "advancement": {},
+        "identifier": "soulsmith-forge-bound-light-forge-blessing",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Soul-Smith 3, Forge of Bound Light",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "JaASOItbL0tB8Z9y",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "soulsmith_forge_boundlight",
+          "featureKey": "forge_blessing"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "IMk51OD3bUdIdY6P",
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.IMk51OD3bUdIdY6P"
+    },
+    {
+      "name": "Hearthfield",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_hearth_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "revision": 1,
+          "rules": "2025"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“Anywhere you set the anvil down becomes a home.”</em></p><p>When you lead or host a <strong>a Soma Break</strong>, you can shape the space around you into a temporary hearth.</p><ul><li>Each ally who spends one or more Body dice to heal during that rest regains an additional <strong>1d6 Integrity</strong>.</li><li>If the rest occurs in a reclaimed ruin, hex under your faction’s control, or within sight of a banner, sigil, or emblem you forged, the GM may allow the bonus to increase to <strong>2d6</strong> for particularly on-theme scenes.</li></ul><p><em>There are campfires, and there are places people tell stories about years later. You build the second kind.</em></p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "soulsmith-forge-bound-light-hearthfield",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Soul-Smith 10, Forge of Bound Light",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "JaASOItbL0tB8Z9y",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "soulsmith_forge_boundlight",
+          "featureKey": "hearthfield"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 50000,
+      "_id": "sOJkNE0PBnabNtl9",
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.sOJkNE0PBnabNtl9"
+    },
+    {
+      "name": "Sanctuary Engine",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_human_protection_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "revision": 1,
+          "rules": "2025"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“You have reforged the idea of safety into something portable.”</em></p><p>As an <strong>action</strong>, you can ignite a moving demilitarized zone of hammered light.</p><ul><li>You create a <strong>3 squares-radius</strong> Sanctuary Field centered on you that lasts for <strong>1 minute</strong> and moves with you.</li><li>Allies inside the field have <strong>resistance to all damage</strong>.</li><li>Hostile creatures inside the field have <strong>disadvantage</strong> on attack rolls against creatures other than you.</li><li>When an ally inside the field spends Body dice to heal, they roll each die <strong>twice</strong> and take the higher result.</li><li>If a peaceful objective (surrender, treaty, rescue, extraction, or similar) is completed during the field’s duration or within 1 minute after it ends, your faction gains <strong>+1 Diplomacy OP</strong> and <strong>+1 Soft Power OP</strong> for the next strategic turn.</li></ul><p><em>This is what happens when you strike mercy on the anvil long enough—reality learns manners.</em></p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "soulsmith-forge-bound-light-sanctuary-engine",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Soul-Smith 18, Forge of Bound Light",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "JaASOItbL0tB8Z9y",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "soulsmith_forge_boundlight",
+          "featureKey": "sanctuary_engine"
+        },
+        "autoanimations": {
+          "id": "7ad93af1-bc34-4c08-86b6-9ac5610c1ea8",
+          "label": "Sanctuary Engine",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "shieldfx",
+              "animation": "ice",
+              "variant": "03",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 225000,
+      "_id": "H5zOLmlNwpLKXn36",
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.H5zOLmlNwpLKXn36"
+    },
+    {
+      "name": "Gentle Edges",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_smith_hammer_holy_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "revision": 1,
+          "rules": "2025"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“Some blows land as warnings, not endings.”</em></p><ul><li>Weapons you personally forge, maintain, or sanctify can always deal <strong>non-lethal</strong> damage at your direction, even if they would not normally be able to (GM’s call for edge cases like disintegration beams).</li><li>When you lead or anchor a conflict that ends in a <strong>no-fatality victory</strong> (surrender, rout, incapacitation, or social resolution) where your work clearly mattered, your faction gains <strong>+1 Diplomacy OP</strong> for the next strategic turn (once per scenario).</li></ul><p><em>This doesn’t mean you never hurt anyone. It means you always left a door.</em></p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "soulsmith-forge-bound-light-gentle-edges",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Soul-Smith 6, Forge of Bound Light",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "JaASOItbL0tB8Z9y",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "soulsmith_forge_boundlight",
+          "featureKey": "gentle_edges"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 200000,
+      "_id": "VWeq4tmeFq2IECVw",
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.VWeq4tmeFq2IECVw"
+    },
+    {
+      "name": "Pattern of Mercy",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_hand_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "revision": 1,
+          "rules": "2025"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“You’ve noticed that mercy has a shape. You help the world remember it.”</em></p><ul><li>When your party resolves a conflict via <strong>Parley</strong>, surrender, negotiation, or other peaceful means where you had meaningful narrative involvement, you can, once per Soma Break, trigger a soft power realignment.</li><li>After that resolution, you may convert <strong>1 Economy OP</strong> into <strong>1 Soft Power OP</strong> for your faction, or vice versa, representing the quiet reshaping of reputations, rumors, and supply lines.</li><li>This conversion must be applied to the strategic turn most closely associated with that scenario (GM adjudicates exact timing).</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "soulsmith-forge-bound-light-pattern-of-mercy",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Soul-Smith 14, Forge of Bound Light",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "JaASOItbL0tB8Z9y",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "soulsmith_forge_boundlight",
+          "featureKey": "pattern_of_mercy"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 250000,
+      "_id": "EiPxXs5d0aF3u5B7",
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.EiPxXs5d0aF3u5B7"
+    },
+    {
+      "name": "Luminous Intercession",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_energy_blast_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "revision": 1,
+          "rules": "2025"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Kindness bends trajectories.”</em></p><p>You can interpose raw, forged radiance between violence and its target.</p><ul><li>When a creature within <strong>6 squares</strong> of you takes damage, you can use your <strong>reaction</strong> to flare your forge-light in a defensive pattern.</li><li>Reduce the damage taken by that creature by <strong>2d8 + your tier</strong>.</li><li>The attacker must make a <strong>Soul check</strong> (DC = your Resolve DC). On a failure, the next attack they make before the end of their next turn is made with <strong>disadvantage</strong>.</li><li>Any damage prevented in this way becomes <strong>temporary Integrity</strong> that you may distribute among allies of your choice within 2 squares of the protected creature.</li></ul><p><strong>OP Echo.</strong> If your intercession prevents at least 10 total damage, your faction gains <strong>+1 Soft Power OP</strong> for the next strategic turn (once per scenario).</p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "soulsmith-forge-bound-light-luminous-intercession",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Soul-Smith 15, Forge of Bound Light",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "JaASOItbL0tB8Z9y",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "soulsmith_forge_boundlight",
+          "featureKey": "luminous_intercession"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 300000,
+      "_id": "B1NuwOAqv3V9SNsD",
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.B1NuwOAqv3V9SNsD"
+    },
+    {
+      "name": "Bound Light (Bad Eden)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sun_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "revision": 1,
+          "rules": "2025"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Hammer kindness into armor.</em></p><p>When you finish <strong>crafting or sanctifying</strong> a weapon, shield, armor, or emblem for an ally, you bind a little of your own guarded gentleness into it.</p><ul><li>Once per <strong>scenario</strong>, when an ally uses an item you personally forged or sanctified to contribute to a meaningful victory (combat, negotiation, or symbolic act), your faction gains <strong>+1 Soft Power OP</strong> for the next strategic turn.</li><li>This is an echo, not a coupon. If multiple such victories happen, the GM adjudicates the most impactful one.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "soulsmith-forge-bound-light-bound-light",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Soul-Smith 3, Forge of Bound Light",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "JaASOItbL0tB8Z9y",
+      "flags": {
+        "dnd5e": {},
+        "bbttcc": {
+          "subclassKey": "soulsmith_forge_boundlight",
+          "featureKey": "bound_light"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "3eBsOZsZ8XNN62nO",
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.3eBsOZsZ8XNN62nO"
+    },
+    {
+      "name": "Enduring Focus",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_enduring_focus.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Core Feats v1",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Enduring Focus</h2><p><em>You hold your will together when others lose it.</em></p><hr /><h3>Rules</h3><p>You reroll the lowest die on Body checks made to maintain Clarity hold. Additionally, you can perform somatic components even when holding weapons or a shield.</p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_enduring_focus",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-core-v1",
+          "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+        }
+      },
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 4100000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_id": "rernCTDpHnGpoAbv",
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.rernCTDpHnGpoAbv"
+    },
+    {
+      "_id": "lmophgrpDTTE94DH",
+      "name": "Keeper",
+      "type": "class",
+      "img": "icons/svg/temple.svg",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-keeper",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "keeper",
+          "soul"
+        ],
+        "description": {
+          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling — the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "faculty": "soul",
+            "signature": "faith",
+            "secondary": "insight",
+            "pool": "Soft Power",
+            "awakens": "Pactkeeper or Dreamwalker"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.lmophgrpDTTE94DH"
+    },
+    {
+      "_id": "D21X71sDhyTIXyHv",
+      "name": "Keeper — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/svg/temple.svg",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "keeper",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Keeper — Apprentice</strong> (Tier I).</p><p><strong>Trade — The rites:</strong> Weddings, funerals, blessings; participants recover 2×tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick — Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 601000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "keeper",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177885474,
+        "modifiedTime": 1784177885474,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!DSppSI2lCnin4Y1O.D21X71sDhyTIXyHv"
+    }
+  ],
+  "effects": [],
+  "folder": "CI9EJz4qle0pugEK",
+  "sort": 250000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177885474,
+    "modifiedTime": 1784177885474,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!DSppSI2lCnin4Y1O"
+}

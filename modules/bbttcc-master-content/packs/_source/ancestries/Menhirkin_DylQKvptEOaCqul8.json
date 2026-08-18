@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Menhirkin",
+  "color": null,
+  "sorting": "a",
+  "_id": "DylQKvptEOaCqul8",
+  "description": "",
+  "sort": 400000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1775004111035,
+    "modifiedTime": 1777520249022,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!folders!DylQKvptEOaCqul8"
+}

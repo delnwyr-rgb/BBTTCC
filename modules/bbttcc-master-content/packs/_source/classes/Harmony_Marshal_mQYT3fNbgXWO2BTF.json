@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Harmony Marshal",
+  "color": null,
+  "sorting": "a",
+  "_id": "mQYT3fNbgXWO2BTF",
+  "description": "",
+  "sort": 400000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459246048,
+    "modifiedTime": 1776981086504,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!mQYT3fNbgXWO2BTF"
+}

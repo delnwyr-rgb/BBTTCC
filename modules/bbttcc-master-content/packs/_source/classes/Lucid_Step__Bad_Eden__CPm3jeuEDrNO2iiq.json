@@ -1,0 +1,67 @@
+{
+  "name": "Lucid Step (Bad Eden)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_step_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Step sideways, see which kind of dream waits.</em></p><p>Once per <strong>Strategic Turn</strong>, when your faction generates or receives a <strong>Spark Lead</strong> (a clue, ping, or emergent phenomenon pointing toward a Spark), you may spend <strong>1 Soft Power OP</strong> to perform a Sapphire Lucidity check.</p><ul><li>You immediately learn whether the next Spark is <strong>Conceptual</strong>, <strong>Vestigial</strong>, or <strong>Animate</strong>.</li><li>This insight cannot reveal power level, danger tier, or location—only the metaphysical <strong>class</strong> of the Spark.</li></ul><p>This is not divination. It’s memory from the world-that-was.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwSapphireLucid\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Lucid Step</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn (1 Soft Power OP) &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When your faction generates or receives a Spark Lead, spend 1 Soft Power OP for a Sapphire Lucidity check: learn whether the next Spark is Conceptual, Vestigial, or Animate. No power level / danger / location info — class only.</div>\n</div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "dreamwalker-sapphire-lucid-step",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Dreamwalker 3, Trance of the Sapphire Gate",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "EpLuwx2VEkhesaOK",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "dreamwalker_sapphire_gate",
+      "featureKey": "lucid_step"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459927030,
+    "modifiedTime": 1781116127836,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "CPm3jeuEDrNO2iiq",
+  "sort": 162500,
+  "_key": "!items!CPm3jeuEDrNO2iiq"
+}

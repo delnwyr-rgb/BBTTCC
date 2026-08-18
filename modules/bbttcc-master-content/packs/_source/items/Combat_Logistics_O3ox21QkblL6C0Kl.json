@@ -1,0 +1,66 @@
+{
+  "name": "Combat Logistics",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_combat_logistic.jpeg",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Core Feats (Batch 3)",
+      "revision": 1,
+      "rules": "2026"
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2>Combat Logistics</h2><p><em>Wars are won before the first swing.</em></p><hr /><h3>Rules</h3><p>At the start of combat, choose one ally. That ally gains temporary Integrity equal to your skill rank bonus.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_combat_logistics",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-batch3",
+      "featNumber": 52,
+      "generatedAt": "2026-01-19T05:04:20.693394Z"
+    }
+  },
+  "_id": "O3ox21QkblL6C0Kl",
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 1400000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.O3ox21QkblL6C0Kl",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1781116204078,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!O3ox21QkblL6C0Kl"
+}

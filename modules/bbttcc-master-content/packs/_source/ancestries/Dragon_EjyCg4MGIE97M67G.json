@@ -1,0 +1,169 @@
+{
+  "_id": "EjyCg4MGIE97M67G",
+  "name": "Dragon",
+  "type": "species",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dragon.png",
+  "system": {
+    "category": "ancestry",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Born of a draconic bloodline — winged scion of the eldest skies. Wyrmling whelps grow into ancient sovereigns whose mere presence rewrites the weather.</em></p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "1sqbfeihe7ab1lyl",
+        "type": "Size",
+        "configuration": {
+          "sizes": [
+            "med"
+          ]
+        },
+        "level": 0,
+        "title": "",
+        "hint": "Dragon (size: med).",
+        "value": {}
+      },
+      {
+        "_id": "wsm9r1ewrnsuj8fw",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.cXfjrpJnOqM91M64",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Dragon Tier 1",
+        "hint": "Grants the tier 1 Dragon feature."
+      },
+      {
+        "_id": "n1ewfsd82m1h68or",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.jjgS6LTMiSHVOAUk",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Dragon Tier 2",
+        "hint": "Grants the tier 2 Dragon feature."
+      },
+      {
+        "_id": "yhen7jxb8teujw28",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.DC1jifkyZuXxBiqv",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Dragon Tier 3",
+        "hint": "Grants the tier 3 Dragon feature."
+      },
+      {
+        "_id": "zmgkhympk8bh9gu1",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.TS0irI3h9k4OR4Vg",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Dragon Tier 4",
+        "hint": "Grants the tier 4 Dragon feature."
+      }
+    ],
+    "identifier": "dragon",
+    "properties": [],
+    "type": {
+      "value": "humanoid",
+      "subtype": "Dragon"
+    }
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestry",
+      "lineage": "dragon",
+      "version": "1.0.0",
+      "date": "2026-05-15",
+      "npAncestry": true
+    },
+    "fourththing": {
+      "principleSource": "ancestry",
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool × 0.60",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    },
+    "bbttcc-factions": {
+      "opContribution": {
+        "violence": 2,
+        "logistics": 1
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778961511599,
+    "modifiedTime": 1781116073415,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "folder": "3ZT3OPQvwKQwCJIr",
+  "sort": 100000,
+  "_key": "!items!EjyCg4MGIE97M67G"
+}

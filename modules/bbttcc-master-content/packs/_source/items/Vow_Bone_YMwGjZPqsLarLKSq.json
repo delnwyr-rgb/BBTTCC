@@ -1,0 +1,81 @@
+{
+  "name": "Vow-Bone",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_ritual_bone.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "vow-bone",
+      "vow",
+      "bone",
+      "ritual"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Calcified marrow recovered from witnesses who died holding a vow. Carved into clasps, hilt-pommels, and ritual fastenings.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Bone that remembers a promise.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Calcified marrow recovered from witnesses who died holding a vow. Carved into clasps, hilt-pommels, and ritual fastenings.</p>",
+          "charges": 1,
+          "materialKey": "vow-bone",
+          "price": {
+            "marks": 675,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1.5,
+            "notes": "TIII material stamp × rarity 1.5",
+            "bound": "free",
+            "saleBack": 270
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "YMwGjZPqsLarLKSq",
+  "effects": [],
+  "sort": 112500,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137194159,
+    "modifiedTime": 1782156674949,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!YMwGjZPqsLarLKSq"
+}

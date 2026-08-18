@@ -1,0 +1,71 @@
+{
+  "_id": "nUJlD7LiFYw6QMpI",
+  "name": "Void Edge: Emotional Erasure",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_void_edge_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2 data-start=\"6963\" data-end=\"6998\">Level 14 — <strong data-start=\"6977\" data-end=\"6998\">Emotional Erasure</strong></h2><p data-start=\"7000\" data-end=\"7018\">You delete states.</p><h3 data-start=\"7020\" data-end=\"7042\">Mechanical Effects</h3><p data-start=\"7043\" data-end=\"7072\">Once per round, when you hit:</p><ul data-start=\"7073\" data-end=\"7202\"><li data-start=\"7073\" data-end=\"7137\"><p data-start=\"7075\" data-end=\"7137\">Remove one beneficial emotional, morale, or inspiration effect</p></li><li data-start=\"7138\" data-end=\"7202\"><p data-start=\"7140\" data-end=\"7202\">This bypasses resistance or mitigation tied to hope or courage</p></li></ul><p data-start=\"7204\" data-end=\"7219\">At <strong data-start=\"7207\" data-end=\"7218\">Burn 4+</strong>:</p><ul data-start=\"7220\" data-end=\"7264\"><li data-start=\"7220\" data-end=\"7264\"><p data-start=\"7222\" data-end=\"7264\">The effect cannot be reapplied for 1 round</p></li></ul><p data-start=\"7266\" data-end=\"7302\">Some things do not get to come back.</p>",
+      "chat": ""
+    },
+    "identifier": "voidedge_emotional_erasure",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 14
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "voidedge_emotional_erasure",
+      "burn": {
+        "min": 4,
+        "_taggedBy": "bbttcc-burn-batch-tagger",
+        "_ts": 1770856292330,
+        "_from": "Void Edge: Emotional Erasure"
+      }
+    }
+  },
+  "folder": "640HHePTVNcMB98C",
+  "sort": 150000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459909022,
+    "modifiedTime": 1781116183291,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!nUJlD7LiFYw6QMpI"
+}

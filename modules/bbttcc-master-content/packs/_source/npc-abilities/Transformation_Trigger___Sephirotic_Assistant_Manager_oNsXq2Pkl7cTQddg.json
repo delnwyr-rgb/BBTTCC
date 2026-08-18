@@ -1,0 +1,49 @@
+{
+  "name": "Transformation Trigger — Sephirotic Assistant Manager",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "5e-port"
+    ],
+    "description": {
+      "value": "<p><strong>Parley / redemption condition:</strong> If the party spends actions helping clean, reassuring Gilbert, invoking the sacred purpose of public gathering, or promising to reopen the theater properly, Gilbert can be talked down. Once he is below half Integrity <em>or</em> after a round in which at least two PCs forgo attacks to help the space, a successful DC 15 group social / insight / performance / faith approach transforms him into a <strong>Sephirotic Assistant Manager</strong> and ends the fight.</p>",
+      "chat": ""
+    }
+  },
+  "_id": "oNsXq2Pkl7cTQddg",
+  "effects": [],
+  "sort": 0,
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gilbert, Eternally Cleaning Not Leaning Theater Attendant"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": null,
+    "modifiedTime": null,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!oNsXq2Pkl7cTQddg"
+}

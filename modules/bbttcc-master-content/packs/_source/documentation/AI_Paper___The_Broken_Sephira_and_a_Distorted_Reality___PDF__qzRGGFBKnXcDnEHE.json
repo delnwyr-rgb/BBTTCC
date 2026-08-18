@@ -1,0 +1,65 @@
+{
+  "folder": "aLOArmTQHDECz4tJ",
+  "name": "AI Paper - The Broken Sephira and a Distorted Reality, (PDF)",
+  "_id": "qzRGGFBKnXcDnEHE",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "The Reason Behind The Game",
+      "type": "pdf",
+      "_id": "98mupthFdKsDZ7Wm",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": "art/bbttcc/GOTTGAIT/Shattered%20Lens%20Studios%20Lore_%20The%20Broken%20Sephira%20and%20a%20Distorted%20Reality.pdf",
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1784077421531,
+        "modifiedTime": 1784077421531
+      },
+      "_key": "!journal.pages!qzRGGFBKnXcDnEHE.98mupthFdKsDZ7Wm"
+    }
+  ],
+  "categories": [],
+  "sort": 200000,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784077421531,
+    "modifiedTime": 1784077421531,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!journal!qzRGGFBKnXcDnEHE"
+}

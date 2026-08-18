@@ -1,0 +1,148 @@
+{
+  "name": "Oldenborn (Earthbound): Deep-Blooded",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_cave_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You were built for caves, collapse, and consequences.”</em></p>\n        <p><strong>Deep-Blooded.</strong> You reroll the lowest die on checks against poison and environmental Stress. You can’t be surprised by structural failure (collapsing ceilings, buckling catwalks) unless you are unconscious.</p>\n        <p><strong>Worksite Authority.</strong> You gain a skill rank with the Plating aptitude or the Plating aptitude. If you already have both, you gain expertise with one.</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "oldenborn-earthbound-deep_blooded",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Oldenborn",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "oldenborn",
+      "feature": "deep_blooded",
+      "lineage": "Earthbound",
+      "tierLevel": 5,
+      "version": "1.0.0"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "defense",
+          "mode": "reroll-lowest",
+          "vs": "poison"
+        },
+        {
+          "context": "defense",
+          "mode": "reroll-lowest",
+          "vs": "environmental Stress"
+        }
+      ],
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "effects": [
+    {
+      "_id": "773a14c965db4379",
+      "name": "Earthbound: Deep-Blooded (Poison Resist)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blade_3.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.traits.dr.value",
+            "value": "poison",
+            "priority": 10,
+            "type": "add"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Automation covers poison resistance; other benefits are table-facing.",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346196572,
+        "modifiedTime": 1777346196572
+      },
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!7lLgAEf0spAdOiBa.773a14c965db4379"
+    }
+  ],
+  "folder": "820o8CGCzl3DnTr2",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.safHuHjRql9ir2pn",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1775004114716,
+    "modifiedTime": 1782167240121,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "7lLgAEf0spAdOiBa",
+  "sort": 100000,
+  "_key": "!items!7lLgAEf0spAdOiBa"
+}

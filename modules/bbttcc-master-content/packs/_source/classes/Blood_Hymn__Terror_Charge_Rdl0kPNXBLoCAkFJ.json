@@ -1,0 +1,71 @@
+{
+  "_id": "Rdl0kPNXBLoCAkFJ",
+  "name": "Blood Hymn: Terror Charge",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blood_hymn_skull.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2 data-start=\"2426\" data-end=\"2457\">Level 14 — <strong data-start=\"2440\" data-end=\"2457\">Terror Charge</strong></h2><p data-start=\"2459\" data-end=\"2482\">Fear trails behind you.</p><h3 data-start=\"2484\" data-end=\"2506\">Mechanical Effects</h3><p data-start=\"2507\" data-end=\"2528\">While at <strong data-start=\"2516\" data-end=\"2527\">Burn 3+</strong>:</p><ul data-start=\"2529\" data-end=\"2718\"><li data-start=\"2529\" data-end=\"2590\"><p data-start=\"2531\" data-end=\"2590\">Creatures you hit must save or become <strong data-start=\"2569\" data-end=\"2590\">Shaken of you</strong></p></li><li data-start=\"2591\" data-end=\"2718\"><p data-start=\"2593\" data-end=\"2619\">Shaken creatures have:</p><ul data-start=\"2622\" data-end=\"2718\"><li data-start=\"2622\" data-end=\"2671\"><p data-start=\"2624\" data-end=\"2671\">roll 3d10 keep lowest 2 on opportunity attacks against you</p></li><li data-start=\"2674\" data-end=\"2718\"><p data-start=\"2676\" data-end=\"2718\">Reduced movement when moving away from you</p></li></ul></li></ul><p data-start=\"2720\" data-end=\"2735\">At <strong data-start=\"2723\" data-end=\"2734\">Burn 4+</strong>:</p><ul data-start=\"2736\" data-end=\"2811\"><li data-start=\"2736\" data-end=\"2811\"><p data-start=\"2738\" data-end=\"2811\">Nearby enemies (GM-defined radius) must save or hesitate (lose reactions)</p></li></ul><p data-start=\"2813\" data-end=\"2886\">They are not afraid of dying.<br data-start=\"2842\" data-end=\"2845\" />They are afraid of watching you not stop.</p>",
+      "chat": ""
+    },
+    "identifier": "bloodhymn_terror_charge",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 14
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "bloodhymn_terror_charge",
+      "burn": {
+        "min": 3,
+        "_taggedBy": "bbttcc-burn-batch-tagger",
+        "_ts": 1770856291088,
+        "_from": "Blood Hymn: Terror Charge"
+      }
+    }
+  },
+  "folder": "KPLHk8VtCoaVM95K",
+  "sort": 106250,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459909020,
+    "modifiedTime": 1781116149097,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!Rdl0kPNXBLoCAkFJ"
+}

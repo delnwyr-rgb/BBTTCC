@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": null,
+  "name": "Allesh Gilliam",
+  "color": null,
+  "sorting": "a",
+  "_id": "CI9EJz4qle0pugEK",
+  "description": "",
+  "sort": 300000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177885304,
+    "modifiedTime": 1784177885924,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!CI9EJz4qle0pugEK"
+}

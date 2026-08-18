@@ -1,0 +1,101 @@
+{
+  "name": "Yesodic Memory Lens",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/tesod_memory_lens.png",
+  "system": {
+    "slot": "lens",
+    "tags": [
+      "yesodic",
+      "lens",
+      "memory",
+      "sephirotic",
+      "attunement"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>Hand-ground lens of Yesodium-clouded glass, set in a Tree-of-Life-shard mount.</p><p><strong>Recall Sephirah (Harmonized, 1/scene).</strong> Look through the lens at any object, person, or location you have previously perceived under a known sephirotic alignment. Recall that alignment now — the GM names which sefirah dominated the moment.</p><p><strong>Memory Edge (Harmonized).</strong> Once per raid, after a magic test resolves, add +1 margin retroactively.</p><p><em>Unharmonized: clear glass. Pretty. Inert.</em></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "tool",
+          "signature": "What the lens once saw, you see again.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {
+            "memoryEdge": true,
+            "sephirotic_aligned": true,
+            "recall_sephirah": true
+          },
+          "requiresHarmonization": true,
+          "lore": "<p>Hand-ground lens of Yesodium-clouded glass, set in a Tree-of-Life-shard mount.</p><p><b>Recall Sephirah (Harmonized, 1/scene).</b> Look through the lens at any object, person, or location you have previously perceived under a known sephirotic alignment. Recall that alignment now — the GM names which sefirah dominated the moment.</p><p><b>Memory Edge (Harmonized).</b> Once per raid, after a magic test resolves, add +1 margin retroactively.</p><p><i>Unharmonized: clear glass. Pretty. Inert.</i></p>",
+          "materialOf": [
+            {
+              "key": "yesodium",
+              "qty": 1
+            },
+            {
+              "key": "tree-of-life-shard",
+              "qty": 1
+            },
+            {
+              "key": "focused-crystal",
+              "qty": 2
+            },
+            {
+              "key": "prayer-binding",
+              "qty": 1
+            }
+          ],
+          "price": {
+            "marks": 270,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII tool stamp",
+            "bound": "attuned",
+            "saleBack": 108
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "Lztp9EkSjp6yYdkn",
+  "effects": [],
+  "sort": 600000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777137210142,
+    "modifiedTime": 1778541963671,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!Lztp9EkSjp6yYdkn"
+}

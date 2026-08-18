@@ -1,0 +1,63 @@
+{
+  "name": "Total Mobilization",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_flag_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Everybody in. Every hand, every cart, every reserve you swore you'd keep back. The whole faction leans on the door at once.</p><p><b>+1 to all friendly rolls this round; friendly tokens gain +1 square movement for 1 round.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "total_mobilization",
+      "meta": {
+        "tier": 3,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "universal",
+        "layer": "cross-layer",
+        "costBand": "medium",
+        "raidTypes": [
+          "any"
+        ],
+        "fireMode": "pre-roll",
+        "opCosts": {
+          "logistics": 3,
+          "economy": 2
+        },
+        "authoredSprint": "balance-w1"
+      },
+      "effects": {
+        "text": "Everyone in: +1 to all friendly rolls this round; friendly tokens gain +5 ft movement for 1 round."
+      }
+    }
+  },
+  "_id": "GEv7wCEx2FMVjsFt",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "6ut7GT8pCAhpdWjS": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1779731207893,
+    "modifiedTime": 1782167245445,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!GEv7wCEx2FMVjsFt"
+}

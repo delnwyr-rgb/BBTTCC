@@ -1,0 +1,82 @@
+{
+  "name": "S'narchy Burger Mascot's Final Smile",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/snarky_burger_pin2.png",
+  "system": {
+    "slot": "trinket",
+    "tags": [
+      "mal-voiced",
+      "pre-fall",
+      "talisman"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>A jagged shard of pre-Fall enamel signage. The mascot's grin is preserved exactly as it was when the world stopped being funny on purpose. Most people pin it to a coat. Some keep it in a pocket. A few have tried to throw it away. It comes back. Probably. I haven't checked.</p><p><strong>Mascot's Last Dignity.</strong> Reroll the lowest die on the first Intimidate or Mock check you make each scene. Other people see the brooch. Other people remember S'narchy Burger. Other people make their check against being charmed by your obvious bad taste.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "talisman",
+          "signature": "Frozen mid-sarcasm. Honestly relatable.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A jagged shard of pre-Fall enamel signage. The mascot's grin is preserved exactly as it was when the world stopped being funny on purpose. Most people pin it to a coat. Some keep it in a pocket. A few have tried to throw it away. It comes back. Probably. I haven't checked.</p><p><b>Mascot's Last Dignity.</b> Reroll the lowest die on the first Intimidate or Mock check you make each scene. Other people see the brooch. Other people remember Snarky Burger. Other people make their check against being charmed by your obvious bad taste.</p>",
+          "materialOf": [
+            "enamel-pin",
+            "pre-fall-signage",
+            "frozen-sarcasm"
+          ],
+          "price": {
+            "marks": 50,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI talisman stamp",
+            "bound": "free",
+            "saleBack": 20
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "xV0IaaYpq2oY36Go",
+  "effects": [],
+  "sort": 600782,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777437725640,
+    "modifiedTime": 1784515282837,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!xV0IaaYpq2oY36Go"
+}

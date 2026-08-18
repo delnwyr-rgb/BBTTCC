@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "C6ZQ5Y62R4hqOwPP",
+  "name": "Path of the Avalanche",
+  "color": null,
+  "sorting": "a",
+  "_id": "agkQNnsVjul6ZPYs",
+  "description": "",
+  "sort": 100000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776460194450,
+    "modifiedTime": 1777392582611,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!agkQNnsVjul6ZPYs"
+}

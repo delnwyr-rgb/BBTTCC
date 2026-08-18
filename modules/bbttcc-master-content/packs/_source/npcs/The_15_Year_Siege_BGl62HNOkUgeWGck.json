@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": "ZiFLx2LEOrGxvEmc",
+  "name": "The 15 Year Siege",
+  "color": null,
+  "sorting": "a",
+  "_id": "BGl62HNOkUgeWGck",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177533967,
+    "modifiedTime": 1784177533967,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!BGl62HNOkUgeWGck"
+}

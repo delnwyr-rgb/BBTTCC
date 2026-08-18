@@ -1,0 +1,86 @@
+{
+  "name": "Yesodium Tongue-Stud",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/yesodium_tongue_stud.png",
+  "system": {
+    "slot": "implant",
+    "tags": [
+      "mal-voiced",
+      "yesodium",
+      "soulbound"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>A tiny stud of refined yesodium installed through the tongue by someone who absolutely knew what they were doing or absolutely didn't, no in-between. The wearer reports a faint pulse-memory taste, like licking a battery you used to own. Khezek Tor doesn't sell these. They also don't NOT sell these. You understand the distinction.</p><p><strong>Pulse-Memory.</strong> While installed, +1 to Soul-channel manifestation rolls. Counts as constantly active. Cannot be removed without a healer and an apology. Yesodium is a hell of a drug.</p><p><strong>Drawback.</strong> -1 to any check that requires you to be soberly persuasive to a Lyrenn elder.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "implant",
+          "signature": "It is a drug. It is a piercing. It is, regrettably, both.",
+          "origin": "claimed",
+          "originator": null,
+          "bound": "soulbound",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A tiny stud of refined yesodium installed through the tongue by someone who absolutely knew what they were doing or absolutely didn't, no in-between. The wearer reports a faint pulse-memory taste, like licking a battery you used to own. Khezek Tor doesn't sell these. They also don't NOT sell these. You understand the distinction.</p><p><b>Pulse-Memory.</b> While installed, +1 to Soul-channel manifestation rolls. Counts as constantly active. Cannot be removed without a healer and an apology. Yesodium is a hell of a drug.</p><p><b>Drawback.</b> -1 to any check that requires you to be soberly persuasive to a Lyrenn elder.</p>",
+          "materialOf": [
+            "yesodium",
+            "anchor-quartz",
+            "regret"
+          ],
+          "grants": {
+            "somaModifiers": {
+              "soul": 1
+            }
+          },
+          "price": {
+            "marks": 225,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII implant stamp × soulbound 1.5",
+            "bound": "soulbound",
+            "saleBack": 0
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "119If6Px4hHtomFJ",
+  "effects": [],
+  "sort": 600288,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725651,
+    "modifiedTime": 1778541951189,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!119If6Px4hHtomFJ"
+}

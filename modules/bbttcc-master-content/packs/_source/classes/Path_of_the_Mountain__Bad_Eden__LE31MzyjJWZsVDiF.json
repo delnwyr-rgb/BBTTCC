@@ -1,0 +1,45 @@
+{
+  "name": "Path of the Mountain (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mountain.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "bulwark",
+    "source": {
+      "custom": "Bad Eden Originals — Sprint F",
+      "revision": 1,
+      "rules": "2026"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"You belong here now. Argue with the mountain.\"</em></p>\n<p><strong>Doctrine:</strong> Durability, refusal, rootedness — immovable, load-bearing, patient.</p>\n<p>The Mountain makes the scene bounce off you. Your Surge spends are the geometry of refusal: roots that share their footing, a flat \"no\" to the next thing done to you or yours, and a bastion the whole line forms behind.</p>\n<h3>Path (spent via Surge)</h3>\n<ul>\n  <li><strong>Root</strong> (1) — you and adjacent allies gain DR equal to Tier and cannot be forcibly moved.</li>\n  <li><strong>Deny</strong> (2) — you or an ally becomes immune to forced-movement/CC and gains DR this round.</li>\n  <li><strong>Bastion</strong> (5) — allies within Tier squares gain DR equal to Tier; you cannot be moved.</li>\n</ul>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-bulwark-mountain",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "By8SiTcVi3AfmZUU",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "LE31MzyjJWZsVDiF",
+  "sort": 100000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1781116140932,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!LE31MzyjJWZsVDiF"
+}

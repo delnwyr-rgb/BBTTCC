@@ -1,0 +1,76 @@
+{
+  "_id": "gREfY9XCCPbEAOL0",
+  "name": "Angel: Empyrean Spark",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Empyrean Spark.</strong> You know the Celestial language. Resistance to sephirotic damage. You can shed dim light in a 2 squares radius at will.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "angel-lesser",
+    "requirements": "Angel (Empyrean)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "angel",
+      "lineage": "Angel (Empyrean)",
+      "feature": "lesser",
+      "tierLevel": 1,
+      "version": "1.0.0",
+      "date": "2026-05-15",
+      "npAncestry": true
+    },
+    "fourththing": {
+      "principleSource": "ancestry"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1778961512089,
+    "modifiedTime": 1782167240131,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "folder": "CBS92ieQuq91YbWx",
+  "sort": 300000,
+  "_key": "!items!gREfY9XCCPbEAOL0"
+}

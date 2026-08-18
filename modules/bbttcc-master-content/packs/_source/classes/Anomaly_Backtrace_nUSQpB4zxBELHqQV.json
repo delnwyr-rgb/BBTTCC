@@ -1,0 +1,115 @@
+{
+  "name": "Anomaly Backtrace",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Anomaly Backtrace.</strong> You are disturbingly good at reconstructing the chain of events that produced a glitch.</p><ul><li>When you spend at least 10 minutes examining the aftermath of a <strong>Spark event, Tikkun shift, hex mutation, or Qliphothic incident</strong>, you can make an <strong>Occult (Mind), Investigation (Mind), or Insight (Soul)</strong> check (GM sets DC).</li><li>On a success, you can reconstruct a rough <strong>cause chain:</strong> who or what triggered this, what layer it came from (mundane, factional, Tikkun, Qliphothic), and at least one actionable clue about how to <strong>repeat, avoid, or repair</strong> it.</li></ul><p>Mechanically, this is a narrative tool for feeding the party useful “debug info” in complicated situations.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "anomaly-backtrace",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 8
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (8th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Anomaly Backtrace",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_lucid_2.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984388,
+        "modifiedTime": 1777346199612
+      },
+      "_id": "hOoLg1pB3dR5LEKG",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.anomalyBacktrace",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!nUSQpB4zxBELHqQV.hOoLg1pB3dR5LEKG"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "anomalyBacktrace": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984388,
+    "modifiedTime": 1781116183541,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "nUSQpB4zxBELHqQV",
+  "sort": 112500,
+  "_key": "!items!nUSQpB4zxBELHqQV"
+}

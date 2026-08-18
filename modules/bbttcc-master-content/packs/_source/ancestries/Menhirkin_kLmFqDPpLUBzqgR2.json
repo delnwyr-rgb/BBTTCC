@@ -1,0 +1,355 @@
+{
+  "_id": "kLmFqDPpLUBzqgR2",
+  "name": "Menhirkin",
+  "type": "species",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tharlabrindt_pov.png",
+  "system": {
+    "category": "ancestry",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-canon-menhirkin=\"v1\" style=\"display:none\"></div><p><em>\"The land is not scenery. The land is a person. You are the version of it that finally stood up and walked over to complain.\"</em></p><p>You are not descended from the land. You are the land. A hex decided to become a person and the person is you. The standing stones on the ridge are distant cousins. The bedrock under the bunker is a grandparent. Mortals call you a Hex-Giant. You don't correct them.</p><p><strong>Creature Type.</strong> Humanoid (Menhirkin). <strong>Size.</strong> Medium, but you count as Large for carrying capacity and the size of creatures you can shove or grapple. <strong>Speed.</strong> 6 squares</p><p><strong>Heartstone (passive).</strong> A fragment of your home hex is literally inside you. While in any hex your faction controls or has claimed: reroll the lowest die on Body checks (auto-fires), and you cannot be forcibly removed from the hex against your will (teleportation, banishment, forced march) without first being reduced to 0 Integrity.</p><p><strong>Land Memory (1/Soma Break).</strong> Lay a hand on any surface older than you; the GM tells you one true thing the land remembers.</p><p><strong>Living Rampart (1/Soma Break).</strong> Reaction — when a creature you can see targets an ally adjacent to you with an attack, the attacker rolls 3d10 keep lowest 2 on that attack roll.</p><p><strong>Stonebound (passive).</strong> Reroll the lowest die on Body checks to resist being pushed, knocked Prone, or otherwise forcibly moved (auto-fires). Reroll the lowest die on Body checks to build, repair, or fortify structures, siegeworks, and defensive emplacements (auto-fires).</p><p><strong>Strategic Hooks.</strong> <em>OP Edge:</em> +2 Non-Lethal OP and +1 Violence OP at campaign start. <em>Fortify Hex:</em> first Patch the Breach or structure-repair Siege activity each Turn costs 1 fewer OP (min 0). <em>Logistics Frame:</em> 1/Turn, treat one raid/operation Logistics cost as Logistics −1 (min 0). <em>Sentient Land (1/Strategic Turn):</em> consult the hex itself about a pending decision; one-sentence honest answer from the land's perspective.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"menhirkinHexGiant\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Menhirkin: Hex-Giant</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 3 active per-uses (2 Soma Break · 1 Strategic Turn) + 2 reroll passives + Heartstone hex-protection  ·  <strong>Action:</strong> Picker (Land Memory · Living Rampart · Sentient Land · Heartstone)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">4-slot picker — Land Memory (touch-the-old-stones), Living Rampart (ally-cover reaction), Sentient Land (1/Strategic Turn faction question), Heartstone passive. Stonebound reroll grants auto-fire on Body checks for forced-movement and build/repair/fortify.</span></p></div>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "mJh91oDMWDwzfq6L",
+        "type": "Size",
+        "configuration": {
+          "sizes": [
+            "med"
+          ]
+        },
+        "level": 0,
+        "title": "",
+        "hint": "Medium (but you count as Large for carrying, shove, and grapple).",
+        "value": {}
+      },
+      {
+        "_id": "HS11111111111111",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.2wTyD2Lq1mbnwODi",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Heartstone",
+        "hint": "Gain the Menhirkin: Heartstone feature."
+      },
+      {
+        "_id": "SM22222222222222",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.nkLGYmro2QJxW5nA",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Land Memory",
+        "hint": "Gain the Menhirkin: Land Memory feature (v2 reframe of Stone Memory)."
+      },
+      {
+        "_id": "GW33333333333333",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.NIOQEm26wOoSuf2O",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Gravity Well",
+        "hint": "Gain the Menhirkin: Gravity Well feature."
+      },
+      {
+        "_id": "a1b2c3d4e5f6g7h8",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.Pf74lkSrv4Ogjyk6",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Living Rampart",
+        "hint": "Gain the Menhirkin: Living Rampart feature."
+      },
+      {
+        "_id": "h7g6f5e4d3c2b1a0",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.o9A2rhMAKPFI8Dnb",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Stonebound",
+        "hint": "Gain the Menhirkin: Stonebound feature."
+      },
+      {
+        "_id": "Z9Y8X7W6V5U4T3S2",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.qVOg838eU3areJzy",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Strategic Hooks (Menhirkin)",
+        "hint": "Grants OP edges and hex/Logistics hooks used by Bad Eden faction systems."
+      }
+    ],
+    "identifier": "menhirkin",
+    "movement": {
+      "walk": "30",
+      "units": null,
+      "hover": false,
+      "ignoredDifficultTerrain": []
+    },
+    "senses": {
+      "darkvision": null,
+      "blindsight": null,
+      "tremorsense": 10,
+      "truesight": null,
+      "units": null,
+      "special": "Tremorsense 10 ft while standing on natural ground."
+    },
+    "type": {
+      "value": "humanoid",
+      "subtype": "Menhirkin",
+      "custom": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Living Rampart: Athletics +1",
+      "img": "icons/magic/earth/strike-shock-stone.webp",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.athletics.value",
+            "value": 1,
+            "type": "add",
+            "priority": 10,
+            "phase": "initial"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Passive: Living Rampart: Athletics +1",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "sprint": "passive-ae-2026-04-28",
+          "batch": 2
+        }
+      },
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "_id": "ABtRlSRtwZtFWrcn",
+      "showIcon": 1,
+      "folder": null,
+      "_stats": {
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777395948562,
+        "modifiedTime": 1777395948562,
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!kLmFqDPpLUBzqgR2.ABtRlSRtwZtFWrcn"
+    }
+  ],
+  "folder": "DylQKvptEOaCqul8",
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestry",
+      "opEffects": {
+        "nonLethal": 2,
+        "violence": 1
+      },
+      "siegeRepairDiscount": 1,
+      "logisticsDiscountPerTurn": 1,
+      "sentientLandConsult": true,
+      "version": "2.0.0",
+      "date": "2026-04-18",
+      "normalizedFrom": "Hex-Giant (Menhirkin)",
+      "refactorNotes": "v2 reframe: living embodiment of sentient land. Heartstone now binds to hex. Stone Memory reframed as Land Memory. Added Sentient Land faction hook."
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "save",
+          "mode": "reroll-lowest",
+          "note": "on Constitution saves and cannot be forcibly removed from the hex against you…"
+        },
+        {
+          "context": "forced-movement",
+          "mode": "reroll-lowest",
+          "note": "on ability checks you make to resist being pushed, knocked prone, or otherwis…"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "note": "on checks you make to build, repair, or fortify structures, siegeworks, and d…"
+        },
+        {
+          "context": "save",
+          "mode": "reroll-lowest",
+          "note": "Constitution saves and cannot be forcibly removed from the hex against your w…"
+        },
+        {
+          "context": "forced-movement",
+          "mode": "reroll-lowest",
+          "note": "ability checks you make to resist being pushed, knocked prone, or otherwise f…"
+        },
+        {
+          "context": "check",
+          "mode": "reroll-lowest",
+          "note": "checks you make to build, repair, or fortify structures, siegeworks, and defe…"
+        },
+        {
+          "context": "attack",
+          "mode": "reroll-highest"
+        },
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "note": "while in a hex your faction controls or has claimed (Heartstone)"
+        },
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "note": "to resist being pushed, knocked Prone, or otherwise forcibly moved (Stonebound)"
+        },
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "note": "to build, repair, or fortify structures, siegeworks, or defensive emplacements (Stonebound)"
+        }
+      ],
+      "resourceGrants": [
+        {
+          "cadence": "per-campaign-start",
+          "resource": "violence-op",
+          "amount": 2
+        },
+        {
+          "cadence": "per-campaign-start",
+          "resource": "non-lethal-op",
+          "amount": 2
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-ally-targeted",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Living Rampart. You have proficiency in the Athletics skill. As a reaction when a creature you can see targets an ally adjacent to you with an attack, you can interpose bulk and bad life choices, imposing disadva..."
+            }
+          }
+        }
+      ],
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-ancestry-v2",
+      "uuid": "Item.kLmFqDPpLUBzqgR2",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1773192851009,
+    "modifiedTime": 1782167240133,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 0,
+  "_key": "!items!kLmFqDPpLUBzqgR2"
+}

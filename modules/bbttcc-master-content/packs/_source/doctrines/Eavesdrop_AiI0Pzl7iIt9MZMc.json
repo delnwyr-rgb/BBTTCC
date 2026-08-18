@@ -1,0 +1,62 @@
+{
+  "name": "Eavesdrop",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_magnifying_glass_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Stand near the curtain. Sip nothing. Hear EVERYTHING. People say the wildest things three feet from a potted plant.</p><p><strong>Draw 1 Earned Secret (courtier-flavored).</strong></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "courtly_eavesdrop",
+      "meta": {
+        "tier": 2,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "courtly",
+        "layer": "tactical",
+        "costBand": "light",
+        "raidTypes": [
+          "presence"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "intrigue": 1
+        },
+        "authoredSprint": "courtly-d"
+      },
+      "effects": {
+        "text": "Draw 1 Earned Secret (courtier-flavored)."
+      }
+    }
+  },
+  "_id": "AiI0Pzl7iIt9MZMc",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "6ut7GT8pCAhpdWjS": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1779731271081,
+    "modifiedTime": 1781402972030,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!AiI0Pzl7iIt9MZMc"
+}

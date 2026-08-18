@@ -1,0 +1,23 @@
+{
+  "name": "Chthonic (Heritage)",
+  "type": "Item",
+  "folder": "j42C7j9nQ8gpXSoM",
+  "_id": "B4rzG2etCobsfOlP",
+  "description": "",
+  "sorting": "a",
+  "sort": 0,
+  "color": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776660294449,
+    "modifiedTime": 1776660294449,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!B4rzG2etCobsfOlP"
+}

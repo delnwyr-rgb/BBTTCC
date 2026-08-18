@@ -1,0 +1,65 @@
+{
+  "_id": "HLPLhZF59lLHQlfS",
+  "name": "Steward: Civic Apotheosis",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_space_station.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"3798\" data-end=\"3812\"><em data-start=\"3798\" data-end=\"3812\">(18th Level)</em></p><p data-start=\"3814\" data-end=\"3893\">You temporarily elevate your community into minor civic-deity mode for a scene.</p><p data-start=\"3895\" data-end=\"3912\">For the duration:</p><ul data-start=\"3914\" data-end=\"4054\"><li data-start=\"3914\" data-end=\"3943\"><p data-start=\"3916\" data-end=\"3943\">Broad stabilization occurs.</p></li><li data-start=\"3944\" data-end=\"3966\"><p data-start=\"3946\" data-end=\"3966\">Panic cannot spread.</p></li><li data-start=\"3967\" data-end=\"4003\"><p data-start=\"3969\" data-end=\"4003\">Cooperative actions are amplified.</p></li><li data-start=\"4004\" data-end=\"4054\"><p data-start=\"4006\" data-end=\"4054\">Protection and solidarity increase dramatically.</p></li></ul><p data-start=\"4056\" data-end=\"4115\">This is not a damage spike.<br data-start=\"4083\" data-end=\"4086\" />It is communal transcendence.</p><h3 data-start=\"4117\" data-end=\"4125\">Cost</h3><p data-start=\"4126\" data-end=\"4173\">Significant Civic Charge expenditure (2+ dice).</p><h3 data-start=\"4175\" data-end=\"4192\">Clarification</h3><p data-start=\"4193\" data-end=\"4247\">The power flows from the community—not from you alone.</p><h3 data-start=\"4249\" data-end=\"4261\">Pushback</h3><p data-start=\"4262\" data-end=\"4393\">Apotheosis risks Dependence.<br data-start=\"4290\" data-end=\"4293\" />If communities begin believing they require divine elevation to function, long-term autonomy erodes.</p><p data-start=\"4395\" data-end=\"4432\"><span class=\"relative inline-flex items-center\">fvtt-Item-steward_-civic-apothe…</span></p>",
+      "chat": ""
+    },
+    "identifier": "steward_civic_apotheosis",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 18
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "steward_civic_apotheosis"
+    }
+  },
+  "folder": "b7c5HgxxTfcVph6r",
+  "sort": 200000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.HLPLhZF59lLHQlfS",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776481562684,
+    "modifiedTime": 1781116134783,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!HLPLhZF59lLHQlfS"
+}

@@ -1,0 +1,63 @@
+{
+  "name": "Logistics Surge",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_box_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>The quartermaster did a Thing. I've learned not to ask. The boxes move, the dice get friendlier all over the field.</p><p><strong>+1 to all friendly rolls this round.</strong></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "logistics_surge_s2",
+      "meta": {
+        "tier": 1,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "universal",
+        "layer": "strategic",
+        "costBand": "light",
+        "raidTypes": [
+          "any"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "logistics": 1,
+          "economy": 1
+        },
+        "authoredSprint": 2
+      },
+      "effects": {
+        "text": "Sudden logistics push: +1 to all friendly rolls this round."
+      }
+    }
+  },
+  "_id": "xSOtsNxQCh0lzllT",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 100196,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1778964846636,
+    "modifiedTime": 1781934665174,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!xSOtsNxQCh0lzllT"
+}

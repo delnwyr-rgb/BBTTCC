@@ -1,0 +1,67 @@
+{
+  "name": "Gentle Edges",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_smith_hammer_holy_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“Some blows land as warnings, not endings.”</em></p><ul><li>Weapons you personally forge, maintain, or sanctify can always deal <strong>non-lethal</strong> damage at your direction, even if they would not normally be able to (GM’s call for edge cases like disintegration beams).</li><li>When you lead or anchor a conflict that ends in a <strong>no-fatality victory</strong> (surrender, rout, incapacitation, or social resolution) where your work clearly mattered, your faction gains <strong>+1 Diplomacy OP</strong> for the next strategic turn (once per scenario).</li></ul><p><em>This doesn’t mean you never hurt anyone. It means you always left a door.</em></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-bound-light-gentle-edges",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 6, Forge of Bound Light",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "JaASOItbL0tB8Z9y",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_boundlight",
+      "featureKey": "gentle_edges"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996551,
+    "modifiedTime": 1781116161106,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "VkPcEJiCx4e7ikxb",
+  "sort": 200000,
+  "_key": "!items!VkPcEJiCx4e7ikxb"
+}

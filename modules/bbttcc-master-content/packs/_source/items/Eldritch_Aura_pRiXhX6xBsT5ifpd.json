@@ -1,0 +1,41 @@
+{
+  "name": "Eldritch Aura",
+  "type": "feature",
+  "img": "icons/magic/symbols/runes-etched-steel-orange.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Crew within reach gain psychic vulnerability while the boss is on its current phase. Standing too close costs.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "boss-augment"
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "pRiXhX6xBsT5ifpd",
+  "effects": [],
+  "sort": 4000000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205374806,
+    "modifiedTime": 1778963271959,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!pRiXhX6xBsT5ifpd"
+}

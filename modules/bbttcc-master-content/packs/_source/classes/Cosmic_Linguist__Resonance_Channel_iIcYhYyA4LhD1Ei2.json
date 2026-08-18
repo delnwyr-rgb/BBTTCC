@@ -1,0 +1,61 @@
+{
+  "_id": "iIcYhYyA4LhD1Ei2",
+  "name": "Cosmic Linguist: Resonance Channel",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shockwave.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Originals (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p>When you cast a manifestation, you may spend Resonance Dice (one at a time) to apply one benefit per die:</p><ul><li><p>+1 Resolve DC</p></li><li><p>Add one additional damage die (or equivalent potency)</p></li><li><p>Extend duration one step</p></li><li><p>Impose roll 3d10 keep lowest 2 on one defense checks</p></li><li><p>Stabilize the manifestation against counter/dispels</p></li></ul><p>Each aggressive use may add Strain (GM adjudication) if you are forcing contradiction or misaligned power.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"clResChan\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Resonance Channel</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> Pool-spend  ·  <strong>Action:</strong> Free (with manifestation)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Each Resonance Die spent stacks one Channel benefit on the manifestation. Aggressive use (forcing contradiction or misaligned power) may add Strain — GM call.</span></p></div>",
+      "chat": ""
+    },
+    "identifier": "cosmic_linguist_resonance_channel",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "cosmic_linguist_resonance_channel"
+    }
+  },
+  "folder": "r5DULAhp98iub0mt",
+  "sort": 150000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.iIcYhYyA4LhD1Ei2",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923345,
+    "modifiedTime": 1781116177269,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!iIcYhYyA4LhD1Ei2"
+}

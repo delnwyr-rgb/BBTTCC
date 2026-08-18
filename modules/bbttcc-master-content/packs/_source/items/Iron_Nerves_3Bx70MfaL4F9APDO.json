@@ -1,0 +1,65 @@
+{
+  "_id": "3Bx70MfaL4F9APDO",
+  "name": "Iron Nerves",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_iron_nerves.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2>Iron Nerves</h2><p><em>Panic is contagious. So is control.</em></p><hr /><h3>Rules</h3><p>When you roll Initiative (Intrigue), you gain temporary Integrity equal to your skill rank bonus.</p><p>Additionally, when you make a defense check against being Shaken or charmed, you may roll a d4 and add it to the save. Once you use this bonus, you can’t use it again until you finish a short or Sanctuary.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_iron_nerves",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-expansion-v1",
+      "generatedAt": "2026-01-18T20:40:44.998078+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 3600000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1781116198670,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!3Bx70MfaL4F9APDO"
+}

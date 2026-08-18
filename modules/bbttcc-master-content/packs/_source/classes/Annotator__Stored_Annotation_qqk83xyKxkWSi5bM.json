@@ -1,0 +1,65 @@
+{
+  "_id": "qqk83xyKxkWSi5bM",
+  "name": "Annotator: Stored Annotation",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hypercube_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"1905\" data-end=\"1918\"><em data-start=\"1905\" data-end=\"1918\">(6th Level)</em></p><p data-start=\"1920\" data-end=\"1969\">You bank one prepared manifestation as a sigiled casting.</p><p data-start=\"1971\" data-end=\"2000\">After deliberate preparation:</p><ul data-start=\"2002\" data-end=\"2154\"><li data-start=\"2002\" data-end=\"2056\"><p data-start=\"2004\" data-end=\"2056\">Store one prepared manifestation as an inscribed annotation.</p></li><li data-start=\"2057\" data-end=\"2154\"><p data-start=\"2059\" data-end=\"2154\">Later, cast it quickly without losing the prepared slot until the stored version is discharged.</p></li></ul><p data-start=\"2156\" data-end=\"2184\">This does not remove Strain.</p><p data-start=\"2186\" data-end=\"2211\">It front-loads stability.</p><p data-start=\"2213\" data-end=\"2261\">You prepared yesterday so you can survive today.</p><p data-start=\"2263\" data-end=\"2300\"></p>",
+      "chat": ""
+    },
+    "identifier": "annotator_stored_annotation",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "annotator_stored_annotation"
+    }
+  },
+  "folder": "7fCEbHBaAKFkEuHN",
+  "sort": 681250,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.qqk83xyKxkWSi5bM",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923345,
+    "modifiedTime": 1781116186549,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!qqk83xyKxkWSi5bM"
+}

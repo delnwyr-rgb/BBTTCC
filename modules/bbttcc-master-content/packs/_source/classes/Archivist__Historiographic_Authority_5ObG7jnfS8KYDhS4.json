@@ -1,0 +1,63 @@
+{
+  "name": "Archivist: Historiographic Authority",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_11.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"4871\" data-end=\"4885\"><em data-start=\"4871\" data-end=\"4885\">(14th Level)</em></p><p data-start=\"4887\" data-end=\"4929\"><em data-start=\"4887\" data-end=\"4929\">“Outcomes stand. Framing is negotiable.”</em></p><p data-start=\"4931\" data-end=\"5014\">Once per Soma Break, after a significant event resolves, you may choose its framing:</p><ul data-start=\"5016\" data-end=\"5280\"><li data-start=\"5016\" data-end=\"5076\"><p data-start=\"5018\" data-end=\"5076\"><strong data-start=\"5018\" data-end=\"5037\">Heroic Framing:</strong> Reduce unrest, fear, Darkness fallout.</p></li><li data-start=\"5077\" data-end=\"5142\"><p data-start=\"5079\" data-end=\"5142\"><strong data-start=\"5079\" data-end=\"5102\">Cautionary Framing:</strong> Increase deterrence against repetition.</p></li><li data-start=\"5143\" data-end=\"5215\"><p data-start=\"5145\" data-end=\"5215\"><strong data-start=\"5145\" data-end=\"5167\">Ambiguous Framing:</strong> Reduce exploitation and follow-up manipulation.</p></li><li data-start=\"5216\" data-end=\"5280\"><p data-start=\"5218\" data-end=\"5280\"><strong data-start=\"5218\" data-end=\"5236\">Sealed Record:</strong> Prevent political or magical weaponization.</p></li></ul><p data-start=\"5282\" data-end=\"5342\">You cannot change the outcome—only its interpretive gravity.</p><h3 data-start=\"5344\" data-end=\"5352\">Cost</h3><p data-start=\"5353\" data-end=\"5391\">Limited use. No Civic Charge required.</p><h3 data-start=\"5393\" data-end=\"5405\">Pushback</h3><p data-start=\"5406\" data-end=\"5522\">Altering framing too aggressively increases Administrative Pressure, especially if it denies narrative consequences.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "identifier": "archivist_historiographic_authority",
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 14
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {}
+  },
+  "folder": "eNi1uCWJUfkKDdUU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776481562683,
+    "modifiedTime": 1782167240798,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "5ObG7jnfS8KYDhS4",
+  "sort": 162500,
+  "_key": "!items!5ObG7jnfS8KYDhS4"
+}

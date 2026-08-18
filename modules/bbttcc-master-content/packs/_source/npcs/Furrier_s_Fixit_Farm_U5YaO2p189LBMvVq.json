@@ -1,0 +1,1580 @@
+{
+  "name": "Furrier's Fixit Farm",
+  "type": "npc",
+  "_id": "U5YaO2p189LBMvVq",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/katie_character.png",
+  "system": {
+    "role": "",
+    "tier": 1,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "type": {
+        "value": "faction"
+      }
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 1
+      },
+      "body": {
+        "value": 1
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {
+      "melee": {
+        "value": 1
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 10,
+        "max": 10
+      },
+      "stress": {
+        "value": 8,
+        "max": 8
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Furrier's Fixit Farm",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/katie_character.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "name": "Suppressive Fire",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "suppressive_fire"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Suppressive Fire</h3><p>Force enemy reroll lowest d20 this round.</p><p><strong>OP Cost:</strong> violence 20</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> Assault, Occupation</p><p><strong>Defender Access:</strong> Yes</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "O2j7lMSBkFRiZUH6",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.O2j7lMSBkFRiZUH6"
+    },
+    {
+      "name": "Patch the Breach",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "patch_the_breach"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Patch the Breach</h3><p>Restore 1 Structure Point.</p><p><strong>OP Cost:</strong> nonLethal 10, economy 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> Assault (defense), Occupation (defense)</p><p><strong>Defender Access:</strong> Yes</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "Sq3IbAvlnVwueJLn",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.Sq3IbAvlnVwueJLn"
+    },
+    {
+      "name": "Smoke and Mirrors",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "smoke_and_mirrors"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Smoke and Mirrors</h3><p>Reduce Alarm Level by 1.</p><p><strong>OP Cost:</strong> intrigue 10, softPower 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> Infiltration, Espionage, Propaganda</p><p><strong>Defender Access:</strong> Conditional</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "HHox2XQdC3dQctNo",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.HHox2XQdC3dQctNo"
+    },
+    {
+      "name": "Flank Attack",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "flank_attack"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Flank Attack</h3><p>Strike from an unexpected angle; pressure the line and seize momentum.</p><p><strong>OP Cost:</strong> violence 1</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> assault, occupation, liberation</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "1a4sQsiVYA15fORI",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.1a4sQsiVYA15fORI"
+    },
+    {
+      "name": "Logistics Surge",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "logistics_surge_s2"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Logistics Surge</h3><p>Sudden logistics push: +1 to all friendly rolls this round.</p><p><strong>Tier:</strong> 1</p><p><strong>Raid Types:</strong> any</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "K8NbjmYocuPDTg4N",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.K8NbjmYocuPDTg4N"
+    },
+    {
+      "name": "Infernal Bargain",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "opt_infernal_bargain"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Infernal Bargain</h3><p>Offer the defender a sealed bargain: accept (+2 to defender&#39;s next roll, attacker gains 1 darkness) or refuse (defender morale −1 from the snubbed offer).</p><p><strong>Tier:</strong> 1</p><p><strong>Raid Types:</strong> presence</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "CMqlXjxPC9NCTmxp",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.CMqlXjxPC9NCTmxp"
+    },
+    {
+      "name": "Whispered Aside",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "courtly_whispered_aside"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Whispered Aside</h3><p>Pick a courtier. +1 Favor to your side.</p><p><strong>Tier:</strong> 1</p><p><strong>Raid Types:</strong> presence</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "317Ti4ctqDFubBPY",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.317Ti4ctqDFubBPY"
+    },
+    {
+      "name": "Harvest Season",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "harvest_season"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Harvest Season</h3><p>+1 Economy regen next turn.</p><p><strong>OP Cost:</strong> economy 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "u3lrl1zzSJo8vrhw",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.u3lrl1zzSJo8vrhw"
+    },
+    {
+      "name": "Minor Repair",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "minor_repair"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Minor Repair</h3><p>Remove &#39;Damaged Infrastructure&#39;.</p><p><strong>OP Cost:</strong> economy 20</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "puoPj0ntoVWRfNkm",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.puoPj0ntoVWRfNkm"
+    },
+    {
+      "name": "Develop Outpost (Stability)",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "develop_outpost_stability"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Develop Outpost (Stability)</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> diplomacy 20, economy 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "g9uSz1zVi6wnonlm",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.g9uSz1zVi6wnonlm"
+    },
+    {
+      "name": "Establish Outpost",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "establish_outpost"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Outpost</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 20, logistics 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "69PExX4Xq0KUocyZ",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.69PExX4Xq0KUocyZ"
+    },
+    {
+      "name": "Establish Supply Line",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "establish_supply_line"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Supply Line</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> logistics 30, economy 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "cOzNOP8fpn1Lejnq",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.cOzNOP8fpn1Lejnq"
+    },
+    {
+      "name": "Establish Trade Route",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "establish_trade_route"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Trade Route</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, diplomacy 10, logistics 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "YZxLNwFXYQmIqME0",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.YZxLNwFXYQmIqME0"
+    },
+    {
+      "name": "Found Farm",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "found_site_farm"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Farm</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 20, logistics 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "CFeNRzq9pfzGchx7",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.CFeNRzq9pfzGchx7"
+    },
+    {
+      "name": "Found Fortress",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "found_site_fortress"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Fortress</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> violence 20, logistics 20, economy 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "TZO1Di7dCOSQxhQf",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.TZO1Di7dCOSQxhQf"
+    },
+    {
+      "name": "Found Mine",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "found_site_mine"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Mine</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, nonLethal 10, logistics 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "8WDJDcHskobEvPeH",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.8WDJDcHskobEvPeH"
+    },
+    {
+      "name": "Found Port",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "found_site_port"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Port</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, logistics 10, diplomacy 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "NJayGEoVBSwLvZoP",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.NJayGEoVBSwLvZoP"
+    },
+    {
+      "name": "Found Research Site",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "found_site_research"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Research Site</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> intrigue 20, softPower 20, economy 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "QsKgKELaK3TOX27i",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.QsKgKELaK3TOX27i"
+    },
+    {
+      "name": "Upgrade Outpost → Settlement",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "upgrade_outpost_settlement"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Upgrade Outpost → Settlement</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, softPower 20, logistics 20</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "JHNBFdGnbdNK5HS7",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.JHNBFdGnbdNK5HS7"
+    },
+    {
+      "name": "Develop Infrastructure",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "develop_infrastructure_std"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Develop Infrastructure</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 40, logistics 20</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "wbXXc4DSIQBSzdYk",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.wbXXc4DSIQBSzdYk"
+    },
+    {
+      "_id": "dKCOmjS7RzjPhRKY",
+      "name": "Bravo",
+      "type": "class",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-bravo",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "bravo",
+          "violence"
+        ],
+        "description": {
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "faculty": "violence",
+            "signature": "melee",
+            "secondary": "brawl",
+            "pool": "Violence",
+            "awakens": "Aurablade or Bulwark"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.dKCOmjS7RzjPhRKY"
+    },
+    {
+      "_id": "jQXnTC0RRO0e7pWo",
+      "name": "Bravo — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "bravo",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 101000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534442,
+        "modifiedTime": 1784177534442,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!U5YaO2p189LBMvVq.jQXnTC0RRO0e7pWo"
+    }
+  ],
+  "effects": [],
+  "folder": "gzB3pxl3G3vzIO5V",
+  "sort": -187500,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "faction",
+      "echoAssets": {
+        "activeCrew": [],
+        "reserveCrew": [],
+        "activeOccult": [],
+        "reserveOccult": [],
+        "slots": null,
+        "updatedTs": 1783140944988,
+        "stewardId": "OaZGlGHBBdTXfJHr",
+        "stewardName": "Miliard"
+      }
+    },
+    "bbttcc-factions": {
+      "isFaction": true,
+      "factionLevel": 1,
+      "opBankMarksMigrated": true,
+      "opCaps": {
+        "violence": 50,
+        "nonlethal": 50,
+        "intrigue": 50,
+        "economy": 70,
+        "softpower": 60,
+        "diplomacy": 60,
+        "logistics": 70,
+        "culture": 50,
+        "faith": 50
+      },
+      "opBank": {
+        "violence": 13,
+        "nonlethal": 13,
+        "intrigue": 14,
+        "economy": 39,
+        "softpower": 24,
+        "diplomacy": 0,
+        "logistics": 32,
+        "culture": 10,
+        "faith": 10
+      },
+      "raidPlan": {},
+      "ops": {},
+      "rigs": [],
+      "activeRigId": "",
+      "stockpile": {
+        "food": 4,
+        "materials": 6,
+        "trade": 6,
+        "military": 0,
+        "knowledge": 0,
+        "defense": 0
+      },
+      "morale": 27,
+      "loyalty": 27,
+      "darkness": 0,
+      "victory": {
+        "vp": 0,
+        "unity": 0,
+        "badgeKey": "emerging",
+        "badgeLabel": "Emerging",
+        "badge": null
+      },
+      "warLogs": [
+        {
+          "ts": 1782683985568,
+          "date": "6/28/2026, 4:59:45 PM",
+          "type": "commit",
+          "summary": "Faction founded. Level 1 established."
+        },
+        {
+          "ts": 1782683985569,
+          "date": "6/28/2026, 4:59:45 PM",
+          "type": "commit",
+          "summary": "Starting OP bank seeded (Standard Start v1)."
+        },
+        {
+          "ts": 1782683985570,
+          "date": "6/28/2026, 4:59:45 PM",
+          "type": "commit",
+          "summary": "Claim staked on a home hex."
+        },
+        {
+          "ts": 1782683987461,
+          "date": "6/28/2026, 4:59:47 PM",
+          "type": "commit",
+          "summary": "Starter rig granted: Hexmobile (free)."
+        },
+        {
+          "type": "commit",
+          "date": "7/13/2026, 4:49:45 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2, surge×1): <b>3</b> violence • <b>3</b> nonlethal • <b>4</b> intrigue • <b>13</b> economy • <b>4</b> softpower • <b>4</b> diplomacy • <b>4</b> logistics",
+          "ts": 1783979385000
+        },
+        {
+          "type": "turn",
+          "date": "7/13/2026, 4:49:53 PM",
+          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "ts": 1783979393000
+        },
+        {
+          "ts": 1783979395028,
+          "type": "buildUnits",
+          "summary": "Build Units +3 (from 6 Materials pips)",
+          "date": "7/13/2026, 4:49:55 PM"
+        },
+        {
+          "ts": 1783979396134,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• ✦ Furrier's Fixit-Farm: Paid garrison upkeep (full_integration) [economy:3] | • The Polygonal Grove: Paid garrison upkeep (full_integration) [logistics:1, economy:1] | • Port Kudzu: Paid garrison upkeep (full_integration) [logistics:3, diplomacy:1] | • Integration morale bonus: +6 Morale (0 short-integration, 3 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +6 Loyalty (0 short-integration, 3 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 6,
+          "loyaltyBonus": 6,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "7/13/2026, 4:49:56 PM"
+        },
+        {
+          "ts": 1783979398229,
+          "date": "7/13/2026, 4:49:58 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1784068514304,
+          "type": "scenario",
+          "scenario": "courtly",
+          "summary": "Courtly Intrigue: diplomacy -2",
+          "date": "7/14/2026, 5:35:14 PM"
+        },
+        {
+          "ts": 1784068517839,
+          "date": "7/14/2026, 5:35:17 PM",
+          "type": "scenario",
+          "scenario": "courtly",
+          "side": "def",
+          "opponent": "The Unmoved Movers",
+          "summary": "Courtly: The Unmoved Movers vs Furrier's Fixit Farm — 14 vs 25 • Influence 4/10 • ONGOING"
+        },
+        {
+          "ts": 1784073872536,
+          "type": "scenario",
+          "scenario": "courtly",
+          "summary": "Courtly Intrigue: diplomacy -2",
+          "date": "7/14/2026, 7:04:32 PM"
+        },
+        {
+          "ts": 1784073876085,
+          "date": "7/14/2026, 7:04:36 PM",
+          "type": "scenario",
+          "scenario": "courtly",
+          "side": "def",
+          "opponent": "Steryo Vights",
+          "summary": "Courtly: Steryo Vights vs Furrier's Fixit Farm — 19 vs 27 • Influence 6/10 • ONGOING"
+        },
+        {
+          "ts": 1784074050267,
+          "type": "scenario",
+          "scenario": "courtly",
+          "summary": "Courtly Intrigue: diplomacy -2",
+          "date": "7/14/2026, 7:07:30 PM"
+        },
+        {
+          "ts": 1784074054272,
+          "date": "7/14/2026, 7:07:34 PM",
+          "type": "scenario",
+          "scenario": "courtly",
+          "side": "def",
+          "opponent": "Steryo Vights",
+          "summary": "Courtly: Steryo Vights vs Furrier's Fixit Farm — 19 vs 30 • Influence 0/10 • DEFENDERWIN"
+        },
+        {
+          "ts": 1784074157861,
+          "date": "7/14/2026, 7:09:17 PM",
+          "type": "scenario",
+          "scenario": "courtly",
+          "side": "def",
+          "opponent": "Steryo Vights",
+          "summary": "Courtly: Steryo Vights vs Furrier's Fixit Farm — 19 vs 30 • Influence 0/10 • DEFENDERWIN"
+        },
+        {
+          "ts": 1784074953034,
+          "type": "scenario",
+          "scenario": "courtly",
+          "summary": "Courtly Intrigue: diplomacy -2",
+          "date": "7/14/2026, 7:22:33 PM"
+        },
+        {
+          "ts": 1784074957083,
+          "date": "7/14/2026, 7:22:37 PM",
+          "type": "scenario",
+          "scenario": "courtly",
+          "side": "def",
+          "opponent": "Steryo Vights",
+          "summary": "Courtly: Steryo Vights vs Furrier's Fixit Farm — 10 vs 29 • Influence 0/10 • DEFENDERWIN"
+        },
+        {
+          "ts": 1784075198584,
+          "type": "scenario",
+          "scenario": "courtly",
+          "summary": "Courtly Intrigue: diplomacy -2",
+          "date": "7/14/2026, 7:26:38 PM"
+        },
+        {
+          "ts": 1784075202178,
+          "date": "7/14/2026, 7:26:42 PM",
+          "type": "scenario",
+          "scenario": "courtly",
+          "side": "def",
+          "opponent": "Steryo Vights",
+          "summary": "Courtly: Steryo Vights vs Furrier's Fixit Farm — 16 vs 30 • Influence 2/10 • ONGOING"
+        },
+        {
+          "ts": 1784076480224,
+          "type": "scenario",
+          "scenario": "courtly",
+          "summary": "Courtly Intrigue: diplomacy -2",
+          "date": "7/14/2026, 7:48:00 PM"
+        },
+        {
+          "ts": 1784076483763,
+          "date": "7/14/2026, 7:48:03 PM",
+          "type": "scenario",
+          "scenario": "courtly",
+          "side": "def",
+          "opponent": "Steryo Vights",
+          "summary": "Courtly: Steryo Vights vs Furrier's Fixit Farm — 12 vs 26 • Influence 3/10 • ONGOING"
+        },
+        {
+          "ts": 1784079296255,
+          "type": "scenario",
+          "scenario": "courtly",
+          "summary": "Courtly Intrigue: diplomacy -2",
+          "date": "7/14/2026, 8:34:56 PM"
+        },
+        {
+          "ts": 1784079300230,
+          "date": "7/14/2026, 8:35:00 PM",
+          "type": "scenario",
+          "scenario": "courtly",
+          "side": "def",
+          "opponent": "Steryo Vights",
+          "summary": "Courtly: Steryo Vights vs Furrier's Fixit Farm — 15 vs 26 • Influence 0/10 • DEFENDERWIN"
+        },
+        {
+          "ts": 1784079433876,
+          "type": "scenario",
+          "scenario": "courtly",
+          "summary": "Courtly Intrigue: diplomacy -2",
+          "date": "7/14/2026, 8:37:13 PM"
+        },
+        {
+          "ts": 1784079437661,
+          "date": "7/14/2026, 8:37:17 PM",
+          "type": "scenario",
+          "scenario": "courtly",
+          "side": "def",
+          "opponent": "Steryo Vights",
+          "summary": "Courtly: Steryo Vights vs Furrier's Fixit Farm — 12 vs 32 • Influence 0/10 • DEFENDERWIN"
+        },
+        {
+          "ts": 1784174498804,
+          "type": "buildUnits",
+          "activity": "buildUnitsSpend",
+          "summary": "Action: asset | Hex: Port Kudzu | BUs −1 (3 → 2) | Note: Townbuilder: \"Fewer Dead Fish Smell Saloon\" (Shanty Hut)",
+          "factionId": "U5YaO2p189LBMvVq",
+          "hexUuid": "Scene.zjVbB2ykTV6PcSiv.Drawing.sNsBmcakyArUSxGa",
+          "action": "asset",
+          "buBefore": 3,
+          "buAfter": 2,
+          "cost": 1,
+          "date": "7/15/2026, 11:01:38 PM"
+        }
+      ],
+      "doctrineSeedMeta": {
+        "packageKey": "standard",
+        "version": "1.0.0",
+        "inProgress": false,
+        "applied": true,
+        "source": "applyStartingPackage",
+        "updatedTs": 1782683986846
+      },
+      "progression": {
+        "victory": {
+          "badgeKey": "emerging",
+          "tierFromBadge": 0,
+          "requiredBadgeForNextTier": "rising",
+          "meetsNextTier": false,
+          "updatedTs": 1783979391674
+        },
+        "stability": {
+          "stableTurns": 1,
+          "maxOverextDuringSpan": 0,
+          "lastApplyTs": 1783979391677,
+          "lastUnpaidTs": null
+        }
+      },
+      "tier": 0,
+      "starterRigGranted": true,
+      "relations": {
+        "7Iy3Fzj9ZYHnY6vQ": "friendly",
+        "tPLdifKdXl1jxo9w": "friendly",
+        "LCjOiLBJcMf1GGGW": "friendly",
+        "H8sSXuuoTZIJKCXP": "at_war",
+        "Zsn8DO6cpTuHHexS": "friendly",
+        "66AuPwIizDNaM25P": "friendly",
+        "X0x1UMviPeviD50c": "friendly",
+        "Xi3jch9jJokVzp32": "friendly",
+        "oK7VitQikQ6FN3PI": "hostile"
+      },
+      "bannerColor": "#3728cc",
+      "enlightenmentLevel": "wisdom",
+      "logistics": {
+        "demand": 3.5,
+        "capacity": 8.5,
+        "ratio": 0.412,
+        "band": "stable",
+        "updatedTs": 1783979386483,
+        "breakdown": {
+          "demand": {
+            "baseDemand": 3,
+            "integDemand": 0,
+            "distanceDemand": 0.5,
+            "specialDemand": 0,
+            "rigDemand": 0,
+            "sprawlDemand": 0
+          },
+          "capacity": {
+            "opCapacity": 7,
+            "tradeCapacity": 0,
+            "integrationCapacity": 1.5,
+            "infraCapacity": 0,
+            "rigCapacity": 0
+          },
+          "counts": {
+            "totalHexes": 3,
+            "sprawlExcess": 0,
+            "shortIntegCount": 0,
+            "occupationCount": 0,
+            "fullIntegCount": 3,
+            "cityCount": 0,
+            "specialCount": 0,
+            "infraDepotCount": 0,
+            "infraMajorPortCount": 0,
+            "infraRoadNetCount": 0,
+            "infraSupplyLineCount": 0,
+            "activeRigCount": 0,
+            "logisticsRigCount": 0,
+            "tradeRouteCount": 0,
+            "distSteps": 1
+          }
+        }
+      },
+      "post": {
+        "pending": {}
+      },
+      "turn": {
+        "pending": {
+          "moraleDelta": 6,
+          "loyaltyDelta": 6
+        }
+      },
+      "pressure": {
+        "overextensionBand": 0,
+        "unpaidUpkeep": false,
+        "risk": "low",
+        "logisticsBand": "stable",
+        "lastUpkeepTs": null,
+        "updatedTs": 1783979391671,
+        "source": "turn-driver.logistics + garrison_upkeep.warLogs"
+      },
+      "bonuses": {
+        "nextTurn": {
+          "opGainPct": -10,
+          "defenseDC": -1
+        }
+      },
+      "buildUnits": 2
+    },
+    "core": {
+      "sheetClass": "bbttcc-factions.BBTTCCFactionSheet"
+    },
+    "bbttcc-character-options": {
+      "nativeLinks": {
+        "subclassName": "",
+        "subclassUuid": "",
+        "subclassApplied": false,
+        "className": "",
+        "classUuid": "",
+        "classApplied": false
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177534442,
+    "modifiedTime": 1784177534442,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!U5YaO2p189LBMvVq"
+}

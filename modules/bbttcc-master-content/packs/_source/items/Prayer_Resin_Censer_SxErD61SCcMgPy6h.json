@@ -1,0 +1,80 @@
+{
+  "name": "Prayer-Resin Censer",
+  "type": "gear",
+  "img": "icons/sundries/lights/incense-burner-brass.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [
+      "tech"
+    ],
+    "category": "gear",
+    "source": "Phase 7 Seed (2026-05-10)",
+    "quantity": 1,
+    "description": {
+      "value": "<p>A brass censer whose smoke carries soft-power blessings. Three sanctifications per Soma Break; the area resists profanation.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "frame": "sigil",
+          "bound": "free",
+          "materialOf": [
+            {
+              "key": "prayer-resin",
+              "qty": 2
+            },
+            {
+              "key": "witness-glass",
+              "qty": 1
+            }
+          ],
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 3,
+              "max": 3,
+              "recoverPer": "soma-break"
+            },
+            "failure": "drain",
+            "origin": "septcraft"
+          },
+          "price": {
+            "marks": 120,
+            "currency": "softpower",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI sigil × 1.20 × tech 2.0",
+            "bound": "free",
+            "saleBack": 48
+          }
+        }
+      }
+    }
+  },
+  "_id": "SxErD61SCcMgPy6h",
+  "effects": [],
+  "folder": "Wxh1A343inwTUeoo",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1778963342717,
+    "modifiedTime": 1782159946545,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 0,
+  "_key": "!items!SxErD61SCcMgPy6h"
+}

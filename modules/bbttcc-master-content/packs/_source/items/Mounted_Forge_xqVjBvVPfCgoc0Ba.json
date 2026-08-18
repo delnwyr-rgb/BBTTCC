@@ -1,0 +1,62 @@
+{
+  "name": "Mounted Forge",
+  "type": "gear",
+  "img": "icons/tools/smithing/anvil.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>Anvil bolted to a turret-ring. Produces ingots and parts each turn the rig is parked or docked. War rigs run it at half during deployment.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "output-module",
+        "yield": {
+          "steel": 2,
+          "parts": 1
+        },
+        "mobileLegal": true
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "xqVjBvVPfCgoc0Ba",
+  "effects": [],
+  "sort": 4100000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205374390,
+    "modifiedTime": 1778963271959,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!xqVjBvVPfCgoc0Ba"
+}

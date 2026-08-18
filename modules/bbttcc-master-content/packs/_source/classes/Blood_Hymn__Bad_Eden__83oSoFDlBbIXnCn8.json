@@ -1,0 +1,45 @@
+{
+  "name": "Blood Hymn (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blood_hymn.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "aurablade",
+    "source": {
+      "custom": "Bad Eden Originals — Sprint F",
+      "revision": 1,
+      "rules": "2026"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>The wound is the prayer.</em></p>\n<p><strong>Mode:</strong> Martyr · <strong>Drift:</strong> Toward</p>\n<p>Blood Hymn Aurablades convert suffering into amplification. Where the base class governs Burn and Aura, the Hymn turns each blow into fuel — for cleave, for fear, for irreversible certainty. Played as the operative who runs <em>toward</em> the worst version of the fight on purpose.</p>\n<h3>Doctrine Features</h3>\n<ul>\n  <li><strong>Level 3 — Escalation.</strong> Your Burn feeds itself. While at Burn 2–3 (Engaged), weapon attacks deal +tier damage and grant +1 Burn (once per turn). At Burn 4+ (Overheated), the bonus scales further.</li>\n  <li><strong>Level 6 — Lifetithe.</strong> Convert flesh into certainty. As part of an attack or Aura effect, take self-damage equal to your tier to gain +1 Burn (no action), reroll one damage die, or reclaim a previously expended Aura effect this turn.</li>\n  <li><strong>Level 10 — Crimson Arc.</strong> Your violence spills outward. Once per turn, when you hit at Burn 2+, choose another creature within reach and deal half the original damage to them. At Burn 4+ the secondary target takes full damage and both must check against an additional rider.</li>\n  <li><strong>Level 14 — Terror Charge.</strong> Fear trails behind you. While at Burn 3+, creatures you hit save or become Shaken; Shaken creatures suffer 3d10 keep lowest 2 on opportunity attacks against you and have reduced movement when fleeing. At Burn 4+ nearby allies of your target are also affected.</li>\n  <li><strong>Level 18 — Final Crescendo (Capstone).</strong> Once per Soma Break, as a bonus action: enter Burn 4 immediately. For the rest of the turn, all attacks deal maximum damage and you may cleave freely (no once-per-turn limit). Aftermath: your Burn drops to 0 and you suffer severe backlash.</li>\n</ul>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-aurablade-blood-hymn",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "KPLHk8VtCoaVM95K",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "83oSoFDlBbIXnCn8",
+  "sort": 109375,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.364",
+    "createdTime": 1776459469161,
+    "modifiedTime": 1782167240798,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.1",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!83oSoFDlBbIXnCn8"
+}

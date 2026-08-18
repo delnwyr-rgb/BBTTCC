@@ -1,0 +1,44 @@
+{
+  "_id": "VBne8V1y6uju7APr",
+  "name": "The Quartermaster's Debt",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_connected_1.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>The Quartermaster's Debt.</strong> You covered a shortfall once, quietly, and never mentioned it. Now you mention it. Just once. Just enough.</p><p><em>Play:</em> +1 favor with a courtier of your choice toward your side.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "favorPlus1",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1300000,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1780000000000,
+    "modifiedTime": 1784079176430,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!VBne8V1y6uju7APr"
+}

@@ -1,0 +1,67 @@
+{
+  "name": "Accord Engine (Bad Eden)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_war_engine.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2025",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>You tune people like instruments and cities like choirs.</em></p><p>During a <strong>Parley</strong> or formal negotiation scene where you have a clear seat at the table, you can lean on your faction’s diplomatic machinery.</p><ul><li>When you or your party would roll an opposed check against an NPC faction or major NPC (such as a contested Diplomacy (Presence)/Stealth (Intrigue)/Insight (Soul) check), you may spend <strong>1 Diplomacy OP</strong> from your faction.</li><li>If you do, and the opposing side rolls a <strong>9 or lower</strong> on their 2d10x10, you may treat that roll as if it were a <strong>10</strong> instead—<em>but only</em> if accepting that outcome clearly moves the situation toward <strong>peace, ceasefire, or de-escalation</strong>.</li><li>This represents pre-worked backchannels, community pressure, and your knack for letting the “we should probably not die today” impulse win.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "harmmarshal-mandate-accord-engine",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Harmony Marshal 3, Mandate of Accord",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "w8AbiDc92Mb4wLnR",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "harmmarshal_mandate_accord",
+      "featureKey": "accord_engine"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776467813568,
+    "modifiedTime": 1782167240827,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "mRa0LCslCNivqeOZ",
+  "sort": 100000,
+  "_key": "!items!mRa0LCslCNivqeOZ"
+}

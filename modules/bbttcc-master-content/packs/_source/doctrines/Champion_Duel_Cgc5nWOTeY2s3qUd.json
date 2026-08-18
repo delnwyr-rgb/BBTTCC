@@ -1,0 +1,40 @@
+{
+  "name": "Champion Duel",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sword_3.png",
+  "system": {
+    "category": "maneuver",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Duel</h3><p>Issue a 1v1 challenge between active Champions. The loser is wounded or slain.</p><p><strong>OP Cost:</strong> anytime 2</p><p><strong>Tier:</strong> 1</p><p><strong>Raid Types:</strong> siege</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "siege_champion_duel"
+    }
+  },
+  "_id": "Cgc5nWOTeY2s3qUd",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601773,
+    "modifiedTime": 1782703702691,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!Cgc5nWOTeY2s3qUd"
+}

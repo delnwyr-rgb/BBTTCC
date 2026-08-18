@@ -1,0 +1,67 @@
+{
+  "name": "Bound Light (Bad Eden)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sun_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Hammer kindness into armor.</em></p><p>When you finish <strong>crafting or sanctifying</strong> a weapon, shield, armor, or emblem for an ally, you bind a little of your own guarded gentleness into it.</p><ul><li>Once per <strong>scenario</strong>, when an ally uses an item you personally forged or sanctified to contribute to a meaningful victory (combat, negotiation, or symbolic act), your faction gains <strong>+1 Soft Power OP</strong> for the next strategic turn.</li><li>This is an echo, not a coupon. If multiple such victories happen, the GM adjudicates the most impactful one.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-bound-light-bound-light",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 3, Forge of Bound Light",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "JaASOItbL0tB8Z9y",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_boundlight",
+      "featureKey": "bound_light"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996555,
+    "modifiedTime": 1781116195984,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "yNqehZ5LB8f9aVK1",
+  "sort": 100000,
+  "_key": "!items!yNqehZ5LB8f9aVK1"
+}

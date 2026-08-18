@@ -1,0 +1,128 @@
+{
+  "name": "Hex-Ward Filigree",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hex_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Hex-Ward Filigree.</strong> You can lay down sigils and structural tweaks that give an entire hex a faint bias toward Athletics.</p><ul><li>By spending a day of work in a hex (and whatever resources your campaign rules require), you can inscribe a <strong>Hex-Ward</strong> there: subtle runes in foundations, anchor plates, and shrines.</li><li>A Hex-Warded location gains a minor persistent defensive edge: the GM may grant a small bonus or reroll on checks or rolls to <strong>resist devastation, collapse, or structural sabotage</strong> (including certain encounter outcomes).</li><li>This can interact with your Turn Request / Resolution Engine as a small modifier whenever that hex would suffer destructive changes.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "hex-ward-filigree",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 13
+    },
+    "properties": [],
+    "requirements": "Soul-Smith (13th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Hex-Ward Filigree (Hex Ward Hook)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_projection.png",
+      "origin": null,
+      "transfer": false,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459996555,
+        "modifiedTime": 1777346199994
+      },
+      "_id": "t4TTt2IwZMvAN0wm",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.soulSmith.hexWardFiligree",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.hexHooks.hexWardBonus",
+            "value": 1,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!yFxfw7v0s2QoD6DW.t4TTt2IwZMvAN0wm"
+    }
+  ],
+  "folder": "qdqMhHfZdVgUs1gN",
+  "flags": {
+    "bbttcc": {
+      "soulSmith": {
+        "hexWardFiligree": true
+      },
+      "hexHooks": {
+        "hexWardBonus": 1
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996555,
+    "modifiedTime": 1781116195659,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "yFxfw7v0s2QoD6DW",
+  "sort": 253125,
+  "_key": "!items!yFxfw7v0s2QoD6DW"
+}

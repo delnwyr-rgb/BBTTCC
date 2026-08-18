@@ -1,0 +1,72 @@
+{
+  "name": "Perfect Angle",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hex_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>You don’t just get lucky—you wait until the universe lines up.</em></p><p>Once per <strong>a Soma Break</strong>, when you make an attack roll, attribute check, or defense check, you can treat the 2d10x10 result as a <strong>natural 20</strong>.</p><ul><li>You must declare that you are using Perfect Angle <strong>before</strong> the dice are rolled.</li><li>This applies only to the 2d10x10 roll; other parts of the effect (damage, additional rolls) are resolved normally.</li></ul><p><strong>Strategic Layer.</strong> If this Perfect Angle is used to successfully complete a <strong>Spark step</strong>, advance The Great Work, or resolve a <strong>Parley</strong> or major conflict <strong>without bloodshed</strong>, the GM may reduce the regional or campaign <strong>Darkness Track by 1</strong>, as reality briefly remembers its kinder geometry.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "wyrdlens-refraction-foresight-perfect-angle",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 14
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept 14, Refraction of Foresight",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "bfvmbtbYMd6cxsV2",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "wyrdlens_refraction_foresight",
+      "featureKey": "perfect_angle"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459984388,
+    "modifiedTime": 1782167240828,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "q5CNfYPa6Ttr5BVs",
+  "sort": 150000,
+  "_key": "!items!q5CNfYPa6Ttr5BVs"
+}

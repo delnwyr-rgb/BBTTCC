@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Aurablade",
+  "color": null,
+  "sorting": "a",
+  "_id": "dOGgswNkCqoX08ys",
+  "description": "",
+  "sort": 1100000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459908962,
+    "modifiedTime": 1776459931900,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+  },
+  "_key": "!folders!dOGgswNkCqoX08ys"
+}

@@ -1,0 +1,349 @@
+{
+  "name": "Aurablade",
+  "type": "class",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Aurablade.png",
+  "system": {
+    "category": "path",
+    "identifier": "aurablade",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h1 data-start=\"725\" data-end=\"768\">⚔ AURABLADE — MECHANICAL CORE (PHASE 1.5)</h1><p data-start=\"770\" data-end=\"824\"><em data-start=\"770\" data-end=\"824\">Emotion is not flavor text.<br data-start=\"798\" data-end=\"801\" />Emotion is a resource.</em></p><hr data-start=\"826\" data-end=\"829\" /><h2 data-start=\"831\" data-end=\"864\">🔥 Burn — What It Is (Plainly)</h2><p data-start=\"866\" data-end=\"910\"><strong data-start=\"866\" data-end=\"874\">Burn</strong> represents emotional overextension:</p><ul data-start=\"911\" data-end=\"986\"><li data-start=\"911\" data-end=\"932\"><p data-start=\"913\" data-end=\"932\">Adrenaline overload</p></li><li data-start=\"933\" data-end=\"950\"><p data-start=\"935\" data-end=\"950\">Suppressed fear</p></li><li data-start=\"951\" data-end=\"967\"><p data-start=\"953\" data-end=\"967\">Moral fixation</p></li><li data-start=\"968\" data-end=\"986\"><p data-start=\"970\" data-end=\"986\">Spiritual strain</p></li></ul><p data-start=\"988\" data-end=\"1076\">Burn is <strong data-start=\"996\" data-end=\"1014\">not a die pool</strong>.<br data-start=\"1015\" data-end=\"1018\" />Burn is a <strong data-start=\"1028\" data-end=\"1043\">state track</strong> that unlocks power <strong data-start=\"1063\" data-end=\"1070\">and</strong> risk.</p><p data-start=\"1078\" data-end=\"1152\">You do not “spend” Burn.<br />You <strong data-start=\"1107\" data-end=\"1128\">enter Burn states</strong>, and the game responds.</p><hr data-start=\"1154\" data-end=\"1157\" /><h2 data-start=\"1159\" data-end=\"1202\">🔥 How You Gain Burn (Concrete Triggers)</h2><p data-start=\"1204\" data-end=\"1265\">You gain <strong data-start=\"1213\" data-end=\"1223\">1 Burn</strong> when <strong data-start=\"1229\" data-end=\"1240\">any one</strong> of the following occurs:</p><h3 data-start=\"1267\" data-end=\"1294\">Universal Burn Triggers</h3><ul data-start=\"1295\" data-end=\"1529\"><li data-start=\"1295\" data-end=\"1352\"><p data-start=\"1297\" data-end=\"1352\">You hit with an attack granted or enhanced by your Aura</p></li><li data-start=\"1353\" data-end=\"1401\"><p data-start=\"1355\" data-end=\"1401\">You force a defense check using an Aura feature</p></li><li data-start=\"1402\" data-end=\"1466\"><p data-start=\"1404\" data-end=\"1466\">You escalate without pause (GM-flagged high-risk continuation)</p></li><li data-start=\"1467\" data-end=\"1529\"><p data-start=\"1469\" data-end=\"1529\">You remain in the same Aura for too long without stabilizing</p></li></ul><p data-start=\"1531\" data-end=\"1634\">⚠️ <strong data-start=\"1534\" data-end=\"1544\">Limit:</strong><br data-start=\"1544\" data-end=\"1547\" />You can gain <strong data-start=\"1560\" data-end=\"1588\">at most 1 Burn per round</strong>, unless a subclass explicitly overrides this.</p><p data-start=\"1636\" data-end=\"1674\">Burn rewards <strong data-start=\"1649\" data-end=\"1663\">commitment</strong>, not spam.</p><hr data-start=\"1676\" data-end=\"1679\" /><h2 data-start=\"1681\" data-end=\"1715\">🔥 Burn States (Explicit Bands)</h2><p data-start=\"1717\" data-end=\"1755\">Burn is divided into <strong data-start=\"1738\" data-end=\"1754\">three states</strong>.</p><h3 data-start=\"1757\" data-end=\"1789\">🔹 Burn 0–1 — <strong data-start=\"1775\" data-end=\"1789\">Controlled</strong></h3><p data-start=\"1790\" data-end=\"1817\">You are emotionally steady.</p><ul data-start=\"1819\" data-end=\"1899\"><li data-start=\"1819\" data-end=\"1860\"><p data-start=\"1821\" data-end=\"1860\">You gain <strong data-start=\"1830\" data-end=\"1860\">only passive Aura benefits</strong></p></li><li data-start=\"1861\" data-end=\"1879\"><p data-start=\"1863\" data-end=\"1879\">No backlash risk</p></li><li data-start=\"1880\" data-end=\"1899\"><p data-start=\"1882\" data-end=\"1899\">No forced effects</p></li></ul><p data-start=\"1901\" data-end=\"1926\">This is the <em data-start=\"1913\" data-end=\"1919\">safe</em> state.</p><hr data-start=\"1928\" data-end=\"1931\" /><h3 data-start=\"1933\" data-end=\"1962\">🔸 Burn 2–3 — <strong data-start=\"1951\" data-end=\"1962\">Engaged</strong></h3><p data-start=\"1963\" data-end=\"1998\">Your emotion is active and visible.</p><p data-start=\"2000\" data-end=\"2014\">At this state:</p><ul data-start=\"2015\" data-end=\"2143\"><li data-start=\"2015\" data-end=\"2061\"><p data-start=\"2017\" data-end=\"2061\">Your Aura unlocks <strong data-start=\"2035\" data-end=\"2061\">standard combat riders</strong></p></li><li data-start=\"2062\" data-end=\"2107\"><p data-start=\"2064\" data-end=\"2107\">Your abilities gain <strong data-start=\"2084\" data-end=\"2107\">explicit 5E effects</strong></p></li><li data-start=\"2108\" data-end=\"2143\"><p data-start=\"2110\" data-end=\"2143\">You may choose to <strong data-start=\"2128\" data-end=\"2143\">push harder</strong></p></li></ul><p data-start=\"2145\" data-end=\"2181\">This is the <em data-start=\"2157\" data-end=\"2180\">intended combat state</em>.</p><hr data-start=\"2183\" data-end=\"2186\" /><h3 data-start=\"2188\" data-end=\"2219\">🔥 Burn 4+ — <strong data-start=\"2205\" data-end=\"2219\">Overheated</strong></h3><p data-start=\"2220\" data-end=\"2260\">You are exceeding safe emotional limits.</p><p data-start=\"2262\" data-end=\"2276\">At this state:</p><ul data-start=\"2277\" data-end=\"2426\"><li data-start=\"2277\" data-end=\"2305\"><p data-start=\"2279\" data-end=\"2305\">Aura effects <strong data-start=\"2292\" data-end=\"2305\">intensify</strong></p></li><li data-start=\"2306\" data-end=\"2426\"><p data-start=\"2308\" data-end=\"2328\">GM is authorized to:</p><ul data-start=\"2331\" data-end=\"2426\"><li data-start=\"2331\" data-end=\"2349\"><p data-start=\"2333\" data-end=\"2349\">Trigger backlash</p></li><li data-start=\"2352\" data-end=\"2370\"><p data-start=\"2354\" data-end=\"2370\">Apply collateral</p></li><li data-start=\"2373\" data-end=\"2426\"><p data-start=\"2375\" data-end=\"2426\">Force Aura collapse on a bad roll or narrative beat</p></li></ul></li></ul><p data-start=\"2428\" data-end=\"2455\">This is the <em data-start=\"2440\" data-end=\"2454\">danger state</em>.</p><hr data-start=\"2457\" data-end=\"2460\" /><h2 data-start=\"2462\" data-end=\"2509\">🔥 What Happens at Backlash (Clear, Bounded)</h2><p data-start=\"2511\" data-end=\"2570\">When backlash triggers (GM discretion or subclass feature):</p><p data-start=\"2572\" data-end=\"2622\">One of the following occurs (GM chooses or rolls):</p><ul data-start=\"2623\" data-end=\"2819\"><li data-start=\"2623\" data-end=\"2659\"><p data-start=\"2625\" data-end=\"2659\">You take psychic or sephirotic damage (radiant)</p></li><li data-start=\"2660\" data-end=\"2713\"><p data-start=\"2662\" data-end=\"2713\">You suffer roll 3d10 keep lowest 2 on your next attack or save</p></li><li data-start=\"2714\" data-end=\"2756\"><p data-start=\"2716\" data-end=\"2756\">Your Aura collapses (you drop to Burn 0)</p></li><li data-start=\"2757\" data-end=\"2819\"><p data-start=\"2759\" data-end=\"2819\">A narrative consequence occurs (fear, escalation, attention)</p></li></ul><p data-start=\"2821\" data-end=\"2895\">Aurablades are not punished randomly.<br data-start=\"2858\" data-end=\"2861\" />They are punished <strong data-start=\"2879\" data-end=\"2894\">predictably</strong>.</p><hr data-start=\"2897\" data-end=\"2900\" /><h1 data-start=\"2902\" data-end=\"2948\">💠 AURA STATES — EXPLICIT MECHANICAL EFFECTS</h1><p data-start=\"2950\" data-end=\"2967\">Each Aura grants:</p><ul data-start=\"2968\" data-end=\"3047\"><li data-start=\"2968\" data-end=\"2990\"><p data-start=\"2970\" data-end=\"2990\">A <strong data-start=\"2972\" data-end=\"2990\">passive effect</strong></p></li><li data-start=\"2991\" data-end=\"3017\"><p data-start=\"2993\" data-end=\"3017\"><strong data-start=\"2993\" data-end=\"3017\">Engaged Burn effects</strong></p></li><li data-start=\"3018\" data-end=\"3047\"><p data-start=\"3020\" data-end=\"3047\"><strong data-start=\"3020\" data-end=\"3047\">Overheated Burn effects</strong></p></li></ul><p data-start=\"3049\" data-end=\"3109\">These are <strong data-start=\"3059\" data-end=\"3073\">not manifestations</strong>.<br data-start=\"3074\" data-end=\"3077\" />They are <strong data-start=\"3086\" data-end=\"3108\">combat permissions</strong>.</p><hr data-start=\"3111\" data-end=\"3114\" /><h2 data-start=\"3116\" data-end=\"3147\">🔥 FURY — Escalation &amp; Force</h2><p data-start=\"3149\" data-end=\"3186\"><strong data-start=\"3149\" data-end=\"3159\">Theme:</strong> Press harder. Break lines.</p><h3 data-start=\"3188\" data-end=\"3211\">Passive (Always On)</h3><ul data-start=\"3212\" data-end=\"3264\"><li data-start=\"3212\" data-end=\"3264\"><p data-start=\"3214\" data-end=\"3264\">+1 bonus to damage rolls with melee weapon attacks</p></li></ul><hr data-start=\"3266\" data-end=\"3269\" /><h3 data-start=\"3271\" data-end=\"3293\">Burn 2–3 (Engaged)</h3><p data-start=\"3294\" data-end=\"3327\">When you hit with a melee attack:</p><ul data-start=\"3328\" data-end=\"3445\"><li data-start=\"3328\" data-end=\"3349\"><p data-start=\"3330\" data-end=\"3349\">Deal <strong data-start=\"3335\" data-end=\"3349\">+tier damage</strong></p></li><li data-start=\"3350\" data-end=\"3445\"><p data-start=\"3352\" data-end=\"3445\">You may <strong data-start=\"3360\" data-end=\"3384\">push the target 1 square</strong> or <strong data-start=\"3388\" data-end=\"3398\">cleave</strong> a second creature within reach (once per turn)</p></li></ul><p data-start=\"3447\" data-end=\"3460\">You may also:</p><ul data-start=\"3461\" data-end=\"3505\"><li data-start=\"3461\" data-end=\"3505\"><p data-start=\"3463\" data-end=\"3505\">Ignore roll 3d10 keep lowest 2 on one attack per turn</p></li></ul><hr data-start=\"3507\" data-end=\"3510\" /><h3 data-start=\"3512\" data-end=\"3536\">Burn 4+ (Overheated)</h3><p data-start=\"3537\" data-end=\"3550\">When you hit:</p><ul data-start=\"3551\" data-end=\"3683\"><li data-start=\"3551\" data-end=\"3615\"><p data-start=\"3553\" data-end=\"3615\">Target must succeed on a Violence check or be <strong data-start=\"3598\" data-end=\"3615\">knocked prone</strong></p></li><li data-start=\"3616\" data-end=\"3683\"><p data-start=\"3618\" data-end=\"3683\">Your attacks <strong data-start=\"3631\" data-end=\"3649\">deny reactions</strong> until the start of your next turn</p></li></ul><p data-start=\"3685\" data-end=\"3693\">⚠️ Risk:</p><ul data-start=\"3694\" data-end=\"3739\"><li data-start=\"3694\" data-end=\"3739\"><p data-start=\"3696\" data-end=\"3739\">On a missed attack, GM may trigger backlash</p></li></ul><p data-start=\"3741\" data-end=\"3775\">Fury trades control for dominance.</p><hr data-start=\"3777\" data-end=\"3780\" /><h2 data-start=\"3782\" data-end=\"3815\">🛡 RESOLVE — Defense &amp; Refusal</h2><p data-start=\"3817\" data-end=\"3863\"><strong data-start=\"3817\" data-end=\"3827\">Theme:</strong> Stand firm. Make removal expensive.</p><h3 data-start=\"3865\" data-end=\"3888\">Passive (Always On)</h3><ul data-start=\"3889\" data-end=\"3940\"><li data-start=\"3889\" data-end=\"3940\"><p data-start=\"3891\" data-end=\"3940\">+1 bonus to Guard while you have not moved this turn</p></li></ul><hr data-start=\"3942\" data-end=\"3945\" /><h3 data-start=\"3947\" data-end=\"3969\">Burn 2–3 (Engaged)</h3><p data-start=\"3970\" data-end=\"3978\">You may:</p><ul data-start=\"3979\" data-end=\"4090\"><li data-start=\"3979\" data-end=\"4053\"><p data-start=\"3981\" data-end=\"4053\">Gain <strong data-start=\"3986\" data-end=\"4000\">resistance</strong> to one damage type until the start of your next turn</p></li><li data-start=\"4054\" data-end=\"4090\"><p data-start=\"4056\" data-end=\"4090\">Ignore forced movement up to 2 squares</p></li></ul><p data-start=\"4092\" data-end=\"4105\">Additionally:</p><ul data-start=\"4106\" data-end=\"4164\"><li data-start=\"4106\" data-end=\"4164\"><p data-start=\"4108\" data-end=\"4164\">Opportunity attacks against you are made at disadvantage</p></li></ul><hr data-start=\"4166\" data-end=\"4169\" /><h3 data-start=\"4171\" data-end=\"4195\">Burn 4+ (Overheated)</h3><p data-start=\"4196\" data-end=\"4204\">You may:</p><ul data-start=\"4205\" data-end=\"4340\"><li data-start=\"4205\" data-end=\"4287\"><p data-start=\"4207\" data-end=\"4287\">Automatically succeed on one Violence, Body, or Intrigue check per round</p></li><li data-start=\"4288\" data-end=\"4340\"><p data-start=\"4290\" data-end=\"4340\">Lock your position: enemies cannot move you at all</p></li></ul><p data-start=\"4342\" data-end=\"4350\">⚠️ Risk:</p><ul data-start=\"4351\" data-end=\"4401\"><li data-start=\"4351\" data-end=\"4401\"><p data-start=\"4353\" data-end=\"4401\">When damage is fully negated, backlash may occur</p></li></ul><p data-start=\"4403\" data-end=\"4441\">Resolve dares the world to try harder.</p><hr data-start=\"4443\" data-end=\"4446\" /><h2 data-start=\"4448\" data-end=\"4484\">🤍 MERCY — Protection &amp; Restraint</h2><p data-start=\"4486\" data-end=\"4525\"><strong data-start=\"4486\" data-end=\"4496\">Theme:</strong> Prevent loss. Redirect harm.</p><h3 data-start=\"4527\" data-end=\"4550\">Passive (Always On)</h3><ul data-start=\"4551\" data-end=\"4612\"><li data-start=\"4551\" data-end=\"4612\"><p data-start=\"4553\" data-end=\"4612\">You may choose to deal <strong data-start=\"4576\" data-end=\"4596\">nonlethal damage</strong> without penalty</p></li></ul><hr data-start=\"4614\" data-end=\"4617\" /><h3 data-start=\"4619\" data-end=\"4641\">Burn 2–3 (Engaged)</h3><p data-start=\"4642\" data-end=\"4697\">Once per round, when an ally within 2 squares takes damage:</p><ul data-start=\"4698\" data-end=\"4762\"><li data-start=\"4698\" data-end=\"4728\"><p data-start=\"4700\" data-end=\"4728\">Reduce that damage by <strong data-start=\"4722\" data-end=\"4728\">tier</strong></p></li><li data-start=\"4729\" data-end=\"4762\"><p data-start=\"4731\" data-end=\"4762\">You may redirect it to yourself</p></li></ul><p data-start=\"4764\" data-end=\"4777\">You may also:</p><ul data-start=\"4778\" data-end=\"4824\"><li data-start=\"4778\" data-end=\"4824\"><p data-start=\"4780\" data-end=\"4824\">Automatically stabilize a creature you touch</p></li></ul><hr data-start=\"4826\" data-end=\"4829\" /><h3 data-start=\"4831\" data-end=\"4855\">Burn 4+ (Overheated)</h3><p data-start=\"4856\" data-end=\"4864\">You may:</p><ul data-start=\"4865\" data-end=\"4969\"><li data-start=\"4865\" data-end=\"4924\"><p data-start=\"4867\" data-end=\"4924\">Prevent an ally from dropping below 1 Integrity (once per round)</p></li><li data-start=\"4925\" data-end=\"4969\"><p data-start=\"4927\" data-end=\"4969\">Convert a failed last stand check into a success</p></li></ul><p data-start=\"4971\" data-end=\"4979\">⚠️ Risk:</p><ul data-start=\"4980\" data-end=\"5036\"><li data-start=\"4980\" data-end=\"5036\"><p data-start=\"4982\" data-end=\"5036\">Preventing death may trigger backlash or Aura collapse</p></li></ul><p data-start=\"5038\" data-end=\"5089\">Mercy delays consequences — it does not erase them.</p><hr data-start=\"5091\" data-end=\"5094\" /><h2 data-start=\"5096\" data-end=\"5132\">🕳 DREAD — Suppression &amp; Collapse</h2><p data-start=\"5134\" data-end=\"5171\"><strong data-start=\"5134\" data-end=\"5144\">Theme:</strong> Remove hope. End momentum.</p><h3 data-start=\"5173\" data-end=\"5196\">Passive (Always On)</h3><ul data-start=\"5197\" data-end=\"5279\"><li data-start=\"5197\" data-end=\"5279\"><p data-start=\"5199\" data-end=\"5279\">Enemies within 1 square suffer roll 3d10 keep lowest 2 on morale-based checks (GM adjudication)</p></li></ul><hr data-start=\"5281\" data-end=\"5284\" /><h3 data-start=\"5286\" data-end=\"5308\">Burn 2–3 (Engaged)</h3><p data-start=\"5309\" data-end=\"5316\">On hit:</p><ul data-start=\"5317\" data-end=\"5418\"><li data-start=\"5317\" data-end=\"5387\"><p data-start=\"5319\" data-end=\"5387\">Target must save or be <strong data-start=\"5342\" data-end=\"5356\">Shaken</strong> until the end of its next turn</p></li><li data-start=\"5388\" data-end=\"5418\"><p data-start=\"5390\" data-end=\"5418\">Target cannot take reactions</p></li></ul><p data-start=\"5420\" data-end=\"5433\">You may also:</p><ul data-start=\"5434\" data-end=\"5493\"><li data-start=\"5434\" data-end=\"5493\"><p data-start=\"5436\" data-end=\"5493\">Suppress one buff or inspiration effect (GM adjudication)</p></li></ul><hr data-start=\"5495\" data-end=\"5498\" /><h3 data-start=\"5500\" data-end=\"5524\">Burn 4+ (Overheated)</h3><p data-start=\"5525\" data-end=\"5538\">When you hit:</p><ul data-start=\"5539\" data-end=\"5687\"><li data-start=\"5539\" data-end=\"5619\"><p data-start=\"5541\" data-end=\"5619\">Target suffers <strong data-start=\"5556\" data-end=\"5585\">roll 3d10 keep lowest 2 on all saves</strong> until the start of your next turn</p></li><li data-start=\"5620\" data-end=\"5687\"><p data-start=\"5622\" data-end=\"5687\">Nearby enemies must save or hesitate (lose movement or reactions)</p></li></ul><p data-start=\"5689\" data-end=\"5697\">⚠️ Risk:</p><ul data-start=\"5698\" data-end=\"5746\"><li data-start=\"5698\" data-end=\"5746\"><p data-start=\"5700\" data-end=\"5746\">Collateral fear or narrative fallout is likely</p></li></ul><p data-start=\"5748\" data-end=\"5796\">Dread does not kill bodies.<br data-start=\"5775\" data-end=\"5778\" />It kills <em data-start=\"5787\" data-end=\"5795\">belief</em>.</p><hr data-start=\"5798\" data-end=\"5801\" /><h1 data-start=\"5803\" data-end=\"5837\">🔄 Changing Aura (Explicit Rule)</h1><p data-start=\"5839\" data-end=\"5864\">You may change your Aura:</p><ul data-start=\"5865\" data-end=\"5930\"><li data-start=\"5865\" data-end=\"5888\"><p data-start=\"5867\" data-end=\"5888\">As a <strong data-start=\"5872\" data-end=\"5888\">bonus action</strong></p></li><li data-start=\"5889\" data-end=\"5930\"><p data-start=\"5891\" data-end=\"5930\">Or as part of a rest or narrative reset</p></li></ul><p data-start=\"5932\" data-end=\"5946\">Changing Aura:</p><ul data-start=\"5947\" data-end=\"6044\"><li data-start=\"5947\" data-end=\"5986\"><p data-start=\"5949\" data-end=\"5986\">Does <strong data-start=\"5954\" data-end=\"5961\">not</strong> clear Burn automatically</p></li><li data-start=\"5987\" data-end=\"6044\"><p data-start=\"5989\" data-end=\"6044\">May reduce Burn by 1 if done defensively or narratively</p></li></ul><p data-start=\"6046\" data-end=\"6099\">Frequent swapping = control<br data-start=\"6073\" data-end=\"6076\" />Deep commitment = power</p><hr data-start=\"6101\" data-end=\"6104\" /><h1 data-start=\"6106\" data-end=\"6151\">🧠 How Players Should Think About Aurablade</h1><p data-start=\"6153\" data-end=\"6177\">Ask yourself every turn:</p><ul data-start=\"6179\" data-end=\"6280\"><li data-start=\"6179\" data-end=\"6212\"><p data-start=\"6181\" data-end=\"6212\">“Do I escalate — or stabilize?”</p></li><li data-start=\"6213\" data-end=\"6243\"><p data-start=\"6215\" data-end=\"6243\">“Can I afford another Burn?”</p></li><li data-start=\"6244\" data-end=\"6280\"><p data-start=\"6246\" data-end=\"6280\">“What happens if this goes wrong?”</p></li></ul><p data-start=\"6282\" data-end=\"6315\">Aurablades are <strong data-start=\"6297\" data-end=\"6314\">not forgiving</strong>.</p><p data-start=\"6317\" data-end=\"6337\">They are <strong data-start=\"6326\" data-end=\"6336\">honest</strong>.</p><hr /><p><strong>Bad Eden Resource Actions:</strong> This patched class JSON grants Features-tab resource display/action items at level 1 for the runtime resource-action engine.</p>",
+      "chat": ""
+    },
+    "startingEquipment": [],
+    "levels": 1,
+    "advancement": [
+      {
+        "_id": "6jC9kzVPDsnnY3IO",
+        "type": "HitPoints",
+        "configuration": {},
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      {
+        "_id": "He0NO4aGFw5ESuXk",
+        "type": "Subclass",
+        "configuration": {},
+        "value": {
+          "document": null,
+          "uuid": null
+        },
+        "level": 3,
+        "title": "",
+        "hint": "",
+        "flags": {}
+      },
+      {
+        "_id": "F3lztRY7YoQTqhXH",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 4,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      {
+        "_id": "VaBQIzrvUak6vnUn",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 8,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      {
+        "_id": "ZtZeyVymIuhlsKbT",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 12,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      {
+        "_id": "HcvRmEV3DJJFFoH2",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 16,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      {
+        "_id": "l8EtNSfONAPTWl0j",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 19,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      {
+        "_id": "DrO6a8jlxI1GdgMP",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "saves:wis",
+            "saves:cha"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "defense check Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      {
+        "_id": "0CcvUuOYW5tRvu3o",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [],
+          "choices": [
+            {
+              "count": 2,
+              "pool": [
+                "skills:acr",
+                "skills:ath",
+                "skills:ins",
+                "skills:prc",
+                "skills:itm"
+              ]
+            }
+          ]
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Skill Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      {
+        "_id": "grgBYWJqWmJFVlIS",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "armor:lgt"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Armor Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      {
+        "_id": "a9qA6e7011jFgmhB",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "weapon:sim",
+            "weapon:mar"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Weapon Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      {
+        "_id": "l6TwG6MjmlLftERT",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.wgygFL4kFQvY7Y7R",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.BhlrJv0osQl3kJId",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.DbgJfsKa735tgoaL",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.SnNMVlFK9hAUbO5U",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.0HJDPkWxEvKLPZQG",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 1,
+        "title": "Aurablade Core Features"
+      }
+    ],
+    "spellcasting": {
+      "progression": "half",
+      "ability": "cha",
+      "preparation": {
+        "formula": "@cha.mod + floor(@classes.aurablade.levels/2)"
+      }
+    },
+    "primaryAbility": {
+      "value": [
+        "cha"
+      ],
+      "all": false
+    },
+    "hd": {
+      "denomination": "d8",
+      "spent": 0,
+      "additional": ""
+    },
+    "properties": [],
+    "wealth": ""
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "primary": "cha",
+      "burn": {
+        "range": {
+          "min": 0,
+          "max": 1
+        },
+        "delta": 1,
+        "_taggedBy": "bbttcc-burn-batch-tagger",
+        "_ts": 1770856290932,
+        "_from": "Aurablade"
+      }
+    }
+  },
+  "folder": "dOGgswNkCqoX08ys",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459909021,
+    "modifiedTime": 1782167240821,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "V7fpwepCDoqUdT1O",
+  "sort": 100000,
+  "_key": "!items!V7fpwepCDoqUdT1O"
+}

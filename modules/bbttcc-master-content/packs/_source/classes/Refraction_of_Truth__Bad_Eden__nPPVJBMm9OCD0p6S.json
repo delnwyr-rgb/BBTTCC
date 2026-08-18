@@ -1,0 +1,45 @@
+{
+  "name": "Refraction of Truth (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_lightning_2.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "wyrdlens-adept",
+    "source": "Bad Eden Originals — Sprint F (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"I see what you actually are.\"</em></p>\n<p><strong>Refraction:</strong> Truth — perception bent toward exposure; lies, concealment, the thing that does not want to be named.</p>\n<p>The Refraction of Truth makes hiding impossible. Your Surge spends strip cover: read a foe true so its defenses fail, name the lie so it stops working, and lay an enemy so bare it has nowhere left to put a single intention.</p>\n<h3>Refraction (spent via Surge)</h3>\n<ul>\n  <li><strong>The Reading Eye</strong> (1) — a foe rolls its saves at disadvantage (you read it true).</li>\n  <li><strong>The Unconcealed Word</strong> (2) — a foe is Staggered and its next attack is at disadvantage.</li>\n  <li><strong>The Exposure</strong> (5) — a foe cannot take reactions and rolls its saves at disadvantage.</li>\n</ul>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-wyrdlens-adept-truth",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "4SZvMbYoYLB4LZnj",
+  "flags": {
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "nPPVJBMm9OCD0p6S",
+  "sort": 500000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1781116183120,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!nPPVJBMm9OCD0p6S"
+}

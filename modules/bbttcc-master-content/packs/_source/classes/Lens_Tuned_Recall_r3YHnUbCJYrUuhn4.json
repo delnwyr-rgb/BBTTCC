@@ -1,0 +1,129 @@
+{
+  "name": "Lens-Tuned Recall",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_13.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Lens-Tuned Recall.</strong> Your memory has grooves worn into it by repeated passes over the same strange patterns.</p><ul><li>You gain a small mechanical bonus on <strong>Occult (Mind)</strong> and <strong>Lore (Mind)</strong> checks made to recall information about <strong>Sparks, Tikkun workings, Qliphothic phenomena,</strong> or <strong>Sephirotic anomalies</strong>.</li><li>If you fail such a check by 5 or less, the GM may give you a partial or sideways answer instead of nothing.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "lens-tuned-recall",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (1st level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Lens-Tuned Recall (Occult (Mind) & Lore (Mind) Edge)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_lucid_4.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984388,
+        "modifiedTime": 1777433398886
+      },
+      "_id": "K60OQYURktly52Nu",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.occult.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "system.skills.lore.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.lensTunedRecall",
+            "type": "custom",
+            "value": true,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!r3YHnUbCJYrUuhn4.K60OQYURktly52Nu"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "lensTunedRecall": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984388,
+    "modifiedTime": 1781116186804,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "r3YHnUbCJYrUuhn4",
+  "sort": 200000,
+  "_key": "!items!r3YHnUbCJYrUuhn4"
+}

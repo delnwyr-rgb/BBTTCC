@@ -1,0 +1,67 @@
+{
+  "name": "Overcharge Cycle",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_lightning_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You know how to wake dead metal just a little too well.”</em></p><p>When you finish a <strong>a Soma Break</strong>, you may choose one <strong>construct, device, vehicle, or weapon</strong> you repaired, salvaged, or forged during or before the rest.</p><ul><li>For the next <strong>hour</strong>, it gains <strong>+1 to attack rolls</strong> (if it makes attacks) and <strong>+1 to Guard</strong> (if it can be targeted and has an Guard).</li><li>Once per round, the first time it hits or successfully completes a relevant action, it deals an extra <strong>1d8 lightning or sephirotic damage (radiant)</strong> (your choice when you apply the overcharge).</li><li>If the item or construct is destroyed while overcharged, you immediately gain <strong>advantage</strong> on your next tool check and salvage action this scene, as the feedback pours a blueprint directly into your hands.</li></ul><p><strong>OP Echo.</strong> If you successfully reclaim at least one meaningful Material, Component, or OP via salvage during the hour, your faction gains <strong>+1 Economy OP</strong> for the next strategic turn (once per scenario).</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-spark-reclaimer-overcharge-cycle",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 15, Forge of the Spark Reclaimer",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "BvmSP1PPc1ABT2OO",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_sparkreclaimer",
+      "featureKey": "overcharge_cycle"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996554,
+    "modifiedTime": 1781116181114,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "lm9IrX8LTD7APtV0",
+  "sort": 175000,
+  "_key": "!items!lm9IrX8LTD7APtV0"
+}

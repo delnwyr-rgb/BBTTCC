@@ -1,0 +1,67 @@
+{
+  "name": "Unity Cadence",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_hand_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2025",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You make sure people walk away instead of carried.”</em></p><p>When you take point on a mission, negotiation, or defense, you’re listening for the moment things could stop breaking.</p><ul><li>When a <strong>scene or encounter you lead</strong> (as face, tactical commander, or moral center) ends with <strong>zero fatalities</strong> on either side—surrender, withdrawal, incapacitation, or mutual stand-downs all count—your faction may gain <strong>+1 Unity/Victory Point</strong> for the current or next strategic turn.</li><li>This can happen at most <strong>once per scene</strong>, and the GM should only award it when your presence and choices clearly guided things away from bloodshed.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "harmmarshal-mandate-unity-cadence",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": [],
+    "requirements": "Harmony Marshal 6, Mandate of Accord",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "w8AbiDc92Mb4wLnR",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "harmmarshal_mandate_accord",
+      "featureKey": "unity_cadence"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776467813567,
+    "modifiedTime": 1781116112467,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "4LezJr5Ajm67mCR8",
+  "sort": 400000,
+  "_key": "!items!4LezJr5Ajm67mCR8"
+}

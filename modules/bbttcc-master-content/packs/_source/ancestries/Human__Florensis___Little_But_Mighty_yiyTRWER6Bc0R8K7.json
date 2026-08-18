@@ -1,0 +1,74 @@
+{
+  "name": "Human (Florensis): Little But Mighty",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_brawl.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“Small is not weak. Small is <strong>opportunity</strong>.”</em></p>\n        <p><strong>Little But Mighty.</strong> You may choose to be Small. You don’t suffer penalties for using weapons sized for Medium creatures.</p>\n        <p><strong>Hide In Plain Sight.</strong> If you do not move on your turn, you can take the Hide action as a bonus action.</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "human-florensis-little_mighty",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Human",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "human",
+      "feature": "little_mighty",
+      "lineage": "Florensis",
+      "tierLevel": 0,
+      "version": "1.0.0"
+    }
+  },
+  "effects": [],
+  "folder": "5uWwAnq69wld1Rkg",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.i9ECvOrhf9JL2nrJ",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1775004105807,
+    "modifiedTime": 1781116105107,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "yiyTRWER6Bc0R8K7",
+  "sort": 200000,
+  "_key": "!items!yiyTRWER6Bc0R8K7"
+}

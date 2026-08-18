@@ -1,0 +1,49 @@
+{
+  "name": "Aura of Aggressive Positivity",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_4.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "5e-port"
+    ],
+    "description": {
+      "value": "<p>Creatures within 2 squares must make a DC 14 Presence check at the start of their turn or suffer roll 3d10 keep lowest 2 on hostile actions against the Elemental.</p>",
+      "chat": ""
+    }
+  },
+  "_id": "hioZSp55e9GU0DvQ",
+  "effects": [],
+  "sort": 0,
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Lisa Frank Elemental"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782167245006,
+    "modifiedTime": 1783220777983,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!hioZSp55e9GU0DvQ"
+}

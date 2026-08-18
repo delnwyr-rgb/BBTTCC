@@ -1,0 +1,271 @@
+{
+  "name": "Shared Dreamwork",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_connected_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Shared Dreamwork.</strong> You extend your dreamspace outward, creating a temporary link between your consciousness and another's.</p><p><strong>Once per Soma Break</strong>, as an action, choose one willing creature within 6 squares For 10 minutes, you and the linked creature share a dream-channel:</p><ul><li><strong>Dream-Link Insight (Soul):</strong> Both gain +1 Insight (Soul), and you may use either creature's Insight (Soul) bonus on Insight (Soul) checks.</li><li><strong>Emotional Mirror:</strong> Once during the link, when the ally fails a Soul or Presence check, you may use your reaction to let them reroll the save, adding your Soul modifier.</li><li><strong>Shared Omen:</strong> Once during the link, you or the ally may add +1d4 to an attribute check, attack roll, or defense check after seeing the roll but before knowing the result.</li></ul><p>During Shared Dreamwork, Sparks and metaphysical disturbances become easier for the ally to perceive, and certain Bad Eden travel, intrigue, and encounter systems may offer additional insights.</p>",
+      "chat": ""
+    },
+    "activities": {
+      "activateSharedDream": {
+        "type": "utility",
+        "activation": {
+          "type": "action",
+          "override": false
+        },
+        "description": {},
+        "_id": "JK5EhdZHruhLZ5IV",
+        "sort": 0,
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "units": "self",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false,
+          "prompt": true
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "shared-dreamwork",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Dreamwalker",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Shared Dreamwork: Dream-Link Insight (Soul)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_6.png",
+      "origin": null,
+      "transfer": false,
+      "disabled": true,
+      "duration": {
+        "value": 600,
+        "units": "seconds",
+        "expiry": "turnStart",
+        "expired": false
+      },
+      "flags": {
+        "bbttcc": {
+          "dreamwalkerShared": "insight"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1776459927034,
+        "modifiedTime": 1786827857747
+      },
+      "_id": "HwdqHAo6SeMMLz89",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.insight.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!VleHwUCtUlA7hkWM.HwdqHAo6SeMMLz89"
+    },
+    {
+      "name": "Shared Dreamwork: Emotional Mirror",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_7.png",
+      "origin": null,
+      "transfer": false,
+      "disabled": true,
+      "duration": {
+        "value": 600,
+        "units": "seconds",
+        "expiry": "turnStart",
+        "expired": false
+      },
+      "flags": {
+        "bbttcc": {
+          "dreamwalkerShared": "mirror"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459927034,
+        "modifiedTime": 1777346198973
+      },
+      "_id": "qkzM6fVYAO7Fey0d",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.dreamwalker.emotionalMirror",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!VleHwUCtUlA7hkWM.qkzM6fVYAO7Fey0d"
+    },
+    {
+      "name": "Shared Dreamwork: Shared Omen (1d4)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_8.png",
+      "origin": null,
+      "transfer": false,
+      "disabled": true,
+      "duration": {
+        "value": 600,
+        "units": "seconds",
+        "expiry": "turnStart",
+        "expired": false
+      },
+      "flags": {
+        "bbttcc": {
+          "dreamwalkerShared": "omen"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459927034,
+        "modifiedTime": 1777346198973
+      },
+      "_id": "u25Q6zcsLwM3fFzB",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.dreamwalker.sharedOmenD4",
+            "value": 1,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!VleHwUCtUlA7hkWM.u25Q6zcsLwM3fFzB"
+    }
+  ],
+  "folder": "YLUIFZ5nPOUSaSH2",
+  "flags": {
+    "bbttcc": {
+      "dreamwalker": {
+        "sharedDreamwork": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459927034,
+    "modifiedTime": 1782167240822,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "VleHwUCtUlA7hkWM",
+  "sort": 375000,
+  "_key": "!items!VleHwUCtUlA7hkWM"
+}

@@ -1,0 +1,862 @@
+{
+  "name": "Sephirotic Pilgrim-Tram",
+  "type": "rig",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_goddess.png",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "rig",
+      "createdViaContentSprint": "2026-06-13",
+      "createdAt": 1781332649241
+    },
+    "bbttcc-structures": {
+      "hasStructure": true,
+      "facilityMode": false,
+      "materialBOM": [
+        {
+          "materialKey": "scribed-steel",
+          "qty": 6,
+          "originalQty": 6,
+          "family": "metal",
+          "tier": "III",
+          "name": "Scribed Steel",
+          "tagsCache": [
+            "material",
+            "scribed-steel"
+          ]
+        },
+        {
+          "materialKey": "heart-iron",
+          "qty": 3,
+          "originalQty": 3,
+          "family": "metal",
+          "tier": "II",
+          "name": "Heart-Iron",
+          "tagsCache": [
+            "material",
+            "heart-iron",
+            "heart-iron",
+            "aurablade",
+            "metal"
+          ]
+        },
+        {
+          "materialKey": "cold-iron",
+          "qty": 2,
+          "originalQty": 2,
+          "family": "metal",
+          "tier": "II",
+          "name": "Cold-Iron",
+          "tagsCache": [
+            "material",
+            "cold-iron",
+            "iron",
+            "cold-forge",
+            "hex-resistant"
+          ]
+        }
+      ],
+      "state": "intact",
+      "plates": {
+        "current": 33,
+        "max": 33
+      },
+      "threshold": 3.05,
+      "resists": {
+        "kinetic": 0.5
+      },
+      "vulnerabilities": {
+        "energy|heat": {
+          "type": "energy",
+          "flavor": "heat",
+          "factor": 2
+        }
+      },
+      "loadBearing": false,
+      "collapseProfile": {
+        "fallFt": 10,
+        "damageDice": "2d10",
+        "nonlethal": true,
+        "knockbackFt": 5,
+        "triggerState": "breached"
+      },
+      "history": []
+    }
+  },
+  "system": {
+    "identity": {
+      "mobility": "mobile",
+      "state": "parked",
+      "factionOwnerId": "",
+      "archetype": "Pilgrim Conveyance",
+      "binding": {
+        "hexId": "",
+        "sceneId": "",
+        "tokenId": ""
+      }
+    },
+    "crew": {
+      "slots": [],
+      "capacity": {
+        "pilot": {
+          "min": 1,
+          "max": 1
+        },
+        "gunner": {
+          "min": 0,
+          "max": 2
+        },
+        "engineer": {
+          "min": 0,
+          "max": 1
+        },
+        "crew": {
+          "min": 0,
+          "max": 4
+        }
+      },
+      "crewMin": 1,
+      "crewMax": 8
+    },
+    "integrity": {
+      "value": 50,
+      "max": 50,
+      "tier": 2,
+      "bracket": "medium"
+    },
+    "derived": {
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 12
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "defenses": {
+      "resistances": [
+        "psychic"
+      ],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "output": {
+      "modules": [],
+      "basePerTurn": {}
+    },
+    "travel": {
+      "speed": 3,
+      "range": 12,
+      "hazardResist": 0
+    },
+    "tags": [
+      "faith",
+      "softpower",
+      "scion",
+      "pilgrimage",
+      "faction-rig"
+    ],
+    "details": {
+      "biography": {
+        "value": "<p><strong>Concept.</strong> A Scion conveyance strung with prayer-thread and lit from inside by a Spark someone is definitely supposed to be guarding more carefully. It carries the faithful toward the Great Work and the curious toward awkward theological conversations.</p>\n<p><strong>Signature.</strong> Its passage steadies allied resolve and sways the undecided. The Spark in the lantern hums in a key that makes the air feel load-bearing.</p>",
+        "public": ""
+      }
+    },
+    "description": "<p><strong>Concept.</strong> A Scion conveyance strung with prayer-thread and lit from inside by a Spark someone is definitely supposed to be guarding more carefully. It carries the faithful toward the Great Work and the curious toward awkward theological conversations.</p>\n<p><strong>Signature.</strong> Its passage steadies allied resolve and sways the undecided. The Spark in the lantern hums in a key that makes the air feel load-bearing.</p>"
+  },
+  "prototypeToken": {
+    "actorLink": true,
+    "disposition": 1,
+    "name": "Sephirotic Pilgrim-Tram",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_goddess.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "G6Bgo4PvO6XHLiEf",
+  "items": [
+    {
+      "name": "Sail Barge Frame",
+      "type": "gear",
+      "img": "icons/environment/settlement/wagon-black.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "description": {
+          "value": "<p>A pleasure-galley with delusions of fortress. Docks at hexes to throw lavish productions; cuts loose to roam when the music demands it. Throne optional, mandatory.</p><p><b>Frame · Medium · Hybrid · Jabba canon</b></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-frame"
+          },
+          "rigFrame": {
+            "bracket": "medium",
+            "baseIntegrity": 32,
+            "tierStep": 10,
+            "mobilityAllowed": [
+              "hybrid"
+            ],
+            "slots": {
+              "weapon": 2,
+              "system": 2,
+              "output": 3
+            },
+            "capacity": {
+              "pilot": {
+                "min": 1,
+                "max": 1
+              },
+              "gunner": {
+                "min": 0,
+                "max": 1
+              },
+              "engineer": {
+                "min": 0,
+                "max": 1
+              },
+              "crew": {
+                "min": 0,
+                "max": 6
+              }
+            },
+            "actions": {
+              "pilot": [
+                "steer",
+                "tack-against-wind",
+                "raise-sail",
+                "evasive"
+              ],
+              "gunner": [
+                "fire-weapon",
+                "suppression",
+                "reload"
+              ],
+              "engineer": [
+                "repair",
+                "boost-system",
+                "vent-heat"
+              ],
+              "crew": [
+                "operate-module",
+                "brace",
+                "signal",
+                "hold-on"
+              ]
+            },
+            "travel": {
+              "speed": 2,
+              "range": 10
+            },
+            "visualFrame": "anchor-ring"
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 2900000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398492950,
+        "modifiedTime": 1781398492950,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "R4rYDc1F0ra7sThi",
+      "_key": "!actors.items!G6Bgo4PvO6XHLiEf.R4rYDc1F0ra7sThi"
+    },
+    {
+      "name": "Resonance Howler",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "violence",
+          "type": "psychic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 12
+        },
+        "tags": [
+          "aoe",
+          "morale",
+          "medium"
+        ],
+        "effect": "",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>Sub-audible siren that turns will into wet paper. Doesn't damage steel; ruins morale within the cone.</p>"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-weapon"
+          },
+          "rfi": {
+            "item": {
+              "tier": "III",
+              "frame": "weapon",
+              "price": {
+                "marks": 450,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIII weapon stamp",
+                "bound": "free",
+                "saleBack": 180
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "749b442c-4907-4d54-bd99-1fd59abf4c56",
+          "label": "Resonance Howler",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "templatefx",
+          "primary": {
+            "video": {
+              "dbSection": "templatefx",
+              "menuType": "circle",
+              "animation": "shatter",
+              "variant": "01",
+              "color": "orange",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 1600000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398492950,
+        "modifiedTime": 1781398492950,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "QSCKITJk9HIaHuMv",
+      "_key": "!actors.items!G6Bgo4PvO6XHLiEf.QSCKITJk9HIaHuMv"
+    },
+    {
+      "name": "Comms Array",
+      "type": "gear",
+      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "description": {
+          "value": "<p>A nest of antennae held together by faith. Extends signal range; allies on hex coordinate at +1 step.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-system",
+            "passive": true
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 1100000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398492950,
+        "modifiedTime": 1781398492950,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "nYCBXmRdtOCKBxvM",
+      "_key": "!actors.items!G6Bgo4PvO6XHLiEf.nYCBXmRdtOCKBxvM"
+    },
+    {
+      "name": "Sensor Suite",
+      "type": "gear",
+      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "description": {
+          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-system",
+            "passive": true
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 300000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398492950,
+        "modifiedTime": 1781398492950,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "hmygLDzmrOvBiJYU",
+      "_key": "!actors.items!G6Bgo4PvO6XHLiEf.hmygLDzmrOvBiJYU"
+    },
+    {
+      "name": "Beacon Spire",
+      "type": "gear",
+      "img": "icons/tools/smithing/anvil.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "description": {
+          "value": "<p>A vertical hymn of light. Stationary-only: the spire's purpose is being a fixed point others can find.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "output-module",
+            "yield": {
+              "signal": 1,
+              "faith": 1
+            },
+            "mobileLegal": false
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 2700000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398492950,
+        "modifiedTime": 1781398492950,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "XxzVnXzwAkHk3av4",
+      "_key": "!actors.items!G6Bgo4PvO6XHLiEf.XxzVnXzwAkHk3av4"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1781398492950,
+    "modifiedTime": 1781398493078,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 200000,
+  "_key": "!actors!G6Bgo4PvO6XHLiEf"
+}

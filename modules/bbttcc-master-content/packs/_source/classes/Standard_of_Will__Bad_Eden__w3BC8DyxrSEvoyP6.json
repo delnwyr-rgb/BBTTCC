@@ -1,0 +1,116 @@
+{
+  "name": "Standard of Will (Bad Eden)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_flag_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Craft banners the world can stand beneath.</em></p><p>As an <strong>action</strong>, you can raise a physical or symbolic <strong>standard</strong> you forged or sanctified (banner, emblem, patchwork flag, welded sign).</p><ul><li>Until the start of your next turn, allies of your choice within <strong>3 squares</strong> of you gain a <strong>+1 bonus</strong> to defense check against being <strong>Shaken</strong>.</li><li>The standard’s presence lingers in memory. If this scene ends in a clear victory or successful stand where your banner was visibly part of the moment, your faction gains <strong>+1 Unity/Victory Point</strong> (GM’s discretion, once per scene).</li></ul><p><em>People don’t just see cloth. They see permission to keep breathing.</em></p>",
+      "chat": ""
+    },
+    "activities": {
+      "raiseStandard": {
+        "type": "utility",
+        "activation": {
+          "type": "action",
+          "condition": "",
+          "override": false
+        },
+        "target": {
+          "prompt": false,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "range": {
+          "value": "15",
+          "units": "ft",
+          "override": false
+        },
+        "description": {},
+        "_id": "ox6wfxEPu1hIHHFn",
+        "sort": 0,
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-victory-standard-of-will",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 3, Forge of Victory",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "dsO4fBFdVXDt6vRA",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_victory",
+      "featureKey": "standard_of_will"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459996555,
+    "modifiedTime": 1782167240831,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "w3BC8DyxrSEvoyP6",
+  "sort": 250000,
+  "_key": "!items!w3BC8DyxrSEvoyP6"
+}

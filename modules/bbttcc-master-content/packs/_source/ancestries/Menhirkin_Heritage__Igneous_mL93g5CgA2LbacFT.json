@@ -1,0 +1,356 @@
+{
+  "name": "Menhirkin Heritage: Igneous",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_fireball_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Menhirkin heritage: Igneous.</p><p><em>“Some stone was born yelling.”</em></p><p><strong>Menhirkin (Igneous).</strong> You are new rock. The Shattering was your birthday. The land that stood up and began answering chose you because it wanted a mouth that remembered being molten. You run hot, you cool slow, and you are, structurally, still furious about something.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Menhirkin).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 6 squares walking.</li><li><strong>Lineage Lean.</strong> Menhirkin does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Violence</strong> in fiction and through Tier powers.</li></ul><h3>Menhirkin Core: The Land Stood Up</h3><p><em>Shared across all Menhirkin heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><strong>Stone Soul.</strong> You count as Large for carry, shove, and grapple despite your Medium frame. You reroll the lowest die on checks to resist being forcibly moved.</li><li><strong>Hex Recognition.</strong> Once per scene, while you are on a natural surface you are directly touching, you may whisper a single question about the place. The GM answers with one true thing the land knows.</li><li><strong>Slow to Wear.</strong> You reroll the lowest die on Body checks against Stress, long-duration physical wear, forced marches, climate exposure, and sustained labor. You do not tire the way softer things tire.</li><li><strong>Heavy Presence.</strong> Your weight and settledness are perceptible. Creatures within 2 squares of you know you are there even if they cannot see you; you roll 3d10 keep lowest 2 on Intrigue (Stealth) checks unless you are on or in stone.</li></ul><h3>Igneous Traits</h3><ul><li><strong>Heat Memory.</strong> When you take thermal damage with the fire flavor, you may bank that damage. Before your next Soma Break, you may spend the banked heat as a bonus action to add +1d10 exploding thermal damage (flavor: fire) to your next weapon attack, unarmed strike, or grapple that connects.</li><li><strong>Molten Bearing.</strong> You count fire, smoke, ash, and heated terrain as normal ground for the purposes of difficult terrain and footing. Contact with your bare skin singes paper and warms metal.</li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Violence OP</strong> and <strong>+1 Non-Lethal OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Volcanic / Thermal / Industrial-Furnace</em> hexes, your faction's heat-based or smelting operations cost 1 fewer OP (minimum 0).</li><li><strong>Forge-Ready.</strong> Once per Strategic Turn, your faction may reroll one failed crafting or weapons-salvage check. The heat remembers the work.</li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#a8c4e0;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Hex Recognition</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">On a natural surface you're touching, whisper a question — GM answers with one true thing the land knows.</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "79f3a0c21d32e737",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.TDAzTMQwQQlQyoi5",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Igneous Tier I",
+        "hint": "Gain your Igneous Tier I feat."
+      }
+    ],
+    "identifier": "menhirkin_igneous_heritage",
+    "requirements": "Menhirkin",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "menhirkin",
+      "lineage": "Igneous",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "violence": 2,
+        "nonlethal": 1
+      }
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          {
+            "type": "energy",
+            "flavor": "fire"
+          }
+        ]
+      },
+      "rerolls": [
+        {
+          "context": "forced-movement",
+          "mode": "reroll-lowest",
+          "note": "on checks to resist being forcibly moved"
+        },
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "vs:exhaustion",
+          "note": "on Body checks against exhaustion, long-duration physical wear, forced marche…"
+        },
+        {
+          "context": "check",
+          "skill": "stealth",
+          "mode": "reroll-highest",
+          "note": "on Intrigue (Stealth) checks unless you are on or in stone"
+        },
+        {
+          "context": "check",
+          "attribute": "intrigue",
+          "mode": "reroll-highest",
+          "note": "on Intrigue (Stealth) checks unless you are on or in stone"
+        },
+        {
+          "context": "forced-movement",
+          "mode": "reroll-lowest",
+          "note": "checks to resist being forcibly moved"
+        },
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "vs:exhaustion",
+          "note": "Body checks against exhaustion, long-duration physical wear, forced marches, …"
+        },
+        {
+          "context": "check",
+          "skill": "stealth",
+          "mode": "reroll-highest",
+          "note": "Intrigue (Stealth) checks unless you are on or in stone"
+        },
+        {
+          "context": "check",
+          "attribute": "intrigue",
+          "mode": "reroll-highest",
+          "note": "Intrigue (Stealth) checks unless you are on or in stone"
+        }
+      ],
+      "resourceGrants": [
+        {
+          "cadence": "per-campaign-start",
+          "resource": "violence-op",
+          "amount": 2
+        },
+        {
+          "cadence": "per-campaign-start",
+          "resource": "non-lethal-op",
+          "amount": 2
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-damage-taken",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Igneous Traits Heat Memory. When you take energy damage with the fire flavor, you may bank that damage"
+            }
+          }
+        }
+      ]
+    },
+    "autoanimations": {
+      "id": "322e7e01-0695-475c-abc6-e0a44ff64f87",
+      "label": "Menhirkin Heritage: Igneous",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "yellowwhite",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "RImtnSG0UK4pP7o7",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.mL93g5CgA2LbacFT",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776660294429,
+    "modifiedTime": 1782167281945,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "mL93g5CgA2LbacFT",
+  "sort": 0,
+  "_key": "!items!mL93g5CgA2LbacFT"
+}

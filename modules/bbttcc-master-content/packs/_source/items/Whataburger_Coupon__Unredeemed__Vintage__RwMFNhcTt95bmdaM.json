@@ -1,0 +1,80 @@
+{
+  "name": "Whataburger Coupon, Unredeemed (Vintage)",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/whataburger_coupon2.png",
+  "system": {
+    "slot": "trinket",
+    "tags": [
+      "mal-voiced",
+      "trade-good",
+      "pre-fall"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>A laminated paper coupon. Two for one breakfast taquitos, valid through a date so old the typeface itself is illegal in three coalitions. Yes. People will trade you a horse for it. Yes, even now. Yes, I'm aware that doesn't make sense. Take it up with the Akashic field.</p><p><strong>Currency of the Frontier-Formerly-Known.</strong> Once per session, in any wasteland market or trading post, this coupon counts as a Tier-II trade good for purposes of barter. After the trade, it goes back in your pocket. The vendor is still happy about it three days later.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "trade-good",
+          "signature": "Expired in the year sixty before the Shattering. Still works on people.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A laminated paper coupon. Two for one breakfast taquitos, valid through a date so old the typeface itself is illegal in three coalitions. Yes. People will trade you a horse for it. Yes, even now. Yes, I'm aware that doesn't make sense. Take it up with the Akashic field.</p><p><b>Currency of the Frontier-Formerly-Known.</b> Once per session, in any wasteland market or trading post, this coupon counts as a Tier-II trade good for purposes of barter. After the trade, it goes back in your pocket. The vendor is still happy about it three days later.</p>",
+          "materialOf": [
+            "pre-fall-paper",
+            "borderline-irrational-state-pride"
+          ],
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII trade-good stamp",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "RwMFNhcTt95bmdaM",
+  "effects": [],
+  "sort": 600258,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725645,
+    "modifiedTime": 1778541966822,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!RwMFNhcTt95bmdaM"
+}

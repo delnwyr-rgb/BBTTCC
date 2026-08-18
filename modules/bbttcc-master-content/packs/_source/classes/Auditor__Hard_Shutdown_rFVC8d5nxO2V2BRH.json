@@ -1,0 +1,72 @@
+{
+  "_id": "rFVC8d5nxO2V2BRH",
+  "name": "Auditor: Hard Shutdown",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_brick_protocol.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"3833\" data-end=\"3847\"><em data-start=\"3833\" data-end=\"3847\">(18th Level)</em></p><p><strong>Administrative Pressure:</strong> +3</p><p data-start=\"3849\" data-end=\"3921\">You end the manifestation of a feral god, tulpa, or rogue divine entity.</p><p data-start=\"3923\" data-end=\"4013\">The manifestation collapses and cannot reconstitute for a meaningful time (GM discretion).</p><p data-start=\"4015\" data-end=\"4109\">This does not erase the entity from existence.<br data-start=\"4061\" data-end=\"4064\" />It removes its current operational authority.</p><h3 data-start=\"4111\" data-end=\"4119\">Cost</h3><p data-start=\"4120\" data-end=\"4167\">Significant Civic Charge expenditure (2+ dice).</p><h3 data-start=\"4169\" data-end=\"4183\">Escalation</h3><p data-start=\"4184\" data-end=\"4268\">If the entity is Out of Compliance, the shutdown bypasses typical divine resistance.</p><h3 data-start=\"4270\" data-end=\"4282\">Pushback</h3><p data-start=\"4283\" data-end=\"4317\">This is a jurisdictional incident.</p><p data-start=\"4319\" data-end=\"4326\">Expect:</p><ul data-start=\"4327\" data-end=\"4413\"><li data-start=\"4327\" data-end=\"4347\"><p data-start=\"4329\" data-end=\"4347\">Divine retaliation</p></li><li data-start=\"4348\" data-end=\"4368\"><p data-start=\"4350\" data-end=\"4368\">Political scrutiny</p></li><li data-start=\"4369\" data-end=\"4385\"><p data-start=\"4371\" data-end=\"4385\">Mandate audits</p></li><li data-start=\"4386\" data-end=\"4413\"><p data-start=\"4388\" data-end=\"4413\">Rival Auditor involvement</p></li></ul>",
+      "chat": ""
+    },
+    "identifier": "auditor_hard_shutdown",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 18
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "auditor_hard_shutdown",
+      "pushback": {
+        "track": "pressure",
+        "on": "use",
+        "amount": 3,
+        "_taggedBy": "bbttcc-pressure-tagger",
+        "_ts": 1770862584349
+      }
+    }
+  },
+  "folder": "Z0Kl38HLbgyB7iFl",
+  "sort": 500000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.rFVC8d5nxO2V2BRH",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776481562690,
+    "modifiedTime": 1781116187689,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!rFVC8d5nxO2V2BRH"
+}

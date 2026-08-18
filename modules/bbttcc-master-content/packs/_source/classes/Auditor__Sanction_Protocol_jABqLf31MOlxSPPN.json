@@ -1,0 +1,72 @@
+{
+  "_id": "jABqLf31MOlxSPPN",
+  "name": "Auditor: Sanction Protocol",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_punctuation_6.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p data-start=\"2763\" data-end=\"2777\"><em data-start=\"2763\" data-end=\"2777\">(10th Level)</em></p><p><strong>Administrative Pressure:</strong> +1</p><p data-start=\"2779\" data-end=\"2842\">When a creature violates a binding contract or major precedent:</p><ul data-start=\"2844\" data-end=\"2928\"><li data-start=\"2844\" data-end=\"2890\"><p data-start=\"2846\" data-end=\"2890\">Impose roll 3d10 keep lowest 2 on its next roll,<strong data-start=\"2884\" data-end=\"2890\">or</strong></p></li><li data-start=\"2891\" data-end=\"2928\"><p data-start=\"2893\" data-end=\"2928\">Suppress one ability for the round.</p></li></ul><p data-start=\"2930\" data-end=\"3095\">If the creature is <strong data-start=\"2949\" data-end=\"2970\">Out of Compliance</strong>, you may spend 1 Civic Charge to escalate the suppression to a full round of denial for a specific feature (GM adjudicated).</p><p data-start=\"3097\" data-end=\"3156\">You are not retaliating.<br data-start=\"3121\" data-end=\"3124\" />You are documenting consequence.</p>",
+      "chat": ""
+    },
+    "identifier": "auditor_sanction_protocol",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 10
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "auditor_sanction_protocol",
+      "pushback": {
+        "track": "pressure",
+        "on": "use",
+        "amount": 1,
+        "_taggedBy": "bbttcc-pressure-tagger",
+        "_ts": 1770862583977
+      }
+    }
+  },
+  "folder": "Z0Kl38HLbgyB7iFl",
+  "sort": 700000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.jABqLf31MOlxSPPN",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776481562690,
+    "modifiedTime": 1781116178817,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!jABqLf31MOlxSPPN"
+}

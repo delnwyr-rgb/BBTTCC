@@ -1,0 +1,73 @@
+{
+  "name": "Oldenborn: Old Memory, Old Flesh",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_oldenborn_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You are not an elf. You are the memory of a place that learned to walk again.”</em></p>\n<p><strong>Dream-Flesh.</strong> You do not sleep. When you rest, you drift into Yesod—symbolic memory-space—unless you choose otherwise. You are immune to magical sleep, and you can always tell when a dream, illusion, or constructed reality is present.</p>\n<p><strong>Old Memory, Old Paths.</strong> You reroll the lowest die on checks to interpret ruins, follow ley-lines, identify altered terrain, and sense metaphysical instability. You always know if a place feels <em>remembered</em>, <em>abandoned</em>, or <em>contested</em> (the GM answers vaguely).</p>\n<p><strong>Veil-Sight.</strong> You perceive the <em>presence</em> of spirits, ghosts, Spark echoes, and noospheric constructs. This grants awareness, not perfect sight.</p>\n<p><strong>You Are Remembered.</strong> When you first meet a community, the GM chooses (or rolls) whether you are met with reverence, fear, or familiarity. It’s never neutral.</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "oldenborn-old-memory-old-flesh",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Oldenborn",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "oldenborn",
+      "feature": "core",
+      "lineage": "any",
+      "version": "1.0.0"
+    }
+  },
+  "effects": [],
+  "folder": "5PPxNybRn7zD0k0G",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.uCIsyp7z78F75Xsf",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1775004114716,
+    "modifiedTime": 1781116074585,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "J40U8Ik2NXJolIVN",
+  "sort": 100000,
+  "_key": "!items!J40U8Ik2NXJolIVN"
+}

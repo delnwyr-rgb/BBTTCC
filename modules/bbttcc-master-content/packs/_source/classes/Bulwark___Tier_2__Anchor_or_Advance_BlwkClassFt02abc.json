@@ -1,0 +1,70 @@
+{
+  "name": "Bulwark — Tier 2: Anchor or Advance",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_1.png.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>Signature move. Once a scene, you choose which kind of inevitability you are.</em></p><p><strong>Anchor or Advance — 1/scene (recovers on Soma Break).</strong> As part of any action on your turn, declare a stance. The chosen stance lasts until the end of your next turn:</p><ul><li><p><strong>Anchor.</strong> You cannot be moved against your will by any effect short of a Heroic-DC (22) push from a creature of your size or larger. Forced movement, knockback, teleportation targeting you, banishment, and dimensional swap effects all fail.</p></li><li><p><strong>Advance.</strong> You cannot be prevented from reaching a destination you declare on the same action. Difficult terrain, conditions that halve speed, opportunity reactions, and zone-of-control effects do not stop your movement toward that point. You may still take damage along the way.</p></li></ul><p>Doctrine features at L5+ extend or modify which stance you favor.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "bulwark_tier2_anchor_or_advance",
+    "requirements": "Bulwark Initiation 6",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll",
+          "formula": ""
+        }
+      ],
+      "max": "1"
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "classfeat",
+      "classIdentifier": "bulwark",
+      "tierLevel": 2,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {}
+    }
+  },
+  "folder": "rWwlRrTVc3OdPSZA",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777003646522,
+    "modifiedTime": 1781116125473,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BlwkClassFt02abc",
+  "sort": 0,
+  "_key": "!items!BlwkClassFt02abc"
+}

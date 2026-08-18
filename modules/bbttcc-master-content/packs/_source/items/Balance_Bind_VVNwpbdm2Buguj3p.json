@@ -1,0 +1,78 @@
+{
+  "name": "Balance Bind",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/techno_binding_2.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "balance-bind"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Hand-twisted cord of hex-rope and witness-thread. Used in cleats and ritual harnesses where staying upright matters.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "A cord that argues with gravity.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Hand-twisted cord of hex-rope and witness-thread. Used in cleats and ritual harnesses where staying upright matters.</p>",
+          "charges": 3,
+          "materialKey": "balance-bind",
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII material stamp",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "VVNwpbdm2Buguj3p",
+  "effects": [],
+  "sort": 300000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137161831,
+    "modifiedTime": 1782156674948,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!VVNwpbdm2Buguj3p"
+}

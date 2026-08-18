@@ -1,0 +1,81 @@
+{
+  "name": "Anchorstone",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_crystal3.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "anchorstone",
+      "bulwark",
+      "stone",
+      "ground"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Dense igneous rubble harvested from collapsed sept-foundations. Used to ballast Bulwark armor and ritual tools that need to <i>stay</i>.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "A weight that argues with the wind.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Dense igneous rubble harvested from collapsed sept-foundations. Used to ballast Bulwark armor and ritual tools that need to <i>stay</i>.</p>",
+          "charges": 3,
+          "materialKey": "anchorstone",
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII material stamp",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "tVP4d4a5cyBMHJId",
+  "effects": [],
+  "sort": 200000,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137194170,
+    "modifiedTime": 1782156674955,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!tVP4d4a5cyBMHJId"
+}

@@ -1,0 +1,86 @@
+{
+  "name": "Dream-Cache Regulator",
+  "type": "gear",
+  "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [
+      "tech"
+    ],
+    "category": "gear",
+    "source": "Phase 7 Seed (2026-05-10)",
+    "description": {
+      "value": "<p>A small sigil-pendant tuned to a Dreamwalker's echo-reservoir. Stabilizes banking, prevents spillover during Soma Break.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "frame": "sigil",
+          "bound": "attuned",
+          "materialOf": [
+            {
+              "key": "tree-of-life-shard",
+              "qty": 1
+            },
+            {
+              "key": "yesodium",
+              "qty": 1
+            },
+            {
+              "key": "marrow-tincture",
+              "qty": 1
+            },
+            {
+              "key": "witness-resin",
+              "qty": 1
+            }
+          ],
+          "tech": {
+            "kind": "attuned",
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "failure": "drain",
+            "origin": "septcraft"
+          },
+          "price": {
+            "marks": 1080,
+            "currency": "softpower",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII sigil × 1.20 × tech 2.0",
+            "bound": "attuned",
+            "saleBack": 432
+          }
+        }
+      }
+    }
+  },
+  "_id": "6XcO03Fuik2H0Ybf",
+  "effects": [],
+  "folder": "0JDB983lzPepXXNe",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778963277000,
+    "modifiedTime": 1778963277000,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 0,
+  "_key": "!items!6XcO03Fuik2H0Ybf"
+}

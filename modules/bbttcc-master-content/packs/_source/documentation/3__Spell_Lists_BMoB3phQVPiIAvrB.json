@@ -1,0 +1,285 @@
+{
+  "folder": "PzPQUJAx5SvgZeKR",
+  "name": "3. Spell Lists",
+  "_id": "BMoB3phQVPiIAvrB",
+  "pages": [
+    {
+      "sort": 650000,
+      "name": "Pactkeeper",
+      "type": "text",
+      "_id": "JgPgNYRJjqHjQIS6",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h1 data-start=\"1003\" data-end=\"1041\">PACTKEEPER — CURATED SPELL LIST</h1><h2 data-start=\"1259\" data-end=\"1273\">minor manifestation</h2><ul data-start=\"1274\" data-end=\"1347\"><li data-start=\"1274\" data-end=\"1286\"><p data-start=\"1276\" data-end=\"1286\">Guidance</p></li><li data-start=\"1287\" data-end=\"1296\"><p data-start=\"1289\" data-end=\"1296\">Light</p></li><li data-start=\"1297\" data-end=\"1311\"><p data-start=\"1299\" data-end=\"1311\">Resistance</p></li><li data-start=\"1312\" data-end=\"1331\"><p data-start=\"1314\" data-end=\"1331\">Spare the Dying</p></li><li data-start=\"1332\" data-end=\"1347\"><p data-start=\"1334\" data-end=\"1347\">Thaumaturgy</p></li></ul><hr data-start=\"1349\" data-end=\"1352\" /><h2 data-start=\"1354\" data-end=\"1369\">1st Level</h2><ul data-start=\"1370\" data-end=\"1499\"><li data-start=\"1370\" data-end=\"1379\"><p data-start=\"1372\" data-end=\"1379\">Bless</p></li><li data-start=\"1380\" data-end=\"1392\"><p data-start=\"1382\" data-end=\"1392\">Ceremony</p></li><li data-start=\"1393\" data-end=\"1404\"><p data-start=\"1395\" data-end=\"1404\">Command</p></li><li data-start=\"1405\" data-end=\"1421\"><p data-start=\"1407\" data-end=\"1421\">Detect Magic</p></li><li data-start=\"1422\" data-end=\"1451\"><p data-start=\"1424\" data-end=\"1451\">Detect Poison and Disease</p></li><li data-start=\"1452\" data-end=\"1485\"><p data-start=\"1454\" data-end=\"1485\">Protection from Evil and Good</p></li><li data-start=\"1486\" data-end=\"1499\"><p data-start=\"1488\" data-end=\"1499\">Sanctuary</p></li></ul><hr data-start=\"1501\" data-end=\"1504\" /><h2 data-start=\"1506\" data-end=\"1521\">2nd Level</h2><ul data-start=\"1522\" data-end=\"1622\"><li data-start=\"1522\" data-end=\"1529\"><p data-start=\"1524\" data-end=\"1529\">Aid</p></li><li data-start=\"1530\" data-end=\"1547\"><p data-start=\"1532\" data-end=\"1547\">Calm Emotions</p></li><li data-start=\"1548\" data-end=\"1565\"><p data-start=\"1550\" data-end=\"1565\">Gentle Repose</p></li><li data-start=\"1566\" data-end=\"1581\"><p data-start=\"1568\" data-end=\"1581\">Hold Person</p></li><li data-start=\"1582\" data-end=\"1604\"><p data-start=\"1584\" data-end=\"1604\">Lesser Restoration</p></li><li data-start=\"1605\" data-end=\"1622\"><p data-start=\"1607\" data-end=\"1622\">Zone of Truth</p></li></ul><hr data-start=\"1624\" data-end=\"1627\" /><h2 data-start=\"1629\" data-end=\"1644\">3rd Level</h2><ul data-start=\"1645\" data-end=\"1741\"><li data-start=\"1645\" data-end=\"1663\"><p data-start=\"1647\" data-end=\"1663\">Beacon of Hope</p></li><li data-start=\"1664\" data-end=\"1680\"><p data-start=\"1666\" data-end=\"1680\">Dispel Magic</p></li><li data-start=\"1681\" data-end=\"1696\"><p data-start=\"1683\" data-end=\"1696\">Feign Death</p></li><li data-start=\"1697\" data-end=\"1709\"><p data-start=\"1699\" data-end=\"1709\">Revivify</p></li><li data-start=\"1710\" data-end=\"1729\"><p data-start=\"1712\" data-end=\"1729\">Speak with Dead</p></li><li data-start=\"1730\" data-end=\"1741\"><p data-start=\"1732\" data-end=\"1741\">Tongues</p></li></ul><hr data-start=\"1743\" data-end=\"1746\" /><h2 data-start=\"1748\" data-end=\"1763\">4th Level</h2><ul data-start=\"1764\" data-end=\"1847\"><li data-start=\"1764\" data-end=\"1780\"><p data-start=\"1766\" data-end=\"1780\">Aura of Life</p></li><li data-start=\"1781\" data-end=\"1795\"><p data-start=\"1783\" data-end=\"1795\">Banishment</p></li><li data-start=\"1796\" data-end=\"1810\"><p data-start=\"1798\" data-end=\"1810\">Death Ward</p></li><li data-start=\"1811\" data-end=\"1825\"><p data-start=\"1813\" data-end=\"1825\">Divination</p></li><li data-start=\"1826\" data-end=\"1847\"><p data-start=\"1828\" data-end=\"1847\">Guardian of Faith</p></li></ul><hr data-start=\"1849\" data-end=\"1852\" /><h2 data-start=\"1854\" data-end=\"1869\">5th Level</h2><ul data-start=\"1870\" data-end=\"1953\"><li data-start=\"1870\" data-end=\"1881\"><p data-start=\"1872\" data-end=\"1881\">Commune</p></li><li data-start=\"1882\" data-end=\"1905\"><p data-start=\"1884\" data-end=\"1905\">Greater Restoration</p></li><li data-start=\"1906\" data-end=\"1916\"><p data-start=\"1908\" data-end=\"1916\">Hallow</p></li><li data-start=\"1917\" data-end=\"1932\"><p data-start=\"1919\" data-end=\"1932\">Legend Lore</p></li><li data-start=\"1933\" data-end=\"1953\"><p data-start=\"1935\" data-end=\"1953\">Mass Cure Wounds</p></li></ul><hr data-start=\"1955\" data-end=\"1958\" /><h2 data-start=\"1960\" data-end=\"1975\">6th Level</h2><ul data-start=\"1976\" data-end=\"2035\"><li data-start=\"1976\" data-end=\"1984\"><p data-start=\"1978\" data-end=\"1984\">Heal</p></li><li data-start=\"1985\" data-end=\"2000\"><p data-start=\"1987\" data-end=\"2000\">Planar Ally</p></li><li data-start=\"2001\" data-end=\"2016\"><p data-start=\"2003\" data-end=\"2016\">True Seeing</p></li><li data-start=\"2017\" data-end=\"2035\"><p data-start=\"2019\" data-end=\"2035\">Word of Recall</p></li></ul><hr data-start=\"2037\" data-end=\"2040\" /><h2 data-start=\"2042\" data-end=\"2057\">7th Level</h2><ul data-start=\"2058\" data-end=\"2105\"><li data-start=\"2058\" data-end=\"2073\"><p data-start=\"2060\" data-end=\"2073\">Plane Shift</p></li><li data-start=\"2074\" data-end=\"2088\"><p data-start=\"2076\" data-end=\"2088\">Regenerate</p></li><li data-start=\"2089\" data-end=\"2105\"><p data-start=\"2091\" data-end=\"2105\">Resurrection</p></li></ul><hr data-start=\"2107\" data-end=\"2110\" /><h2 data-start=\"2112\" data-end=\"2127\">8th Level</h2><ul data-start=\"2128\" data-end=\"2156\"><li data-start=\"2128\" data-end=\"2141\"><p data-start=\"2130\" data-end=\"2141\">Holy Aura</p></li><li data-start=\"2142\" data-end=\"2156\"><p data-start=\"2144\" data-end=\"2156\">Mind Blank</p></li></ul><hr data-start=\"2158\" data-end=\"2161\" /><h2 data-start=\"2163\" data-end=\"2177\">9th Level</h2><ul data-start=\"2178\" data-end=\"2213\"><li data-start=\"2178\" data-end=\"2191\"><p data-start=\"2180\" data-end=\"2191\">Mass Heal</p></li><li data-start=\"2192\" data-end=\"2213\"><p data-start=\"2194\" data-end=\"2213\">True Resurrection</p><hr /></li></ul>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.3.0",
+        "lastModifiedBy": null
+      },
+      "_key": "!journal.pages!BMoB3phQVPiIAvrB.JgPgNYRJjqHjQIS6"
+    },
+    {
+      "sort": 200000,
+      "name": "Cosmic Linguist",
+      "type": "text",
+      "_id": "fAE0NJDch8x8QJD0",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h1 data-start=\"2478\" data-end=\"2521\">COSMIC LINGUIST — CURATED SPELL LIST</h1><hr data-start=\"2762\" data-end=\"2765\" /><h2 data-start=\"2767\" data-end=\"2781\">minor manifestation</h2><ul data-start=\"2782\" data-end=\"2869\"><li data-start=\"2782\" data-end=\"2795\"><p data-start=\"2784\" data-end=\"2795\">Mage Hand</p></li><li data-start=\"2796\" data-end=\"2814\"><p data-start=\"2798\" data-end=\"2814\">Minor Illusion</p></li><li data-start=\"2815\" data-end=\"2835\"><p data-start=\"2817\" data-end=\"2835\">Prestidigitation</p></li><li data-start=\"2836\" data-end=\"2853\"><p data-start=\"2838\" data-end=\"2853\">Toll the Dead</p></li><li data-start=\"2854\" data-end=\"2869\"><p data-start=\"2856\" data-end=\"2869\">Mind Sliver</p></li></ul><hr data-start=\"2871\" data-end=\"2874\" /><h2 data-start=\"2876\" data-end=\"2891\">1st Level</h2><ul data-start=\"2892\" data-end=\"3010\"><li data-start=\"2892\" data-end=\"2911\"><p data-start=\"2894\" data-end=\"2911\">Absorb Elements</p></li><li data-start=\"2912\" data-end=\"2928\"><p data-start=\"2914\" data-end=\"2928\">Charm Person</p></li><li data-start=\"2929\" data-end=\"2953\"><p data-start=\"2931\" data-end=\"2953\">Comprehend Languages</p></li><li data-start=\"2954\" data-end=\"2971\"><p data-start=\"2956\" data-end=\"2971\">Disguise Self</p></li><li data-start=\"2972\" data-end=\"3000\"><p data-start=\"2974\" data-end=\"3000\">Illusions (Silent Image)</p></li><li data-start=\"3001\" data-end=\"3010\"><p data-start=\"3003\" data-end=\"3010\">Sleep</p></li></ul><hr data-start=\"3012\" data-end=\"3015\" /><h2 data-start=\"3017\" data-end=\"3032\">2nd Level</h2><ul data-start=\"3033\" data-end=\"3119\"><li data-start=\"3033\" data-end=\"3041\"><p data-start=\"3035\" data-end=\"3041\">Blur</p></li><li data-start=\"3042\" data-end=\"3061\"><p data-start=\"3044\" data-end=\"3061\">Detect Thoughts</p></li><li data-start=\"3062\" data-end=\"3077\"><p data-start=\"3064\" data-end=\"3077\">Hold Person</p></li><li data-start=\"3078\" data-end=\"3094\"><p data-start=\"3080\" data-end=\"3094\">Invisibility</p></li><li data-start=\"3095\" data-end=\"3107\"><p data-start=\"3097\" data-end=\"3107\">Levitate</p></li><li data-start=\"3108\" data-end=\"3119\"><p data-start=\"3110\" data-end=\"3119\">Silence</p></li></ul><hr data-start=\"3121\" data-end=\"3124\" /><h2 data-start=\"3126\" data-end=\"3141\">3rd Level</h2><ul data-start=\"3142\" data-end=\"3238\"><li data-start=\"3142\" data-end=\"3158\"><p data-start=\"3144\" data-end=\"3158\">Counterspell</p></li><li data-start=\"3159\" data-end=\"3175\"><p data-start=\"3161\" data-end=\"3175\">Dispel Magic</p></li><li data-start=\"3176\" data-end=\"3184\"><p data-start=\"3178\" data-end=\"3184\">Fear</p></li><li data-start=\"3185\" data-end=\"3205\"><p data-start=\"3187\" data-end=\"3205\">Hypnotic Pattern</p></li><li data-start=\"3206\" data-end=\"3221\"><p data-start=\"3208\" data-end=\"3221\">Major Image</p></li><li data-start=\"3222\" data-end=\"3238\"><p data-start=\"3224\" data-end=\"3238\">Remove Curse</p></li></ul><hr data-start=\"3240\" data-end=\"3243\" /><h2 data-start=\"3245\" data-end=\"3260\">4th Level</h2><ul data-start=\"3261\" data-end=\"3341\"><li data-start=\"3261\" data-end=\"3275\"><p data-start=\"3263\" data-end=\"3275\">Banishment</p></li><li data-start=\"3276\" data-end=\"3286\"><p data-start=\"3278\" data-end=\"3286\">Blight</p></li><li data-start=\"3287\" data-end=\"3300\"><p data-start=\"3289\" data-end=\"3300\">Confusion</p></li><li data-start=\"3301\" data-end=\"3319\"><p data-start=\"3303\" data-end=\"3319\">Dimension Door</p></li><li data-start=\"3320\" data-end=\"3341\"><p data-start=\"3322\" data-end=\"3341\">Phantasmal Killer</p></li></ul><hr data-start=\"3343\" data-end=\"3346\" /><h2 data-start=\"3348\" data-end=\"3363\">5th Level</h2><ul data-start=\"3364\" data-end=\"3439\"><li data-start=\"3364\" data-end=\"3383\"><p data-start=\"3366\" data-end=\"3383\">Dominate Person</p></li><li data-start=\"3384\" data-end=\"3401\"><p data-start=\"3386\" data-end=\"3401\">Modify Memory</p></li><li data-start=\"3402\" data-end=\"3421\"><p data-start=\"3404\" data-end=\"3421\">Synaptic Static</p></li><li data-start=\"3422\" data-end=\"3439\"><p data-start=\"3424\" data-end=\"3439\">Wall of Force</p></li></ul><hr data-start=\"3441\" data-end=\"3444\" /><h2 data-start=\"3446\" data-end=\"3461\">6th Level</h2><ul data-start=\"3462\" data-end=\"3532\"><li data-start=\"3462\" data-end=\"3478\"><p data-start=\"3464\" data-end=\"3478\">Disintegrate</p></li><li data-start=\"3479\" data-end=\"3498\"><p data-start=\"3481\" data-end=\"3498\">Mass Suggestion</p></li><li data-start=\"3499\" data-end=\"3516\"><p data-start=\"3501\" data-end=\"3516\">Mental Prison</p></li><li data-start=\"3517\" data-end=\"3532\"><p data-start=\"3519\" data-end=\"3532\">True Seeing</p></li></ul><hr data-start=\"3534\" data-end=\"3537\" /><h2 data-start=\"3539\" data-end=\"3554\">7th Level</h2><ul data-start=\"3555\" data-end=\"3604\"><li data-start=\"3555\" data-end=\"3568\"><p data-start=\"3557\" data-end=\"3568\">Forcecage</p></li><li data-start=\"3569\" data-end=\"3584\"><p data-start=\"3571\" data-end=\"3584\">Plane Shift</p></li><li data-start=\"3585\" data-end=\"3604\"><p data-start=\"3587\" data-end=\"3604\">Reverse Gravity</p></li></ul><hr data-start=\"3606\" data-end=\"3609\" /><h2 data-start=\"3611\" data-end=\"3626\">8th Level</h2><ul data-start=\"3627\" data-end=\"3670\"><li data-start=\"3627\" data-end=\"3646\"><p data-start=\"3629\" data-end=\"3646\">Antimagic Field</p></li><li data-start=\"3647\" data-end=\"3661\"><p data-start=\"3649\" data-end=\"3661\">Feeblemind</p></li><li data-start=\"3662\" data-end=\"3670\"><p data-start=\"3664\" data-end=\"3670\">Maze</p></li></ul><hr data-start=\"3672\" data-end=\"3675\" /><h2 data-start=\"3677\" data-end=\"3691\">9th Level</h2><ul data-start=\"3692\" data-end=\"3790\"><li data-start=\"3692\" data-end=\"3705\"><p data-start=\"3694\" data-end=\"3705\">Foresight</p></li><li data-start=\"3706\" data-end=\"3722\"><p data-start=\"3708\" data-end=\"3722\">Imprisonment</p></li><li data-start=\"3723\" data-end=\"3742\"><p data-start=\"3725\" data-end=\"3742\">Power Word Kill</p></li><li data-start=\"3743\" data-end=\"3790\"><p data-start=\"3745\" data-end=\"3790\">Wish <em data-start=\"3750\" data-end=\"3788\">(highly discouraged, extreme Strain)</em></p></li></ul><hr data-start=\"3792\" data-end=\"3795\" />"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.3.0",
+        "lastModifiedBy": null
+      },
+      "_key": "!journal.pages!BMoB3phQVPiIAvrB.fAE0NJDch8x8QJD0"
+    },
+    {
+      "sort": 800000,
+      "name": "Wyrdlens Adept",
+      "type": "text",
+      "_id": "SdXt4Uwa9LRVOL2r",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h1 data-start=\"2478\" data-end=\"2521\">Wyrdlens Adept — CURATED SPELL LIST</h1><hr data-start=\"2762\" data-end=\"2765\" /><h2 data-start=\"2767\" data-end=\"2781\">minor manifestation</h2><ul data-start=\"2782\" data-end=\"2869\"><li data-start=\"2782\" data-end=\"2795\"><p data-start=\"2784\" data-end=\"2795\">Mending</p></li><li data-start=\"2796\" data-end=\"2814\"><p data-start=\"2798\" data-end=\"2814\">Message</p></li><li data-start=\"2796\" data-end=\"2814\"><p data-start=\"2798\" data-end=\"2814\">Prestidigitation</p></li><li data-start=\"2836\" data-end=\"2853\"><p data-start=\"2838\" data-end=\"2853\">Ray of Frost</p></li><li data-start=\"2854\" data-end=\"2869\"><p data-start=\"2856\" data-end=\"2869\">Shocking Grasp</p></li></ul><hr data-start=\"2871\" data-end=\"2874\" /><h2 data-start=\"2876\" data-end=\"2891\">1st Level</h2><ul data-start=\"2892\" data-end=\"3010\"><li data-start=\"2892\" data-end=\"2911\"><p data-start=\"2894\" data-end=\"2911\">Comprehend Languages</p></li><li data-start=\"2912\" data-end=\"2928\"><p data-start=\"2914\" data-end=\"2928\">Detect Magic</p></li><li data-start=\"2912\" data-end=\"2928\"><p data-start=\"2914\" data-end=\"2928\">Identify</p></li><li data-start=\"2912\" data-end=\"2928\"><p data-start=\"2914\" data-end=\"2928\">Magic Missile</p></li><li data-start=\"2912\" data-end=\"2928\"><p data-start=\"2914\" data-end=\"2928\">Shield</p></li></ul><hr data-start=\"3012\" data-end=\"3015\" /><h2 data-start=\"3017\" data-end=\"3032\">2nd Level</h2><ul data-start=\"3033\" data-end=\"3119\"><li data-start=\"3033\" data-end=\"3041\"><p data-start=\"3035\" data-end=\"3041\">Arcane Lock</p></li><li data-start=\"3033\" data-end=\"3041\"><p data-start=\"3035\" data-end=\"3041\">Detect Thoughts</p></li><li data-start=\"3033\" data-end=\"3041\"><p data-start=\"3035\" data-end=\"3041\">Invisibility</p></li><li data-start=\"3033\" data-end=\"3041\"><p data-start=\"3035\" data-end=\"3041\">Lesser Restoration</p></li><li data-start=\"3033\" data-end=\"3041\"><p data-start=\"3035\" data-end=\"3041\">See Invisibilit</p></li></ul><hr data-start=\"3121\" data-end=\"3124\" /><h2 data-start=\"3126\" data-end=\"3141\">3rd Level</h2><ul data-start=\"3142\" data-end=\"3238\"><li data-start=\"3142\" data-end=\"3158\"><p data-start=\"3144\" data-end=\"3158\">Counterspell</p></li><li data-start=\"3159\" data-end=\"3175\"><p data-start=\"3161\" data-end=\"3175\">Dispel Magic</p></li><li data-start=\"3185\" data-end=\"3205\"><p data-start=\"3187\" data-end=\"3205\">Glyph of Warding</p></li><li data-start=\"3185\" data-end=\"3205\"><p>Lightning Bolt</p></li><li data-start=\"3185\" data-end=\"3205\"><p>Tiny Hut</p></li></ul><hr data-start=\"3240\" data-end=\"3243\" /><h2 data-start=\"3245\" data-end=\"3260\">4th Level</h2><ul data-start=\"3261\" data-end=\"3341\"><li data-start=\"3261\" data-end=\"3275\"><p data-start=\"3263\" data-end=\"3275\">Banishment</p></li><li data-start=\"3276\" data-end=\"3286\"><p data-start=\"3278\" data-end=\"3286\">Blight</p></li><li data-start=\"3287\" data-end=\"3300\"><p data-start=\"3289\" data-end=\"3300\">Confusion</p></li><li data-start=\"3301\" data-end=\"3319\"><p data-start=\"3303\" data-end=\"3319\">Dimension Door</p></li><li data-start=\"3320\" data-end=\"3341\"><p data-start=\"3322\" data-end=\"3341\">Phantasmal Killer</p></li></ul><hr data-start=\"3343\" data-end=\"3346\" /><h2 data-start=\"3348\" data-end=\"3363\">5th Level</h2><ul data-start=\"3364\" data-end=\"3439\"><li data-start=\"3364\" data-end=\"3383\"><p data-start=\"3366\" data-end=\"3383\">Legend Lore</p></li><li data-start=\"3364\" data-end=\"3383\"><p>Scrying</p></li><li data-start=\"3364\" data-end=\"3383\"><p>Telekinesis</p></li><li data-start=\"3364\" data-end=\"3383\"><p>Wall of Force</p></li></ul><hr data-start=\"3441\" data-end=\"3444\" /><h2 data-start=\"3446\" data-end=\"3461\">6th Level</h2><ul data-start=\"3462\" data-end=\"3532\"><li data-start=\"3462\" data-end=\"3478\"><p data-start=\"3464\" data-end=\"3478\">Chain Lightning</p></li><li data-start=\"3462\" data-end=\"3478\"><p data-start=\"3464\" data-end=\"3478\">Globe of Invulnerability</p></li><li data-start=\"3517\" data-end=\"3532\"><p data-start=\"3519\" data-end=\"3532\">True Seeing</p></li></ul><hr data-start=\"3534\" data-end=\"3537\" /><h2 data-start=\"3539\" data-end=\"3554\">7th Level</h2><ul data-start=\"3555\" data-end=\"3604\"><li data-start=\"3555\" data-end=\"3568\"><p data-start=\"3557\" data-end=\"3568\">Forcecage</p></li><li data-start=\"3569\" data-end=\"3584\"><p data-start=\"3571\" data-end=\"3584\">Plane Shift</p></li><li data-start=\"3585\" data-end=\"3604\"><p data-start=\"3587\" data-end=\"3604\">Teleport</p></li></ul><hr data-start=\"3606\" data-end=\"3609\" /><h2 data-start=\"3611\" data-end=\"3626\">8th Level</h2><ul data-start=\"3627\" data-end=\"3670\"><li data-start=\"3627\" data-end=\"3646\"><p data-start=\"3629\" data-end=\"3646\">Anti-Magic Field</p></li><li data-start=\"3627\" data-end=\"3646\"><p data-start=\"3629\" data-end=\"3646\">Mind Blank</p></li></ul><hr data-start=\"3672\" data-end=\"3675\" /><h2 data-start=\"3677\" data-end=\"3691\">9th Level</h2><ul data-start=\"3692\" data-end=\"3790\"><li data-start=\"3692\" data-end=\"3705\"><p data-start=\"3694\" data-end=\"3705\">Foresight</p></li><li data-start=\"3706\" data-end=\"3722\"><p data-start=\"3708\" data-end=\"3722\">Wish</p></li></ul><hr data-start=\"3792\" data-end=\"3795\" />"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.3.0",
+        "lastModifiedBy": null
+      },
+      "_key": "!journal.pages!BMoB3phQVPiIAvrB.SdXt4Uwa9LRVOL2r"
+    },
+    {
+      "sort": 400000,
+      "name": "Dreamwalker",
+      "type": "text",
+      "_id": "ST8Qu6vBo7J6UkMI",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h1 data-start=\"2478\" data-end=\"2521\">Dreamwalker — CURATED SPELL LIST</h1><hr data-start=\"2762\" data-end=\"2765\" /><h2 data-start=\"2767\" data-end=\"2781\">minor manifestation</h2><ul data-start=\"2782\" data-end=\"2869\"><li data-start=\"2782\" data-end=\"2795\"><p data-start=\"2784\" data-end=\"2795\">Guidance</p></li><li data-start=\"2782\" data-end=\"2795\"><p data-start=\"2784\" data-end=\"2795\">Mage Hand</p></li><li data-start=\"2796\" data-end=\"2814\"><p data-start=\"2798\" data-end=\"2814\">Message</p></li><li data-start=\"2815\" data-end=\"2835\"><p data-start=\"2817\" data-end=\"2835\">Minor Illusion</p></li><li data-start=\"2836\" data-end=\"2853\"><p data-start=\"2838\" data-end=\"2853\">Resistance</p></li></ul><hr data-start=\"2871\" data-end=\"2874\" /><h2 data-start=\"2876\" data-end=\"2891\">1st Level</h2><ul data-start=\"2892\" data-end=\"3010\"><li data-start=\"2892\" data-end=\"2911\"><p data-start=\"2894\" data-end=\"2911\">Bless</p></li><li data-start=\"2912\" data-end=\"2928\"><p data-start=\"2914\" data-end=\"2928\">Detect Magic</p></li><li data-start=\"2912\" data-end=\"2928\"><p>Disguise Self</p></li><li data-start=\"2912\" data-end=\"2928\"><p>Shield</p></li><li data-start=\"2912\" data-end=\"2928\"><p>Sleep</p></li></ul><hr data-start=\"3012\" data-end=\"3015\" /><h2 data-start=\"3017\" data-end=\"3032\">2nd Level</h2><ul data-start=\"3033\" data-end=\"3119\"><li data-start=\"3033\" data-end=\"3041\"><p data-start=\"3035\" data-end=\"3041\">Augury</p></li><li data-start=\"3033\" data-end=\"3041\"><p>Calm Emotions</p></li><li data-start=\"3033\" data-end=\"3041\"><p>Detect Thoughts</p></li><li data-start=\"3033\" data-end=\"3041\"><p>Mirror Image</p></li><li data-start=\"3033\" data-end=\"3041\"><p>Misty Step</p></li></ul><hr data-start=\"3121\" data-end=\"3124\" /><h2 data-start=\"3126\" data-end=\"3141\">3rd Level</h2><ul data-start=\"3142\" data-end=\"3238\"><li data-start=\"3142\" data-end=\"3158\"><p data-start=\"3144\" data-end=\"3158\">Clairvoyance</p></li><li data-start=\"3142\" data-end=\"3158\"><p data-start=\"3144\" data-end=\"3158\">Counterspell</p></li><li data-start=\"3159\" data-end=\"3175\"><p data-start=\"3161\" data-end=\"3175\">Hypnotic Pattern</p></li><li data-start=\"3159\" data-end=\"3175\"><p>Sending</p></li><li data-start=\"3159\" data-end=\"3175\"><p>Slow</p></li></ul><hr data-start=\"3240\" data-end=\"3243\" /><h2 data-start=\"3245\" data-end=\"3260\">4th Level</h2><ul data-start=\"3261\" data-end=\"3341\"><li data-start=\"3261\" data-end=\"3275\"><p data-start=\"3263\" data-end=\"3275\">Dimension Door</p></li><li data-start=\"3261\" data-end=\"3275\"><p>Favricate</p></li><li data-start=\"3261\" data-end=\"3275\"><p>Otiluke's Resilient Sphere</p></li><li data-start=\"3261\" data-end=\"3275\"><p>Stone Shape</p></li></ul><hr data-start=\"3343\" data-end=\"3346\" /><h2 data-start=\"3348\" data-end=\"3363\">5th Level</h2><ul data-start=\"3364\" data-end=\"3439\"><li data-start=\"3364\" data-end=\"3383\"><p data-start=\"3366\" data-end=\"3383\">Legend Lore</p></li><li data-start=\"3364\" data-end=\"3383\"><p>Scrying</p></li><li data-start=\"3364\" data-end=\"3383\"><p>Telekinesis</p></li><li data-start=\"3364\" data-end=\"3383\"><p>Wall of Force</p></li></ul><hr data-start=\"3441\" data-end=\"3444\" /><h2 data-start=\"3446\" data-end=\"3461\">6th Level</h2><ul data-start=\"3462\" data-end=\"3532\"><li data-start=\"3462\" data-end=\"3478\"><p data-start=\"3464\" data-end=\"3478\">Blade Barrier</p></li><li data-start=\"3462\" data-end=\"3478\"><p>Globe of Invulnerability</p></li><li data-start=\"3462\" data-end=\"3478\"><p>True Seeing</p></li></ul><hr data-start=\"3534\" data-end=\"3537\" /><h2 data-start=\"3539\" data-end=\"3554\">7th Level</h2><ul data-start=\"3555\" data-end=\"3604\"><li data-start=\"3555\" data-end=\"3568\"><p data-start=\"3557\" data-end=\"3568\">Forcecage</p></li><li data-start=\"3569\" data-end=\"3584\"><p data-start=\"3571\" data-end=\"3584\">Plane Shift</p></li><li data-start=\"3585\" data-end=\"3604\"><p data-start=\"3587\" data-end=\"3604\">Teleport</p></li></ul><hr data-start=\"3606\" data-end=\"3609\" /><h2 data-start=\"3611\" data-end=\"3626\">8th Level</h2><ul data-start=\"3627\" data-end=\"3670\"><li data-start=\"3627\" data-end=\"3646\"><p data-start=\"3629\" data-end=\"3646\">Befuddlement</p></li><li data-start=\"3627\" data-end=\"3646\"><p data-start=\"3629\" data-end=\"3646\">Mind Blank</p></li><li data-start=\"3647\" data-end=\"3661\"><p data-start=\"3649\" data-end=\"3661\">Feeblemind</p></li></ul><hr data-start=\"3672\" data-end=\"3675\" /><h2 data-start=\"3677\" data-end=\"3691\">9th Level</h2><ul data-start=\"3692\" data-end=\"3790\"><li data-start=\"3692\" data-end=\"3705\"><p data-start=\"3694\" data-end=\"3705\">Astral Projection</p></li><li data-start=\"3692\" data-end=\"3705\"><p data-start=\"3694\" data-end=\"3705\">Foresight</p></li></ul><hr data-start=\"3792\" data-end=\"3795\" />"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.3.0",
+        "lastModifiedBy": null
+      },
+      "_key": "!journal.pages!BMoB3phQVPiIAvrB.ST8Qu6vBo7J6UkMI"
+    },
+    {
+      "sort": 100000,
+      "name": "Aurablade",
+      "type": "text",
+      "_id": "PeVesTpMFW5Izcvm",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h1 data-start=\"2478\" data-end=\"2521\">Aurablade — CURATED SPELL LIST</h1><hr data-start=\"2762\" data-end=\"2765\" /><h2 data-start=\"2767\" data-end=\"2781\">minor manifestation</h2><ul data-start=\"2782\" data-end=\"2869\"><li data-start=\"2782\" data-end=\"2795\"><p data-start=\"2784\" data-end=\"2795\">Light</p></li><li data-start=\"2782\" data-end=\"2795\"><p>Sacred Flame</p></li><li data-start=\"2782\" data-end=\"2795\"><p>Thaumaturgy</p></li></ul><hr data-start=\"2871\" data-end=\"2874\" /><h2 data-start=\"2876\" data-end=\"2891\">1st Level</h2><ul data-start=\"2892\" data-end=\"3010\"><li data-start=\"2892\" data-end=\"2911\"><p data-start=\"2894\" data-end=\"2911\">Command</p></li><li data-start=\"2892\" data-end=\"2911\"><p>Cure Wounds</p></li><li data-start=\"2892\" data-end=\"2911\"><p>Divine Favor</p></li><li data-start=\"2892\" data-end=\"2911\"><p>Heroism</p></li><li data-start=\"2892\" data-end=\"2911\"><p>Searing Smite</p></li><li data-start=\"2892\" data-end=\"2911\"><p>Shield of Faith</p></li></ul><hr data-start=\"3012\" data-end=\"3015\" /><h2 data-start=\"3017\" data-end=\"3032\">2nd Level</h2><ul data-start=\"3033\" data-end=\"3119\"><li data-start=\"3033\" data-end=\"3041\"><p data-start=\"3035\" data-end=\"3041\">Aid</p></li><li data-start=\"3033\" data-end=\"3041\"><p>Calm Emotions</p></li><li data-start=\"3033\" data-end=\"3041\"><p>Lesser Restoration</p></li><li data-start=\"3033\" data-end=\"3041\"><p>Zone of Truth</p></li></ul><hr data-start=\"3121\" data-end=\"3124\" /><h2 data-start=\"3126\" data-end=\"3141\">3rd Level</h2><ul data-start=\"3142\" data-end=\"3238\"><li data-start=\"3142\" data-end=\"3158\"><p data-start=\"3144\" data-end=\"3158\">Beacon of Hope</p></li><li data-start=\"3142\" data-end=\"3158\"><p>Dispel Magic</p></li><li data-start=\"3142\" data-end=\"3158\"><p>Fear</p></li></ul><hr data-start=\"3240\" data-end=\"3243\" /><h2 data-start=\"3245\" data-end=\"3260\">4th Level</h2><ul data-start=\"3261\" data-end=\"3341\"><li data-start=\"3261\" data-end=\"3275\"><p data-start=\"3263\" data-end=\"3275\">Banishment</p></li><li data-start=\"3276\" data-end=\"3286\"><p data-start=\"3278\" data-end=\"3286\">Freedom of Movement</p></li></ul><hr data-start=\"3343\" data-end=\"3346\" /><h2 data-start=\"3348\" data-end=\"3363\">5th Level</h2><ul data-start=\"3364\" data-end=\"3439\"><li data-start=\"3364\" data-end=\"3383\"><p data-start=\"3366\" data-end=\"3383\">Flame Strike</p></li><li data-start=\"3364\" data-end=\"3383\"><p>Greater Restoration</p></li></ul><hr data-start=\"3441\" data-end=\"3444\" />"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.3.0",
+        "lastModifiedBy": null
+      },
+      "_key": "!journal.pages!BMoB3phQVPiIAvrB.PeVesTpMFW5Izcvm"
+    },
+    {
+      "sort": 600000,
+      "name": "Harmony Marshall",
+      "type": "text",
+      "_id": "ccso46V0irHoAikp",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h1 data-start=\"2478\" data-end=\"2521\">Harmony Marshall — CURATED SPELL LIST</h1><hr data-start=\"2762\" data-end=\"2765\" /><h2 data-start=\"2767\" data-end=\"2781\">minor manifestation</h2><ul data-start=\"2782\" data-end=\"2869\"><li data-start=\"2782\" data-end=\"2795\"><p data-start=\"2784\" data-end=\"2795\">Guidance</p></li><li data-start=\"2782\" data-end=\"2795\"><p data-start=\"2784\" data-end=\"2795\">Light</p></li><li data-start=\"2782\" data-end=\"2795\"><p>Message</p></li><li data-start=\"2782\" data-end=\"2795\"><p>Resistance</p></li></ul><hr data-start=\"2871\" data-end=\"2874\" /><h2 data-start=\"2876\" data-end=\"2891\">1st Level</h2><ul data-start=\"2892\" data-end=\"3010\"><li data-start=\"2892\" data-end=\"2911\"><p data-start=\"2894\" data-end=\"2911\">Bless</p></li><li data-start=\"2892\" data-end=\"2911\"><p>Cure Wounds</p></li><li data-start=\"2892\" data-end=\"2911\"><p>Heroism</p></li><li data-start=\"2892\" data-end=\"2911\"><p>Sanctuary</p></li><li data-start=\"2892\" data-end=\"2911\"><p>Shield of Faith</p></li></ul><hr data-start=\"3012\" data-end=\"3015\" /><h2 data-start=\"3017\" data-end=\"3032\">2nd Level</h2><ul data-start=\"3033\" data-end=\"3119\"><li data-start=\"3033\" data-end=\"3041\"><p data-start=\"3035\" data-end=\"3041\">Aid</p></li><li data-start=\"3033\" data-end=\"3041\"><p>Calm Emotions</p></li><li data-start=\"3033\" data-end=\"3041\"><p>Enhance Ability</p></li><li data-start=\"3033\" data-end=\"3041\"><p>Lesser Restoration</p></li><li data-start=\"3033\" data-end=\"3041\"><p>Zone of Truth</p></li></ul><hr data-start=\"3121\" data-end=\"3124\" /><h2 data-start=\"3126\" data-end=\"3141\">3rd Level</h2><ul data-start=\"3142\" data-end=\"3238\"><li data-start=\"3142\" data-end=\"3158\"><p data-start=\"3144\" data-end=\"3158\">Beacon of Hope</p></li><li data-start=\"3142\" data-end=\"3158\"><p>Create Food and Water</p></li><li data-start=\"3142\" data-end=\"3158\"><p>Dispel Magic</p></li><li data-start=\"3142\" data-end=\"3158\"><p>Mass Healing Word</p></li></ul><hr data-start=\"3240\" data-end=\"3243\" /><h2 data-start=\"3245\" data-end=\"3260\">4th Level</h2><ul data-start=\"3261\" data-end=\"3341\"><li data-start=\"3261\" data-end=\"3275\"><p data-start=\"3263\" data-end=\"3275\">Aura of Life</p></li><li data-start=\"3261\" data-end=\"3275\"><p>Death Ward</p></li><li data-start=\"3276\" data-end=\"3286\"><p data-start=\"3278\" data-end=\"3286\">Freedom of Movement</p></li></ul><hr data-start=\"3343\" data-end=\"3346\" /><h2 data-start=\"3348\" data-end=\"3363\">5th Level</h2><ul data-start=\"3364\" data-end=\"3439\"><li data-start=\"3364\" data-end=\"3383\"><p data-start=\"3366\" data-end=\"3383\">Commune</p></li><li data-start=\"3364\" data-end=\"3383\"><p data-start=\"3366\" data-end=\"3383\">Hallow</p></li><li data-start=\"3364\" data-end=\"3383\"><p data-start=\"3366\" data-end=\"3383\">Raise Dead</p></li><li data-start=\"3364\" data-end=\"3383\"><p>Mass Cure Wounds</p></li></ul><hr data-start=\"3441\" data-end=\"3444\" />"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.3.0",
+        "lastModifiedBy": null
+      },
+      "_key": "!journal.pages!BMoB3phQVPiIAvrB.ccso46V0irHoAikp"
+    },
+    {
+      "sort": 700000,
+      "name": "Soul-Smith",
+      "type": "text",
+      "_id": "vhi5KPJ7W6OKtJS8",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h1 data-start=\"2478\" data-end=\"2521\">Soul-Smith — CURATED SPELL LIST</h1><hr data-start=\"2762\" data-end=\"2765\" /><h2 data-start=\"2767\" data-end=\"2781\">minor manifestation</h2><ul data-start=\"2782\" data-end=\"2869\"><li data-start=\"2782\" data-end=\"2795\"><p data-start=\"2784\" data-end=\"2795\">Guidance</p></li><li data-start=\"2782\" data-end=\"2795\"><p data-start=\"2784\" data-end=\"2795\">Mending</p></li><li data-start=\"2782\" data-end=\"2795\"><p>Resistance</p></li></ul><hr data-start=\"2871\" data-end=\"2874\" /><h2 data-start=\"2876\" data-end=\"2891\">1st Level</h2><ul data-start=\"2892\" data-end=\"3010\"><li data-start=\"2892\" data-end=\"2911\"><p data-start=\"2894\" data-end=\"2911\">Bless</p></li><li data-start=\"2892\" data-end=\"2911\"><p>Cure Wounds</p></li><li data-start=\"2892\" data-end=\"2911\"><p>Detect Magic</p></li><li data-start=\"2892\" data-end=\"2911\"><p>Healing Word</p></li><li data-start=\"2892\" data-end=\"2911\"><p>Shield of Faith</p></li></ul><hr data-start=\"3012\" data-end=\"3015\" /><h2 data-start=\"3017\" data-end=\"3032\">2nd Level</h2><ul data-start=\"3033\" data-end=\"3119\"><li data-start=\"3033\" data-end=\"3041\"><p data-start=\"3035\" data-end=\"3041\">Aid</p></li><li data-start=\"3033\" data-end=\"3041\"><p>Enhance Ability</p></li><li data-start=\"3033\" data-end=\"3041\"><p>Heat Metal</p></li><li data-start=\"3033\" data-end=\"3041\"><p>Lesser Restoration</p></li><li data-start=\"3033\" data-end=\"3041\"><p>Warding Bond</p></li></ul><hr data-start=\"3121\" data-end=\"3124\" /><h2 data-start=\"3126\" data-end=\"3141\">3rd Level</h2><ul data-start=\"3142\" data-end=\"3238\"><li data-start=\"3142\" data-end=\"3158\"><p data-start=\"3144\" data-end=\"3158\">Beacon of Hope</p></li><li data-start=\"3142\" data-end=\"3158\"><p>Dispel Magic</p></li><li data-start=\"3142\" data-end=\"3158\"><p>Revivify</p></li></ul><hr data-start=\"3240\" data-end=\"3243\" /><h2 data-start=\"3245\" data-end=\"3260\">4th Level</h2><ul data-start=\"3261\" data-end=\"3341\"><li data-start=\"3261\" data-end=\"3275\"><p data-start=\"3263\" data-end=\"3275\">Fabricate</p></li><li data-start=\"3276\" data-end=\"3286\"><p data-start=\"3278\" data-end=\"3286\">Freedom of Movement</p></li><li data-start=\"3276\" data-end=\"3286\"><p>Stone Shape</p></li></ul><hr data-start=\"3343\" data-end=\"3346\" /><h2 data-start=\"3348\" data-end=\"3363\">5th Level</h2><ul data-start=\"3364\" data-end=\"3439\"><li data-start=\"3364\" data-end=\"3383\"><p data-start=\"3366\" data-end=\"3383\">Greater Restoration</p></li><li data-start=\"3364\" data-end=\"3383\"><p data-start=\"3366\" data-end=\"3383\">Telekinesis</p></li><li data-start=\"3364\" data-end=\"3383\"><p>Wall of Force</p></li><li data-start=\"3364\" data-end=\"3383\"><p>Wall of Stone</p></li></ul><hr data-start=\"3441\" data-end=\"3444\" />"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.3.0",
+        "lastModifiedBy": null
+      },
+      "_key": "!journal.pages!BMoB3phQVPiIAvrB.vhi5KPJ7W6OKtJS8"
+    }
+  ],
+  "categories": [],
+  "sort": 225000,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775619860546,
+    "modifiedTime": 1775619860546,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!journal!BMoB3phQVPiIAvrB"
+}

@@ -1,0 +1,271 @@
+{
+  "name": "Dream-Thread Tuning",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_projection_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Dream-Thread Tuning.</strong> You learn to adjust the symbolic threads beneath events, granting small but meaningful shifts to perception, resolve, or timing.</p><p><strong>Once per Soma Break</strong>, you may spend 1 minute focusing and choose one of the following tunings. Each lasts 10 minutes.</p><ul><li><strong>Clarity Thread:</strong> You gain +1 Insight (Soul); allies within 2 squares gain +1 to either Investigation (Mind) or Perception (Mind) checks (your choice when selected).</li><li><strong>Courage Thread:</strong> You reroll the lowest die on defense checks against being Shaken; allies within 2 squares gain +1 to their next defense check.</li><li><strong>Foresight Thread:</strong> Once before the tuning ends, you or an ally may add +1d4 to an attack roll, save, or attribute check after seeing the roll but before knowing the result.</li></ul>",
+      "chat": ""
+    },
+    "activities": {
+      "activateThread": {
+        "type": "utility",
+        "activation": {
+          "type": "minute",
+          "override": false
+        },
+        "description": {},
+        "_id": "UuvKLqR5aKSoJBJa",
+        "sort": 0,
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "units": "self",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false,
+          "prompt": true
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "dream-thread-tuning",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 2
+    },
+    "properties": [],
+    "requirements": "Dreamwalker",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Clarity Thread (Insight (Soul) + Ally Perception (Mind)/Investigation (Mind))",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_contain_1.png",
+      "origin": null,
+      "transfer": false,
+      "disabled": true,
+      "duration": {
+        "value": 600,
+        "units": "seconds",
+        "expiry": "turnStart",
+        "expired": false
+      },
+      "flags": {
+        "bbttcc": {
+          "dreamwalkerThread": "clarity"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1776459927032,
+        "modifiedTime": 1786827857695
+      },
+      "_id": "ic1KvL72MfoFIFbg",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.insight.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!LhwaA7WbybhObu2G.ic1KvL72MfoFIFbg"
+    },
+    {
+      "name": "Courage Thread (Shaken Resistance + Ally Save Bonus)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cracked_stone.png",
+      "origin": null,
+      "transfer": false,
+      "disabled": true,
+      "duration": {
+        "value": 600,
+        "units": "seconds",
+        "expiry": "turnStart",
+        "expired": false
+      },
+      "flags": {
+        "bbttcc": {
+          "dreamwalkerThread": "courage"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459927032,
+        "modifiedTime": 1777346198542
+      },
+      "_id": "vWYXTJfWpFvBhHFQ",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.dreamwalker.courageAdvantage",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!LhwaA7WbybhObu2G.vWYXTJfWpFvBhHFQ"
+    },
+    {
+      "name": "Foresight Thread (1d4 Boost Storage)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cracked_stone_2.png",
+      "origin": null,
+      "transfer": false,
+      "disabled": true,
+      "duration": {
+        "value": 600,
+        "units": "seconds",
+        "expiry": "turnStart",
+        "expired": false
+      },
+      "flags": {
+        "bbttcc": {
+          "dreamwalkerThread": "foresight"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459927032,
+        "modifiedTime": 1777346198543
+      },
+      "_id": "mfmFbzzYf0jcckTA",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.dreamwalker.foresightD4",
+            "value": 1,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!LhwaA7WbybhObu2G.mfmFbzzYf0jcckTA"
+    }
+  ],
+  "folder": "YLUIFZ5nPOUSaSH2",
+  "flags": {
+    "bbttcc": {
+      "dreamwalker": {
+        "threadTuning": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459927032,
+    "modifiedTime": 1782167240816,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "LhwaA7WbybhObu2G",
+  "sort": 350000,
+  "_key": "!items!LhwaA7WbybhObu2G"
+}

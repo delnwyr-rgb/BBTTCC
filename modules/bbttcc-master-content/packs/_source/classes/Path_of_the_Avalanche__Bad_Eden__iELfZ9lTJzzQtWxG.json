@@ -1,0 +1,41 @@
+{
+  "name": "Path of the Avalanche (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_avalanche.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "bulwark",
+    "source": "Bad Eden Originals — Sprint F (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"You do not stop. They learn this the hard way.\"</em></p>\n<p><strong>Doctrine:</strong> Momentum is the point — geography deciding to move.</p>\n<p>The Avalanche is mass that arrives all at once. Your Surge spends are forward motion made lethal: barrel through, crash home, and — when it matters — become a thing nothing in the world can currently stop.</p>\n<h3>Path (spent via Surge)</h3>\n<ul>\n  <li><strong>Roll Forward</strong> (1) — your next Strike +Tier d6, and the target is knocked Prone.</li>\n  <li><strong>Crash</strong> (3) — your next Strike lands as a max-die crit; the target is Staggered.</li>\n  <li><strong>Unstoppable</strong> (5) — immune to forced-movement/CC this round; your next Strike ignores resistances and knocks the target Prone.</li>\n</ul>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-bulwark-avalanche",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "agkQNnsVjul6ZPYs",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "iELfZ9lTJzzQtWxG",
+  "sort": 100000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1781116176942,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!iELfZ9lTJzzQtWxG"
+}

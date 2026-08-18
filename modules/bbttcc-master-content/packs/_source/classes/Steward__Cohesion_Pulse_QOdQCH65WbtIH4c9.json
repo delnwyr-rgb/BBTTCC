@@ -1,0 +1,65 @@
+{
+  "_id": "QOdQCH65WbtIH4c9",
+  "name": "Steward: Cohesion Pulse",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_shockwave.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"2161\" data-end=\"2174\"><em data-start=\"2161\" data-end=\"2174\">(6th Level)</em></p><p data-start=\"2176\" data-end=\"2244\">You emit a stabilizing surge through a panicked or collapsing scene.</p><h3 data-start=\"2246\" data-end=\"2256\">Effect</h3><ul data-start=\"2257\" data-end=\"2409\"><li data-start=\"2257\" data-end=\"2290\"><p data-start=\"2259\" data-end=\"2290\">Reduce fear or morale collapse.</p></li><li data-start=\"2291\" data-end=\"2310\"><p data-start=\"2293\" data-end=\"2310\">Stabilize unrest.</p></li><li data-start=\"2311\" data-end=\"2409\"><p data-start=\"2313\" data-end=\"2409\">Convert part of the fallout into a small faction benefit (Unity, Soft Power, morale equivalent).</p></li></ul><h3 data-start=\"2411\" data-end=\"2419\">Cost</h3><p data-start=\"2420\" data-end=\"2445\">Spend 1 Civic Charge die.</p><h3 data-start=\"2447\" data-end=\"2464\">Clarification</h3><p data-start=\"2465\" data-end=\"2516\">This does not erase conflict. It prevents fracture.</p><h3 data-start=\"2518\" data-end=\"2530\">Pushback</h3><p data-start=\"2531\" data-end=\"2612\">If used to suppress legitimate dissent repeatedly, Dependence Pressure increases.</p><p data-start=\"2614\" data-end=\"2651\"></p>",
+      "chat": ""
+    },
+    "identifier": "steward_cohesion_pulse",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 6
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "steward_cohesion_pulse"
+    }
+  },
+  "folder": "b7c5HgxxTfcVph6r",
+  "sort": 300000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.QOdQCH65WbtIH4c9",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776481562685,
+    "modifiedTime": 1781116147256,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!QOdQCH65WbtIH4c9"
+}

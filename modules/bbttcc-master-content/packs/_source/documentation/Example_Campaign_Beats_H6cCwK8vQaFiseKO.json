@@ -1,0 +1,63 @@
+{
+  "folder": "OoZBBlTDgemhNept",
+  "name": "Example Campaign Beats",
+  "_id": "H6cCwK8vQaFiseKO",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "It might go something like this ...",
+      "type": "text",
+      "_id": "B0UYcHImHn1trHlx",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h1 data-start=\"3158\" data-end=\"3190\">📖 END-TO-END CAMPAIGN EXAMPLE</h1><p data-start=\"3192\" data-end=\"3238\">We walk a faction from nothing to world shift.</p><hr data-start=\"3240\" data-end=\"3243\" /><h2 data-start=\"3245\" data-end=\"3280\">🧱 STEP 1 — Claim Wilderness Hex</h2><ul data-start=\"3282\" data-end=\"3364\"><li data-start=\"3282\" data-end=\"3308\"><p data-start=\"3284\" data-end=\"3308\">Use Reconstruction Drive</p></li><li data-start=\"3309\" data-end=\"3326\"><p data-start=\"3311\" data-end=\"3326\">Integration → 2</p></li><li data-start=\"3327\" data-end=\"3338\"><p data-start=\"3329\" data-end=\"3338\">Loyalty 1</p></li><li data-start=\"3339\" data-end=\"3364\"><p data-start=\"3341\" data-end=\"3364\">Logistics demand begins</p></li></ul><hr data-start=\"3366\" data-end=\"3369\" /><h2 data-start=\"3371\" data-end=\"3408\">⚔ STEP 2 — Raid Neighbor (Assault)</h2><ul data-start=\"3410\" data-end=\"3619\"><li data-start=\"3410\" data-end=\"3433\"><p data-start=\"3412\" data-end=\"3433\">Stage 4 OP → +2 bonus</p></li><li data-start=\"3434\" data-end=\"3469\"><p data-start=\"3436\" data-end=\"3469\">Use Flank Attack + Supply Overrun</p></li><li data-start=\"3470\" data-end=\"3487\"><p data-start=\"3472\" data-end=\"3487\">Win (margin +3)</p></li><li data-start=\"3488\" data-end=\"3516\"><p data-start=\"3490\" data-end=\"3516\">Gain +2 Economy next round</p></li><li data-start=\"3517\" data-end=\"3568\"><p data-start=\"3519\" data-end=\"3568\">Morale +5 <span class=\"relative inline-flex items-center\">raid-morale.enhancer</span></p></li><li data-start=\"3569\" data-end=\"3619\"><p data-start=\"3571\" data-end=\"3619\">Unity +2 <span class=\"relative inline-flex items-center\">raid-victory.enhancer</span></p></li></ul><p data-start=\"3621\" data-end=\"3640\">Darkness unchanged.</p><hr data-start=\"3642\" data-end=\"3645\" /><h2 data-start=\"3647\" data-end=\"3680\">🕵 STEP 3 — Infiltration Fails</h2><ul data-start=\"3682\" data-end=\"3817\"><li data-start=\"3682\" data-end=\"3746\"><p data-start=\"3684\" data-end=\"3746\">Alarm rises from 1 → 3 <span class=\"relative inline-flex items-center\">raid-infiltration.alarm.enhancer</span></p></li><li data-start=\"3747\" data-end=\"3771\"><p data-start=\"3749\" data-end=\"3771\">Flashback reduces to 2</p></li><li data-start=\"3772\" data-end=\"3817\"><p data-start=\"3774\" data-end=\"3817\">Minor drift pressure (violence vs ideology)</p></li></ul><hr data-start=\"3819\" data-end=\"3822\" /><h2 data-start=\"3824\" data-end=\"3850\">🏙 STEP 4 — Develop Hex</h2><ul data-start=\"3852\" data-end=\"3902\"><li data-start=\"3852\" data-end=\"3865\"><p data-start=\"3854\" data-end=\"3865\">Civic Audit</p></li><li data-start=\"3866\" data-end=\"3882\"><p data-start=\"3868\" data-end=\"3882\">Local Festival</p></li><li data-start=\"3883\" data-end=\"3902\"><p data-start=\"3885\" data-end=\"3902\">Sanctum Expansion</p></li></ul><p data-start=\"3904\" data-end=\"3944\">Integration → 5<br data-start=\"3919\" data-end=\"3922\" />Blessed Ground active.</p><hr data-start=\"3946\" data-end=\"3949\" /><h2 data-start=\"3951\" data-end=\"3990\">🔮 STEP 5 — Discover Corrupted Spark</h2><p data-start=\"3992\" data-end=\"4015\">Campaign beat triggers.</p><p data-start=\"4017\" data-end=\"4045\">Darkness = 8 (Tension band).</p><hr data-start=\"4047\" data-end=\"4050\" /><h2 data-start=\"4052\" data-end=\"4078\">🕊 STEP 6 — Ritual Raid</h2><ul data-start=\"4080\" data-end=\"4180\"><li data-start=\"4080\" data-end=\"4101\"><p data-start=\"4082\" data-end=\"4101\">Faith staging heavy</p></li><li data-start=\"4102\" data-end=\"4136\"><p data-start=\"4104\" data-end=\"4136\">Use Harmonic Chant (Darkness −1)</p></li><li data-start=\"4137\" data-end=\"4146\"><p data-start=\"4139\" data-end=\"4146\">Success</p></li><li data-start=\"4147\" data-end=\"4163\"><p data-start=\"4149\" data-end=\"4163\">Spark purified</p></li><li data-start=\"4164\" data-end=\"4180\"><p data-start=\"4166\" data-end=\"4180\">Darkness now 6</p></li></ul><hr data-start=\"4182\" data-end=\"4185\" /><h2 data-start=\"4187\" data-end=\"4219\">🌳 STEP 7 — Great Work Ritual</h2><ul data-start=\"4221\" data-end=\"4342\"><li data-start=\"4221\" data-end=\"4243\"><p data-start=\"4223\" data-end=\"4243\">Faith 10 + Culture 5</p></li><li data-start=\"4244\" data-end=\"4261\"><p data-start=\"4246\" data-end=\"4261\">Trigger Phase C</p></li><li data-start=\"4262\" data-end=\"4297\"><p data-start=\"4264\" data-end=\"4297\">Hex permanently aligned (Tiferet)</p></li><li data-start=\"4298\" data-end=\"4313\"><p data-start=\"4300\" data-end=\"4313\">OP mix shifts</p></li><li data-start=\"4314\" data-end=\"4342\"><p data-start=\"4316\" data-end=\"4342\">Regional Darkness regen −1</p></li></ul><p data-start=\"4344\" data-end=\"4361\">Faction Unity +2.</p><hr data-start=\"4363\" data-end=\"4366\" /><h2 data-start=\"4368\" data-end=\"4404\">🌍 STEP 8 — Political Drift Event</h2><p data-start=\"4406\" data-end=\"4444\">High violence history triggers strain.</p><p data-start=\"4446\" data-end=\"4484\">Faction chooses Reform (reduce drift).</p><p data-start=\"4486\" data-end=\"4506\">Darkness stabilizes.</p><p data-start=\"4508\" data-end=\"4523\">World advances.</p>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.3.0",
+        "lastModifiedBy": null
+      },
+      "_key": "!journal.pages!H6cCwK8vQaFiseKO.B0UYcHImHn1trHlx"
+    }
+  ],
+  "categories": [],
+  "sort": 300000,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775619866699,
+    "modifiedTime": 1775799290609,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!journal!H6cCwK8vQaFiseKO"
+}

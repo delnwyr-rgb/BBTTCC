@@ -1,0 +1,65 @@
+{
+  "_id": "oZ72wd2LjNSl3SVd",
+  "name": "Redactor: Name Stripping",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_7.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"1609\" data-end=\"1622\"><em data-start=\"1609\" data-end=\"1622\">3rd Level)</em></p><p data-start=\"1624\" data-end=\"1656\"><em data-start=\"1624\" data-end=\"1656\">Names matter. You remove them.</em></p><p data-start=\"1658\" data-end=\"1678\">Once per Soma Break:</p><p data-start=\"1680\" data-end=\"1737\">Choose a creature or effect and strip one semantic label:</p><ul data-start=\"1739\" data-end=\"1807\"><li data-start=\"1739\" data-end=\"1749\"><p data-start=\"1741\" data-end=\"1749\">Undead</p></li><li data-start=\"1750\" data-end=\"1762\"><p data-start=\"1752\" data-end=\"1762\">Summoned</p></li><li data-start=\"1763\" data-end=\"1774\"><p data-start=\"1765\" data-end=\"1774\">Magical</p></li><li data-start=\"1775\" data-end=\"1786\"><p data-start=\"1777\" data-end=\"1786\">Hostile</p></li><li data-start=\"1787\" data-end=\"1800\"><p data-start=\"1789\" data-end=\"1800\">Protected</p></li><li data-start=\"1801\" data-end=\"1807\"><p data-start=\"1803\" data-end=\"1807\">Etc.</p></li></ul><p data-start=\"1809\" data-end=\"1865\">For a short duration, abilities that rely on that label:</p><ul data-start=\"1867\" data-end=\"1940\"><li data-start=\"1867\" data-end=\"1875\"><p data-start=\"1869\" data-end=\"1875\">Fail</p></li><li data-start=\"1876\" data-end=\"1907\"><p data-start=\"1878\" data-end=\"1907\">Treat the target as invalid</p></li><li data-start=\"1908\" data-end=\"1940\"><p data-start=\"1910\" data-end=\"1940\">Lose their trigger condition</p></li></ul><p data-start=\"1942\" data-end=\"1961\">This is loud magic.</p><p data-start=\"1963\" data-end=\"1987\">Gain Strain immediately.</p><p data-start=\"1989\" data-end=\"2018\">You did not change the thing.</p><p data-start=\"2020\" data-end=\"2050\">You changed what it counts as.</p><p data-start=\"2052\" data-end=\"2089\"></p>",
+      "chat": ""
+    },
+    "identifier": "redactor_name_stripping",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "redactor_name_stripping"
+    }
+  },
+  "folder": "pcv0zMJZU8aoEMQc",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.oZ72wd2LjNSl3SVd",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459923345,
+    "modifiedTime": 1782167240827,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!oZ72wd2LjNSl3SVd"
+}

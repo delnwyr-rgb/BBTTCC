@@ -1,0 +1,212 @@
+{
+  "name": "Echo-Diver Heritage: Abyssal",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wasteland_3.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Echo-Diver heritage: Abyssal.</p><p><em>“The deep remembers everything. You’re how it talks about it.”</em></p><p><strong>Echo-Diver (Abyssal).</strong> Your time-sense tilts backward. You don’t predict; you remember, hard, and through things that shouldn’t remember, and sometimes on behalf of things that no longer can. Abyssal Echo-Divers are the ones who find the last note in the last pocket of the last body, and know whose handwriting it was without being told.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Echo-Diver).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Echo-Diver does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Soul</strong> in fiction and through Tier powers.</p></li></ul><h3>Echo-Diver Core: Half-Second Inheritance</h3><p><em>Shared across all Echo-Diver heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Temporal Flinch.</strong> You cannot be surprised while conscious. Once per scene, when you or an ally within 2 squares would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 1 square If this moves the target out of the attack's range or line, the attack misses.</p></li><li><p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air that a comparable Medium creature needs. You reroll the lowest die on Body checks against suffocation, starvation, dehydration, and extreme temperature.</p></li><li><p><strong>Vault Sight.</strong> You have low-light vision out to 12 squares You reroll the lowest die on Mind (Perception) checks to notice unstable structure, active traps, trigger plates, load-bearing failure, and temporal or Spark residue.</p></li><li><p><strong>Rat Inheritance.</strong> You can squeeze through spaces at least one foot wide without halving your movement, and you can hold stillness that shouldn't work.</p></li></ul><h3>Abyssal Traits</h3><ul><li><p><strong>Deep-Current Resistance.</strong> You have resistance to thermal damage with the cold flavor, kinetic damage with the thunder flavor, and psychic damage. The abyss has already tried all three on you. You filed a report.</p></li><li><p><strong>Still Water.</strong> You reroll the lowest die on Soul (Insight) checks and on defense checks against becoming shaken. You have already been more afraid than this, in a place with no surface.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Faith OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Deep / Submerged / Sunken / Archive</em> hexes, your faction's recon and investigation operations gain +2 on the success check.</p></li><li><p><strong>Retrocognitive Read.</strong> Once per Strategic Turn, you may ask the GM what the last major event was in a hex your faction does not control. Useful for reading an adjacent territory before you step into it.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Temporal Flinch</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Reaction  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When an attack would hit you or an ally within 2 squares, shift them 1 square If that breaks range/LoS, the attack misses.</span></p></div>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "e686691276c89dc0",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.Bg1PTabXXLoAlGnY",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Abyssal Tier I",
+        "hint": "Gain your Abyssal Tier I feat."
+      }
+    ],
+    "identifier": "echo_diver_abyssal_heritage",
+    "requirements": "Echo-Diver",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "echo_diver",
+      "lineage": "Abyssal",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "intrigue": 2,
+        "faith": 1
+      }
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          {
+            "type": "energy",
+            "flavor": "cold"
+          },
+          {
+            "type": "kinetic",
+            "flavor": "thunder"
+          },
+          "psychic"
+        ]
+      },
+      "rerolls": [
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "vs:suffocation",
+          "note": "on Body checks against suffocation, starvation, dehydration, and extreme temp…"
+        },
+        {
+          "context": "check",
+          "skill": "perception",
+          "mode": "reroll-lowest",
+          "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg…"
+        },
+        {
+          "context": "check",
+          "attribute": "mind",
+          "mode": "reroll-lowest",
+          "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg…"
+        },
+        {
+          "context": "check",
+          "skill": "insight",
+          "mode": "reroll-lowest",
+          "vs": "vs:becoming shaken",
+          "note": "on Soul (Insight) checks and on defense checks against becoming shaken"
+        },
+        {
+          "context": "check",
+          "attribute": "soul",
+          "mode": "reroll-lowest",
+          "vs": "vs:becoming shaken",
+          "note": "on Soul (Insight) checks and on defense checks against becoming shaken"
+        },
+        {
+          "context": "defense",
+          "mode": "reroll-lowest",
+          "vs": "vs:becoming shaken",
+          "note": "on Soul (Insight) checks and on defense checks against becoming shaken"
+        },
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "vs:suffocation",
+          "note": "Body checks against suffocation, starvation, dehydration, and extreme tempera…"
+        },
+        {
+          "context": "check",
+          "skill": "perception",
+          "mode": "reroll-lowest",
+          "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger …"
+        },
+        {
+          "context": "check",
+          "attribute": "mind",
+          "mode": "reroll-lowest",
+          "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger …"
+        },
+        {
+          "context": "check",
+          "skill": "insight",
+          "mode": "reroll-lowest",
+          "vs": "vs:becoming shaken",
+          "note": "Soul (Insight) checks and on defense checks against becoming shaken"
+        },
+        {
+          "context": "check",
+          "attribute": "soul",
+          "mode": "reroll-lowest",
+          "vs": "vs:becoming shaken",
+          "note": "Soul (Insight) checks and on defense checks against becoming shaken"
+        },
+        {
+          "context": "defense",
+          "mode": "reroll-lowest",
+          "vs": "vs:becoming shaken",
+          "note": "Soul (Insight) checks and on defense checks against becoming shaken"
+        }
+      ],
+      "resourceGrants": [
+        {
+          "cadence": "per-campaign-start",
+          "resource": "intrigue-op",
+          "amount": 2
+        },
+        {
+          "cadence": "per-campaign-start",
+          "resource": "faith-op",
+          "amount": 2
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-self-or-ally-hit",
+          "limit": {
+            "window": "soma-break",
+            "uses": 1
+          },
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Temporal Flinch. You cannot be surprised while conscious. Once per scene, when you or an ally within 10 feet would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 5 feet"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Nuxjzs6LomZDQ5xW",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.6C4TjG04YUwSGg9k",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776660294403,
+    "modifiedTime": 1782167281944,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "6C4TjG04YUwSGg9k",
+  "sort": 0,
+  "_key": "!items!6C4TjG04YUwSGg9k"
+}

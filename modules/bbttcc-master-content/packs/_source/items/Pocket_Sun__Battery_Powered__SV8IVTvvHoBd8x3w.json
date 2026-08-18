@@ -1,0 +1,82 @@
+{
+  "name": "Pocket Sun (Battery Powered)",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/flashlight.png",
+  "system": {
+    "slot": "tool",
+    "tags": [
+      "mal-voiced",
+      "light",
+      "comfort"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>A small steel flashlight with a yellow filter and a faint, persistent warmth. Switch it on and the immediate surroundings look like 4pm in late June, regardless of when or where you are. The batteries last unreasonably long. The light is technically real. The comfort is technically real. The smell of cut grass is, fine, the smell of cut grass is in your head.</p><p><strong>Pocket Noon.</strong> Once per scene, illuminate one Near zone in soft golden light for one minute. Allies in the zone reroll the lowest die on Resolve checks against fear, despair, or the slow corruption of qliphothic ambient. Enemies in the zone are visible regardless of cover. Mal: \"It's not actually sunlight. It's, you know, *vibes.*\"</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "tool",
+          "signature": "Lights everything in noon-summer-gold. Even at midnight. Especially at midnight.",
+          "origin": "claimed",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A small steel flashlight with a yellow filter and a faint, persistent warmth. Switch it on and the immediate surroundings look like 4pm in late June, regardless of when or where you are. The batteries last unreasonably long. The light is technically real. The comfort is technically real. The smell of cut grass is, fine, the smell of cut grass is in your head.</p><p><b>Pocket Noon.</b> Once per scene, illuminate one Near zone in soft golden light for one minute. Allies in the zone reroll the lowest die on Resolve checks against fear, despair, or the slow corruption of qliphothic ambient. Enemies in the zone are visible regardless of cover. Mal: \"It's not actually sunlight. It's, you know, *vibes.*\"</p>",
+          "materialOf": [
+            "pre-fall-electronics",
+            "summer-memory",
+            "stubborn-batteries"
+          ],
+          "charges": 5,
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "SV8IVTvvHoBd8x3w",
+  "effects": [],
+  "sort": 606250,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725663,
+    "modifiedTime": 1778541967482,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!SV8IVTvvHoBd8x3w"
+}

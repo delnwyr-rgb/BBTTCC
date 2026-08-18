@@ -1,0 +1,23 @@
+{
+  "name": "T1 Baseline Armor",
+  "type": "Item",
+  "color": "#5a8c5a",
+  "_id": "2yW6O57xUFtROfpB",
+  "description": "",
+  "folder": "Iyyec8ij0PAfdLBd",
+  "sorting": "a",
+  "sort": 100000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777862454769,
+    "modifiedTime": 1777868607776,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!2yW6O57xUFtROfpB"
+}

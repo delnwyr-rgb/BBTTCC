@@ -1,0 +1,65 @@
+{
+  "_id": "hWJWokdPW2Pp6st3",
+  "name": "Spark Sense",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_spark_sense.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2>Spark Sense</h2><p><em>Some truths are louder than sound.</em></p><hr /><h3>Rules</h3><p>You gain a skill rank in Occult (Mind). If you already have it, you gain mastery.</p><p>As an action, you may focus on the unseen and learn one of the following about a creature, object, or place within 6 squares (choose one):</p><ul><li>Whether it is suffused with magic-like resonance</li><li>Whether it feels aligned toward Renewal or toward Corruption (GM adjudication)</li><li>Whether it bears an active ward, curse, or binding</li></ul><p>You can use this principle a number of times equal to your skill rank bonus, regaining all uses on a Sanctuary.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_spark_sense",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-expansion-v1",
+      "generatedAt": "2026-01-18T20:40:45.006988+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 2300000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1782164185979,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!hWJWokdPW2Pp6st3"
+}

@@ -1,0 +1,75 @@
+{
+  "name": "Shadow Courier — Tier 3: Package Mastery",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hypercube_1.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>Delivery is a sacrament now.</em></p><p><strong>At Shadow Courier Initiation 11</strong>, your Route's signature Package type gains an additional benefit each time you successfully deliver it (in addition to the L1 doctrine delivery effect):</p><ul><li><p><strong>Route of the Wayfarer Tongue (Message).</strong> Delivering grants the recipient faction <strong>+1 Intrigue OP</strong> in addition to the L1 effect.</p></li><li><p><strong>Route of the Black Stair (Blade or Key).</strong> Delivering recovers <strong>1 Pace</strong> for you in addition to the L1 effect.</p></li><li><p><strong>Route of the Last Mile (Soul).</strong> Delivering reduces <strong>Darkness</strong> in the recipient's hex by an additional <strong>1 point</strong> in addition to the L1 effect.</p></li></ul><p>If you ever change Routes (which the campaign should not normally permit), this feature retunes itself to the new doctrine on your next Soma Break.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "shadow_courier_tier3_package_mastery",
+    "requirements": "Shadow Courier Initiation 11",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "classfeat",
+      "classIdentifier": "shadow_courier",
+      "tierLevel": 3,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {},
+      "triggers": [
+        {
+          "event": "on-delivery",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Initiation 11 , your Route's signature Package type gains an additional benefit each time you successfully deliver it (in addition to the L1 doctrine delivery effect): Route of the Wayfarer Tongue (Message)"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "i2DrP0h8cZ7UFXpy",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777005233893,
+    "modifiedTime": 1781116153607,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ShdwClassFt03abc",
+  "sort": 0,
+  "_key": "!items!ShdwClassFt03abc"
+}

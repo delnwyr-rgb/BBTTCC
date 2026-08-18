@@ -1,0 +1,62 @@
+{
+  "name": "Controlled Collapse",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_controlled_collapse.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Core Feats (Batch 3) (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<h2>Controlled Collapse</h2><p><em>Things fall apart. Professionals choose the direction.</em></p><hr><h3>Rules</h3><p>Once per Soma Break, when an environmental hazard, trap, or structural failure would affect an area, you may reduce the affected area by half and choose where the danger concentrates.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_controlled_collapse",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-batch3",
+      "featNumber": 41,
+      "generatedAt": "2026-01-19T05:04:20.693394Z"
+    }
+  },
+  "_id": "uyeVV3g4Q9qsFIoQ",
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 1200000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.uyeVV3g4Q9qsFIoQ",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1782159946551,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!uyeVV3g4Q9qsFIoQ"
+}

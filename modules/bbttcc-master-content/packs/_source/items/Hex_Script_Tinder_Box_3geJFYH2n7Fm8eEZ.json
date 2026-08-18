@@ -1,0 +1,79 @@
+{
+  "name": "Hex-Script Tinder Box",
+  "type": "gear",
+  "img": "icons/sundries/lights/torch-brown.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [
+      "tech"
+    ],
+    "category": "gear",
+    "source": "Phase 7 Seed (2026-05-10)",
+    "description": {
+      "value": "<p>A tin box stamped with hex-glyphs. The fire it kindles refuses mundane extinguishment until the scribed mark is broken.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "frame": "tool",
+          "bound": "free",
+          "materialOf": [
+            {
+              "key": "hex-glyph-plate",
+              "qty": 1
+            },
+            {
+              "key": "ash-wood",
+              "qty": 1
+            }
+          ],
+          "tech": {
+            "kind": "charged",
+            "charges": {
+              "value": 5,
+              "max": 5,
+              "recoverPer": "scene"
+            },
+            "failure": "misfire",
+            "origin": "hex-script"
+          },
+          "price": {
+            "marks": 60,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool × 0.60 × tech 2.0",
+            "bound": "free",
+            "saleBack": 24
+          }
+        }
+      }
+    }
+  },
+  "_id": "3geJFYH2n7Fm8eEZ",
+  "effects": [],
+  "folder": "Wxh1A343inwTUeoo",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778963291960,
+    "modifiedTime": 1778963291960,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 0,
+  "_key": "!items!3geJFYH2n7Fm8eEZ"
+}

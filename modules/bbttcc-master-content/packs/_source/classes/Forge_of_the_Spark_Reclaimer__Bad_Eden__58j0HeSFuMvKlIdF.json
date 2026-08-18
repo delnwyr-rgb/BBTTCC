@@ -1,0 +1,41 @@
+{
+  "name": "Forge of the Spark Reclaimer (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_forge.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "soul-smith",
+    "source": "Bad Eden Originals — Sprint F (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"Nothing is beyond salvage.\"</em></p>\n<p><strong>Mode:</strong> Salvage · <strong>Drift:</strong> Sideways</p>\n<p>The Spark Reclaimer treats destruction as a delivery service. Anything that breaks near you — a foe, a rig, a wall somebody loved — sheds a <strong>Salvage Spark</strong> you pocket (cap = tier + 1). You spend Sparks + Surge to pull use out of ruin: mending allies, stripping wreckage into armor, salvaging whole people back from the edge.</p>\n<h3>Doctrine (Spark-fueled, spent via Surge)</h3>\n<ul>\n  <li><strong>Where The Heat Was.</strong> When something is destroyed within reach of you, bank a Salvage Spark. The wreckage owes you. You collect.</li>\n  <li><strong>Reclaim.</strong> Spark + Surge: salvage a condition off an ally and shore them up with DR equal to your tier. You take the broken thing off them and make it useful.</li>\n  <li><strong>The Remembered Thing.</strong> Spark + Surge: pull a salvaged relic out of the residue — an ally heals 1d8 + tier and gains DR. It returns as it last existed, usable if it was usable.</li>\n  <li><strong>Deep Salvage.</strong> Spark + Surge: restore an ally hard — 2d8 + tier integrity and clear <em>every</em> condition on them. Some ruins are worth the dig.</li>\n  <li><strong>The Last Forge of the Broken Things (Capstone).</strong> Once per session, walk the perimeter of a destroyed site and, over a day's work, restore it to a Salvaged State (~25% capacity) — a garrison, a leyline node, a faction's ruined headquarters. The campaign-scale miracle stays campaign-scale.</li>\n</ul>\n<p><em>Out-of-combat:</em> <strong>Clean Extraction</strong> (negate a Darkness tick after a salvage or demolition you ran) remains the strategic flourish.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-soul-smith-smith-spark-reclaimer",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "BvmSP1PPc1ABT2OO",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "58j0HeSFuMvKlIdF",
+  "sort": 400000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776459469161,
+    "modifiedTime": 1781116113673,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!58j0HeSFuMvKlIdF"
+}

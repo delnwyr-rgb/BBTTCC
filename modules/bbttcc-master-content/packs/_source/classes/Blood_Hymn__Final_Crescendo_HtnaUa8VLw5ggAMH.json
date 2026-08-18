@@ -1,0 +1,252 @@
+{
+  "_id": "HtnaUa8VLw5ggAMH",
+  "name": "Blood Hymn: Final Crescendo",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2 data-start=\"2893\" data-end=\"2926\">Level 18 — <strong data-start=\"2907\" data-end=\"2926\">Final Crescendo</strong></h2><p data-start=\"2928\" data-end=\"2956\">You burn everything at once.</p><h3 data-start=\"2958\" data-end=\"2980\">Once per Soma Break</h3><p data-start=\"2981\" data-end=\"2999\">As a bonus action:</p><ul data-start=\"3000\" data-end=\"3153\"><li data-start=\"3000\" data-end=\"3034\"><p data-start=\"3002\" data-end=\"3034\">You immediately enter <strong data-start=\"3024\" data-end=\"3034\">Burn 4</strong></p></li><li data-start=\"3035\" data-end=\"3153\"><p data-start=\"3037\" data-end=\"3062\">For the rest of the turn:</p><ul data-start=\"3065\" data-end=\"3153\"><li data-start=\"3065\" data-end=\"3102\"><p data-start=\"3067\" data-end=\"3102\">All attacks deal <strong data-start=\"3084\" data-end=\"3102\">maximum damage</strong></p></li><li data-start=\"3105\" data-end=\"3153\"><p data-start=\"3107\" data-end=\"3153\">You may cleave freely (no once-per-turn limit)</p></li></ul></li></ul><h3 data-start=\"3155\" data-end=\"3168\">Aftermath</h3><ul data-start=\"3169\" data-end=\"3364\"><li data-start=\"3169\" data-end=\"3195\"><p data-start=\"3171\" data-end=\"3195\">Your Burn drops to <strong data-start=\"3190\" data-end=\"3195\">0</strong></p></li><li data-start=\"3196\" data-end=\"3364\"><p data-start=\"3198\" data-end=\"3229\">You suffer <strong data-start=\"3209\" data-end=\"3228\">severe backlash</strong>:</p><ul data-start=\"3232\" data-end=\"3364\"><li data-start=\"3232\" data-end=\"3267\"><p data-start=\"3234\" data-end=\"3267\">roll 3d10 keep lowest 2 on attacks and saves</p></li><li data-start=\"3270\" data-end=\"3322\"><p data-start=\"3272\" data-end=\"3322\">Speed reduced to 0 until the end of your next turn</p></li><li data-start=\"3325\" data-end=\"3364\"><p data-start=\"3327\" data-end=\"3364\">GM may impose a narrative consequence</p></li></ul></li></ul><p data-start=\"3366\" data-end=\"3398\">The hymn always ends in silence.</p><hr data-start=\"3400\" data-end=\"3403\" /><h3 data-start=\"3405\" data-end=\"3431\"></h3>",
+      "chat": ""
+    },
+    "identifier": "bloodhymn_final_crescendo",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 18
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "bloodhymn_final_crescendo",
+      "burn": {
+        "set": 4,
+        "after": {
+          "when": "endOfTurn",
+          "set": 0
+        },
+        "_taggedBy": "bbttcc-burn-batch-tagger",
+        "_ts": 1770856290555,
+        "_from": "Blood Hymn: Final Crescendo"
+      }
+    },
+    "autoanimations": {
+      "id": "8d624234-8764-4937-9b7f-0147ad4916ec",
+      "label": "Blood Hymn: Final Crescendo",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "darkpurple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "KPLHk8VtCoaVM95K",
+  "sort": 125000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459909020,
+    "modifiedTime": 1782167240815,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!HtnaUa8VLw5ggAMH"
+}

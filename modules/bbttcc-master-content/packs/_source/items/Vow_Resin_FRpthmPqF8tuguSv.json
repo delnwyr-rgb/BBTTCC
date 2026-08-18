@@ -1,0 +1,81 @@
+{
+  "name": "Vow-Resin",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_vow_wac.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "vow-resin",
+      "resin",
+      "vow",
+      "ritual"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Crystalized residue collected from sept-rooms after long oath-keeping vigils. Used to seal pact-pen barrels and bind marrow-tonic compounds.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Hardened from the air of an unbroken promise.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Crystalized residue collected from sept-rooms after long oath-keeping vigils. Used to seal pact-pen barrels and bind marrow-tonic compounds.</p>",
+          "charges": 3,
+          "materialKey": "vow-resin",
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII material stamp",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "FRpthmPqF8tuguSv",
+  "effects": [],
+  "sort": 474854,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137194186,
+    "modifiedTime": 1782156674943,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!FRpthmPqF8tuguSv"
+}

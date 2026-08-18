@@ -1,0 +1,155 @@
+{
+  "name": "Human (Neanderthal): Hearth-Reader",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_1.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You read a room the way others read a map.”</em></p><p><strong>Hearth-Reader.</strong> You reroll the lowest die on Insight checks, and you can’t be surprised by social betrayal if you have spoken to the betrayer for at least 1 minute (GM adjudicates).</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "human-neanderthal-hearth_reader",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Human",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "human",
+      "feature": "hearth_reader",
+      "lineage": "Neanderthal",
+      "tierLevel": 11,
+      "version": "1.0.0"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "skill": "insight",
+          "mode": "reroll-lowest"
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-skill-fail",
+          "predicate": {
+            "tag": [
+              "insight"
+            ]
+          },
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "Hearth-Reader: GM, consider whether the social pattern was telegraphed and the failure should be re-narrated."
+            }
+          }
+        }
+      ]
+    }
+  },
+  "effects": [
+    {
+      "_id": "6fa7808881de4c20",
+      "name": "Neanderthal: Insight +1",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_5.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.insight.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 10
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Small automation: +1 Insight checks.",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346197034,
+        "modifiedTime": 1777433398747
+      },
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!YgjtYIEYt2M4hX19.6fa7808881de4c20"
+    }
+  ],
+  "folder": "QX8nwxDuMx1qPmXY",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.jiCtt4INxcCi4qZa",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1775004105807,
+    "modifiedTime": 1781116083383,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "YgjtYIEYt2M4hX19",
+  "sort": 100000,
+  "_key": "!items!YgjtYIEYt2M4hX19"
+}

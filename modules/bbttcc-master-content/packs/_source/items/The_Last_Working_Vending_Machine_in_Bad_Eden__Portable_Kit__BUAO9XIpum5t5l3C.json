@@ -1,0 +1,82 @@
+{
+  "name": "The Last Working Vending Machine in Bad Eden (Portable Kit)",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/tech_vending_machine.png",
+  "system": {
+    "slot": "tool",
+    "tags": [
+      "mal-voiced",
+      "tool",
+      "wonder"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>Not actually a full vending machine. A small folding kit — about the size of a lunchbox — that, when unfolded, is unmistakably the input slot, the selection grid, and the dispenser of a 1980s vending machine. Drop a small item in. Press a button (any button — it doesn't matter which). Wait six seconds. A different item drops out. The kit was built by someone who had clearly thought about this for a long time and lost.</p><p><strong>The Trade.</strong> Once per session, deposit any single Tier-I item. Roll 1d6: 1-2 = a roughly equivalent Tier-I item (GM choice), 3-4 = a Tier-II item that is *somehow related*, 5 = a small useful tool you didn't know you needed, 6 = the original item back, plus a sandwich. The kit refuses to operate twice in the same scene. The kit has opinions.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "tool",
+          "signature": "Drop in any small object. Get out a different small object. Sometimes useful. Sometimes a sandwich.",
+          "origin": "found",
+          "originator": null,
+          "bound": "soulbound",
+          "upkeep": {
+            "mode": "passive",
+            "per": "day"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Not actually a full vending machine. A small folding kit — about the size of a lunchbox — that, when unfolded, is unmistakably the input slot, the selection grid, and the dispenser of a 1980s vending machine. Drop a small item in. Press a button (any button — it doesn't matter which). Wait six seconds. A different item drops out. The kit was built by someone who had clearly thought about this for a long time and lost.</p><p><b>The Trade.</b> Once per session, deposit any single Tier-I item. Roll 1d6: 1-2 = a roughly equivalent Tier-I item (GM choice), 3-4 = a Tier-II item that is *somehow related*, 5 = a small useful tool you didn't know you needed, 6 = the original item back, plus a sandwich. The kit refuses to operate twice in the same scene. The kit has opinions.</p>",
+          "materialOf": [
+            "pre-fall-electronics",
+            "vending-machine-soul",
+            "lunchbox-frame"
+          ],
+          "charges": 1,
+          "price": {
+            "marks": 405,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII tool stamp × soulbound 1.5",
+            "bound": "soulbound",
+            "saleBack": 0
+          }
+        }
+      }
+    }
+  },
+  "folder": "Wxh1A343inwTUeoo",
+  "_id": "BUAO9XIpum5t5l3C",
+  "effects": [],
+  "sort": 600270,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777437725674,
+    "modifiedTime": 1778541957230,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!BUAO9XIpum5t5l3C"
+}

@@ -1,0 +1,45 @@
+{
+  "name": "Forge of Victory (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_forge.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "soul-smith",
+    "source": {
+      "custom": "Bad Eden Originals — Sprint F",
+      "revision": 1,
+      "rules": "2026"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"What breaks makes the hammer.\"</em></p>\n<p><strong>Mode:</strong> Conquest · <strong>Drift:</strong> Toward</p>\n<p>The Forge of Victory holds that a defeated enemy is simply raw material that has not been collected yet. You bank <strong>Victor's Sparks</strong> — a real resource, cap = tier + 1 — whenever a foe of consequence falls within reach of you, then spend Sparks + Surge to forge their ending into your edge. It is exactly as tasteless as it sounds, and it works.</p>\n<h3>Doctrine (Spark-fueled, spent via Surge)</h3>\n<ul>\n  <li><strong>The Victor's Spark.</strong> When a foe falls in your presence, bank a Victor's Spark (free). Trophies. Flammable ones.</li>\n  <li><strong>Forged Trophy.</strong> Spark + Surge: your next Strike blazes (+tier d6) and an ally gains DR equal to your tier — a weapon and a shield, both made of someone's worst day.</li>\n  <li><strong>Compounded Blow.</strong> Spark: your next Strike lands as a max-die critical. The dead, it turns out, hold grudges you can aim.</li>\n  <li><strong>Sundering Stroke.</strong> Spark + Surge: your next Strike ignores resistances and leaves the target Staggered. Armor is a suggestion you decline.</li>\n  <li><strong>The Final Form (Capstone).</strong> A Capstone Weapon that swallows every Spark you ever collect, gaining a permanent minor benefit per Spark. Over a campaign it becomes a legendary thing with too many names. Bound to you; a lesser hand gets a fraction.</li>\n</ul>\n<p><em>Out-of-combat:</em> <strong>Standard of Will</strong> (raise a standard, allies +1 vs fear, +1 Unity/VP at scene end) and <strong>Victory Forge</strong> (convert OP after a clean objective) remain the strategic flourishes.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-soul-smith-smith-victory",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "dsO4fBFdVXDt6vRA",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "X4zKZtUsvstpkJKs",
+  "sort": 500000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1781116163635,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!X4zKZtUsvstpkJKs"
+}

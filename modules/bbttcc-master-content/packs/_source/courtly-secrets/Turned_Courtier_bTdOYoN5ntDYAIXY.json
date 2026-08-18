@@ -1,0 +1,45 @@
+{
+  "name": "Turned Courtier",
+  "type": "feat",
+  "img": "icons/skills/social/theft-pickpocket-bribery-brown.webp",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Turned Courtier.</strong> Their friend is your friend now. <em>Play:</em> flip a courtier — −1 to the opponent, +1 to you.</p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "bbttcc-raid": {
+      "secret": {
+        "effectKey": "doubleAgent",
+        "acquisition": "template",
+        "acquiredAt": 0,
+        "raidId": ""
+      }
+    }
+  },
+  "_id": "bTdOYoN5ntDYAIXY",
+  "effects": [],
+  "folder": null,
+  "sort": 1700000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782065103712,
+    "modifiedTime": 1784079176431,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!bTdOYoN5ntDYAIXY"
+}

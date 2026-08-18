@@ -1,0 +1,23 @@
+{
+  "type": "Scene",
+  "folder": "2vNM9F0rxBIPVRNE",
+  "name": "Allesh Gilliam",
+  "color": null,
+  "sorting": "a",
+  "_id": "ZjlMCyl32BJTXn9l",
+  "description": "",
+  "sort": 300000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982535656,
+    "modifiedTime": 1783982535656,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!folders!ZjlMCyl32BJTXn9l"
+}

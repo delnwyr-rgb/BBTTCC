@@ -1,0 +1,72 @@
+{
+  "name": "Gentle Pivot",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_4.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“Just a little to the left, away from tragedy.”</em></p><p>When a creature you can see within <strong>6 squares</strong> makes an attack roll against a target that is <strong>bloodied</strong> (at or below half its Integrity), you can use your <strong>reaction</strong> to nudge the intention sideways.</p><ul><li>The attacker has <strong>advantage</strong> on a contested check (such as a shove, grapple, or disarm) they immediately substitute in place of that attack, or may choose to apply the attack with <strong>disadvantage</strong> but automatically treat it as non-lethal.</li></ul><p>This is a narrative tool: you pivot a kill into a capture, a slam into a pin, a swing into a warning blow.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "@prof"
+    },
+    "advancement": {},
+    "identifier": "wyrdlens-refraction-mercy-gentle-pivot",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept 3, Refraction of Mercy",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "pKuSnWKpU0fVPuje",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "wyrdlens_refraction_mercy",
+      "featureKey": "gentle_pivot"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459984382,
+    "modifiedTime": 1782167240796,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "0MoKyZFkoCa2Ye2s",
+  "sort": 200000,
+  "_key": "!items!0MoKyZFkoCa2Ye2s"
+}

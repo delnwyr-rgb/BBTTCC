@@ -1,0 +1,141 @@
+{
+  "name": "Echo-Diver: Spark Conductor",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_lightning_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Spark Conductor.</strong> Your nerves are wired for Vestigial currents.</p><ul><li>You have resistance to lightning and psychic damage.</li><li>You’re harder to rattle by sudden surges of thought or power.</li><li>In Bad Eden play, you partially blunt Radiation and Spark fallout via flags.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "echo-diver-spark-conductor",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Echo-Diver",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Echo-Diver: Spark Conductor (Resistances)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_broken_wall_3.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.traits.dr.value",
+            "value": "lightning",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.traits.dr.value",
+            "value": "psychic",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>Resistance to lightning and psychic damage reflects your ability to route hostile surges through safer channels. Radiation/Spark behavior is controlled via Bad Eden flags, not automated rolls.</p>",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116104503,
+        "modifiedTime": 1781116104503
+      },
+      "_id": "8GgLIHAkwQbRQ6HE",
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!wyYY8pqbzT1D9nCk.8GgLIHAkwQbRQ6HE"
+    }
+  ],
+  "folder": "hm7tk5c30vdo3q91",
+  "flags": {
+    "bbttcc": {
+      "echoDiverFeature": "spark_conductor",
+      "radiation": {
+        "resistance": 0.5
+      },
+      "tikkun": {
+        "sparkAffinity": 1
+      }
+    },
+    "dnd5e": {},
+    "bbttcc-character-options": {
+      "option": {}
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.IkSO8YDqmpMipnHQ",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1775004101594,
+    "modifiedTime": 1781116104502,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "wyYY8pqbzT1D9nCk",
+  "sort": 300000,
+  "_key": "!items!wyYY8pqbzT1D9nCk"
+}

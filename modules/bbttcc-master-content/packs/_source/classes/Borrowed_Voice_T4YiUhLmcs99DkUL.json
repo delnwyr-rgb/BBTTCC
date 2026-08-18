@@ -1,0 +1,72 @@
+{
+  "name": "Borrowed Voice",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_speech_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Oh, that wasn’t me; that was who you needed to hear.”</em></p><p>Once per <strong>a Soma Break</strong>, you can perfectly mimic the <strong>voice, accent, and speech patterns</strong> of a creature whose voice you have heard for at least 1 minute.</p><ul><li>This mimicry lasts for up to <strong>1 minute</strong>.</li><li>Creatures who are familiar with the imitated voice can make an <strong>Insight (Soul)</strong> check vs your <strong>Stealth (Intrigue)</strong> to notice something is off.</li></ul><p>This does not grant you their knowledge—just their sound.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "dreamwalker-thousand-borrowed-voice",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 10
+    },
+    "properties": [],
+    "requirements": "Dreamwalker 10, Trance of the Thousand Faces",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "ElDtbAjWdrLjiz5K",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "dreamwalker_thousand_faces",
+      "featureKey": "borrowed_voice"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459927034,
+    "modifiedTime": 1782167240820,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "T4YiUhLmcs99DkUL",
+  "sort": 100000,
+  "_key": "!items!T4YiUhLmcs99DkUL"
+}

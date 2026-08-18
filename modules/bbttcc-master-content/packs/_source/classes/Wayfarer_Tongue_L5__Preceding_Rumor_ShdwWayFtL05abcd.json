@@ -1,0 +1,82 @@
+{
+  "name": "Wayfarer Tongue L5: Preceding Rumor",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_music_5.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "RFI-native",
+      "revision": 1,
+      "book": "Bulwark + Shadow Courier v1.0",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Your name travels.</em></p><p>When you enter a new location while <strong>carrying a Message</strong>, the first reaction check made by any NPC in that location toward you is rolled with <strong>reroll-lowest</strong>. NPCs are predisposed to acknowledge you, even if they do not yet know what you carry.</p><p>In any scene where your arrival is <strong>expected</strong> (the recipient or someone allied with them anticipates you), enemies present must succeed on a <strong>Soul defense check vs DC 12 + your Initiation tier × 2</strong> at the start of the scene, or <strong>their hostile intent toward you becomes obvious</strong> before they can act on it. Their first concealed action against you in the scene is automatically detected by you and your immediate allies.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "shadow_courier_wayfarer_l5_preceding_rumor",
+    "requirements": "Route of the Wayfarer Tongue, Shadow Courier Initiation 5",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "shadow_courier",
+      "subclassIdentifier": "bbttcc-shadow-courier-courier-wayfarer-tongue",
+      "subclassLevel": 5,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {},
+      "triggers": [
+        {
+          "event": "on-scene-start",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "resent must succeed on a Soul defense check vs DC 12 + your Initiation tier × 2 at the start of the scene, or their hostile intent toward you becomes obvious before they can act on it"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "W1e3ZXUelQ4D70io",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777005233955,
+    "modifiedTime": 1781116156516,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ShdwWayFtL05abcd",
+  "sort": 200000,
+  "_key": "!items!ShdwWayFtL05abcd"
+}

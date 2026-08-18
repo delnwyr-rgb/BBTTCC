@@ -1,0 +1,2503 @@
+{
+  "name": "Pilgrim Wick",
+  "type": "character",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc",
+      "createdViaNPCBuilder": true,
+      "createdAt": 1783479618606
+    },
+    "fourththing": {
+      "kind": "npc",
+      "surgeEnabled": false,
+      "startingGrantsFiredItems": {
+        "hIkJgJD1Cflq3LaO": {
+          "firedAt": 1783482202802,
+          "itemName": "Menhirkin",
+          "viaSwap": true
+        },
+        "jJwBeDPYlN57c5Pn": {
+          "firedAt": 1783482207697,
+          "itemName": "Menhirkin Heritage: Metamorphic",
+          "viaSwap": true
+        }
+      }
+    },
+    "bbttcc-factions": {
+      "factionId": "7Z8QNm4VGo6JRJG2",
+      "warLogs": [
+        {
+          "ts": 1783979400064,
+          "date": "7/13/2026, 4:50:00 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        }
+      ]
+    },
+    "bbttcc-territory": {
+      "faction": "Khezek Tor"
+    },
+    "bbttcc-character-options": {
+      "nativeLinks": {
+        "subclassName": "",
+        "subclassUuid": "",
+        "subclassApplied": false,
+        "className": "",
+        "classUuid": "",
+        "classApplied": false,
+        "heritageName": "Menhirkin Heritage: Metamorphic",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.MouN6qUadA976AZh",
+        "heritageApplied": true,
+        "ancestryName": "Menhirkin",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.kLmFqDPpLUBzqgR2",
+        "ancestryApplied": true
+      },
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.MouN6qUadA976AZh",
+      "archetype": {
+        "pack": "bbttcc-character-options.character-archetypes",
+        "id": "UjKM1dHrs9MdPDWG",
+        "key": "tower",
+        "name": "Archetype: The Tower (Breaker)",
+        "identifier": "archetype-tower",
+        "category": "character-archetypes"
+      },
+      "identity": {
+        "archetype": {
+          "key": "UjKM1dHrs9MdPDWG",
+          "id": "UjKM1dHrs9MdPDWG",
+          "pack": "bbttcc-character-options.character-archetypes",
+          "category": "character-archetypes",
+          "optionKey": "tower",
+          "identifier": "archetype-tower",
+          "name": "Archetype: The Tower (Breaker)",
+          "currentTier": 1,
+          "displayName": "The Tower (Breaker)"
+        },
+        "crew": {
+          "key": "WatHUkAsyCarniyX",
+          "id": "WatHUkAsyCarniyX",
+          "pack": "bbttcc-character-options.crew-types",
+          "optionKey": "mercenary-band",
+          "identifier": "crew-mercenary-band",
+          "name": "Crew Type: Mercenary Band",
+          "displayName": "Mercenary Band",
+          "currentTier": 1
+        },
+        "occult": {
+          "key": "hRYPYVvWp8VaE11I",
+          "id": "hRYPYVvWp8VaE11I",
+          "pack": "bbttcc-character-options.occult-associations",
+          "optionKey": "goetic-summoner",
+          "identifier": "occult-association-goetic-summoner",
+          "name": "Occult Association: Goetic Summoner",
+          "displayName": "Goetic Summoner",
+          "currentTier": 1
+        },
+        "sephirothicAlignment": {
+          "key": "uczM9QF2Ccb50Rd5",
+          "id": "uczM9QF2Ccb50Rd5",
+          "pack": "bbttcc-character-options.sephirothic-alignments",
+          "category": "sephirothic-alignments",
+          "optionKey": null,
+          "identifier": "alignment-malkuth",
+          "name": "Alignment: Malkuth"
+        }
+      },
+      "calculatedOPs": {
+        "violence": 3,
+        "nonlethal": 4,
+        "intrigue": 3,
+        "economy": 2,
+        "softpower": 0,
+        "diplomacy": 0,
+        "logistics": 2,
+        "culture": 0,
+        "faith": 0
+      },
+      "crew": {
+        "pack": "bbttcc-character-options.crew-types",
+        "id": "WatHUkAsyCarniyX",
+        "name": "Crew Type: Mercenary Band",
+        "identifier": "crew-mercenary-band"
+      },
+      "occult": {
+        "pack": "bbttcc-character-options.occult-associations",
+        "id": "hRYPYVvWp8VaE11I",
+        "name": "Occult Association: Goetic Summoner",
+        "identifier": "occult-association-goetic-summoner"
+      },
+      "sephirot": {
+        "pack": "bbttcc-character-options.sephirothic-alignments",
+        "id": "uczM9QF2Ccb50Rd5",
+        "key": null,
+        "name": "Alignment: Malkuth",
+        "identifier": "alignment-malkuth",
+        "category": "sephirothic-alignments"
+      }
+    },
+    "bbttcc-aae": {
+      "politicalPhilosophy": "fascist"
+    },
+    "tokenflip": {
+      "unfuck": false
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the roads, Allesh-Gilliam, St Gilliam's, Khezek Tor, the Vacancy, pilgrimage",
+        "notes": "[KHEZEK-TREATMENT-2026-07-07] PRIVATE TRUTH — Pilgrim Wick. Voice: mild, road-worn, unfailingly polite; answers questions with itineraries. COVER: a devotional walker of the old routes — St Gilliam's for the candles, Khezek Tor for 'the high shrines,' the Vacancy for the bed he never sleeps in. TRUTH: courier for the Khezek Tor Valhaulan cult. The route IS the job: collect the waxed-fiber drop from St Gilliam's drip tray (the third candle, moved a finger-width, means there's something to collect), carry it up to the upper tunnels, return with instructions folded the same way. Wick believes the cult's cause is holy the way tired people believe things — thoroughly and without examination. GUARDS: everything, mildly; caught with a drop, Wick recites pilgrimage scripture and requests to be allowed to continue on foot. Wick does not know Father Tamsin's NAME for certain and has never spoken to him directly — tradecraft: the candle talks, not the men. TELLS: pays exact to the mark; never sleeps in the bed (keeps vigil, technically); smells faintly of candle wax in a town that burns tallow; his boots know the Khezek switchbacks better than any shrine schedule justifies. IF THE DEBT RESOLVES: the channel burns and Wick simply stops coming — one more unreadable name in Verna's ledger."
+      }
+    }
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 4,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 2,
+      "tier": 1
+    },
+    "attributes": {
+      "violence": {
+        "value": 5
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 5
+      },
+      "mind": {
+        "value": 6
+      },
+      "soul": {
+        "value": 5
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 0
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 0
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 3
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 1
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 3
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 1
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 1
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 3
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 5
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 1
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 1
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 1
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 1
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 37,
+        "max": 16
+      },
+      "stress": {
+        "value": 48,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 13,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "probabilityOverlay": {
+        "current": 1
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": "7Z8QNm4VGo6JRJG2",
+      "loyalty": 0,
+      "name": "Khezek Tor"
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": 1,
+    "name": "Pilgrim Wick",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/pilgrim_wick_pov.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "tokenflip": {
+        "tokenfaces": [
+          {
+            "actorId": "Vv8mDrdsPJnCBLeA",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/pilgrim_wick_pov.png",
+            "id": "09F2yUQG32JZqXBX098d",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 1,
+            "height": 1,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          },
+          {
+            "actorId": "Vv8mDrdsPJnCBLeA",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/pilgrim_wick_token.png",
+            "id": "cGeqlCOGLoMFGXvNUTF0",
+            "scaleX": 1,
+            "scaleY": 1,
+            "width": 1,
+            "height": 1,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          },
+          {
+            "actorId": "Vv8mDrdsPJnCBLeA",
+            "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/pilgrim_wick_pov.png",
+            "id": "EXSygqajvaH6ekUCphQG",
+            "scaleX": 3,
+            "scaleY": 3,
+            "width": 16,
+            "height": 16,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          }
+        ]
+      },
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "Vv8mDrdsPJnCBLeA",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/pilgrim_wick_pov.png",
+  "items": [
+    {
+      "name": "Menhirkin",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tharlabrindt_pov.png",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-canon-menhirkin=\"v1\" style=\"display:none\"></div><p><em>\"The land is not scenery. The land is a person. You are the version of it that finally stood up and walked over to complain.\"</em></p><p>You are not descended from the land. You are the land. A hex decided to become a person and the person is you. The standing stones on the ridge are distant cousins. The bedrock under the bunker is a grandparent. Mortals call you a Hex-Giant. You don't correct them.</p><p><strong>Creature Type.</strong> Humanoid (Menhirkin). <strong>Size.</strong> Medium, but you count as Large for carrying capacity and the size of creatures you can shove or grapple. <strong>Speed.</strong> 6 squares</p><p><strong>Heartstone (passive).</strong> A fragment of your home hex is literally inside you. While in any hex your faction controls or has claimed: reroll the lowest die on Body checks (auto-fires), and you cannot be forcibly removed from the hex against your will (teleportation, banishment, forced march) without first being reduced to 0 Integrity.</p><p><strong>Land Memory (1/Soma Break).</strong> Lay a hand on any surface older than you; the GM tells you one true thing the land remembers.</p><p><strong>Living Rampart (1/Soma Break).</strong> Reaction — when a creature you can see targets an ally adjacent to you with an attack, the attacker rolls 3d10 keep lowest 2 on that attack roll.</p><p><strong>Stonebound (passive).</strong> Reroll the lowest die on Body checks to resist being pushed, knocked Prone, or otherwise forcibly moved (auto-fires). Reroll the lowest die on Body checks to build, repair, or fortify structures, siegeworks, and defensive emplacements (auto-fires).</p><p><strong>Strategic Hooks.</strong> <em>OP Edge:</em> +2 Non-Lethal OP and +1 Violence OP at campaign start. <em>Fortify Hex:</em> first Patch the Breach or structure-repair Siege activity each Turn costs 1 fewer OP (min 0). <em>Logistics Frame:</em> 1/Turn, treat one raid/operation Logistics cost as Logistics −1 (min 0). <em>Sentient Land (1/Strategic Turn):</em> consult the hex itself about a pending decision; one-sentence honest answer from the land's perspective.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"menhirkinHexGiant\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Menhirkin: Hex-Giant</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 3 active per-uses (2 Soma Break · 1 Strategic Turn) + 2 reroll passives + Heartstone hex-protection  ·  <strong>Action:</strong> Picker (Land Memory · Living Rampart · Sentient Land · Heartstone)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">4-slot picker — Land Memory (touch-the-old-stones), Living Rampart (ally-cover reaction), Sentient Land (1/Strategic Turn faction question), Heartstone passive. Stonebound reroll grants auto-fire on Body checks for forced-movement and build/repair/fortify.</span></p></div>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "mJh91oDMWDwzfq6L",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium (but you count as Large for carrying, shove, and grapple).",
+            "value": {}
+          },
+          {
+            "_id": "HS11111111111111",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.2wTyD2Lq1mbnwODi",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Heartstone",
+            "hint": "Gain the Menhirkin: Heartstone feature."
+          },
+          {
+            "_id": "SM22222222222222",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.nkLGYmro2QJxW5nA",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Land Memory",
+            "hint": "Gain the Menhirkin: Land Memory feature (v2 reframe of Stone Memory)."
+          },
+          {
+            "_id": "GW33333333333333",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.NIOQEm26wOoSuf2O",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Gravity Well",
+            "hint": "Gain the Menhirkin: Gravity Well feature."
+          },
+          {
+            "_id": "a1b2c3d4e5f6g7h8",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.Pf74lkSrv4Ogjyk6",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Living Rampart",
+            "hint": "Gain the Menhirkin: Living Rampart feature."
+          },
+          {
+            "_id": "h7g6f5e4d3c2b1a0",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.o9A2rhMAKPFI8Dnb",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Stonebound",
+            "hint": "Gain the Menhirkin: Stonebound feature."
+          },
+          {
+            "_id": "Z9Y8X7W6V5U4T3S2",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.qVOg838eU3areJzy",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Strategic Hooks (Menhirkin)",
+            "hint": "Grants OP edges and hex/Logistics hooks used by Bad Eden faction systems."
+          }
+        ],
+        "identifier": "menhirkin",
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": 10,
+          "truesight": null,
+          "units": null,
+          "special": "Tremorsense 10 ft while standing on natural ground."
+        },
+        "type": {
+          "value": "humanoid",
+          "subtype": "Menhirkin",
+          "custom": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Living Rampart: Athletics +1",
+          "img": "icons/magic/earth/strike-shock-stone.webp",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.athletics.value",
+                "value": 1,
+                "type": "add",
+                "priority": 10,
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Passive: Living Rampart: Athletics +1",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "sprint": "passive-ae-2026-04-28",
+              "batch": 2
+            }
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "_id": "ABtRlSRtwZtFWrcn",
+          "showIcon": 1,
+          "folder": null,
+          "_stats": {
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "createdTime": 1784177891309,
+            "modifiedTime": 1784177891309,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!Vv8mDrdsPJnCBLeA.hIkJgJD1Cflq3LaO.ABtRlSRtwZtFWrcn"
+        }
+      ],
+      "folder": "DylQKvptEOaCqul8",
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "opEffects": {
+            "nonLethal": 2,
+            "violence": 1
+          },
+          "siegeRepairDiscount": 1,
+          "logisticsDiscountPerTurn": 1,
+          "sentientLandConsult": true,
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "normalizedFrom": "Hex-Giant (Menhirkin)",
+          "refactorNotes": "v2 reframe: living embodiment of sentient land. Heartstone now binds to hex. Stone Memory reframed as Land Memory. Added Sentient Land faction hook."
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "save",
+              "mode": "reroll-lowest",
+              "note": "on Constitution saves and cannot be forcibly removed from the hex against you…"
+            },
+            {
+              "context": "forced-movement",
+              "mode": "reroll-lowest",
+              "note": "on ability checks you make to resist being pushed, knocked prone, or otherwis…"
+            },
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "on checks you make to build, repair, or fortify structures, siegeworks, and d…"
+            },
+            {
+              "context": "save",
+              "mode": "reroll-lowest",
+              "note": "Constitution saves and cannot be forcibly removed from the hex against your w…"
+            },
+            {
+              "context": "forced-movement",
+              "mode": "reroll-lowest",
+              "note": "ability checks you make to resist being pushed, knocked prone, or otherwise f…"
+            },
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "checks you make to build, repair, or fortify structures, siegeworks, and defe…"
+            },
+            {
+              "context": "attack",
+              "mode": "reroll-highest"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "note": "while in a hex your faction controls or has claimed (Heartstone)"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "note": "to resist being pushed, knocked Prone, or otherwise forcibly moved (Stonebound)"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "note": "to build, repair, or fortify structures, siegeworks, or defensive emplacements (Stonebound)"
+            }
+          ],
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "violence-op",
+              "amount": 2
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "non-lethal-op",
+              "amount": 2
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-ally-targeted",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Living Rampart. You have proficiency in the Athletics skill. As a reaction when a creature you can see targets an ally adjacent to you with an attack, you can interpose bulk and bad life choices, imposing disadva..."
+                }
+              }
+            }
+          ],
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "grantedByAncestry": "Menhirkin"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.kLmFqDPpLUBzqgR2",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891309,
+        "modifiedTime": 1784177891309,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "hIkJgJD1Cflq3LaO",
+      "_key": "!actors.items!Vv8mDrdsPJnCBLeA.hIkJgJD1Cflq3LaO"
+    },
+    {
+      "name": "Menhirkin (Metamorphic): The Thing You Were",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_sapphire_gate.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "RFI-native",
+          "revision": 3,
+          "book": "Heritages v1.1",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-canon-menhirkin=\"v1\" style=\"display:none\"></div>\n<p><em>\"The first shape was softer. The second shape remembers.\"</em></p>\n<p><strong>The Thing You Were (1/Scene).</strong> Bonus action — briefly re-surface a trait of your pre-pressure self. Pick one of three options; it lasts until the end of your next turn:</p>\n<ul>\n  <li><strong>Softer:</strong> your movement increases by 2 squares and you reroll the lowest die on Intrigue checks to squeeze or slip past.</li>\n  <li><strong>Older:</strong> you gain low-light vision 12 squares if you don't already have it, or +6 squares if you do.</li>\n  <li><strong>Wetter:</strong> you become immune to the Burning and Prone conditions, and difficult terrain does not slow you.</li>\n</ul>\n<p>Each option refreshes on Soma Break — you cannot pick the same option twice before a Soma Break.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"menhirkinMetamorphicThingYouWere\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>The Thing You Were</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Scene total — each option refreshes on Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Picker (Softer · Older · Wetter) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Bonus action — re-surface one of three pre-pressure traits (Softer / Older / Wetter) until end of next turn. Each option's individual use refreshes on Soma Break.</div>\n</div>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "menhirkin_metamorphic_tier1",
+        "requirements": "Menhirkin (Metamorphic)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [
+            {
+              "period": "sr",
+              "type": "recoverAll",
+              "formula": ""
+            }
+          ],
+          "max": "1"
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "menhirkin",
+          "feature": "the_thing_you_were",
+          "lineage": "Metamorphic",
+          "tierLevel": 1,
+          "version": "1.1.0",
+          "date": "2026-04-19",
+          "rfiNative": true
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "attribute": "intrigue",
+              "mode": "reroll-lowest",
+              "note": "on Intrigue checks to squeeze or slip past"
+            },
+            {
+              "context": "check",
+              "attribute": "intrigue",
+              "mode": "reroll-lowest",
+              "note": "Intrigue checks to squeeze or slip past"
+            }
+          ],
+          "principleSource": "ancestry",
+          "grantedByHeritage": "Metamorphic"
+        },
+        "autoanimations": {
+          "id": "65db5b22-d0be-4cff-ba05-c4c402df181c",
+          "label": "Menhirkin (Metamorphic): The Thing You Were",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "intro",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "ZD6m5vIWjoIywQ3w",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-heritages-v1.1",
+          "uuid": "Item.Y1FZ3Z6RzVQK0YLJ",
+          "coreVersion": "13.351",
+          "systemId": "fourththing",
+          "systemVersion": "0.6.0"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891309,
+        "modifiedTime": 1784177891309,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "MsF1J073tmdNwxTN",
+      "_key": "!actors.items!Vv8mDrdsPJnCBLeA.MsF1J073tmdNwxTN"
+    },
+    {
+      "name": "Menhirkin Heritage: Metamorphic",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_23.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Menhirkin heritage: Metamorphic.</p><p><em>“What you are now is not what you were. The pressure was the point.”</em></p><p><strong>Menhirkin (Metamorphic).</strong> You are land that was buried, squeezed, heated, and came back up harder and more interesting. Every Metamorphic has a before-self — a softer version of themselves that got pressed into something else. You remember being that. You are not going back.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Menhirkin).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Menhirkin does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Body</strong> in fiction and through Tier powers.</p></li></ul><h3>Menhirkin Core: The Land Stood Up</h3><p><em>Shared across all Menhirkin heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Stone Soul.</strong> You count as Large for carry, shove, and grapple despite your Medium frame. You reroll the lowest die on checks to resist being forcibly moved.</p></li><li><p><strong>Hex Recognition.</strong> Once per scene, while you are on a natural surface you are directly touching, you may whisper a single question about the place. The GM answers with one true thing the land knows.</p></li><li><p><strong>Slow to Wear.</strong> You reroll the lowest die on Body checks against Stress, long-duration physical wear, forced marches, climate exposure, and sustained labor. You do not tire the way softer things tire.</p></li><li><p><strong>Heavy Presence.</strong> Your weight and settledness are perceptible. Creatures within 2 squares of you know you are there even if they cannot see you; you roll 3d10 keep lowest 2 on Intrigue (Stealth) checks unless you are on or in stone.</p></li></ul><h3>Metamorphic Traits</h3><ul><li><p><strong>Pressure Remade.</strong> At the end of each Soma Break, the day chooses what you are until your next Soma Break. Roll a d4 or pick (GM discretion): (1) +1 Guard, (2) resistance to kinetic damage, (3) +1 rank on one skill of your choice, (4) reroll-lowest on Body checks to resist being knocked prone or grappled. You announce the result; you do not pre-pick.</p></li><li><p><strong>Unbreakable Core.</strong> You reroll the lowest die on defense checks against petrification, forced transmutation, and forced shape-change. You have been turned into something else once already; nobody does it twice without your say-so.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Non-Lethal OP</strong> and <strong>+1 Intrigue OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Any hex your faction has held for 3+ Strategic Turns</em> hexes, your faction gains +1 on defense checks in that hex.</p></li><li><p><strong>Second-Form Bearing.</strong> Once per Strategic Turn, your faction may treat one Morale or Loyalty check as if it had one additional track-band of headroom. The thing you became has held under pressure before.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Hex Recognition</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Action  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">On a natural surface you're touching, whisper a question — GM answers with one true thing the land knows.</span></p></div>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "a32c603d15200f04",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.Y1FZ3Z6RzVQK0YLJ",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Metamorphic Tier I",
+            "hint": "Gain your Metamorphic Tier I feat."
+          }
+        ],
+        "identifier": "menhirkin_metamorphic_heritage",
+        "requirements": "Menhirkin",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "menhirkin",
+          "lineage": "Metamorphic",
+          "version": "1.1.0",
+          "date": "2026-04-19",
+          "rfiNative": true,
+          "opEffects": {
+            "nonlethal": 2,
+            "intrigue": 1
+          }
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "forced-movement",
+              "mode": "reroll-lowest",
+              "note": "on checks to resist being forcibly moved"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "vs": "vs:exhaustion",
+              "note": "on Body checks against exhaustion, long-duration physical wear, forced marche…"
+            },
+            {
+              "context": "defense",
+              "mode": "reroll-lowest",
+              "vs": "vs:petr",
+              "note": "on defense checks against petrification, forced transmutation, and forced sha…"
+            },
+            {
+              "context": "check",
+              "skill": "stealth",
+              "mode": "reroll-highest",
+              "note": "on Intrigue (Stealth) checks unless you are on or in stone"
+            },
+            {
+              "context": "check",
+              "attribute": "intrigue",
+              "mode": "reroll-highest",
+              "note": "on Intrigue (Stealth) checks unless you are on or in stone"
+            },
+            {
+              "context": "forced-movement",
+              "mode": "reroll-lowest",
+              "note": "checks to resist being forcibly moved"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "vs": "vs:exhaustion",
+              "note": "Body checks against exhaustion, long-duration physical wear, forced marches, …"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "note": "Body checks to resist being knocked prone or grappled"
+            },
+            {
+              "context": "forced-movement",
+              "mode": "reroll-lowest",
+              "note": "Body checks to resist being knocked prone or grappled"
+            },
+            {
+              "context": "defense",
+              "mode": "reroll-lowest",
+              "vs": "vs:petr",
+              "note": "defense checks against petrification, forced transmutation, and forced shape-…"
+            },
+            {
+              "context": "check",
+              "skill": "stealth",
+              "mode": "reroll-highest",
+              "note": "Intrigue (Stealth) checks unless you are on or in stone"
+            },
+            {
+              "context": "check",
+              "attribute": "intrigue",
+              "mode": "reroll-highest",
+              "note": "Intrigue (Stealth) checks unless you are on or in stone"
+            }
+          ],
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "intrigue-op",
+              "amount": 2
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "non-lethal-op",
+              "amount": 2
+            }
+          ],
+          "grantedByHeritage": "Metamorphic"
+        },
+        "autoanimations": {
+          "id": "8d3f48df-b927-4d6e-969d-0c2c22f01a63",
+          "label": "Menhirkin Heritage: Metamorphic",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "NIrFWcA3AAMW6nsD",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-heritages-v1.1",
+          "uuid": "Item.MouN6qUadA976AZh",
+          "coreVersion": "13.351",
+          "systemId": "fourththing",
+          "systemVersion": "0.6.0"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891309,
+        "modifiedTime": 1784177891309,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "jJwBeDPYlN57c5Pn",
+      "_key": "!actors.items!Vv8mDrdsPJnCBLeA.jJwBeDPYlN57c5Pn"
+    },
+    {
+      "name": "Archetype: The Tower (Breaker)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_tower.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“If it stands, it can fall.”</em></p><p><strong>Archetype (Bad Eden): The Tower (Breaker).</strong> You are structural collapse, breach doctrine, and the terrible logic of proving that a thing was never as stable as it claimed.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens demolition, disruption, breach operations, and catastrophic openings. This Archetype is associated with <strong>+1 Violence</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {
+          "h8X3BzmNOSPkDDx6": {
+            "_id": "h8X3BzmNOSPkDDx6",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 3,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 1,
+            "title": "Archetype Ability Scores",
+            "hint": "Gain 3 ability score points (max +2 to any one score). See the Archetype text for recommended arrays.",
+            "flags": {}
+          }
+        },
+        "identifier": "archetype-tower",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "RnuL7aCXXxgV9QU4",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "character-archetypes",
+          "bonuses": {
+            "violence": 1
+          },
+          "option": {
+            "category": "archetype",
+            "key": "tower",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:tower",
+              "bbttcc:expression:breaker",
+              "bbttcc:base"
+            ]
+          }
+        },
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": "Item.zTN7YGcUFICBGiPW",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.zTN7YGcUFICBGiPW",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891309,
+        "modifiedTime": 1784177891309,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "rBWyLgDQL8CD5flT",
+      "sort": 100000,
+      "_key": "!actors.items!Vv8mDrdsPJnCBLeA.rBWyLgDQL8CD5flT"
+    },
+    {
+      "name": "Archetype: The Tower (Breaker) (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_tower.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden – Archetype: The Tower (Breaker) (Tier 1)",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 (Level 1) — The Tower (Breaker)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "archetype-tower-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Level 1+",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "name": "Archetype Tier 1 Proficiencies",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_6.png",
+          "_id": "zOYSsV6rMdmfERTi",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.athletics.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.investigation.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177891309,
+            "modifiedTime": 1784177891309
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!Vv8mDrdsPJnCBLeA.e3jNqsfD6xHzLpeL.zOYSsV6rMdmfERTi"
+        }
+      ],
+      "folder": "RnuL7aCXXxgV9QU4",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "tower",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:tower",
+              "bbttcc:expression:breaker",
+              "bbttcc:tier:1",
+              "bbttcc:violence_op_cap:+2"
+            ]
+          }
+        },
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": "Item.yKWEeD1fgL1AM1wt",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.yKWEeD1fgL1AM1wt",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891309,
+        "modifiedTime": 1784177891309,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "e3jNqsfD6xHzLpeL",
+      "sort": 0,
+      "_key": "!actors.items!Vv8mDrdsPJnCBLeA.e3jNqsfD6xHzLpeL"
+    },
+    {
+      "name": "Alignment: Malkuth",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "The Kingdom - Reality that must work. +1 Economy, +1 Logistics OPs\n\nMalkuth is grounded stewardship: land, labor, roads, walls, and the actual world. It rewards hex development, infrastructure, and practical leadership that makes civilization durable.",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "alignment-malkuth",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_throne_1.png",
+      "effects": [],
+      "folder": "RAOWJYon3t34M5XY",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "economy": 1,
+            "logistics": 1
+          },
+          "option": {}
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.q53inPEbjgWtS6KS",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.ioIlSBdwpfrIgWyf",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891309,
+        "modifiedTime": 1784177891309,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "lUXevYHo4SkQcWFd",
+      "sort": 700000,
+      "_key": "!actors.items!Vv8mDrdsPJnCBLeA.lUXevYHo4SkQcWFd"
+    },
+    {
+      "name": "Crew Type: Mercenary Band (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden – Crew Type: Mercenary Band (Tier 1)",
+          "revision": 2,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank with Medium Armor and one Martial Weapon of your choice.</li><li><strong>Strategic:</strong> Your faction starts with +1 Violence OPs.</li></ul>",
+          "chat": ""
+        },
+        "identifier": "crew-mercenary-band-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "requirements": "Level 1+",
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        }
+      },
+      "effects": [],
+      "folder": "m4EIJI3cE6QISpe4",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "mercenary-band",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "op",
+              "combat"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:mercenary-band",
+              "bbttcc:tier:1",
+              "bbttcc:domain:op",
+              "bbttcc:domain:combat",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:violence:+8",
+              "bbttcc:effect:op:diplomacy:-3",
+              "bbttcc:effect:combat:armor_training:medium",
+              "bbttcc:effect:combat:weapon_training:martial_choice:1",
+              "bbttcc:theme:contract-violence",
+              "bbttcc:theme:professional-soldiers",
+              "bbttcc:theme:battlefield-pressure",
+              "bbttcc:theme:paid-force"
+            ]
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Item.bxerUZApok1xK9yH",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.bxerUZApok1xK9yH",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891309,
+        "modifiedTime": 1784177891309,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "UIgQICcDhuAI4GS7",
+      "sort": 0,
+      "_key": "!actors.items!Vv8mDrdsPJnCBLeA.UIgQICcDhuAI4GS7"
+    },
+    {
+      "name": "Occult Association: Goetic Summoner (Tier 1)",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 2,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Goetic Summoner</strong></p><p><strong>“First lesson: the circle protects you. Second lesson: only if it’s perfect.”</strong></p><p>You learn the etiquette of predators: names, constraints, and the price of eye contact. You are not yet strong enough to command, but you are strong enough to be heard.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Occult</strong> and <strong>Intimidation</strong></li><li>Learn <strong>Find Familiar</strong>, flavored as unsettling, watchful, or veil-adjacent</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction attempts intimidation, coercion, or violent leverage, gain <strong>+1 to the relevant Violence OP roll</strong></li><li>When your faction runs reconnaissance, blackmail, or covert acquisition, gain <strong>+1 to the relevant Intrigue OP roll</strong></li><li>When your faction attempts goodwill, legitimacy, or mass Diplomacy, suffer <strong>–1 to the relevant Soft Power OP roll</strong></li></ul><p><strong>Cost:</strong> early Goetic work leaves an obvious scent. Expect attention from the wrong entities, fear from the right people, and a reputation that arrives before you do.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "requirements": "Level 1+",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "identifier": "occult-association-goetic-summoner-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "goetic-summoner",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:goetic-summoner",
+              "bbttcc:tier:1",
+              "bbttcc:domain:darkness",
+              "bbttcc:domain:coercion",
+              "bbttcc:domain:recon",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:coercion",
+              "bbttcc:when:recon",
+              "bbttcc:when:goodwill",
+              "bbttcc:effect:proficiency:arcana",
+              "bbttcc:effect:proficiency:intimidation",
+              "bbttcc:effect:spell:find-familiar",
+              "bbttcc:effect:op_roll:violence:+2",
+              "bbttcc:effect:op_roll:intrigue:+2",
+              "bbttcc:effect:op_roll:softpower:-1",
+              "bbttcc:resonance:qliphoth",
+              "bbttcc:drift:pragmatic-corruptive",
+              "bbttcc:cost:attention",
+              "bbttcc:cost:fear-reputation",
+              "bbttcc:theme:predator-etiquette",
+              "bbttcc:theme:first-circle"
+            ]
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "effects": [
+        {
+          "name": "Occult Tier1 Proficiencies",
+          "disabled": false,
+          "transfer": true,
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bellows_2.png",
+          "_id": "n2WDIGozDB5hZr0q",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.occult.value",
+                "type": "add",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.intimidation.value",
+                "type": "add",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1784177891309,
+            "modifiedTime": 1784177891309
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!Vv8mDrdsPJnCBLeA.Bim5btVanGqotEQt.n2WDIGozDB5hZr0q"
+        }
+      ],
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+      "folder": "8EpFv8GVkHaIuTnR",
+      "_stats": {
+        "compendiumSource": "Item.RqCQJVlh9BuZ0SsL",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.RqCQJVlh9BuZ0SsL",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891309,
+        "modifiedTime": 1784177891309,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "Bim5btVanGqotEQt",
+      "sort": 0,
+      "_key": "!actors.items!Vv8mDrdsPJnCBLeA.Bim5btVanGqotEQt"
+    },
+    {
+      "name": "Deep Well",
+      "type": "feat",
+      "img": "icons/magic/water/orb-water-bubbles.webp",
+      "folder": "QbGNBV70xh9pF0eh",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "BBTTCC Manifestation Techniques v1",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<h2>Deep Well</h2><p><em>Your reservoir of will runs deeper than most stewards'.</em></p><hr /><h3>Rules</h3><p>Your maximum <strong>Clarity</strong> increases by <strong>2</strong>. A deeper reservoir lets you hold more manifestations at once and absorb a bad misfire without running dry.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">⚙ Applies automatically: +2 Clarity max.</p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_deep_well",
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-manifestation-techniques-v1",
+          "theme": "Clarity economy"
+        },
+        "fourththing": {
+          "discipline": {
+            "passive": {
+              "clarityMaxBonus": 2
+            }
+          }
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891309,
+        "modifiedTime": 1784177891309,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "XyRmay4ahQulX4Od",
+      "_key": "!actors.items!Vv8mDrdsPJnCBLeA.XyRmay4ahQulX4Od"
+    },
+    {
+      "name": "Lens Ledger",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_17.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2025",
+          "custom": "Bad Eden Originals"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>You keep a quiet accounting of what should have gone wrong.</em></p><p>When you use a <strong>refraction die</strong> from Foresight Refraction to alter a roll and the result changes a <strong>failure into a success</strong>, mark one tally in your <strong>ledger</strong>.</p><ul><li>At the end of the scene, if you have at least <strong>2 tallies</strong>, you gain  before a future scene (chosen by you) as the timeline pre-cooperates with your entry.</li><li>After you receive this initiative bonus once, your ledger resets to 0 tallies.</li></ul><p>This is purely narrative bookkeeping: you’re getting credit for every disaster you quietly deflected.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlForesightLedger\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Lens Ledger</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Tally-based &nbsp;·&nbsp; <strong>Action:</strong> Free (passive bookkeeping) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When a Foresight Refraction die converts a failure into a success, mark a tally. With 2+ tallies at scene end, gain an initiative bonus on a future scene of your choice; ledger then resets to 0.</div>\n</div>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "wyrdlens-refraction-foresight-lens-ledger",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 3
+        },
+        "properties": [],
+        "requirements": "Wyrdlens Adept 3, Refraction of Foresight",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "bfvmbtbYMd6cxsV2",
+      "flags": {
+        "bbttcc": {
+          "subclassKey": "wyrdlens_refraction_foresight",
+          "featureKey": "lens_ledger"
+        },
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891309,
+        "modifiedTime": 1784177891309,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 300000,
+      "_id": "hlDzomjOXTXWiEzd",
+      "_key": "!actors.items!Vv8mDrdsPJnCBLeA.hlDzomjOXTXWiEzd"
+    },
+    {
+      "name": "Foresight Refraction (Bad Eden)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_6.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2025",
+          "custom": "Bad Eden Originals"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Precognition through a repaired pane.</em></p><p>At the start of a <strong>scene</strong> (combat encounter, tense negotiation, or major exploration beat), roll <strong>2d20</strong> in secret and record the results as <strong>refraction dice</strong>.</p><ul><li>Before any creature (including you) rolls a 2d10x10 for an attack, attribute check, or defense check, you may choose to <strong>replace</strong> that roll with one of your stored refraction dice.</li><li>You must decide before the 2d10x10 is rolled. Once used, a refraction die is expended.</li><li>You refresh your refraction dice at the start of each new qualifying scene.</li></ul><p><strong>Strategic Layer.</strong> Once per <strong>Strategic Turn</strong>, you may spend <strong>1 Intrigue OP</strong> to force an enemy faction to <strong>reroll</strong> one of its strategic 2d10x10-based checks (GM chooses the exact check if multiple candidates exist). You must accept the new result.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlForesightRefr\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Foresight Refraction</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 2d20/scene + 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Free (declare before 2d10x10) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">At scene start, roll 2d20 in secret as refraction dice. Before any 2d10x10 (yours or anyone's) replace it with one stored die — declared before the roll. Strategic: 1/Turn, spend 1 Intrigue OP to force an enemy faction reroll.</div>\n</div>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "wyrdlens-refraction-foresight-refraction",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 3
+        },
+        "properties": [],
+        "requirements": "Wyrdlens Adept 3, Refraction of Foresight",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "bfvmbtbYMd6cxsV2",
+      "flags": {
+        "bbttcc": {
+          "subclassKey": "wyrdlens_refraction_foresight",
+          "featureKey": "foresight_refraction"
+        },
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891309,
+        "modifiedTime": 1784177891309,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "4Bs2J1tHpG4PGQHY": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 200000,
+      "_id": "2fbMWNvEBgFoZ7Qo",
+      "_key": "!actors.items!Vv8mDrdsPJnCBLeA.2fbMWNvEBgFoZ7Qo"
+    },
+    {
+      "_id": "R6NMwjPx7P6DXNMY",
+      "name": "Savant",
+      "type": "class",
+      "img": "icons/svg/book.svg",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-savant",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "savant",
+          "mind"
+        ],
+        "description": {
+          "value": "<p><em>\"It's not obscure. You just haven't read it.\"</em></p><p><strong>Savant</strong> is the Mind Calling — the trade that kept its bearers alive after the Shattering. Umbrella: scholar, engineer, medic, archivist, detective, translator. A profession is a flavor label on the Calling.</p><p><strong>Knack — Library-Brain:</strong> Lore and Investigation checks never fumble; identifies items of tier ≤ own tier on sight (at Tier III, including technomagical origin).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Lore</strong> rank = tier; secondary <strong>Investigation</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Wyrdlens Adept or Cosmic Linguist. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "savant",
+            "faculty": "mind",
+            "signature": "lore",
+            "secondary": "investigation",
+            "pool": "Economy or Soft Power (GM picks by job)",
+            "awakens": "Wyrdlens Adept or Cosmic Linguist"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891309,
+        "modifiedTime": 1784177891309,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!Vv8mDrdsPJnCBLeA.R6NMwjPx7P6DXNMY"
+    },
+    {
+      "_id": "fR66DS34C5TeUjRI",
+      "name": "Savant — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/svg/book.svg",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "savant",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Savant — Apprentice</strong> (Tier I).</p><p><strong>Trade — Appraise / identify:</strong> What it is, what it's worth, whether it's what the seller claims. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — I've Read About This</strong> <em>(1/scene)</em>: Explain the situation; one ally gets +2 on their next relevant check.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 501000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "savant",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177891309,
+        "modifiedTime": 1784177891309,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!Vv8mDrdsPJnCBLeA.fR66DS34C5TeUjRI"
+    }
+  ],
+  "effects": [],
+  "folder": "sa53SaqrBf3NAcFV",
+  "sort": 400000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177891309,
+    "modifiedTime": 1784177891309,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!Vv8mDrdsPJnCBLeA"
+}

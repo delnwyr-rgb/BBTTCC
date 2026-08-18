@@ -1,0 +1,23 @@
+{
+  "type": "Scene",
+  "folder": null,
+  "name": "Mini Raid",
+  "color": null,
+  "sorting": "a",
+  "_id": "D9vWezvOmZN5tvmD",
+  "description": "",
+  "sort": 900000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982539763,
+    "modifiedTime": 1783982540126,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!D9vWezvOmZN5tvmD"
+}

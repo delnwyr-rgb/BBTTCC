@@ -1,0 +1,70 @@
+{
+  "name": "Aurablade: Burn State",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Burn</strong> is a state track, not a die pool. This is your display item for current Burn, current Aura, and current band on the Features tab.</p><p><strong>Bands:</strong> 0–1 Controlled, 2–3 Engaged, 4+ Overheated.</p>",
+      "chat": ""
+    },
+    "identifier": "aurablade_burn_state",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "aurablade_burn_state",
+      "resourceAction": false,
+      "resourceDisplay": true,
+      "engine": "stateTrack",
+      "classId": "aurablade",
+      "track": "burn"
+    }
+  },
+  "folder": "jzZQust69VtMPSOe",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459909020,
+    "modifiedTime": 1781116121673,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BhlrJv0osQl3kJId",
+  "sort": 300000,
+  "_key": "!items!BhlrJv0osQl3kJId"
+}

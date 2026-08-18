@@ -1,0 +1,83 @@
+{
+  "name": "Pre-Fall Comm Bead (paired)",
+  "type": "gear",
+  "img": "icons/commodities/gems/pearl-water.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [
+      "tech"
+    ],
+    "category": "gear",
+    "source": "Phase 7 Seed (2026-05-10)",
+    "description": {
+      "value": "<p>Two crystalline beads, manufactured before the Fall. Pair-linked — speak into one, the other hums in your partner's ear. Range: line-of-thought across one hex.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "frame": "tool",
+          "bound": "attuned",
+          "materialOf": [
+            {
+              "key": "pre-fall-component",
+              "qty": 1
+            },
+            {
+              "key": "focused-crystal",
+              "qty": 1
+            }
+          ],
+          "tech": {
+            "kind": "linked",
+            "charges": {
+              "value": 0,
+              "max": 0,
+              "recoverPer": "manual"
+            },
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "failure": "inert",
+            "origin": "pre-fall"
+          },
+          "price": {
+            "marks": 540,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII tool × 0.60 × tech 2.0",
+            "bound": "attuned",
+            "saleBack": 216
+          }
+        }
+      }
+    }
+  },
+  "_id": "SLbfQ1oObAS8bHhR",
+  "effects": [],
+  "folder": "Wxh1A343inwTUeoo",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778963345415,
+    "modifiedTime": 1778963345415,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 0,
+  "_key": "!items!SLbfQ1oObAS8bHhR"
+}

@@ -1,0 +1,129 @@
+{
+  "name": "Pattern-Seeking Mind",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Pattern-Seeking Mind.</strong> Your brain runs constant background scans on everything you see.</p><ul><li>You have a small mechanical bonus on <strong>Perception (Mind)</strong> and <strong>Insight (Soul)</strong> checks made to spot <strong>hidden patterns, inconsistencies, or anomalies</strong> in environments, documents, and conversations.</li><li>When the GM describes a scene, they may occasionally volunteer information like, “something here doesn’t quite fit,” even if you didn’t explicitly ask—your mind is always auditing.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "pattern-seeking-mind",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 2
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (2nd level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Pattern-Seeking Mind (Perception (Mind) & Insight (Soul) Edge)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_compulsion_2.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.365",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1776459984384,
+        "modifiedTime": 1786827857648
+      },
+      "_id": "sIMXxvRzX9u42GRz",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.perception.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "system.skills.insight.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.patternSeekingMind",
+            "type": "custom",
+            "value": true,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!ITVYwcZhhXvK6ptk.sIMXxvRzX9u42GRz"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "patternSeekingMind": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984384,
+    "modifiedTime": 1781116136445,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ITVYwcZhhXvK6ptk",
+  "sort": 300000,
+  "_key": "!items!ITVYwcZhhXvK6ptk"
+}

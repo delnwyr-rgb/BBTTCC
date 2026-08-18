@@ -1,0 +1,126 @@
+{
+  "name": "Valhauler Pulsar Core",
+  "type": "equipment",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_valhaulan_pulsar_core.jpeg",
+  "system": {
+    "description": {
+      "value": "<p>Vehicle super‑core: doubles pulsar weapon die size; once/day skip 1 travel encounter and gain +2 to next opposed roll.</p>",
+      "chat": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 200,
+      "units": "lb"
+    },
+    "price": {
+      "value": 40000,
+      "denomination": "gp"
+    },
+    "rarity": "legendary",
+    "attunement": "",
+    "identified": true,
+    "type": {
+      "value": "trinket",
+      "baseItem": ""
+    },
+    "equipped": false,
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "valhauler-pulsar-core",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "attuned": false,
+    "crewed": false,
+    "armor": {
+      "value": null,
+      "dex": null
+    },
+    "proficient": null,
+    "properties": [],
+    "strength": null
+  },
+  "flags": {
+    "bbttcc": {
+      "tags": []
+    },
+    "rfi": {
+      "item": {
+        "tier": "IV",
+        "footprint": 1,
+        "reach": "self",
+        "frame": "armor",
+        "signature": "",
+        "origin": "looted",
+        "originator": null,
+        "bound": "free",
+        "upkeep": {
+          "mode": "passive",
+          "per": "scene"
+        },
+        "misfire": {
+          "tierClamp": true,
+          "table": null
+        },
+        "signals": {}
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          },
+          "tier": "IV",
+          "frame": "armor",
+          "origin": "looted",
+          "bound": "free",
+          "reach": "self",
+          "footprint": 1,
+          "legacySystem": {
+            "description": {
+              "value": "<p>Vehicle super‑core: doubles pulsar weapon die size; once per Soma Break skip 1 travel encounter and gain +2 to next opposed roll.</p>"
+            }
+          }
+        }
+      }
+    }
+  },
+  "effects": [],
+  "folder": "TNrB6kEiHS0KwwJT",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1767834209423,
+    "modifiedTime": 1782164185969,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "3Mdd5N4PVhMnvySG",
+  "sort": 2300000,
+  "_key": "!items!3Mdd5N4PVhMnvySG"
+}

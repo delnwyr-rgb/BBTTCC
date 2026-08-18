@@ -1,0 +1,65 @@
+{
+  "_id": "cLddE4bSelGil06x",
+  "name": "Cosmic Linguist: Semantic Editor",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scissors.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“I am not casting. I am editing.”</em></p><p>Choose an <strong>Editing Mode</strong>: Additive, Subtractive, Transformative, Referential, or Performative. Your mode shapes how your manifestations manifest, what they cost in Strain, and what Backlash looks like.</p><p>This is semantic authority, not damage scaling.</p>",
+      "chat": ""
+    },
+    "identifier": "cosmic_linguist_semantic_editor",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "cosmic_linguist_semantic_editor"
+    }
+  },
+  "folder": "r5DULAhp98iub0mt",
+  "sort": 125000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.cLddE4bSelGil06x",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923345,
+    "modifiedTime": 1781116169438,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!cLddE4bSelGil06x"
+}

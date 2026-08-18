@@ -1,0 +1,85 @@
+{
+  "_id": "ck1chupa0heritg8",
+  "name": "Cryptidkin Heritage: Chupacabra",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Local%20Factions/Chupacabra.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Cryptidkin Subspecies.</strong> You are the thing the farmers whisper about. The livestock go quiet, the dogs stop barking, and in the morning there is nothing left but a question the community doesn’t want to ask out loud.</p><p><em>“They didn’t mean anything by the name. They just needed something to blame.”</em></p><p><strong>Chupacabra.</strong> Lean, quick, and thirsty in a way that is not quite hunger. You move through the world as a persistent rumor that keeps turning out to be true.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares; climb 5 squares</p></li><li><p><strong>Subspecies Lean.</strong> Your subspecies leans toward <strong>INTR (Intrigue)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor’s Instinct).</p><h3>Chupacabra Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Chupacabra powers emphasize: night-stalker stealth, drain-bite for fluid and Spark, terror aura when spotted, and a reputation that precedes you like a warning sign.</p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "ckchupaadv000001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.CKCHUPATIER1PLC0",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Chupacabra Tier I",
+        "hint": "Gain your Chupacabra Tier I subspecies power."
+      }
+    ],
+    "identifier": "cryptidkin_chupacabra_heritage",
+    "requirements": "Cryptidkin",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "cryptidkin",
+      "lineage": "Chupacabra",
+      "version": "2.0.0",
+      "date": "2026-04-18",
+      "normalizedFrom": "new-in-v2"
+    }
+  },
+  "folder": "bmheRQWVAx1LwCNh",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-ancestry-v2",
+      "uuid": "Item.ck1chupa0heritg8",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1744977600000,
+    "modifiedTime": 1782167240130,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 100000,
+  "_key": "!items!ck1chupa0heritg8"
+}

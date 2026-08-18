@@ -1,0 +1,72 @@
+{
+  "name": "Treatywave",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_flag_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2025",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You don’t just sign treaties. You make the world ready to honor them.”</em></p><p>Once per <strong>a Soma Break</strong>, you can ride a crest of goodwill that ripples out into factionspace.</p><ul><li>When your faction next spends <strong>Diplomacy OP</strong> as part of a major negotiation, alliance, or crisis-resolution action during the current strategic turn, reduce that specific Diplomacy OP cost by <strong>2</strong> (to a minimum of 1).</li><li>You must declare that you are invoking Treatywave <strong>before</strong> the OP expenditure is finalized.</li><li>This represents groundwork, secret rehearsals, and a thousand small kindnesses you set in motion beforehand.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "harmmarshal-mandate-treatywave",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 14
+    },
+    "properties": [],
+    "requirements": "Harmony Marshal 14, Mandate of Accord",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "w8AbiDc92Mb4wLnR",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "harmmarshal_mandate_accord",
+      "featureKey": "treatywave"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776467813568,
+    "modifiedTime": 1781116185117,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "os46EB4vbg6HHYhm",
+  "sort": 175000,
+  "_key": "!items!os46EB4vbg6HHYhm"
+}

@@ -1,0 +1,23 @@
+{
+  "type": "JournalEntry",
+  "folder": null,
+  "name": "04 - Glossary",
+  "color": "#d3af27",
+  "sorting": "a",
+  "_id": "bDULV9cH00cnJHUX",
+  "description": "",
+  "sort": 1200000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775619863181,
+    "modifiedTime": 1775619863298,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!folders!bDULV9cH00cnJHUX"
+}

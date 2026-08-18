@@ -1,0 +1,66 @@
+{
+  "name": "Drawing Deep",
+  "type": "feat",
+  "img": "icons/magic/symbols/runes-star-blue.webp",
+  "folder": "QbGNBV70xh9pF0eh",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC Manifestation Techniques v1",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2>Drawing Deep</h2><p><em>You hold the Sentence open and let the meaning pour in.</em></p><hr /><h3>Rules</h3><p>While your <strong>Sentence</strong> stance is active, your maximum <strong>Clarity</strong> increases by <strong>3</strong> — but the open channel costs you <strong>+1 Noise per scene</strong> for as long as the stance is held.</p><p style=\"font-size:0.8rem;opacity:0.85;margin:0.5rem 0 0\"><strong>Requires:</strong> Cosmic Linguist</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">⚙ Applies automatically while the Sentence stance is active: +3 Clarity max. (The +1 Noise/scene upkeep is tracked narratively.)</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_drawing_deep",
+    "requirements": "Cosmic Linguist",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-manifestation-techniques-v1",
+      "theme": "Clarity economy"
+    },
+    "fourththing": {
+      "discipline": {
+        "mode": {
+          "key": "clSentence",
+          "grants": {
+            "clarityMaxBonus": 3
+          }
+        }
+      }
+    }
+  },
+  "_id": "n2PgLKzhSeyuOWrd",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782190567939,
+    "modifiedTime": 1782190567940,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!n2PgLKzhSeyuOWrd"
+}

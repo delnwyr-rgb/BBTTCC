@@ -1,0 +1,115 @@
+{
+  "name": "Mnemonic Spillway",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_symbolism.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Mnemonic Spillway.</strong> Your thoughts overflow into the world, leaving echoes others can feel.</p><p>At the end of each short or a Soma Break, choose one Spillway:</p><ul><li><strong>Memory Marker:</strong> You leave a metaphysical imprint at your rest site. You and allies gain +2 on checks to retrace steps to this location, and you faintly sense when a hostile creature passes through it.</li><li><strong>Symbol Trace:</strong> You leave a dream-symbol on a creature you interacted with. You reroll the lowest die on Insight (Soul) checks toward that creature for 24 hours, and you subtly sense deceit or emotional tension.</li><li><strong>Pathway Echo:</strong> You attune to the next hex you plan to travel to. The next Travel hazard is treated as one tier lower, or ignored if already minor.</li><li><strong>Faction Ripple:</strong> If you interacted with a faction, you gain +1 Soft Power OP or +1 Intrigue OP the next time you make an OP test against that faction.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "mnemonic-spillway",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 14
+    },
+    "properties": [],
+    "requirements": "Dreamwalker (14th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Mnemonic Spillway (Symbol Trace)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_messages.png",
+      "origin": null,
+      "transfer": false,
+      "disabled": true,
+      "duration": {
+        "value": 86400,
+        "units": "seconds",
+        "expiry": "turnStart",
+        "expired": false
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459927035,
+        "modifiedTime": 1777346199737
+      },
+      "_id": "ZJ2NnqfUT2YdUp0h",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.dreamwalker.symbolTrace",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!rvfPQwQq6rYBE1EG.ZJ2NnqfUT2YdUp0h"
+    }
+  ],
+  "folder": "YLUIFZ5nPOUSaSH2",
+  "flags": {
+    "bbttcc": {
+      "dreamwalker": {
+        "mnemonicSpillway": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459927035,
+    "modifiedTime": 1782167240829,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "rvfPQwQq6rYBE1EG",
+  "sort": 550000,
+  "_key": "!items!rvfPQwQq6rYBE1EG"
+}

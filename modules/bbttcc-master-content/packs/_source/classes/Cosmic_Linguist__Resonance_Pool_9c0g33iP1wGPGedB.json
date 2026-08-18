@@ -1,0 +1,71 @@
+{
+  "name": "Cosmic Linguist: Resonance Pool",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Resonance Dice</strong> are stored semantic momentum. This is your display item for current Resonance and Strain on the Features tab.</p>",
+      "chat": ""
+    },
+    "identifier": "cosmic_linguist_resonance_pool",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "cosmic_linguist_resonance_pool",
+      "resourceAction": false,
+      "resourceDisplay": true,
+      "engine": "dicePool",
+      "classId": "cosmic_linguist",
+      "pool": "resonance",
+      "track": "strain"
+    }
+  },
+  "folder": "r5DULAhp98iub0mt",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923343,
+    "modifiedTime": 1781116118907,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "9c0g33iP1wGPGedB",
+  "sort": 300000,
+  "_key": "!items!9c0g33iP1wGPGedB"
+}

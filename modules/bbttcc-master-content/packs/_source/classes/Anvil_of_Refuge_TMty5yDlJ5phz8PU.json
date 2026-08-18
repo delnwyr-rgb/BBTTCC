@@ -1,0 +1,68 @@
+{
+  "name": "Anvil of Refuge",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_1.png.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Anvil of Refuge.</strong> Any place you set up your tools becomes just a little harder to hurt people in.</p><ul><li>When you lead the setup of a camp, safehouse, or field workshop, you can declare it an <strong>Anvil of Refuge</strong> for that rest period.</li><li>Creatures who complete a short or a Soma Break there gain a +1 bonus to <strong>defense check against being Shaken</strong> until their next rest.</li><li>At the GM’s discretion, this location may also count as mildly <strong>protective</strong> against certain environmental or metaphysical hazards while the camp lasts.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "anvil-of-refuge",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 7
+    },
+    "properties": [],
+    "requirements": "Soul-Smith (7th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "qdqMhHfZdVgUs1gN",
+  "flags": {
+    "bbttcc": {
+      "soulSmith": {
+        "anvilOfRefuge": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996551,
+    "modifiedTime": 1781116158537,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "TMty5yDlJ5phz8PU",
+  "sort": 173438,
+  "_key": "!items!TMty5yDlJ5phz8PU"
+}

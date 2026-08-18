@@ -1,0 +1,57 @@
+{
+  "name": "Signature Ascendant",
+  "type": "feat",
+  "img": "icons/magic/symbols/star-solid-gold.webp",
+  "folder": "QbGNBV70xh9pF0eh",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC Manifestation Techniques v1",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2>Signature Ascendant</h2><p><em>The working that defines you grows as you do.</em></p><hr /><h3>Rules</h3><p>Your <strong>signature manifestation</strong> counts as <strong>one tier higher</strong> for all effects (damage, healing, footprint, scale), though its Clarity cost is unchanged. If you have not yet designated a signature manifestation, you may do so when you take this Technique.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">✍ Applied by the GM/player — no automatic engine effect.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_signature_ascendant",
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-manifestation-techniques-v1",
+      "theme": "Reach, scale & signature"
+    },
+    "fourththing": {}
+  },
+  "_id": "V3qRPM7SJLkpnfpb",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782190568621,
+    "modifiedTime": 1782190568622,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!V3qRPM7SJLkpnfpb"
+}

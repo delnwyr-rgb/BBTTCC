@@ -1,0 +1,69 @@
+{
+  "name": "Cosmic Linguist: Initiation 11 — The Sentence (Signature Mode)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_10.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Initiation 11 — The Sentence (Signature Mode).</strong> Stance. While The Sentence is held, every manifestation you sustain treats its primary target as <em>bound by name</em> — mechanical hook for holds, binds, and compelled-truth at the GM's table. Pays ongoing upkeep against your Clarity.</p><p><span style=\"opacity: 0.7; font-size: 0.85em\">Discipline (mode <code>clSentence</code>): while ON, additional Reach discount −1 (stacks with Init 1 for a total of −2 on Blood-Debt-reach). Click this feature on the sheet to toggle the stance.</span></p><p><em>Pilot: lock exact upkeep curve and break condition after one playtest cycle.</em></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"clMode\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>The Sentence</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> Stance (signature)  ·  <strong>Action:</strong> Action (open / drop)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Hold to bind primary targets of sustained manifestations by name (mechanical hook for holds, binds, compelled-truth). Pays ongoing upkeep against Clarity.</span></p></div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "cl_mode_sentence",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "properties": [],
+    "requirements": "Cosmic Linguist (11th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "r5DULAhp98iub0mt",
+  "flags": {
+    "fourththing": {
+      "discipline": {
+        "mode": {
+          "key": "clSentence",
+          "grants": {
+            "reachDiscount": 1
+          }
+        }
+      }
+    },
+    "bbttcc": {},
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777312943677,
+    "modifiedTime": 1781116166331,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "a2702a2349d936dd",
+  "sort": 350000,
+  "_key": "!items!a2702a2349d936dd"
+}

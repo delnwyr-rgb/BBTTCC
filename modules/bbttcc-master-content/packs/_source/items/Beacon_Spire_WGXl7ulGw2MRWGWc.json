@@ -1,0 +1,62 @@
+{
+  "name": "Beacon Spire",
+  "type": "gear",
+  "img": "icons/tools/smithing/anvil.webp",
+  "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>A vertical hymn of light. Stationary-only: the spire's purpose is being a fixed point others can find.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "output-module",
+        "yield": {
+          "signal": 1,
+          "faith": 1
+        },
+        "mobileLegal": false
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "WGXl7ulGw2MRWGWc",
+  "effects": [],
+  "sort": 2700000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205374565,
+    "modifiedTime": 1778963271956,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!WGXl7ulGw2MRWGWc"
+}

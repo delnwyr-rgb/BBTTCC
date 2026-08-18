@@ -1,0 +1,101 @@
+{
+  "name": "Hexbane Surplice",
+  "type": "armor",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "guardBonus": 2,
+    "evasionBonus": 0,
+    "resolveBonus": 2,
+    "resistances": [
+      "qliphothic",
+      "thermal"
+    ],
+    "armorSkill": "warding",
+    "equipped": false,
+    "tags": [
+      "warding",
+      "vestment",
+      "hex-warded",
+      "field",
+      "attunement"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A field surplice layered over a hex-lattice underlayer, cut for wardens who walk hex-blighted ground where the curse runs hot. Turns aside both the corruption and the scorch that so often comes with it.</p><p><b>Hexbane Weave.</b> Resists qliphothic and thermal. Built to be worn working, not displayed.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Guard +2, Resolve +2</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic, Thermal</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 675 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "For the ground where the air itself is wrong.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A field surplice layered over a hex-lattice underlayer, cut for wardens who walk hex-blighted ground where the curse runs hot. Turns aside both the corruption and the scorch that so often comes with it.</p><p><b>Hexbane Weave.</b> Resists qliphothic and thermal. Built to be worn working, not displayed.</p>",
+          "materialOf": [
+            "hex-lattice",
+            "warded-wool",
+            "ash-thread"
+          ],
+          "price": {
+            "marks": 675,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII armor × 1.50",
+            "bound": "attuned",
+            "saleBack": 270
+          }
+        }
+      },
+      "grants": {
+        "resistances": [
+          {
+            "type": "qliphothic"
+          },
+          {
+            "type": "thermal"
+          }
+        ]
+      }
+    }
+  },
+  "folder": "gD1WklJiuS6Vg2p3",
+  "_id": "cZwesdiZPVdjj6Qx",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782150391790,
+    "modifiedTime": 1782160020989,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!cZwesdiZPVdjj6Qx"
+}

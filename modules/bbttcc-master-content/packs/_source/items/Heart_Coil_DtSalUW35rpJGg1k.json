@@ -1,0 +1,81 @@
+{
+  "name": "Heart-Coil",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_coil_1.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "heart-coil",
+      "coil",
+      "channel",
+      "salvage"
+    ],
+    "category": "gear",
+    "source": "",
+    "quantity": 1,
+    "description": {
+      "value": "<p>Hand-wound copper-and-aurablade-resin coil, harvested from intact pre-Eden tech caches. The coil hums when current passes; the hum harmonizes with the wielder's pulse.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "Wound from a working that wanted to be a heart.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Hand-wound copper-and-aurablade-resin coil, harvested from intact pre-Eden tech caches. The coil hums when current passes; the hum harmonizes with the wielder's pulse.</p>",
+          "charges": 2,
+          "materialKey": "heart-coil",
+          "price": {
+            "marks": 150,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII material stamp",
+            "bound": "free",
+            "saleBack": 60
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "DtSalUW35rpJGg1k",
+  "effects": [],
+  "sort": 270313,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777137194182,
+    "modifiedTime": 1782156674942,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!DtSalUW35rpJGg1k"
+}

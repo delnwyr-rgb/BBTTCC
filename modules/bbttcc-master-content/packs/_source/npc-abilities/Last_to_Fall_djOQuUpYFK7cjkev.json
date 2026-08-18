@@ -1,0 +1,58 @@
+{
+  "name": "Last to Fall",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rampart_1.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "seed-bestiary-attacks",
+      "tier-iv",
+      "role-brute"
+    ],
+    "description": {
+      "value": "<p><strong>Passive.</strong> If the warlord is still standing, the guard cannot be reduced below 1 Integrity by a single attack. (Multiple sources in the same round can finish them.) When the warlord falls, this feature ends; the guard immediately takes 10 qliphothic Stress damage.</p><p><em>They will not die before the warlord. After is fine. After is the actual job description.</em></p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "feature"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Hex-Warlord's Honored Guard"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "sort": 0,
+  "_id": "djOQuUpYFK7cjkev",
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": null,
+    "modifiedTime": null,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!djOQuUpYFK7cjkev"
+}

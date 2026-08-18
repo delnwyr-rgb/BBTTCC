@@ -1,0 +1,65 @@
+{
+  "_id": "5NgRfhPWkCDM4Vvh",
+  "name": "Rig Hand",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_rig_hand.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Feats Expansion v1",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<h2>Rig Hand</h2><p><em>You know what keeps a moving fortress from becoming a coffin.</em></p><hr /><h3>Rules</h3><p>You gain skill rank with tinker’s tools. If you already have it, you gain mastery.</p><p>During a Respite, you can perform emergency maintenance on a vehicle, rig, or facility. Choose one:</p><ul><li>Restore 1d6 Integrity to a construct/vehicle/rig under the GM’s control rules, or</li><li>Remove one non-magical malfunction or minor condition (stuck mechanism, seized hatch, jammed lock, fouled intake) at the GM’s discretion.</li></ul><p>Once you use this principle, you can’t use it again until you finish a Sanctuary.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_rig_hand",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-expansion-v1",
+      "generatedAt": "2026-01-18T20:40:44.997352+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 2700000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1781116200457,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!5NgRfhPWkCDM4Vvh"
+}

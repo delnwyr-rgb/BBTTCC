@@ -1,0 +1,41 @@
+{
+  "name": "Annotator (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quill_design.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "cosmic_linguist",
+    "source": "Bad Eden Originals — Sprint F (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"See below. It changes everything above.\"</em></p>\n<p><strong>Doctrine:</strong> Prefer surgical changes with precise scope — a small note that produces a large consequence. You are strongest when the edit looks modest.</p>\n<p>The Annotator wins in the margins. Your Surge spends are footnotes with teeth: shore up an ally's roll, pin a foe with marginalia it cannot ignore, and revise the whole passage at once.</p>\n<h3>Doctrine (spent via Surge)</h3>\n<ul>\n  <li><strong>Footnote</strong> (1) — an ally banks a reroll-lowest (a small note, a large consequence).</li>\n  <li><strong>Marginalia</strong> (2) — a foe is Staggered and rolls its saves at disadvantage.</li>\n  <li><strong>Revision</strong> (5) — allies within 6 squares each bank a reroll-lowest (the whole passage, corrected).</li>\n</ul>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-cosmic-linguist-linguist-annotator",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "7fCEbHBaAKFkEuHN",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "ZPkMURIahxeFvL3z",
+  "sort": 1000000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.364",
+    "createdTime": 1776459104439,
+    "modifiedTime": 1782167240823,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.1",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!ZPkMURIahxeFvL3z"
+}

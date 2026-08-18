@@ -1,0 +1,65 @@
+{
+  "_id": "aIw8v94NHWDQqs3H",
+  "name": "Annotator: Ritual Annotation",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quill_sigil.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"1493\" data-end=\"1506\"><em data-start=\"1493\" data-end=\"1506\">(3rd Level)</em></p><p data-start=\"1508\" data-end=\"1563\">You annotate rituals with correspondence-perfect notes.</p><h3 data-start=\"1565\" data-end=\"1576\">Effects</h3><ul data-start=\"1577\" data-end=\"1739\"><li data-start=\"1577\" data-end=\"1636\"><p data-start=\"1579\" data-end=\"1636\">Ritual casting is faster or more stable (GM adjudicated).</p></li><li data-start=\"1637\" data-end=\"1685\"><p data-start=\"1639\" data-end=\"1685\">Aligned rituals generate additional Resonance.</p></li><li data-start=\"1686\" data-end=\"1739\"><p data-start=\"1688\" data-end=\"1739\">Misaligned rituals generate less Strain than usual.</p></li></ul><p data-start=\"1741\" data-end=\"1792\">Your rituals are not safer because they are weaker.</p><p data-start=\"1794\" data-end=\"1834\">They are safer because they are correct.</p>",
+      "chat": ""
+    },
+    "identifier": "annotator_ritual_annotation",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "annotator_ritual_annotation"
+    }
+  },
+  "folder": "7fCEbHBaAKFkEuHN",
+  "sort": 800000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.aIw8v94NHWDQqs3H",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923345,
+    "modifiedTime": 1781116166911,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!aIw8v94NHWDQqs3H"
+}

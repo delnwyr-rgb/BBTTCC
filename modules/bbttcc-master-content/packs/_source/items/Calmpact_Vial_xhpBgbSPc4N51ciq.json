@@ -1,0 +1,87 @@
+{
+  "name": "Calmpact Vial",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/techno_serum_4.png",
+  "system": {
+    "slot": "consumable",
+    "tags": [
+      "consumable",
+      "tier-i"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>A dose of pacifying compound. Drops the cortisol floor; the world stays loud but stops cutting.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>On use:</strong> Inflict <strong>2</strong> Stress</p></li><li><p><strong>Charges:</strong> 1 (consumed on use)</p></li><li><p><strong>Target:</strong> Self</p></li><li><p><strong>Tier:</strong> I</p></li><li><p><strong>Cost:</strong> 10 Economy marks</p></li></ul>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "consumable",
+          "signature": "The hands stop shaking before the mind catches up.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "A dose of pacifying compound. Drops the cortisol floor; the world stays loud but stops cutting.",
+          "charges": 1,
+          "consume": {
+            "effects": [
+              {
+                "kind": "track",
+                "track": "stress",
+                "op": "add",
+                "delta": 2
+              }
+            ],
+            "decrement": true
+          },
+          "price": {
+            "marks": 10,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI consumable stamp",
+            "bound": "free",
+            "saleBack": 4
+          }
+        }
+      }
+    }
+  },
+  "folder": "guHYjt0gjPLU2wCs",
+  "_id": "xhpBgbSPc4N51ciq",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777096380551,
+    "modifiedTime": 1781741514309,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!xhpBgbSPc4N51ciq"
+}

@@ -1,0 +1,804 @@
+{
+  "name": "Sarmoung Whisper-Skiff",
+  "type": "rig",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_golbe_1.png",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "rig",
+      "createdViaContentSprint": "2026-06-13",
+      "createdAt": 1781332649820
+    },
+    "bbttcc-structures": {
+      "hasStructure": true,
+      "facilityMode": false,
+      "materialBOM": [
+        {
+          "materialKey": "bog-iron",
+          "qty": 5,
+          "originalQty": 5,
+          "family": "metal",
+          "tier": "I",
+          "name": "bog-iron",
+          "tagsCache": []
+        },
+        {
+          "materialKey": "ash-wood",
+          "qty": 2,
+          "originalQty": 2,
+          "family": "wood",
+          "tier": "I",
+          "name": "ash-wood",
+          "tagsCache": []
+        },
+        {
+          "materialKey": "cold-iron",
+          "qty": 1,
+          "originalQty": 1,
+          "family": "metal",
+          "tier": "II",
+          "name": "Cold-Iron",
+          "tagsCache": [
+            "material",
+            "cold-iron",
+            "iron",
+            "cold-forge",
+            "hex-resistant"
+          ]
+        }
+      ],
+      "state": "intact",
+      "plates": {
+        "current": 22,
+        "max": 22
+      },
+      "threshold": 1.2,
+      "resists": {
+        "kinetic": 0.5
+      },
+      "vulnerabilities": {
+        "energy|heat": {
+          "type": "energy",
+          "flavor": "heat",
+          "factor": 2
+        },
+        "energy|fire": {
+          "type": "energy",
+          "flavor": "fire",
+          "factor": 2
+        }
+      },
+      "loadBearing": false,
+      "collapseProfile": {
+        "fallFt": 10,
+        "damageDice": "2d10",
+        "nonlethal": true,
+        "knockbackFt": 5,
+        "triggerState": "breached"
+      },
+      "history": []
+    }
+  },
+  "system": {
+    "identity": {
+      "mobility": "mobile",
+      "state": "parked",
+      "factionOwnerId": "",
+      "archetype": "Stealth Runabout",
+      "binding": {
+        "hexId": "",
+        "sceneId": "",
+        "tokenId": ""
+      }
+    },
+    "crew": {
+      "slots": [],
+      "capacity": {
+        "pilot": {
+          "min": 1,
+          "max": 1
+        },
+        "gunner": {
+          "min": 0,
+          "max": 1
+        },
+        "engineer": {
+          "min": 0,
+          "max": 0
+        },
+        "crew": {
+          "min": 0,
+          "max": 2
+        }
+      },
+      "crewMin": 1,
+      "crewMax": 4
+    },
+    "integrity": {
+      "value": 32,
+      "max": 32,
+      "tier": 2,
+      "bracket": "light"
+    },
+    "derived": {
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 12
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "output": {
+      "modules": [],
+      "basePerTurn": {}
+    },
+    "travel": {
+      "speed": 5,
+      "range": 16,
+      "hazardResist": 1
+    },
+    "tags": [
+      "intrigue",
+      "sarmoung",
+      "stealth",
+      "fast",
+      "faction-rig"
+    ],
+    "details": {
+      "biography": {
+        "value": "<p><strong>Concept.</strong> A Sarmoung Brotherhood runabout built for arriving without having been seen to leave. Mufflers on the engine, mufflers on the crew, mufflers on the questions you&#39;d otherwise ask.</p>\n<p><strong>Signature.</strong> It is already gone. It was never here. The Phase Cloak does most of the lying; the crew handles the rest.</p>",
+        "public": ""
+      }
+    },
+    "description": "<p><strong>Concept.</strong> A Sarmoung Brotherhood runabout built for arriving without having been seen to leave. Mufflers on the engine, mufflers on the crew, mufflers on the questions you&#39;d otherwise ask.</p>\n<p><strong>Signature.</strong> It is already gone. It was never here. The Phase Cloak does most of the lying; the crew handles the rest.</p>"
+  },
+  "prototypeToken": {
+    "actorLink": true,
+    "disposition": 1,
+    "name": "Sarmoung Whisper-Skiff",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_golbe_1.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "5oohdnPcCJL6WoQY",
+  "items": [
+    {
+      "name": "Light Skiff Frame",
+      "type": "gear",
+      "img": "icons/environment/settlement/wagon-black.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "description": {
+          "value": "<p>A two-seat scrambler with bald tires, an angry engine, and a single hardpoint that wishes it were a cannon. Built for the run, not the fight.</p><p><b>Frame · Light · Mobile</b></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-frame"
+          },
+          "rigFrame": {
+            "bracket": "light",
+            "baseIntegrity": 16,
+            "tierStep": 6,
+            "mobilityAllowed": [
+              "mobile"
+            ],
+            "slots": {
+              "weapon": 1,
+              "system": 1,
+              "output": 0
+            },
+            "capacity": {
+              "pilot": {
+                "min": 1,
+                "max": 1
+              },
+              "gunner": {
+                "min": 0,
+                "max": 0
+              },
+              "engineer": {
+                "min": 0,
+                "max": 0
+              },
+              "crew": {
+                "min": 0,
+                "max": 1
+              }
+            },
+            "actions": {
+              "pilot": [
+                "steer",
+                "evasive",
+                "swerve"
+              ],
+              "gunner": [],
+              "engineer": [],
+              "crew": [
+                "brace",
+                "hold-on"
+              ]
+            },
+            "travel": {
+              "speed": 4,
+              "range": 12
+            },
+            "visualFrame": "open-corners"
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 1900000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398489360,
+        "modifiedTime": 1781398489360,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "DKNGhDsDtcN0ITni",
+      "_key": "!actors.items!5oohdnPcCJL6WoQY.DKNGhDsDtcN0ITni"
+    },
+    {
+      "name": "Twin Autocannons",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_2.png",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "2d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 4,
+          "long": 12
+        },
+        "tags": [
+          "suppression",
+          "light"
+        ],
+        "effect": "",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>Belt-fed twin barrels. Less aimed than <em>insisted upon</em>. Suppression in service of statement.</p>"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-weapon"
+          },
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "frame": "weapon",
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "8b5ab879-3a84-4f1a-a5cd-955c3e7f2368",
+          "label": "Twin Autocannons",
+          "levels3d": {
+            "type": "explosion",
+            "data": {
+              "color01": "#FFFFFF",
+              "color02": "#FFFFFF",
+              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+            },
+            "sound": {
+              "enable": false
+            },
+            "secondary": {
+              "enable": false,
+              "data": {
+                "color01": "#FFFFFF",
+                "color02": "#FFFFFF",
+                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+              }
+            }
+          },
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "lasershot",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isReturning": false,
+              "isWait": false,
+              "onlyX": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 1800000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398489360,
+        "modifiedTime": 1781398489360,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "yj8yXb0c9qahjMPm",
+      "_key": "!actors.items!5oohdnPcCJL6WoQY.yj8yXb0c9qahjMPm"
+    },
+    {
+      "name": "Phase Cloak",
+      "type": "gear",
+      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "description": {
+          "value": "<p>Burns coolant for invisibility. Active toggle; the rig is harder to target until cycled off.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-system",
+            "passive": false
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 100000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398489360,
+        "modifiedTime": 1781398489360,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "wf9setxz8sUFOVKW",
+      "_key": "!actors.items!5oohdnPcCJL6WoQY.wf9setxz8sUFOVKW"
+    },
+    {
+      "name": "Sensor Suite",
+      "type": "gear",
+      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "description": {
+          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-system",
+            "passive": true
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 300000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398489360,
+        "modifiedTime": 1781398489360,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "0Q9tYyCnacaMnLtO",
+      "_key": "!actors.items!5oohdnPcCJL6WoQY.0Q9tYyCnacaMnLtO"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1781398489360,
+    "modifiedTime": 1781398493080,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 300000,
+  "_key": "!actors!5oohdnPcCJL6WoQY"
+}

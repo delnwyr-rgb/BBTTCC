@@ -1,0 +1,65 @@
+{
+  "_id": "J28PETcHFnsTrO4Y",
+  "name": "Annotator: Ritual Upgrade",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quantum_computer_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"2743\" data-end=\"2820\">You may convert certain manifestations into rituals with sufficient preparation time.</p><h3 data-start=\"2822\" data-end=\"2832\">Effect</h3><p data-start=\"2833\" data-end=\"2852\">With careful setup:</p><ul data-start=\"2854\" data-end=\"2978\"><li data-start=\"2854\" data-end=\"2883\"><p data-start=\"2856\" data-end=\"2883\">Cast the manifestation as a ritual.</p></li><li data-start=\"2884\" data-end=\"2931\"><p data-start=\"2886\" data-end=\"2931\">Gain increased stability, reach, or duration.</p></li><li data-start=\"2932\" data-end=\"2978\"><p data-start=\"2934\" data-end=\"2978\">Reduce volatility compared to rapid casting.</p></li></ul><p data-start=\"2980\" data-end=\"2991\">Costs time.</p><p data-start=\"2993\" data-end=\"3016\">Prevents panic-casting.</p><p data-start=\"3018\" data-end=\"3037\">Rewards discipline.</p><p data-start=\"3039\" data-end=\"3087\">Annotators trade speed for structural dominance.</p>",
+      "chat": ""
+    },
+    "identifier": "annotator_ritual_upgrade",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "annotator_ritual_upgrade"
+    }
+  },
+  "folder": "7fCEbHBaAKFkEuHN",
+  "sort": 900000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.J28PETcHFnsTrO4Y",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923344,
+    "modifiedTime": 1781116136733,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!J28PETcHFnsTrO4Y"
+}

@@ -1,0 +1,658 @@
+{
+  "folder": "H6eMhWQrjwcwZcBi",
+  "name": "Frikkin' Laser Blade Saber",
+  "type": "weapon",
+  "_id": "isZMrBmNftHjejFA",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_2.png",
+  "system": {
+    "category": "melee",
+    "intent": "violence",
+    "skill": "melee",
+    "damage": {
+      "formula": "1d10",
+      "attribute": "violence",
+      "type": "energy",
+      "damageFlavor": "light",
+      "track": "integrity",
+      "base": {
+        "types": [],
+        "custom": {
+          "enabled": false
+        },
+        "scaling": {
+          "number": 1
+        },
+        "number": 1,
+        "denomination": 10,
+        "bonus": "@mod"
+      },
+      "versatile": {
+        "types": [],
+        "custom": {
+          "enabled": false
+        },
+        "scaling": {
+          "number": 1
+        }
+      }
+    },
+    "damageParts": [],
+    "range": {
+      "short": 1,
+      "long": 1,
+      "units": "ft",
+      "reach": null
+    },
+    "tags": [
+      "saber",
+      "energy-blade",
+      "light"
+    ],
+    "effect": "On a clean hit, the saber may sever a manifestation's anchor — at GM discretion, suppress one ongoing manifestation effect on the target until end of next turn.",
+    "flavor": "What?",
+    "manifestation": {
+      "tier": 1,
+      "family": "form",
+      "concept": "",
+      "form": "weapon",
+      "function": "harm",
+      "stability": "bound",
+      "interactionModel": "weapon",
+      "costType": "none",
+      "costValue": 0,
+      "costText": "",
+      "duration": "scene",
+      "durationText": "",
+      "triggerText": "",
+      "scale": "personal",
+      "targetText": "",
+      "rangeAreaText": "",
+      "rangeFt": 0,
+      "maintenanceCost": "",
+      "riskText": "",
+      "pathResonance": "",
+      "fictionalPermission": "",
+      "gmCalibration": "",
+      "mechanicalHook": "",
+      "signature": "",
+      "thirdThing": "",
+      "opCost": {
+        "pool": "",
+        "value": 0
+      }
+    },
+    "activities": {
+      "RT1rWgZvMIWUr8HH": {
+        "_id": "RT1rWgZvMIWUr8HH",
+        "type": "attack",
+        "sort": 0,
+        "activation": {
+          "type": "action",
+          "override": false
+        },
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "description": {},
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "flags": {},
+        "range": {
+          "units": "self",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false,
+          "prompt": true
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        },
+        "attack": {
+          "critical": {},
+          "flat": false,
+          "type": {}
+        },
+        "damage": {
+          "critical": {},
+          "includeBase": true,
+          "parts": []
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "description": {
+      "value": "<p>A saber made of light. No big deal.</p><p></p><p>What?</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>On a clean hit, the saber may sever a manifestation's anchor — at GM discretion, suppress one ongoing manifestation effect on the target until end of next turn.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d10 Thermal damage to <em>Integrity</em> <span style=\"opacity:.75\">(light)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Melee (Violence)</li>\n  <li><strong>Reach:</strong> Melee</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    },
+    "identifier": "weapon",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "identified": true,
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "quantity": 1,
+    "weight": {
+      "value": 0,
+      "units": "lb"
+    },
+    "price": {
+      "value": 0,
+      "denomination": "gp"
+    },
+    "rarity": "uncommon",
+    "attunement": "",
+    "attuned": false,
+    "equipped": false,
+    "crew": {
+      "value": []
+    },
+    "ammunition": {},
+    "armor": {},
+    "properties": [
+      "fin",
+      "lgt"
+    ],
+    "proficient": null,
+    "type": {
+      "value": "martialM",
+      "baseItem": "longsword"
+    },
+    "mastery": ""
+  },
+  "effects": [],
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "flags": {
+    "rfi": {
+      "item": {
+        "tier": "II",
+        "footprint": 1,
+        "reach": "5",
+        "frame": "weapon",
+        "signature": "",
+        "origin": "looted",
+        "originator": null,
+        "bound": "free",
+        "upkeep": {
+          "mode": "passive",
+          "per": "scene"
+        },
+        "misfire": {
+          "tierClamp": true,
+          "table": null
+        },
+        "signals": {}
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "5",
+          "frame": "weapon",
+          "signature": "A saber made of light. No big deal.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {
+            "lightblade": true
+          },
+          "lore": "<p>One-handed blade of bound photons. Hums a single note when drawn; the colour shifts with the wielder's mood.</p><p>Cuts through metal slow and cuts through doubt fast.</p>",
+          "materialOf": [
+            "focused-crystal",
+            "rad-iron",
+            "heart-coil"
+          ],
+          "legacySystem": {
+            "category": "melee",
+            "intent": "violence",
+            "skill": "melee",
+            "damage": {
+              "formula": "2d6",
+              "attribute": "violence",
+              "type": "kinetic",
+              "damageFlavor": "",
+              "track": "integrity",
+              "base": {
+                "types": [],
+                "custom": {
+                  "enabled": false
+                },
+                "scaling": {
+                  "number": 1
+                },
+                "number": 1,
+                "denomination": 10,
+                "bonus": "@mod"
+              },
+              "versatile": {
+                "types": [],
+                "custom": {
+                  "enabled": false
+                },
+                "scaling": {
+                  "number": 1
+                }
+              }
+            },
+            "range": {
+              "short": 1,
+              "long": 1,
+              "units": "ft",
+              "reach": null
+            },
+            "tags": [],
+            "effect": "",
+            "flavor": "",
+            "manifestation": {
+              "tier": 1,
+              "family": "form",
+              "concept": "",
+              "form": "weapon",
+              "function": "harm",
+              "stability": "bound",
+              "interactionModel": "weapon",
+              "costType": "none",
+              "costValue": 0,
+              "costText": "",
+              "duration": "scene",
+              "durationText": "",
+              "triggerText": "",
+              "scale": "personal",
+              "targetText": "",
+              "rangeAreaText": "",
+              "maintenanceCost": "",
+              "riskText": "",
+              "pathResonance": "",
+              "fictionalPermission": "",
+              "gmCalibration": "",
+              "mechanicalHook": "",
+              "signature": "",
+              "thirdThing": "",
+              "opCost": {
+                "pool": "",
+                "value": 0
+              }
+            },
+            "activities": {
+              "RT1rWgZvMIWUr8HH": {
+                "_id": "RT1rWgZvMIWUr8HH",
+                "type": "attack",
+                "sort": 0,
+                "activation": {
+                  "type": "action",
+                  "override": false
+                },
+                "consumption": {
+                  "scaling": {
+                    "allowed": false
+                  },
+                  "spellSlot": true,
+                  "targets": []
+                },
+                "description": {},
+                "duration": {
+                  "units": "inst",
+                  "concentration": false,
+                  "override": false
+                },
+                "effects": [],
+                "flags": {},
+                "range": {
+                  "units": "self",
+                  "override": false
+                },
+                "target": {
+                  "template": {
+                    "contiguous": false,
+                    "units": "ft"
+                  },
+                  "affects": {
+                    "choice": false
+                  },
+                  "override": false,
+                  "prompt": true
+                },
+                "uses": {
+                  "spent": 0,
+                  "recovery": []
+                },
+                "visibility": {
+                  "level": {},
+                  "requireAttunement": false,
+                  "requireIdentification": false,
+                  "requireMagic": false
+                },
+                "attack": {
+                  "critical": {},
+                  "flat": false,
+                  "type": {}
+                },
+                "damage": {
+                  "critical": {},
+                  "includeBase": true,
+                  "parts": []
+                }
+              }
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": [],
+              "max": ""
+            },
+            "description": {
+              "value": "<p>A saber made of light. No big deal.</p><p></p><p>What?</p>",
+              "chat": ""
+            },
+            "identifier": "weapon",
+            "source": {
+              "revision": 1,
+              "rules": "2024"
+            },
+            "identified": true,
+            "unidentified": {
+              "description": ""
+            },
+            "container": null,
+            "quantity": 1,
+            "weight": {
+              "value": 0,
+              "units": "lb"
+            },
+            "price": {
+              "value": 0,
+              "denomination": "gp"
+            },
+            "rarity": "uncommon",
+            "attunement": "",
+            "attuned": false,
+            "equipped": false,
+            "crew": {
+              "value": []
+            },
+            "ammunition": {},
+            "armor": {},
+            "properties": [
+              "fin",
+              "lgt"
+            ],
+            "proficient": null,
+            "type": {
+              "value": "martialM",
+              "baseItem": "longsword"
+            },
+            "mastery": ""
+          },
+          "price": {
+            "marks": 450,
+            "currency": "violence",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII weapon stamp",
+            "bound": "free",
+            "saleBack": 180
+          }
+        }
+      }
+    },
+    "autoanimations": {
+      "id": "6c17b7eb-ad59-4239-9480-8302eb6a2821",
+      "label": "Frikkin' Laser Blade Saber",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "melee",
+      "primary": {
+        "video": {
+          "dbSection": "melee",
+          "menuType": "weapon",
+          "animation": "lasersword",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5,
+      "meleeSwitch": {
+        "video": {
+          "dbSection": "range",
+          "menuType": "weapon",
+          "animation": "arrow",
+          "variant": "regular",
+          "color": "regular",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "detect": "automatic",
+          "range": 2,
+          "returning": false,
+          "switchType": "on"
+        }
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1772307365400,
+    "modifiedTime": 1782167282786,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!isZMrBmNftHjejFA"
+}

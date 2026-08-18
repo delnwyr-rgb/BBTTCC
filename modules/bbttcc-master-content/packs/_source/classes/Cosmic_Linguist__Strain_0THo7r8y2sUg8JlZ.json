@@ -1,0 +1,70 @@
+{
+  "name": "Cosmic Linguist: Strain",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cracked_stone.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Strain</strong> tracks symbolic overload, semantic contradiction, and magical backlash caused by pushing language too hard.</p>",
+      "chat": ""
+    },
+    "identifier": "cosmic_linguist_strain_track",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "cosmic_linguist_strain_track",
+      "resourceAction": false,
+      "resourceDisplay": true,
+      "engine": "track",
+      "classId": "cosmic_linguist",
+      "track": "strain"
+    }
+  },
+  "folder": "r5DULAhp98iub0mt",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923343,
+    "modifiedTime": 1781116107642,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "0THo7r8y2sUg8JlZ",
+  "sort": 500000,
+  "_key": "!items!0THo7r8y2sUg8JlZ"
+}

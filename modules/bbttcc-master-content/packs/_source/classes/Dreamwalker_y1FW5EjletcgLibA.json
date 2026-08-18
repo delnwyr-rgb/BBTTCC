@@ -1,0 +1,724 @@
+{
+  "name": "Dreamwalker",
+  "type": "class",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Dreamwalker1.png",
+  "system": {
+    "category": "path",
+    "identifier": "dreamwalker",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"The future is just memory pointed the other way.\"</em></p>\n<p>The Dreamwalker reads the Tree and works manifestations — and that work <em>is</em> the fuel. You run on <strong>Surge</strong> like everyone, but yours arrives when you <strong>cast a manifestation</strong> (bank +1, max +2/round). The old sprawl folds into this: Echo Dice are now Surge, and the eight soma-break feats live on as four tier powers.</p>\n<h3>The Oracle (spent via Surge)</h3>\n<ul>\n  <li><strong>Omen</strong> (1) — you or an ally saw the thread coming: banks a reroll-lowest.</li>\n  <li><strong>Dream Ward</strong> (2) — an ally drifts into a protective dreamstate: DR + a reroll.</li>\n  <li><strong>Shared Dream</strong> (3) — allies within 6 squares bank a reroll and draw 1 Clarity (refuels their casting).</li>\n  <li><strong>Reality Hack</strong> (5) — rewrite the moment: the party banks a reroll and one enemy rolls its next attack at disadvantage.</li>\n</ul>\n<p>The <strong>Dream-Cache</strong> endures — bank a manifestation between scenes, deploy it next scene without paying Clarity. And the oracle's quiet work stays out of combat: Dream Resonance still senses a hex's Sephirah, and you still Commune with the Great Work for a true answer.</p>",
+      "chat": ""
+    },
+    "advancement": {
+      "Je5XyZJWzXR6rcRs": {
+        "_id": "Je5XyZJWzXR6rcRs",
+        "type": "HitPoints",
+        "configuration": {},
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "qSjjIW8ipMvEE2GP": {
+        "_id": "qSjjIW8ipMvEE2GP",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.5lwGyCBDn3nqoVHy",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.HfkD3IxUC2fHuzr5",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Uxukk9kl0G1r9dZ2",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.moP2fK3ghD8S0Gz9",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 1,
+        "title": "Dreamwalker Core Features",
+        "flags": {},
+        "hint": ""
+      },
+      "jt0L8ZEeErUFM2C1": {
+        "_id": "jt0L8ZEeErUFM2C1",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.LhwaA7WbybhObu2G",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 2,
+        "title": "Dream-Thread Tuning",
+        "flags": {},
+        "hint": ""
+      },
+      "PDB65Hz3Z0WtW6hD": {
+        "_id": "PDB65Hz3Z0WtW6hD",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.VleHwUCtUlA7hkWM",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 3,
+        "title": "Shared Dreamwork",
+        "flags": {},
+        "hint": ""
+      },
+      "EUHlMzvpKDtazTT6": {
+        "_id": "EUHlMzvpKDtazTT6",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.F49sEy1mUfuAf2Nt",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 5,
+        "title": "Dream Rite",
+        "flags": {},
+        "hint": ""
+      },
+      "KvLsnjfPjedVUoSN": {
+        "_id": "KvLsnjfPjedVUoSN",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.W18UmvWhY6b5XJAD",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 6,
+        "title": "Dream Stability",
+        "flags": {},
+        "hint": ""
+      },
+      "gYPzq7TLWRwt81UH": {
+        "_id": "gYPzq7TLWRwt81UH",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.u3gQ0e5n5dxZ3SCR",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 7,
+        "title": "Symbolic Cartography",
+        "flags": {},
+        "hint": ""
+      },
+      "fXpi2qOEHgHfxUaC": {
+        "_id": "fXpi2qOEHgHfxUaC",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.TSWbYDz9nlW0dIQT",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 9,
+        "title": "Dreamer’s Poise",
+        "flags": {},
+        "hint": ""
+      },
+      "lRIz3t4BVzdFhEq7": {
+        "_id": "lRIz3t4BVzdFhEq7",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.G9fK2gX5Tcev21cU",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 10,
+        "title": "Omen-Thread Weaving",
+        "flags": {},
+        "hint": ""
+      },
+      "RWG5HVkHW6uOm0cQ": {
+        "_id": "RWG5HVkHW6uOm0cQ",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.NK1Ftukd4YPqziiR",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 11,
+        "title": "Vision of the Great Work",
+        "flags": {},
+        "hint": ""
+      },
+      "YEw2pcckrzCZe4YA": {
+        "_id": "YEw2pcckrzCZe4YA",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.tAsGXgZrgFdpNyVi",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 13,
+        "title": "Dream Echo Reservoir",
+        "flags": {},
+        "hint": ""
+      },
+      "HpcBa7sIT8JjS2qY": {
+        "_id": "HpcBa7sIT8JjS2qY",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.rvfPQwQq6rYBE1EG",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 14,
+        "title": "Mnemonic Spillway",
+        "flags": {},
+        "hint": ""
+      },
+      "UHLy2jPEHqhkFyVB": {
+        "_id": "UHLy2jPEHqhkFyVB",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.MHfSNNFN1e544eox",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 15,
+        "title": "Waking Dreamfield",
+        "flags": {},
+        "hint": ""
+      },
+      "GjYakAu0plcuXKOn": {
+        "_id": "GjYakAu0plcuXKOn",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.RQhSgy0Ps39BucuM",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 17,
+        "title": "Ascension Layer",
+        "flags": {},
+        "hint": ""
+      },
+      "rkRp98xxJ2RdSWro": {
+        "_id": "rkRp98xxJ2RdSWro",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.uD8rt09f8CkX4N94",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 18,
+        "title": "Fractal Self",
+        "flags": {},
+        "hint": ""
+      },
+      "2Bd8GqqpYxRRx3y8": {
+        "_id": "2Bd8GqqpYxRRx3y8",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.4imbYyUj1RKPkgNh",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 20,
+        "title": "Apotheosis of the Oneiric",
+        "flags": {},
+        "hint": ""
+      },
+      "b8wksBNI12HbCvy2": {
+        "_id": "b8wksBNI12HbCvy2",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 4,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "1cY1wAxwzsTlsieq": {
+        "_id": "1cY1wAxwzsTlsieq",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 8,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "cXmxEfF4g9VCjR0l": {
+        "_id": "cXmxEfF4g9VCjR0l",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 12,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "X3EHR7qH9WODyoHd": {
+        "_id": "X3EHR7qH9WODyoHd",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 16,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "v3yXQ0gSTo7RF5Vn": {
+        "_id": "v3yXQ0gSTo7RF5Vn",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 19,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "YGxgq4j6rciK7l5N": {
+        "_id": "YGxgq4j6rciK7l5N",
+        "type": "Subclass",
+        "configuration": {},
+        "value": {
+          "document": null,
+          "uuid": null
+        },
+        "level": 3,
+        "title": "",
+        "hint": "",
+        "flags": {}
+      },
+      "o3OKm1MVhtL1ZIIz": {
+        "_id": "o3OKm1MVhtL1ZIIz",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "saves:wis",
+            "saves:cha"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "defense check Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "aKZkHc9zHfV0iGxJ": {
+        "_id": "aKZkHc9zHfV0iGxJ",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [],
+          "choices": [
+            {
+              "count": 3,
+              "pool": [
+                "skills:ins",
+                "skills:prc",
+                "skills:rel",
+                "skills:arc",
+                "skills:per",
+                "skills:inv",
+                "skills:prf",
+                "skills:sur"
+              ]
+            }
+          ]
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Skill Proficiencies",
+        "hint": "Choose three skills from Insight (Soul) (Soul), Perception (Mind) (Mind), Faith (Soul), Occult (Mind), Diplomacy (Presence), Investigation (Mind) (Mind), Performance (Presence) (Presence), and Athletics (Violence) (Body).",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "hK17RQadRRGZs06O": {
+        "_id": "hK17RQadRRGZs06O",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "weapon:sim"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Weapon Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "m9tpw0gZGDj6oLJx": {
+        "_id": "m9tpw0gZGDj6oLJx",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "armor:lgt"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Armor Training",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "14ef4b30d6b804ea": {
+        "_id": "14ef4b30d6b804ea",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.91dc5101e44cc01b",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": {
+            "ability": "",
+            "preparation": "",
+            "uses": {
+              "max": "",
+              "per": ""
+            }
+          }
+        },
+        "value": {},
+        "level": 1,
+        "title": "Dreamwalker Discipline (Tier 1 — Oneiric Reservoir)",
+        "icon": "",
+        "classRestriction": "",
+        "hint": "",
+        "flags": {}
+      },
+      "cf74de5c27701ca5": {
+        "_id": "cf74de5c27701ca5",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.e22a0f248b11df6a",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": {
+            "ability": "",
+            "preparation": "",
+            "uses": {
+              "max": "",
+              "per": ""
+            }
+          }
+        },
+        "value": {},
+        "level": 5,
+        "title": "Dreamwalker Discipline (Tier 2 — Dream-Cache)",
+        "icon": "",
+        "classRestriction": "",
+        "hint": "",
+        "flags": {}
+      },
+      "18c62314c7f7ac0f": {
+        "_id": "18c62314c7f7ac0f",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.4ea57d63c8f5db28",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": {
+            "ability": "",
+            "preparation": "",
+            "uses": {
+              "max": "",
+              "per": ""
+            }
+          }
+        },
+        "value": {},
+        "level": 11,
+        "title": "Dreamwalker Discipline (Tier 3 — The Walking Lane (Signature Mode))",
+        "icon": "",
+        "classRestriction": "",
+        "hint": "",
+        "flags": {}
+      },
+      "70eb7b4901b11b56": {
+        "_id": "70eb7b4901b11b56",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.40b52c149fd8f1ed",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": {
+            "ability": "",
+            "preparation": "",
+            "uses": {
+              "max": "",
+              "per": ""
+            }
+          }
+        },
+        "value": {},
+        "level": 17,
+        "title": "Dreamwalker Discipline (Tier 4 — Shared Dream)",
+        "icon": "",
+        "classRestriction": "",
+        "hint": "",
+        "flags": {}
+      }
+    },
+    "startingEquipment": [],
+    "hd": {
+      "additional": "",
+      "denomination": "d8",
+      "spent": 0
+    },
+    "levels": 1,
+    "primaryAbility": {
+      "value": [
+        "wis"
+      ],
+      "all": false
+    },
+    "properties": [],
+    "spellcasting": {
+      "progression": "full",
+      "ability": "wis",
+      "preparation": {
+        "formula": "@wis.mod + @classes.dreamwalker.levels"
+      }
+    },
+    "wealth": ""
+  },
+  "effects": [],
+  "folder": "Jnvq4R9WS9xhsS3k",
+  "flags": {
+    "bbttcc": {
+      "primary": "wisdom",
+      "opBonus": {
+        "faith": 2,
+        "softPower": 1
+      }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459927037,
+    "modifiedTime": 1782167240832,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "y1FW5EjletcgLibA",
+  "sort": 100000,
+  "_key": "!items!y1FW5EjletcgLibA"
+}

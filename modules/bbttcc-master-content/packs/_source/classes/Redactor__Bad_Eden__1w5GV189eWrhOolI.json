@@ -1,0 +1,41 @@
+{
+  "name": "Redactor (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blood_hymn.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "cosmic_linguist",
+    "source": "Bad Eden Originals — Sprint F (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"It is not there anymore. It was never there.\"</em></p>\n<p><strong>Doctrine:</strong> Power lies in omission, silence, and removal — a good redaction is terrifying because it leaves clean edges. Ask what word, path, memory, or option disappears.</p>\n<p>The Redactor wins by deletion. Your Surge spends remove things from the sentence: an affliction off an ally, a foe's options, or the foe's entire standing as a threat.</p>\n<h3>Doctrine (spent via Surge)</h3>\n<ul>\n  <li><strong>Redact</strong> (1) — strike one condition off an ally (clean edges where it used to be).</li>\n  <li><strong>Silence</strong> (2) — a foe cannot take reactions until your next turn (its options, omitted).</li>\n  <li><strong>Erasure</strong> (5) — a foe is Staggered, cannot take reactions, and rolls its saves at disadvantage (struck from the sentence).</li>\n</ul>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-cosmic-linguist-linguist-redactor",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "pcv0zMJZU8aoEMQc",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "1w5GV189eWrhOolI",
+  "sort": 700000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776459469161,
+    "modifiedTime": 1781116110400,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!1w5GV189eWrhOolI"
+}

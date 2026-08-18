@@ -1,0 +1,67 @@
+{
+  "name": "Prism Ledger",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>You keep quiet books on how hard truth will be to install.</em></p><p>You can spend <strong>10 minutes</strong> performing a brief analytical rite (charts, string maps, numerology, argument trees) focused on a planned <strong>Alignment Shift</strong> for a Hex or Spark.</p><ul><li>At the end of the rite, the GM tells you whether the upcoming Align-Shift DC for this attempt is trending <strong>easier than usual</strong>, <strong>about normal</strong>, or <strong>harder than usual</strong>, based on current fiction, opposition, and setup.</li><li>This does not give you exact numbers or guarantee success; it provides a <strong>forecast</strong> so you know whether to bring more OPs, allies, or preparation.</li></ul><p>In other words, you glimpse whether the Lens is currently tilted in your favor.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlTruthPrism\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Prism Ledger</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 10-min rite &nbsp;·&nbsp; <strong>Action:</strong> Downtime (10 min) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Spend 10 minutes on charts/string maps/numerology focused on a planned Alignment Shift. GM tells you whether the upcoming Align-Shift DC is trending easier / normal / harder. Forecast only — no exact numbers.</div>\n</div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "wyrdlens-refraction-truth-prism-ledger",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 10
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept 10, Refraction of Truth",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "4SZvMbYoYLB4LZnj",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "wyrdlens_refraction_truth",
+      "featureKey": "prism_ledger"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984382,
+    "modifiedTime": 1781116110914,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "3E4acMusjRIbYj79",
+  "sort": 200000,
+  "_key": "!items!3E4acMusjRIbYj79"
+}

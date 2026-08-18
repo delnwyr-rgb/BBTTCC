@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": null,
+  "name": "Bad Eden NPCs",
+  "color": null,
+  "sorting": "a",
+  "_id": "ZiFLx2LEOrGxvEmc",
+  "description": "",
+  "sort": 200000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177533966,
+    "modifiedTime": 1784177535061,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!ZiFLx2LEOrGxvEmc"
+}

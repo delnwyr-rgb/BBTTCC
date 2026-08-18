@@ -1,0 +1,71 @@
+{
+  "name": "Avalanche L9: No Terminal Velocity",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "RFI-native",
+      "revision": 1,
+      "book": "Bulwark + Shadow Courier v1.0",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Difficult terrain is for people who pause.</em></p><p>Your movement speed cannot be reduced below <strong>half your base speed</strong> by any effect, condition, surface, or creature short of a physical barrier substantial enough to stop a charging rhino (GM call). This includes — but is not limited to — difficult terrain, grease, web, the <strong>restrained</strong> condition, the <strong>prone</strong> condition's stand-up cost, slowed/snared effects, and being grappled by a creature your size or smaller.</p><p>You still take damage from traps and hazardous terrain along your path; you simply do not stop for them. You may end movement voluntarily.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "bulwark_avalanche_l9_no_terminal_velocity",
+    "requirements": "Path of the Avalanche, Bulwark Initiation 9",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 9
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "bulwark",
+      "subclassIdentifier": "bbttcc-bulwark-avalanche",
+      "subclassLevel": 9,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {}
+    }
+  },
+  "folder": "agkQNnsVjul6ZPYs",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777003646549,
+    "modifiedTime": 1781116122869,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BlwkAvalFtL09abc",
+  "sort": 0,
+  "_key": "!items!BlwkAvalFtL09abc"
+}

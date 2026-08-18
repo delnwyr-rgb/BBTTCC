@@ -1,0 +1,65 @@
+{
+  "_id": "QTj4AtKW9lxRJq5T",
+  "name": "Steward: Public Works Miracle",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"2686\" data-end=\"2700\"><em data-start=\"2686\" data-end=\"2700\">(10th Level)</em></p><p data-start=\"2702\" data-end=\"2742\">You bless a site or community for a day.</p><p data-start=\"2744\" data-end=\"2779\">Choose one infrastructure blessing:</p><ul data-start=\"2781\" data-end=\"2902\"><li data-start=\"2781\" data-end=\"2806\"><p data-start=\"2783\" data-end=\"2806\">Food supply stabilizes.</p></li><li data-start=\"2807\" data-end=\"2832\"><p data-start=\"2809\" data-end=\"2832\">Shelter becomes secure.</p></li><li data-start=\"2833\" data-end=\"2848\"><p data-start=\"2835\" data-end=\"2848\">Calm spreads.</p></li><li data-start=\"2849\" data-end=\"2869\"><p data-start=\"2851\" data-end=\"2869\">Structures repair.</p></li><li data-start=\"2870\" data-end=\"2902\"><p data-start=\"2872\" data-end=\"2902\">Safe passage becomes reliable.</p></li></ul><p data-start=\"2904\" data-end=\"2955\">This is not combat power.<br data-start=\"2929\" data-end=\"2932\" />This is sustainability.</p><h3 data-start=\"2957\" data-end=\"2965\">Cost</h3><p data-start=\"2966\" data-end=\"3011\">Spend 1–2 Civic Charge dice (scale by scope).</p><h3 data-start=\"3013\" data-end=\"3022\">Scope</h3><p data-start=\"3023\" data-end=\"3103\">Blessings operate narratively within reason; they do not invalidate natural law.</p><h3 data-start=\"3105\" data-end=\"3117\">Pushback</h3><p data-start=\"3118\" data-end=\"3187\">Communities may begin expecting miracles instead of building systems.</p>",
+      "chat": ""
+    },
+    "identifier": "steward_public_works_miracle",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 10
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "steward_public_works_miracle"
+    }
+  },
+  "folder": "b7c5HgxxTfcVph6r",
+  "sort": 375000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.QTj4AtKW9lxRJq5T",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776481562685,
+    "modifiedTime": 1781116147604,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!QTj4AtKW9lxRJq5T"
+}

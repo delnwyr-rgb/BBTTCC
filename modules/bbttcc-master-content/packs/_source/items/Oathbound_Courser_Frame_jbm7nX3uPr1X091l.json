@@ -1,0 +1,95 @@
+{
+  "name": "Oathbound Courser Frame",
+  "type": "feat",
+  "img": "icons/environment/settlement/wagon-black.webp",
+  "folder": "0JDB983lzPepXXNe",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>A sacred messenger's mount — single rider, no weapon mount, built for speed and diplomatic reach. Travels under oath-protection; rarely engaged in direct combat because rules of safe passage cover it.</p><p><b>Frame · Personal · Mobile · Courier</b></p>",
+      "chat": "",
+      "unidentified": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "rig-frame"
+      },
+      "rigFrame": {
+        "bracket": "personal",
+        "baseIntegrity": 8,
+        "tierStep": 3,
+        "mobilityAllowed": [
+          "mobile"
+        ],
+        "slots": {
+          "weapon": 0,
+          "system": 1,
+          "output": 0
+        },
+        "capacity": {
+          "pilot": {
+            "min": 1,
+            "max": 1
+          },
+          "gunner": {
+            "min": 0,
+            "max": 0
+          },
+          "engineer": {
+            "min": 0,
+            "max": 0
+          },
+          "crew": {
+            "min": 0,
+            "max": 0
+          }
+        },
+        "actions": {
+          "pilot": [
+            "steer",
+            "evasive",
+            "swerve",
+            "oath-leap"
+          ],
+          "gunner": [],
+          "engineer": [],
+          "crew": []
+        },
+        "travel": {
+          "speed": 8,
+          "range": 16
+        },
+        "tags": [
+          "courier",
+          "oathbound",
+          "diplomatic",
+          "fast"
+        ],
+        "visualFrame": "open-corners"
+      }
+    }
+  },
+  "_id": "jbm7nX3uPr1X091l",
+  "effects": [],
+  "sort": 3800000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778961701159,
+    "modifiedTime": 1778963271958,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!jbm7nX3uPr1X091l"
+}

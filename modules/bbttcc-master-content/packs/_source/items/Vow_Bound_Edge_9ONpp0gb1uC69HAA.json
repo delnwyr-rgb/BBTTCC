@@ -1,0 +1,77 @@
+{
+  "name": "Vow-Bound Edge",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/techno_sword.png",
+  "system": {
+    "slot": "material",
+    "tags": [
+      "material",
+      "vow-bound-edge"
+    ],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>Tempered cutting blank consecrated to a single function. Loses its potency if used outside its sworn role.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "material",
+          "signature": "An edge sworn to its purpose.",
+          "origin": "found",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "none"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Tempered cutting blank consecrated to a single function. Loses its potency if used outside its sworn role.</p>",
+          "charges": 1,
+          "materialKey": "vow-bound-edge",
+          "price": {
+            "marks": 450,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII material stamp",
+            "bound": "free",
+            "saleBack": 180
+          }
+        }
+      }
+    }
+  },
+  "folder": "Mzo3vreEeHyIsTWO",
+  "_id": "9ONpp0gb1uC69HAA",
+  "effects": [],
+  "sort": 106250,
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777137161798,
+    "modifiedTime": 1778541955662,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!9ONpp0gb1uC69HAA"
+}

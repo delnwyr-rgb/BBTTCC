@@ -1,0 +1,79 @@
+{
+  "name": "Witness-Glass Scope",
+  "type": "gear",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_magnifying_glass_1.png",
+  "system": {
+    "slot": "misc",
+    "tags": [
+      "tech"
+    ],
+    "category": "gear",
+    "source": "Phase 7 Seed (2026-05-10)",
+    "quantity": 1,
+    "description": {
+      "value": "<p>A short hand-scope. Through the witness-glass lens, illusion thins and concealment glows the color of its weave.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "II",
+          "frame": "tool",
+          "bound": "attuned",
+          "materialOf": [
+            {
+              "key": "witness-glass",
+              "qty": 2
+            },
+            {
+              "key": "focusing-lens",
+              "qty": 1
+            }
+          ],
+          "tech": {
+            "kind": "attuned",
+            "attunement": {
+              "required": true,
+              "slots": 1
+            },
+            "failure": "drain",
+            "origin": "witness-forge"
+          },
+          "price": {
+            "marks": 180,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TII tool × 0.60 × tech 2.0",
+            "bound": "attuned",
+            "saleBack": 72
+          }
+        }
+      }
+    }
+  },
+  "_id": "kNqvw8MyHr8iSdfD",
+  "effects": [],
+  "folder": "TNrB6kEiHS0KwwJT",
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778963499668,
+    "modifiedTime": 1782149456173,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 100000,
+  "_key": "!items!kNqvw8MyHr8iSdfD"
+}

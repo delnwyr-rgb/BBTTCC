@@ -1,0 +1,141 @@
+{
+  "name": "Qliph-Scarred: Strategic Hooks (Qliph-Scarred)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_1.png.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“Send the Qliph-Scarred into the bad places. If they come back smiling, it means the rest of probably can still come back.”</em></p><p><strong>OP Edge.</strong> Your faction leans toward problem-solving in corrupted zones, containment operations, and subtle social pressure.</p><p><strong>Corruption-Tuned.</strong> You help keep others steady in the presence of Darkness, even when it whispers to you first.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "qliph-scarred-strategic-hooks",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Qliph-Scarred",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Qliph-Scarred: Strategic Hooks (Bad Eden OP Flags)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_book_1.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.op.intrigue.baseBonus",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.op.nonLethal.baseBonus",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>Data-only for your Bad Eden OP and world engines: Qliph-Scarred factions lean toward Intrigue and Non-Lethal lines, especially in corrupted or unstable zones.</p>",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116074873,
+        "modifiedTime": 1781116074873
+      },
+      "_id": "peAXJ5Bzbrimm4Tc",
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!JYdGhXK2dKB1wEg6.peAXJ5Bzbrimm4Tc"
+    }
+  ],
+  "folder": "k2E5xzg6QsIqtHKN",
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryHooks",
+      "opEffects": {
+        "intrigue": 1,
+        "nonLethal": 1
+      },
+      "corruptionSpecialist": 1,
+      "version": "1.0.0"
+    },
+    "dnd5e": {},
+    "bbttcc-character-options": {
+      "option": {}
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.7omOVWI5D3ujtxpg",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1775004117332,
+    "modifiedTime": 1781116074873,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "JYdGhXK2dKB1wEg6",
+  "sort": 200000,
+  "_key": "!items!JYdGhXK2dKB1wEg6"
+}

@@ -1,0 +1,129 @@
+{
+  "name": "Sephirotic Physiology",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wings_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Sephirotic Physiology.</strong> Your body carries the faint architecture of the higher spheres.</p><ul><li>You have resistance to <strong>sephirotic damage</strong>.</li><li>Your mind naturally aligns toward clarity and higher-order pattern recognition.</li><li>In Sephirothic-aligned hexes, your senses subtly sharpen (handled narratively).</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "sephirotic-physiology",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Sephirotic Scion",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Sephirotic Physiology (Radiant Resistance)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_blood_hymn_hex.png",
+      "type": "base",
+      "disabled": false,
+      "transfer": true,
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346196686,
+        "modifiedTime": 1777433398732
+      },
+      "_id": "3qbud7ccqGFTBZC6",
+      "system": {
+        "changes": [
+          {
+            "key": "system.traits.dr.value",
+            "type": "add",
+            "value": "radiant",
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "system.skills.insight.value",
+            "type": "add",
+            "value": "+1",
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!BqZpVGIP8ubbQ38j.3qbud7ccqGFTBZC6"
+    }
+  ],
+  "folder": "FehDulVPgqIjjQEa",
+  "flags": {
+    "bbttcc": {
+      "speciesTrait": "scion_physiology",
+      "sephiroticAffinity": 1
+    },
+    "dnd5e": {},
+    "bbttcc-character-options": {
+      "option": {}
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.e0c6wt6GiL8dL33I",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.e0c6wt6GiL8dL33I",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1775004122531,
+    "modifiedTime": 1782167240122,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "BqZpVGIP8ubbQ38j",
+  "sort": 400000,
+  "_key": "!items!BqZpVGIP8ubbQ38j"
+}

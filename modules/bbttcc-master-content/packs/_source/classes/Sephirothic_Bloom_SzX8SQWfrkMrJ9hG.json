@@ -1,0 +1,72 @@
+{
+  "name": "Sephirothic Bloom",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_29.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>You coax better worlds to sprout in the cracks of the old.</em></p><p>Once per <strong>a Soma Break</strong>, when you lead or are a clear moral center of a <strong>non-lethal victory</strong> (surrender, rout, negotiated peace) in a hex marked by corruption, occupation, or high Darkness, you may trigger a Sephirothic Bloom.</p><ul><li>Reduce the relevant <strong>Darkness Track</strong> by <strong>1</strong> (local, regional, or campaign-scale as the GM deems appropriate).</li><li>Shift the affected Hex one step toward a <strong>beneficial Sephirah</strong> (GM chooses which, based on narrative: Tiferet, Chesed, etc.).</li></ul><p>This is the world briefly remembering it was supposed to be kind.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "wyrdlens-refraction-mercy-sephirothic-bloom",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 14
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept 14, Refraction of Mercy",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "pKuSnWKpU0fVPuje",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "wyrdlens_refraction_mercy",
+      "featureKey": "sephirothic_bloom"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984386,
+    "modifiedTime": 1781116158026,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "SzX8SQWfrkMrJ9hG",
+  "sort": 350000,
+  "_key": "!items!SzX8SQWfrkMrJ9hG"
+}

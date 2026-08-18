@@ -1,0 +1,23 @@
+{
+  "type": "JournalEntry",
+  "folder": null,
+  "name": "01 - Playing the Game",
+  "color": "#4182f1",
+  "sorting": "a",
+  "_id": "GruW1UQmcpIS9hgw",
+  "description": "",
+  "sort": 900000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775619852013,
+    "modifiedTime": 1775619852630,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!folders!GruW1UQmcpIS9hgw"
+}

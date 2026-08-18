@@ -1,0 +1,41 @@
+{
+  "name": "Route of the Wayfarer Tongue (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "shadow_courier",
+    "source": "Bad Eden Originals — Sprint F (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"Go. I'll hold the way.\"</em></p>\n<p><strong>Doctrine:</strong> Movement is mercy — routes, deliveries, impossible arrival; open the road for someone who needs it.</p>\n<p>The Wayfarer is the courier as lifeline. Your Surge spends are extraction made real: free an ally to run, escort them through untouched, and — when it's nearly too late — whisk them clear of the kill zone.</p>\n<h3>Route (spent via Surge)</h3>\n<ul>\n  <li><strong>Clear Road</strong> (1) — an ally gains a freed reaction and a reroll; their road opens.</li>\n  <li><strong>Safe Passage</strong> (2) — an ally gains DR equal to Tier and a reroll; nothing touches what you're carrying.</li>\n  <li><strong>Impossible Arrival</strong> (5) — whisk a hurt ally clear: heal them, DR equal to Tier, and a freed reaction.</li>\n</ul>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-shadow-courier-courier-wayfarer-tongue",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "W1e3ZXUelQ4D70io",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "kCpxoUP3SA2zbpa8",
+  "sort": 300000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1781116179784,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!kCpxoUP3SA2zbpa8"
+}

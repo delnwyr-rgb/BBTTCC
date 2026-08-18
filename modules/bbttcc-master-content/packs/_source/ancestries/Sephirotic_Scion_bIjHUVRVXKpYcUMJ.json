@@ -1,0 +1,196 @@
+{
+  "name": "Sephirotic Scion",
+  "type": "species",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/SephiroticScion4.png",
+  "system": {
+    "category": "ancestry",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Sephirotic Scion.</strong> Your blood remembers the higher spheres. Light hangs around you a little too long, prayers sometimes answer themselves, and the world’s moral architecture feels less like an abstraction and more like the weather report.</p><hr><p><em><strong>Sephirotic Scion Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic).</p></li><li><p><strong>Size.</strong> You are Medium.</p></li><li><p><strong>Speed.</strong> Your walking speed is 6 squares</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Sephirotic Scion does not grant any attribute bonuses.</p></li></ul><p>Your Sephirotic heritage grants you additional features through advancements (Item Grants) added during character creation: sephirotic physiology, attunement to higher patterns, holy conduction, the Light of Harmony, and strategic hooks that tilt factions toward soft power, diplomacy, and alignment work.</p>",
+      "chat": ""
+    },
+    "advancement": {
+      "A1B2C3D4E5F6G7H8": {
+        "_id": "A1B2C3D4E5F6G7H8",
+        "type": "Size",
+        "configuration": {
+          "sizes": [
+            "med"
+          ]
+        },
+        "level": 0,
+        "title": "",
+        "hint": "Medium Sephirotic Scion.",
+        "value": {},
+        "flags": {}
+      },
+      "I1J2K3L4M5N6O7P8": {
+        "_id": "I1J2K3L4M5N6O7P8",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.e0c6wt6GiL8dL33I",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Sephirotic Physiology",
+        "hint": "Gain the Sephirotic Physiology feature.",
+        "flags": {}
+      },
+      "Q1R2S3T4U5V6W7X8": {
+        "_id": "Q1R2S3T4U5V6W7X8",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.hW51wp7YORbeUToi",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Sefirot Attunement",
+        "hint": "Gain the Sefirot Attunement feature.",
+        "flags": {}
+      },
+      "Y1Z2A3B4C5D6E7F8": {
+        "_id": "Y1Z2A3B4C5D6E7F8",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.SlKMUA0gElcOjrZ4",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Holy Conduit",
+        "hint": "Gain the Holy Conduit feature.",
+        "flags": {}
+      },
+      "G1H2I3J4K5L6M7N8": {
+        "_id": "G1H2I3J4K5L6M7N8",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.zrNHJoHr6sjpY4ik",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Light of Harmony",
+        "hint": "Gain the Scion: Light of Harmony feature.",
+        "flags": {}
+      },
+      "O1P2Q3R4S5T6U7V8": {
+        "_id": "O1P2Q3R4S5T6U7V8",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.dlHWQbSNuwpfn6Xc",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Scion: Strategic Hooks",
+        "hint": "Grants OP bonuses and Sephirotic-alignment hooks used by Bad Eden faction and world systems.",
+        "flags": {}
+      }
+    },
+    "identifier": "sephirotic-scion",
+    "movement": {
+      "walk": "30",
+      "units": null,
+      "hover": false,
+      "ignoredDifficultTerrain": []
+    },
+    "senses": {
+      "darkvision": null,
+      "blindsight": null,
+      "tremorsense": null,
+      "truesight": null,
+      "units": null,
+      "special": ""
+    },
+    "type": {
+      "value": "humanoid",
+      "subtype": "Sephirotic Scion",
+      "custom": ""
+    }
+  },
+  "effects": [],
+  "folder": "087LoHAORwCBuexO",
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "race",
+      "ancestryKey": "sephirotic_scion",
+      "version": "1.0.0",
+      "date": "2025-12-08"
+    },
+    "bbttcc-character-options": {
+      "option": {}
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1775015210959,
+    "modifiedTime": 1782167240130,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "bIjHUVRVXKpYcUMJ",
+  "sort": 100000,
+  "_key": "!items!bIjHUVRVXKpYcUMJ"
+}

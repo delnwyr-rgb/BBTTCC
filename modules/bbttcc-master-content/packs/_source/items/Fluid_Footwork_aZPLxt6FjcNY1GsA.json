@@ -1,0 +1,107 @@
+{
+  "_id": "aZPLxt6FjcNY1GsA",
+  "name": "Fluid Footwork",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_fluid_footwork.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Core Feats v1 (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<h2>Fluid Footwork</h2><p><em>You move like the fight is trying to catch up with you.</em></p><hr><h3>Rules</h3><p>Your movement increases by 2 squares Additionally, when you make a melee attack against a creature, that creature can’t make reaction strikes against you for the rest of the turn (hit or miss).</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_fluid_footwork",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [
+    {
+      "_id": "6tzSnWQ36xgB0Oz5",
+      "name": "Fluid Footwork — Speed",
+      "origin": null,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "tint": "#ffffff",
+      "transfer": true,
+      "description": "",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_sapphire_gate.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.attributes.movement.walk",
+            "value": "+10",
+            "priority": 20,
+            "type": "add"
+          }
+        ]
+      },
+      "statuses": [],
+      "sort": 0,
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "dnd5e",
+        "systemVersion": "5.1.9",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346200331,
+        "modifiedTime": 1777346200331
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!aZPLxt6FjcNY1GsA.6tzSnWQ36xgB0Oz5"
+    }
+  ],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-core-v1",
+      "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 4000000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1782164185977,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!aZPLxt6FjcNY1GsA"
+}

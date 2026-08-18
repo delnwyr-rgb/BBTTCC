@@ -1,0 +1,67 @@
+{
+  "name": "Forge Blessing",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Hold still, I’m putting feelings on this.”</em></p><p>As a <strong>bonus action</strong>, you can bless a weapon or shield you can touch.</p><ul><li>For the next minute, the blessed item stores one pulse of your intent. Once during that duration, when its wielder makes an attack roll or is targeted by an attack, they can add their <strong>tier</strong> to either the attack roll or their Guard against that one attack (their choice).</li><li>Once the extra bonus is used, the blessing fades.</li><li>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": "@prof"
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-bound-light-forge-blessing",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 3, Forge of Bound Light",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "JaASOItbL0tB8Z9y",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_boundlight",
+      "featureKey": "forge_blessing"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996549,
+    "modifiedTime": 1781116117556,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "8uvcyxSJkUsN1eBd",
+  "sort": 0,
+  "_key": "!items!8uvcyxSJkUsN1eBd"
+}

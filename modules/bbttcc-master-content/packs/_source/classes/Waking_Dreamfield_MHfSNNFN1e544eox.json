@@ -1,0 +1,182 @@
+{
+  "name": "Waking Dreamfield",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_project_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Waking Dreamfield.</strong> You briefly let the waking world and your inner dreamspace overlap.</p><p><strong>Once per Soma Break</strong>, as a bonus action, you enter a waking dreamstate for 1 minute:</p><ul><li>You gain a +1 bonus to Soul and Presence check.</li><li>Once per round, when you make an Insight (Soul), Perception (Mind), or Faith (Soul) check, you may add +1d4 to the roll.</li></ul><p>Bad Eden engines may treat this state as heightened anomaly-awareness for the duration.</p>",
+      "chat": ""
+    },
+    "activities": {
+      "activateDreamfield": {
+        "type": "utility",
+        "activation": {
+          "type": "bonus",
+          "override": false
+        },
+        "duration": {
+          "value": "1",
+          "units": "minute",
+          "concentration": false,
+          "override": false
+        },
+        "description": {},
+        "_id": "RVKCOL57OQfOMiwP",
+        "sort": 0,
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "effects": [],
+        "range": {
+          "units": "self",
+          "override": false
+        },
+        "target": {
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false,
+          "prompt": true
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "waking-dreamfield",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 15
+    },
+    "properties": [],
+    "requirements": "Dreamwalker (15th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Waking Dreamfield (Self Buff)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_crossbow.png",
+      "origin": null,
+      "transfer": false,
+      "disabled": true,
+      "duration": {
+        "value": 60,
+        "units": "seconds",
+        "expiry": "turnStart",
+        "expired": false
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459927033,
+        "modifiedTime": 1777346198591
+      },
+      "_id": "Qh0uXI3bQJ6uwu3j",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.abilities.wis.bonuses.save",
+            "value": "+1",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "system.abilities.cha.bonuses.save",
+            "value": "+1",
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.dreamwalker.dreamfieldActive",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!MHfSNNFN1e544eox.Qh0uXI3bQJ6uwu3j"
+    }
+  ],
+  "folder": "YLUIFZ5nPOUSaSH2",
+  "flags": {
+    "bbttcc": {
+      "dreamwalker": {
+        "wakingDreamfield": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459927033,
+    "modifiedTime": 1782167240816,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "MHfSNNFN1e544eox",
+  "sort": 368750,
+  "_key": "!items!MHfSNNFN1e544eox"
+}

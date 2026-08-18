@@ -1,0 +1,23 @@
+{
+  "name": "Rig & Boss Catalog",
+  "type": "Item",
+  "_id": "0JDB983lzPepXXNe",
+  "description": "",
+  "folder": null,
+  "sorting": "a",
+  "sort": 700000,
+  "color": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205373478,
+    "modifiedTime": 1781331693996,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!0JDB983lzPepXXNe"
+}

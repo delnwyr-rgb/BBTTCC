@@ -1,0 +1,936 @@
+{
+  "name": "Evil Bad Auditor",
+  "type": "character",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc",
+      "createdViaNPCBuilder": true,
+      "createdAt": 1784060748594
+    },
+    "fourththing": {
+      "kind": "npc",
+      "surgeEnabled": false
+    },
+    "bbttcc-factions": {
+      "factionId": "oK7VitQikQ6FN3PI"
+    },
+    "bbttcc-territory": {
+      "faction": "Evil Bad Faction"
+    },
+    "bbttcc-character-options": {
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "heritageUuid": "",
+      "nativeLinks": {
+        "heritageName": "",
+        "heritageUuid": "",
+        "heritageApplied": false,
+        "ancestryName": "Devil (Infernal)",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.tIPJVAeBzZypZ0iR",
+        "ancestryApplied": true
+      }
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "secretsUsed": {}
+      }
+    }
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 1,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1
+    },
+    "attributes": {
+      "violence": {
+        "value": 2
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 2
+      },
+      "body": {
+        "value": 2
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 0
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 0
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 0
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 0
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 0
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 0
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 16,
+        "max": 16
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 3,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": "oK7VitQikQ6FN3PI",
+      "loyalty": 0,
+      "name": "Evil Bad Faction"
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": 1,
+    "name": "Evil Bad Auditor",
+    "displayName": 30,
+    "width": 0.5,
+    "height": 0.5,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/A_top_down_view%2C_taken%2C_202604291557%20Background%20Removed.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 0.55,
+      "scaleY": 0.55,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "I6Chs28DnkObqUcV",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/A_top_down_view%2C_taken%2C_202604291557%20Background%20Removed.png",
+  "items": [
+    {
+      "name": "Devil (Infernal)",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_skull_1.png",
+      "system": {
+        "category": "ancestry",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Infernal bloodline — bound to the Hells through pact, descent, or curse. Cunning negotiators whose smiles always cost more than the asking price.</em></p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "2hc7h6bhj7p3q8n4",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Devil (Infernal) (size: med).",
+            "value": {}
+          },
+          {
+            "_id": "qtrumj4txosved6l",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.q75tTwN1LB4N62Ut",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Devil (Infernal) Tier 1",
+            "hint": "Grants the tier 1 Devil (Infernal) feature."
+          },
+          {
+            "_id": "1v7iba3u03us5qb2",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.CfW5Jb0k5WpdJpwL",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Devil (Infernal) Tier 2",
+            "hint": "Grants the tier 2 Devil (Infernal) feature."
+          },
+          {
+            "_id": "9yxhhwuhs1g7r8lj",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.aoCij1hBhm0FJk9e",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Devil (Infernal) Tier 3",
+            "hint": "Grants the tier 3 Devil (Infernal) feature."
+          },
+          {
+            "_id": "idi2m6he6uwjuop7",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.PasUt27Ca35sKyQB",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Devil (Infernal) Tier 4",
+            "hint": "Grants the tier 4 Devil (Infernal) feature."
+          }
+        ],
+        "identifier": "devil",
+        "properties": [],
+        "type": {
+          "value": "humanoid",
+          "subtype": "Devil (Infernal)"
+        }
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "lineage": "devil",
+          "version": "1.0.0",
+          "date": "2026-05-15",
+          "npAncestry": true
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool × 0.60",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "grantedByAncestry": "Devil (Infernal)"
+        },
+        "bbttcc-factions": {
+          "opContribution": {
+            "violence": 1,
+            "intrigue": 1
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534388,
+        "modifiedTime": 1784177534388,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "folder": "tOM0KLv9UgMPUDOT",
+      "sort": 100000,
+      "_id": "wpNiJoCQM5pFUwJ4",
+      "_key": "!actors.items!I6Chs28DnkObqUcV.wpNiJoCQM5pFUwJ4"
+    },
+    {
+      "name": "Devil: Lesser Brand",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sigil_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Lesser Brand.</strong> You know the Infernal language and gain a skill rank in Diplomacy or Stealth (your choice). Resistance to thermal damage.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "devil-lesser",
+        "requirements": "Devil (Infernal)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "devil",
+          "lineage": "Devil (Infernal)",
+          "feature": "lesser",
+          "tierLevel": 1,
+          "version": "1.0.0",
+          "date": "2026-05-15",
+          "npAncestry": true
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "vocabScrub": "2026-05-16",
+          "grantedByAncestry": "Devil (Infernal)"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534388,
+        "modifiedTime": 1784177534388,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "folder": "tOM0KLv9UgMPUDOT",
+      "sort": 300000,
+      "_id": "0sQGAVAgkDD4Yety",
+      "_key": "!actors.items!I6Chs28DnkObqUcV.0sQGAVAgkDD4Yety"
+    },
+    {
+      "name": "Devil: Pactbinder",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quill_sigil.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Pactbinder (1/Soma Break).</strong> When you secure a willing verbal agreement with a creature, both parties become magically bound for 24 hours. Breaking the pact deals 4d6 psychic damage to the breaker.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "devil-pactbinder",
+        "requirements": "Devil (Infernal)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "devil",
+          "lineage": "Devil (Infernal)",
+          "feature": "pactbinder",
+          "tierLevel": 2,
+          "version": "1.0.0",
+          "date": "2026-05-15",
+          "npAncestry": true
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "grantedByAncestry": "Devil (Infernal)"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534388,
+        "modifiedTime": 1784177534388,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "folder": "tOM0KLv9UgMPUDOT",
+      "sort": 400000,
+      "_id": "7LCpNYvEa5gIzIpM",
+      "_key": "!actors.items!I6Chs28DnkObqUcV.7LCpNYvEa5gIzIpM"
+    },
+    {
+      "name": "Devil: Archduke's Tongue",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_mask.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Archduke's Tongue.</strong> When you make a Presence (Diplomacy or Stealth) check, you may roll twice and take the better. You also know whenever a creature within 6 squares tells a deliberate lie.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "devil-archduke",
+        "requirements": "Devil (Infernal)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "devil",
+          "lineage": "Devil (Infernal)",
+          "feature": "archduke",
+          "tierLevel": 3,
+          "version": "1.0.0",
+          "date": "2026-05-15",
+          "npAncestry": true
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "vocabScrub": "2026-05-16",
+          "grantedByAncestry": "Devil (Infernal)"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534388,
+        "modifiedTime": 1784177534388,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "folder": "tOM0KLv9UgMPUDOT",
+      "sort": 200000,
+      "_id": "aXdOXZbKgZYx2Twy",
+      "_key": "!actors.items!I6Chs28DnkObqUcV.aXdOXZbKgZYx2Twy"
+    },
+    {
+      "name": "Devil: Sovereign of Hells",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_eyes_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Sovereign of Hells (1/Soma Break).</strong> Compel a creature you have made eye contact with to obey one direct command (Soul check DC 8 + Tier + Presence to resist). The command must not be self-destructive. Your fire resistance becomes immunity.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "devil-sovereign",
+        "requirements": "Devil (Infernal)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "devil",
+          "lineage": "Devil (Infernal)",
+          "feature": "sovereign",
+          "tierLevel": 4,
+          "version": "1.0.0",
+          "date": "2026-05-15",
+          "npAncestry": true
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "grantedByAncestry": "Devil (Infernal)"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534388,
+        "modifiedTime": 1784177534388,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "folder": "tOM0KLv9UgMPUDOT",
+      "sort": 500000,
+      "_id": "9g8S2XIEJuBQ2jbu",
+      "_key": "!actors.items!I6Chs28DnkObqUcV.9g8S2XIEJuBQ2jbu"
+    }
+  ],
+  "effects": [],
+  "folder": "q161mthKFcQADAdV",
+  "sort": 150000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177534388,
+    "modifiedTime": 1784177534388,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!I6Chs28DnkObqUcV"
+}

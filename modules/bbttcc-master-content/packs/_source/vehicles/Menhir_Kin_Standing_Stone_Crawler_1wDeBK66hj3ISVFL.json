@@ -1,0 +1,828 @@
+{
+  "name": "Menhir Kin Standing-Stone Crawler",
+  "type": "rig",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_war_tower_1.png",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "rig",
+      "createdViaContentSprint": "2026-06-13",
+      "createdAt": 1781332649519
+    },
+    "bbttcc-structures": {
+      "hasStructure": true,
+      "facilityMode": false,
+      "materialBOM": [
+        {
+          "materialKey": "scribed-steel",
+          "qty": 10,
+          "originalQty": 10,
+          "family": "metal",
+          "tier": "III",
+          "name": "Scribed Steel",
+          "tagsCache": [
+            "material",
+            "scribed-steel"
+          ]
+        },
+        {
+          "materialKey": "heart-iron",
+          "qty": 5,
+          "originalQty": 5,
+          "family": "metal",
+          "tier": "II",
+          "name": "Heart-Iron",
+          "tagsCache": [
+            "material",
+            "heart-iron",
+            "heart-iron",
+            "aurablade",
+            "metal"
+          ]
+        },
+        {
+          "materialKey": "cold-iron",
+          "qty": 4,
+          "originalQty": 4,
+          "family": "metal",
+          "tier": "II",
+          "name": "Cold-Iron",
+          "tagsCache": [
+            "material",
+            "cold-iron",
+            "iron",
+            "cold-forge",
+            "hex-resistant"
+          ]
+        },
+        {
+          "materialKey": "mountain-stone",
+          "qty": 4,
+          "originalQty": 4,
+          "family": "stone",
+          "tier": "I",
+          "name": "mountain-stone",
+          "tagsCache": []
+        },
+        {
+          "materialKey": "yesodium",
+          "qty": 1,
+          "originalQty": 1,
+          "family": "sephirotic",
+          "tier": "III",
+          "name": "Yesodium",
+          "tagsCache": [
+            "material",
+            "yesodium",
+            "sephirotic",
+            "yesod",
+            "metastable-proto-ore",
+            "narrative-responsive",
+            "khezek-tor"
+          ]
+        }
+      ],
+      "state": "intact",
+      "plates": {
+        "current": 76,
+        "max": 76
+      },
+      "threshold": 2.75,
+      "resists": {
+        "kinetic": 0.5,
+        "qliphothic": 0.5
+      },
+      "vulnerabilities": {
+        "energy|heat": {
+          "type": "energy",
+          "flavor": "heat",
+          "factor": 2
+        },
+        "kinetic|concussive": {
+          "type": "kinetic",
+          "flavor": "concussive",
+          "factor": 2
+        }
+      },
+      "loadBearing": true,
+      "collapseProfile": {
+        "fallFt": 10,
+        "damageDice": "2d10",
+        "nonlethal": true,
+        "knockbackFt": 5,
+        "triggerState": "breached"
+      },
+      "history": []
+    }
+  },
+  "system": {
+    "identity": {
+      "mobility": "mobile",
+      "state": "parked",
+      "factionOwnerId": "",
+      "archetype": "Walking Bastion",
+      "binding": {
+        "hexId": "",
+        "sceneId": "",
+        "tokenId": ""
+      }
+    },
+    "crew": {
+      "slots": [],
+      "capacity": {
+        "pilot": {
+          "min": 1,
+          "max": 2
+        },
+        "gunner": {
+          "min": 1,
+          "max": 4
+        },
+        "engineer": {
+          "min": 1,
+          "max": 2
+        },
+        "crew": {
+          "min": 2,
+          "max": 8
+        }
+      },
+      "crewMin": 5,
+      "crewMax": 16
+    },
+    "integrity": {
+      "value": 120,
+      "max": 120,
+      "tier": 3,
+      "bracket": "siege"
+    },
+    "derived": {
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 12
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "defenses": {
+      "resistances": [
+        "kinetic"
+      ],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "output": {
+      "modules": [],
+      "basePerTurn": {}
+    },
+    "travel": {
+      "speed": 1,
+      "range": 6,
+      "hazardResist": 2
+    },
+    "tags": [
+      "bulwark",
+      "menhir-kin",
+      "stone",
+      "slow",
+      "faction-rig"
+    ],
+    "details": {
+      "biography": {
+        "value": "<p><strong>Concept.</strong> The Menhir Kin do not build vehicles so much as convince a standing stone to walk. Slow. Implacable. The kind of slow that arrives anyway. It does not skip encounters; it absorbs them.</p>\n<p><strong>Signature.</strong> A fortress that travels badly and holds excellently. When it finally stops, the ground is grateful and the enemy is not.</p>",
+        "public": ""
+      }
+    },
+    "description": "<p><strong>Concept.</strong> The Menhir Kin do not build vehicles so much as convince a standing stone to walk. Slow. Implacable. The kind of slow that arrives anyway. It does not skip encounters; it absorbs them.</p>\n<p><strong>Signature.</strong> A fortress that travels badly and holds excellently. When it finally stops, the ground is grateful and the enemy is not.</p>"
+  },
+  "prototypeToken": {
+    "actorLink": true,
+    "disposition": 1,
+    "name": "Menhir Kin Standing-Stone Crawler",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_war_tower_1.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "1wDeBK66hj3ISVFL",
+  "items": [
+    {
+      "name": "Forge Facility Frame",
+      "type": "gear",
+      "img": "icons/environment/settlement/wagon-black.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "description": {
+          "value": "<p>A bolted-down industrial cathedral. Chimneys exhale slag and prayer in equal measure. Doesn't move; doesn't need to. Things come <em>to</em> it.</p><p><strong>Frame · Siege · Stationary</strong></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-frame"
+          },
+          "rigFrame": {
+            "bracket": "siege",
+            "baseIntegrity": 64,
+            "tierStep": 18,
+            "mobilityAllowed": [
+              "stationary"
+            ],
+            "slots": {
+              "weapon": 1,
+              "system": 2,
+              "output": 4
+            },
+            "capacity": {
+              "pilot": {
+                "min": 0,
+                "max": 0
+              },
+              "gunner": {
+                "min": 0,
+                "max": 1
+              },
+              "engineer": {
+                "min": 0,
+                "max": 2
+              },
+              "crew": {
+                "min": 0,
+                "max": 4
+              }
+            },
+            "actions": {
+              "pilot": [],
+              "gunner": [
+                "fire-weapon",
+                "suppression",
+                "opportunity-fire"
+              ],
+              "engineer": [
+                "repair",
+                "boost-system",
+                "vent-heat",
+                "cycle-power",
+                "counter-sabotage"
+              ],
+              "crew": [
+                "operate-module",
+                "reload",
+                "brace"
+              ]
+            },
+            "travel": {
+              "speed": 0,
+              "range": 0
+            },
+            "visualFrame": "anchor-corners"
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 3100000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398481422,
+        "modifiedTime": 1781398481422,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "OBgtsqUDXkPN5I7d",
+      "_key": "!actors.items!1wDeBK66hj3ISVFL.OBgtsqUDXkPN5I7d"
+    },
+    {
+      "name": "Mortar Battery",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_siege_2.png",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "3d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 8,
+          "long": 24
+        },
+        "tags": [
+          "aoe",
+          "arc",
+          "heavy"
+        ],
+        "effect": "",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>Indirect fire from pre-rotated tubes. Crew yells coordinates at each other; the math sometimes lands.</p>"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-weapon"
+          },
+          "rfi": {
+            "item": {
+              "tier": "II",
+              "frame": "weapon",
+              "price": {
+                "marks": 150,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TII weapon stamp",
+                "bound": "free",
+                "saleBack": 60
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "c953b856-cf2f-4dde-8132-92b805b63d97",
+          "label": "Mortar Battery",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "templatefx",
+          "primary": {
+            "video": {
+              "dbSection": "templatefx",
+              "menuType": "circle",
+              "animation": "shatter",
+              "variant": "01",
+              "color": "orange",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 2400000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398481422,
+        "modifiedTime": 1781398481422,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "GKGZvlgX8FzUmbRc",
+      "_key": "!actors.items!1wDeBK66hj3ISVFL.GKGZvlgX8FzUmbRc"
+    },
+    {
+      "name": "Reinforced Plating",
+      "type": "gear",
+      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "description": {
+          "value": "<p>Bolted-on plate; ugly, heavy, effective. Adds integrity without subtlety.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-system",
+            "passive": true
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 400000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398481422,
+        "modifiedTime": 1781398481422,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "xTcEAxP47dO2G5Sr",
+      "_key": "!actors.items!1wDeBK66hj3ISVFL.xTcEAxP47dO2G5Sr"
+    },
+    {
+      "name": "Sensor Suite",
+      "type": "gear",
+      "img": "icons/sundries/gaming/chess-pawn-white-pearl.webp",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "description": {
+          "value": "<p>Looks farther, sees sooner. Passive +perception for crew on board; initiative ties broken in your favor.</p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rigGear": {
+            "subtype": "rig-system",
+            "passive": true
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          }
+        }
+      },
+      "folder": "0JDB983lzPepXXNe",
+      "effects": [],
+      "sort": 300000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781398481422,
+        "modifiedTime": 1781398481422,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "_id": "2eS75uaYKeYfwNie",
+      "_key": "!actors.items!1wDeBK66hj3ISVFL.2eS75uaYKeYfwNie"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1781398481422,
+    "modifiedTime": 1781398493077,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "sort": 100000,
+  "_key": "!actors!1wDeBK66hj3ISVFL"
+}

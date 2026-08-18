@@ -1,0 +1,149 @@
+{
+  "_id": "84f23a0c6bb4d55d",
+  "name": "Circuitborn",
+  "type": "species",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_1.png",
+  "system": {
+    "category": "ancestry",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Exo-Knight, Parallax, Salvage, Synapse</strong>.</p><p>This root grants the shared Circuitborn core trait package (<em>Firmware of Identity</em>) and preserves live UUID compatibility for the four Line items.</p><p><em>“You are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.”</em></p><p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p><p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you, you may regain either one spent Bad Eden OP (a category you used this scene) or Integrity equal to your tier.</p><p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor.</p><p><strong>Line Memory.</strong> Choose one Circuitborn line (Exo-Knight, Parallax, Salvage, Synapse). Your line grants Tier powers as you level.</p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "cbsizeadvancmnt0",
+        "type": "Size",
+        "configuration": {
+          "sizes": [
+            "med"
+          ]
+        },
+        "level": 0,
+        "title": "",
+        "hint": "Medium.",
+        "value": {}
+      },
+      {
+        "_id": "cbfirmwareadvnc0",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.MLNWLvI12pEWb6tN",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Firmware of Identity",
+        "hint": "Gain the shared Circuitborn core trait package."
+      }
+    ],
+    "movement": {
+      "walk": "30",
+      "units": null,
+      "hover": false,
+      "ignoredDifficultTerrain": []
+    },
+    "senses": {
+      "darkvision": null,
+      "blindsight": null,
+      "tremorsense": null,
+      "truesight": null,
+      "units": null,
+      "special": "Informational Matrix Sense (radio / signal / ritual / rumor networks)."
+    },
+    "type": {
+      "value": "humanoid",
+      "custom": "Construct-Living",
+      "subtype": "Circuitborn"
+    },
+    "identifier": "circuitborn"
+  },
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestry",
+      "family": "circuitborn",
+      "version": "2.0.0",
+      "date": "2026-04-18",
+      "heritageList": [
+        "exo_knight",
+        "parallax",
+        "salvage",
+        "synapse"
+      ],
+      "refactorNotes": "v2: Introduced Circuitborn species root to mirror the v2 species + heritage pattern. Existing Line items remain race-typed for backward compat."
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "defense",
+          "mode": "reroll-lowest",
+          "vs": "vs:poison and disease",
+          "note": "on defense checks [TODO(adv-call)] against poison and disease, and you are im…"
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on-rest",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "You do not eat, drink, or sleep. You enter maintenance trance when you rest"
+            }
+          }
+        },
+        {
+          "event": "on-rest",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "You do not eat, drink, or sleep. You enter maintenance trance when you rest"
+            }
+          }
+        }
+      ],
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "effects": [],
+  "folder": "3H6h9q66XbEDFtAN",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776541800000,
+    "modifiedTime": 1782167240121,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 0,
+  "_key": "!items!84f23a0c6bb4d55d"
+}

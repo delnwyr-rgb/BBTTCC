@@ -1,0 +1,67 @@
+{
+  "name": "Stillness Between",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quantum_4.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>You move in the pauses no one else hears.</em></p><p>You gain a subtle control over the tempo of danger:</p><ul><li>You gain a <strong>+1 bonus to initiative</strong>.</li><li>When you are not surprised, the first attack made against you each combat is made with <strong>disadvantage</strong>, as the attacker slips on the quiet you’ve already stepped into.</li></ul><p>Things start, but they rarely start <em>before</em> you’re ready.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "dreamwalker-quiet-stillness-between",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Dreamwalker 3, Trance of the Quiet Sun",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "11soLvLsTohdUQFT",
+  "flags": {
+    "bbttcc": {
+      "subclassKey": "dreamwalker_quiet_sun",
+      "featureKey": "stillness_between"
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459927033,
+    "modifiedTime": 1781116143023,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "N2XUQov8HUlXbXG2",
+  "sort": 350000,
+  "_key": "!items!N2XUQov8HUlXbXG2"
+}

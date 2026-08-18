@@ -1,0 +1,1242 @@
+{
+  "name": "Lieutenant Perch",
+  "type": "character",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc",
+      "createdViaNPCBuilder": true,
+      "createdAt": 1784000824806
+    },
+    "fourththing": {
+      "kind": "npc",
+      "surgeEnabled": false
+    },
+    "bbttcc-character-options": {
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.a2b5906bad32ad4c",
+      "nativeLinks": {
+        "heritageName": "Cryptidkin Heritage: Furrykin",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.a2b5906bad32ad4c",
+        "heritageApplied": true,
+        "ancestryName": "Cryptidkin",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.c9a7f1d26e3b4c81",
+        "ancestryApplied": true
+      }
+    },
+    "bbttcc-mal-voice": {
+      "persona": {
+        "topics": "the letter, the summit, the Bandit Lord, pensions, eel jerky, the white rag",
+        "notes": "[BANDIT-ACCORD-2026-07-13] PRIVATE TRUTH — Lieutenant Perch, envoy of the Drowned South. Voice: aggressively courteous, slightly too fast, the cadence of a man who has rehearsed every sentence twice on the punt ride over; salutes as involuntary reflex (the Muster, officers, one goat, historically). HIS SITUATION: nineteen years in the profession, four from pension, and he has watched the toll base shrink and the program grow and done the arithmetic every night since spring — his retirement now depends on a summit going well between people who ambushed each other for a living, which is why his courtesy has the load-bearing quality of a man carrying crockery across ice. HIS ECHO: he was in an ambush that yielded — hands up in the reeds, spear in the mud — and what he remembers isn't fear, it's the SOUP being real, and going back to camp unable to explain why that undid him. GUARDS: will not discuss camp positions, whistle-codes, or the Lord's books ('above my pay, and I'd like to keep the pay'). Always offers the eel jerky first; it is genuinely terrible; refusing it politely earns his eternal respect. TELLS: touches the waxed letter-pouch like a talisman even after the letter's delivered; when the summit's odds come up, recites his years-of-service like a rosary (nineteen, four to go)."
+      }
+    }
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 4,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1
+    },
+    "attributes": {
+      "violence": {
+        "value": 3
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 6
+      },
+      "body": {
+        "value": 5
+      },
+      "mind": {
+        "value": 4
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 0
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 0
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 2
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 1
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 1
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 0
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 0
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 34,
+        "max": 16
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 3,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": 1,
+    "name": "Lieutenant Perch",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "lTao7uqiu0bZ2e8A",
+  "img": "icons/svg/mystery-man.svg",
+  "items": [
+    {
+      "_id": "JzFeqgV5WSsVqAbk",
+      "name": "Broker",
+      "type": "class",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-broker",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "broker",
+          "presence"
+        ],
+        "description": {
+          "value": "<p><em>\"There is no problem two reasonable parties can't monetize.\"</em></p><p><strong>Broker</strong> is the Presence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: merchant, envoy, entertainer, cult recruiter, gang face. A profession is a flavor label on the Calling.</p><p><strong>Knack — Fair Price:</strong> The Broker moves any negotiated price <strong>5% per tier</strong> in their side's favor inside the ±25% tolerance band (Tier IV: the full ±20% swing).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Diplomacy</strong> rank = tier; secondary <strong>Empathy</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Diplomacy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Harmony Marshal. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "broker",
+            "faculty": "presence",
+            "signature": "diplomacy",
+            "secondary": "empathy",
+            "pool": "Diplomacy or Soft Power (GM picks by job)",
+            "awakens": "Harmony Marshal"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534560,
+        "modifiedTime": 1784177534560,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!lTao7uqiu0bZ2e8A.JzFeqgV5WSsVqAbk"
+    },
+    {
+      "_id": "0ToRdpvRftguwIyS",
+      "name": "Broker — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "broker",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Broker — Apprentice</strong> (Tier I).</p><p><strong>Trade — Word on the street:</strong> Current prices, current rumors, who's buying. <span style=\"opacity:0.7\">Standard fee 10 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Read the Room</strong> <em>(1/scene)</em>: GM truthfully answers: who here has the real power, and what do they want right now?</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 301000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "broker",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534560,
+        "modifiedTime": 1784177534560,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!lTao7uqiu0bZ2e8A.0ToRdpvRftguwIyS"
+    },
+    {
+      "name": "Cryptidkin",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Brennan.png",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin.</strong> Normalized Bad Eden ancestry root.</p><p>Select one subspecies when building the character: <strong>Chupacabra, Jackalope, Furrykin</strong>.</p><p>This root grants the shared Cryptidkin core trait package. Subspecies layer flavor, size, and Tier powers on top.</p><p><em>“Every settlement has a story about you. None of them are accurate. All of them are useful.”</em></p><hr><p><em><strong>Cryptidkin Core Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (set by subspecies).</p></li><li><p><strong>Speed.</strong> 6 squares (subspecies may override).</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Cryptidkin does not grant fixed bonuses. Subspecies lean expressed through Tier powers.</p></li></ul><p><strong>Folklore Presence.</strong> When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as <em>omen</em>, <em>trophy</em>, or <em>legend</em>. It is never neutral. People have heard of your kind. They are almost always wrong, and that is almost always useful.</p><p><strong>Wasteland Adapted.</strong> You reroll the lowest die on checks against disease and environmental poison. You ignore the first nonmagical environmental hazard you encounter each Strategic Turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor’s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 12 squares You cannot be surprised while conscious.</p><p><strong>Subspecies.</strong> Choose one Cryptidkin subspecies (Chupacabra, Jackalope, Furrykin). Your subspecies grants Tier powers as you level (Tier I at creation, then 5/11/17).</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "CKSIZE0000000001",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "sm",
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Small or Medium (set by subspecies).",
+            "value": {}
+          },
+          {
+            "_id": "CKCORE0000000001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.CKCORETRAITPLACE",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Folklore & Frame",
+            "hint": "Gain the core Cryptidkin ancestry traits."
+          }
+        ],
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": 60,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": "Folklore Presence; Survivor's Instinct."
+        },
+        "type": {
+          "value": "humanoid",
+          "custom": "",
+          "subtype": "Cryptidkin"
+        },
+        "identifier": "cryptidkin"
+      },
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "family": "cryptidkin",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "absorbed": [
+            "jackalope",
+            "furrykin"
+          ]
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "grantedByAncestry": "Cryptidkin"
+        }
+      },
+      "effects": [],
+      "folder": "f95fcfa18822c4e3",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.c9a7f1d26e3b4c81",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534560,
+        "modifiedTime": 1784177534560,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 1500000,
+      "_id": "eCwkJMtN3NmzD956",
+      "_key": "!actors.items!lTao7uqiu0bZ2e8A.eCwkJMtN3NmzD956"
+    },
+    {
+      "name": "Cryptidkin: Folklore & Frame",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "system": {
+        "category": "feature",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-canon-cryptidkin-folklore-frame=\"v1\" style=\"display:none\"></div><p><em>\"You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.\"</em></p><p><strong>Folklore Presence.</strong> 1/Soma Break, when you first meet a community, decide whether the rumors about you arrived first. If yes, reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering — the GM gets to colour it.</p><p><strong>Wasteland Adapted.</strong> Reroll the lowest die on defense checks against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh).</p><p><strong>Survivor's Instinct.</strong> 1/Soma Break, when you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "cryptidkin-folklore-frame",
+        "requirements": "Cryptidkin",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "cryptidkin",
+          "feature": "folklore_frame",
+          "family": "cryptidkin",
+          "tierLevel": 0,
+          "version": "2.0.0",
+          "date": "2026-04-18"
+        },
+        "fourththing": {
+          "triggers": [
+            {
+              "event": "on-would-drop-to-zero",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Survivor’s Instinct. When you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress"
+                }
+              }
+            }
+          ],
+          "grantedByAncestry": "Cryptidkin"
+        },
+        "autoanimations": {
+          "id": "1ef467b8-6eb3-4e41-b1cc-5c1e27f370ac",
+          "label": "Cryptidkin: Folklore & Frame",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "loop",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "f95fcfa18822c4e3",
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534560,
+        "modifiedTime": 1784177534560,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": null,
+        "duplicateSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "5XKy6x6ON2T3bvbA",
+      "_key": "!actors.items!lTao7uqiu0bZ2e8A.5XKy6x6ON2T3bvbA"
+    },
+    {
+      "name": "Cryptidkin (Furrykin): Wildframe & Instinct",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_furrykin.png",
+      "system": {
+        "category": "feature",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 2,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Your body is built for a world that bites back. So is your patience.”</em></p>\n<p><strong>Wildframe.</strong> Add your tier to Body defense checks made to resist Stress.</p>\n<p><strong>Keen Sense.</strong> Choose one at character creation: <em>Keen Smell</em>, <em>Keen Hearing</em>, or <em>Keen Sight</em>. You reroll the lowest die on Soul (Perception) checks that rely on that sense.</p>\n<p><strong>Frame Choice.</strong> Choose one narrative frame at character creation; it is permanent.</p>\n<ul><li><strong>Predator.</strong> Your unarmed strikes (bite or claws) deal 1d6 instead of 1d4 and count as natural weapons.</li><li><strong>Forager.</strong> You gain a skill rank in the Athletics skill. If you already have it, you may choose another skill from the Cryptidkin list (GM adjudicates).</li><li><strong>Brute.</strong> You count as one size larger for the purposes of carrying capacity, push, drag, lift, shove, and grapple.</li></ul>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "cryptidkin-furrykin-wildframe-instinct",
+        "requirements": "Cryptidkin (Furrykin)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [
+        {
+          "name": "Wildframe & Instinct: Athletics +1",
+          "img": "icons/creatures/abilities/paw-print-orange.webp",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.athletics.value",
+                "value": 1,
+                "type": "add",
+                "priority": 10,
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Passive: Wildframe &amp; Instinct: Athletics +1",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "sprint": "passive-ae-2026-04-28"
+            }
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "_id": "rpR5M3AUar8hNI41",
+          "showIcon": 1,
+          "folder": null,
+          "_stats": {
+            "coreVersion": "14.364",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "createdTime": 1784177534560,
+            "modifiedTime": 1784177534560,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!lTao7uqiu0bZ2e8A.MnASW1IQwf01rnQ5.rpR5M3AUar8hNI41"
+        }
+      ],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "cryptidkin",
+          "feature": "wildframe_instinct",
+          "lineage": "Furrykin",
+          "tierLevel": 0,
+          "version": "2.0.0",
+          "date": "2026-04-18"
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "skill": "perception",
+              "mode": "reroll-lowest"
+            },
+            {
+              "context": "check",
+              "attribute": "soul",
+              "mode": "reroll-lowest"
+            }
+          ],
+          "vocabScrub": "2026-05-16",
+          "principleSource": "ancestry",
+          "grantedByHeritage": "Furrykin"
+        }
+      },
+      "folder": "sdEPUmGLjvHEFLp6",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534560,
+        "modifiedTime": 1784177534560,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 400000,
+      "_id": "MnASW1IQwf01rnQ5",
+      "_key": "!actors.items!lTao7uqiu0bZ2e8A.MnASW1IQwf01rnQ5"
+    },
+    {
+      "name": "Cryptidkin Heritage: Furrykin",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/RayCat.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Cryptidkin Subspecies.</strong> This heritage preserves the original UUID for <em>Furrykin</em> while converting it from a species-root with five sub-clades into a single flexible Cryptidkin subspecies.</p><p><em>“You are not an animal that learned to talk. You are a person the world made with fur because it needed you to survive.”</em></p><p><strong>Furrykin.</strong> You are anything fur-bearing the world decided to make people out of. Talking badger, cunning fox, stoic bear, watchful rabbit, the uncle-shaped thing the trappers call Bigfoot—all valid. Size and frame are flexible; the instinct is not.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (choose at creation; Medium Furrykin can describe themselves as “large and shaggy” without mechanical change—Bigfoot-scale creatures still move and fight at Medium).</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Subspecies Lean.</strong> No fixed stat lean. Your frame is your business—the Tier powers adapt to how you play it.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor’s Instinct).</p><h3>Wildframe & Instinct (Furrykin Extras)</h3><ul><li><p><strong>Wildframe.</strong> Your body is built for a world that bites back. You already reroll the lowest die on checks against disease and environmental poison (from Wasteland Adapted); as Furrykin, you also add your tier to any Body defense check to resist Stress.</p></li><li><p><strong>Keen Sense.</strong> Choose one: <em>Keen Smell</em>, <em>Keen Hearing</em>, or <em>Keen Sight</em>. You reroll the lowest die on Perception checks relying on that sense.</p></li><li><p><strong>Frame Choice.</strong> Choose one narrative frame at creation: <em>Predator</em> (bite or claws count as unarmed strikes that deal 1d6 instead of 1d4), <em>Forager</em> (trained in Athletics), or <em>Brute</em> (count as one size larger for carrying, shoving, and grappling).</p></li></ul><h3>Furrykin Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Tier powers previously split across Felid / Leporid / Mustelid / Ursid / Vulpin are unified; choose flavor at the table without mechanical separation.</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "ckfurrykinadv001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.RWAuuqy8LInVCgvJ",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Furrykin Tier I",
+            "hint": "Gain your Furrykin Tier I subspecies power (maps to legacy Wildframe & Instinct grant)."
+          }
+        ],
+        "identifier": "cryptidkin_furrykin_heritage",
+        "requirements": "Cryptidkin",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "cryptidkin",
+          "lineage": "Furrykin",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "normalizedFrom": "Furrykin [species + 5 clade heritages consolidated]",
+          "consolidatedFrom": [
+            "furrykin_felid",
+            "furrykin_leporid",
+            "furrykin_mustelid",
+            "furrykin_ursid",
+            "furrykin_vulpin"
+          ]
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16",
+          "grantedByHeritage": "Furrykin"
+        }
+      },
+      "folder": "ooP9ptENqJIkL9Hf",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.a2b5906bad32ad4c",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534560,
+        "modifiedTime": 1784177534560,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "xLV2HOul30coLLmX",
+      "_key": "!actors.items!lTao7uqiu0bZ2e8A.xLV2HOul30coLLmX"
+    },
+    {
+      "name": "Grave Calm",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_grave_calm.jpeg",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Core Feats (Batch 3)",
+          "revision": 1,
+          "rules": "2026"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Grave Calm</h2><p><em>Panic spreads. So does steadiness.</em></p><hr /><h3>Rules</h3><p>You reroll the lowest die on defense checks against being Shaken. If you succeed, choose one ally within 2 squares to gain the same benefit on their next save.</p>",
+          "chat": ""
+        },
+        "identifier": "bbttcc_feat_grave_calm",
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "requirements": "",
+        "type": {
+          "value": "feat",
+          "subtype": ""
+        },
+        "activities": {},
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "pack": "bbttcc-feats-batch3",
+          "featNumber": 53,
+          "generatedAt": "2026-01-19T05:04:20.693394Z"
+        }
+      },
+      "folder": "QbGNBV70xh9pF0eh",
+      "sort": 800000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": "Item.400eyTBdXTDXybIk",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534560,
+        "modifiedTime": 1784177534560,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_id": "VE5EF9PUsgTBgg8N",
+      "_key": "!actors.items!lTao7uqiu0bZ2e8A.VE5EF9PUsgTBgg8N"
+    }
+  ],
+  "effects": [],
+  "folder": "aOk8J8ifHvog81xS",
+  "sort": 300000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177534560,
+    "modifiedTime": 1784177534560,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!lTao7uqiu0bZ2e8A"
+}

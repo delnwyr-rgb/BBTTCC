@@ -1,0 +1,58 @@
+{
+  "name": "Thinning Aura",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "seed-bestiary-attacks",
+      "tier-iv",
+      "role-caster"
+    ],
+    "description": {
+      "value": "<p><strong>Passive.</strong> All creatures within 2 squares of the avatar — including allies — are subject to occasional Veil-thinning: at the start of their turn, on a 1 on a d10, they take 1d4 qliphothic Stress damage. The avatar does not control this and does not particularly notice it.</p><p><em>Being near them is its own debt.</em></p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "IV",
+          "frame": "feature"
+        }
+      }
+    },
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Avatar of the Veil"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "sort": 0,
+  "_id": "dNsG3Tu0zyeGHgrf",
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782167245005,
+    "modifiedTime": 1782167245005,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!dNsG3Tu0zyeGHgrf"
+}

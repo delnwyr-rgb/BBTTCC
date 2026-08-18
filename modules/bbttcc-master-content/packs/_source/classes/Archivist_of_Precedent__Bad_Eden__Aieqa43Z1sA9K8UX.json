@@ -1,0 +1,50 @@
+{
+  "name": "Archivist of Precedent (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_4.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "pactkeeper",
+    "source": {
+      "custom": "Bad Eden Originals — Sprint F",
+      "revision": 1,
+      "rules": "2026"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Every ruling has already been made. I know where.</em></p>\n<p style='opacity:0.7;font-size:0.85em'>Mode: Historical enforcement / drift: Toward</p>\n<h3>Level 1: Read The Ledger</h3>\n<p>You are trained in a vast internal catalog of historical rulings, treaties, precedents, and case records spanning the setting's known Lore. At character creation and on each a Soma Break, you may prepare [TBD:balance — Soul mod] <strong>Precedents</strong> — specific historical rulings relevant to situations you anticipate encountering. When a prepared Precedent becomes relevant in play, you may invoke it as an action, spending [TBD:balance — 2 Leverage] to compel the current situation to resolve under its terms. GM adjudicates fit.</p>\n<h3>Level 5: Citation In Hand</h3>\n<p>Once per scene, you may invoke a Precedent that you did <em>not</em> prepare, if you can plausibly know it (GM judgment). Treat this as a Precedent invocation at +1 Leverage cost. The fact that an Archivist can produce a citation at any moment makes opposing legal positions significantly less stable, which is the actual game-state effect.</p>\n<h3>Level 9: Binding Lineage</h3>\n<p>When you invoke a Precedent in a political proceeding (faction-level dispute, hex-level governance, contract negotiation), the outcome is treated as <em>continuing the line</em> — it counts as an additional entry in the historical record for future invocations. You and any Archivist after you may invoke the present ruling as Precedent in future cases, making your in-play decisions genuinely load-bearing for the setting's legal Lore.</p>\n<h3>Level 13: The Unbroken Chain</h3>\n<p>You may declare a <strong>Chain of Precedent</strong> — a series of three or more historical rulings that, taken together, compel a specific outcome in the current situation. Chains are invoked as a single action for [TBD:balance — 8 Leverage]. The target of the Chain (a creature, faction, or ongoing effect) must make a Soul check [TBD:balance DC] or be bound by the Chain's implied ruling. Binding effects last until the ruling is formally appealed or overturned.</p>\n<h3>Level 17: The Standing Record (Capstone)</h3>\n<p>You may declare a Precedent of your own at the end of a session — a ruling that the events of the session establish as binding going forward. The Precedent is permanent unless overturned by the session's recognized authority. From this point forward, you and future Pactkeepers may invoke this Precedent in play. Over a campaign, the Archivist of Precedent accumulates a body of <em>personal case law</em> that reshapes the setting's legal landscape.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-pactkeeper-archivist-of-precedent",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "eNi1uCWJUfkKDdUU",
+  "flags": {
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_id": "Aieqa43Z1sA9K8UX",
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776481562683,
+    "modifiedTime": 1781116120299,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "sort": 0,
+  "_key": "!items!Aieqa43Z1sA9K8UX"
+}

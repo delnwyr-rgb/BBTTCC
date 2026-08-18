@@ -1,0 +1,470 @@
+{
+  "name": "Onboarding — Sandbox Hold",
+  "width": 2400,
+  "height": 1800,
+  "padding": 0.2,
+  "grid": {
+    "type": 2,
+    "size": 100,
+    "style": "solidLines",
+    "thickness": 1,
+    "color": "#000000",
+    "alpha": 0.2,
+    "distance": 1,
+    "units": "m"
+  },
+  "initial": {
+    "x": null,
+    "y": null,
+    "scale": null
+  },
+  "navigation": false,
+  "flags": {
+    "bbttcc-onboarding": {
+      "tutorialScene": "sandbox-hex"
+    }
+  },
+  "_id": "41hYw905sQhtx89B",
+  "active": false,
+  "navOrder": 0,
+  "thumb": "worlds/roll-for-initiation-bad-eden/assets/scenes/thumb-VfGwWkTXZTv9xRc6MoEx-g.webp",
+  "shiftX": 0,
+  "shiftY": 0,
+  "initialLevel": "defaultLevel0000",
+  "tokenVision": false,
+  "fog": {
+    "mode": 1,
+    "colors": {
+      "explored": null,
+      "unexplored": null
+    }
+  },
+  "environment": {
+    "darknessLevel": 0,
+    "darknessLock": false,
+    "globalLight": {
+      "enabled": true,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "cycle": true,
+    "base": {
+      "hue": 0,
+      "intensity": 0,
+      "luminosity": 0,
+      "saturation": 0,
+      "shadows": 0
+    },
+    "dark": {
+      "hue": 0.7138888888888889,
+      "intensity": 0,
+      "luminosity": -0.25,
+      "saturation": 0,
+      "shadows": 0
+    }
+  },
+  "transition": {
+    "type": null,
+    "duration": 1500,
+    "activeOnly": false
+  },
+  "drawings": [
+    {
+      "shape": {
+        "type": "p",
+        "points": [
+          225,
+          195,
+          113,
+          260,
+          0,
+          195,
+          0,
+          65,
+          113,
+          0,
+          225,
+          65
+        ],
+        "width": null,
+        "height": null,
+        "radius": null
+      },
+      "x": 1087,
+      "y": 770,
+      "fillColor": "#c8cc28",
+      "fillAlpha": 0.12,
+      "strokeColor": "#c8cc28",
+      "strokeAlpha": 1,
+      "strokeWidth": 6,
+      "text": "Tutelary Hold",
+      "fontSize": 20,
+      "textColor": "#f8fbff",
+      "flags": {
+        "bbttcc-territory": {
+          "isHex": true,
+          "kind": "territory-hex",
+          "name": "Tutelary Hold",
+          "status": "unclaimed",
+          "type": "wilderness",
+          "size": "none",
+          "population": "uninhabited",
+          "capital": false,
+          "resources": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "createdAt": 1781807761176,
+          "factionId": "",
+          "terrain": {
+            "key": "plains",
+            "label": "Plains / Grasslands"
+          },
+          "terrainType": "plains",
+          "terrainKey": "plains",
+          "leylines": {
+            "primaryResonance": "none",
+            "flowState": "normal",
+            "purity": 0,
+            "memoryCharge": 0,
+            "gate": {
+              "enabled": false,
+              "linkHexUuid": "",
+              "strength": 0.5,
+              "minFactionTier": "T2",
+              "locked": false
+            }
+          },
+          "sephirotBonus": {
+            "food": 0,
+            "materials": 0,
+            "trade": 0,
+            "military": 0,
+            "knowledge": 0
+          },
+          "calc": {
+            "base": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            },
+            "sephirotName": "",
+            "multipliers": {
+              "mAll": 1,
+              "mTrade": 1
+            },
+            "modifiers": [],
+            "effective": {
+              "food": 0,
+              "materials": 0,
+              "trade": 0,
+              "military": 0,
+              "knowledge": 0
+            }
+          },
+          "sephirotUuid": "",
+          "sephirotName": "",
+          "sephirotKey": "",
+          "manualOverride": false,
+          "effectiveCached": {
+            "economy": 0,
+            "violence": 0,
+            "nonLethal": 0,
+            "intrigue": 0,
+            "diplomacy": 0,
+            "softPower": 0
+          },
+          "effectiveAt": 1781808162451,
+          "modifiers": [],
+          "notes": "",
+          "improvements": [
+            {
+              "id": "Gqmr81pcEeM0CxLT",
+              "ts": 1781807806584,
+              "turn": 45,
+              "kind": "owner_action",
+              "label": "Leyline configuration updated",
+              "description": "Leyline resonance / flow / gate updated via editor.",
+              "source": {
+                "activity": "hex_editor_save",
+                "factionId": "bytUGWIOqq9eT7Or"
+              },
+              "before": {
+                "leylines": null
+              },
+              "after": {
+                "leylines": {
+                  "primaryResonance": "none",
+                  "flowState": "normal",
+                  "purity": 0,
+                  "memoryCharge": 0,
+                  "gate": {
+                    "enabled": false,
+                    "linkHexUuid": "",
+                    "strength": 0.5,
+                    "minFactionTier": "T2",
+                    "locked": false
+                  }
+                }
+              },
+              "reversible": true,
+              "dedupeKey": null
+            }
+          ],
+          "turn": {
+            "pending": null
+          },
+          "post": {
+            "pending": null
+          }
+        },
+        "bbttcc-onboarding": {
+          "spawned": true,
+          "sandboxHex": true
+        }
+      },
+      "_id": "HNocbYkVl5U9hqmf",
+      "author": "bytUGWIOqq9eT7Or",
+      "elevation": 0,
+      "levels": [],
+      "sort": 0,
+      "rotation": 0,
+      "bezierFactor": 0,
+      "fillType": 0,
+      "texture": null,
+      "fontFamily": "",
+      "textAlpha": 1,
+      "hidden": false,
+      "locked": false,
+      "interface": false,
+      "_key": "!scenes.drawings!41hYw905sQhtx89B.HNocbYkVl5U9hqmf"
+    }
+  ],
+  "tokens": [
+    {
+      "texture": {
+        "src": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Aurablade.png",
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "fit": "contain",
+        "scaleX": 1,
+        "scaleY": 1,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "name": "Toblerone",
+      "displayName": 30,
+      "actorLink": true,
+      "width": 1,
+      "height": 1,
+      "depth": 1,
+      "lockRotation": false,
+      "rotation": 0,
+      "alpha": 1,
+      "disposition": 1,
+      "displayBars": 30,
+      "bar1": {
+        "attribute": "derived.integrity"
+      },
+      "bar2": {
+        "attribute": null
+      },
+      "light": {
+        "negative": false,
+        "priority": 0,
+        "alpha": 0.5,
+        "angle": 360,
+        "bright": 0,
+        "color": null,
+        "coloration": 1,
+        "dim": 0,
+        "attenuation": 0.5,
+        "luminosity": 0.5,
+        "saturation": 0,
+        "contrast": 0,
+        "shadows": 0,
+        "animation": {
+          "type": null,
+          "speed": 5,
+          "intensity": 5,
+          "reverse": false
+        },
+        "darkness": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "sight": {
+        "enabled": true,
+        "range": 0,
+        "angle": 360,
+        "visionMode": "basic",
+        "color": null,
+        "attenuation": 0.1,
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0
+      },
+      "detectionModes": {},
+      "occludable": {
+        "radius": 0
+      },
+      "ring": {
+        "enabled": false,
+        "colors": {
+          "ring": null,
+          "background": null
+        },
+        "effects": 0,
+        "subject": {
+          "scale": 1,
+          "texture": null
+        }
+      },
+      "turnMarker": {
+        "mode": 1,
+        "animation": null,
+        "src": null,
+        "disposition": false
+      },
+      "movementAction": null,
+      "flags": {
+        "wall-height": {
+          "tokenHeight": 0
+        },
+        "tokenflip": {
+          "tokenfaces": [
+            {
+              "actorId": "GpOORLTg9fSxAqDW",
+              "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Aurablade.png",
+              "id": "S0nyKMbuODaz0pbX9ult",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 1,
+              "height": 1,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            },
+            {
+              "actorId": "GpOORLTg9fSxAqDW",
+              "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Aurablade.png",
+              "id": "NMnACZQ6nUdFDowCoVcJ",
+              "scaleX": 1,
+              "scaleY": 1,
+              "width": 0.25,
+              "height": 0.25,
+              "model3d": "",
+              "subject": "",
+              "autoFlip": 0,
+              "transition": "flip",
+              "autoFlipMacro": null
+            }
+          ]
+        }
+      },
+      "actorId": "GpOORLTg9fSxAqDW",
+      "hidden": false,
+      "sort": 0,
+      "shape": 0,
+      "level": "defaultLevel0000",
+      "_id": "9OBJpUvuevjDmy9G",
+      "delta": null,
+      "x": 1450,
+      "y": 1212,
+      "elevation": 0,
+      "locked": false,
+      "_movementHistory": [],
+      "_regions": [],
+      "_key": "!scenes.tokens!41hYw905sQhtx89B.9OBJpUvuevjDmy9G"
+    }
+  ],
+  "levels": [
+    {
+      "_id": "defaultLevel0000",
+      "name": "Level",
+      "elevation": {
+        "bottom": 0,
+        "top": 20
+      },
+      "background": {
+        "color": "#000000",
+        "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/bad_eden_hand_drawn_map_items_full_colorv3.png",
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "foreground": {
+        "src": null,
+        "tint": "#ffffff",
+        "alphaThreshold": 0.75
+      },
+      "fog": {
+        "src": null
+      },
+      "textures": {
+        "anchorX": 0.5,
+        "anchorY": 0.5,
+        "offsetX": 0,
+        "offsetY": 0,
+        "fit": "fill",
+        "scaleX": 1,
+        "scaleY": 1,
+        "rotation": 0
+      },
+      "visibility": {
+        "levels": []
+      },
+      "sort": 0,
+      "flags": {},
+      "_key": "!scenes.levels!41hYw905sQhtx89B.defaultLevel0000"
+    }
+  ],
+  "lights": [],
+  "notes": [],
+  "sounds": [],
+  "regions": [],
+  "tiles": [],
+  "walls": [],
+  "playlist": null,
+  "playlistSound": null,
+  "journal": null,
+  "journalEntryPage": null,
+  "weather": "",
+  "folder": "VhwCVQiwIRmTpe7h",
+  "sort": 400000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1783982547071,
+    "modifiedTime": 1783982547071,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "navName": "",
+  "_key": "!scenes!41hYw905sQhtx89B",
+  "templates": []
+}

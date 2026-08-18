@@ -1,0 +1,23 @@
+{
+  "type": "Actor",
+  "folder": null,
+  "name": "Test PCs",
+  "color": "#5aff5e",
+  "sorting": "a",
+  "_id": "FBhV32XeCO4JNcym",
+  "description": "",
+  "sort": 100000,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177517979,
+    "modifiedTime": 1784177519585,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!FBhV32XeCO4JNcym"
+}

@@ -1,0 +1,113 @@
+{
+  "_id": "TjBhlDjlMKL60wbo",
+  "name": "Human Heritage: Denisovan",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/OL%20Gearbox%20Background%20Removed.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Human (Denisovan)</em> while converting it from a lineage-species into a heritage.</p><p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Denisovan).</strong> You are not a fantasy human. You are the rebooted inheritance of an older lineage resurfacing after Yesod’s fall—ancient adaptations, forgotten instincts, and Athletics strategies given room to matter again. You remember mountains that no longer exist. Gravity listens to you when you ask it to.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>BOD (Body)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory) from the Human species root.</p><h3>Denisovan Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17):</p><ul><li><p><strong>Tier I — High-Altitude Blood.</strong> reroll-lowest on checks vs. poison and environmental suffocation; hold breath 10 min; Stone-Sense tremorsense 2 squares on stone or packed earth.</p></li><li><p><strong>Tier II — Stone-Singer.</strong> Mason’s tool proficiency. 1/Soma Break reinforce a structure or barrier.</p></li><li><p><strong>Tier III — Ancient Logic.</strong> reroll-lowest on Investigation and Occult checks involving structures, mechanisms, or ruins; share the insight to grant an ally advantage once per scene.</p></li><li><p><strong>Tier IV — Peak-Anchor.</strong> 1/Soma Break reaction to negate forced movement or teleportation within 6 squares; aggressor takes psychic backlash equal to your tier.</p></li></ul>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "14833a501be64719",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.FeRlU9VFJ5Yvhfnw",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Denisovan Tier I",
+        "hint": "Gain your Denisovan Tier I lineage power (High-Altitude Blood)."
+      }
+    ],
+    "identifier": "human_denisovan_heritage",
+    "requirements": "Human",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "human",
+      "lineage": "Denisovan",
+      "version": "2.0.0",
+      "date": "2026-04-18",
+      "normalizedFrom": "Human (Denisovan) [race/species]",
+      "tierGrantPattern": "all-tiers",
+      "note": "Denisovan is the first heritage in the pack to grant all 4 Tiers at levels 0/5/11/17 via advancements. Other heritages currently only grant Tier I and rely on a separate wiring hook for higher Tiers. Flag for future consistency pass."
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "vs:poison",
+          "note": "on Body checks against poison, environmental suffocation, and extreme altitude"
+        },
+        {
+          "context": "check",
+          "attribute": "body",
+          "mode": "reroll-lowest",
+          "vs": "vs:poison",
+          "note": "Body checks against poison, environmental suffocation, and extreme altitude"
+        }
+      ],
+      "resourceGrants": [
+        {
+          "cadence": "per-campaign-start",
+          "resource": "logistics-op",
+          "amount": 2
+        }
+      ],
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "folder": "X8GnIzoaCFwLQbGU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-ancestry-v2",
+      "uuid": "Item.TjBhlDjlMKL60wbo",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776540642443,
+    "modifiedTime": 1782167240127,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 0,
+  "_key": "!items!TjBhlDjlMKL60wbo"
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Escort Supply Line",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_vehicle_1.png",
+  "system": {
+    "category": "strategic",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Escort Supply Line</h3><p>Screen your own siege's supply convoy. Adds one escort pip; each pip cancels one enemy interdiction at the next strategic tick and deters defender sorties (escort-protected hexes inflict heavier sortie casualties on the defender). Played by the besieger or a supporter. Target the siege's supply-road hex or the besieged hex.</p><p><strong>OP Cost:</strong> violence 10, logistics 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> uncommon</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "strategic",
+      "key": "escort_supply_line"
+    }
+  },
+  "_id": "zUeUSBt86WzZ4fRB",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601764,
+    "modifiedTime": 1782703702692,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!zUeUSBt86WzZ4fRB"
+}

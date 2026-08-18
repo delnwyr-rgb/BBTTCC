@@ -1,0 +1,65 @@
+{
+  "_id": "iaYD798xFXLr7Fu0",
+  "name": "Redactor: Redline the Draft",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_4.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"3023\" data-end=\"3037\"><em data-start=\"3023\" data-end=\"3037\">(14th Level)</em></p><p data-start=\"3039\" data-end=\"3057\"><em data-start=\"3039\" data-end=\"3057\">“No. Remove it.”</em></p><p data-start=\"3059\" data-end=\"3143\">When you cast a removal or negation manifestation, you may massively enhance its scope once.</p><p data-start=\"3145\" data-end=\"3153\">You may:</p><ul data-start=\"3155\" data-end=\"3306\"><li data-start=\"3155\" data-end=\"3203\"><p data-start=\"3157\" data-end=\"3203\">Bypass one immunity or resistance to negation.</p></li><li data-start=\"3204\" data-end=\"3256\"><p data-start=\"3206\" data-end=\"3256\">Extend the removal across multiple linked effects.</p></li><li data-start=\"3257\" data-end=\"3306\"><p data-start=\"3259\" data-end=\"3306\">Force the suppression through layered defenses.</p></li></ul><p data-start=\"3308\" data-end=\"3330\">Immediate consequence:</p><ul data-start=\"3332\" data-end=\"3379\"><li data-start=\"3332\" data-end=\"3354\"><p data-start=\"3334\" data-end=\"3354\">Gain maximum Strain.</p></li><li data-start=\"3355\" data-end=\"3379\"><p data-start=\"3357\" data-end=\"3379\">Backlash is automatic.</p></li></ul><p data-start=\"3381\" data-end=\"3408\">This is not clever editing.</p><p data-start=\"3410\" data-end=\"3453\">This is tearing a paragraph out of reality.</p><p data-start=\"3455\" data-end=\"3481\">The universe will respond.</p>",
+      "chat": ""
+    },
+    "identifier": "redactor_redline_the_draft",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 14
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "redactor_redline_the_draft"
+    }
+  },
+  "folder": "pcv0zMJZU8aoEMQc",
+  "sort": 400000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.iaYD798xFXLr7Fu0",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923345,
+    "modifiedTime": 1781116177522,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!iaYD798xFXLr7Fu0"
+}

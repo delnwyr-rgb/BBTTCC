@@ -1,0 +1,83 @@
+{
+  "_id": "humneanderthal01",
+  "name": "Human Heritage: Neanderthal",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/young_gearbox_pov.png",
+  "system": {
+    "category": "heritage",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human Lineage.</strong> The branch that kept the strength. Heavy bone, deep lung, the ancestor who decided that an ice age is a problem you out-mass.</p><p><em>“The map says ‘stop.’ You keep walking. Slower. Heavier. The map gives up first.”</em></p><p><strong>Neanderthal.</strong> You are the broad lineage that survived by being the thing the cold couldn’t finish.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>VIO (Violence)</strong>—expressed primarily through Tier powers.</p></li><li><p><strong>Endurance Frame.</strong> You count as one size larger for the purposes of carrying capacity, push, drag, and lift.</p></li></ul>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "humneanderthad1",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.K1TU1acwHzjGP56l",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Neanderthal Tier I",
+        "hint": "Gain your Neanderthal Tier I lineage power (Thick-Boned)."
+      }
+    ],
+    "identifier": "human_neanderthal_heritage",
+    "requirements": "Human",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "human",
+      "lineage": "Neanderthal",
+      "version": "2.0.0",
+      "date": "2026-04-18"
+    }
+  },
+  "folder": "xPvKnV19qnSzNoUM",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776543000000,
+    "modifiedTime": 1781116094273,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 200000,
+  "_key": "!items!humneanderthal01"
+}

@@ -1,0 +1,49 @@
+{
+  "name": "Legendary Action — Quiet In The Theater",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_5.png",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [
+      "translated",
+      "5e-port"
+    ],
+    "description": {
+      "value": "<p>One creature Gilbert can see within 12 squares must succeed on a DC 16 Body check or be unable to speak above a whisper and unable to cast manifestations with verbal components until the end of its next turn.</p>",
+      "chat": ""
+    }
+  },
+  "_id": "KVCpnSVfqSIoDMme",
+  "effects": [],
+  "sort": 0,
+  "flags": {
+    "bbttcc": {
+      "npcAbility": {
+        "sources": [
+          "Gilbert, Eternally Cleaning Not Leaning Theater Attendant"
+        ],
+        "worlds": [
+          "ember",
+          "foundry"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782167244994,
+    "modifiedTime": 1782167244994,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!KVCpnSVfqSIoDMme"
+}

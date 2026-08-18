@@ -1,0 +1,65 @@
+{
+  "_id": "xZKRZBpccpSzMPau",
+  "name": "Annotator: Great Work Rite",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_spark_7.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"3156\" data-end=\"3170\"><em data-start=\"3156\" data-end=\"3170\">(18th Level)</em></p><p data-start=\"3172\" data-end=\"3266\">You undertake a scene-long ritual capable of altering a place, hex, or community meaningfully.</p><p data-start=\"3268\" data-end=\"3287\">This is not damage.</p><p data-start=\"3289\" data-end=\"3312\">This is transformation.</p><p data-start=\"3314\" data-end=\"3323\">Examples:</p><ul data-start=\"3324\" data-end=\"3509\"><li data-start=\"3324\" data-end=\"3377\"><p data-start=\"3326\" data-end=\"3377\">Rewriting the ambient correspondence of a location.</p></li><li data-start=\"3378\" data-end=\"3413\"><p data-start=\"3380\" data-end=\"3413\">Stabilizing a corrupted district.</p></li><li data-start=\"3414\" data-end=\"3459\"><p data-start=\"3416\" data-end=\"3459\">Rebalancing a fractured symbolic structure.</p></li><li data-start=\"3460\" data-end=\"3509\"><p data-start=\"3462\" data-end=\"3509\">Shifting the long-term identity of a community.</p></li></ul><h3 data-start=\"3511\" data-end=\"3519\">Cost</h3><p data-start=\"3520\" data-end=\"3533\">Once per arc.</p><p data-start=\"3535\" data-end=\"3572\">Strain applies. Backlash is possible.</p><p data-start=\"3574\" data-end=\"3630\">But when completed properly, the world does not explode.</p><p data-start=\"3632\" data-end=\"3667\">It changes quietly—and permanently.</p><p data-start=\"3669\" data-end=\"3706\"></p>",
+      "chat": ""
+    },
+    "identifier": "annotator_great_work_rite",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 18
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "annotator_great_work_rite"
+    }
+  },
+  "folder": "7fCEbHBaAKFkEuHN",
+  "sort": 500000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.xZKRZBpccpSzMPau",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923346,
+    "modifiedTime": 1781116194407,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!xZKRZBpccpSzMPau"
+}

@@ -1,0 +1,5504 @@
+{
+  "name": "Evil Bad Faction",
+  "type": "npc",
+  "_id": "oK7VitQikQ6FN3PI",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/FactionB2.png",
+  "system": {
+    "role": "",
+    "tier": 3,
+    "factionId": "",
+    "notes": "",
+    "details": {
+      "level": 1,
+      "tier": 3,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "type": {
+        "value": "faction"
+      }
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 1
+      },
+      "body": {
+        "value": 1
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {
+      "melee": {
+        "value": 3
+      },
+      "brawl": {
+        "value": 2
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 10,
+        "max": 10
+      },
+      "stress": {
+        "value": 8,
+        "max": 8
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "malkuth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Evil Bad Faction",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/FactionB2.png",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "name": "Suppressive Fire",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "suppressive_fire"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Suppressive Fire</h3><p>Force enemy reroll lowest 2d10x10 this round.</p><p><strong>OP Cost:</strong> violence 2</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> Assault, Occupation</p><p><strong>Defender Access:</strong> Yes</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "oNjQnoV5wJqXBGJ9",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.oNjQnoV5wJqXBGJ9"
+    },
+    {
+      "name": "Patch the Breach",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "patch_the_breach"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Patch the Breach</h3><p>Restore 1 Structure Point.</p><p><strong>OP Cost:</strong> nonLethal 1, economy 1</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> Assault (defense), Occupation (defense)</p><p><strong>Defender Access:</strong> Yes</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "fs8XuOB2aWQit99p",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.fs8XuOB2aWQit99p"
+    },
+    {
+      "name": "Smoke and Mirrors",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "smoke_and_mirrors"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Smoke and Mirrors</h3><p>Reduce Alarm Level by 1.</p><p><strong>OP Cost:</strong> intrigue 1, softPower 1</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> Infiltration, Espionage, Propaganda</p><p><strong>Defender Access:</strong> Conditional</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "45q79D6fcdzQL5Ja",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.45q79D6fcdzQL5Ja"
+    },
+    {
+      "name": "Flank Attack",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "flank_attack"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Flank Attack</h3><p>Strike from an unexpected angle; pressure the line and seize momentum.</p><p><strong>OP Cost:</strong> violence 1</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> assault, occupation, liberation</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "2VX6caGCbiGQu4RK",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.2VX6caGCbiGQu4RK"
+    },
+    {
+      "name": "Harvest Season",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "harvest_season"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Harvest Season</h3><p>+1 Economy regen next turn.</p><p><strong>OP Cost:</strong> economy 1</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "2m1i5LVWftHXI26H",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.2m1i5LVWftHXI26H"
+    },
+    {
+      "name": "Minor Repair",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "minor_repair"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Minor Repair</h3><p>Remove &#39;Damaged Infrastructure&#39;.</p><p><strong>OP Cost:</strong> economy 2</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "IOYNzN147ul9ztIT",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.IOYNzN147ul9ztIT"
+    },
+    {
+      "name": "Develop Outpost (Stability)",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "develop_outpost_stability"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Develop Outpost (Stability)</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> softPower 20, nonLethal 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "108U9cn7MzQBG4ZI",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.108U9cn7MzQBG4ZI"
+    },
+    {
+      "name": "Establish Outpost",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "establish_outpost"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Outpost</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 20, logistics 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "fTV5WlkVTORpu6sK",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.fTV5WlkVTORpu6sK"
+    },
+    {
+      "name": "Establish Supply Line",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "establish_supply_line"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Supply Line</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> logistics 30, economy 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "fo9LTmZvbubgy7ZU",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.fo9LTmZvbubgy7ZU"
+    },
+    {
+      "name": "Establish Trade Route",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "establish_trade_route"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Establish Trade Route</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, diplomacy 10, logistics 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "BCLtzPEPNpfm5ue2",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.BCLtzPEPNpfm5ue2"
+    },
+    {
+      "name": "Found Farm",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "found_site_farm"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Farm</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 20, logistics 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "hNoxKKcTFzaEljAc",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.hNoxKKcTFzaEljAc"
+    },
+    {
+      "name": "Found Fortress",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "found_site_fortress"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Fortress</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> violence 20, logistics 20, economy 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "7lEDpMqZyW1Q0gU5",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.7lEDpMqZyW1Q0gU5"
+    },
+    {
+      "name": "Found Mine",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "found_site_mine"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Mine</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, nonLethal 10, logistics 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "XP2ZTBCdZeEIoNPk",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.XP2ZTBCdZeEIoNPk"
+    },
+    {
+      "name": "Found Port",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "found_site_port"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Port</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, logistics 10, diplomacy 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "H6Aj8tUoQoFqIhEx",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.H6Aj8tUoQoFqIhEx"
+    },
+    {
+      "name": "Found Research Site",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "found_site_research"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Found Research Site</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> intrigue 20, softPower 20, economy 10</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "BKBTvZMb9wAmZjSx",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.BKBTvZMb9wAmZjSx"
+    },
+    {
+      "name": "Upgrade Outpost → Settlement",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "upgrade_outpost_settlement"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Upgrade Outpost → Settlement</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, softPower 20, logistics 20</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "mcFUZ30lQx63wvGX",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.mcFUZ30lQx63wvGX"
+    },
+    {
+      "name": "Develop Infrastructure",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "develop_infrastructure_std"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Develop Infrastructure</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 40, logistics 20</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "BgfnPJ8aGwSdE0gA",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.BgfnPJ8aGwSdE0gA"
+    },
+    {
+      "name": "Logistics Surge",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "logistics_surge_s2"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Logistics Surge</h3><p>Sudden logistics push: +1 to all friendly rolls this round.</p><p><strong>Tier:</strong> 1</p><p><strong>Raid Types:</strong> any</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "dSh5pzQFuzecvnq6",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.dSh5pzQFuzecvnq6"
+    },
+    {
+      "name": "Infernal Bargain",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "opt_infernal_bargain"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Infernal Bargain</h3><p>Offer the defender a sealed bargain: accept (+2 to defender&#39;s next roll, attacker gains 1 darkness) or refuse (defender morale −1 from the snubbed offer).</p><p><strong>Tier:</strong> 1</p><p><strong>Raid Types:</strong> presence</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "gmFi83PLVoBQu1cd",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.gmFi83PLVoBQu1cd"
+    },
+    {
+      "name": "Whispered Aside",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "courtly_whispered_aside"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Whispered Aside</h3><p>Pick a courtier. +1 Favor to your side.</p><p><strong>Tier:</strong> 1</p><p><strong>Raid Types:</strong> presence</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "nXPRqfmJWcPhLiqv",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.nXPRqfmJWcPhLiqv"
+    },
+    {
+      "name": "Sortie",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "sortie"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Sortie</h3><p>Defender sallies out to strike an adjacent attacker supply hex. Severs the &#39;Supply Line&#39; modifier and shaves 15 OP from the besieger&#39;s Buffer. Risk: 1d4 of your own garrison holdings are lost (+2 if the hex is escort-protected). Played by the besieged faction. Target the attacker&#39;s supply-road hex.</p><p><strong>OP Cost:</strong> violence 20</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> uncommon</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "CM2SkwTHMTXI2Gxt",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.CM2SkwTHMTXI2Gxt"
+    },
+    {
+      "name": "Reinforce Garrison",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "reinforce_garrison"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Reinforce Garrison</h3><p>Defender stiffens the defence: +1 Anytime budget per round AND +1 Renewal pool for the duration. Played by the besieged faction; target the besieged hex.</p><p><strong>OP Cost:</strong> violence 15, logistics 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> uncommon</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "XY5mZ9IUt7139oxN",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.XY5mZ9IUt7139oxN"
+    },
+    {
+      "name": "Call Relief",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "call_relief"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Call Relief</h3><p>Summon an allied relief force. Pushes a wave onto the siege that arrives in 2 turns; on arrival the GM convenes the Relief Scene (Phase E.3). Requires a willing ally. Target the besieged hex.</p><p><strong>OP Cost:</strong> diplomacy 20, softPower 20</p><p><strong>Tier:</strong> 2</p><p><strong>Rarity:</strong> rare</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "eCnUCskabPYRTGFm",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.eCnUCskabPYRTGFm"
+    },
+    {
+      "name": "Sue for Terms",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "sue_for_terms"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Sue for Terms</h3><p>Defender offers a negotiated surrender. The attacker may accept (won_sack) or refuse at next resolution (siege.resolveTerms). Target the besieged hex.</p><p><strong>OP Cost:</strong> diplomacy 20, softPower 15</p><p><strong>Tier:</strong> 2</p><p><strong>Rarity:</strong> rare</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "EEEcciOt0ZRpTUIi",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.EEEcciOt0ZRpTUIi"
+    },
+    {
+      "name": "Champion Defends Wall",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "champion_defends_wall"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Defends Wall</h3><p>A named defender Champion takes the wall: locked Active for 2 turns and +1 Anytime budget. Optional note {&quot;championId&quot;:&quot;...&quot;} picks the champion; otherwise the first eligible. Target the besieged hex.</p><p><strong>OP Cost:</strong> violence 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> uncommon</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "9ngoS9WCL16XTGb9",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.9ngoS9WCL16XTGb9"
+    },
+    {
+      "name": "Pray for Omen",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "pray_for_omen"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Pray for Omen</h3><p>Beseech the powers: the next Event Deck draw re-rolls in the defender&#39;s favour (consumed when the deck fires, Phase F). Target the besieged hex.</p><p><strong>OP Cost:</strong> faith 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> uncommon</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "lwgsbj9Nh7lpKwOd",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.lwgsbj9Nh7lpKwOd"
+    },
+    {
+      "name": "Champion Returns",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "champion_returns"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Champion Returns</h3><p>Coax an Absent attacker Champion back to the line (status Active). Optional note {&quot;championId&quot;:&quot;...&quot;}; otherwise the first absent. Target the besieged hex.</p><p><strong>OP Cost:</strong> diplomacy 20, softPower 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> uncommon</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "za5zFalj3SdHvuy1",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.za5zFalj3SdHvuy1"
+    },
+    {
+      "name": "Interdict Supply Line",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "strategic",
+          "key": "interdict_supply_line"
+        }
+      },
+      "system": {
+        "category": "strategic",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Interdict Supply Line</h3><p>Cut a supply-path hex feeding an enemy siege. Strips the hex&#39;s &#39;Supply Line&#39; modifier (severs the route until restored) and lands an immediate harassment pulse: the besieger&#39;s Supply Buffer is shaved and per-turn attrition rises. Any faction except the besieger may interdict. Target the supply-road hex, not the besieged hex.</p><p><strong>OP Cost:</strong> intrigue 15, violence 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> uncommon</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "anBgKsMIofLRpTSJ",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.anBgKsMIofLRpTSJ"
+    },
+    {
+      "name": "Defensive Entrenchment",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "defensive_entrenchment"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Defensive Entrenchment</h3><p>Dig in and harden positions; defender DC +3 this round.</p><p><strong>OP Cost:</strong> nonlethal 1</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> assault_defense, occupation, siege</p><p><strong>Defender Access:</strong> true</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "KxzmOvkyeawxrPPC",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.KxzmOvkyeawxrPPC"
+    },
+    {
+      "name": "Last-Stand Banner",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "last_stand_banner"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Last-Stand Banner</h3><p>Defenders ignore first Structure loss this round.</p><p><strong>OP Cost:</strong> violence 20, faith 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> Siege (defense), Occupation</p><p><strong>Defender Access:</strong> Yes</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "7FnoAa5H5XUEt9OK",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.7FnoAa5H5XUEt9OK"
+    },
+    {
+      "name": "Quantum Shield",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "quantum_shield"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Quantum Shield</h3><p>Reduce incoming damage by half for one round.</p><p><strong>OP Cost:</strong> economy 30, faith 20</p><p><strong>Tier:</strong> 3</p><p><strong>Rarity:</strong> very rare</p><p><strong>Raid Types:</strong> Assault (defense), Occupation, Ritual/Tikkun</p><p><strong>Defender Access:</strong> Yes</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "ElP6D75Q01J21qQJ",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.ElP6D75Q01J21qQJ"
+    },
+    {
+      "name": "Defender’s Reversal",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "defender_s_reversal"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Defender’s Reversal</h3><p>Reflect first enemy maneuver used this round.</p><p><strong>OP Cost:</strong> intrigue 30, nonLethal 20</p><p><strong>Tier:</strong> 3</p><p><strong>Rarity:</strong> very rare</p><p><strong>Raid Types:</strong> Occupation (defense), Siege</p><p><strong>Defender Access:</strong> Yes</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "PQkIurR8bgmvMcwt",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.PQkIurR8bgmvMcwt"
+    },
+    {
+      "name": "Stage a Distraction",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "courtly_stage_distraction"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Stage a Distraction</h3><p>Suspicion −1. Opponent discards a Stolen secret if held.</p><p><strong>Tier:</strong> 2</p><p><strong>Raid Types:</strong> presence</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "HkSiFPOYR0kiSwnV",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.HkSiFPOYR0kiSwnV"
+    },
+    {
+      "name": "Quote the Old Law",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "courtly_quote_old_law"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Quote the Old Law</h3><p>Suspicion −2. Cancel one Scandal on the table.</p><p><strong>Tier:</strong> 2</p><p><strong>Raid Types:</strong> presence</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "rDXobutM0ZpJBmI3",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.rDXobutM0ZpJBmI3"
+    },
+    {
+      "name": "Rally the Line",
+      "type": "feat",
+      "flags": {
+        "bbttcc": {
+          "kind": "maneuver",
+          "key": "rally_the_line"
+        }
+      },
+      "system": {
+        "category": "maneuver",
+        "source": "Bad Eden Doctrine",
+        "tags": [],
+        "description": {
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Rally the Line</h3><p>+1 to allies&#39; next attack/defense. On Success: +2 Morale and −1 Darkness (merged from Radiant Rally).</p><p><strong>OP Cost:</strong> softPower 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> Assault, Liberation, Occupation</p><p><strong>Defender Access:</strong> Yes</p></div>",
+          "chat": ""
+        }
+      },
+      "_id": "A3NtDT7TW271GUYR",
+      "img": "icons/svg/item-bag.svg",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.A3NtDT7TW271GUYR"
+    },
+    {
+      "name": "Sealed Pardon, Pre-Signed",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scroll_1.png",
+      "system": {
+        "category": "technique",
+        "source": "",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Sealed Pardon, Pre-Signed.</strong> A blank pardon with a real signature, sold to you by someone who will deny it to their grave. Fill in your own name. Move along.</p><p><em>Play:</em> Clear your own Scandal flag (if any).</p>",
+          "chat": "",
+          "unidentified": ""
+        }
+      },
+      "flags": {
+        "bbttcc-raid": {
+          "secret": {
+            "effectKey": "clearScandal",
+            "acquisition": "earned",
+            "acquiredAt": 1782065103598,
+            "raidId": ""
+          }
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "kuOBa28LyyrcVDNm",
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.kuOBa28LyyrcVDNm"
+    },
+    {
+      "name": "Forged Writ of Passage",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scroll_1.png",
+      "system": {
+        "category": "technique",
+        "source": "",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Forged Writ of Passage.</strong> The seal is real. The signature is real-adjacent. By the time anyone checks, you were demonstrably somewhere else, being charming.</p><p><em>Play:</em> Lower Suspicion by 2.</p>",
+          "chat": "",
+          "unidentified": ""
+        }
+      },
+      "flags": {
+        "bbttcc-raid": {
+          "secret": {
+            "effectKey": "coverTracks",
+            "acquisition": "earned",
+            "acquiredAt": 1782065103655,
+            "raidId": ""
+          }
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "0XILrW0onAVI0uPS",
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.0XILrW0onAVI0uPS"
+    },
+    {
+      "name": "The Wrong Twin",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_eyes_1.png",
+      "system": {
+        "category": "technique",
+        "source": "",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>The Wrong Twin.</strong> You introduce a small, load-bearing uncertainty about who, exactly, your opponent has been dealing with all evening.</p><p><em>Play:</em> Your opponent must reroll their next exchange.</p>",
+          "chat": "",
+          "unidentified": ""
+        }
+      },
+      "flags": {
+        "bbttcc-raid": {
+          "secret": {
+            "effectKey": "forceReroll",
+            "acquisition": "earned",
+            "acquiredAt": 1782065103712,
+            "raidId": ""
+          }
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "jCl6rlkOcIYyZwhy",
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.jCl6rlkOcIYyZwhy"
+    },
+    {
+      "name": "Buried Betrothal",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_3.png",
+      "system": {
+        "category": "technique",
+        "source": "",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Buried Betrothal.</strong> A marriage promised before the Shattering, never formally dissolved. Wave it gently and watch a cold courtier suddenly find you fascinating.</p><p><em>Play:</em> +2 favor with a courtier of your choice toward your side.</p>",
+          "chat": "",
+          "unidentified": ""
+        }
+      },
+      "flags": {
+        "bbttcc-raid": {
+          "secret": {
+            "effectKey": "favorPlus2",
+            "acquisition": "stolen",
+            "acquiredAt": 1782065103767,
+            "raidId": ""
+          }
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "GR8jjEm8kV4DuMr0",
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.GR8jjEm8kV4DuMr0"
+    },
+    {
+      "_id": "WKcR4xnT6EqLUEhp",
+      "name": "Bravo",
+      "type": "class",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-bravo",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "bravo",
+          "violence"
+        ],
+        "description": {
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "faculty": "violence",
+            "signature": "melee",
+            "secondary": "brawl",
+            "pool": "Violence",
+            "awakens": "Aurablade or Bulwark"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.WKcR4xnT6EqLUEhp"
+    },
+    {
+      "_id": "iToVv617050NGtiO",
+      "name": "Bravo — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "bravo",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 101000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.iToVv617050NGtiO"
+    },
+    {
+      "_id": "BGqozsqYdnAxmKeb",
+      "name": "Bravo — Initiate (Tier II)",
+      "type": "feature",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "bravo",
+          "tier-2"
+        ],
+        "description": {
+          "value": "<p><strong>Bravo — Initiate</strong> (Tier II).</p><p><strong>Trade — Drill the green:</strong> Train a group; they count Trained (rank 1) in one Violence aptitude for the next scene that tests it. <span style=\"opacity:0.7\">Standard fee 30 marks (Violence).</span></p><p><strong>Trick — Disarming Blow</strong> <em>(1/scene)</em>: On a hit, the target drops its weapon or takes −2 on its next strike.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 102000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "tier": 2
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.BGqozsqYdnAxmKeb"
+    },
+    {
+      "_id": "mki2BwTJQcLMWQ9M",
+      "name": "Bravo — Master (Tier III)",
+      "type": "feature",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "bravo",
+          "tier-3"
+        ],
+        "description": {
+          "value": "<p><strong>Bravo — Master</strong> (Tier III).</p><p><strong>Trade — Muscle for the job:</strong> Accompany one operation as a combatant (full stat participation). <span style=\"opacity:0.7\">Standard fee 90 marks (Violence).</span></p><p><strong>Trick — Veteran's Read</strong> <em>(1/scene)</em>: Declare one enemy's next move aloud; all allies get +2 to defend against exactly that.</p><p><em>Master step:</em> the Bravo's Knack (Shieldwall) improves at this tier — see the class entry.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 103000,
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "bravo",
+            "tier": 3
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1784177534402,
+        "modifiedTime": 1784177534402,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!oK7VitQikQ6FN3PI.mki2BwTJQcLMWQ9M"
+    }
+  ],
+  "effects": [],
+  "folder": "q161mthKFcQADAdV",
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "bbttcc-factions": {
+      "isFaction": true,
+      "factionLevel": 3,
+      "opBankMarksMigrated": true,
+      "opCaps": {
+        "violence": 110,
+        "nonlethal": 110,
+        "intrigue": 110,
+        "economy": 110,
+        "softpower": 110,
+        "diplomacy": 110,
+        "logistics": 110,
+        "culture": 110,
+        "faith": 110
+      },
+      "opBank": {
+        "violence": 110,
+        "nonlethal": 110,
+        "intrigue": 110,
+        "economy": 110,
+        "softpower": 110,
+        "diplomacy": 106,
+        "logistics": 110,
+        "culture": 110,
+        "faith": 110
+      },
+      "raidPlan": {},
+      "ops": {},
+      "rigs": [],
+      "activeRigId": "",
+      "stockpile": {
+        "food": 0,
+        "materials": 3,
+        "trade": 1,
+        "military": 4,
+        "knowledge": 0,
+        "defense": 0
+      },
+      "morale": 50,
+      "loyalty": 50,
+      "darkness": 0,
+      "victory": {
+        "vp": 32,
+        "unity": 0,
+        "badgeKey": "ascendant",
+        "badgeLabel": "Ascendant",
+        "badge": {
+          "key": "ascendant",
+          "label": "Ascendant",
+          "vp": 20,
+          "at": 1781567041869
+        }
+      },
+      "warLogs": [
+        {
+          "ts": 1779125350107,
+          "date": "5/18/2026, 12:29:10 PM",
+          "type": "commit",
+          "summary": "Faction founded. Level 1 established."
+        },
+        {
+          "ts": 1779125350108,
+          "date": "5/18/2026, 12:29:10 PM",
+          "type": "commit",
+          "summary": "Starting OP bank seeded (Standard Start v1)."
+        },
+        {
+          "ts": 1779125350109,
+          "date": "5/18/2026, 12:29:10 PM",
+          "type": "commit",
+          "summary": "Claim staked on a home hex."
+        },
+        {
+          "ts": 1779130739004,
+          "date": "5/18/2026, 1:58:59 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "Action Faction",
+          "outcome": "win",
+          "summary": "assault vs Blackwater Verge c — Normal; A 4 + 15 vs D 16 + 10 → A 19 vs D 26 (Δ -7) • OP−(Att) softpower:1 • OP−(Support) The Unmoved Movers [violence:10]; Mans(Att): rally_the_line; Mans(Def): —; Support: The Unmoved Movers",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 19,
+          "defenderTotal": 26,
+          "margin": -7,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 15,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "Zsn8DO6cpTuHHexS"
+          ],
+          "supportFactionNames": [
+            "The Unmoved Movers"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Blackwater Verge c"
+        },
+        {
+          "ts": 1779137326687,
+          "date": "5/18/2026, 3:48:46 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "The Tuesday Game",
+          "outcome": "loss",
+          "summary": "assault vs Blackwater Verge c — Normal; A 19 + 6 vs D 10 + 10 → A 25 vs D 20 (Δ +5); Support: The Unmoved Movers",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 25,
+          "defenderTotal": 20,
+          "margin": 5,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 6,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "Zsn8DO6cpTuHHexS"
+          ],
+          "supportFactionNames": [
+            "The Unmoved Movers"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Blackwater Verge c"
+        },
+        {
+          "ts": 1779137843212,
+          "date": "5/18/2026, 3:57:23 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "The Tuesday Game",
+          "outcome": "win",
+          "summary": "assault vs Blackwater Verge c — Normal; A 12 + 6 vs D 13 + 10 → A 18 vs D 23 (Δ -5); Support: The Unmoved Movers",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 18,
+          "defenderTotal": 23,
+          "margin": -5,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 6,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "Zsn8DO6cpTuHHexS"
+          ],
+          "supportFactionNames": [
+            "The Unmoved Movers"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Blackwater Verge c"
+        },
+        {
+          "ts": 1779138778408,
+          "date": "5/18/2026, 4:12:58 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "The Tuesday Game",
+          "outcome": "loss",
+          "summary": "assault vs Blackwater Verge c — Normal; A 17 + 11 vs D 12 + 10 → A 28 vs D 22 (Δ +6) • OP−(Support) The Unmoved Movers [violence:10]; Support: The Unmoved Movers",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 28,
+          "defenderTotal": 22,
+          "margin": 6,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 11,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "Zsn8DO6cpTuHHexS"
+          ],
+          "supportFactionNames": [
+            "The Unmoved Movers"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Blackwater Verge c"
+        },
+        {
+          "ts": 1779139097610,
+          "date": "5/18/2026, 4:18:17 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "The Tuesday Game",
+          "outcome": "loss",
+          "summary": "assault vs Blackwater Verge c — Normal; A 12 + 6 vs D 3 + 10 → A 18 vs D 13 (Δ +5); Support: The Unmoved Movers",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 18,
+          "defenderTotal": 13,
+          "margin": 5,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 6,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "Zsn8DO6cpTuHHexS"
+          ],
+          "supportFactionNames": [
+            "The Unmoved Movers"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Blackwater Verge c"
+        },
+        {
+          "ts": 1779139447946,
+          "date": "5/18/2026, 4:24:07 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "The Tuesday Game",
+          "outcome": "win",
+          "summary": "assault vs Blackwater Verge c — Normal; A 14 + 6 vs D 11 + 10 → A 20 vs D 21 (Δ -1); Support: The Unmoved Movers",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 20,
+          "defenderTotal": 21,
+          "margin": -1,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 6,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "Zsn8DO6cpTuHHexS"
+          ],
+          "supportFactionNames": [
+            "The Unmoved Movers"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Blackwater Verge c"
+        },
+        {
+          "ts": 1779139553829,
+          "date": "5/18/2026, 4:25:53 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "The Tuesday Game",
+          "outcome": "win",
+          "summary": "assault vs Blackwater Verge c — Normal; A 10 + 6 vs D 17 + 10 → A 16 vs D 27 (Δ -11) • OP−(Att) violence:2; Mans(Att): suppressive_fire; Mans(Def): —; Support: The Unmoved Movers",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 16,
+          "defenderTotal": 27,
+          "margin": -11,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 6,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "Zsn8DO6cpTuHHexS"
+          ],
+          "supportFactionNames": [
+            "The Unmoved Movers"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Blackwater Verge c"
+        },
+        {
+          "ts": 1779139628937,
+          "date": "5/18/2026, 4:27:08 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "The Tuesday Game",
+          "outcome": "win",
+          "summary": "assault vs Blackwater Verge c — Normal; A 3 + 6 vs D 18 + 10 → A 9 vs D 28 (Δ -19) • OP−(Att) violence:2; Mans(Att): suppressive_fire; Mans(Def): —; Support: The Unmoved Movers",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 9,
+          "defenderTotal": 28,
+          "margin": -19,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 6,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "Zsn8DO6cpTuHHexS"
+          ],
+          "supportFactionNames": [
+            "The Unmoved Movers"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Blackwater Verge c"
+        },
+        {
+          "ts": 1779140120673,
+          "date": "5/18/2026, 4:35:20 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "The Tuesday Game",
+          "outcome": "win",
+          "summary": "assault vs Blackwater Verge c — Normal; A 7 + 6 vs D 14 + 10 → A 13 vs D 24 (Δ -11) • OP−(Att) violence:2; Mans(Att): suppressive_fire; Mans(Def): —; Support: The Unmoved Movers",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 13,
+          "defenderTotal": 24,
+          "margin": -11,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 6,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "Zsn8DO6cpTuHHexS"
+          ],
+          "supportFactionNames": [
+            "The Unmoved Movers"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Blackwater Verge c"
+        },
+        {
+          "ts": 1779141680313,
+          "date": "5/18/2026, 5:01:20 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "The Tuesday Game",
+          "outcome": "win",
+          "summary": "assault vs Blackwater Verge c — Normal; A 10 + 6 vs D 11 + 10 → A 16 vs D 21 (Δ -5) • OP−(Att) violence:2; Mans(Att): suppressive_fire; Mans(Def): —; Support: The Unmoved Movers",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 16,
+          "defenderTotal": 21,
+          "margin": -5,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 6,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "Zsn8DO6cpTuHHexS"
+          ],
+          "supportFactionNames": [
+            "The Unmoved Movers"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Blackwater Verge c"
+        },
+        {
+          "ts": 1779155051781,
+          "date": "5/18/2026, 8:44:11 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "The Linebreakers",
+          "outcome": "loss",
+          "summary": "assault vs Evil Bad Fortress — Normal; A 17 + 19 vs D 5 + 10 → A 36 vs D 15 (Δ +21) • OP−(Att) violence:2; Mans(Att): suppressive_fire; Mans(Def): —; Support: Action Faction, The Faction of the Red Hat, The Tuesday Game, Travis's Faction",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 36,
+          "defenderTotal": 15,
+          "margin": 21,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 19,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "3Uef5yisEtiPNw0U",
+            "kh2xHeifJoXjprr4",
+            "4hevazGUzSHA3PtB",
+            "9zbj0xDews4jqQnb"
+          ],
+          "supportFactionNames": [
+            "Action Faction",
+            "The Faction of the Red Hat",
+            "The Tuesday Game",
+            "Travis's Faction"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Evil Bad Fortress"
+        },
+        {
+          "ts": 1779156248344,
+          "date": "5/18/2026, 9:04:08 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "The Tuesday Game",
+          "outcome": "win",
+          "summary": "assault vs Evil Bad Fortress — Normal; A 12 + 6 vs D 15 + 10 → A 18 vs D 25 (Δ -7); Support: The Unmoved Movers",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 18,
+          "defenderTotal": 25,
+          "margin": -7,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 6,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "Zsn8DO6cpTuHHexS"
+          ],
+          "supportFactionNames": [
+            "The Unmoved Movers"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Evil Bad Fortress"
+        },
+        {
+          "ts": 1779166124824,
+          "date": "5/18/2026, 11:48:44 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "The Tuesday Game",
+          "outcome": "win",
+          "summary": "assault vs Evil Bad Fortress — Normal; A 10 + 6 vs D 12 + 10 → A 16 vs D 22 (Δ -6); Support: The Unmoved Movers",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 16,
+          "defenderTotal": 22,
+          "margin": -6,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 6,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "Zsn8DO6cpTuHHexS"
+          ],
+          "supportFactionNames": [
+            "The Unmoved Movers"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Evil Bad Fortress"
+        },
+        {
+          "ts": 1779228759641,
+          "date": "5/19/2026, 5:12:39 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "Steryo Vights",
+          "outcome": "loss",
+          "summary": "assault vs Evil Bad Fortress — Normal; A 10 + 38 vs D 10 + 10 → A 48 vs D 20 (Δ +28) • OP−(Att) violence:1; Support: Funkie Bunch, Why is joe here",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 48,
+          "defenderTotal": 20,
+          "margin": 28,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 38,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "tPLdifKdXl1jxo9w",
+            "Xi3jch9jJokVzp32"
+          ],
+          "supportFactionNames": [
+            "Funkie Bunch",
+            "Why is joe here"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Evil Bad Fortress"
+        },
+        {
+          "ts": 1779311780070,
+          "type": "scenario",
+          "scenario": "infiltration",
+          "summary": "OP nonlethal -2 (Infiltration)",
+          "date": "5/20/2026, 4:16:20 PM"
+        },
+        {
+          "ts": 1779311783884,
+          "date": "5/20/2026, 4:16:23 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "def",
+          "opponent": "Steryo Vights",
+          "summary": "Infiltration: Steryo Vights vs Evil Bad Faction — 11 vs 24 • Alarm 4/5 (alerted) • ALERTED"
+        },
+        {
+          "ts": 1779327309399,
+          "type": "scenario",
+          "scenario": "infiltration",
+          "summary": "OP nonlethal -2 (Infiltration)",
+          "date": "5/20/2026, 8:35:09 PM"
+        },
+        {
+          "ts": 1779327313023,
+          "date": "5/20/2026, 8:35:13 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "def",
+          "opponent": "Steryo Vights",
+          "summary": "Infiltration: Steryo Vights vs Evil Bad Faction — 68 vs 12 • Alarm 0/5 (quiet) • QUIET"
+        },
+        {
+          "type": "commit",
+          "date": "5/30/2026, 1:51:41 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780167101000
+        },
+        {
+          "type": "turn",
+          "date": "5/30/2026, 1:51:50 PM",
+          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "ts": 1780167110000
+        },
+        {
+          "ts": 1780167114704,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "5/30/2026, 1:51:54 PM"
+        },
+        {
+          "ts": 1780167118058,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "5/30/2026, 1:51:58 PM"
+        },
+        {
+          "ts": 1780167119828,
+          "date": "5/30/2026, 1:51:59 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "5/30/2026, 2:05:35 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780167935000
+        },
+        {
+          "type": "turn",
+          "date": "5/30/2026, 2:05:42 PM",
+          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "ts": 1780167942000
+        },
+        {
+          "ts": 1780167945267,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "5/30/2026, 2:05:45 PM"
+        },
+        {
+          "ts": 1780167948768,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "5/30/2026, 2:05:48 PM"
+        },
+        {
+          "ts": 1780167950101,
+          "date": "5/30/2026, 2:05:50 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "5/30/2026, 2:17:21 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780168641000
+        },
+        {
+          "type": "turn",
+          "date": "5/30/2026, 2:17:31 PM",
+          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "ts": 1780168651000
+        },
+        {
+          "ts": 1780168654250,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "5/30/2026, 2:17:34 PM"
+        },
+        {
+          "ts": 1780168658500,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "5/30/2026, 2:17:38 PM"
+        },
+        {
+          "ts": 1780168659996,
+          "date": "5/30/2026, 2:17:39 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "5/30/2026, 2:18:34 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780168714000
+        },
+        {
+          "type": "turn",
+          "date": "5/30/2026, 2:18:41 PM",
+          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "ts": 1780168721000
+        },
+        {
+          "ts": 1780168724496,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "5/30/2026, 2:18:44 PM"
+        },
+        {
+          "ts": 1780168728701,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid logistics:10]",
+          "unpaid": true,
+          "moraleBonus": 0,
+          "loyaltyBonus": 0,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "5/30/2026, 2:18:48 PM"
+        },
+        {
+          "ts": 1780168730020,
+          "date": "5/30/2026, 2:18:50 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "turn",
+          "date": "5/30/2026, 2:22:21 PM",
+          "summary": "Morale set to 30%",
+          "ts": 1780168941000
+        },
+        {
+          "ts": 1780168942285,
+          "date": "5/30/2026, 2:22:22 PM",
+          "type": "siege",
+          "activity": "siege_resolved",
+          "summary": "Siege Carried by Storm (defender) — turn 5.",
+          "siegeId": "siege-mpspzk5k-oxplcg",
+          "hexUuid": "Scene.EPrIyhHJQxy2REce.Drawing.RQ40Tai3G7s9opal",
+          "role": "defender",
+          "status": "won_storm",
+          "narrativeBeats": [
+            {
+              "turn": 2,
+              "kind": "siege_declared",
+              "title": "Siege declared on Perspicacity Fortress",
+              "description": "The Unmoved Movers commits 60 OP to siege. Size: standard. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q. Bulwark discount: none.",
+              "payload": {
+                "bulwarkDiscount": false
+              }
+            },
+            {
+              "turn": 5,
+              "kind": "layer_breached",
+              "title": "Outer Curtain Wall — Perspicacity falls",
+              "description": "Layer 1 of 3 breached (razed) on turn 5.",
+              "payload": {
+                "layerIdx": 0,
+                "layerName": "Outer Curtain Wall — Perspicacity",
+                "rule": "razed"
+              }
+            },
+            {
+              "turn": 5,
+              "kind": "layer_breached",
+              "title": "The Barbican Gate — Perspicacity falls",
+              "description": "Layer 2 of 3 breached (razed) on turn 5.",
+              "payload": {
+                "layerIdx": 1,
+                "layerName": "The Barbican Gate — Perspicacity",
+                "rule": "razed"
+              }
+            },
+            {
+              "turn": 5,
+              "kind": "layer_breached",
+              "title": "The Inner Keep — Perspicacity falls",
+              "description": "Layer 3 of 3 breached (razed) on turn 5.",
+              "payload": {
+                "layerIdx": 2,
+                "layerName": "The Inner Keep — Perspicacity",
+                "rule": "razed"
+              }
+            },
+            {
+              "turn": 5,
+              "kind": "siege_storm",
+              "title": "The last layer falls — the place is carried by storm",
+              "description": "All 3 layer(s) breached. Outcome: won_storm (ownership / morale / war-log write-back lands in Phase F)."
+            }
+          ]
+        },
+        {
+          "type": "commit",
+          "date": "5/30/2026, 3:31:43 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780173103000
+        },
+        {
+          "type": "turn",
+          "date": "5/30/2026, 3:31:51 PM",
+          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "ts": 1780173111000
+        },
+        {
+          "ts": 1780173114090,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "5/30/2026, 3:31:54 PM"
+        },
+        {
+          "ts": 1780173117630,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid logistics:10]",
+          "unpaid": true,
+          "moraleBonus": 0,
+          "loyaltyBonus": 0,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "5/30/2026, 3:31:57 PM"
+        },
+        {
+          "ts": 1780173118811,
+          "date": "5/30/2026, 3:31:58 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "5/30/2026, 5:00:32 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780178432000
+        },
+        {
+          "type": "turn",
+          "date": "5/30/2026, 5:00:41 PM",
+          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "ts": 1780178441000
+        },
+        {
+          "ts": 1780178443434,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "5/30/2026, 5:00:43 PM"
+        },
+        {
+          "ts": 1780178446905,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid logistics:10]",
+          "unpaid": true,
+          "moraleBonus": 0,
+          "loyaltyBonus": 0,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "5/30/2026, 5:00:46 PM"
+        },
+        {
+          "ts": 1780178448101,
+          "date": "5/30/2026, 5:00:48 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "5/30/2026, 5:25:15 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780179915000
+        },
+        {
+          "type": "turn",
+          "date": "5/30/2026, 5:25:23 PM",
+          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "ts": 1780179923000
+        },
+        {
+          "ts": 1780179925727,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "5/30/2026, 5:25:25 PM"
+        },
+        {
+          "ts": 1780179930950,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:2, logistics:10]",
+          "unpaid": true,
+          "moraleBonus": 0,
+          "loyaltyBonus": 0,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "5/30/2026, 5:25:30 PM"
+        },
+        {
+          "ts": 1780179932186,
+          "date": "5/30/2026, 5:25:32 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "5/31/2026, 2:17:48 AM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780211868000
+        },
+        {
+          "type": "turn",
+          "date": "5/31/2026, 2:17:56 AM",
+          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "ts": 1780211876000
+        },
+        {
+          "ts": 1780211878832,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "5/31/2026, 2:17:58 AM"
+        },
+        {
+          "ts": 1780211884077,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
+          "unpaid": true,
+          "moraleBonus": 0,
+          "loyaltyBonus": 0,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "5/31/2026, 2:18:04 AM"
+        },
+        {
+          "ts": 1780211885454,
+          "date": "5/31/2026, 2:18:05 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "5/31/2026, 2:18:36 AM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780211916000
+        },
+        {
+          "type": "turn",
+          "date": "5/31/2026, 2:18:43 AM",
+          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "ts": 1780211923000
+        },
+        {
+          "ts": 1780211925872,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "5/31/2026, 2:18:45 AM"
+        },
+        {
+          "ts": 1780211929409,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
+          "unpaid": true,
+          "moraleBonus": 0,
+          "loyaltyBonus": 0,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "5/31/2026, 2:18:49 AM"
+        },
+        {
+          "ts": 1780211930617,
+          "date": "5/31/2026, 2:18:50 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "5/31/2026, 2:19:22 AM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780211962000
+        },
+        {
+          "type": "turn",
+          "date": "5/31/2026, 2:19:29 AM",
+          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "ts": 1780211969000
+        },
+        {
+          "ts": 1780211971694,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "5/31/2026, 2:19:31 AM"
+        },
+        {
+          "ts": 1780211975310,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
+          "unpaid": true,
+          "moraleBonus": 0,
+          "loyaltyBonus": 0,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "5/31/2026, 2:19:35 AM"
+        },
+        {
+          "ts": 1780211976520,
+          "date": "5/31/2026, 2:19:36 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "5/31/2026, 2:20:07 AM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780212007000
+        },
+        {
+          "type": "turn",
+          "date": "5/31/2026, 2:20:14 AM",
+          "summary": "Morale set to 41%",
+          "ts": 1780212014000
+        },
+        {
+          "type": "turn",
+          "date": "5/31/2026, 2:20:14 AM",
+          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "ts": 1780212014000
+        },
+        {
+          "ts": 1780212017540,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "5/31/2026, 2:20:17 AM"
+        },
+        {
+          "ts": 1780212021252,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
+          "unpaid": true,
+          "moraleBonus": 0,
+          "loyaltyBonus": 0,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "5/31/2026, 2:20:21 AM"
+        },
+        {
+          "ts": 1780212022502,
+          "date": "5/31/2026, 2:20:22 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "5/31/2026, 2:20:52 AM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780212052000
+        },
+        {
+          "type": "turn",
+          "date": "5/31/2026, 2:20:59 AM",
+          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "ts": 1780212059000
+        },
+        {
+          "ts": 1780212062153,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "5/31/2026, 2:21:02 AM"
+        },
+        {
+          "ts": 1780212067362,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
+          "unpaid": true,
+          "moraleBonus": 0,
+          "loyaltyBonus": 0,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "5/31/2026, 2:21:07 AM"
+        },
+        {
+          "ts": 1780212068969,
+          "date": "5/31/2026, 2:21:08 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "5/31/2026, 2:21:33 AM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780212093000
+        },
+        {
+          "type": "turn",
+          "date": "5/31/2026, 2:21:40 AM",
+          "summary": "Trend: Morale→1% • Loyalty→0%",
+          "ts": 1780212100000
+        },
+        {
+          "ts": 1780212102146,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "5/31/2026, 2:21:42 AM"
+        },
+        {
+          "ts": 1780212105859,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
+          "unpaid": true,
+          "moraleBonus": 0,
+          "loyaltyBonus": 0,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "5/31/2026, 2:21:45 AM"
+        },
+        {
+          "ts": 1780212107130,
+          "date": "5/31/2026, 2:21:47 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "5/31/2026, 2:22:37 AM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780212157000
+        },
+        {
+          "type": "turn",
+          "date": "5/31/2026, 2:22:44 AM",
+          "summary": "Trend: Morale→0% • Loyalty→0%",
+          "ts": 1780212164000
+        },
+        {
+          "type": "turn",
+          "date": "5/31/2026, 2:22:45 AM",
+          "summary": "Morale set to 50%",
+          "ts": 1780212165000
+        },
+        {
+          "ts": 1780212165501,
+          "date": "5/31/2026, 2:22:45 AM",
+          "type": "siege",
+          "activity": "siege_resolved",
+          "summary": "Siege The Siege is Broken (defender) — turn 15.",
+          "siegeId": "siege-mpsx5ouu-kcnext",
+          "hexUuid": "Scene.EPrIyhHJQxy2REce.Drawing.RQ40Tai3G7s9opal",
+          "role": "defender",
+          "status": "lost_hold",
+          "narrativeBeats": [
+            {
+              "turn": 7,
+              "kind": "siege_declared",
+              "title": "Siege declared on Perspicacity Fortress",
+              "description": "The Unmoved Movers commits 60 OP to siege. Size: standard. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q. Bulwark discount: none.",
+              "payload": {
+                "bulwarkDiscount": false
+              }
+            },
+            {
+              "turn": 8,
+              "kind": "tick_drain",
+              "title": "Tick 8: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 52 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 3,
+                  "logistics": 3,
+                  "economy": 2,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 52
+              }
+            },
+            {
+              "turn": null,
+              "kind": "convene",
+              "title": "Breach Scene convened — layer 1",
+              "description": "GM convened the tactical breach on Outer Curtain Wall — Perspicacity."
+            },
+            {
+              "turn": 9,
+              "kind": "tick_drain",
+              "title": "Tick 9: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 44 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 3,
+                  "logistics": 3,
+                  "economy": 2,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 44
+              }
+            },
+            {
+              "turn": 10,
+              "kind": "tick_drain",
+              "title": "Tick 10: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 36 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 3,
+                  "logistics": 3,
+                  "economy": 2,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 36
+              }
+            },
+            {
+              "turn": 10,
+              "kind": "event_deck",
+              "title": "Event: Reinforcements Arrive",
+              "description": "A column arrives bearing supplies. — Buffer +20.",
+              "payload": {
+                "eventId": "reinforcements",
+                "deckId": "generic",
+                "gateRoll": {
+                  "fired": true,
+                  "roll": 15,
+                  "threshold": 14,
+                  "dice": [
+                    5,
+                    10
+                  ],
+                  "deckId": "generic"
+                },
+                "omenUsed": false
+              }
+            },
+            {
+              "turn": 11,
+              "kind": "tick_drain",
+              "title": "Tick 11: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 48 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 3,
+                  "logistics": 3,
+                  "economy": 2,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 48
+              }
+            },
+            {
+              "turn": 12,
+              "kind": "tick_drain",
+              "title": "Tick 12: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 40 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 3,
+                  "logistics": 3,
+                  "economy": 2,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 40
+              }
+            },
+            {
+              "turn": 12,
+              "kind": "event_deck",
+              "title": "Event: Bad Omen",
+              "description": "The augurs spoke ill. — random morale -1; defender Anytime -1.",
+              "payload": {
+                "eventId": "bad_omen",
+                "deckId": "generic",
+                "gateRoll": {
+                  "fired": true,
+                  "roll": 14,
+                  "threshold": 14,
+                  "dice": [
+                    7,
+                    7
+                  ],
+                  "deckId": "generic"
+                },
+                "omenUsed": false
+              }
+            },
+            {
+              "turn": 13,
+              "kind": "tick_drain",
+              "title": "Tick 13: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 32 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 4,
+                  "logistics": 4,
+                  "economy": 0,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 32
+              }
+            },
+            {
+              "turn": 14,
+              "kind": "tick_drain",
+              "title": "Tick 14: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 24 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 4,
+                  "logistics": 4,
+                  "economy": 0,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 24
+              }
+            },
+            {
+              "turn": 14,
+              "kind": "trojan_failed",
+              "title": "The ruse is discovered",
+              "description": "Trojan Horse FAILS (Sneak past the watch, Sabotage the defences). Forces halved (−0 OP), Buffer −24, attacker −2 morale (applied in Phase F).",
+              "payload": {
+                "results": [
+                  {
+                    "key": "sneak",
+                    "label": "Sneak past the watch",
+                    "cat": "Intrigue",
+                    "dc": 13,
+                    "auto": false,
+                    "base": 11,
+                    "bonus": 0,
+                    "total": 11,
+                    "pass": false
+                  },
+                  {
+                    "key": "sabotage",
+                    "label": "Sabotage the defences",
+                    "cat": "Faith",
+                    "dc": 12,
+                    "auto": false,
+                    "base": 9,
+                    "bonus": 0,
+                    "total": 9,
+                    "pass": false
+                  },
+                  {
+                    "key": "breach",
+                    "label": "Breach from within",
+                    "cat": "Violence",
+                    "dc": 12,
+                    "auto": false,
+                    "base": 15,
+                    "bonus": 0,
+                    "total": 15,
+                    "pass": true
+                  }
+                ],
+                "sinon": false,
+                "bufferShaved": 24,
+                "halved": 0
+              }
+            },
+            {
+              "turn": 14,
+              "kind": "trojan_failed",
+              "title": "The ruse is discovered",
+              "description": "Trojan Horse FAILS (Sabotage the defences, Breach from within). Forces halved (−0 OP), Buffer −0, attacker −2 morale (applied in Phase F).",
+              "payload": {
+                "results": [
+                  {
+                    "key": "sneak",
+                    "label": "Sneak past the watch",
+                    "cat": "Intrigue",
+                    "dc": 13,
+                    "auto": false,
+                    "base": 18,
+                    "bonus": 0,
+                    "total": 18,
+                    "pass": true
+                  },
+                  {
+                    "key": "sabotage",
+                    "label": "Sabotage the defences",
+                    "cat": "Faith",
+                    "dc": 12,
+                    "auto": false,
+                    "base": 6,
+                    "bonus": 0,
+                    "total": 6,
+                    "pass": false
+                  },
+                  {
+                    "key": "breach",
+                    "label": "Breach from within",
+                    "cat": "Violence",
+                    "dc": 12,
+                    "auto": false,
+                    "base": 5,
+                    "bonus": 0,
+                    "total": 5,
+                    "pass": false
+                  }
+                ],
+                "sinon": false,
+                "bufferShaved": 0,
+                "halved": 0
+              }
+            },
+            {
+              "turn": 15,
+              "kind": "tick_drain",
+              "title": "Tick 15: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 0 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 0,
+                  "logistics": 0,
+                  "economy": 0,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 0
+              }
+            },
+            {
+              "turn": 15,
+              "kind": "siege_hold",
+              "title": "Buffer exhausted — attacker breaks the siege",
+              "description": "Attacker's commitment depleted. Orderly withdrawal."
+            }
+          ]
+        },
+        {
+          "ts": 1780212165628,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "5/31/2026, 2:22:45 AM"
+        },
+        {
+          "ts": 1780212168825,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
+          "unpaid": true,
+          "moraleBonus": 0,
+          "loyaltyBonus": 0,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "5/31/2026, 2:22:48 AM"
+        },
+        {
+          "ts": 1780212170132,
+          "date": "5/31/2026, 2:22:50 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/1/2026, 12:49:57 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780336197000
+        },
+        {
+          "ts": 1780336209658,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/1/2026, 12:50:09 PM"
+        },
+        {
+          "ts": 1780336213140,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/1/2026, 12:50:13 PM"
+        },
+        {
+          "ts": 1780336214591,
+          "date": "6/1/2026, 12:50:14 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/1/2026, 12:53:50 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780336430000
+        },
+        {
+          "ts": 1780336441290,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/1/2026, 12:54:01 PM"
+        },
+        {
+          "ts": 1780336444317,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/1/2026, 12:54:04 PM"
+        },
+        {
+          "ts": 1780336445676,
+          "date": "6/1/2026, 12:54:05 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/2/2026, 11:49:25 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780462165000
+        },
+        {
+          "type": "turn",
+          "date": "6/2/2026, 11:49:36 PM",
+          "summary": "Morale set to 51%",
+          "ts": 1780462176000
+        },
+        {
+          "ts": 1780462176655,
+          "date": "6/2/2026, 11:49:36 PM",
+          "type": "siege",
+          "activity": "siege_resolved",
+          "summary": "Siege The Siege is Broken (defender) — turn 18.",
+          "siegeId": "siege-mpxl7b0g-t50g3e",
+          "hexUuid": "Scene.EPrIyhHJQxy2REce.Drawing.RQ40Tai3G7s9opal",
+          "role": "defender",
+          "status": "lost_hold",
+          "narrativeBeats": [
+            {
+              "turn": 17,
+              "kind": "siege_declared",
+              "title": "Siege declared on Perspicacity Fortress",
+              "description": "The Unmoved Movers commits 6 OP to siege. Size: standard. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q. Bulwark discount: none.",
+              "payload": {
+                "bulwarkDiscount": false
+              }
+            },
+            {
+              "turn": 18,
+              "kind": "tick_drain",
+              "title": "Tick 18: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 0 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 2,
+                  "logistics": 2,
+                  "economy": 2,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 0
+              }
+            },
+            {
+              "turn": 18,
+              "kind": "siege_hold",
+              "title": "Buffer exhausted — attacker breaks the siege",
+              "description": "Attacker's commitment depleted. Orderly withdrawal."
+            }
+          ]
+        },
+        {
+          "ts": 1780462177562,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/2/2026, 11:49:37 PM"
+        },
+        {
+          "ts": 1780462180345,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/2/2026, 11:49:40 PM"
+        },
+        {
+          "ts": 1780462181761,
+          "date": "6/2/2026, 11:49:41 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/2/2026, 11:52:41 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780462361000
+        },
+        {
+          "type": "turn",
+          "date": "6/2/2026, 11:52:51 PM",
+          "summary": "Morale set to 52%",
+          "ts": 1780462371000
+        },
+        {
+          "ts": 1780462371552,
+          "date": "6/2/2026, 11:52:51 PM",
+          "type": "siege",
+          "activity": "siege_resolved",
+          "summary": "Siege The Siege is Broken (defender) — turn 19.",
+          "siegeId": "siege-mpxlbhsn-rrkpy6",
+          "hexUuid": "Scene.EPrIyhHJQxy2REce.Drawing.RQ40Tai3G7s9opal",
+          "role": "defender",
+          "status": "lost_hold",
+          "narrativeBeats": [
+            {
+              "turn": 18,
+              "kind": "siege_declared",
+              "title": "Siege declared on Perspicacity Fortress",
+              "description": "The Unmoved Movers commits 0 OP to siege. Size: standard. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q. Bulwark discount: none.",
+              "payload": {
+                "bulwarkDiscount": false
+              }
+            },
+            {
+              "turn": 19,
+              "kind": "tick_drain",
+              "title": "Tick 19: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 0 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 0,
+                  "logistics": 0,
+                  "economy": 0,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 0
+              }
+            },
+            {
+              "turn": 19,
+              "kind": "siege_hold",
+              "title": "Buffer exhausted — attacker breaks the siege",
+              "description": "Attacker's commitment depleted. Orderly withdrawal."
+            }
+          ]
+        },
+        {
+          "ts": 1780462372599,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/2/2026, 11:52:52 PM"
+        },
+        {
+          "ts": 1780462375339,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/2/2026, 11:52:55 PM"
+        },
+        {
+          "ts": 1780462376547,
+          "date": "6/2/2026, 11:52:56 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/3/2026, 10:26:43 AM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780500403000
+        },
+        {
+          "ts": 1780500414832,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/3/2026, 10:26:54 AM"
+        },
+        {
+          "ts": 1780500417530,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/3/2026, 10:26:57 AM"
+        },
+        {
+          "ts": 1780500418880,
+          "date": "6/3/2026, 10:26:58 AM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/3/2026, 1:13:10 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780510390000
+        },
+        {
+          "ts": 1780510401456,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/3/2026, 1:13:21 PM"
+        },
+        {
+          "ts": 1780510404532,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/3/2026, 1:13:24 PM"
+        },
+        {
+          "ts": 1780510406008,
+          "date": "6/3/2026, 1:13:26 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/3/2026, 1:14:56 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780510496000
+        },
+        {
+          "ts": 1780510508687,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/3/2026, 1:15:08 PM"
+        },
+        {
+          "ts": 1780510511815,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/3/2026, 1:15:11 PM"
+        },
+        {
+          "ts": 1780510513200,
+          "date": "6/3/2026, 1:15:13 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/3/2026, 1:16:05 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780510565000
+        },
+        {
+          "type": "turn",
+          "date": "6/3/2026, 1:16:13 PM",
+          "summary": "Morale set to 49%",
+          "ts": 1780510573000
+        },
+        {
+          "type": "turn",
+          "date": "6/3/2026, 1:16:14 PM",
+          "summary": "Trend: Morale→1% • Loyalty→0%",
+          "ts": 1780510574000
+        },
+        {
+          "ts": 1780510576196,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/3/2026, 1:16:16 PM"
+        },
+        {
+          "ts": 1780510579360,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/3/2026, 1:16:19 PM"
+        },
+        {
+          "ts": 1780510580789,
+          "date": "6/3/2026, 1:16:20 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/3/2026, 1:17:55 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780510675000
+        },
+        {
+          "ts": 1780510686212,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/3/2026, 1:18:06 PM"
+        },
+        {
+          "ts": 1780510688880,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/3/2026, 1:18:08 PM"
+        },
+        {
+          "ts": 1780510690308,
+          "date": "6/3/2026, 1:18:10 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/3/2026, 1:19:10 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780510750000
+        },
+        {
+          "type": "turn",
+          "date": "6/3/2026, 1:19:19 PM",
+          "summary": "Morale set to 49%",
+          "ts": 1780510759000
+        },
+        {
+          "ts": 1780510760920,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/3/2026, 1:19:20 PM"
+        },
+        {
+          "ts": 1780510764126,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/3/2026, 1:19:24 PM"
+        },
+        {
+          "ts": 1780510765582,
+          "date": "6/3/2026, 1:19:25 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/3/2026, 2:06:28 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780513588000
+        },
+        {
+          "type": "turn",
+          "date": "6/3/2026, 2:06:39 PM",
+          "summary": "Morale set to 51%",
+          "ts": 1780513599000
+        },
+        {
+          "ts": 1780513599692,
+          "date": "6/3/2026, 2:06:39 PM",
+          "type": "siege",
+          "activity": "siege_resolved",
+          "summary": "Siege The Siege is Broken (defender) — turn 26.",
+          "siegeId": "siege-mpydwxfl-3axmg9",
+          "hexUuid": "Scene.EPrIyhHJQxy2REce.Drawing.RQ40Tai3G7s9opal",
+          "role": "defender",
+          "status": "lost_hold",
+          "narrativeBeats": [
+            {
+              "turn": 20,
+              "kind": "siege_declared",
+              "title": "Siege declared on Perspicacity Fortress",
+              "description": "The Unmoved Movers commits 60 OP to siege. Size: standard. Depot: Scene.EPrIyhHJQxy2REce.Drawing.8fAbe55kZfhkJ07Q. Bulwark discount: none.",
+              "payload": {
+                "bulwarkDiscount": false
+              }
+            },
+            {
+              "turn": 21,
+              "kind": "tick_drain",
+              "title": "Tick 21: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 52 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 3,
+                  "logistics": 3,
+                  "economy": 2,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 52
+              }
+            },
+            {
+              "turn": 21,
+              "kind": "bombard",
+              "title": "Bombardment",
+              "description": "The Unmoved Movers bombard Outer Curtain Wall — Perspicacity for 25 structure damage.",
+              "payload": {
+                "layerIdx": 0,
+                "dmg": 25
+              }
+            },
+            {
+              "turn": 22,
+              "kind": "tick_drain",
+              "title": "Tick 22: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 44 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 3,
+                  "logistics": 3,
+                  "economy": 2,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 44
+              }
+            },
+            {
+              "turn": 22,
+              "kind": "event_deck",
+              "title": "Event: Bad Omen",
+              "description": "The augurs spoke ill. — random morale -1; defender Anytime -1.",
+              "payload": {
+                "eventId": "bad_omen",
+                "deckId": "generic",
+                "gateRoll": {
+                  "fired": true,
+                  "roll": 20,
+                  "threshold": 14,
+                  "dice": [
+                    10,
+                    10
+                  ],
+                  "deckId": "generic"
+                },
+                "omenUsed": false
+              }
+            },
+            {
+              "turn": 22,
+              "kind": "bombard",
+              "title": "Bombardment",
+              "description": "The Unmoved Movers bombard Outer Curtain Wall — Perspicacity for 27 structure damage.",
+              "payload": {
+                "layerIdx": 0,
+                "dmg": 27
+              }
+            },
+            {
+              "turn": 23,
+              "kind": "tick_drain",
+              "title": "Tick 23: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 36 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 3,
+                  "logistics": 3,
+                  "economy": 2,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 36
+              }
+            },
+            {
+              "turn": 23,
+              "kind": "event_deck",
+              "title": "Event: Bad Omen",
+              "description": "The augurs spoke ill. — random morale -1; defender Anytime -1.",
+              "payload": {
+                "eventId": "bad_omen",
+                "deckId": "generic",
+                "gateRoll": {
+                  "fired": true,
+                  "roll": 18,
+                  "threshold": 14,
+                  "dice": [
+                    8,
+                    10
+                  ],
+                  "deckId": "generic"
+                },
+                "omenUsed": false
+              }
+            },
+            {
+              "turn": 23,
+              "kind": "bombard",
+              "title": "Bombardment",
+              "description": "The Unmoved Movers bombard Outer Curtain Wall — Perspicacity for 25 structure damage.",
+              "payload": {
+                "layerIdx": 0,
+                "dmg": 25
+              }
+            },
+            {
+              "turn": 24,
+              "kind": "tick_drain",
+              "title": "Tick 24: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 28 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 3,
+                  "logistics": 3,
+                  "economy": 2,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 28
+              }
+            },
+            {
+              "turn": 24,
+              "kind": "bombard",
+              "title": "Bombardment",
+              "description": "The Unmoved Movers bombard Outer Curtain Wall — Perspicacity for 29 structure damage.",
+              "payload": {
+                "layerIdx": 0,
+                "dmg": 29
+              }
+            },
+            {
+              "turn": 25,
+              "kind": "tick_drain",
+              "title": "Tick 25: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 20 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 3,
+                  "logistics": 3,
+                  "economy": 2,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 20
+              }
+            },
+            {
+              "turn": 25,
+              "kind": "event_deck",
+              "title": "Event: Prophet's Visitation",
+              "description": "An oracle delivers a word — welcome to one camp, bitter to the other. — attacker morale +1, defender −1.",
+              "payload": {
+                "eventId": "prophets_visitation",
+                "deckId": "generic",
+                "gateRoll": {
+                  "fired": true,
+                  "roll": 14,
+                  "threshold": 14,
+                  "dice": [
+                    6,
+                    8
+                  ],
+                  "deckId": "generic"
+                },
+                "omenUsed": false
+              }
+            },
+            {
+              "turn": 25,
+              "kind": "clash_maneuver",
+              "title": "Bombard — in the moment",
+              "description": "Fired during the clash (tactical tempo). Buffer −1.5 OP."
+            },
+            {
+              "turn": 25,
+              "kind": "bombard",
+              "title": "Bombardment",
+              "description": "The Unmoved Movers bombard Outer Curtain Wall — Perspicacity for 26 structure damage.",
+              "payload": {
+                "layerIdx": 0,
+                "dmg": 26
+              }
+            },
+            {
+              "turn": 25,
+              "kind": "garrison_culled",
+              "title": "The garrison falls with the wall",
+              "description": "Defenders caught in the collapse — −46, defender muster down to 20."
+            },
+            {
+              "turn": 25,
+              "kind": "convene",
+              "title": "Breach Scene convened — layer 1",
+              "description": "GM convened the tactical breach on Outer Curtain Wall — Perspicacity."
+            },
+            {
+              "turn": 25,
+              "kind": "garrison_culled",
+              "title": "The garrison falls with the wall",
+              "description": "Defenders caught in the collapse — −22, defender muster down to 20."
+            },
+            {
+              "turn": 25,
+              "kind": "garrison_culled",
+              "title": "The garrison falls with the wall",
+              "description": "Defenders caught in the collapse — −12, defender muster down to 8."
+            },
+            {
+              "turn": 25,
+              "kind": "garrison_culled",
+              "title": "The garrison falls with the wall",
+              "description": "Defenders caught in the collapse — −14, defender muster down to 6."
+            },
+            {
+              "turn": 25,
+              "kind": "garrison_culled",
+              "title": "The garrison falls with the wall",
+              "description": "Defenders caught in the collapse — −14, defender muster down to 6."
+            },
+            {
+              "turn": 25,
+              "kind": "champion_duel",
+              "title": "Evil Bad Rig bests Evan",
+              "description": "Duel rolls — Evan 13 vs Evil Bad Rig 18. Evan is wounded.",
+              "actorIds": [
+                "KX1SHfWr8mN6DOeq",
+                "UIKwMI31eQtRXSj0"
+              ],
+              "payload": {
+                "winnerId": "KX1SHfWr8mN6DOeq",
+                "loserId": "UIKwMI31eQtRXSj0",
+                "winnerSide": "defender",
+                "loserSide": "attacker",
+                "fate": "wounded",
+                "rolls": {
+                  "attacker": 13,
+                  "defender": 18
+                }
+              }
+            },
+            {
+              "turn": 25,
+              "kind": "champion_status",
+              "title": "Champion active → wounded",
+              "description": "",
+              "actorIds": [
+                "UIKwMI31eQtRXSj0"
+              ],
+              "payload": {
+                "prev": "active",
+                "next": "wounded",
+                "source": "champion_duel"
+              }
+            },
+            {
+              "turn": 26,
+              "kind": "tick_drain",
+              "title": "Tick 26: −8 OP from Buffer",
+              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 0 OP total.",
+              "payload": {
+                "drain": 8,
+                "deducted": {
+                  "violence": 5,
+                  "logistics": 0,
+                  "economy": 0,
+                  "softPower": 0,
+                  "diplomacy": 0,
+                  "faith": 0,
+                  "intrigue": 0
+                },
+                "remaining": 0
+              }
+            },
+            {
+              "turn": 26,
+              "kind": "siege_hold",
+              "title": "Buffer exhausted — attacker breaks the siege",
+              "description": "Attacker's commitment depleted. Orderly withdrawal."
+            },
+            {
+              "turn": 26,
+              "kind": "event_deck",
+              "title": "Event: Champion Wounded",
+              "description": "Misfortune strikes a champion — illness or a training mishap. — Evil Bad Rig wounded.",
+              "payload": {
+                "eventId": "champion_wounded",
+                "deckId": "generic",
+                "gateRoll": {
+                  "fired": true,
+                  "roll": 17,
+                  "threshold": 14,
+                  "dice": [
+                    8,
+                    9
+                  ],
+                  "deckId": "generic"
+                },
+                "omenUsed": false
+              }
+            },
+            {
+              "turn": 26,
+              "kind": "champion_recovered",
+              "title": "Evan recovers",
+              "description": "Wounded → active.",
+              "actorIds": [
+                "UIKwMI31eQtRXSj0"
+              ],
+              "payload": {
+                "side": "attacker"
+              }
+            },
+            {
+              "turn": 26,
+              "kind": "butchers_bill",
+              "title": "The butcher's bill",
+              "description": "Muster losses — attacker 0, defender 108 over 0 clashes."
+            }
+          ]
+        },
+        {
+          "ts": 1780513600459,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/3/2026, 2:06:40 PM"
+        },
+        {
+          "ts": 1780513603616,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/3/2026, 2:06:43 PM"
+        },
+        {
+          "ts": 1780513605198,
+          "date": "6/3/2026, 2:06:45 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/3/2026, 4:25:14 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780521914000
+        },
+        {
+          "type": "turn",
+          "date": "6/3/2026, 4:25:25 PM",
+          "summary": "Trend: Morale→0% • Loyalty→0%",
+          "ts": 1780521925000
+        },
+        {
+          "ts": 1780521926267,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/3/2026, 4:25:26 PM"
+        },
+        {
+          "ts": 1780521930023,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/3/2026, 4:25:30 PM"
+        },
+        {
+          "ts": 1780521931656,
+          "date": "6/3/2026, 4:25:31 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/3/2026, 4:32:33 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780522353000
+        },
+        {
+          "ts": 1780522365399,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/3/2026, 4:32:45 PM"
+        },
+        {
+          "ts": 1780522368418,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/3/2026, 4:32:48 PM"
+        },
+        {
+          "ts": 1780522369998,
+          "date": "6/3/2026, 4:32:49 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/3/2026, 4:36:13 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780522573000
+        },
+        {
+          "ts": 1780522583910,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/3/2026, 4:36:23 PM"
+        },
+        {
+          "ts": 1780522586914,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/3/2026, 4:36:26 PM"
+        },
+        {
+          "ts": 1780522588522,
+          "date": "6/3/2026, 4:36:28 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/3/2026, 4:40:35 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780522835000
+        },
+        {
+          "ts": 1780522847636,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/3/2026, 4:40:47 PM"
+        },
+        {
+          "ts": 1780522850417,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/3/2026, 4:40:50 PM"
+        },
+        {
+          "ts": 1780522851935,
+          "date": "6/3/2026, 4:40:51 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/4/2026, 1:58:36 PM",
+          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "ts": 1780599516000
+        },
+        {
+          "ts": 1780599528508,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/4/2026, 1:58:48 PM"
+        },
+        {
+          "ts": 1780599531323,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/4/2026, 1:58:51 PM"
+        },
+        {
+          "ts": 1780599532742,
+          "date": "6/4/2026, 1:58:52 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/9/2026, 8:53:09 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "ts": 1781056389000
+        },
+        {
+          "ts": 1781056403779,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/9/2026, 8:53:23 PM"
+        },
+        {
+          "ts": 1781056406238,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/9/2026, 8:53:26 PM"
+        },
+        {
+          "ts": 1781056407533,
+          "date": "6/9/2026, 8:53:27 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/15/2026, 4:32:15 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "ts": 1781559135000
+        },
+        {
+          "ts": 1781559147543,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/15/2026, 4:32:27 PM"
+        },
+        {
+          "ts": 1781559149311,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/15/2026, 4:32:29 PM"
+        },
+        {
+          "ts": 1781559150888,
+          "date": "6/15/2026, 4:32:30 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/15/2026, 5:23:05 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "ts": 1781562185000
+        },
+        {
+          "ts": 1781562196922,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/15/2026, 5:23:16 PM"
+        },
+        {
+          "ts": 1781562198816,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/15/2026, 5:23:18 PM"
+        },
+        {
+          "ts": 1781562200250,
+          "date": "6/15/2026, 5:23:20 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/15/2026, 6:43:53 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "ts": 1781567033000
+        },
+        {
+          "ts": 1781567045565,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/15/2026, 6:44:05 PM"
+        },
+        {
+          "ts": 1781567047474,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/15/2026, 6:44:07 PM"
+        },
+        {
+          "ts": 1781567048993,
+          "date": "6/15/2026, 6:44:08 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/15/2026, 6:47:17 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "ts": 1781567237000
+        },
+        {
+          "type": "turn",
+          "date": "6/15/2026, 6:47:27 PM",
+          "summary": "Trend: Morale→0% • Loyalty→0%",
+          "ts": 1781567247000
+        },
+        {
+          "ts": 1781567249273,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/15/2026, 6:47:29 PM"
+        },
+        {
+          "ts": 1781567251193,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/15/2026, 6:47:31 PM"
+        },
+        {
+          "ts": 1781567252668,
+          "date": "6/15/2026, 6:47:32 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/15/2026, 6:56:19 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "ts": 1781567779000
+        },
+        {
+          "ts": 1781567791362,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/15/2026, 6:56:31 PM"
+        },
+        {
+          "ts": 1781567793147,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/15/2026, 6:56:33 PM"
+        },
+        {
+          "ts": 1781567794659,
+          "date": "6/15/2026, 6:56:34 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/15/2026, 7:12:59 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "ts": 1781568779000
+        },
+        {
+          "ts": 1781568790867,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/15/2026, 7:13:10 PM"
+        },
+        {
+          "ts": 1781568792732,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/15/2026, 7:13:12 PM"
+        },
+        {
+          "ts": 1781568794258,
+          "date": "6/15/2026, 7:13:14 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/15/2026, 7:45:41 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "ts": 1781570741000
+        },
+        {
+          "ts": 1781570753496,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/15/2026, 7:45:53 PM"
+        },
+        {
+          "ts": 1781570755434,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/15/2026, 7:45:55 PM"
+        },
+        {
+          "ts": 1781570756954,
+          "date": "6/15/2026, 7:45:56 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/15/2026, 8:24:53 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "ts": 1781573093000
+        },
+        {
+          "type": "turn",
+          "date": "6/15/2026, 8:25:02 PM",
+          "summary": "Trend: Morale→0% • Loyalty→0%",
+          "ts": 1781573102000
+        },
+        {
+          "ts": 1781573105346,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/15/2026, 8:25:05 PM"
+        },
+        {
+          "ts": 1781573107450,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/15/2026, 8:25:07 PM"
+        },
+        {
+          "ts": 1781573109080,
+          "date": "6/15/2026, 8:25:09 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/15/2026, 8:27:09 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "ts": 1781573229000
+        },
+        {
+          "ts": 1781573240298,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/15/2026, 8:27:20 PM"
+        },
+        {
+          "ts": 1781573242124,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/15/2026, 8:27:22 PM"
+        },
+        {
+          "ts": 1781573243570,
+          "date": "6/15/2026, 8:27:23 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/15/2026, 10:27:08 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "ts": 1781580428000
+        },
+        {
+          "ts": 1781580440409,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/15/2026, 10:27:20 PM"
+        },
+        {
+          "ts": 1781580442301,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/15/2026, 10:27:22 PM"
+        },
+        {
+          "ts": 1781580443876,
+          "date": "6/15/2026, 10:27:23 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/15/2026, 10:35:02 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "ts": 1781580902000
+        },
+        {
+          "type": "turn",
+          "date": "6/15/2026, 10:35:12 PM",
+          "summary": "Trend: Morale→0% • Loyalty→0%",
+          "ts": 1781580912000
+        },
+        {
+          "ts": 1781580914264,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/15/2026, 10:35:14 PM"
+        },
+        {
+          "ts": 1781580916170,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/15/2026, 10:35:16 PM"
+        },
+        {
+          "ts": 1781580917607,
+          "date": "6/15/2026, 10:35:17 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/16/2026, 2:11:56 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "ts": 1781637116000
+        },
+        {
+          "ts": 1781637128657,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/16/2026, 2:12:08 PM"
+        },
+        {
+          "ts": 1781637130506,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/16/2026, 2:12:10 PM"
+        },
+        {
+          "ts": 1781637132061,
+          "date": "6/16/2026, 2:12:12 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "type": "commit",
+          "date": "6/17/2026, 5:45:19 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "ts": 1781736319000
+        },
+        {
+          "ts": 1781736330656,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/17/2026, 5:45:30 PM"
+        },
+        {
+          "ts": 1781736332487,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/17/2026, 5:45:32 PM"
+        },
+        {
+          "ts": 1781736334007,
+          "date": "6/17/2026, 5:45:34 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1781835973929,
+          "type": "scenario",
+          "scenario": "infiltration",
+          "summary": "OP nonlethal -2 (Infiltration)",
+          "date": "6/18/2026, 9:26:13 PM"
+        },
+        {
+          "ts": 1781835977740,
+          "date": "6/18/2026, 9:26:17 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "def",
+          "opponent": "Funkie Bunch",
+          "summary": "Infiltration: Funkie Bunch vs Evil Bad Faction — 23 vs 9 • Alarm 0/5 (quiet) • QUIET"
+        },
+        {
+          "type": "commit",
+          "date": "6/18/2026, 9:47:39 PM",
+          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "ts": 1781837259000
+        },
+        {
+          "ts": 1781837271787,
+          "type": "buildUnits",
+          "summary": "Build Units +1 (from 3 Materials pips)",
+          "date": "6/18/2026, 9:47:51 PM"
+        },
+        {
+          "ts": 1781837273688,
+          "type": "turn",
+          "activity": "garrison_upkeep",
+          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "unpaid": false,
+          "moraleBonus": 1,
+          "loyaltyBonus": 1,
+          "holdingsNeglected": 0,
+          "holdingsAbandonedHexes": 0,
+          "holdingsAbandonedUnits": 0,
+          "date": "6/18/2026, 9:47:53 PM"
+        },
+        {
+          "ts": 1781837275271,
+          "date": "6/18/2026, 9:47:55 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1782075162861,
+          "date": "6/21/2026, 3:52:42 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "vilanis oscaris",
+          "outcome": "loss",
+          "summary": "assault vs Evil Bad Fortress — Normal; A 6 + 13 vs D 4 + 10 → A 19 vs D 14 (Δ +5) • OP−(Att) violence:51, intrigue:10; Mans(Att): command_overdrive, tactical_overwatch, flank_attack; Mans(Def): —; Support: Circuitous Roots, Shadow Rats, (The Mūs Umbral), The Yips",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 19,
+          "defenderTotal": 14,
+          "margin": 5,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 13,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "7Iy3Fzj9ZYHnY6vQ",
+            "LCjOiLBJcMf1GGGW",
+            "66AuPwIizDNaM25P"
+          ],
+          "supportFactionNames": [
+            "Circuitous Roots",
+            "Shadow Rats, (The Mūs Umbral)",
+            "The Yips"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Evil Bad Fortress"
+        },
+        {
+          "ts": 1782076799281,
+          "date": "6/21/2026, 4:19:59 PM",
+          "type": "raid",
+          "side": "def",
+          "opponent": "vilanis oscaris",
+          "outcome": "loss",
+          "summary": "assault vs Evil Bad Fortress — Normal; A 17 + 13 vs D 3 + 10 → A 30 vs D 13 (Δ +17) • OP−(Att) violence:51, intrigue:10; Mans(Att): command_overdrive, tactical_overwatch, flank_attack; Mans(Def): —; Support: Circuitous Roots, Shadow Rats, (The Mūs Umbral), The Yips",
+          "activityKey": "assault",
+          "difficulty": "normal",
+          "attackerTotal": 30,
+          "defenderTotal": 13,
+          "margin": 17,
+          "contested": true,
+          "contestedKey": "violence",
+          "attackerBonus": 13,
+          "defenderBonus": 10,
+          "supportFactionIds": [
+            "7Iy3Fzj9ZYHnY6vQ",
+            "LCjOiLBJcMf1GGGW",
+            "66AuPwIizDNaM25P"
+          ],
+          "supportFactionNames": [
+            "Circuitous Roots",
+            "Shadow Rats, (The Mūs Umbral)",
+            "The Yips"
+          ],
+          "targetType": "hex",
+          "targetUuid": "Scene.PCLBxi4TNR5rfDaE.Drawing.S28x85oArB19cM9w",
+          "targetName": "Evil Bad Fortress"
+        },
+        {
+          "ts": 1782078190311,
+          "type": "scenario",
+          "scenario": "infiltration",
+          "summary": "OP nonlethal -2 (Infiltration)",
+          "date": "6/21/2026, 4:43:10 PM"
+        },
+        {
+          "ts": 1782078194043,
+          "date": "6/21/2026, 4:43:14 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "def",
+          "opponent": "vilanis oscaris",
+          "summary": "Infiltration: vilanis oscaris vs Evil Bad Faction — 46 vs 24 • Alarm 0/5 (quiet) • QUIET"
+        },
+        {
+          "ts": 1782078379729,
+          "type": "scenario",
+          "scenario": "infiltration",
+          "summary": "OP nonlethal -2 (Infiltration)",
+          "date": "6/21/2026, 4:46:19 PM"
+        },
+        {
+          "ts": 1782078383355,
+          "date": "6/21/2026, 4:46:23 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "def",
+          "opponent": "vilanis oscaris",
+          "summary": "Infiltration: vilanis oscaris vs Evil Bad Faction — 51 vs 24 • Alarm 0/5 (quiet) • QUIET"
+        },
+        {
+          "ts": 1782078541123,
+          "type": "scenario",
+          "scenario": "infiltration",
+          "summary": "OP nonlethal -20 (Infiltration)",
+          "date": "6/21/2026, 4:49:01 PM"
+        },
+        {
+          "ts": 1782078544791,
+          "date": "6/21/2026, 4:49:04 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "def",
+          "opponent": "vilanis oscaris",
+          "summary": "Infiltration: vilanis oscaris vs Evil Bad Faction — 41 vs 39 • Alarm 0/5 (quiet) • QUIET"
+        },
+        {
+          "ts": 1782078892687,
+          "type": "scenario",
+          "scenario": "infiltration",
+          "summary": "OP nonlethal -2 (Infiltration)",
+          "date": "6/21/2026, 4:54:52 PM"
+        },
+        {
+          "ts": 1782078896363,
+          "date": "6/21/2026, 4:54:56 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "def",
+          "opponent": "vilanis oscaris",
+          "summary": "Infiltration: vilanis oscaris vs Evil Bad Faction — 43 vs 19 • Alarm 0/5 (quiet) • QUIET"
+        },
+        {
+          "ts": 1782078927596,
+          "type": "scenario",
+          "scenario": "infiltration",
+          "summary": "OP nonlethal -2 (Infiltration)",
+          "date": "6/21/2026, 4:55:27 PM"
+        },
+        {
+          "ts": 1782078931206,
+          "date": "6/21/2026, 4:55:31 PM",
+          "type": "scenario",
+          "scenario": "infiltration",
+          "side": "def",
+          "opponent": "vilanis oscaris",
+          "summary": "Infiltration: vilanis oscaris vs Evil Bad Faction — 44 vs 22 • Alarm 0/5 (quiet) • QUIET"
+        },
+        {
+          "ts": 1783979397489,
+          "date": "7/13/2026, 4:49:57 PM",
+          "type": "turn",
+          "activity": "process_requests",
+          "summary": "No queued repair requests to process."
+        },
+        {
+          "ts": 1784067182911,
+          "type": "scenario",
+          "scenario": "courtly",
+          "summary": "Courtly Intrigue: diplomacy -2",
+          "date": "7/14/2026, 5:13:02 PM"
+        },
+        {
+          "ts": 1784067186499,
+          "date": "7/14/2026, 5:13:06 PM",
+          "type": "scenario",
+          "scenario": "courtly",
+          "side": "def",
+          "opponent": "The Unmoved Movers",
+          "summary": "Courtly: The Unmoved Movers vs Evil Bad Faction — 24 vs 9 • Influence 10/2 • ONGOING"
+        },
+        {
+          "ts": 1784082502222,
+          "type": "scenario",
+          "scenario": "courtly",
+          "summary": "Courtly Intrigue: diplomacy -2",
+          "date": "7/14/2026, 9:28:22 PM"
+        },
+        {
+          "ts": 1784082505783,
+          "date": "7/14/2026, 9:28:25 PM",
+          "type": "scenario",
+          "scenario": "courtly",
+          "side": "def",
+          "opponent": "The Unmoved Movers",
+          "summary": "Courtly: The Unmoved Movers vs Evil Bad Faction — 20 vs 20 • Influence 10/10 • ONGOING"
+        }
+      ],
+      "doctrineSeedMeta": {
+        "packageKey": "standard",
+        "version": "1.0.0",
+        "inProgress": false,
+        "applied": true,
+        "source": "applyStartingPackage",
+        "updatedTs": 1779125351191
+      },
+      "progression": {
+        "victory": {
+          "badgeKey": "ascendant",
+          "tierFromBadge": 4,
+          "requiredBadgeForNextTier": "ascendant",
+          "meetsNextTier": true,
+          "updatedTs": 1783979391885
+        },
+        "stability": {
+          "stableTurns": 32,
+          "maxOverextDuringSpan": 3,
+          "lastApplyTs": 1783979391677,
+          "lastUnpaidTs": 1780336438176
+        }
+      },
+      "tier": 3,
+      "bannerColor": "#c8cc28",
+      "relations": {
+        "Zsn8DO6cpTuHHexS": "at_war",
+        "tPLdifKdXl1jxo9w": "at_war",
+        "H8sSXuuoTZIJKCXP": "at_war"
+      },
+      "championRoster": [
+        "KX1SHfWr8mN6DOeq",
+        "4AEgpwYKEH3QHP3R",
+        "NP0kpBvtERMeTqPo"
+      ],
+      "logistics": {
+        "demand": 1,
+        "capacity": 11,
+        "ratio": 0.091,
+        "band": "stable",
+        "updatedTs": 1783979386483,
+        "breakdown": {
+          "demand": {
+            "baseDemand": 1,
+            "integDemand": 0,
+            "distanceDemand": 0,
+            "specialDemand": 0,
+            "rigDemand": 0,
+            "sprawlDemand": 0
+          },
+          "capacity": {
+            "opCapacity": 11,
+            "tradeCapacity": 0,
+            "integrationCapacity": 0,
+            "infraCapacity": 0,
+            "rigCapacity": 0
+          },
+          "counts": {
+            "totalHexes": 1,
+            "sprawlExcess": 0,
+            "shortIntegCount": 0,
+            "occupationCount": 0,
+            "fullIntegCount": 0,
+            "cityCount": 0,
+            "specialCount": 0,
+            "infraDepotCount": 0,
+            "infraMajorPortCount": 0,
+            "infraRoadNetCount": 0,
+            "activeRigCount": 0,
+            "logisticsRigCount": 0,
+            "tradeRouteCount": 0,
+            "distSteps": 0,
+            "infraSupplyLineCount": 0
+          }
+        }
+      },
+      "post": {
+        "pending": null
+      },
+      "turn": {
+        "pending": null
+      },
+      "pressure": {
+        "overextensionBand": 0,
+        "unpaidUpkeep": false,
+        "risk": "low",
+        "logisticsBand": "stable",
+        "lastUpkeepTs": 1781837273688,
+        "updatedTs": 1783979391671,
+        "source": "turn-driver.logistics + garrison_upkeep.warLogs"
+      },
+      "bonuses": {
+        "nextTurn": {
+          "opGainPct": -20,
+          "defenseDC": -2
+        }
+      },
+      "buildUnits": 45,
+      "defendingSieges": [
+        "Scene.EPrIyhHJQxy2REce.Drawing.RQ40Tai3G7s9opal"
+      ],
+      "activeSieges": [],
+      "unlocks": {
+        "maneuvers": {
+          "patch_the_breach": {
+            "unlocked": true,
+            "via": [
+              "raid-test"
+            ],
+            "ts": 1782065100057
+          },
+          "defensive_entrenchment": {
+            "unlocked": true,
+            "via": [
+              "raid-test"
+            ],
+            "ts": 1782065100057
+          },
+          "last_stand_banner": {
+            "unlocked": true,
+            "via": [
+              "raid-test"
+            ],
+            "ts": 1782065100057
+          },
+          "quantum_shield": {
+            "unlocked": true,
+            "via": [
+              "raid-test"
+            ],
+            "ts": 1782065100057
+          },
+          "defender_s_reversal": {
+            "unlocked": true,
+            "via": [
+              "raid-test"
+            ],
+            "ts": 1782065100057
+          },
+          "smoke_and_mirrors": {
+            "unlocked": true,
+            "via": [
+              "raid-test"
+            ],
+            "ts": 1782065100057
+          },
+          "courtly_stage_distraction": {
+            "unlocked": true,
+            "via": [
+              "raid-test"
+            ],
+            "ts": 1782065100057
+          },
+          "courtly_quote_old_law": {
+            "unlocked": true,
+            "via": [
+              "raid-test"
+            ],
+            "ts": 1782065100057
+          },
+          "suppressive_fire": {
+            "unlocked": true,
+            "via": [
+              "raid-test"
+            ],
+            "ts": 1782065100057
+          },
+          "rally_the_line": {
+            "unlocked": true,
+            "via": [
+              "raid-test"
+            ],
+            "ts": 1782065100057
+          }
+        }
+      },
+      "pools": {
+        "intrigue": 0
+      }
+    },
+    "core": {
+      "sheetClass": "bbttcc-factions.BBTTCCFactionSheet"
+    },
+    "bbttcc-raid": {
+      "raidSession": {
+        "rev": 58,
+        "ts": 1779826392488,
+        "attackerId": "oK7VitQikQ6FN3PI",
+        "supportFactionIds": [],
+        "activityKey": "assault",
+        "difficulty": "normal",
+        "targetType": "hex",
+        "targetName": "—",
+        "targetUuid": "",
+        "defenderId": "",
+        "rigId": "",
+        "creatureId": "",
+        "actorUuid": "",
+        "sceneUuid": "",
+        "tokenUuid": "",
+        "rounds": [],
+        "logWar": false,
+        "includeDefender": true,
+        "by": "bytUGWIOqq9eT7Or"
+      },
+      "musterPool": {
+        "size": 26,
+        "seededAt": 1781140699971,
+        "raisedTotal": 0,
+        "lostTotal": 0,
+        "updatedTurn": 47,
+        "updatedAt": 1783979391711
+      },
+      "infilState": {
+        "attackerId": "X0x1UMviPeviD50c",
+        "defenderId": "oK7VitQikQ6FN3PI",
+        "label": "Infiltration",
+        "difficulty": 15,
+        "alarm": 0,
+        "alarmMax": 5,
+        "progress": 5,
+        "progressMax": 5,
+        "messyThreshold": 3,
+        "round": 5,
+        "outcome": "clean",
+        "flipResolution": null,
+        "pendingDiscoveries": [],
+        "history": [
+          {
+            "round": 1,
+            "atkSpend": 2,
+            "defSpend": 2,
+            "atkTotal": 46,
+            "defTotal": 24,
+            "margin": 22,
+            "result": "attacker",
+            "alarmBefore": 0,
+            "alarmAfter": 0,
+            "band": "quiet",
+            "note": ""
+          },
+          {
+            "round": 2,
+            "atkSpend": 2,
+            "defSpend": 2,
+            "atkTotal": 51,
+            "defTotal": 24,
+            "margin": 27,
+            "result": "attacker",
+            "alarmBefore": 0,
+            "alarmAfter": 0,
+            "band": "quiet",
+            "note": ""
+          },
+          {
+            "round": 3,
+            "atkSpend": 2,
+            "defSpend": 20,
+            "atkTotal": 41,
+            "defTotal": 39,
+            "margin": 2,
+            "result": "attacker",
+            "alarmBefore": 0,
+            "alarmAfter": 0,
+            "band": "quiet",
+            "note": ""
+          },
+          {
+            "round": 4,
+            "atkSpend": 2,
+            "defSpend": 2,
+            "atkTotal": 43,
+            "defTotal": 19,
+            "margin": 24,
+            "result": "attacker",
+            "alarmBefore": 0,
+            "alarmAfter": 0,
+            "band": "quiet",
+            "note": ""
+          },
+          {
+            "round": 5,
+            "atkSpend": 2,
+            "defSpend": 2,
+            "atkTotal": 44,
+            "defTotal": 22,
+            "margin": 22,
+            "result": "attacker",
+            "alarmBefore": 0,
+            "alarmAfter": 0,
+            "band": "quiet",
+            "note": ""
+          }
+        ],
+        "_flashbackUsedThisRound": false
+      }
+    },
+    "fourththing": {
+      "kind": "faction"
+    },
+    "bbttcc-character-options": {
+      "nativeLinks": {
+        "subclassName": "",
+        "subclassUuid": "",
+        "subclassApplied": false,
+        "className": "",
+        "classUuid": "",
+        "classApplied": false
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1784177534402,
+    "modifiedTime": 1784177534402,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!oK7VitQikQ6FN3PI"
+}

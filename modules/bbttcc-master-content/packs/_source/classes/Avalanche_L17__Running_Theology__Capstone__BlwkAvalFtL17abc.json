@@ -1,0 +1,81 @@
+{
+  "name": "Avalanche L17: Running Theology (Capstone)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_anchor.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>Movement is now a doctrine of the body.</em></p><p>While you have <strong>at least 1 Frame Die</strong> in your pool:</p><ul><li><p>You are <strong>immune</strong> to forced movement, the <strong>staggered</strong> condition, and any effect that would stun, paralyze, or render you unconscious without first reducing your integrity to 0.</p></li><li><p>At the start of your turn you may spend any number of Frame Dice. For each one spent, roll the die and add the result to your movement speed (in feet) for that turn only.</p></li><li><p>You may pass through the space occupied by any creature or unattended object softer than reinforced stone (GM call) without stopping. You do not provoke reactions while doing so.</p></li></ul>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "bulwark_avalanche_l17_running_theology",
+    "requirements": "Path of the Avalanche, Bulwark Initiation 17",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "subclassfeat",
+      "classIdentifier": "bulwark",
+      "subclassIdentifier": "bbttcc-bulwark-avalanche",
+      "subclassLevel": 17,
+      "version": "1.0.0",
+      "date": "2026-04-23",
+      "rfiNative": true,
+      "capstone": true
+    },
+    "fourththing": {
+      "grants": {
+        "conditionImmunities": [
+          "staggered"
+        ]
+      },
+      "triggers": [
+        {
+          "event": "on-turn-start",
+          "effect": {
+            "kind": "chat-prompt",
+            "args": {
+              "body": "At the start of your turn you may spend any number of Frame Dice"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "folder": "agkQNnsVjul6ZPYs",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777003646557,
+    "modifiedTime": 1781116123495,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "BlwkAvalFtL17abc",
+  "sort": 0,
+  "_key": "!items!BlwkAvalFtL17abc"
+}

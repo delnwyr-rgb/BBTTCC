@@ -1,0 +1,106 @@
+{
+  "name": "Motorspeeder Frame",
+  "type": "gear",
+  "img": "icons/environment/settlement/wagon-black.webp",
+  "folder": "0JDB983lzPepXXNe",
+  "system": {
+    "slot": "misc",
+    "tags": [],
+    "category": "gear",
+    "source": "",
+    "description": {
+      "value": "<p>The compromise: hover-bike with a saddlebag and a pillion that fits a body bag if folded carefully. Faster than a landspeeder, less dignified than a bike.</p><p><b>Frame · Personal · Mobile · Pilot + 1 passenger</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "rig-frame"
+      },
+      "rigFrame": {
+        "bracket": "personal",
+        "baseIntegrity": 9,
+        "tierStep": 3,
+        "mobilityAllowed": [
+          "mobile"
+        ],
+        "slots": {
+          "weapon": 1,
+          "system": 1,
+          "output": 0
+        },
+        "capacity": {
+          "pilot": {
+            "min": 1,
+            "max": 1
+          },
+          "gunner": {
+            "min": 0,
+            "max": 0
+          },
+          "engineer": {
+            "min": 0,
+            "max": 0
+          },
+          "crew": {
+            "min": 0,
+            "max": 1
+          }
+        },
+        "actions": {
+          "pilot": [
+            "steer",
+            "evasive",
+            "swerve"
+          ],
+          "gunner": [],
+          "engineer": [],
+          "crew": [
+            "brace",
+            "hold-on"
+          ]
+        },
+        "travel": {
+          "speed": 7,
+          "range": 10
+        },
+        "visualFrame": "open-corners"
+      },
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool × 0.60",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    }
+  },
+  "_id": "CT7l9DVzYqO4nyAF",
+  "effects": [],
+  "sort": 1500000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778961742348,
+    "modifiedTime": 1778963271955,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!CT7l9DVzYqO4nyAF"
+}

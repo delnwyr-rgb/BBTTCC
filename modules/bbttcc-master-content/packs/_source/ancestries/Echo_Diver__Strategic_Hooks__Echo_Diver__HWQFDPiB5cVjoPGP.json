@@ -1,0 +1,141 @@
+{
+  "name": "Echo-Diver: Strategic Hooks (Echo-Diver)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_portal_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“Your faction always has a hunch about what the world is about to try.”</em></p><p><strong>OP Edge.</strong> Your faction leans slightly toward Soft Power and Intrigue OP lines thanks to your intuitive feel for weird situations.</p><p><strong>Echo-Tuned.</strong> You make Spark/Echo encounters a little safer and more profitable, as expressed via Bad Eden flags and world logic.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "echo-diver-strategic-hooks",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Echo-Diver",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Echo-Diver: Strategic Hooks (Bad Eden OP Flags)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bomb_1.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.op.softPower.baseBonus",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.op.intrigue.baseBonus",
+            "value": 1,
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "<p>Data-only for your OP / encounter engines: Echo-Diver factions lean slightly toward Soft Power and Intrigue OP. Spark encounter behavior is handled in your world logic.</p>",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116073879,
+        "modifiedTime": 1781116073879
+      },
+      "_id": "09BMC7z75QxIZNf3",
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!HWQFDPiB5cVjoPGP.09BMC7z75QxIZNf3"
+    }
+  ],
+  "folder": "hm7tk5c30vdo3q91",
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryHooks",
+      "opEffects": {
+        "softPower": 1,
+        "intrigue": 1
+      },
+      "sparkEncounterEdge": 1,
+      "version": "1.0.0"
+    },
+    "dnd5e": {},
+    "bbttcc-character-options": {
+      "option": {}
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.9MRmtWarhrVi7RVu",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1775004101594,
+    "modifiedTime": 1781116073878,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "HWQFDPiB5cVjoPGP",
+  "sort": 400000,
+  "_key": "!items!HWQFDPiB5cVjoPGP"
+}

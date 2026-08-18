@@ -1,0 +1,125 @@
+{
+  "name": "Error Budget Accounting",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_decomm_book_9.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Error Budget Accounting.</strong> You track how much reality can afford to wobble before it falls down.</p><ul><li>When you lead or advise a Tikkun-related experiment, ritual, or field test, you can declare an <em>error budget</em>.</li><li>Once per such operation, if the result would <strong>increase Darkness or corruption</strong> in a hex or Spark, the GM may reduce that increase by 1 (to a minimum determined by your campaign rules) as your mitigation and safety procedures kick in.</li><li>You cannot use this to erase catastrophic failures, but you can keep “oops” from becoming “we broke it forever.”</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "error-budget-accounting",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 12
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (12th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Error Budget Accounting (Darkness Mitigation)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_attack_3.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984387,
+        "modifiedTime": 1777346199363
+      },
+      "_id": "9bYOAvEzQMhEknX3",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.errorBudgetAccounting",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.opHooks.tikkunErrorBudgetEvents",
+            "value": 1,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!ee9slWH77dKvdyXi.9bYOAvEzQMhEknX3"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "errorBudgetAccounting": true
+      },
+      "opHooks": {
+        "tikkunErrorBudgetEvents": 1
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984387,
+    "modifiedTime": 1781116172743,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "ee9slWH77dKvdyXi",
+  "sort": 700000,
+  "_key": "!items!ee9slWH77dKvdyXi"
+}

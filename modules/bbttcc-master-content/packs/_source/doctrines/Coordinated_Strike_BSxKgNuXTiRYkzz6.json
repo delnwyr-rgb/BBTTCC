@@ -1,0 +1,63 @@
+{
+  "name": "Coordinated Strike",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Parade-ground precision in a place with no parade and not much ground left. I'm a little proud, honestly.</p><p><b>On Success: 7 damage to enemy tokens; allies gain Press the Advantage; faction morale +1.</b></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "coordinated_strike",
+      "meta": {
+        "tier": 2,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "violence",
+        "layer": "cross-layer",
+        "costBand": "medium",
+        "raidTypes": [
+          "violence"
+        ],
+        "fireMode": "post-commit",
+        "opCosts": {
+          "violence": 3,
+          "softpower": 1
+        },
+        "authoredSprint": 2
+      },
+      "effects": {
+        "text": "On success: enemy tokens take 7 damage, allied tokens gain 'Press the Advantage', faction morale +1."
+      }
+    }
+  },
+  "_id": "BSxKgNuXTiRYkzz6",
+  "effects": [],
+  "folder": "SziFuLdTIX4Y2Rav",
+  "sort": 103125,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778964846638,
+    "modifiedTime": 1780163523240,
+    "lastModifiedBy": "6ut7GT8pCAhpdWjS",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!BSxKgNuXTiRYkzz6"
+}

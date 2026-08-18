@@ -1,0 +1,133 @@
+{
+  "name": "Heartforge of the Great Work",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_heart_metal_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Heartforge of the Great Work.</strong> You have become less of a person and more of a walking repair script for reality.</p><ul><li>Once per <strong>strategic turn</strong>, when your faction undertakes a major operation centered on <strong>repair, healing, cleansing, or reconstruction</strong> (hex restoration, rebuilding a bastion, reclaiming a corrupted site, mending a shattered community), you may invoke this feature.</li><li>The operation automatically <strong>avoids catastrophic failure</strong>. A failure becomes a partial success; a partial success becomes a full success; or a full success gains an additional <strong>restorative rider</strong> (such as an extra point of Darkness reduction, Loyalty gain, or hex status improvement), at the GM’s discretion.</li><li>On the world scale, your presence gradually leaves regions you work in with a baseline bias toward <strong>stability and healing</strong>. People start saying things like, “If the Soul-Smith sets up shop here, this place is going to make it.”</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "heartforge-of-the-great-work",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 20
+    },
+    "properties": [],
+    "requirements": "Soul-Smith (20th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Heartforge of the Great Work (Capstone)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_connected_2.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459996551,
+        "modifiedTime": 1777346198531
+      },
+      "_id": "OwqMqwCf0sgF9riC",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.soulSmith.heartforgeOfTheGreatWork",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.capstone",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.opHooks.repairAutoUpliftPerTurn",
+            "value": 1,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!Kf2znx20cboaME3H.OwqMqwCf0sgF9riC"
+    }
+  ],
+  "folder": "qdqMhHfZdVgUs1gN",
+  "flags": {
+    "bbttcc": {
+      "soulSmith": {
+        "heartforgeOfTheGreatWork": true
+      },
+      "capstone": true,
+      "opHooks": {
+        "repairAutoUpliftPerTurn": 1
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459996551,
+    "modifiedTime": 1781116139889,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "Kf2znx20cboaME3H",
+  "sort": 153125,
+  "_key": "!items!Kf2znx20cboaME3H"
+}

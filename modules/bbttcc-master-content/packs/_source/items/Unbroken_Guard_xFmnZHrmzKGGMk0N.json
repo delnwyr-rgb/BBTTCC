@@ -1,0 +1,65 @@
+{
+  "_id": "xFmnZHrmzKGGMk0N",
+  "name": "Unbroken Guard",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_unbroken_guard.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Core Feats v1",
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Unbroken Guard</h2><p><em>You stand where others would rather not.</em></p><hr /><h3>Rules</h3><p>When a creature within 1 square of you targets an ally with an attack, you may use your reaction to impose roll 3d10 keep lowest 2 on that attack and reduce the attacker’s movement to 0 until the end of its current turn.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_unbroken_guard",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-core-v1",
+      "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+    }
+  },
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 1800000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1782164185981,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!xFmnZHrmzKGGMk0N"
+}

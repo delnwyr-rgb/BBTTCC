@@ -1,0 +1,65 @@
+{
+  "_id": "x01PSc3ItEYzWphX",
+  "name": "Metaphor Apostle: Myth Hook",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_faery.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"1465\" data-end=\"1478\"><em data-start=\"1465\" data-end=\"1478\">(3rd Level)</em></p><p data-start=\"1480\" data-end=\"1523\">You establish a symbolic hook in the scene.</p><p data-start=\"1525\" data-end=\"1570\">Declare a symbol (sigil, phrase, icon, prop).</p><p data-start=\"1572\" data-end=\"1598\">For the rest of the scene:</p><ul data-start=\"1600\" data-end=\"1720\"><li data-start=\"1600\" data-end=\"1663\"><p data-start=\"1602\" data-end=\"1663\">Manifestations referencing that symbol may gain additional Resonance.</p></li><li data-start=\"1664\" data-end=\"1720\"><p data-start=\"1666\" data-end=\"1720\">Influence may extend further when narratively aligned.</p></li></ul><p data-start=\"1722\" data-end=\"1746\">Hooks reward continuity.</p><p data-start=\"1748\" data-end=\"1774\">Symbols want to propagate.</p>",
+      "chat": ""
+    },
+    "identifier": "metaphor_myth_hook",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "metaphor_myth_hook"
+    }
+  },
+  "folder": "kW6Z4Tf29UMVg49o",
+  "sort": 500000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.x01PSc3ItEYzWphX",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459923345,
+    "modifiedTime": 1782167240831,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!x01PSc3ItEYzWphX"
+}

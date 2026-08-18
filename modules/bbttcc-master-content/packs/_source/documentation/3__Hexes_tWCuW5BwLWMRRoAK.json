@@ -1,0 +1,63 @@
+{
+  "folder": "GruW1UQmcpIS9hgw",
+  "name": "3. Hexes",
+  "_id": "tWCuW5BwLWMRRoAK",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "The World in Pieces",
+      "type": "text",
+      "_id": "hOzFJFy9afzEFl2Z",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<img src=\"art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_activities_border_patrol.png\" /><h1>The World is Broken into Hexes</h1><p data-start=\"435\" data-end=\"548\">After the collapse of <strong data-start=\"457\" data-end=\"472\">Adam Kadmon</strong>, reality did not simply shatter — it <strong data-start=\"510\" data-end=\"547\">fragmented into structured pieces</strong>.</p><p data-start=\"550\" data-end=\"584\">These pieces are called <strong data-start=\"574\" data-end=\"583\">hexes</strong>.</p><p data-start=\"586\" data-end=\"639\">Each hex is a region of the world containing its own:</p><p data-start=\"641\" data-end=\"705\">• geography<br data-start=\"652\" data-end=\"655\" />• people<br data-start=\"663\" data-end=\"666\" />• dangers<br data-start=\"675\" data-end=\"678\" />• resources<br data-start=\"689\" data-end=\"692\" />• mysteries</p><p data-start=\"707\" data-end=\"837\">When you look at the campaign map, each hex represents a <strong data-start=\"764\" data-end=\"836\">fragment of reality waiting to be explored, understood, and repaired</strong>.</p><hr data-start=\"839\" data-end=\"842\" /><h1 data-section-id=\"t2n0bb\" data-start=\"844\" data-end=\"867\">What a Hex Represents</h1><p data-start=\"869\" data-end=\"898\">A hex is not just a location.</p><p data-start=\"900\" data-end=\"928\">It is a <strong data-start=\"908\" data-end=\"927\">story container</strong>.</p><p data-start=\"930\" data-end=\"952\">Every hex may contain:</p><p data-start=\"954\" data-end=\"1075\">• settlements or ruins<br data-start=\"976\" data-end=\"979\" />• natural resources<br data-start=\"998\" data-end=\"1001\" />• strange phenomena<br data-start=\"1020\" data-end=\"1023\" />• hostile forces<br data-start=\"1039\" data-end=\"1042\" />• opportunities for development</p><p data-start=\"1077\" data-end=\"1194\">Exploring hexes is one of the main ways players discover <strong data-start=\"1134\" data-end=\"1193\">new problems to solve and new ways to improve the world</strong>.</p><hr data-start=\"1196\" data-end=\"1199\" /><h1 data-section-id=\"fcgpsp\" data-start=\"1201\" data-end=\"1218\">Exploring Hexes</h1><p data-start=\"1220\" data-end=\"1288\">When your faction travels into a new hex, several things may happen.</p><p data-start=\"1290\" data-end=\"1300\">You might:</p><p data-start=\"1302\" data-end=\"1465\">• discover a hidden settlement<br data-start=\"1332\" data-end=\"1335\" />• uncover ancient infrastructure<br data-start=\"1367\" data-end=\"1370\" />• encounter hostile creatures<br data-start=\"1399\" data-end=\"1402\" />• trigger a <strong data-start=\"1414\" data-end=\"1431\">Campaign Beat</strong><br data-start=\"1431\" data-end=\"1434\" />• reveal corruption or Darkness</p><p data-start=\"1467\" data-end=\"1548\">Exploration is the primary way the campaign map becomes <strong data-start=\"1523\" data-end=\"1547\">alive and meaningful</strong>.</p><hr data-start=\"1550\" data-end=\"1553\" /><h1 data-section-id=\"11zufxg\" data-start=\"1555\" data-end=\"1573\">Developing Hexes</h1><p data-start=\"1575\" data-end=\"1634\">Once a hex is secured, your faction can begin improving it.</p><p data-start=\"1636\" data-end=\"1662\">Development might include:</p><p data-start=\"1664\" data-end=\"1790\">• building infrastructure<br data-start=\"1689\" data-end=\"1692\" />• restoring damaged facilities<br data-start=\"1722\" data-end=\"1725\" />• creating defensive structures<br data-start=\"1756\" data-end=\"1759\" />• integrating local communities</p><p data-start=\"1792\" data-end=\"1884\">Over time, a developed hex becomes part of your faction’s <strong data-start=\"1850\" data-end=\"1883\">territory and support network</strong>.</p><hr data-start=\"1886\" data-end=\"1889\" /><h1 data-section-id=\"u9xilv\" data-start=\"1891\" data-end=\"1920\">Hex Ownership and Territory</h1><p data-start=\"1922\" data-end=\"1996\">When your faction invests in a hex, it becomes part of your <strong data-start=\"1982\" data-end=\"1995\">territory</strong>.</p><p data-start=\"1998\" data-end=\"2023\">Controlled hexes provide:</p><p data-start=\"2025\" data-end=\"2104\">• resources<br data-start=\"2036\" data-end=\"2039\" />• strategic positioning<br data-start=\"2062\" data-end=\"2065\" />• travel routes<br data-start=\"2080\" data-end=\"2083\" />• narrative influence</p><p data-start=\"2106\" data-end=\"2185\">Protecting your territory becomes increasingly important as your faction grows.</p><hr data-start=\"2187\" data-end=\"2190\" /><h1 data-section-id=\"1kiydue\" data-start=\"2192\" data-end=\"2209\">Hex Connections</h1><p data-start=\"2211\" data-end=\"2254\">Hexes are connected to neighboring regions.</p><p data-start=\"2256\" data-end=\"2298\">Movement between hexes allows factions to:</p><p data-start=\"2300\" data-end=\"2403\">• explore new territory<br data-start=\"2323\" data-end=\"2326\" />• reach important locations<br data-start=\"2353\" data-end=\"2356\" />• respond to threats<br data-start=\"2376\" data-end=\"2379\" />• expand their influence</p><p data-start=\"2405\" data-end=\"2474\">Travel between hexes may trigger encounters or reveal hidden dangers.</p><hr data-start=\"2476\" data-end=\"2479\" /><h1 data-section-id=\"16c9w9w\" data-start=\"2481\" data-end=\"2494\">Hex Hazards</h1><p data-start=\"2496\" data-end=\"2518\">Not every hex is safe.</p><p data-start=\"2520\" data-end=\"2545\">Some regions may contain:</p><p data-start=\"2547\" data-end=\"2658\">• corrupted environments<br data-start=\"2571\" data-end=\"2574\" />• radiation zones<br data-start=\"2591\" data-end=\"2594\" />• magical anomalies<br data-start=\"2613\" data-end=\"2616\" />• hostile factions<br data-start=\"2634\" data-end=\"2637\" />• dangerous creatures</p><p data-start=\"2660\" data-end=\"2730\">Entering hazardous hexes often creates new challenges for the players.</p><hr data-start=\"2732\" data-end=\"2735\" /><h1 data-section-id=\"o0eyh5\" data-start=\"2737\" data-end=\"2764\">The Hex Development Cycle</h1><p data-start=\"2766\" data-end=\"2820\">Over time, hexes evolve as players interact with them.</p><p data-start=\"2822\" data-end=\"2854\">A typical cycle looks like this:</p><pre class=\"overflow-visible! px-0!\" data-start=\"2856\" data-end=\"3015\"><code>Discover Hex\n     ↓\nExplore the Region\n     ↓\nEncounter Problems\n     ↓\nResolve Conflicts\n     ↓\nDevelop Infrastructure\n     ↓\nIntegrate into Territory</code></pre><p data-start=\"3017\" data-end=\"3101\">As more hexes are developed, the world slowly becomes <strong data-start=\"3071\" data-end=\"3100\">more stable and connected</strong>.</p><hr data-start=\"3103\" data-end=\"3106\" /><h1 data-section-id=\"1moqgk3\" data-start=\"3108\" data-end=\"3134\">Hexes and the Great Work</h1><p data-start=\"3136\" data-end=\"3228\">Repairing hexes is one of the most important ways factions contribute to <strong data-start=\"3209\" data-end=\"3227\">the Great Work</strong>.</p><p data-start=\"3230\" data-end=\"3293\">Each restored region pushes reality a little closer to harmony.</p><p data-start=\"3295\" data-end=\"3361\">Each neglected or corrupted hex pushes it further toward collapse.</p><hr data-start=\"3363\" data-end=\"3366\" /><h1 data-section-id=\"njbg2w\" data-start=\"3368\" data-end=\"3382\">Hex Strategy</h1><p data-start=\"3384\" data-end=\"3438\">As your faction grows, hex decisions become strategic.</p><p data-start=\"3440\" data-end=\"3458\">You may choose to:</p><p data-start=\"3460\" data-end=\"3586\">• expand into new regions<br data-start=\"3485\" data-end=\"3488\" />• secure important travel routes<br data-start=\"3520\" data-end=\"3523\" />• develop resource-rich hexes<br data-start=\"3552\" data-end=\"3555\" />• confront dangerous corruption</p><p data-start=\"3588\" data-end=\"3652\">Every hex represents a <strong data-start=\"3611\" data-end=\"3651\">choice about the future of the world</strong>.</p><hr data-start=\"3654\" data-end=\"3657\" /><h1 data-section-id=\"jr4o1u\" data-start=\"3659\" data-end=\"3689\">What Players Should Remember</h1><p data-start=\"3691\" data-end=\"3746\">When thinking about hexes, remember three simple ideas:</p><p data-start=\"3748\" data-end=\"3783\"><strong data-start=\"3748\" data-end=\"3783\">1 — Hexes are places to explore</strong></p><p data-start=\"3785\" data-end=\"3826\">They contain mysteries and opportunities.</p><p data-start=\"3828\" data-end=\"3863\"><strong data-start=\"3828\" data-end=\"3863\">2 — Hexes are problems to solve</strong></p><p data-start=\"3865\" data-end=\"3916\">Every region has challenges that must be addressed.</p><p data-start=\"3918\" data-end=\"3958\"><strong data-start=\"3918\" data-end=\"3958\">3 — Hexes are foundations for growth</strong></p><p data-start=\"3960\" data-end=\"4014\">Developed hexes strengthen your faction and the world.</p><hr data-start=\"4016\" data-end=\"4019\" /><h1 data-section-id=\"ex09de\" data-start=\"4021\" data-end=\"4038\">In Simple Terms</h1><p data-start=\"4040\" data-end=\"4096\">Hexes are <strong data-start=\"4050\" data-end=\"4095\">the building blocks of the campaign world</strong>.</p><p data-start=\"4098\" data-end=\"4131\">Exploring them reveals the story.</p><p data-start=\"4133\" data-end=\"4167\">Developing them shapes the future.</p><p data-start=\"4169\" data-end=\"4226\">And repairing them brings the world closer to completion.</p><img src=\"art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/TravelHex4.png\" />"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.3.0",
+        "lastModifiedBy": null
+      },
+      "_key": "!journal.pages!tWCuW5BwLWMRRoAK.hOzFJFy9afzEFl2Z"
+    }
+  ],
+  "categories": [],
+  "sort": 0,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775619852110,
+    "modifiedTime": 1775619852110,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!journal!tWCuW5BwLWMRRoAK"
+}

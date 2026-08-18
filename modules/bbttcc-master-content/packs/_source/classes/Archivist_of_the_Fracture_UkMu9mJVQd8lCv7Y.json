@@ -1,0 +1,125 @@
+{
+  "name": "Archivist of the Fracture",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_book_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Archivist of the Fracture.</strong> You don’t just survive anomalies—you take notes.</p><ul><li>When your party completes an encounter, operation, or travel segment involving <strong>Sparks, Tikkun events, Qliphothic anomalies, or heavy hex-tilt</strong>, and you had meaningful time to observe or interact with the phenomenon, you can perform a <strong>post-event analysis</strong>.</li><li>On a successful <strong>Occult (Mind), Lore (Mind), or Investigation (Mind)</strong> check (DC set by the GM), your faction gains a small narrative resource bump: extra <strong>intel, research progress, or a +1 OP-equivalent</strong> bonus toward future operations involving that same phenomenon or faction.</li></ul><p>Mechanically, this is your hook for “we learn from weirdness” effects: scripts can look for this flag and award small, repeatable advantages on follow-up rolls.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "archivist-of-the-fracture",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (5th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Archivist of the Fracture (Intel Hook)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_3.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984386,
+        "modifiedTime": 1777346198902
+      },
+      "_id": "KCb1dQJPRIj5m5dA",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.archivistOfTheFracture",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.opHooks.weirdnessIntelBonus",
+            "value": 1,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!UkMu9mJVQd8lCv7Y.KCb1dQJPRIj5m5dA"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "archivistOfTheFracture": true
+      },
+      "opHooks": {
+        "weirdnessIntelBonus": 1
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984386,
+    "modifiedTime": 1781116160070,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "UkMu9mJVQd8lCv7Y",
+  "sort": 600000,
+  "_key": "!items!UkMu9mJVQd8lCv7Y"
+}

@@ -1,0 +1,136 @@
+{
+  "name": "Wyrdlens Adept: Tier 4 — Tikkun Sight",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_spark_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 4 — Tikkun Sight.</strong> 1/Soma Break, treat one of your misfires as if it had landed at base tier, and convert the Surge it would have spent into Clarity instead. Where others see a shattered angle, you see the angle that <em>was</em> there.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Click this feature on the sheet to mark the ability spent and post the chat card. Reset on Soma Break via the dialog's Reset button.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Nonviolent-scene rider: a Tikkun Sight conversion in a nonviolent scene also wipes the Corruption tick the gather would have caused.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlT4\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Tikkun Sight</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Reaction (after misfire) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Treat one of your misfires as if it landed at base tier; convert the Surge it would have spent into Clarity. In a nonviolent scene, also wipes the Corruption tick the gather would have caused.</div>\n</div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "max": "",
+      "recovery": []
+    },
+    "advancement": {},
+    "identifier": "wl_tikkun_sight",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "requirements": "Wyrdlens Adept (17th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Nonviolent Spark Harvest (Tier 4 Gather Hook)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_13.png",
+      "origin": null,
+      "transfer": true,
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459984384,
+        "modifiedTime": 1777346198083
+      },
+      "_id": "J2JrKfeBgws3vp9w",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.tier4",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.wyrdlensAdept.nonviolentSparkHarvest",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.tikkunHooks.nonviolentGatherNoCorruption",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!Co8OEcRTwU1Apwpr.J2JrKfeBgws3vp9w"
+    }
+  ],
+  "folder": "gZHoMHBbaIJOJgZ5",
+  "flags": {
+    "bbttcc": {
+      "wyrdlensAdept": {
+        "tier4": true,
+        "nonviolentSparkHarvest": true
+      },
+      "tikkunHooks": {
+        "nonviolentGatherNoCorruption": true
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "discipline": {}
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459984384,
+    "modifiedTime": 1781116128462,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "Co8OEcRTwU1Apwpr",
+  "sort": 212500,
+  "_key": "!items!Co8OEcRTwU1Apwpr"
+}

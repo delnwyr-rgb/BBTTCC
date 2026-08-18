@@ -1,0 +1,338 @@
+{
+  "folder": "bDULV9cH00cnJHUX",
+  "name": "Some Familiar Reference Points",
+  "_id": "XTqai5nZt42c3r2X",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "Let's Try This",
+      "type": "text",
+      "_id": "sb4A5HHLcE7j6QNw",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p>Bad Eden SHAMELESSLY rips off many many many many many … many other properties.</p><p></p><p>Or, less litigiously, owes much in spirit to endeavors that have gone before.</p><p></p><p>So - here's a way to wrap these concepts around their more familiar ancestors.</p>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116255232,
+        "modifiedTime": 1781116255232
+      },
+      "_key": "!journal.pages!XTqai5nZt42c3r2X.sb4A5HHLcE7j6QNw"
+    },
+    {
+      "sort": 200000,
+      "name": "Hexes are like ...",
+      "type": "text",
+      "_id": "KtczlVrpoZ44QWt7",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p><em>… things you've seen in games such as Civilization, Sims, Stronghold Crusader, etc.</em></p><ul><li><p>Hexes are property you control, and develop, which provide you with resources to power the rest of the \"Hex Layer\" portion of the game.</p></li><li><p>Different types of settlements provide different types of resources.</p></li><li><p>Developing things in certain ways unlock different sorts of effects and bonuses for your group.</p></li><li><p>Aligning and controlling hexes, developing them into their complete state, is the core remit of the game,</p></li><li><p>The more hexes you control, the more powerful you become.</p></li></ul>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116255233,
+        "modifiedTime": 1781116255233
+      },
+      "_key": "!journal.pages!XTqai5nZt42c3r2X.KtczlVrpoZ44QWt7"
+    },
+    {
+      "sort": 300000,
+      "name": "OPs are like ...",
+      "type": "text",
+      "_id": "Ellj9N2ltPDjO9lS",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p><em>… action points, mana points, Clarity points, etc, in other systems. They represent the total power potential of a Faction, and are used across a variety of use cases, including:</em></p><p></p><ul><li><p>Maintaining and developing hexes, (including paying upkeep for things like garrisons)</p></li><li><p>Powering Raid Maneuvers</p></li><li><p>Powering Strategic Actions</p></li><li><p>Powering Travel</p></li><li><p>Buying things</p></li><li><p>Resolving quest activities</p></li><li><p>Setting base bonuses for OP checks</p></li><li><p>Power certain PC level powers</p></li></ul>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116255233,
+        "modifiedTime": 1781116255233
+      },
+      "_key": "!journal.pages!XTqai5nZt42c3r2X.Ellj9N2ltPDjO9lS"
+    },
+    {
+      "sort": 400000,
+      "name": "Raids are like ...",
+      "type": "text",
+      "_id": "TsaCClTVF2EcMSF9",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p><em>skirmishes in other games like Warhammer 40k, Rogue Trader, or Battletech.</em></p><p></p><ul><li><p>Not all Raids involve violence. Some involve stealth, or diplomacy, or other contested activities.</p></li><li><p>Not all Raids are Faction v Faction directly. Some are Faction v Rig, Faction v Facility, or Faction vs Raid Boss.</p></li><li><p>But all are, fundamentally, a Faction vs another entity, using opposing OP checks managed through the Raid interface.</p></li></ul>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116255233,
+        "modifiedTime": 1781116255233
+      },
+      "_key": "!journal.pages!XTqai5nZt42c3r2X.TsaCClTVF2EcMSF9"
+    },
+    {
+      "sort": 500000,
+      "name": "Maneuvers are like ...",
+      "type": "text",
+      "_id": "A9MAVXcKiOHYJfkh",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p><em>… cards in Magic the Gathering.</em></p><ul><li><p>They are special powers a Faction can use during their Raid action turn.</p></li><li><p>As a rule, they must be earned or discovered. They are, in essence, collectible, with some being far more rare than others.</p></li><li><p>They are organized by tier, from common to legendary.</p></li></ul>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116255233,
+        "modifiedTime": 1781116255233
+      },
+      "_key": "!journal.pages!XTqai5nZt42c3r2X.A9MAVXcKiOHYJfkh"
+    },
+    {
+      "sort": 250000,
+      "name": "Strategic Activities are like ...",
+      "type": "text",
+      "_id": "0mcwXZi7DHX1NZbn",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p><em>… resource management in games like those discussed in the Hex section.</em></p><ul><li><p>They are OP powered initiatives designed to enhance, develop, or repair Hexes, Rigs, and Facilities.</p></li><li><p>They resolve on Strategic Turn Advancement.</p></li></ul>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116255234,
+        "modifiedTime": 1781116255234
+      },
+      "_key": "!journal.pages!XTqai5nZt42c3r2X.0mcwXZi7DHX1NZbn"
+    },
+    {
+      "sort": 600000,
+      "name": "Factions are like ...",
+      "type": "text",
+      "_id": "bZrdgh0HFHuBoejp",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p><em>… an adventuring party meets Sense8.</em> Because you are a faction, you draw power from a common source, which in turn draws its power from you.</p><ul><li><p>You may take energy from it. You may give energy back to it.</p></li><li><p>You can see through the eyes, and hear through the ears, of other members of your Faction.</p></li><li><p>You may share energy with other members of your faction through your faction's connection.</p></li></ul>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116255234,
+        "modifiedTime": 1781116255234
+      },
+      "_key": "!journal.pages!XTqai5nZt42c3r2X.bZrdgh0HFHuBoejp"
+    },
+    {
+      "sort": 700000,
+      "name": "The malleability of the world is like ...",
+      "type": "text",
+      "_id": "GXEoajHHbV0KBCyu",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<p><em>… Shadesmar in the Stormlight Archive. The world remembers.</em></p><ul><li><p>It can be reasoned with.</p></li><li><p>It can be convinced.</p></li><li><p>It can be changed by clever arguments or raw violence.</p></li><li><p>If you believe you can fly, you can.</p></li></ul>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116255234,
+        "modifiedTime": 1781116255234
+      },
+      "_key": "!journal.pages!XTqai5nZt42c3r2X.GXEoajHHbV0KBCyu"
+    }
+  ],
+  "categories": [],
+  "sort": 100000,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775619863227,
+    "modifiedTime": 1781116255232,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!journal!XTqai5nZt42c3r2X"
+}

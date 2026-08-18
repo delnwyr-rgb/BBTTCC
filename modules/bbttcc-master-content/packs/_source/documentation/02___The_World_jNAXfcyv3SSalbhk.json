@@ -1,0 +1,23 @@
+{
+  "type": "JournalEntry",
+  "folder": null,
+  "name": "02 - The World",
+  "color": "#2a68ec",
+  "sorting": "a",
+  "_id": "jNAXfcyv3SSalbhk",
+  "description": "",
+  "sort": 1000000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775619855684,
+    "modifiedTime": 1775619855927,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!folders!jNAXfcyv3SSalbhk"
+}

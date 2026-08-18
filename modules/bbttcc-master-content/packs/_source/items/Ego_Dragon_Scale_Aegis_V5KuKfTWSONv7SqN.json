@@ -1,0 +1,126 @@
+{
+  "name": "Ego‑Dragon Scale Aegis",
+  "type": "equipment",
+  "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_%20ego_dragon_scale_aegis.png",
+  "system": {
+    "description": {
+      "value": "<p>Armor (breastplate). Grants resistance to psychic; once/day negate a charm/fear effect for you and allies within 30 ft.</p>",
+      "chat": ""
+    },
+    "quantity": 1,
+    "weight": {
+      "value": 20,
+      "units": "lb"
+    },
+    "price": {
+      "value": 30000,
+      "denomination": "gp"
+    },
+    "rarity": "legendary",
+    "attunement": "",
+    "identified": true,
+    "type": {
+      "value": "",
+      "baseItem": ""
+    },
+    "equipped": false,
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "egodragon-scale-aegis",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "unidentified": {
+      "description": ""
+    },
+    "container": null,
+    "attuned": false,
+    "crewed": false,
+    "armor": {
+      "value": null,
+      "dex": null
+    },
+    "proficient": null,
+    "properties": [],
+    "strength": null
+  },
+  "flags": {
+    "bbttcc": {
+      "tags": []
+    },
+    "rfi": {
+      "item": {
+        "tier": "IV",
+        "footprint": 1,
+        "reach": "self",
+        "frame": "armor",
+        "signature": "",
+        "origin": "looted",
+        "originator": null,
+        "bound": "free",
+        "upkeep": {
+          "mode": "passive",
+          "per": "scene"
+        },
+        "misfire": {
+          "tierClamp": true,
+          "table": null
+        },
+        "signals": {}
+      }
+    },
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool stamp",
+            "bound": "free",
+            "saleBack": 12
+          },
+          "tier": "IV",
+          "frame": "armor",
+          "origin": "looted",
+          "bound": "free",
+          "reach": "self",
+          "footprint": 1,
+          "legacySystem": {
+            "description": {
+              "value": "<p>Armor (breastplate). Grants resistance to psychic; once per Soma Break negate a charm/fear effect for you and allies within 6 squares</p>"
+            }
+          }
+        }
+      }
+    }
+  },
+  "effects": [],
+  "folder": "TNrB6kEiHS0KwwJT",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1767834169815,
+    "modifiedTime": 1782164185977,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_id": "V5KuKfTWSONv7SqN",
+  "sort": 1000000,
+  "_key": "!items!V5KuKfTWSONv7SqN"
+}

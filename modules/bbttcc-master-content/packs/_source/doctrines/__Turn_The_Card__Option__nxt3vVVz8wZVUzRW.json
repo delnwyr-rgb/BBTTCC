@@ -1,0 +1,40 @@
+{
+  "name": "⭐ Turn The Card [Option]",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_1.png",
+  "system": {
+    "category": "maneuver",
+    "source": "Bad Eden Doctrine",
+    "tags": [],
+    "description": {
+      "value": "<div class=\"bbttcc-doctrine-desc\"><h3>⭐ Turn The Card [Option]</h3><p><em>No rules text registered.</em></p><p><strong>OP Cost:</strong> intrigue 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> option</p><p><strong>Raid Types:</strong> espionage, infiltration, propaganda</p></div>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "opt_turn_the_card"
+    }
+  },
+  "_id": "nxt3vVVz8wZVUzRW",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782702601757,
+    "modifiedTime": 1782703702690,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!nxt3vVVz8wZVUzRW"
+}

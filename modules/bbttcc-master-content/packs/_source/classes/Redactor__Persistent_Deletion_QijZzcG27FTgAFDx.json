@@ -1,0 +1,65 @@
+{
+  "_id": "QijZzcG27FTgAFDx",
+  "name": "Redactor: Persistent Deletion",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_scroll_edited_9.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"2548\" data-end=\"2562\"><em data-start=\"2548\" data-end=\"2562\">(10th Level)</em></p><p data-start=\"2564\" data-end=\"2624\">When you successfully banish, dispel, or suppress an effect:</p><p data-start=\"2626\" data-end=\"2704\">You may spend <strong data-start=\"2640\" data-end=\"2670\">1 additional Resonance Die</strong> to apply <strong data-start=\"2680\" data-end=\"2703\">Persistent Deletion</strong>.</p><p data-start=\"2706\" data-end=\"2713\">Effect:</p><ul data-start=\"2714\" data-end=\"2826\"><li data-start=\"2714\" data-end=\"2791\"><p data-start=\"2716\" data-end=\"2791\">The same effect cannot be reapplied to that target for 1 minute,<br data-start=\"2780\" data-end=\"2783\" /><strong data-start=\"2785\" data-end=\"2791\">or</strong></p></li><li data-start=\"2792\" data-end=\"2826\"><p data-start=\"2794\" data-end=\"2826\">It returns weakened (GM choice).</p></li></ul><p data-start=\"2828\" data-end=\"2870\">If this contradicts established Precedent:</p><p data-start=\"2872\" data-end=\"2898\">Gain +1 additional Strain.</p><p data-start=\"2900\" data-end=\"2922\">Deletion is tolerated.</p><p data-start=\"2924\" data-end=\"2951\">Contradicting canon is not.</p>",
+      "chat": ""
+    },
+    "identifier": "redactor_persistent_deletion",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 10
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "redactor_persistent_deletion"
+    }
+  },
+  "folder": "pcv0zMJZU8aoEMQc",
+  "sort": 200000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.QijZzcG27FTgAFDx",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923344,
+    "modifiedTime": 1781116148430,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!QijZzcG27FTgAFDx"
+}

@@ -1,0 +1,101 @@
+{
+  "name": "Oathkeeper's Bulwark",
+  "type": "armor",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "guardBonus": 3,
+    "evasionBonus": 0,
+    "resolveBonus": 2,
+    "resistances": [
+      "kinetic"
+    ],
+    "armorSkill": "warding",
+    "equipped": false,
+    "tags": [
+      "shield",
+      "warding",
+      "reactive",
+      "pactkeeper-favored",
+      "attunement"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>A reinforced heater shield carried by Pactkeeper enforcers, its rim engraved with a standing oath the bearer renews each dawn. When the oath holds, so does the shield — vow-resin lacing snags incoming force and feeds it into the bearer's stance.</p><p><strong>Eat the Blow (1/Soma Break).</strong> While attuned and equipped, the bearer may shift one die of incoming kinetic damage into Stress instead of Integrity. GM-adjudicated; tap the use tracker when spent. Resists kinetic passively.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +3, Resolve +2</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Kinetic</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 450 Economy marks</p></li></ul>",
+      "chat": ""
+    },
+    "uses": {
+      "max": 1,
+      "spent": 0
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "III",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "shield",
+          "signature": "It keeps the promise so your ribs don't have to.",
+          "origin": "given",
+          "originator": null,
+          "bound": "attuned",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>A reinforced heater shield carried by Pactkeeper enforcers, its rim engraved with a standing oath the bearer renews each dawn. When the oath holds, so does the shield — vow-resin lacing snags incoming force and feeds it into the bearer's stance.</p><p><b>Eat the Blow (1/Soma Break).</b> While attuned and equipped, the bearer may shift one die of incoming kinetic damage into Stress instead of Integrity. GM-adjudicated; tap the use tracker when spent. Resists kinetic passively.</p>",
+          "materialOf": [
+            "heart-iron",
+            "vow-resin",
+            "oath-leather"
+          ],
+          "price": {
+            "marks": 450,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TIII shield × 1",
+            "bound": "attuned",
+            "saleBack": 180
+          }
+        }
+      },
+      "grants": {
+        "resistances": [
+          {
+            "type": "kinetic"
+          }
+        ]
+      }
+    }
+  },
+  "folder": "gD1WklJiuS6Vg2p3",
+  "_id": "VY4WIzc5wopxlxqF",
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1782150391560,
+    "modifiedTime": 1782179522078,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!VY4WIzc5wopxlxqF"
+}

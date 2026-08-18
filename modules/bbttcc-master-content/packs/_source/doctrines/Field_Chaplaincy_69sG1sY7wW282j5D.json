@@ -1,0 +1,63 @@
+{
+  "name": "Field Chaplaincy",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_2.png",
+  "system": {
+    "category": "technique",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>A steady voice walking the line between the volleys. Hands on shoulders. Names said out loud. It matters more than the math admits.</p><p><strong>Darkness −1; friendly tokens gain Blessed for 2 rounds.</strong></p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "maneuver",
+      "key": "field_chaplaincy",
+      "meta": {
+        "tier": 2,
+        "rarity": "common",
+        "minFactionTier": null,
+        "storyOnly": false,
+        "availability": "standard",
+        "unlockKey": null,
+        "engine": "universal",
+        "layer": "cross-layer",
+        "costBand": "medium",
+        "raidTypes": [
+          "any"
+        ],
+        "fireMode": "anytime",
+        "opCosts": {
+          "faith": 2,
+          "softpower": 1
+        },
+        "authoredSprint": "balance-w1"
+      },
+      "effects": {
+        "text": "Chaplains walk the line: darkness −1; friendly tokens gain 'Blessed' for 2 rounds."
+      }
+    }
+  },
+  "_id": "69sG1sY7wW282j5D",
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "6ut7GT8pCAhpdWjS": 3
+  },
+  "_stats": {
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1779731207892,
+    "modifiedTime": 1781402980310,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!69sG1sY7wW282j5D"
+}

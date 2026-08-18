@@ -1,0 +1,242 @@
+{
+  "_id": "ht8O7ef1XzldZRyU",
+  "name": "Metaphor Apostle: Shared Dream",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_attack.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p data-start=\"2404\" data-end=\"2418\"><em data-start=\"2404\" data-end=\"2418\">(10th Level)</em></p><p data-start=\"2420\" data-end=\"2468\">You cast across groups through shared symbolism.</p><p data-start=\"2470\" data-end=\"2499\">Choose a collective identity:</p><ul data-start=\"2501\" data-end=\"2556\"><li data-start=\"2501\" data-end=\"2508\"><p data-start=\"2503\" data-end=\"2508\">Crowd</p></li><li data-start=\"2509\" data-end=\"2514\"><p data-start=\"2511\" data-end=\"2514\">Mob</p></li><li data-start=\"2515\" data-end=\"2522\"><p data-start=\"2517\" data-end=\"2522\">Choir</p></li><li data-start=\"2523\" data-end=\"2529\"><p data-start=\"2525\" data-end=\"2529\">Army</p></li><li data-start=\"2530\" data-end=\"2544\"><p data-start=\"2532\" data-end=\"2544\">Congregation</p></li><li data-start=\"2545\" data-end=\"2556\"><p data-start=\"2547\" data-end=\"2556\">Survivors</p></li></ul><p data-start=\"2558\" data-end=\"2612\">You may affect the group as a unified symbolic system:</p><ul data-start=\"2614\" data-end=\"2683\"><li data-start=\"2614\" data-end=\"2633\"><p data-start=\"2616\" data-end=\"2633\">Shared illusion</p></li><li data-start=\"2634\" data-end=\"2649\"><p data-start=\"2636\" data-end=\"2649\">Shared fear</p></li><li data-start=\"2650\" data-end=\"2665\"><p data-start=\"2652\" data-end=\"2665\">Shared calm</p></li><li data-start=\"2666\" data-end=\"2683\"><p data-start=\"2668\" data-end=\"2683\">Shared belief</p></li></ul><p data-start=\"2685\" data-end=\"2719\">It feels like fate—not domination.</p><h3 data-start=\"2721\" data-end=\"2746\">Resonance Interaction</h3><p data-start=\"2747\" data-end=\"2797\">Group alignment can generate additional Resonance.</p><h3 data-start=\"2799\" data-end=\"2807\">Risk</h3><p data-start=\"2808\" data-end=\"2856\">If the shared metaphor fractures, Strain spikes.</p>",
+      "chat": ""
+    },
+    "identifier": "metaphor_shared_dream",
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 10
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "metaphor_shared_dream"
+    },
+    "autoanimations": {
+      "id": "eda596d0-71ac-4476-98b1-29c885499ef3",
+      "label": "Metaphor Apostle: Shared Dream",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "magicsign",
+          "animation": "enchantment",
+          "variant": "02",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "folder": "kW6Z4Tf29UMVg49o",
+  "sort": 450000,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.ht8O7ef1XzldZRyU",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776459923345,
+    "modifiedTime": 1781116176298,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!ht8O7ef1XzldZRyU"
+}

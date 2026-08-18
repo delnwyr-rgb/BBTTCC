@@ -1,0 +1,705 @@
+{
+  "name": "Wyrdlens Adept",
+  "type": "class",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/WyrdlensAdept2.png",
+  "system": {
+    "category": "path",
+    "identifier": "wyrdlens-adept",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"Every structure has a flaw. You only have to look at it correctly.\"</em></p>\n<p>The Wyrdlens Adept turns perception into force. You run on <strong>Surge</strong> like everyone, and yours arrives when you <strong>land a manifestation</strong> (bank +1, max +2/round) — every revelation feeds the lens. The free <strong>Probability Overlay</strong> (1/round reroll-lowest, refreshes at the start of your turn) stays as your innate edge.</p>\n<h3>The Lens (spent via Surge)</h3>\n<ul>\n  <li><strong>Foresight</strong> (1) — you or an ally banks a reroll-lowest (you saw the thread).</li>\n  <li><strong>Expose</strong> (2) — a foe's next attack and its saves are at disadvantage (you read the seam).</li>\n  <li><strong>Refract</strong> (3) — an ally gains DR equal to Tier and a freed reaction (harm bends aside).</li>\n  <li><strong>Revelation</strong> (5) — allies within 6 squares bank a reroll; a foe's next attack is at disadvantage.</li>\n</ul>\n<p><strong>Tikkun Sight</strong> endures — once per Soma Break, treat a misfire as a base-tier success (the Tree pays in Clarity instead).</p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "WA00000000000001",
+        "type": "HitPoints",
+        "configuration": {},
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      {
+        "_id": "WA00000000000005",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 4,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      {
+        "_id": "WA00000000000008",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 8,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      {
+        "_id": "WA00000000000011",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 12,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      {
+        "_id": "WA00000000000016",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 16,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      {
+        "_id": "WA00000000000019",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 19,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      {
+        "_id": "WA00000000000028",
+        "type": "Subclass",
+        "configuration": {},
+        "value": {
+          "document": null,
+          "uuid": null
+        },
+        "level": 3,
+        "title": "",
+        "hint": "",
+        "flags": {}
+      },
+      {
+        "_id": "WA00000000000029",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "saves:int",
+            "saves:wis"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "defense check Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      {
+        "_id": "WA00000000000030",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "skills:arc",
+            "skills:his"
+          ],
+          "choices": [
+            {
+              "count": 2,
+              "pool": [
+                "skills:ins",
+                "skills:inv",
+                "skills:rel",
+                "skills:prc"
+              ]
+            }
+          ]
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Skill Proficiencies",
+        "hint": "Gain Occult (Mind) and Lore (Mind) automatically, then choose two from Insight (Soul) (Soul), Investigation (Mind) (Mind), Faith (Soul), Perception (Mind) (Mind).",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      {
+        "_id": "WA00000000000031",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "weapon:sim"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Weapon Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      {
+        "_id": "WA00000000000032",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "armor:lgt"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Armor Training",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      {
+        "_id": "WA00000000000033",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "defense check Proficiencies",
+        "hint": "",
+        "classRestriction": "secondary",
+        "flags": {}
+      },
+      {
+        "_id": "WA00000000000034",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "weapon:sim"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Weapon Proficiencies",
+        "hint": "",
+        "classRestriction": "secondary",
+        "flags": {}
+      },
+      {
+        "_id": "WA00000000000035",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "armor:lgt"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Armor Training",
+        "hint": "",
+        "classRestriction": "secondary",
+        "flags": {}
+      },
+      {
+        "_id": "WA00000000000002",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.r3YHnUbCJYrUuhn4",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.9HNxUBStk9ZQcVo1",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 1,
+        "title": "Wyrdlens Adept Core Features"
+      },
+      {
+        "_id": "WA00000000000003",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ITVYwcZhhXvK6ptk",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.1Nyj14RtQYCa8ts9",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 2,
+        "title": "Wyrdlens Adept: Level 2 Features"
+      },
+      {
+        "_id": "WA00000000000004",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.wybZlXpz67IS64fk",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.HBqlIr3lDYCtGaZn",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 3,
+        "title": "Wyrdlens Adept: Level 3 Features"
+      },
+      {
+        "_id": "WA00000000000006",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.aJgef4oQFiMVplza",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.5Ol7xTa7nbHAorK1",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 4,
+        "title": "Wyrdlens Adept: Level 4 Features"
+      },
+      {
+        "_id": "WA00000000000007",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.UkMu9mJVQd8lCv7Y",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.epAamkxdLCBOOLV4",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 5,
+        "title": "Wyrdlens Adept: Level 5 Features"
+      },
+      {
+        "_id": "WA00000000000009",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.SSDolF9UH4LINkM2",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 6,
+        "title": "Probability Threading"
+      },
+      {
+        "_id": "WA00000000000010",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.mtLfkdPa7TS8Daz3",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 7,
+        "title": "Fractal Cross-Reference"
+      },
+      {
+        "_id": "WA00000000000012",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.nUSQpB4zxBELHqQV",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 8,
+        "title": "Anomaly Backtrace"
+      },
+      {
+        "_id": "WA00000000000013",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.NXnio3Y6tuRJnSSu",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 9,
+        "title": "Narrative Refactor"
+      },
+      {
+        "_id": "WA00000000000014",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.sbv16vdaRpt1Z15m",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.9X62SPa6emtijeRr",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 10,
+        "title": "Wyrdlens Adept: Level 10 Features"
+      },
+      {
+        "_id": "WA00000000000015",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ee9slWH77dKvdyXi",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.8DQbUpylbqTBzkl0",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 11,
+        "title": "Wyrdlens Adept: Level 11 Features"
+      },
+      {
+        "_id": "WA00000000000017",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.dbmGJcTgEiHCiFe4",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 12,
+        "title": "Predictive Convergence Map"
+      },
+      {
+        "_id": "WA00000000000018",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.JClBHQVOqzC452it",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 13,
+        "title": "Global Symbol Index"
+      },
+      {
+        "_id": "WA00000000000020",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.d3NkaovFyI5CHU8G",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 14,
+        "title": "Causal Spine Trace"
+      },
+      {
+        "_id": "WA00000000000021",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.8mo6EwEjZrYGYGeP",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 15,
+        "title": "Hex-Scope Refactor"
+      },
+      {
+        "_id": "WA00000000000023",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.4ElebzTv9azsMGb0",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 16,
+        "title": "Lattice Profiler"
+      },
+      {
+        "_id": "WA00000000000024",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Co8OEcRTwU1Apwpr",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 17,
+        "title": "Wyrdlens Adept: Tier 4 — Nonviolent Spark Harvest"
+      },
+      {
+        "_id": "WA00000000000027",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.HSoekiOL8gUzj1FC",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 20,
+        "title": "Root Access to the Lattice"
+      }
+    ],
+    "startingEquipment": [],
+    "hd": {
+      "additional": "",
+      "denomination": "d8",
+      "spent": 0
+    },
+    "levels": 1,
+    "primaryAbility": {
+      "value": [
+        "int"
+      ],
+      "all": false
+    },
+    "properties": [],
+    "spellcasting": {
+      "progression": "full",
+      "ability": "int",
+      "preparation": {
+        "formula": "@int.mod + @classes.wyrdlens_adept.levels"
+      }
+    },
+    "wealth": ""
+  },
+  "effects": [],
+  "folder": "AnlupqhUqRCmEi6Q",
+  "flags": {
+    "bbttcc": {
+      "primary": "intelligence",
+      "opBonus": {
+        "intrigue": 2
+      }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459984387,
+    "modifiedTime": 1782167240824,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "bgiFz9pi5mdS7aGl",
+  "sort": 100000,
+  "_key": "!items!bgiFz9pi5mdS7aGl"
+}

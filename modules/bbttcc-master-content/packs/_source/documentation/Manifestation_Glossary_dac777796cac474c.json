@@ -1,0 +1,426 @@
+{
+  "folder": "OoZBBlTDgemhNept",
+  "name": "Manifestation Glossary",
+  "_id": "dac777796cac474c",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "Manifestation Glossary — Overview",
+      "type": "text",
+      "_id": "ddbfb51be4cff962",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h1>Manifestation Glossary</h1>\n<p><em>A quick-reference for the mechanical knobs every manifestation interacts with. Each section explains the concept first, then the mechanics, then how the four caster <strong>Disciplines</strong> bend them.</em></p>\n<p>If you see <code>Discipline: Reach −1 · Misfire −2</code> on a chat card, it's the discipline aggregator telling you which knobs your active feats and Signature Mode are currently shifting.</p>\n<ul>\n  <li><strong>Tier &amp; Footprint</strong> are universal — every Steward has a tier (1–4) and every manifestation has a footprint (Personal / Scene / Operation / Age). Disciplines do <em>not</em> raise your tier or footprint.</li>\n  <li><strong>The four knobs (Clarity, Reach, Misfire, Concurrency)</strong> are where Disciplines actually live. Each caster path bends one of them.</li>\n  <li><strong>Trad Caster Classes (TCCs)</strong> — Cosmic Linguist, Wyrdlens Adept, Dreamwalker, Pactkeeper — manifest as their primary tool. They get a deeper Clarity pool, a per-cast discount, and exclusive access to Workings (instant manifestations) and T0 Lesser Manifestations. Non-TCCs are restricted to Forms.</li>\n</ul>",
+        "markdown": ""
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777323326220,
+        "modifiedTime": 1777323326220,
+        "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+      },
+      "_key": "!journal.pages!dac777796cac474c.ddbfb51be4cff962"
+    },
+    {
+      "sort": 200000,
+      "name": "Clarity",
+      "type": "text",
+      "_id": "617fd05a2e152c62",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h2>Clarity</h2>\n<p><strong>What it is:</strong> Your focus pool — the resource you spend to <em>cast</em> a manifestation and to <em>sustain</em> one across a scene. When Clarity hits zero, sustained manifestations drop one by one until you can pay the bill.</p>\n\n<h3>Mechanics</h3>\n<ul>\n  <li><strong>Spend on cast.</strong> Tier 1 manifestations cost 1 Clarity; Tier 2 = 2; Tier 3 = 3; Tier 4 = 5 (Hermetic mode +1; Chaos mode −1; Ascendant skips Clarity entirely but accrues Blood Debt).</li>\n  <li><strong>Spend on upkeep.</strong> Sustained / Bound / Enduring manifestations bill 1 Clarity × tier per upkeep tick (cadence GM-set). Can't pay? It drops.</li>\n  <li><strong>Maximum scales with Steward tier:</strong> T1 = 5, T2 = 7, T3 = 10, T4 = 14. <strong>TCCs add +5 to max</strong> across all tiers. Recovers fully on Soma Break, half-fills on Scene Break.</li>\n</ul>\n\n<h3>How Disciplines bend it</h3>\n<p>The <strong>Dreamwalker</strong> is the Clarity-pool specialist. Their Tier 1 (Oneiric Reservoir) and Tier 2 (Dream-Cache) features add to your Clarity <em>maximum</em> — +2 from T1, +1 from T2, total +3 by L5 — <em>on top of</em> the +5 TCC baseline. A T1 Dreamwalker therefore has 5 (tier base) + 5 (TCC) + 3 (discipline) = <strong>13 Clarity</strong> at character creation.</p>\n<p>All four TCCs also get a <strong>−1 Clarity per cast</strong> discount (floor 0). A Hermetic T1 cast normally costs 1+1=2 Clarity; for a TCC it costs 1. Surfaces in the cost note as <code>TCC discount −1</code> when it fires.</p>",
+        "markdown": ""
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777323326220,
+        "modifiedTime": 1777323326220,
+        "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+      },
+      "_key": "!journal.pages!dac777796cac474c.617fd05a2e152c62"
+    },
+    {
+      "sort": 300000,
+      "name": "Reach",
+      "type": "text",
+      "_id": "465418ce242e0703",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h2>Reach</h2>\n<p><strong>What it is:</strong> The cost of casting a manifestation <em>above your Steward tier</em>. Canon allows you to reach exactly one tier higher than yours — never two — and you must declare how you're paying for it.</p>\n\n<h3>Mechanics</h3>\n<ul>\n  <li><strong>Surge reach.</strong> Cast at the higher tier; on failure, the misfire roll uses the higher tier's column (worse outcomes). No mechanical resource cost — you spent your character's Surge.</li>\n  <li><strong>Blood-Debt reach.</strong> Cast at the higher tier; you accrue +1 Blood Debt; no misfire roll happens. Blood Debt is a separate ledger that catches up with you later.</li>\n  <li><strong>Out-of-reach error.</strong> Trying to manifest at T(yours+2) is rejected by the engine.</li>\n</ul>\n\n<h3>How Disciplines bend it</h3>\n<p>The <strong>Cosmic Linguist</strong> is the Reach-economy specialist. Their Initiation 1 (True-Name Touch) reduces Blood-Debt-reach cost by 1 (typically zeroing it), and their Signature Mode <strong>The Sentence</strong> adds another −1 while held — total −2 on Blood-Debt-reach. The discount is automatic; the cast chat card's cost note will read <code>Discipline: Reach −2</code> when both are stacked.</p>",
+        "markdown": ""
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777323326220,
+        "modifiedTime": 1777323326220,
+        "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+      },
+      "_key": "!journal.pages!dac777796cac474c.465418ce242e0703"
+    },
+    {
+      "sort": 400000,
+      "name": "Misfire",
+      "type": "text",
+      "_id": "2100a0aa5b5636fe",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h2>Misfire</h2>\n<p><strong>What it is:</strong> The roll-table consulted when a manifestation fails its check. A d10 is rolled, the result mapped to a band (1-2 / 3-4 / 5-6 / 7-8 / 9 / 10), and the band's effect at your tier-column is applied. Bands range from \"Reality Flicker\" (mild, 1-2) up to \"Catastrophic Resonance\" (10).</p>\n\n<h3>Mechanics</h3>\n<ul>\n  <li><strong>Mode bias.</strong> Hermetic shifts the d10 by −2 (gentler misfires); Chaos by +2 (worse); Ascendant skips misfire entirely (T3+ only).</li>\n  <li><strong>Reach bumps the column.</strong> A reached cast misfires on the <em>higher</em> tier's column — costs scale with the reach.</li>\n  <li><strong>Negative shift = better.</strong> A roll of 6 reads as a \"5-6\" band by default; a −1 shift makes it read as \"3-4\" (less severe).</li>\n</ul>\n\n<h3>How Disciplines bend it</h3>\n<p>The <strong>Wyrdlens Adept</strong> is the Misfire-band specialist. Tier 1 (Lens Read) shifts misfires by −1; Tier 2 (Probability Overlay) adds another −1 (total −2 by L5). Their Signature Mode <strong>Refraction</strong> adds another −2 while held — total −4 by L11. Stacks additively with the mode bias from Hermetic/Chaos. The discount is automatic; the cast chat card shows <code>Discipline: Misfire −N</code>.</p>",
+        "markdown": ""
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777323326220,
+        "modifiedTime": 1777323326220,
+        "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+      },
+      "_key": "!journal.pages!dac777796cac474c.2100a0aa5b5636fe"
+    },
+    {
+      "sort": 500000,
+      "name": "Concurrency",
+      "type": "text",
+      "_id": "78e4e83aaa1bd9c6",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h2>Concurrency</h2>\n<p><strong>What it is:</strong> The number of manifestations you have <em>active and sustained</em> at the same time. Every Sustained, Bound, or Enduring manifestation enters the active tracker and pays upkeep until it drops or is dismissed.</p>\n\n<h3>Mechanics</h3>\n<ul>\n  <li><strong>No hard cap by default.</strong> The engine doesn't refuse extra sustained manifestations — but every additional active manifestation bills upkeep against the same Clarity pool, so the soft cap is whatever Clarity you can afford to pay.</li>\n  <li><strong>Active tracker.</strong> Each entry stores tier, stability (sustained/bound/enduring), mode, and reach path. Visible on the sheet and consulted during upkeep ticks.</li>\n  <li><strong>Upkeep cards</strong> show which entries were billed, which were dropped (insufficient Clarity), and any Discipline bonuses or scales currently in effect.</li>\n</ul>\n\n<h3>How Disciplines bend it</h3>\n<p>The <strong>Pactkeeper</strong> is the Upkeep / Concurrency specialist. Initiation 1 (The Bargain) grants a passive +1 Concurrency (informational; surfaces on upkeep cards). Their Signature Mode <strong>Sealed Pact</strong> does two things while held: <em>Concurrency +2</em> (so +3 total) and <em>Upkeep ×0.5</em> — every active manifestation's per-tick Clarity bill is halved (round up). The scale is applied automatically by the engine; the upkeep chat card shows <code>Discipline: Upkeep ×0.50 · Concurrency +3</code>.</p>",
+        "markdown": ""
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777323326220,
+        "modifiedTime": 1777323326220,
+        "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+      },
+      "_key": "!journal.pages!dac777796cac474c.78e4e83aaa1bd9c6"
+    },
+    {
+      "sort": 600000,
+      "name": "Noise",
+      "type": "text",
+      "_id": "07498dd5ae62a975",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h2>Noise</h2>\n<p><strong>What it is:</strong> The metaphysical static you generate when you cast in <em>Chaos mode</em> — bending the world without permission and leaving a residue. Noise accumulates on a separate ledger and feeds the Corruption / detection / unwanted-attention machinery the GM and faction layer track.</p>\n\n<h3>Mechanics</h3>\n<ul>\n  <li><strong>Generated by Chaos mode only.</strong> A Chaos cast adds +2 Noise on top of its (reduced) Clarity cost. Hermetic and Ascendant generate 0 Noise.</li>\n  <li><strong>Pool: 0–10 by default.</strong> Visible on your sheet alongside Clarity. Doesn't drop unless something explicitly bleeds it (rituals, downtime, doctrine effects). <strong>Scene Break shaves 1 off.</strong></li>\n  <li><strong>Consequences are GM-driven.</strong> High Noise feeds Corruption ticks, makes you findable to faction Intrigue, and at thresholds may trigger unwanted attention from the Lattice. The number is the warning light, not the punishment itself.</li>\n</ul>\n\n<h3>How Disciplines bend it</h3>\n<p>None of the four caster Disciplines directly modify Noise generation in the pilot. Noise is a mode-discipline knob (it lives on the cast-mode side of the engine, not the path-discipline side). If you want low Noise, lean into Hermetic or Ascendant; if you want raw power on a budget, eat the Noise of Chaos and pay the bill later. <strong>Wyrdlens Adept</strong>'s Tier 4 Tikkun Sight in a nonviolent scene will wipe the Corruption tick a Spark gather would have caused — so the Noise stays, but the worst of its consequences are forgiven.</p>",
+        "markdown": ""
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777323326220,
+        "modifiedTime": 1777323326220,
+        "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+      },
+      "_key": "!journal.pages!dac777796cac474c.07498dd5ae62a975"
+    },
+    {
+      "sort": 700000,
+      "name": "Workings vs Forms",
+      "type": "text",
+      "_id": "4dc3e90e374172f4",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h2>Workings vs Forms — Who Can Manifest What</h2>\n<p>Manifestations resolve in two registers. Choosing one is a fictional commitment about <em>what kind of magic you do</em>, not just a mechanical knob.</p>\n\n<h3>Workings (instant)</h3>\n<p><strong>What it is:</strong> An active intervention that resolves immediately and ends. The blast that hits, the displacement that snaps the enemy across the room, the lock that springs open, the truth you compel out of someone's mouth.</p>\n<p><strong>Who can do them:</strong> <strong>Trad Caster Classes only</strong> — Cosmic Linguist, Wyrdlens Adept, Dreamwalker, Pactkeeper. The active interventionist register is the TCC's primary tool; the engine rejects an instant-stability cast from any other class with a notification.</p>\n\n<h3>Forms (sustained / bound / enduring)</h3>\n<p><strong>What it is:</strong> A persistent shape held open against the world. Wards that watch a doorway, glamours you wear, summons you keep around, conjurations that linger, names bound to objects. A Form pays per-tick Clarity upkeep and drops when you can't pay.</p>\n<p><strong>Who can do them:</strong> <strong>Anyone.</strong> Bulwarks, Aurablades, Soul-Smiths, Shadow Couriers, Harmony Marshals — they all manifest, but only as Forms. The Bulwark's \"manifestation\" is a charged ward; the Aurablade's is a sustained aura. Their primary tool is still their equipment / pool — manifestation is a complement.</p>\n\n<h3>Why this matters</h3>\n<p>This separation gives TCCs <em>fictional space</em> non-TCCs can't claim. Players who choose a TCC expect their primary tool of interaction to be magic; Workings are how that intent expresses. Non-TCCs who manifest do so by holding shapes open, not by spending magic the way a TCC does.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Items without an explicitly declared stability are treated as legacy and pass through the gate — only items tagged <code>stability: instant</code> are restricted. If you author a new manifestation item and want a non-TCC to use it, declare a sustained / bound / enduring stability.</p>",
+        "markdown": ""
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777323326220,
+        "modifiedTime": 1777323326220,
+        "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+      },
+      "_key": "!journal.pages!dac777796cac474c.4dc3e90e374172f4"
+    },
+    {
+      "sort": 800000,
+      "name": "T0 Lesser Manifestation",
+      "type": "text",
+      "_id": "90d9a4403cbfa0f7",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h2>T0 Lesser Manifestation</h2>\n<p><strong>What it is:</strong> Cantrip-flavor narrative chatter. A TCC always has trivial magic on hand — the candle that lights itself, the pebble that floats briefly, the door that recognizes their name, the dust that arranges into a hint.</p>\n\n<h3>Mechanics</h3>\n<ul>\n  <li><strong>No roll, no resource, no upkeep.</strong> Pure narrative. The engine posts a chat card with the TCC's described cue; nothing is checked, nothing is spent.</li>\n  <li><strong>TCC-only.</strong> Non-TCCs cannot fire a Lesser Manifestation — the action is gated at the engine layer.</li>\n  <li><strong>Always available.</strong> Doesn't refresh on Soma Break because there's nothing to refresh — there's no resource, no use limit.</li>\n  <li><strong>Distinct from a T1 Working.</strong> A T1 Working has a check, can misfire, and has mechanical effect. A T0 Lesser is the quiet ambient magic that fills the space between proper castings.</li>\n</ul>\n\n<h3>How to fire one</h3>\n<p>Click the <code>◌ Lesser</code> button on the character sheet (visible only to TCCs). Foundry prompts you for a one-line description; the chat card posts with your line. From a macro: <code>game.fourththing.actions.lesserManifestation(actor, { description: \"the door knows my name\" })</code>.</p>\n\n<h3>Design note</h3>\n<p>The Lesser register exists because Hermetic T1 for a TCC still costs 1 Clarity — a real, finite resource. Lesser is the always-on tool that makes a TCC <em>feel</em> like a caster between proper workings. If you find yourself reaching for Lesser in a scene where a roll matters, you probably want a T1 Working instead.</p>",
+        "markdown": ""
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777323326220,
+        "modifiedTime": 1777323326220,
+        "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+      },
+      "_key": "!journal.pages!dac777796cac474c.90d9a4403cbfa0f7"
+    },
+    {
+      "sort": 900000,
+      "name": "Scene Break",
+      "type": "text",
+      "_id": "fba9d2fc27455834",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h2>Scene Break — Light Recovery</h2>\n<p><strong>What it is:</strong> A breath between scenes that takes the worst of the pressure off without fully resetting. Faster cadence than a Soma Break — the GM may allow several Scene Breaks per session if the fiction supports them.</p>\n\n<h3>Mechanics</h3>\n<ul>\n  <li><strong>Refills Clarity to at least half max</strong> (round up). If you're already at or above half, nothing happens.</li>\n  <li><strong>Shaves 1 Noise</strong> off the pool (floor 0).</li>\n  <li><strong>Does NOT</strong> refresh Frame Dice, Ruin Charges, Burn, Surge, item uses, Integrity, or Stress. Those wait for Soma Break.</li>\n  <li><strong>Universal.</strong> Anyone can take a Scene Break — a Bulwark recovering from a brutal fight, a Shadow Courier between deliveries, a TCC pacing themselves. The deeper Clarity pool TCCs carry just means they get more relative uptime out of it.</li>\n</ul>\n\n<h3>How to fire one</h3>\n<p>Click the <code>◐ Scene Break</code> button on the character sheet, or call <code>game.fourththing.actions.sceneBreak(actor)</code> from a macro. Posts a chat card with the deltas applied.</p>\n\n<h3>When to take one</h3>\n<p>The classic pattern: end of an exploration scene, mid-dungeon between encounters, a brief downbeat in social play. Soma Breaks are GM-gated and meant to be rarer — Scene Breaks are the in-session breather that keeps the magic flowing without bypassing the day-arc economy.</p>",
+        "markdown": ""
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777323326220,
+        "modifiedTime": 1777323326220,
+        "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+      },
+      "_key": "!journal.pages!dac777796cac474c.fba9d2fc27455834"
+    },
+    {
+      "sort": 1000000,
+      "name": "Signature Modes & Chat Cards",
+      "type": "text",
+      "_id": "8335f13fe623611f",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h2>Signature Modes (Stances)</h2>\n<p>The four caster paths each have one Signature Mode you toggle on/off as a stance. While ON, additional discipline bonuses are layered on top of your passive feats. <strong>Click the Signature Mode feature on your sheet</strong> to open the toggle dialog.</p>\n<ul>\n  <li><strong>The Sentence</strong> — Cosmic Linguist (Initiation 11). Adds Reach −1 (stacks with passive for −2 total).</li>\n  <li><strong>Refraction</strong> — Wyrdlens Adept (Tier 3). Adds Misfire −2 (stacks with passive for −4 total).</li>\n  <li><strong>The Walking Lane</strong> — Dreamwalker (Tier 3). No engine deltas during the pilot — narrative reach into adjacent realms + GM hint.</li>\n  <li><strong>Sealed Pact</strong> — Pactkeeper (Initiation 11). Adds Upkeep ×0.5 and Concurrency +2.</li>\n</ul>\n<p>Signature Modes pay an ongoing upkeep against your Clarity (pilot stage: GM-set; exact curve to lock after one playtest cycle). Drop the stance freely on your turn.</p>\n\n<h2>How to read the chat card</h2>\n<p>Every cast and every upkeep tick now appends a <code>Discipline:</code> line summarizing what's currently shifting. Read it left-to-right:</p>\n<pre style=\"opacity:0.85;font-size:0.85em\">Clarity 2 · Reach→T2 via Surge · TCC discount −1 · Discipline: Reach −2 · Misfire −2</pre>\n<p>That's a Cosmic Linguist + Wyrdlens dip, T2 Surge-reach, with The Sentence active and both Wyrdlens passives in effect. The TCC discount also fired, lowering the base cost.</p>",
+        "markdown": ""
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "createdTime": 1777323326220,
+        "modifiedTime": 1777323326220,
+        "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+      },
+      "_key": "!journal.pages!dac777796cac474c.8335f13fe623611f"
+    }
+  ],
+  "categories": [],
+  "sort": 550000,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1777319908001,
+    "modifiedTime": 1777323326220,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!journal!dac777796cac474c"
+}

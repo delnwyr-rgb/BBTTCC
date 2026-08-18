@@ -1,0 +1,65 @@
+{
+  "folder": "GruW1UQmcpIS9hgw",
+  "name": "5. Travel",
+  "_id": "1cWUu91ldXKx0L8U",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "Here, There, Everywhere",
+      "type": "text",
+      "_id": "OCXdlFuFGytPIcjj",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<img src=\"art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/GrasslandsOverlay2.png\"><hr><h1>Moving Through the Broken World</h1><p data-start=\"391\" data-end=\"505\">The world of Bad Eden is divided into <strong data-start=\"427\" data-end=\"436\">hexes</strong>, fragments of reality left behind after the collapse of Adam Kadmon.</p><p data-start=\"507\" data-end=\"563\">Travel is the process of moving between these fragments.</p><p data-start=\"565\" data-end=\"622\">As your faction explores the world, travel allows you to:</p><p data-start=\"624\" data-end=\"727\">• discover new regions<br data-start=\"646\" data-end=\"649\">• reach important locations<br data-start=\"676\" data-end=\"679\">• respond to threats<br data-start=\"699\" data-end=\"702\">• expand your territory</p><p data-start=\"729\" data-end=\"790\">But movement through the world is never entirely predictable.</p><p data-start=\"792\" data-end=\"851\">Every journey carries <strong data-start=\"814\" data-end=\"850\">risk, discovery, and possibility</strong>.</p><hr data-start=\"853\" data-end=\"856\"><h1 data-section-id=\"jklmbg\" data-start=\"858\" data-end=\"876\">How Travel Works</h1><p data-start=\"878\" data-end=\"968\">Travel usually occurs when your faction moves from one hex to another on the campaign map.</p><p data-start=\"970\" data-end=\"1070\">The distance traveled and the terrain between locations determine how difficult the journey will be.</p><p data-start=\"1072\" data-end=\"1109\">During travel, the game may generate:</p><p data-start=\"1111\" data-end=\"1172\">• encounters<br data-start=\"1123\" data-end=\"1126\">• hazards<br data-start=\"1135\" data-end=\"1138\">• discoveries<br data-start=\"1151\" data-end=\"1154\">• narrative events</p><p data-start=\"1174\" data-end=\"1253\">These moments help make the world feel alive and responsive to player movement.</p><hr data-start=\"1255\" data-end=\"1258\"><h1 data-section-id=\"1yd4dki\" data-start=\"1260\" data-end=\"1279\">Travel Encounters</h1><p data-start=\"1281\" data-end=\"1386\">Travel often triggers <strong data-start=\"1303\" data-end=\"1317\">encounters</strong>, which represent unexpected situations that arise along the journey.</p><p data-start=\"1388\" data-end=\"1413\">Encounters might include:</p><p data-start=\"1415\" data-end=\"1523\">• hostile creatures<br data-start=\"1434\" data-end=\"1437\">• strange phenomena<br data-start=\"1456\" data-end=\"1459\">• hidden ruins<br data-start=\"1473\" data-end=\"1476\">• travelers in need<br data-start=\"1495\" data-end=\"1498\">• environmental hazards</p><p data-start=\"1525\" data-end=\"1649\">These encounters are usually presented through <strong data-start=\"1572\" data-end=\"1590\">Campaign Beats</strong>, where players must make decisions that shape the outcome.</p><hr data-start=\"1651\" data-end=\"1654\"><h1 data-section-id=\"172urop\" data-start=\"1656\" data-end=\"1680\">Terrain and Difficulty</h1><p data-start=\"1682\" data-end=\"1737\">Not all regions of the world are equally easy to cross.</p><p data-start=\"1739\" data-end=\"1803\">Some terrain may slow travel or increase the risk of encounters.</p><p data-start=\"1805\" data-end=\"1822\">Examples include:</p><p data-start=\"1824\" data-end=\"1923\">• dense wilderness<br data-start=\"1842\" data-end=\"1845\">• ruined infrastructure<br data-start=\"1868\" data-end=\"1871\">• corrupted environments<br data-start=\"1895\" data-end=\"1898\">• unstable magical fields</p><p data-start=\"1925\" data-end=\"2006\">Travel through these areas may require more time, resources, or careful planning.</p><hr data-start=\"2008\" data-end=\"2011\"><h1 data-section-id=\"4ctmxg\" data-start=\"2013\" data-end=\"2028\">Travel Routes</h1><p data-start=\"2030\" data-end=\"2119\">As your faction expands its territory, travel becomes easier between regions you control.</p><p data-start=\"2121\" data-end=\"2225\">Developed hexes and infrastructure can create reliable routes that allow faster movement across the map.</p><p data-start=\"2227\" data-end=\"2341\">This makes <strong data-start=\"2238\" data-end=\"2287\">territory development strategically important</strong>, since safe routes improve mobility and coordination.</p><hr data-start=\"2343\" data-end=\"2346\"><h1 data-section-id=\"prxaya\" data-start=\"2348\" data-end=\"2359\">Ley Gates</h1><p data-start=\"2361\" data-end=\"2426\">Some locations contain ancient structures known as <strong data-start=\"2412\" data-end=\"2425\">Ley Gates</strong>.</p><p data-start=\"2428\" data-end=\"2517\">These gates connect distant hexes through currents of magical energy called <strong data-start=\"2504\" data-end=\"2516\">leylines</strong>.</p><p data-start=\"2519\" data-end=\"2636\">When activated, a Ley Gate allows factions to travel between two distant regions far more quickly than normal travel.</p><p data-start=\"2638\" data-end=\"2729\">Ley Gates are rare and often require discovery, repair, or control before they can be used.</p><hr data-start=\"2731\" data-end=\"2734\"><h1 data-section-id=\"1srmcrt\" data-start=\"2736\" data-end=\"2752\">Travel Hazards</h1><p data-start=\"2754\" data-end=\"2811\">Traveling through the fractured world is not always safe.</p><p data-start=\"2813\" data-end=\"2838\">Possible dangers include:</p><p data-start=\"2840\" data-end=\"2953\">• environmental corruption<br data-start=\"2866\" data-end=\"2869\">• radiation zones<br data-start=\"2886\" data-end=\"2889\">• magical anomalies<br data-start=\"2908\" data-end=\"2911\">• hostile factions<br data-start=\"2929\" data-end=\"2932\">• wandering creatures</p><p data-start=\"2955\" data-end=\"3037\">Hazards may drain resources, create narrative complications, or trigger conflicts.</p><img src=\"art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/SwomnpsterHex4.png\"><hr data-start=\"3039\" data-end=\"3042\"><h1 data-section-id=\"1fk6i9d\" data-start=\"3044\" data-end=\"3066\">Planning Expeditions</h1><p data-start=\"3068\" data-end=\"3127\">As your faction grows, travel becomes a strategic decision.</p><p data-start=\"3129\" data-end=\"3152\">You may need to decide:</p><p data-start=\"3154\" data-end=\"3290\">• which regions to explore next<br data-start=\"3185\" data-end=\"3188\">• when to respond to threats<br data-start=\"3216\" data-end=\"3219\">• how to connect distant territory<br data-start=\"3253\" data-end=\"3256\">• whether to risk dangerous routes</p><p data-start=\"3292\" data-end=\"3395\">Exploration is often the first step toward discovering <strong data-start=\"3347\" data-end=\"3394\">new opportunities and new problems to solve</strong>.</p><hr data-start=\"3397\" data-end=\"3400\"><h1 data-section-id=\"x0qn1b\" data-start=\"3402\" data-end=\"3421\">The Journey Cycle</h1><p data-start=\"3423\" data-end=\"3461\">Travel often follows a simple pattern:</p><pre class=\"overflow-visible! px-0!\" data-start=\"3463\" data-end=\"3605\"><code>Choose Destination\n      ↓\nBegin Journey\n      ↓\nEncounter Events\n      ↓\nResolve Problems\n      ↓\nArrive in New Hex</code></pre><p data-start=\"3607\" data-end=\"3661\">Once you arrive, exploration of the new hex can begin.</p><hr data-start=\"3663\" data-end=\"3666\"><h1 data-section-id=\"1j3omac\" data-start=\"3668\" data-end=\"3692\">Travel and Exploration</h1><p data-start=\"3694\" data-end=\"3729\">Travel is the gateway to discovery.</p><p data-start=\"3731\" data-end=\"3769\">Every new region you enter may reveal:</p><p data-start=\"3771\" data-end=\"3903\">• hidden settlements<br data-start=\"3791\" data-end=\"3794\">• forgotten infrastructure<br data-start=\"3820\" data-end=\"3823\">• powerful artifacts<br data-start=\"3843\" data-end=\"3846\">• sources of corruption<br data-start=\"3869\" data-end=\"3872\">• opportunities for development</p><p data-start=\"3905\" data-end=\"4024\">The farther your faction travels, the more of the world becomes known — and the more influence you can wield within it.</p><hr data-start=\"4026\" data-end=\"4029\"><h1 data-section-id=\"jr4o1u\" data-start=\"4031\" data-end=\"4061\">What Players Should Remember</h1><p data-start=\"4063\" data-end=\"4103\">Three key ideas define travel in Bad Eden.</p><p data-start=\"4105\" data-end=\"4137\"><strong data-start=\"4105\" data-end=\"4137\">1 — Travel reveals the world</strong></p><p data-start=\"4139\" data-end=\"4166\">New hexes mean new stories.</p><p data-start=\"4168\" data-end=\"4195\"><strong data-start=\"4168\" data-end=\"4195\">2 — Travel creates risk</strong></p><p data-start=\"4197\" data-end=\"4246\">Journeys often lead to encounters and challenges.</p><p data-start=\"4248\" data-end=\"4282\"><strong data-start=\"4248\" data-end=\"4282\">3 — Travel expands opportunity</strong></p><p data-start=\"4284\" data-end=\"4347\">Exploration opens the door to growth, resources, and influence.</p><hr data-start=\"4349\" data-end=\"4352\"><h1 data-section-id=\"ex09de\" data-start=\"4354\" data-end=\"4371\">In Simple Terms</h1><p data-start=\"4373\" data-end=\"4438\">Travel is how your faction <strong data-start=\"4400\" data-end=\"4437\">moves through the shattered world</strong>.</p><p data-start=\"4440\" data-end=\"4493\">It leads to discovery, danger, and new possibilities.</p><p data-start=\"4495\" data-end=\"4537\">Every journey pushes the campaign forward.</p><img src=\"art/bbttcc/GOTTGAIT/GOTTGAIT%20Scene%20files/FarmOverlay2.png\">"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.363",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "createdTime": 1781116251308,
+        "modifiedTime": 1781116251308
+      },
+      "_key": "!journal.pages!1cWUu91ldXKx0L8U.OCXdlFuFGytPIcjj"
+    }
+  ],
+  "categories": [],
+  "sort": 0,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775619852110,
+    "modifiedTime": 1781116251307,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!journal!1cWUu91ldXKx0L8U"
+}

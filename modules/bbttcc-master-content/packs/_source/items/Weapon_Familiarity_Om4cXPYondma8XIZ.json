@@ -1,0 +1,62 @@
+{
+  "name": "Weapon Familiarity",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Feats/bbttcc_feats_weapon_familiarity.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden Core Feats (Batch 3) (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<h2>Weapon Familiarity</h2><p><em>A handle is a handle if you know leverage.</em></p><hr><h3>Rules</h3><p>When you attack with a weapon you are not trained with, you do not suffer disadvantage.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_feat_weapon_familiarity",
+    "uses": {
+      "max": "",
+      "spent": 0,
+      "recovery": []
+    },
+    "requirements": "",
+    "type": {
+      "value": "feat",
+      "subtype": ""
+    },
+    "activities": {},
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "pack": "bbttcc-feats-batch3",
+      "featNumber": 54,
+      "generatedAt": "2026-01-19T05:04:20.693394Z"
+    }
+  },
+  "_id": "Om4cXPYondma8XIZ",
+  "folder": "QbGNBV70xh9pF0eh",
+  "sort": 101563,
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "_stats": {
+    "compendiumSource": "Item.Om4cXPYondma8XIZ",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1768802465828,
+    "modifiedTime": 1782167241491,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_key": "!items!Om4cXPYondma8XIZ"
+}

@@ -1,0 +1,67 @@
+{
+  "name": "Marchwork",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_sapphire_boots.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "Bad Eden Originals"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You don’t just march. You set tempo.</em>”</p><p>Your presence and banners teach people how to move like a single thought.</p><ul><li>When allies begin their turn within <strong>2 squares</strong> of you, they gain a <strong>+2 squares bonus</strong> to their walking speed until the end of that turn.</li><li>This doesn’t stack with itself, but it does play nicely with other speed increases (GM adjudicates edge cases).</li></ul><p><em>You don’t shout ‘Forward.’ You just start walking and the hex comes with you.</em></p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "soulsmith-forge-victory-marchwork",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Soul-Smith 6, Forge of Victory",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "dsO4fBFdVXDt6vRA",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "soulsmith_forge_victory",
+      "featureKey": "marchwork"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459996550,
+    "modifiedTime": 1782167240812,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "CwwBcnUZyKZPRDXG",
+  "sort": 200000,
+  "_key": "!items!CwwBcnUZyKZPRDXG"
+}

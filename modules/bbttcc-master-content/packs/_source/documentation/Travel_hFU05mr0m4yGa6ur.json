@@ -1,0 +1,63 @@
+{
+  "folder": "OoZBBlTDgemhNept",
+  "name": "Travel",
+  "_id": "hFU05mr0m4yGa6ur",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "Don't make me turn this campaign around",
+      "type": "text",
+      "_id": "0HwqRhZk3jYyvXSj",
+      "system": {},
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "text": {
+        "format": 1,
+        "content": "<h1 data-start=\"4530\" data-end=\"4568\">🧭 TRAVEL ENGINE — CANON DESCRIPTION</h1><blockquote data-start=\"4570\" data-end=\"4597\"><p data-start=\"4572\" data-end=\"4597\">“Distance is never free.”</p></blockquote><p data-start=\"4599\" data-end=\"4611\">Grounded in:</p><ul data-start=\"4613\" data-end=\"4806\"><li data-start=\"4613\" data-end=\"4670\"><p data-start=\"4615\" data-end=\"4670\">Terrain canon <span class=\"relative inline-flex items-center\">main</span></p></li><li data-start=\"4671\" data-end=\"4728\"><p data-start=\"4673\" data-end=\"4728\">Gate resolver <span class=\"relative inline-flex items-center\">main</span></p></li><li data-start=\"4729\" data-end=\"4806\"><p data-start=\"4731\" data-end=\"4806\">Infiltration / encounter triggers <span class=\"relative inline-flex items-center\">raid-infiltration.alarm.enhancer</span></p></li></ul><hr data-start=\"4808\" data-end=\"4811\" /><h2 data-start=\"4813\" data-end=\"4836\">📘 TRAVEL COST MODEL</h2><p data-start=\"4838\" data-end=\"4863\">Travel cost derived from:</p><ol data-start=\"4865\" data-end=\"4937\"><li data-start=\"4865\" data-end=\"4879\"><p data-start=\"4868\" data-end=\"4879\">Terrain key</p></li><li data-start=\"4880\" data-end=\"4891\"><p data-start=\"4883\" data-end=\"4891\">Distance</p></li><li data-start=\"4892\" data-end=\"4902\"><p data-start=\"4895\" data-end=\"4902\">Weather</p></li><li data-start=\"4903\" data-end=\"4920\"><p data-start=\"4906\" data-end=\"4920\">Rig mitigation</p></li><li data-start=\"4921\" data-end=\"4937\"><p data-start=\"4924\" data-end=\"4937\">Gate discount</p></li></ol><hr data-start=\"4939\" data-end=\"4942\" /><h2 data-start=\"4944\" data-end=\"4965\">🗺 TERRAIN EFFECTS</h2><div class=\"TyagGW_tableContainer\"><div tabindex=\"-1\" class=\"group TyagGW_tableWrapper flex flex-col-reverse w-fit\"><table data-start=\"4967\" data-end=\"5162\" class=\"w-fit min-w-(--thread-content-width)\"><thead data-start=\"4967\" data-end=\"4992\"><tr data-start=\"4967\" data-end=\"4992\"><th data-start=\"4967\" data-end=\"4977\" data-col-size=\"sm\">Terrain</th><th data-start=\"4977\" data-end=\"4992\" data-col-size=\"sm\">Base Impact</th></tr></thead><tbody data-start=\"5019\" data-end=\"5162\"><tr data-start=\"5019\" data-end=\"5040\"><td data-start=\"5019\" data-end=\"5028\" data-col-size=\"sm\">Plains</td><td data-start=\"5028\" data-end=\"5040\" data-col-size=\"sm\">Baseline</td></tr><tr data-start=\"5041\" data-end=\"5065\"><td data-start=\"5041\" data-end=\"5053\" data-col-size=\"sm\">Mountains</td><td data-start=\"5053\" data-end=\"5065\" data-col-size=\"sm\">+OP cost</td></tr><tr data-start=\"5066\" data-end=\"5092\"><td data-start=\"5066\" data-end=\"5074\" data-col-size=\"sm\">Swamp</td><td data-start=\"5074\" data-end=\"5092\" data-col-size=\"sm\">Increased risk</td></tr><tr data-start=\"5093\" data-end=\"5126\"><td data-start=\"5093\" data-end=\"5105\" data-col-size=\"sm\">Wasteland</td><td data-start=\"5105\" data-end=\"5126\" data-col-size=\"sm\">Radiation penalty</td></tr><tr data-start=\"5127\" data-end=\"5162\"><td data-start=\"5127\" data-end=\"5135\" data-col-size=\"sm\">Ruins</td><td data-start=\"5135\" data-end=\"5162\" data-col-size=\"sm\">Infiltration likelihood</td></tr></tbody></table></div></div><p data-start=\"5164\" data-end=\"5248\">Terrain normalized via canonical key storage <span class=\"relative inline-flex items-center\">main</span></p><hr data-start=\"5250\" data-end=\"5253\" /><h2 data-start=\"5255\" data-end=\"5270\">🜂 LEY GATES</h2><p data-start=\"5272\" data-end=\"5330\">From gate resolver <span class=\"relative inline-flex items-center\">main</span></p><div class=\"TyagGW_tableContainer\"><div tabindex=\"-1\" class=\"group TyagGW_tableWrapper flex flex-col-reverse w-fit\"><table data-start=\"5332\" data-end=\"5498\" class=\"w-fit min-w-(--thread-content-width)\"><thead data-start=\"5332\" data-end=\"5354\"><tr data-start=\"5332\" data-end=\"5354\"><th data-start=\"5332\" data-end=\"5344\" data-col-size=\"sm\">Condition</th><th data-start=\"5344\" data-end=\"5354\" data-col-size=\"sm\">Effect</th></tr></thead><tbody data-start=\"5379\" data-end=\"5498\"><tr data-start=\"5379\" data-end=\"5430\"><td data-start=\"5379\" data-end=\"5410\" data-col-size=\"sm\">Enabled + Tier meets minTier</td><td data-start=\"5410\" data-end=\"5430\" data-col-size=\"sm\">Remote adjacency</td></tr><tr data-start=\"5431\" data-end=\"5476\"><td data-start=\"5431\" data-end=\"5446\" data-col-size=\"sm\">Violence 0–1</td><td data-start=\"5446\" data-end=\"5476\" data-col-size=\"sm\">Travel discount multiplier</td></tr><tr data-start=\"5477\" data-end=\"5498\"><td data-start=\"5477\" data-end=\"5486\" data-col-size=\"sm\">Locked</td><td data-start=\"5486\" data-end=\"5498\" data-col-size=\"sm\">Disabled</td></tr></tbody></table></div></div><p data-start=\"5500\" data-end=\"5504\">Mal:</p><blockquote data-start=\"5506\" data-end=\"5523\"><p data-start=\"5508\" data-end=\"5523\">“Fold the map.”</p></blockquote><hr data-start=\"5525\" data-end=\"5528\" /><h2 data-start=\"5530\" data-end=\"5543\">🌪 WEATHER</h2><p data-start=\"5545\" data-end=\"5568\">Weather Arc influences:</p><div class=\"TyagGW_tableContainer\"><div tabindex=\"-1\" class=\"group TyagGW_tableWrapper flex flex-col-reverse w-fit\"><table data-start=\"5570\" data-end=\"5734\" class=\"w-fit min-w-(--thread-content-width)\"><thead data-start=\"5570\" data-end=\"5590\"><tr data-start=\"5570\" data-end=\"5590\"><th data-start=\"5570\" data-end=\"5580\" data-col-size=\"sm\">Weather</th><th data-start=\"5580\" data-end=\"5590\" data-col-size=\"sm\">Effect</th></tr></thead><tbody data-start=\"5613\" data-end=\"5734\"><tr data-start=\"5613\" data-end=\"5634\"><td data-start=\"5613\" data-end=\"5621\" data-col-size=\"sm\">Clear</td><td data-start=\"5621\" data-end=\"5634\" data-col-size=\"sm\">No change</td></tr><tr data-start=\"5635\" data-end=\"5656\"><td data-start=\"5635\" data-end=\"5648\" data-col-size=\"sm\">Turbulence</td><td data-start=\"5648\" data-end=\"5656\" data-col-size=\"sm\">−10%</td></tr><tr data-start=\"5657\" data-end=\"5679\"><td data-start=\"5657\" data-end=\"5665\" data-col-size=\"sm\">Surge</td><td data-start=\"5665\" data-end=\"5679\" data-col-size=\"sm\">+30% regen</td></tr><tr data-start=\"5680\" data-end=\"5701\"><td data-start=\"5680\" data-end=\"5693\" data-col-size=\"sm\">Stagnation</td><td data-start=\"5693\" data-end=\"5701\" data-col-size=\"sm\">−40%</td></tr><tr data-start=\"5702\" data-end=\"5734\"><td data-start=\"5702\" data-end=\"5714\" data-col-size=\"sm\">Inversion</td><td data-start=\"5714\" data-end=\"5734\" data-col-size=\"sm\">Swap OP channels</td></tr></tbody></table></div></div><p data-start=\"5736\" data-end=\"5804\">(From LEY_FLOW_MULT mapping) <span class=\"relative inline-flex items-center\">main</span></p><hr data-start=\"5806\" data-end=\"5809\" /><h2 data-start=\"5811\" data-end=\"5834\">🎲 TRAVEL ENCOUNTERS</h2><p data-start=\"5836\" data-end=\"5855\">Travel may trigger:</p><ul data-start=\"5857\" data-end=\"5934\"><li data-start=\"5857\" data-end=\"5870\"><p data-start=\"5859\" data-end=\"5870\">Scout Signs</p></li><li data-start=\"5871\" data-end=\"5891\"><p data-start=\"5873\" data-end=\"5891\">Infiltration Alarm</p></li><li data-start=\"5892\" data-end=\"5917\"><p data-start=\"5894\" data-end=\"5917\">Campaign Beat injection</p></li><li data-start=\"5918\" data-end=\"5934\"><p data-start=\"5920\" data-end=\"5934\">Boss encounter</p></li></ul><p data-start=\"5936\" data-end=\"5987\">Encounter pipeline integrated with campaign engine.</p><hr data-start=\"5989\" data-end=\"5992\" /><h2 data-start=\"5994\" data-end=\"6013\">⚠ TRAVEL FAILURE</h2><p data-start=\"6015\" data-end=\"6034\">If OP insufficient:</p><ul data-start=\"6036\" data-end=\"6101\"><li data-start=\"6036\" data-end=\"6050\"><p data-start=\"6038\" data-end=\"6050\">Travel fails</p></li><li data-start=\"6051\" data-end=\"6064\"><p data-start=\"6053\" data-end=\"6064\">No movement</p></li><li data-start=\"6065\" data-end=\"6079\"><p data-start=\"6067\" data-end=\"6079\">No encounter</p></li><li data-start=\"6080\" data-end=\"6101\"><p data-start=\"6082\" data-end=\"6101\">No partial mutation</p></li></ul><hr data-start=\"6103\" data-end=\"6106\" /><h1 data-start=\"6108\" data-end=\"6124\">🗣 MAL SUMMARY</h1><blockquote data-start=\"6126\" data-end=\"6241\"><p data-start=\"6128\" data-end=\"6241\">“Travel drains you.<br data-start=\"6147\" data-end=\"6150\" />Ritual risks you.<br data-start=\"6169\" data-end=\"6172\" />Politics judges you.<br data-start=\"6194\" data-end=\"6197\" />Strategy feeds you.<br data-start=\"6218\" data-end=\"6221\" />Raid defines you.”</p></blockquote>"
+      },
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "category": null,
+      "ownership": {
+        "default": -1,
+        "vmUfDuSYUIe7V5uB": 3
+      },
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.3.0",
+        "lastModifiedBy": null
+      },
+      "_key": "!journal.pages!hFU05mr0m4yGa6ur.0HwqRhZk3jYyvXSj"
+    }
+  ],
+  "categories": [],
+  "sort": 500000,
+  "ownership": {
+    "default": 2,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1775619866699,
+    "modifiedTime": 1775799290609,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!journal!hFU05mr0m4yGa6ur"
+}

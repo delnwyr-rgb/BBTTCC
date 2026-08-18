@@ -1,0 +1,41 @@
+{
+  "name": "Path of the Cataclyst (Bad Eden)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_atom_1.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "bulwark",
+    "source": "Bad Eden Originals — Sprint F (2026 rules)",
+    "tags": [],
+    "description": {
+      "value": "<p><em>\"Something gives way. You aim where.\"</em></p>\n<p><strong>Doctrine:</strong> Controlled eruption — trade stability for force on purpose.</p>\n<p>The Cataclyst is the wall that decides to come down on someone. Your Surge spends turn your own stored impact into offense: a strike that erupts, a seam found in anything, a moment where the ground itself gives up standing still.</p>\n<h3>Path (spent via Surge)</h3>\n<ul>\n  <li><strong>Erupt</strong> (1) — your next Strike blazes (+Tier d6 exploding) and hurls the target back.</li>\n  <li><strong>Shatter</strong> (3) — your next Strike ignores resistances; the target is Staggered.</li>\n  <li><strong>Cataclysm</strong> (5) — your next Strike lands as a max-die crit, and foes in reach are knocked Prone.</li>\n</ul>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-bulwark-cataclyst",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "HmbujXzEJL7v48Q9",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "TymJux36egJ8oH6o",
+  "sort": 100000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.363",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1781116159807,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!TymJux36egJ8oH6o"
+}

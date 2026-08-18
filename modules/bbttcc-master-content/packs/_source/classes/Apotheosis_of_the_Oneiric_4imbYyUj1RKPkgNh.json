@@ -1,0 +1,127 @@
+{
+  "name": "Apotheosis of the Oneiric",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Apotheosis of the Oneiric.</strong> You shed the last barrier between waking and dreaming, moving through the world as a sovereign of narrative possibility.</p><ul><li><strong>Limitless Tuning:</strong> You may use Dream-Thread Tuning any number of times.</li><li><strong>Expanded Dream Rites:</strong> You may perform two Dream Rites per Soma Break, and one may be performed without trance, even in combat (1 action).</li><li><strong>True Dreamstride:</strong> Once per Soma Break, as an action, you and up to six willing creatures may shift through the symbolic layer to appear anywhere within 24 squares or in an adjacent overworld hex.</li><li><strong>World-Bent Aura (10 minutes):</strong> You gain +2 Guard and reroll the lowest die on all Mind, Soul, and Presence checks. Allies within 6 squares gain +1 to all defense check.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "1"
+    },
+    "advancement": {},
+    "identifier": "apotheosis-of-the-oneiric",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 20
+    },
+    "properties": [],
+    "requirements": "Dreamwalker (20th level)",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Apotheosis of the Oneiric (Aura)",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_camp.png",
+      "origin": null,
+      "transfer": false,
+      "disabled": true,
+      "duration": {
+        "value": 600,
+        "units": "seconds",
+        "expiry": "turnStart",
+        "expired": false
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776459927029,
+        "modifiedTime": 1777346197748
+      },
+      "_id": "sIHDQW2bfOFHeZ3m",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.attributes.ac.bonus",
+            "value": 2,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.bbttcc.dreamwalker.apotheosisActive",
+            "value": true,
+            "priority": 20,
+            "type": "custom",
+            "phase": "initial"
+          }
+        ]
+      },
+      "description": "",
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!4imbYyUj1RKPkgNh.sIHDQW2bfOFHeZ3m"
+    }
+  ],
+  "folder": "YLUIFZ5nPOUSaSH2",
+  "flags": {
+    "bbttcc": {
+      "dreamwalker": {
+        "apotheosis": true
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776459927029,
+    "modifiedTime": 1782167240797,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "4imbYyUj1RKPkgNh",
+  "sort": 275000,
+  "_key": "!items!4imbYyUj1RKPkgNh"
+}

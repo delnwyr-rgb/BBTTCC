@@ -1,0 +1,143 @@
+{
+  "name": "Drifter's Weave",
+  "type": "armor",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/drifter_weave.png",
+  "system": {
+    "guardBonus": 1,
+    "evasionBonus": 1,
+    "resolveBonus": 0,
+    "resistances": [],
+    "armorSkill": "weave",
+    "equipped": false,
+    "tags": [
+      "t1-baseline",
+      "light",
+      "cloth"
+    ],
+    "category": "armor",
+    "source": "",
+    "description": {
+      "value": "<p>Layered travel cloth — patchwork canvas over a quilted underlayer, road-stained at the cuffs. Cut for moving. Sold on every frontier table from Allesh Gilliam to the edge of the Lyrenn line. The first armor most Stewards ever buy, and the first they outgrow.</p><p><strong>Standard Issue.</strong> Worn in the field, not the throne room. Easy to repair, easy to replace, easy to forget you have it on.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Light</li>\n  <li><strong>Defense:</strong> Guard +1, Evasion +1</li>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 75 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "item": {
+          "tier": "I",
+          "footprint": 1,
+          "reach": "self",
+          "frame": "armor",
+          "signature": "Cloth that's already walked further than you have.",
+          "origin": "looted",
+          "originator": null,
+          "bound": "free",
+          "upkeep": {
+            "mode": "passive",
+            "per": "scene"
+          },
+          "misfire": {
+            "tierClamp": true,
+            "table": null
+          },
+          "signals": {},
+          "lore": "<p>Layered travel cloth — patchwork canvas over a quilted underlayer, road-stained at the cuffs. Cut for moving. Sold on every frontier table from Allesh Gilliam to the edge of the Lyrenn line. The first armor most Stewards ever buy, and the first they outgrow.</p><p><b>Standard Issue.</b> Worn in the field, not the throne room. Easy to repair, easy to replace, easy to forget you have it on.</p>",
+          "materialOf": [
+            "road-canvas",
+            "quilted-liner"
+          ],
+          "price": {
+            "marks": 75,
+            "currency": "nonlethal",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI armor stamp",
+            "bound": "free",
+            "saleBack": 30
+          }
+        }
+      }
+    }
+  },
+  "folder": "2yW6O57xUFtROfpB",
+  "_id": "UjGo97xHboWL2RPP",
+  "effects": [
+    {
+      "name": "⚙️ Defense Grant",
+      "transfer": false,
+      "disabled": false,
+      "flags": {
+        "fourththing": {
+          "defenseGrant": true
+        }
+      },
+      "system": {
+        "changes": [
+          {
+            "key": "flags.fourththing.grant.guard",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          },
+          {
+            "key": "flags.fourththing.grant.evasion",
+            "value": 1,
+            "priority": 20,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "_id": "NbDBxSqwNNwXa5Fh",
+      "img": "icons/svg/aura.svg",
+      "type": "base",
+      "start": null,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "showIcon": 1,
+      "folder": null,
+      "sort": 0,
+      "_stats": {
+        "coreVersion": "14.364",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1781726107549,
+        "modifiedTime": 1781726107549,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!items.effects!UjGo97xHboWL2RPP.NbDBxSqwNNwXa5Fh"
+    }
+  ],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1777862455115,
+    "modifiedTime": 1782160020988,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!UjGo97xHboWL2RPP"
+}

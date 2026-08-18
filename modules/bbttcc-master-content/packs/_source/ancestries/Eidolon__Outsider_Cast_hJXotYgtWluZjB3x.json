@@ -1,0 +1,76 @@
+{
+  "_id": "hJXotYgtWluZjB3x",
+  "name": "Eidolon: Outsider Cast",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_alien.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Outsider Cast.</strong> You do not need to eat, sleep, or breathe. You appear subtly wrong to careful observers (Perception DC 15 to notice). Resistance to psychic damage.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "eidolon-lesser",
+    "requirements": "Eidolon (Outsider)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "eidolon",
+      "lineage": "Eidolon (Outsider)",
+      "feature": "lesser",
+      "tierLevel": 1,
+      "version": "1.0.0",
+      "date": "2026-05-15",
+      "npAncestry": true
+    },
+    "fourththing": {
+      "principleSource": "ancestry"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778961512564,
+    "modifiedTime": 1781116092554,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "folder": "xEjihJm7wSmcGO1b",
+  "sort": 150000,
+  "_key": "!items!hJXotYgtWluZjB3x"
+}

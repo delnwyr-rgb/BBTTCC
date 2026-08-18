@@ -1,0 +1,169 @@
+{
+  "_id": "RCEUy4jQaqFuEBrC",
+  "name": "Angel (Empyrean)",
+  "type": "species",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_1.png",
+  "system": {
+    "category": "ancestry",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Empyrean lineage — celestial blood that sings in the marrow. Diplomats, healers, witnesses; the Pleroma is their kindred and their burden.</em></p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "yzic9frc4625znue",
+        "type": "Size",
+        "configuration": {
+          "sizes": [
+            "med"
+          ]
+        },
+        "level": 0,
+        "title": "",
+        "hint": "Angel (Empyrean) (size: med).",
+        "value": {}
+      },
+      {
+        "_id": "bv5fl5tsr9iwdris",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.gREfY9XCCPbEAOL0",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Angel (Empyrean) Tier 1",
+        "hint": "Grants the tier 1 Angel (Empyrean) feature."
+      },
+      {
+        "_id": "mlri7eln6vdynk1b",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.crBMmAxf08Ojs6GJ",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Angel (Empyrean) Tier 2",
+        "hint": "Grants the tier 2 Angel (Empyrean) feature."
+      },
+      {
+        "_id": "g3lxspvoa6h1s5x6",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.aa6WcAbEhJn75ZzX",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Angel (Empyrean) Tier 3",
+        "hint": "Grants the tier 3 Angel (Empyrean) feature."
+      },
+      {
+        "_id": "ddisziavxa5ib14r",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.S0iMwf2MhxOdwwlG",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Angel (Empyrean) Tier 4",
+        "hint": "Grants the tier 4 Angel (Empyrean) feature."
+      }
+    ],
+    "identifier": "angel",
+    "properties": [],
+    "type": {
+      "value": "humanoid",
+      "subtype": "Angel (Empyrean)"
+    }
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestry",
+      "lineage": "angel",
+      "version": "1.0.0",
+      "date": "2026-05-15",
+      "npAncestry": true
+    },
+    "fourththing": {
+      "principleSource": "ancestry",
+      "rfi": {
+        "item": {
+          "price": {
+            "marks": 30,
+            "currency": "economy",
+            "gmOverride": false,
+            "altCurrencies": {},
+            "split": null,
+            "rarityMult": 1,
+            "notes": "TI tool × 0.60",
+            "bound": "free",
+            "saleBack": 12
+          }
+        }
+      }
+    },
+    "bbttcc-factions": {
+      "opContribution": {
+        "diplomacy": 1,
+        "faith": 1
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778961512463,
+    "modifiedTime": 1781116079320,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "folder": "CBS92ieQuq91YbWx",
+  "sort": 100000,
+  "_key": "!items!RCEUy4jQaqFuEBrC"
+}

@@ -1,0 +1,67 @@
+{
+  "name": "Garrison Fort Template",
+  "type": "feature",
+  "img": "icons/sundries/scrolls/scroll-bound-sealed-red.webp",
+  "system": {
+    "category": "principle",
+    "source": "",
+    "tags": [],
+    "description": {
+      "value": "<p>Pre-rolled stationary garrison: heavy frame, four guns, militia output. Holds a hex against raids.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "fourththing": {
+      "rigGear": {
+        "subtype": "rig-template"
+      },
+      "rigTemplate": {
+        "config": {
+          "identity": {
+            "mobility": "stationary",
+            "state": "parked",
+            "archetype": "garrison"
+          },
+          "frame": "Garrison Fort Frame",
+          "gear": {
+            "weapons": [
+              "Twin Autocannons",
+              "Twin Autocannons",
+              "Mortar Battery",
+              "Plasma Lance"
+            ],
+            "systems": [
+              "Reinforced Plating",
+              "Sensor Suite",
+              "Comms Array"
+            ],
+            "outputs": [
+              "Hex-Bound Garrison Plate"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "folder": "0JDB983lzPepXXNe",
+  "_id": "TLuZhcCmu40SVlUi",
+  "effects": [],
+  "sort": 2600000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1778205374982,
+    "modifiedTime": 1778963271956,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!TLuZhcCmu40SVlUi"
+}

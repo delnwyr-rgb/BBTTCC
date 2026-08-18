@@ -1,0 +1,108 @@
+{
+  "_id": "yiZiL1OaWx9qX5bF",
+  "name": "Cryptidkin Heritage: Jackalope",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/Verity_Furlong_screenshot%20Background%20Removed.png",
+  "system": {
+    "category": "technique",
+    "source": "Bad Eden (2024 rules)",
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin Subspecies.</strong> This heritage preserves the original UUID for <em>Jackalope (Bad Eden)</em> while converting it from a species-root to a Cryptidkin subspecies.</p><p><em>“You don’t spot a Jackalope. You notice the world flinch, and then realize why.”</em></p><p><strong>Jackalope.</strong> Fast because they have to be. Twitchy because the world has trained them that stillness is how you die. Half-remembered pre-Shattering folklore, half radiation-assembled rumor, and fully people.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium.</p></li><li><p><strong>Speed.</strong> 7 squares</p></li><li><p><strong>Subspecies Lean.</strong> Your subspecies leans toward <strong>INTR (Intrigue)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor’s Instinct).</p><h3>Jackalope Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Jackalope powers emphasize: <em>Startle Reflex</em> (can’t-be-caught-flat burst), <em>Wasteland Bound</em> (long-distance run), <em>Horns of Bad Luck</em> (jinx aura), <em>Can’t Catch Me</em> (evasion), and strategic <em>Bad Omen Runner</em> faction hooks.</p><h3>Strategic Hooks (Foundry / Bad Eden)</h3><p>If you see Jackalope tracks circling your hex, you are not under attack. You are being <em>advised</em>.</p><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+1 Soft Power OP</strong> and <strong>+1 Non-Lethal OP</strong> at campaign start.</p></li><li><p><strong>Trail Whisper.</strong> Once per Strategic Turn, your faction can reroll a single Travel or Scout check made in a hex adjacent to your home territory.</p></li></ul>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "ckjackalopeadv01",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.KvTZJ08kUbqxRijn",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Jackalope Tier I",
+        "hint": "Gain your Jackalope Tier I subspecies power (maps to legacy Startle Reflex)."
+      },
+      {
+        "_id": "ckjackhornsadv01",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.items.Item.HORNSBADLUCK0001",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Horns of Bad Luck (Manifestation)",
+        "hint": "Grant the Jackalope-only Tier I natural-weapon manifestation."
+      }
+    ],
+    "identifier": "cryptidkin_jackalope_heritage",
+    "requirements": "Cryptidkin",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "cryptidkin",
+      "lineage": "Jackalope",
+      "opEffects": {
+        "softPower": 1,
+        "nonLethal": 1
+      },
+      "travelRerollAdjacent": true,
+      "version": "2.0.0",
+      "date": "2026-04-18",
+      "normalizedFrom": "Jackalope (Bad Eden) [species]"
+    }
+  },
+  "folder": "q86PDhfgI3ZNMpkJ",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-ancestry-v2",
+      "uuid": "Item.yiZiL1OaWx9qX5bF",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1773192847288,
+    "modifiedTime": 1782167240138,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "sort": 100000,
+  "_key": "!items!yiZiL1OaWx9qX5bF"
+}

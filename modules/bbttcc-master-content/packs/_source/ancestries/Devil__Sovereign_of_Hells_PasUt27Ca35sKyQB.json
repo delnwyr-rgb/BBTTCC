@@ -1,0 +1,76 @@
+{
+  "_id": "PasUt27Ca35sKyQB",
+  "name": "Devil: Sovereign of Hells",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_eyes_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "rules": "2024",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Sovereign of Hells (1/Soma Break).</strong> Compel a creature you have made eye contact with to obey one direct command (Soul check DC 8 + Tier + Presence to resist). The command must not be self-destructive. Your fire resistance becomes immunity.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "devil-sovereign",
+    "requirements": "Devil (Infernal)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "devil",
+      "lineage": "Devil (Infernal)",
+      "feature": "sovereign",
+      "tierLevel": 4,
+      "version": "1.0.0",
+      "date": "2026-05-15",
+      "npAncestry": true
+    },
+    "fourththing": {
+      "principleSource": "ancestry"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1778961511942,
+    "modifiedTime": 1782167240126,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "folder": "tOM0KLv9UgMPUDOT",
+  "sort": 500000,
+  "_key": "!items!PasUt27Ca35sKyQB"
+}

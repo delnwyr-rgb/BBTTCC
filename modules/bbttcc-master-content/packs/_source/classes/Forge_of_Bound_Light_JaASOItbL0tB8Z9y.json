@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": "GfXaI2ez3f3cqjhv",
+  "name": "Forge of Bound Light",
+  "color": null,
+  "sorting": "a",
+  "_id": "JaASOItbL0tB8Z9y",
+  "description": "",
+  "sort": 0,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "createdTime": 1776459996495,
+    "modifiedTime": 1776459996495
+  },
+  "_key": "!folders!JaASOItbL0tB8Z9y"
+}

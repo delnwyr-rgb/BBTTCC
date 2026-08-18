@@ -1,0 +1,121 @@
+{
+  "name": "Rally the Quiet (Bad Eden)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_hand_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2025",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Stability without stagnation; pressure without cruelty.</em></p><p>When a friendly creature within <strong>6 squares</strong> of you fails a defense check against being <strong>Shaken</strong>, you can use your <strong>reaction</strong> to steady them.</p><ul><li>The creature rerolls the defense check and must use the new result.</li><li>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a <strong>a Soma Break</strong>.</li></ul><p><strong>Strategic Layer.</strong> Once per <strong>Strategic Turn</strong>, when your faction spends OP to prevent a rebellion or unrest event in a <strong>Loyal</strong> hex, you may reduce that specific OP cost by <strong>1</strong> (minimum 1). This represents the quiet confidence your presence anchors.</p>",
+      "chat": ""
+    },
+    "activities": {
+      "rallyQuiet": {
+        "type": "utility",
+        "activation": {
+          "type": "reaction",
+          "condition": "When an ally within 30 ft fails a fear save.",
+          "override": false
+        },
+        "target": {
+          "prompt": true,
+          "template": {
+            "contiguous": false,
+            "units": "ft"
+          },
+          "affects": {
+            "choice": false
+          },
+          "override": false
+        },
+        "range": {
+          "value": "30",
+          "units": "ft",
+          "override": false
+        },
+        "description": {},
+        "_id": "HYJV1G6rhPe6Iy84",
+        "sort": 0,
+        "consumption": {
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true,
+          "targets": []
+        },
+        "duration": {
+          "units": "inst",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "uses": {
+          "spent": 0,
+          "recovery": []
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "lr",
+          "type": "recoverAll"
+        }
+      ],
+      "max": "@prof"
+    },
+    "advancement": {},
+    "identifier": "harmmarshal-resolve-rally-quiet",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 3
+    },
+    "properties": [],
+    "requirements": "Harmony Marshal 3, Mandate of Resolve",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "FLlH96uJfBcVDu4s",
+  "flags": {
+    "dnd5e": {},
+    "bbttcc": {
+      "subclassKey": "harmmarshal_resolve",
+      "featureKey": "rally_quiet"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1776467813567,
+    "modifiedTime": 1782167240797,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "1Z3pI70adqCZvj6P",
+  "sort": 300000,
+  "_key": "!items!1Z3pI70adqCZvj6P"
+}

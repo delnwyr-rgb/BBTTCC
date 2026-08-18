@@ -1,0 +1,140 @@
+{
+  "name": "Pactkeeper: Invoke Precedent",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_energy_blast_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p>Spend Civic Charge to <strong>Invoke Precedent</strong>.</p><ul><li>Cite Precedent</li><li>Establish Record</li><li>Suppress Contradiction</li></ul><p>This action should route to the Pactkeeper Precedent dialog and may reduce Administrative Pressure when appropriate.</p>",
+      "chat": ""
+    },
+    "identifier": "pactkeeper_invoke_precedent_action",
+    "advancement": {},
+    "activities": {
+      "primary": {
+        "type": "utility",
+        "name": "Pactkeeper: Invoke Precedent",
+        "activation": {
+          "type": "action",
+          "condition": "",
+          "override": false
+        },
+        "consumption": {
+          "targets": [],
+          "scaling": {
+            "allowed": false
+          },
+          "spellSlot": true
+        },
+        "description": {
+          "chatFlavor": ""
+        },
+        "duration": {
+          "units": "inst",
+          "value": "",
+          "concentration": false,
+          "override": false
+        },
+        "effects": [],
+        "range": {
+          "units": "self",
+          "value": "",
+          "override": false
+        },
+        "target": {
+          "affects": {
+            "type": "self",
+            "choice": false
+          },
+          "template": {
+            "count": "",
+            "units": "ft",
+            "type": "",
+            "contiguous": false,
+            "stationary": false
+          },
+          "override": false,
+          "prompt": true
+        },
+        "uses": {
+          "max": "",
+          "spent": 0,
+          "recovery": []
+        },
+        "_id": "PCmCS03me608tKNn",
+        "img": null,
+        "sort": 0,
+        "flags": {},
+        "visibility": {
+          "level": {},
+          "requireAttunement": false,
+          "requireIdentification": false,
+          "requireMagic": false
+        },
+        "roll": {
+          "prompt": false,
+          "visible": false
+        }
+      }
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "identifier": "pactkeeper_invoke_precedent_action",
+      "resourceAction": true,
+      "resourceDisplay": false,
+      "engine": "dicePool",
+      "classId": "pactkeeper",
+      "pool": "civic",
+      "track": "pressure",
+      "cost": 1,
+      "actionKey": "pactkeeper_invoke_precedent_action",
+      "opensDialog": "pactkeeper_precedent"
+    }
+  },
+  "folder": "WEL7mlledpAPLjnP",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776481562689,
+    "modifiedTime": 1781116174759,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3,
+    "PEWWUtMPC7h7WMIt": 3
+  },
+  "_id": "fCnlK9VmSfLKfqia",
+  "sort": 212500,
+  "_key": "!items!fCnlK9VmSfLKfqia"
+}
