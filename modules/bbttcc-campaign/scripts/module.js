@@ -121,6 +121,15 @@ const BANDIT_RUNG_MAL = {
 const SETTING_CADENCE_RESPECT     = "cadenceRespect";
 const SETTING_CADENCE_TRIBUTE     = "cadenceTribute";
 const SETTING_CADENCE_UNCONTESTED = "cadenceUncontested";
+
+// ── GRIEF-REFUSALS rung meters (2026-08-18) ────────────────────────────────
+// The indict ladders for Chuckle Creek / Stillwater / Soft Landing. Each is a
+// hidden 0–4 counter; every rung beat gates on it with { flag, gte }. Raised by
+// the GM today (see seed-*.macro.js headers); when the "hex refuses consequence"
+// substrate lands (`noncanon` / `stasis` / `cushioned`) the engine drives them.
+const SETTING_CHUCKLE_SEEN   = "chucklecreekSeen";
+const SETTING_STILLWATER_CRACK = "stillwaterCrack";
+const SETTING_SOFTLANDING_GIVE = "softlandingGive";
 const CADENCE_OUTCOME_FLAGS = {
   cadence_win_style: { respect: 1, tribute: 0, uncontested: 0 },  // cameo opens
   cadence_win_ugly:  { respect: 0, tribute: 0, uncontested: 0 },  // you won the hex, lost the region
@@ -4139,6 +4148,9 @@ function _resolveGateValue(name) {
     case "cadenceRespect":     return _banditMeterGet(SETTING_CADENCE_RESPECT);     // Cadence: cameo owed
     case "cadenceTribute":     return _banditMeterGet(SETTING_CADENCE_TRIBUTE);     // Cadence: rematch standing
     case "cadenceUncontested": return _banditMeterGet(SETTING_CADENCE_UNCONTESTED); // Cadence: border show
+    case "chucklecreekSeen": return _banditMeterGet(SETTING_CHUCKLE_SEEN);       // Chuckle Creek indict rung (0-4)
+    case "stillwaterCrack":  return _banditMeterGet(SETTING_STILLWATER_CRACK);   // Stillwater crack rung (0-4)
+    case "softlandingGive":  return _banditMeterGet(SETTING_SOFTLANDING_GIVE);   // Soft Landing give rung (0-4)
     default: return null;            // unknown source — caller treats as unmet + warns
   }
 }
@@ -7024,6 +7036,18 @@ Hooks.once("init", () => {
     type: Number,
     default: 0
   });
+
+  // Grief-Refusals indict ladders (0-4). GM-raised until the frozen-hex engine exists.
+  for (const [key, name] of [
+    [SETTING_CHUCKLE_SEEN,     "Bad Eden Chuckle Creek Rung"],
+    [SETTING_STILLWATER_CRACK, "Bad Eden Stillwater Crack"],
+    [SETTING_SOFTLANDING_GIVE, "Bad Eden Soft Landing Give"]
+  ]) {
+    game.settings.register(MOD_ID, key, {
+      name, hint: "Internal: Grief-Refusals indict rung (0-4). Gates that hex's ladder beats.",
+      scope: "world", config: false, type: Number, default: 0
+    });
+  }
 
   // The Cadence: dance-battle standing-state flags (0/1), written by outcomes.
   for (const [key, name] of [
