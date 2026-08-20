@@ -10,6 +10,10 @@
 // duels, ambush staging, and non-raid dialog/vendor scenes.
 //
 // How it works:
+//   * Tokens dropped onto an enabled scene auto-enrol AND auto-size to the
+//     scene's `tokenSize` (default 6×6) when they arrive at Foundry's default
+//     1×1 — tableau art is portrait-scale, not battlemap-scale. Persisted to
+//     the document (unlike depth), because it is a real footprint choice.
 //   * Tokens flagged tableauActor get visual scale based on Y position
 //     (higher Y / closer to camera = larger; lower Y / further back = smaller)
 //   * Z-order follows Y so closer tokens draw on top of farther ones
@@ -59,7 +63,14 @@
     // Ease-in: closer-to-back shrinks fast, closer-to-front stays near full.
     // 1.0 = linear; >1 = more aggressive falloff into the distance.
     curve:    1.8,
-    zSortByY: true
+    zSortByY: true,
+    // Auto-size on drop (2026-08-17). Tableau art is portrait-scale, not
+    // battlemap-scale: a default 1×1 token lands far too small to read against
+    // a diorama, and every drop needed the same manual resize afterwards. Any
+    // token arriving at exactly 1×1 is grown to this footprint at preCreate.
+    // Depth then MULTIPLIES onto it (see fitScale) exactly as it does for a
+    // hand-sized token — this only moves the starting point. 0 disables.
+    tokenSize: 6
   });
 
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
@@ -299,16 +310,35 @@
   // needed — refreshToken applies depth as soon as the new token renders.
   Hooks.on("preCreateToken", (doc) => {
     try {
-      if (!getTableau(doc.parent)) return;
-      const cur = foundry.utils.getProperty(doc, `flags.${MOD}.tableauActor`);
-      if (cur !== undefined) return;
+      const cfg = getTableau(doc.parent);
+      if (!cfg) return;
       // Structures are the STAGE, not actors on it (owner call 2026-06-04): the depth
       // curve makes a back-of-stage wall comically tiny next to a foreground muster,
       // and no token footprint compensates. Buildings hold their authored size —
       // opt one in via the Token HUD masks button or tableau.markActor(tok, true).
+      // The same principle covers auto-size: a building's footprint is authored.
       const isStructure = game.actors?.get?.(doc.actorId)?.getFlag?.("bbttcc-structures", "hasStructure") === true;
       if (isStructure) return;
-      doc.updateSource({ [`flags.${MOD}.tableauActor`]: true });
+
+      const cur = foundry.utils.getProperty(doc, `flags.${MOD}.tableauActor`);
+      const update = {};
+      if (cur === undefined) update[`flags.${MOD}.tableauActor`] = true;
+
+      // Auto-size (2026-08-17). ONLY a token arriving at exactly 1×1 is grown:
+      // 1×1 is Foundry's default, so it means "nobody chose a size", while any
+      // other footprint is a deliberate choice — a prototype authored at 2×2, a
+      // vehicle, a hand-tuned drop — and must survive contact with the tableau.
+      // Explicitly pinned tokens (flag === false, "hold true size" via the HUD)
+      // are exempt too: pinning is a statement about size, not just about depth.
+      if (cur !== false) {
+        const size = Number(cfg.tokenSize) || 0;
+        if (size > 0 && Number(doc.width) === 1 && Number(doc.height) === 1) {
+          update.width  = size;
+          update.height = size;
+        }
+      }
+
+      if (Object.keys(update).length) doc.updateSource(update);
     } catch (e) { console.warn(TAG, "preCreateToken auto-enrol failed", e); }
   });
 
@@ -397,6 +427,27 @@
         if (!scene) return;
         await scene.update({ [`flags.${MOD}.tableau.enabled`]: false });
         for (const tk of canvas.tokens.placeables) resetToken(tk);
+      },
+      // Retro-fit the drop-time auto-size onto a scene populated BEFORE this
+      // existed (or hand-scaled). Same rule as preCreateToken — only 1×1 tokens
+      // move, structures and explicitly-pinned tokens are left alone — so it is
+      // idempotent and safe to re-run. Returns the tokens it resized.
+      sizeExisting: async (scene = canvas?.scene, { size = null } = {}) => {
+        if (!scene) return [];
+        const cfg = getTableau(scene);
+        if (!cfg) return ui.notifications?.warn("Tableau is not enabled on this scene.") ?? [];
+        const target = Number(size ?? cfg.tokenSize) || 0;
+        if (target <= 0) return [];
+        const ups = [];
+        for (const doc of scene.tokens) {
+          if (doc.flags?.[MOD]?.tableauActor === false) continue;
+          if (game.actors?.get?.(doc.actorId)?.getFlag?.("bbttcc-structures", "hasStructure") === true) continue;
+          if (Number(doc.width) !== 1 || Number(doc.height) !== 1) continue;
+          ups.push({ _id: doc.id, width: target, height: target });
+        }
+        if (ups.length) await scene.updateEmbeddedDocuments("Token", ups);
+        ui.notifications?.info(`Tableau: resized ${ups.length} token(s) to ${target}×${target}.`);
+        return ups;
       },
       setFrontBack: async (frontY, backY, scene = canvas?.scene) => {
         if (!scene) return;

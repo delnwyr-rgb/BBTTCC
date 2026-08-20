@@ -40,6 +40,7 @@
     enabled:  !!cur.enabled,
     frontY:   Number(cur.frontY   ?? Math.round(sy + sh * 0.90)),
     backY:    Number(cur.backY    ?? Math.round(sy + sh * 0.10)),
+    tokenSize: Number(cur.tokenSize ?? 6),
     minScale: Number(cur.minScale ?? 0.25),
     maxScale: Number(cur.maxScale ?? 1.00),
     curve:    Number(cur.curve    ?? 1.8)
@@ -109,6 +110,18 @@
         </div>
 
         <hr style="margin:8px 0 6px;"/>
+
+        <div style="${rowStyle}">
+          <label style="${labelStyle}">Drop size</label>
+          <input type="number" name="tokenSize" value="${v0.tokenSize}" min="0" max="20" step="1" style="width:110px;"/>
+          <button type="button" data-act="sizeExisting" style="white-space:nowrap;">Apply to existing 1×1</button>
+        </div>
+        <p style="opacity:.7; font-size:11px; margin:2px 0 6px;">
+          Tokens dropped on this scene at Foundry's default 1×1 are grown to this footprint
+          automatically — tableau art is portrait-scale, not battlemap-scale. Any other size is
+          treated as deliberate and left alone; 0 turns the auto-size off. Depth multiplies on top.
+        </p>
+
         <div style="display:flex; gap:6px; flex-wrap:wrap; margin:6px 0;">
           <button type="button" data-act="markSel">Mark Selected as Courtier</button>
           <button type="button" data-act="unmarkSel">Unmark Selected</button>
@@ -145,6 +158,7 @@
       };
 
       const readForm = () => ({
+        tokenSize: Number(form.querySelector('[name="tokenSize"]').value),
         curve:    Number(form.querySelector('[name="curve"]').value),
         minScale: Number(form.querySelector('[name="minScale"]').value),
         maxScale: Number(form.querySelector('[name="maxScale"]').value),
@@ -192,6 +206,13 @@
             updateLabels();
             persist(readForm());
             ui.notifications.info(`Back Y set to ${y} (token "${tk.name || tk.id}" center).`);
+          } else if (act === "sizeExisting") {
+            // Retro-fit the drop-time size onto tokens already on the scene.
+            // Persist the field first so the API reads the value on screen.
+            persist(readForm());
+            const target = Number(form.querySelector('[name="tokenSize"]').value) || 0;
+            if (target <= 0) return ui.notifications.warn("Set a drop size above 0 first.");
+            await api.sizeExisting(canvas.scene, { size: target });
           } else if (act === "markSel") {
             if (!sel.length) return ui.notifications.warn("No tokens selected.");
             for (const tk of sel) await api.markActor(tk, true);
