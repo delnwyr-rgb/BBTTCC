@@ -96,7 +96,11 @@ function findTutorialScene(key) {
 }
 
 /** Valid tutorial scene keys, in flow order. */
-const TUTORIAL_SCENE_KEYS = ["incarnation", "meatsuit-range", "driving-course", "sandbox-hex", "hostile-hex"];
+// "reef" added 2026-08-17 — the dive level under the Proving Ground's dark
+// water. Two scenes + transition.dive rather than the Levels module, per the
+// owner's standing no-Levels ruling; the trials beat resolves it by this key
+// and degrades gracefully (hands the relic over on the surface) if unwired.
+const TUTORIAL_SCENE_KEYS = ["incarnation", "meatsuit-range", "driving-course", "sandbox-hex", "hostile-hex", "reef"];
 
 /**
  * Point a tutorial key at a Scene (GM only), clearing the key off whatever held it —

@@ -202,9 +202,48 @@ async function deck({ title = "Operator", slides = [], label = "Got it", speak =
   return "done";
 }
 
+/** A forked prompt — two or more real choices rather than one Continue.
+ *  Same id scheme as prompt()/deck() so the between-beat sweep still finds it.
+ *  Resolves the chosen action, or `fallback` if the player closes the window
+ *  (a closed dialog must never leave a beat waiting on an answer). */
+async function choose({ title = "Operator", content = "", options = [], fallback = null } = {}) {
+  const opts = (Array.isArray(options) ? options : []).filter(o => o?.action && o?.label);
+  if (!opts.length) return fallback;
+  const body = `<div class="bbttcc-onboarding-prompt">${content}</div>`;
+  const DV2 = foundry?.applications?.api?.DialogV2;
+  raiseDialogByTitle(title);
+  if (DV2?.wait) {
+    try {
+      const picked = await DV2.wait({
+        id: promptIdFor(title),
+        window: { title }, content: body,
+        position: { ...PROMPT_POSITION, width: 500 },
+        buttons: opts.map((o, i) => ({ action: o.action, label: o.label, default: i === 0 })),
+        rejectClose: false, modal: false
+      });
+      return picked ?? fallback;
+    } catch (_) { return fallback; }
+  }
+  return new Promise((res) => {
+    const buttons = {};
+    for (const o of opts) buttons[o.action] = { label: o.label, callback: () => res(o.action) };
+    new Dialog({ title, content: body, buttons, default: opts[0].action, close: () => res(fallback) },
+      { id: promptIdFor(title), ...PROMPT_POSITION, width: 500 }).render(true);
+  });
+}
+
 let _running = false;
 
-async function start({ user = game.user, fromStart = false } = {}) {
+/** Run the arc.
+ *    start()                            — resume; finished beats are skipped
+ *    start({fromStart:true})            — wipe progress and replay everything
+ *    start({from:"proving_trials"})     — jump in at a beat and run to the end
+ *    start({only:["final_showdown"]})   — run just these beats, in arc order
+ *  `from`/`only` exist for PLAYTESTING (added 2026-08-17): the endgame sits
+ *  fifteen beats deep behind three raids, and replaying the whole tutorial to
+ *  reach it is not a reasonable test loop. Both ignore stored progress for the
+ *  beats they select, so a finished beat still re-runs when you name it. */
+async function start({ user = game.user, fromStart = false, from = null, only = null } = {}) {
   if (_running) { ui.notifications?.warn?.("Onboarding is already running."); return; }
   const ns = _ns();
   const steward = ns?.resolve?.steward?.(user);
@@ -245,12 +284,40 @@ async function start({ user = game.user, fromStart = false } = {}) {
       riff: (a, o) => (ns?.riff ? ns.riff(a, o) : Promise.resolve(null)),
       prompt,
       deck: (opts = {}) => deck({ speak: _speak, ...opts }),
+      choose,
       director: { registerBeat, listBeats, getBeat }
     };
 
-    for (const beat of _beats) {
+    // Resolve the playtest selectors against the registered arc order.
+    const onlySet = only ? new Set(Array.isArray(only) ? only : [only]) : null;
+    const fromIdx = from ? _beats.findIndex(b => b.id === from) : -1;
+    if (from && fromIdx < 0) {
+      ui.notifications?.warn?.(`Onboarding: no beat "${from}". Known: ${_beats.map(b => b.id).join(", ")}`);
+      return;
+    }
+    if (onlySet) {
+      const unknown = [...onlySet].filter(id => !_beats.some(b => b.id === id));
+      if (unknown.length) {
+        ui.notifications?.warn?.(`Onboarding: unknown beat(s) ${unknown.join(", ")}. Known: ${_beats.map(b => b.id).join(", ")}`);
+        return;
+      }
+    }
+    const selected = (beat, i) => {
+      if (onlySet) return onlySet.has(beat.id);
+      if (fromIdx >= 0) return i >= fromIdx;
+      return true;
+    };
+    if (onlySet || fromIdx >= 0) {
+      const names = _beats.filter(selected).map(b => b.id);
+      console.log(TAG, `playtest run — ${names.length} beat(s): ${names.join(" → ")}`);
+    }
+
+    for (const [beatIdx, beat] of _beats.entries()) {
+      if (!selected(beat, beatIdx)) continue;
       p = _progress(steward);
-      if (p.steps?.[beat.id]?.done && !fromStart) {
+      // A named beat always runs — that's the point of asking for it.
+      const _ignoreDone = fromStart || onlySet || fromIdx >= 0;
+      if (p.steps?.[beat.id]?.done && !_ignoreDone) {
         // Progress persists on the Steward — a replayed start() without
         // {fromStart:true} silently skips finished beats. Say so, loudly-ish.
         console.log(TAG, `skipping beat "${beat.id}" — already done for ${steward.name}. Replay everything with game.bbttcc.onboarding.start({fromStart:true}).`);
@@ -336,7 +403,7 @@ Hooks.once("ready", () => {
   const ns = globalThis.game?.bbttcc?.onboarding;
   if (!ns) return;
   ns.beats = { register: registerBeat, list: listBeats, get: getBeat };
-  ns.ui = Object.assign(ns.ui ?? {}, { raiseDialogByTitle, closeDialogByTitle, closeAllOnboardingPrompts, promptIdFor, PROMPT_POSITION, deck });
+  ns.ui = Object.assign(ns.ui ?? {}, { raiseDialogByTitle, closeDialogByTitle, closeAllOnboardingPrompts, promptIdFor, PROMPT_POSITION, deck, choose });
   Object.assign(ns, { start, skip, reset, status, activeRuns, isRunning: () => _running });
 
   try {

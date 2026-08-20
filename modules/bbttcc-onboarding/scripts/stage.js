@@ -144,7 +144,7 @@ function _registerOps() {
    */
   reg("spawnFoe", async ({ sceneId, x = 1000, y = 1000, elevation = 0, name = "Foe", img = "",
                           size = 1, foeClass = "qliphothic", body = 3, level = 1,
-                          resistances = [], vulnerabilities = [], ownerUserId = "" }) => {
+                          resistances = [], vulnerabilities = [], conditions = [], ownerUserId = "" }) => {
     const folder = await _folder();
     const actor = await Actor.create({
       name, type: "npc", folder: folder?.id, img: img || "icons/svg/mystery-man.svg",
@@ -173,6 +173,15 @@ function _registerOps() {
       });
     } catch (e) { console.warn(TAG, "foe track fill failed", e); }
 
+    // Arrive already carrying conditions — the stealth approach spawns its foes
+    // Surprised, which the system's own "cannot act on the first round" rule
+    // then enforces for free. Routed through toggleCondition so the AE + card
+    // fire exactly as they would mid-fight.
+    for (const key of (Array.isArray(conditions) ? conditions : [])) {
+      try { await game.fourththing?.toggleCondition?.(actor, String(key)); }
+      catch (e) { console.warn(TAG, `spawnFoe: condition "${key}" failed`, e); }
+    }
+
     let tokenId = null;
     const scene = game.scenes?.get?.(sceneId);
     if (scene) {
@@ -185,6 +194,25 @@ function _registerOps() {
       } catch (e) { console.warn(TAG, "foe token place failed", e); }
     }
     return { actorId: actor.id, tokenId, sceneId, integrityMax };
+  });
+
+  // ─── Native scene levels (2026-08-17) ──────────────────────────────────────
+  // Foundry v14 scenes carry `levels[]`, each with its own background and an
+  // elevation band. The Proving Ground has "Proving Ground" (0→40) and "Reefer
+  // Dive" (−20→0), so diving is nothing more than writing the token's
+  // elevation — precisely the "vertical via token.document.elevation, never the
+  // Levels module" rule. Returns the previous elevation so the caller can
+  // surface the player exactly where they left off.
+  reg("setElevation", async ({ sceneId, actorId, elevation = 0 }) => {
+    const scene = game.scenes?.get?.(String(sceneId || ""));
+    if (!scene) return { ok: false, from: 0 };
+    const docs = scene.tokens?.filter?.(t => t.actorId === String(actorId || "")) ?? [];
+    if (!docs.length) return { ok: false, from: 0 };
+    const from = Number(docs[0].elevation) || 0;
+    try {
+      await scene.updateEmbeddedDocuments("Token", docs.map(t => ({ _id: t.id, elevation: Number(elevation) || 0 })));
+    } catch (e) { console.warn(TAG, "setElevation failed", e); return { ok: false, from }; }
+    return { ok: true, from, to: Number(elevation) || 0 };
   });
 
   // Darkness is a MANUAL track (system.darkness.value, 0–10 on the sheet) — no
@@ -250,6 +278,88 @@ function _registerOps() {
       if (sys?.conditions?.prone !== true) await game.fourththing?.toggleCondition?.(actor, "prone");
     } catch (_) {}
     return { ok: true, damage: total };
+  });
+
+  /* ─── Proving Ground trials (2026-08-17) ───────────────────────────────────
+   * A relic marker: an inert, unarmed prop the player walks onto. NPC-typed and
+   * default-OWNER for the same reasons the foes are, but disposition NEUTRAL and
+   * `kind:"marker"` so nothing mistakes it for something to shoot.
+   */
+  reg("spawnMarker", async ({ sceneId, x = 1000, y = 1000, elevation = 0, name = "Relic", img = "", size = 1, ownerUserId = "" }) => {
+    const folder = await _folder();
+    const actor = await Actor.create({
+      name, type: "npc", folder: folder?.id, img: img || "icons/svg/mystery-man.svg",
+      ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
+      prototypeToken: Object.assign(
+        { actorLink: false, disposition: CONST.TOKEN_DISPOSITIONS.NEUTRAL, name, width: size, height: size },
+        img ? { texture: { src: img } } : {}
+      ),
+      flags: { [MODULE_ID]: { spawned: true, kind: "marker", ownerUserId } }
+    });
+    if (!actor) return null;
+    let tokenId = null;
+    const scene = game.scenes?.get?.(sceneId);
+    if (scene) {
+      try {
+        const td = (await actor.getTokenDocument({ x, y })).toObject();
+        if (Number(elevation)) td.elevation = Number(elevation);
+        td.flags = Object.assign({}, td.flags, { [MODULE_ID]: { spawned: true, ownerUserId } });
+        const [c] = await scene.createEmbeddedDocuments("Token", [td]);
+        tokenId = c.id;
+      } catch (e) { console.warn(TAG, "marker token place failed", e); }
+    }
+    return { actorId: actor.id, tokenId, sceneId };
+  });
+
+  // Reaching into a sigil costs something. Routed through the system's own
+  // damage pipeline so resistances, the Noise/radiation penalties and every
+  // on-damage-taken trigger all behave exactly as they would in a real fight.
+  reg("hurt", async ({ actorId, formula = "1d6", type = "kinetic", flavor = "" }) => {
+    const actor = game.actors?.get?.(String(actorId || ""));
+    if (!actor) return { ok: false, amount: 0 };
+    let total = 0;
+    try {
+      const r = new Roll(String(formula || "1d6"));
+      await r.evaluate();
+      total = Math.max(0, Number(r.total) || 0);
+      await game.fourththing?.rolls?._applyDamageToActor?.(actor, total, {
+        op: "damage", track: "integrity", damageType: type, damageFlavor: flavor
+      });
+    } catch (e) { console.warn(TAG, "hurt failed", e); return { ok: false, amount: 0 }; }
+    return { ok: true, amount: total };
+  });
+
+  // The healing water. Clamped to max — a boon that overfills a track would
+  // quietly break the sheet's arithmetic.
+  reg("mend", async ({ actorId, formula = "2d6" }) => {
+    const actor = game.actors?.get?.(String(actorId || ""));
+    if (!actor) return { ok: false, amount: 0 };
+    try {
+      const r = new Roll(String(formula || "2d6"));
+      await r.evaluate();
+      const sys = actor.system?.system ?? actor.system;
+      const cur = Number(sys?.derived?.integrity?.value) || 0;
+      const max = Number(sys?.derived?.integrity?.max) || cur;
+      const healed = Math.max(0, Math.min(max - cur, Number(r.total) || 0));
+      if (healed > 0) await actor.update({ "system.derived.integrity.value": cur + healed });
+      return { ok: true, amount: healed };
+    } catch (e) { console.warn(TAG, "mend failed", e); return { ok: false, amount: 0 }; }
+  });
+
+  // Hand a Courtly Secret to a faction. The secrets API wants a real Document
+  // for `source.toObject()`, so the template is minted IN MEMORY (`new Item`) —
+  // no compendium authoring, nothing persisted but the granted copy. addSecret
+  // reads effectKey from opts when the source carries none, and "earned"
+  // (rather than "stolen") means playing it costs no suspicion.
+  reg("grantSecret", async ({ factionId, name, effectKey, text = "", img = "icons/svg/secret.svg" }) => {
+    const api = globalThis.game?.bbttcc?.api?.raid?.courtlySecrets;
+    const faction = game.actors?.get?.(String(factionId || ""));
+    if (!api?.addSecret || !faction || !name || !effectKey) return { ok: false };
+    try {
+      const template = new Item({ name, type: "feat", img, system: { description: { value: text } } });
+      const created = await api.addSecret(faction.id, template, { acquisition: "earned", effectKey });
+      return created ? { ok: true, name: created.name, itemId: created.id } : { ok: false };
+    } catch (e) { console.warn(TAG, "grantSecret failed", e); return { ok: false }; }
   });
 
   reg("ensureToken", async ({ actorId, sceneId, x = 1000, y = 1000, ownerUserId = "" }) => {
@@ -675,7 +785,7 @@ function _registerOps() {
     return { ok: true };
   });
 
-  console.log(TAG, "GM ops registered: spawnDummy, spawnObstacle, spawnFoe, raiseDarkness, foeSurrender, shoveOffPerch, ensureToken, mintRig, ensureSandboxHex, claimHex, unclaimHex, disembark, spawnHostileFaction, ensureHex, setRaidSession, clearRaidSession, teardownFinale, cleanup.");
+  console.log(TAG, "GM ops registered: spawnDummy, spawnObstacle, spawnFoe, raiseDarkness, foeSurrender, shoveOffPerch, spawnMarker, hurt, mend, grantSecret, setElevation, ensureToken, mintRig, ensureSandboxHex, claimHex, unclaimHex, disembark, spawnHostileFaction, ensureHex, setRaidSession, clearRaidSession, teardownFinale, cleanup.");
 }
 
 /* ─── Public helpers (called by beats; resolve ids -> Documents) ────────────── */
@@ -740,6 +850,40 @@ async function ensureOwned(actorIds = [], userId = "") {
 async function grantOp(factionId, marks = {}) {
   if (!factionId) return { ok: false, granted: {} };
   return (await _runAsGM("grantOp", { factionId, marks })) ?? { ok: false, granted: {} };
+}
+
+/** Spawn an inert relic marker + token on `scene`. Returns { actor, token } or null. */
+async function spawnMarker(scene, opts = {}) {
+  const res = await _runAsGM("spawnMarker", { sceneId: scene?.id, ...opts, ..._ownedBy() });
+  if (!res?.actorId) return null;
+  const actor = await _ns()?.relay?.resolveActor?.(res.actorId);
+  const token = res.tokenId ? await _ns()?.relay?.resolveToken?.(res.sceneId, res.tokenId) : null;
+  return { actor: actor || null, token: token || null };
+}
+
+/** Move an actor's token(s) to an elevation — i.e. between native scene levels.
+ *  Returns { ok, from, to } so the caller can restore the original height. */
+async function setElevation(scene, actorId, elevation = 0) {
+  if (!scene?.id || !actorId) return { ok: false, from: 0 };
+  return (await _runAsGM("setElevation", { sceneId: scene.id, actorId, elevation })) ?? { ok: false, from: 0 };
+}
+
+/** Apply damage through the system's own pipeline. opts: {formula,type,flavor}. */
+async function hurt(actorId, { formula = "1d6", type = "kinetic", flavor = "" } = {}) {
+  if (!actorId) return { ok: false, amount: 0 };
+  return (await _runAsGM("hurt", { actorId, formula, type, flavor })) ?? { ok: false, amount: 0 };
+}
+
+/** Heal integrity, clamped to max. */
+async function mend(actorId, formula = "2d6") {
+  if (!actorId) return { ok: false, amount: 0 };
+  return (await _runAsGM("mend", { actorId, formula })) ?? { ok: false, amount: 0 };
+}
+
+/** Grant a Courtly Secret to a faction (minted in memory — no pack authoring). */
+async function grantSecret(factionId, { name, effectKey, text = "", img } = {}) {
+  if (!factionId || !name || !effectKey) return { ok: false };
+  return (await _runAsGM("grantSecret", { factionId, name, effectKey, text, img })) ?? { ok: false };
 }
 
 /** Spawn a combat-simulator foe + token. opts: {x,y,elevation,name,img,size,foeClass,body,level,
@@ -859,6 +1003,7 @@ Hooks.once("ready", () => {
   if (ns) ns.stage = {
     ensureTokenOnScene, spawnDummy, spawnObstacle, mintRig, grantOp, ensureOwned, disembark,
     spawnFoe, raiseDarkness, foeSurrender, shoveOffPerch,
+    spawnMarker, hurt, mend, grantSecret, setElevation,
     ensureSandboxHex, claimHex, unclaimHex, spawnHostileFaction, ensureHex,
     setRaidSession, clearRaidSession, openRaidConsoleForGM, teardownFinale, cleanup, folder: _folder,
     setRunContext, runContext, runBegin, runEnd, runList, laneFrac: _laneFrac

@@ -10,6 +10,13 @@
  *           into it with a crew behind them and something of their own making.
  *   Phase 3d: combat_sim (live-fire on the Proving Ground: qliphothic to kill,
  *           sentient to spare, Darkness for the ones you don't)
+ *   Phase 5 (climax): proving_trials → final_showdown. Sits AFTER the three
+ *           raids by owner ruling — those teach the consoles, this is them in
+ *           practice. Framed in-fiction as an attack on the GAME itself: four
+ *           sigil hazards yield four relics (one a dive to the reef scene), all
+ *           four unlock the great circle, and the player chooses to storm it or
+ *           slip into it. Both roads end at the same parley, where a messenger
+ *           hands over two real Courtly Secrets and an offer to stop.
  *   Phase 4 (finale): travel into a hostile hex → triple raid (violence / intrigue /
  *           presence, player-driven pre-targeted consoles) → graduation dive into live Bad Eden
  *
@@ -1320,6 +1327,590 @@ const combatSim = {
   }
 };
 
+/* ═══════════════════ THE PROVING GROUND — TRIALS & SHOWDOWN ═══════════════════
+ * Owner's design 2026-08-17, on the new Proving Ground art. The whole block is
+ * framed as an EMERGENCY: something is trying to crash the game, and the only
+ * tools to hand are the onboarding mechanics the player just learned. The
+ * Operator — a daemon who lives inside that game — is exactly the right voice
+ * for it, and the tutorial's seams stop being seams and become the fiction.
+ *
+ *   proving_trials   four sigil-marked hazards, one relic each. One of them is
+ *                    underwater: a real dive to the reef scene and back.
+ *   final_showdown   the great circle is SEALED until all four relics are in
+ *                    hand; then a fight that a messenger interrupts, carrying
+ *                    two Courtly Secrets and an offer to stop.
+ *
+ * Kept deliberately in the same idiom as the rest of beats.js: every gate has an
+ * untrappable escape, every spawn is flagged for teardown, and nothing here
+ * touches the live world.
+ */
+
+// ⚠ POSITIONS are read off the baked 4652×4454 art (frame-checked 2026-08-17)
+// and expressed as fractions of the VISIBLE scene rect, so they survive padding.
+// One table — nudging a site is one line.
+const PG_TRIALS = [
+  {
+    key: "lava", name: "The Cinder Sigil", relic: "Cinder Key",
+    img: "icons/svg/fire.svg", xFrac: 0.49, yFrac: 0.48,
+    approach: "The lava sigil — the burning one, centre of the map. It will cook you while you work.",
+    // Hazard fires ON pickup: reaching in costs you something.
+    hazard: { formula: "2d6", type: "thermal", flavor: "hot",
+              line: "The sigil takes its toll — {n} thermal. Relics are never free." },
+    taken: "Cinder Key — still glowing. One."
+  },
+  {
+    key: "healing", name: "The Still Water", relic: "Still Draught",
+    img: "icons/svg/heal.svg", xFrac: 0.74, yFrac: 0.44,
+    approach: "The pale pond north-east. That one's healing water — the only kind thing on this map, and it still wants paying attention to.",
+    heal: { formula: "2d6", line: "The water closes over the burn — +{n} Integrity. Take it; you'll want it later." },
+    taken: "Still Draught — bottled. Two."
+  },
+  {
+    key: "grove", name: "The Green Circle", relic: "Verdant Mark",
+    img: "icons/svg/oak.svg", xFrac: 0.12, yFrac: 0.61,
+    approach: "West edge, the green ring. Whatever's growing in there is growing WRONG, and it has been waiting.",
+    hazard: { formula: "1d6", type: "poison", flavor: "",
+              line: "The ring exhales — {n} poison. It doesn't like being read." },
+    taken: "Verdant Mark — warm, and faintly moving. Three."
+  },
+  {
+    key: "reef", name: "The Deep", relic: "Reef Shard",
+    img: "icons/svg/water.svg", xFrac: 0.32, yFrac: 0.82, dive: true,
+    approach: "And the dark water, south-west. That one isn't a puddle — it goes DOWN. The last relic is on the reef floor, and you'll have to swim for it.",
+    taken: "Reef Shard — cold enough to ache. Four. That's the set."
+  }
+];
+
+// Where the reef relic sits on the dive scene, and where the great circle sits
+// on the surface. Same fraction convention.
+/** The scene's dive level, if it has one. Foundry v14 scenes carry `levels[]`,
+ *  each with its own background and an elevation band; the Proving Ground pairs
+ *  "Proving Ground" (0→40) with "Reefer Dive" (−20→0). Any level whose band
+ *  goes below zero is the water. Returns { id, name, depth } — depth being the
+ *  middle of the band, so the swimmer sits in open water rather than clipping
+ *  the floor or the surface. */
+function _pgDiveLevel(scene) {
+  const levels = Array.isArray(scene?.levels) ? scene.levels : [];
+  const below = levels.filter(l => Number(l?.elevation?.bottom) < 0);
+  if (!below.length) return null;
+  // Deepest band wins if a scene ever stacks more than one.
+  below.sort((a, b) => Number(a.elevation.bottom) - Number(b.elevation.bottom));
+  const l = below[0];
+  const bottom = Number(l.elevation.bottom) || 0;
+  const top    = Number(l.elevation.top) || 0;
+  return { id: l._id, name: l.name || "the deep", depth: Math.round((bottom + top) / 2) || bottom };
+}
+
+// Read off the reef art in-world (2026-08-17): you descend into open rock at
+// the upper left, then have to swim the width of the reef — past the wreck, the
+// anemone-things and that pink horror by the shack — to reach the shard sitting
+// in the magenta coral at the centre. The swim IS the encounter; nothing down
+// there needs to be spawned.
+const PG_REEF_ENTRY = { xFrac: 0.28, yFrac: 0.27 };
+const PG_REEF_RELIC = { xFrac: 0.53, yFrac: 0.57 };
+const PG_ARENA      = { xFrac: 0.68, yFrac: 0.79 };
+const PG_PICKUP_SQUARES = 1.5;   // how close counts as "reached"
+
+/** Centre of a token document in canvas pixels. */
+function _pgTokenCentre(doc, scene) {
+  const g = Number(scene?.grid?.size) || 100;
+  return { x: Number(doc.x) + (Number(doc.width) || 1) * g / 2,
+           y: Number(doc.y) + (Number(doc.height) || 1) * g / 2 };
+}
+
+/** Has the Steward's token reached this point? Proximity rather than a native
+ *  Region: a Region's behavior schema is version-specific and can't be verified
+ *  from the repo, and this is testable here. Swapping in a Region trigger later
+ *  is a drop-in — the rest of the beat only cares that `arrive()` fires. */
+function _pgReached(doc, scene, pt) {
+  const g = Number(scene?.grid?.size) || 100;
+  const c = _pgTokenCentre(doc, scene);
+  return Math.hypot(c.x - pt.x, c.y - pt.y) <= g * PG_PICKUP_SQUARES;
+}
+
+/** Relics live on the Steward as a flag set — survives a reload, and the
+ *  showdown beat reads it to decide whether the circle opens. */
+function _pgRelics(steward) {
+  const held = steward?.getFlag?.(MODULE_ID, "provingRelics");
+  return Array.isArray(held) ? held : [];
+}
+async function _pgTakeRelic(steward, key) {
+  const held = new Set(_pgRelics(steward));
+  if (held.has(key)) return [...held];
+  held.add(key);
+  const next = [...held];
+  try { await steward.setFlag(MODULE_ID, "provingRelics", next); }
+  catch (e) { console.warn(TAG, "relic flag write failed", e); }
+  return next;
+}
+
+/* ───────────────────────── PROVING TRIALS ───────────────────────── */
+const provingTrials = {
+  id: "proving_trials",
+  title: "The Proving Ground — Trials",
+  scope: "personal",
+
+  enter: async (ctx) => {
+    ctx._spawned = ctx._spawned || [];
+    ctx._pg = { scene: null, markers: new Map(), diving: false, done: new Set() };
+
+    // ── The emergency. Everything after this line is in-fiction panic.
+    await ctx.speak("— *bzzt* — hold. Hold. Something just reached into the world model from OUTSIDE and started pulling.");
+    await _pause(1100);
+    await ctx.speak("Someone is trying to CRASH the game, One. Not your character — the game. And you are the only thing in here with hands and a tutorial's worth of privileges.");
+    await _pause(1100);
+    await ctx.speak("Four sigils are holding the Proving Ground together. Whatever's chewing on us is prying them loose one at a time. Get to each one, take what's anchoring it, and bring all four to the great circle before the floor stops being a floor.");
+    await _pause(900);
+
+    const scene = await _requireScene(ctx, "meatsuit-range", "Proving Ground");
+    ctx._pg.scene = scene;
+    if (scene) { await _enterScene(scene, "Proving Ground", ctx.lane); await _pause(800); }
+
+    const stage = _stage();
+    if (scene && stage) {
+      // The Steward needs to be ON the map to walk it.
+      const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, 0.30, 0.66, ctx.lane));
+      if (st?.created) ctx._spawned.push({ token: st.doc });
+      if (ctx.rig) {
+        const rt = await stage.ensureTokenOnScene(ctx.rig, scene, _scenePoint(scene, 0.22, 0.72, ctx.lane));
+        if (rt?.created) ctx._spawned.push({ token: rt.doc });
+      }
+      // One marker per un-taken trial. Replay-safe: a relic already held is
+      // skipped, so a resumed run doesn't re-litter the map.
+      const held = new Set(_pgRelics(ctx.steward));
+      for (const t of PG_TRIALS) {
+        if (held.has(t.key)) { ctx._pg.done.add(t.key); continue; }
+        const pt = _scenePoint(scene, t.xFrac, t.yFrac, ctx.lane);
+        const sp = await stage.spawnMarker?.(scene, { name: t.name, img: t.img, ...pt });
+        if (sp) { ctx._spawned.push(sp); ctx._pg.markers.set(t.key, { ...t, pt, tokenId: sp.token?.id ?? null, actorId: sp.actor?.id ?? null }); }
+      }
+    }
+
+    await _pause(500);
+    for (const t of PG_TRIALS) {
+      if (ctx._pg.done.has(t.key)) continue;
+      await ctx.speak(t.approach);
+      await _pause(700);
+    }
+    await ctx.speak("Walk onto a sigil to take its relic. Move your token — this is the map, not a menu.");
+    ctx.riff({ beat: "proving_trials", line: "The game itself is under attack and the player is racing to collect four anchoring relics.", intent: "Genuine alarm under the usual dryness. One line." });
+  },
+
+  detect: (ctx, done) => {
+    const sim = ctx._pg;
+    const stage = _stage();
+    const FALLBACK_TITLE = "◇ OPERATOR — Trials";
+    const closeFallback = () => globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(FALLBACK_TITLE);
+
+    if (!sim?.scene || !stage) {
+      ctx.prompt({ title: FALLBACK_TITLE,
+        content: "<p>The Proving Ground isn't available — no arena, or no GM online to stage it.</p><p>Continue; you can replay this later.</p>",
+        label: "Continue" }).then(() => done());
+      return closeFallback;
+    }
+
+    const finish = () => { if (!sim.finished) { sim.finished = true; done(); } };
+
+    /** Take one relic: hazard or boon, flag it, clear the marker, count up. */
+    const claim = async (t) => {
+      if (sim.done.has(t.key)) return;
+      sim.done.add(t.key);
+      const marker = sim.markers.get(t.key);
+      sim.markers.delete(t.key);
+
+      if (t.hazard) {
+        const r = await stage.hurt?.(ctx.steward?.id, t.hazard);
+        await ctx.speak?.(t.hazard.line.replace("{n}", String(r?.amount ?? "some")));
+      } else if (t.heal) {
+        const r = await stage.mend?.(ctx.steward?.id, t.heal.formula);
+        await ctx.speak?.(t.heal.line.replace("{n}", String(r?.amount ?? "some")));
+      }
+      const held = await _pgTakeRelic(ctx.steward, t.key);
+      await ctx.speak?.(t.taken);
+      try { await stage.cleanup?.([marker].filter(Boolean)); } catch (_) {}
+
+      if (held.length >= PG_TRIALS.length) {
+        await _pause(700);
+        await ctx.speak?.("All four. The floor stops arguing with itself— *bzzt* —and the great circle in the south-east just went LIVE. Get in it.");
+        finish();
+      }
+    };
+
+    /** The dive: down to the reef, grab the shard, back up. */
+    const dive = async (t) => {
+      if (sim.diving || sim.done.has(t.key)) return;
+      sim.diving = true;
+      try {
+        // PREFERRED: a native dive LEVEL on this very scene. Diving is then just
+        // the token's elevation — no scene change, no loading seam, and exactly
+        // the "vertical via token.document.elevation" doctrine.
+        const lvl = _pgDiveLevel(sim.scene);
+        if (lvl) {
+          await ctx.speak?.("Down you go. Hold your breath — the system will tell you when that stops being a metaphor.");
+          const moved = await stage.setElevation?.(sim.scene, ctx.steward?.id, lvl.depth);
+          if (!moved?.ok) {
+            console.warn(TAG, "dive: elevation write failed; handing the relic over");
+            await claim(t);
+            return;
+          }
+          await _pause(900);
+          const pt = _scenePoint(sim.scene, PG_REEF_RELIC.xFrac, PG_REEF_RELIC.yFrac, ctx.lane);
+          const shard = await stage.spawnMarker?.(sim.scene, { name: t.name, img: t.img, elevation: lvl.depth, ...pt });
+          if (shard) ctx._spawned.push(shard);
+          await ctx.speak?.(`${lvl.name} — ${Math.abs(lvl.depth)} feet down. The shard is out in the magenta coral, dead centre. Between you and it: a wreck, a lot of legs, and something pink I'd rather not name. Swim.`);
+          sim.reef = { scene: sim.scene, pt, marker: shard, trial: t, surfaceAt: moved.from ?? 0 };
+          return;
+        }
+
+        // FALLBACK: a separate scene wired to the "reef" key.
+        const reef = ctx.scene("reef");
+        if (!reef) {
+          // Neither a dive level nor a reef scene — never strand a relic behind
+          // missing art; hand it over and tell the GM exactly what to fix.
+          await ctx.speak?.("There's no water layer on this map— *bzzt* —so I'm handing you the shard from the surface. Tell your GM: either add a dive LEVEL with a negative elevation band, or stamp a separate reef scene.");
+          console.warn(TAG, 'dive unavailable: no scene level with elevation.bottom < 0, and no "reef" tutorial scene. Add a level, or wireScene("reef", <scene>).');
+          await claim(t);
+          return;
+        }
+        await ctx.speak?.("Down you go. Hold your breath — the system will tell you when that stops being a metaphor.");
+        await _enterScene(reef, "The Reef", ctx.lane);
+        await _pause(900);
+        const st = await stage.ensureTokenOnScene(ctx.steward, reef, _scenePoint(reef, PG_REEF_ENTRY.xFrac, PG_REEF_ENTRY.yFrac, ctx.lane));
+        if (st?.created) ctx._spawned.push({ token: st.doc });
+        const pt = _scenePoint(reef, PG_REEF_RELIC.xFrac, PG_REEF_RELIC.yFrac, ctx.lane);
+        const shard = await stage.spawnMarker?.(reef, { name: t.name, img: t.img, ...pt });
+        if (shard) ctx._spawned.push(shard);
+        await ctx.speak?.("Reef floor. You're in open rock at the shallow end — the shard is out in the magenta coral, dead centre. Swim.");
+        sim.reef = { scene: reef, pt, marker: shard, trial: t, surfaceAt: null };
+      } catch (e) {
+        console.warn(TAG, "dive failed", e);
+        sim.diving = false;
+      }
+    };
+
+    /** Surface again once the shard is in hand. */
+    const surface = async () => {
+      const r = sim.reef;
+      if (!r) return;
+      sim.reef = null;
+      try { await stage.cleanup?.([r.marker].filter(Boolean)); } catch (_) {}
+      await ctx.speak?.("Got it. Up — kick for the light.");
+      if (r.surfaceAt === null) {
+        await _enterScene(sim.scene, "Proving Ground", ctx.lane);   // separate-scene path
+      } else {
+        await stage.setElevation?.(sim.scene, ctx.steward?.id, r.surfaceAt);
+      }
+      await _pause(800);
+      sim.diving = false;
+      await claim(r.trial);
+    };
+
+    // One listener for the whole map: the Steward moving is the only input.
+    const onMove = (tokenDoc) => {
+      if (sim.finished) return;
+      if (tokenDoc?.actorId !== ctx.steward?.id) return;
+
+      // Underwater leg first — different scene, different target.
+      if (sim.reef && tokenDoc.parent?.id === sim.reef.scene.id) {
+        if (_pgReached(tokenDoc, sim.reef.scene, sim.reef.pt)) {
+          surface().catch(e => console.warn(TAG, "surface failed", e));
+        }
+        return;
+      }
+      if (sim.diving) return;                       // mid-transition; ignore
+      if (tokenDoc.parent?.id !== sim.scene.id) return;
+
+      for (const t of [...sim.markers.values()]) {
+        if (!_pgReached(tokenDoc, sim.scene, t.pt)) continue;
+        (t.dive ? dive(t) : claim(t)).catch(e => console.warn(TAG, "trial claim failed", e));
+        break;                                       // one sigil per step
+      }
+    };
+    Hooks.on("updateToken", onMove);
+
+    ctx.prompt({
+      title: FALLBACK_TITLE,
+      content:
+        `<p><b>Walk your Steward's token onto each of the four sigils.</b> Lava (centre), still water (north-east), the green ring (west), and the deep water (south-west — that one's a dive).</p>` +
+        `<p>Each relic costs you something on the way in. Collect all four and the great circle opens.</p>` +
+        `<p><i>Stuck, or a sigil won't answer? Skip ahead — I'll hand you the rest.</i></p>`,
+      label: "Skip the trials"
+    }).then(async () => {
+      // Never trap them behind a hazard that won't fire — grant the remainder.
+      for (const t of PG_TRIALS) if (!sim.done.has(t.key)) await _pgTakeRelic(ctx.steward, t.key);
+      finish();
+    });
+
+    return () => { Hooks.off("updateToken", onMove); closeFallback(); };
+  },
+
+  exit: async (ctx) => {
+    const n = _pgRelics(ctx.steward).length;
+    await ctx.speak(`${n} of ${PG_TRIALS.length} anchors in hand. The pull's still there — I can feel it in the tick rate — but the ground will hold long enough for what comes next.`);
+    try { await _stage()?.cleanup?.(ctx._spawned || []); } catch (_) {}
+    ctx._spawned = [];
+    ctx._pg = null;
+  }
+};
+
+/* ───────────────────────── FINAL SHOWDOWN ───────────────────────── */
+// The great circle. A real fight that a MESSENGER interrupts: the thing pulling
+// at the game would rather negotiate than be unmade, and it says so in the only
+// register the court understands — two Courtly Secrets, handed over.
+//
+// The two secrets are minted in-memory (`new Item(...)`) and handed to
+// addSecret with an explicit effectKey, so this needs no compendium authoring.
+// They are real, playable secrets the moment the Courtly scenario opens.
+const PG_PARLEY_SECRETS = [
+  {
+    name: "\"We're Screwed\"",
+    effectKey: "oppRollMinus2",
+    text: "<p>An unencrypted panic burst, sent to everyone at once and clearly not meant for you. Whatever is on the other end has done the arithmetic and does not like it.</p>"
+        + "<p><em>Play in a Courtly scenario: the opposition rolls at −2. They know you have read it.</em></p>"
+  },
+  {
+    name: "\"Please Totally Don't Murder Us, We Give Up For Reals\"",
+    effectKey: "favorPlus2+influenceDmg2",
+    text: "<p>A formal capitulation, composed at speed by something with no idea how a formal capitulation is composed. It is signed. Repeatedly.</p>"
+        + "<p><em>Play in a Courtly scenario: +2 Favor and 2 Influence damage. A surrender entered into the record is worth more than a surrender shouted.</em></p>"
+  }
+];
+
+// 🔒 Owner ruling 2026-08-17: the courtly raid has ALREADY happened by now (this
+// block sits after raid_presence), so this is that lesson in practice. Once the
+// circle opens the player picks their way in — STORM or SLIP — and both roads
+// end at the same parley. Violence and intrigue are two of the three real
+// activityKeys; presence is what they resolve into.
+const PG_APPROACHES = {
+  violence: {
+    label: "⚔ Storm the gates",
+    activityKey: "violence",
+    brief: "Front door, then. No subtlety, no second guessing — you walk in loud and let them come to you.",
+    coach: "Everything in the circle knows you're here and gets to act. More of them, and they're awake. Lead with the guns and let the rig take the hits.",
+    // Loud means MORE of them, all alert.
+    foes: [
+      { name: "Null Process", foeClass: "qliphothic", body: 4, xFrac: 0.63, yFrac: 0.73, resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
+      { name: "Null Process", foeClass: "qliphothic", body: 4, xFrac: 0.73, yFrac: 0.74, resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
+      { name: "Null Process", foeClass: "qliphothic", body: 4, xFrac: 0.60, yFrac: 0.86, resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
+      { name: "The Pull",     foeClass: "qliphothic", body: 8, size: 2, xFrac: 0.68, yFrac: 0.85, resistances: ["kinetic", "qliphothic"], vulnerabilities: ["sephirotic"] }
+    ]
+  },
+  intrigue: {
+    label: "🗡 Slip inside",
+    activityKey: "intrigue",
+    brief: "Quietly, then. You come in under the noise it's making and it doesn't hear the door.",
+    coach: "Fewer of them, and they start SURPRISED — they cannot act on the first round. That round is a gift; spend it on the big one, not the small ones.",
+    // Quiet means fewer, and the system's own surprise rule buys the free round.
+    foes: [
+      { name: "Null Process", foeClass: "qliphothic", body: 4, xFrac: 0.63, yFrac: 0.73, resistances: ["kinetic"], vulnerabilities: ["sephirotic"], conditions: ["surprise"] },
+      { name: "The Pull",     foeClass: "qliphothic", body: 8, size: 2, xFrac: 0.68, yFrac: 0.85, resistances: ["kinetic", "qliphothic"], vulnerabilities: ["sephirotic"], conditions: ["surprise"] }
+    ]
+  }
+};
+
+const finalShowdown = {
+  id: "final_showdown",
+  title: "The Final Show Down",
+  scope: "personal",
+
+  enter: async (ctx) => {
+    ctx._spawned = ctx._spawned || [];
+    ctx._fs = { scene: null, foes: new Map(), parleyed: false, resolved: false, downed: 0 };
+
+    const held = _pgRelics(ctx.steward);
+    const scene = await _requireScene(ctx, "meatsuit-range", "Proving Ground");
+    ctx._fs.scene = scene;
+
+    if (held.length < PG_TRIALS.length) {
+      // Sealed. The owner's ruling: all four or the circle stays inert.
+      await ctx.speak(`The great circle won't take you — ${held.length} of ${PG_TRIALS.length} anchors. It isn't being coy, One, it's being LOAD-BEARING. Go back for the rest.`);
+      return;
+    }
+
+    if (scene) { await _enterScene(scene, "Proving Ground", ctx.lane); await _pause(700); }
+    await ctx.speak("Four anchors, one circle. Step in and it closes behind you — that's the point of a circle.");
+    await _pause(900);
+    await ctx.speak("Whatever's been pulling at us is going to have to come through in person to finish the job. Good. In person, it can be HIT. *bzzt*");
+    await _pause(900);
+    await ctx.speak("You've run all three consoles by now — violence, intrigue, presence. This is where you stop practising. How do you want to go in?");
+
+    const picked = await ctx.choose?.({
+      title: "◇ OPERATOR — How do we do this?",
+      content:
+        `<p>The circle is open and the thing on the other side doesn't know which door you're using.</p>` +
+        `<p><b>⚔ Storm the gates</b> — everything inside is awake and there are more of them. Loud, fast, honest.</p>` +
+        `<p><b>🗡 Slip inside</b> — fewer of them, and they start <b>Surprised</b>: they cannot act on the first round. Quiet, precise, and it costs them the opening.</p>` +
+        `<p><i>Either way it ends at the same table.</i></p>`,
+      options: [
+        { action: "violence", label: PG_APPROACHES.violence.label },
+        { action: "intrigue", label: PG_APPROACHES.intrigue.label }
+      ],
+      fallback: "violence"
+    }) ?? "violence";
+    const approach = PG_APPROACHES[picked] ?? PG_APPROACHES.violence;
+    ctx._fs.approach = picked;
+    await ctx.speak(approach.brief);
+    await _pause(800);
+
+    const stage = _stage();
+    if (scene && stage) {
+      const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, PG_ARENA.xFrac - 0.08, PG_ARENA.yFrac + 0.06, ctx.lane));
+      if (st?.created) ctx._spawned.push({ token: st.doc });
+      if (ctx.rig) {
+        const rt = await stage.ensureTokenOnScene(ctx.rig, scene, _scenePoint(scene, PG_ARENA.xFrac - 0.13, PG_ARENA.yFrac + 0.09, ctx.lane));
+        if (rt?.created) ctx._spawned.push({ token: rt.doc });
+      }
+      for (const f of approach.foes) {
+        const sp = await stage.spawnFoe?.(scene, {
+          name: f.name, foeClass: f.foeClass, body: f.body, size: f.size ?? 1,
+          resistances: f.resistances ?? [], vulnerabilities: f.vulnerabilities ?? [],
+          conditions: f.conditions ?? [],
+          ..._scenePoint(scene, f.xFrac, f.yFrac, ctx.lane)
+        });
+        if (!sp?.actor) continue;
+        ctx._spawned.push(sp);
+        ctx._fs.foes.set(sp.actor.id, { actorId: sp.actor.id, name: sp.actor.name, boss: (f.body ?? 0) >= 8, down: false });
+      }
+    }
+
+    await ctx.speak(approach.coach);
+    await _pause(700);
+    await ctx.speak("The small ones were never people. The big one is the hand on the lever.");
+    ctx.riff({ beat: "final_showdown", line: "The player has entered the sealed circle to fight the thing crashing the game.", intent: "All bravado, thinly worn. One line." });
+  },
+
+  detect: (ctx, done) => {
+    const fs = ctx._fs;
+    const stage = _stage();
+    const FALLBACK_TITLE = "◇ OPERATOR — Final Show Down";
+    const closeFallback = () => globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(FALLBACK_TITLE);
+
+    if (!fs?.scene || !fs.foes.size) {
+      ctx.prompt({ title: FALLBACK_TITLE,
+        content: "<p>The circle isn't ready — missing arena, missing anchors, or no GM online to stage it.</p><p>Continue when you like.</p>",
+        label: "Continue" }).then(() => done());
+      return closeFallback;
+    }
+
+    const finish = () => { if (!fs.resolved) { fs.resolved = true; done(); } };
+
+    /** The messenger. Fires once, the moment the fight visibly turns. */
+    const parley = async () => {
+      if (fs.parleyed) return;
+      fs.parleyed = true;
+      await ctx.speak("— wait. Something's coming in on a channel that shouldn't exist. It's not attacking. It's TALKING.");
+      await _pause(1000);
+
+      const scene = fs.scene;
+      let messenger = null;
+      if (scene && stage) {
+        messenger = await stage.spawnFoe?.(scene, {
+          name: "A Messenger, Sent In Haste", foeClass: "sentient", body: 2,
+          ..._scenePoint(scene, PG_ARENA.xFrac + 0.10, PG_ARENA.yFrac - 0.09, ctx.lane)
+        });
+        if (messenger) ctx._spawned.push(messenger);
+      }
+      await ctx.speak("It's a messenger. Unarmed, badly rendered, and carrying paperwork. *bzzt* — I did not have this on the list.");
+      await _pause(900);
+
+      // Hand over the two secrets. Minted in memory so no compendium authoring
+      // is required; addSecret takes the effectKey from opts when the source
+      // carries none, and stamps them EARNED (stolen would cost suspicion).
+      const fid = ctx.faction?.id;
+      const granted = [];
+      for (const spec of PG_PARLEY_SECRETS) {
+        const r = await stage.grantSecret?.(fid, spec);
+        if (r?.ok) granted.push(r.name || spec.name);
+      }
+      if (granted.length) {
+        await ctx.speak(`It hands you ${granted.length === 2 ? "two documents" : "a document"}: ${granted.join(" and ")}. Those are COURTLY SECRETS, One — real ones, in your faction's hand, playable the moment a parley opens.`);
+      } else {
+        await ctx.speak("It hands you its paperwork — though the court's filing system just refused it. Your GM can add the secrets by hand if it matters.");
+        console.warn(TAG, "parley secrets not granted — courtlySecrets API unavailable or faction missing");
+      }
+      await _pause(1000);
+      await ctx.speak("So here's the shape of it. You can finish what's in the circle — it's losing, and nobody would blame you. Or you can take the surrender, open the parley, and find out what was so frightened of this place that it tried to unmake it.");
+      await _pause(700);
+      const camePlain = ctx._fs?.approach === "intrigue" ? "You came in quiet, and it still saw you coming" : "You came in loud, and it heard every step";
+      await ctx.speak(`${camePlain}. Either way it's talking now. Your GM runs the parley from the Raid Console — PRESENCE, not violence. I've pointed it at you.`);
+
+      // Raids are GM-driven by design: pre-seed the session and open the GM's
+      // console, exactly as the raid_presence finale beat does.
+      try {
+        if (fid) {
+          await stage.setRaidSession?.(fid, {
+            rev: Date.now(), ts: Date.now(), by: ctx.user?.id ?? "",
+            attackerId: fid, supportFactionIds: [], activityKey: "presence",   // pivots off the approach below
+            difficulty: "standard", targetType: "hex", targetUuid: "", targetName: "The Pull",
+            defenderId: "", rounds: [], logWar: false, includeDefender: false
+          });
+          await stage.openRaidConsoleForGM?.(fid, { playerName: ctx.steward?.name || "", activityKey: "presence" });
+        }
+      } catch (e) { console.warn(TAG, "parley handoff failed", e); }
+    };
+
+    const integrityOf = (a) => {
+      const sys = a?.system?.system ?? a?.system;
+      const v = Number(foundry.utils.getProperty(sys, "derived.integrity.value"));
+      return Number.isFinite(v) ? v : null;
+    };
+
+    const onUpd = (actor) => {
+      const rec = fs.foes.get(actor?.id);
+      if (!rec || rec.down || fs.resolved) return;
+      const v = integrityOf(actor);
+      if (v === null) return;
+
+      // The boss dropping below half is the moment the fight visibly turns —
+      // that's when the other side decides talking is cheaper.
+      if (rec.boss && !fs.parleyed) {
+        const sys = actor.system?.system ?? actor.system;
+        const max = Number(foundry.utils.getProperty(sys, "derived.integrity.max")) || 0;
+        if (max > 0 && v <= max * 0.5) parley().catch(e => console.warn(TAG, "parley failed", e));
+      }
+      if (v > 0) return;
+
+      rec.down = true;
+      fs.downed += 1;
+      if (rec.boss) {
+        ctx.speak?.("The hand comes off the lever. The pull stops— *bzzt* —and the tick rate steadies. You killed it. That was one of the two ways this ends.");
+        finish();
+      } else {
+        ctx.speak?.(`${rec.name} unspools. It was never anyone.`);
+        // Processes down but the boss untouched still counts as turning the fight.
+        if (fs.downed >= 2 && !fs.parleyed) parley().catch(() => {});
+      }
+    };
+    Hooks.on("updateActor", onUpd);
+
+    ctx.prompt({
+      title: FALLBACK_TITLE,
+      content:
+        `<p>Fight what's in the circle. When it starts losing, a <b>messenger</b> arrives with two <b>Courtly Secrets</b> and an offer.</p>` +
+        `<p><b>Finish it</b> — kill the thing on the lever — or <b>take the parley</b>, which your GM runs from the Raid Console on <b>presence</b>.</p>` +
+        `<p><i>Either ending is real. Conclude when the table has settled it.</i></p>`,
+      label: "This is settled"
+    }).then(() => finish());
+
+    return () => { Hooks.off("updateActor", onUpd); closeFallback(); };
+  },
+
+  exit: async (ctx) => {
+    const fs = ctx._fs || {};
+    if (fs.parleyed) {
+      await ctx.speak("However that ended — it ended with words on the table. Remember that you had the option. Most things in Bad Eden won't offer it twice.");
+    } else {
+      await ctx.speak("Circle's quiet. The game is still here, and so are you. *bzzt* — I'd call that a pass.");
+    }
+    await _pause(800);
+    await ctx.speak("Training's over, One. Whatever tried that is still out there, and now it knows your name. Go be worth knowing.");
+    try { await _stage()?.disembark?.(ctx.steward?.id, ctx.rig?.id); } catch (_) {}
+    try { await _stage()?.cleanup?.(ctx._spawned || []); } catch (_) {}
+    ctx._spawned = [];
+    ctx._fs = null;
+  }
+};
+
 /* ═════════════════════════ PHASE 4 — FINALE ═════════════════════════
  * travel into a hostile hex → triple raid (violence / intrigue / presence,
  * player-driven, pre-targeted consoles) → graduation dive into live Bad Eden.
@@ -1510,7 +2101,7 @@ const graduation = {
   scope: "shared",
 
   enter: async (ctx) => {
-    await ctx.speak("Three approaches, one enemy folded. Violence, intrigue, presence — you can take ground any way the moment demands. That's a Steward.");
+    await ctx.speak("Three consoles, four anchors, one circle, and something that tried to unmake the whole board and had to sit down at a table instead. Violence, intrigue, presence — you can take ground any way the moment demands. That's a Steward.");
     await _pause(1000);
     await ctx.speak("Training's done, One. No more sandbox, no more straw adversaries. From here it's the real Bad Eden — your hold, your rig, your faction, live in the weave. Go fix what broke. *bzzt*");
   },
@@ -1573,7 +2164,9 @@ Hooks.once("ready", () => {
     outfitting,
     crewOccult, surgeBeat, manifestations,
     combatSim,
-    travel, raidViolence, raidIntrigue, raidPresence, graduation
+    travel, raidViolence, raidIntrigue, raidPresence,
+    provingTrials, finalShowdown,
+    graduation
   ];
   for (const beat of ordered) ns.beats.register(beat);
   console.log(TAG, "Registered beats:", ns.beats.list().map(b => b.id).join(", "));
