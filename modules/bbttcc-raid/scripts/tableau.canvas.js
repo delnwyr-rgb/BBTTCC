@@ -64,6 +64,17 @@
     // 1.0 = linear; >1 = more aggressive falloff into the distance.
     curve:    1.8,
     zSortByY: true,
+    // Stage bounds (2026-08-20) — where the ARTWORK actually ends, in canvas px.
+    // A backdrop rendered 16:9 onto a taller scene canvas carries baked-in black
+    // letterbox bars, and Foundry's scene rect counts them: the scene "thinks it
+    // is bigger than it is", so tuner defaults spread the perspective across dead
+    // pixels and a token parked in a bar sits off-stage at full front scale.
+    // null = fall back to the scene rect (no letterbox). Vertical only —
+    // letterboxing is a top/bottom phenomenon and dead config nobody reads is
+    // worse than none; add stageLeft/stageRight here if a pillarboxed backdrop
+    // ever turns up.
+    stageTop:    null,
+    stageBottom: null,
     // Auto-size on drop (2026-08-17). Tableau art is portrait-scale, not
     // battlemap-scale: a default 1×1 token lands far too small to read against
     // a diorama, and every drop needed the same manual resize afterwards. Any
@@ -108,6 +119,21 @@
     const raw = scene.flags?.[MOD]?.tableau;
     if (!raw || raw.enabled !== true) return null;
     return { ...DEFAULTS, ...raw };
+  }
+
+  // The stage band: the art's real top/bottom, falling back to the scene rect
+  // when a backdrop has no letterbox. Everything that reasons about "where the
+  // picture is" goes through here — depth clamping, guides, tuner defaults.
+  function stageBand(scene, cfg) {
+    const dims = scene?.dimensions || canvas?.dimensions || {};
+    const sy = Number(dims.sceneY ?? 0);
+    const sh = Number(dims.sceneHeight ?? 0);
+    const top    = Number(cfg?.stageTop);
+    const bottom = Number(cfg?.stageBottom);
+    const t = Number.isFinite(top)    ? top    : sy;
+    const b = Number.isFinite(bottom) ? bottom : (sy + sh);
+    return (b > t) ? { top: t, bottom: b, letterboxed: Number.isFinite(top) || Number.isFinite(bottom) }
+                   : { top: sy, bottom: sy + sh, letterboxed: false };
   }
 
   function isTableauActor(tokenDoc) {
@@ -155,7 +181,12 @@
         tRaw = clamp((depth - Number(cfg.farElev)) / span, 0, 1);
         sortKey = depth;
       } else {
-        const y = Number(token.document?.y ?? 0);
+        // Clamp to the stage band first: a token dragged into a letterbox bar
+        // is read as standing at the nearest edge of the picture rather than
+        // somewhere past it, so it scales like the art it is next to instead of
+        // sitting off-stage at full front scale.
+        const band = stageBand(scene, cfg);
+        const y = clamp(Number(token.document?.y ?? 0), band.top, band.bottom);
         const range = (cfg.frontY - cfg.backY) || 1;
         tRaw = clamp((y - cfg.backY) / range, 0, 1);
         sortKey = y;
@@ -259,6 +290,15 @@
     root.eventMode = "none";
 
     const g = new PIXI.Graphics();
+    // Stage bounds first, underneath — dim dashed-ish amber so the letterbox
+    // edge reads as scenery, not as another thing to drag. Only drawn when the
+    // scene actually declares them; an un-letterboxed backdrop shows nothing.
+    const band = stageBand(canvas?.scene ?? scene, cfg);
+    if (band.letterboxed) {
+      g.lineStyle(2, 0xe8c84a, 0.45);
+      g.moveTo(0, band.top);    g.lineTo(w, band.top);
+      g.moveTo(0, band.bottom); g.lineTo(w, band.bottom);
+    }
     g.lineStyle(4, 0xff5555, 0.85); // back (red)
     g.moveTo(0, back);  g.lineTo(w, back);
     g.lineStyle(4, 0x55ff55, 0.85); // front (green)
@@ -272,6 +312,14 @@
       const tBack  = new PIXI.Text(`▼ BACK — min scale  (Y=${back})`,  { ...labelBase, fill: 0xff5555 });
       tBack.position.set(20, back + 8);
       root.addChild(tFront, tBack);
+      if (band.letterboxed) {
+        const small = { ...labelBase, fontSize: 16, fill: 0xe8c84a };
+        const tTop = new PIXI.Text(`stage top (Y=${Math.round(band.top)}) — art starts here`, small);
+        tTop.position.set(20, band.top + 6);
+        const tBot = new PIXI.Text(`stage bottom (Y=${Math.round(band.bottom)}) — art ends here`, small);
+        tBot.position.set(20, band.bottom - 24);
+        root.addChild(tTop, tBot);
+      }
     } catch (_e) {}
 
     const parent = canvas.interface || canvas.controls || canvas.stage;
@@ -449,6 +497,25 @@
         ui.notifications?.info(`Tableau: resized ${ups.length} token(s) to ${target}×${target}.`);
         return ups;
       },
+      // Where the artwork really starts and ends. Pass null/null to clear back
+      // to the scene rect. Everything that reasons about the picture's extent
+      // reads this: depth clamping, the guide overlay, the tuner's defaults.
+      setStageBounds: async (top, bottom, scene = canvas?.scene) => {
+        if (!scene) return;
+        const t = (top    == null || top    === "") ? null : Number(top);
+        const b = (bottom == null || bottom === "") ? null : Number(bottom);
+        if (t != null && b != null && !(b > t)) {
+          return ui.notifications?.warn("Stage bottom must be below stage top.");
+        }
+        await scene.update({
+          [`flags.${MOD}.tableau.stageTop`]:    t,
+          [`flags.${MOD}.tableau.stageBottom`]: b
+        });
+        applyAll();
+        drawGuides(scene);
+        return { top: t, bottom: b };
+      },
+      stageBand: (scene = canvas?.scene) => stageBand(scene, getTableau(scene) || DEFAULTS),
       setFrontBack: async (frontY, backY, scene = canvas?.scene) => {
         if (!scene) return;
         await scene.update({

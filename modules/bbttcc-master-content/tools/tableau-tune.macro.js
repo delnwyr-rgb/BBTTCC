@@ -36,10 +36,18 @@
   const sy   = Number(dims.sceneY ?? 0);
   const sh   = Number(dims.sceneHeight ?? 1080);
   const cur  = api.readConfig(scene);
+  // Stage band = where the ARTWORK really is. A 16:9 backdrop on a taller canvas
+  // carries baked-in black bars that the scene rect counts as stage, so every
+  // default below is derived from the art, not from the dead pixels around it.
+  const bandTop = Number.isFinite(Number(cur.stageTop))    ? Number(cur.stageTop)    : sy;
+  const bandBot = Number.isFinite(Number(cur.stageBottom)) ? Number(cur.stageBottom) : (sy + sh);
+  const bandH   = Math.max(1, bandBot - bandTop);
   const v0   = {
     enabled:  !!cur.enabled,
-    frontY:   Number(cur.frontY   ?? Math.round(sy + sh * 0.90)),
-    backY:    Number(cur.backY    ?? Math.round(sy + sh * 0.10)),
+    stageTop:    Number.isFinite(Number(cur.stageTop))    ? Number(cur.stageTop)    : "",
+    stageBottom: Number.isFinite(Number(cur.stageBottom)) ? Number(cur.stageBottom) : "",
+    frontY:   Number(cur.frontY   ?? Math.round(bandTop + bandH * 0.90)),
+    backY:    Number(cur.backY    ?? Math.round(bandTop + bandH * 0.10)),
     tokenSize: Number(cur.tokenSize ?? 6),
     minScale: Number(cur.minScale ?? 0.25),
     maxScale: Number(cur.maxScale ?? 1.00),
@@ -61,6 +69,9 @@
       <form class="ft-tableau-form">
         <p class="hint" style="margin:0 0 8px;">
           <b>${scene.name}</b> — scene area Y ∈ [${sy}, ${sy + sh}] (${sh}px tall)<br/>
+          ${(v0.stageTop !== "" || v0.stageBottom !== "")
+            ? `<span style="color:#e8c84a;">stage (art) Y ∈ [${Math.round(bandTop)}, ${Math.round(bandBot)}] (${Math.round(bandH)}px tall) — ${Math.round(sh - bandH)}px of letterbox ignored</span><br/>`
+            : `<span style="opacity:.6;">stage = whole scene (no letterbox declared)</span><br/>`}
           Status: <span data-status>${v0.enabled ? "✅ ENABLED" : "⛔ disabled"}</span>
         </p>
 
@@ -95,6 +106,24 @@
           <span style="color:#5f5;">▲ green line</span> = front (max scale);
           <span style="color:#f55;">▼ red line</span> = back (min scale).
           Drag a token to where you want each line, then click "Set from selected".
+        </p>
+
+        <div style="${rowStyle}">
+          <label style="${labelStyle}">Stage top</label>
+          <input type="number" name="stageTop" value="${v0.stageTop}" step="20" placeholder="(scene top)" style="width:110px;"/>
+          <button type="button" data-act="setStageTopFromToken" style="white-space:nowrap;">Set from selected ▲</button>
+        </div>
+
+        <div style="${rowStyle}">
+          <label style="${labelStyle}">Stage bottom</label>
+          <input type="number" name="stageBottom" value="${v0.stageBottom}" step="20" placeholder="(scene bottom)" style="width:110px;"/>
+          <button type="button" data-act="setStageBottomFromToken" style="white-space:nowrap;">Set from selected ▼</button>
+        </div>
+        <p style="opacity:.7; font-size:11px; margin:2px 0 8px;">
+          Where the ARTWORK starts and ends, when the backdrop has black bars baked into it.
+          Leave blank to use the whole scene. Tokens dragged into a bar scale as if standing at
+          the nearest edge of the picture instead of off-stage at full size, and Reset to Defaults
+          spreads the perspective across the art rather than the dead pixels.
         </p>
 
         <div style="${rowStyle}">
@@ -157,7 +186,13 @@
         }, 80);
       };
 
+      const numOrNull = (sel) => {
+        const raw = String(form.querySelector(sel).value ?? "").trim();
+        return raw === "" ? null : Number(raw);
+      };
       const readForm = () => ({
+        stageTop:    numOrNull('[name="stageTop"]'),
+        stageBottom: numOrNull('[name="stageBottom"]'),
         tokenSize: Number(form.querySelector('[name="tokenSize"]').value),
         curve:    Number(form.querySelector('[name="curve"]').value),
         minScale: Number(form.querySelector('[name="minScale"]').value),
@@ -206,6 +241,18 @@
             updateLabels();
             persist(readForm());
             ui.notifications.info(`Back Y set to ${y} (token "${tk.name || tk.id}" center).`);
+          } else if (act === "setStageTopFromToken" || act === "setStageBottomFromToken") {
+            // Top edge takes the token's TOP, bottom edge its BOTTOM — you drag a
+            // token flush against the letterbox seam and the edge snaps to the
+            // side of it that touches the art (Front/Back Y use centres, because
+            // those mark where a token STANDS, not where the picture stops).
+            if (sel.length !== 1) return ui.notifications.warn("Select exactly one token to anchor the stage edge.");
+            const tk = sel[0];
+            const top = act === "setStageTopFromToken";
+            const y = Math.round(Number(tk.document?.y ?? 0) + (top ? 0 : (tk.h || 0)));
+            form.querySelector(top ? '[name="stageTop"]' : '[name="stageBottom"]').value = y;
+            persist(readForm());
+            ui.notifications.info(`Stage ${top ? "top" : "bottom"} set to ${y} (token "${tk.name || tk.id}").`);
           } else if (act === "sizeExisting") {
             // Retro-fit the drop-time size onto tokens already on the scene.
             // Persist the field first so the API reads the value on screen.
@@ -222,9 +269,14 @@
             for (const tk of sel) await api.markActor(tk, false);
             ui.notifications.info(`Unmarked ${sel.length}.`);
           } else if (act === "reset") {
+            // Derive from the CURRENT stage band, not the scene rect — resetting
+            // the curve should not throw away a letterbox the GM measured.
+            const rTop = numOrNull('[name="stageTop"]') ?? sy;
+            const rBot = numOrNull('[name="stageBottom"]') ?? (sy + sh);
+            const rH   = Math.max(1, rBot - rTop);
             const defaults = {
-              frontY:   Math.round(sy + sh * 0.90),
-              backY:    Math.round(sy + sh * 0.10),
+              frontY:   Math.round(rTop + rH * 0.90),
+              backY:    Math.round(rTop + rH * 0.10),
               minScale: 0.25,
               maxScale: 1.00,
               curve:    1.8
