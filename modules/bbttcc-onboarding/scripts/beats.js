@@ -1462,6 +1462,14 @@ const provingTrials = {
     await ctx.speak("Four sigils are holding the Proving Ground together. Whatever's chewing on us is prying them loose one at a time. Get to each one, take what's anchoring it, and bring all four to the great circle before the floor stops being a floor.");
     await _pause(900);
 
+    // Ownership repair. Normally outfitting does this, but the playtest
+    // selectors make THIS beat a legitimate entry point — and a player without
+    // OWNER on their own steward/faction/rig can't take a hazard hit, can't be
+    // moved between levels, and can't be handed a relic. Idempotent, so it
+    // costs nothing on a full run.
+    try { await _stage()?.ensureOwned?.([ctx.faction?.id, ctx.rig?.id, ctx.steward?.id], ctx.user?.id); }
+    catch (e) { console.warn(TAG, "trials ownership repair failed", e); }
+
     const scene = await _requireScene(ctx, "meatsuit-range", "Proving Ground");
     ctx._pg.scene = scene;
     if (scene) { await _enterScene(scene, "Proving Ground", ctx.lane); await _pause(800); }
@@ -1716,6 +1724,9 @@ const finalShowdown = {
   enter: async (ctx) => {
     ctx._spawned = ctx._spawned || [];
     ctx._fs = { scene: null, foes: new Map(), parleyed: false, resolved: false, downed: 0 };
+
+    try { await _stage()?.ensureOwned?.([ctx.faction?.id, ctx.rig?.id, ctx.steward?.id], ctx.user?.id); }
+    catch (e) { console.warn(TAG, "showdown ownership repair failed", e); }
 
     const held = _pgRelics(ctx.steward);
     const scene = await _requireScene(ctx, "meatsuit-range", "Proving Ground");
