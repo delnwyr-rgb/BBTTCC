@@ -2802,7 +2802,13 @@ const doctrine = await (async () => {
       secretsPlayable: (() => {
         try {
           const st = game.bbttcc?.api?.raid?._lastCourtly?.getState?.() || null;
-          return !!(st && (st.attackerId === this.actor?.id || st.defenderId === this.actor?.id));
+          if (st && (st.attackerId === this.actor?.id || st.defenderId === this.actor?.id)) return true;
+          // Cross-client fallback (2026-08-22): the scenario object lives only
+          // on the creating (GM) client — player sheets read the persisted
+          // mirror flag the courtly enhancer now writes on both participants.
+          const m = this.actor?.getFlag?.("bbttcc-raid", "courtlyActive") || null;
+          return !!(m && m.outcome === "ongoing"
+            && (m.attackerId === this.actor?.id || m.defenderId === this.actor?.id));
         } catch (_e) { return false; }
       })(),
       gmEditMode: !!game.user?.isGM && !!game.settings?.get?.('bbttcc-core','gmEditMode'),

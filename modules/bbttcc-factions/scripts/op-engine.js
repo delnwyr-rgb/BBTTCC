@@ -325,11 +325,23 @@ async function commit(factionId, deltas, context) {
 // Safe to call multiple times. GM-only.
 
 const MIGRATION_FLAG = "opBankMarksMigrated";
+// Epoch guard (2026-08-22): the migration shipped 2026-08-15. Any actor
+// CREATED after that date was seeded marks-native — multiplying it again
+// inflated fresh factions ×10 on the next GM reload (The Errata Society's
+// "phantom 298-OP treasury", live-confirmed 2026-08-22). Post-epoch actors
+// are stamped as migrated without touching their numbers.
+const MARKS_MIGRATION_EPOCH_MS = Date.UTC(2026, 7, 15); // 2026-08-15T00:00Z
 
 async function _migrateOneActor(actor) {
   try {
     const f = actor.flags?.[MOD_ID] || {};
     if (f[MIGRATION_FLAG] === true) return { skipped: true };
+
+    const createdMs = Number(actor._stats?.createdTime) || 0;
+    if (createdMs >= MARKS_MIGRATION_EPOCH_MS) {
+      await actor.update({ [`flags.${MOD_ID}.${MIGRATION_FLAG}`]: true }, { diff: true, recursive: true });
+      return { skipped: true, stamped: true };
+    }
 
     const updates = {};
     let touched = false;
