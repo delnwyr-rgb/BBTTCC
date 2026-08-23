@@ -2,7 +2,7 @@
   "id": "surge-powers",
   "title": "Surge Powers",
   "description": "A shared heroic-resource economy for D&D 5e. Kept d20 rolls of 15+ bank Surge (natural 20s explode and chain); spend it from a menu of universal powers — offense, defense, restoration, and narrative beats.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "authors": [
     {
       "name": "David English"

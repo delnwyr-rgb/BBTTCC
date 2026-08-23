@@ -9,6 +9,10 @@ A shared heroic-resource economy for **D&D 5e** on Foundry VTT (v12–v13, dnd5e
   they bank **+1 Surge**. Advantage and disadvantage flow in naturally — only the kept die counts.
 - **Natural 20s explode.** A nat 20 re-rolls a bonus d20, chaining +1 extra Surge per further 20
   (toggleable).
+- **Casting banks Surge.** Casting a spell (or using a power) banks **+2 Surge** (configurable) —
+  casters don't make enough d20 rolls to live on the threshold fill alone.
+- **Combat ticks Surge.** When combat starts, every character in the tracker banks **+1 Surge**
+  (configurable; late joiners get it on entry) — so there's always something fun to do.
 - **Long rests refill.** A long rest banks +proficiency Surge as a baseline (toggleable).
 - **Pool cap** is 2× proficiency bonus (minimum 4). Override per actor via the
   `flags.surge-powers.maxOverride` flag.
@@ -39,6 +43,8 @@ attack (`1Attack` special duration). Without them, effects remain visible, label
 |---|---|---|
 | Surge threshold | 15 | Kept d20 ≥ this banks +1 (15 ⇒ ~30% of rolls) |
 | Natural 20s explode | on | Chain bonus Surge on nat 20s |
+| Surge per spell cast | 2 | Banked on casting a spell or power (0 disables) |
+| Surge per combat | 1 | Banked by every character at combat start (0 disables) |
 | Long rest refill | on | +proficiency Surge on a long rest |
 | Gain notifications | on | Toast on Surge gain |
 
