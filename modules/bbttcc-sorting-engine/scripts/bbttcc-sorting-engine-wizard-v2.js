@@ -844,12 +844,18 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
 
   _buildRow(category, label, suggestion, ranked, note = "") {
     const overrideName = this._overrides[category];
-    const effective = overrideName || suggestion?.name || "—";
+    // Manual mode has no suggestions — until the player actively picks, the row
+    // is genuinely EMPTY. Rendering the alphabetical first option as if chosen
+    // (2026-08-20 playtest) meant "Death (0)" looked selected while the state
+    // held null, and downstream filters (heritage-by-ancestry, doctrine-by-path)
+    // saw nothing picked.
+    const effective = overrideName || suggestion?.name || "";
     const isOverridden = !!overrideName;
     const hint = note ? `<span class="bbttcc-twv2-row-note">${note}</span>` : "";
-    const optionsHtml = (ranked || []).map(r => {
+    const placeholder = effective ? "" : `<option value="" selected disabled>— choose —</option>`;
+    const optionsHtml = placeholder + (ranked || []).map(r => {
       const sel = r.name === effective ? "selected" : "";
-      const score = (typeof r.score === "number") ? ` (${r.score})` : "";
+      const score = (typeof r.score === "number" && r.score > 0) ? ` (${r.score})` : "";
       return `<option value="${_esc(r.name)}" ${sel}>${_esc(r.name)}${score}</option>`;
     }).join("");
     return `
@@ -857,7 +863,11 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
         <div class="bbttcc-twv2-row-label">${label}${hint}</div>
         <div class="bbttcc-twv2-row-value ${isOverridden ? "is-overridden" : ""}">
           <select data-override-category="${category}" class="bbttcc-twv2-row-select">${optionsHtml}</select>
-          ${isOverridden ? `<span class="bbttcc-twv2-overridden-badge">tweaked</span>` : `<span class="bbttcc-twv2-suggested-badge">suggested</span>`}
+          ${isOverridden
+            ? `<span class="bbttcc-twv2-overridden-badge">${this._mode === "manual" ? "selected" : "tweaked"}</span>`
+            : (effective
+              ? `<span class="bbttcc-twv2-suggested-badge">suggested</span>`
+              : `<span class="bbttcc-twv2-suggested-badge">needs pick</span>`)}
         </div>
       </div>
     `;
@@ -1430,8 +1440,17 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     const heritageOk = !!this._heritage;
     const aptitudePicks = (this._chargenAptitudes || []).filter(s => !!s).length;
     const aptitudesOk = aptitudePicks >= 3;
+    // Every build line must actually be picked. Quiz mode auto-passes (the
+    // suggestion fills every slot); manual mode blocks until the player has
+    // locked each row — previously Create could fire with null archetype/
+    // ancestry/path and forge a broken character (2026-08-20 playtest).
+    const CAT_LABELS = { archetype: "Archetype", ancestry: "Ancestry", crew: "Awesome Crew",
+      path: "Path", doctrine: "Doctrine", philosophy: "Philosophy", occult: "Occult Association",
+      alignment: "Alignment" };
+    const missingCats = Object.keys(CAT_LABELS).filter(c => !this._effective(c));
+    const buildOk = missingCats.length === 0;
 
-    const ready = facultiesValid && heritageOk && aptitudesOk;
+    const ready = buildOk && facultiesValid && heritageOk && aptitudesOk;
     btn.disabled = !ready;
     btn.classList.toggle("is-disabled", !ready);
 
@@ -1442,6 +1461,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       return;
     }
     const parts = [];
+    if (!buildOk) parts.push(`<a href="#" data-jump-section="build">pick ${missingCats.map(c => CAT_LABELS[c]).join(", ")}</a>`);
     if (!heritageOk) parts.push(`<a href="#" data-jump-section="heritage">pick a Heritage</a>`);
     if (!facultiesValid) parts.push(`<a href="#" data-jump-section="faculties">allocate Faculties</a>`);
     if (!aptitudesOk) parts.push(`<a href="#" data-jump-section="aptitudes">choose ${3 - aptitudePicks} more aptitude${(3 - aptitudePicks) === 1 ? "" : "s"}</a>`);
@@ -1463,6 +1483,11 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     if (sectionKey === "heritage") {
       target = root.querySelector("[data-heritage-pick]")?.closest("[data-row-category]")
         || root.querySelector("[data-heritage-pick]");
+    } else if (sectionKey === "build") {
+      // First still-unpicked row, or the whole table as a fallback.
+      target = Array.from(root.querySelectorAll("[data-row-category]"))
+        .find(r => !r.dataset.rowEffective)
+        || root.querySelector(".bbttcc-twv2-build-table");
     } else {
       target = root.querySelector(`[data-finalize-section="${sectionKey}"]`);
     }

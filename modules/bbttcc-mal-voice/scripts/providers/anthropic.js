@@ -353,6 +353,20 @@ async function call(opts = {}) {
       } catch (e) {
         return _err(e.code || "STREAM_ERROR", e?.message || String(e), { retried });
       }
+      // stop=refusal with ZERO delivered text: the safety layer declined the
+      // completion outright (observed 2026-08-21 mid-negotiation — the NPC
+      // rendered as "…"). Nothing streamed, so one retry is safe; refusing
+      // twice returns a typed error so callers can fall back to scripted text
+      // instead of silence.
+      if (streamed.stopReason === "refusal" && !streamed.text) {
+        if (attempt === 1) {
+          retried = true;
+          warn("stop=refusal with empty text — retrying once");
+          await new Promise(r => setTimeout(r, 400));
+          continue;
+        }
+        return _err("REFUSAL", "Model declined this completion twice (stop=refusal, empty text).", { retried });
+      }
       return _finish(streamed.text, streamed.model || model, streamed.usage, streamed.stopReason, retried, opts, debug, streamed.content);
     }
 
@@ -366,6 +380,16 @@ async function call(opts = {}) {
 
     const content = Array.isArray(data?.content) ? data.content : [];
     const text = content.filter(b => b?.type === "text").map(b => b.text || "").join("").trim();
+    // Same refusal handling as the streaming path (see above).
+    if (data?.stop_reason === "refusal" && !text) {
+      if (attempt === 1) {
+        retried = true;
+        warn("stop=refusal with empty text — retrying once");
+        await new Promise(r => setTimeout(r, 400));
+        continue;
+      }
+      return _err("REFUSAL", "Model declined this completion twice (stop=refusal, empty text).", { retried });
+    }
     return _finish(text, data?.model || model, _usageFromData(data?.usage), data?.stop_reason || null, retried, opts, debug, content);
   }
 

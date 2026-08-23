@@ -735,6 +735,10 @@ async function _echoFolder(stewardName) {
   const name = `Echoes — ${stewardName}`;
   let folder = game.folders?.find(f => f.type === "Actor" && f.name === name);
   if (!folder) {
+    // Folder documents have no ownership model — creation is GM-only, always.
+    // A player minting echoes gets them unfiled instead of a red permission
+    // error (2026-08-20 playtest: wizard Crew/Association step on a player login).
+    if (!game.user?.isGM) return null;
     try { folder = await Folder.create({ name, type: "Actor", color: "#3b2f5c" }); }
     catch (e) { console.warn(`[${MOD}/echo-mint] folder create failed`, e); folder = null; }
   }
@@ -963,7 +967,14 @@ export async function mintEchoMember(opts = {}) {
   // Stats: standard array 5/4/3/3/2/2 dealt in Calling-priority order, plus
   // the member's story on the sheet (biography = {concept, notes} strings).
   try {
-    const order = ECHO_STAT_PRIORITIES[calling] ?? ECHO_STAT_PRIORITIES.bravo;
+    const order = (ECHO_STAT_PRIORITIES[calling] ?? ECHO_STAT_PRIORITIES.bravo).slice();
+    // De-clone (2026-08-22): five Savants minted 2/4/3/2/5/3 five times over —
+    // pure array-deal with no variety. Same trick as ancestry: the member's
+    // name seeds a deterministic swap of one adjacent MID pair (never the
+    // signature top stat), so a roster varies while each member stays stable.
+    const seed = _echoSeed(`${member.name}|${calling}|stats`);
+    const swapAt = 1 + (seed % (order.length - 2)); // indexes 1..4 — top stat untouched
+    if (seed % 3 !== 0) [order[swapAt], order[swapAt + 1]] = [order[swapAt + 1], order[swapAt]];
     const update = {};
     order.forEach((att, i) => { update[`system.attributes.${att}.value`] = ECHO_STAT_ARRAY[i]; });
     update["system.biography.concept"] =

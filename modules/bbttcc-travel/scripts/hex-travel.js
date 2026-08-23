@@ -596,8 +596,8 @@ const TERRAIN_TABLE = {
       if (!game.settings?.settings?.has(`${ENC_DIAL_NS}.${ENC_BASE_DC_KEY}`)) {
         game.settings.register(ENC_DIAL_NS, ENC_BASE_DC_KEY, {
           name: "Travel: Encounter Base DC",
-          hint: "Base difficulty of every travel check. The party must roll >= this to pass; failure triggers an encounter. HIGHER = more encounters. Default 15.",
-          scope: "world", config: true, type: Number, default: 15
+          hint: "Base difficulty of every travel check (2d10 + Intrigue + scout). The party must roll >= this to pass; failure triggers an encounter. HIGHER = more encounters. Default 12 (retuned 2026-08-22 for the 2d10 regime — a world that stored the old d20-era 15 should be set back to 12).",
+          scope: "world", config: true, type: Number, default: 12
         });
       }
       if (!game.settings?.settings?.has(`${ENC_DIAL_NS}.${ENC_TIER_STEP_KEY}`)) {
@@ -1124,8 +1124,12 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     const darknessBump = darknessEncounterBoost(actor, to);
     const dc = _encounterDc(ctx.terrainTier, ctx.dcMod, darknessBump);
 
-    // Advantage (reduce-or-advantage choice): a mitigation ability in "advantage" mode rolls 2d20 keep-high.
-    const rollFormula = ctx.travelAdvantage ? "2d20kh + @int + @scout" : "1d20 + @int + @scout";
+    // Owner ruling 2026-08-22: travel joins the tactical layer's 2d10 regime
+    // (the d20 here was the last holdout of a separate math). Advantage rolls
+    // 3d10 keep-high-2, matching strikes/saves everywhere else. Pair with the
+    // retuned Encounter Base DC (12) — the old base 15 was authored against
+    // a d20's flat distribution.
+    const rollFormula = ctx.travelAdvantage ? "3d10kh2 + @int + @scout" : "2d10 + @int + @scout";
     const roll = await (new Roll(rollFormula, { int: intrigueMod, scout: scoutRollMod })).evaluate();
     let total = roll.total;
     let success = total >= dc;

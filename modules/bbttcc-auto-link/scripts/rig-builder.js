@@ -463,6 +463,16 @@ const CHASSIS_STARTERS = [
   {
     key: "flagship_unicorn_vc_class",
     label: "Unicorn VC Class",
+    // 🔒 GM-ONLY. Two reasons, both owner rulings 2026-08-19:
+    //  1. This entry names Monodynamic Industries and Mr. Monocle outright.
+    //     They are the NEXT campaign's big bad and are never named to players
+    //     at this stage — receipts only. A chip's `title` is its description,
+    //     so simply rendering this chip spends the reveal.
+    //  2. It's a D&D conversion kept as the rig-builder proof of concept, not
+    //     playable content.
+    // Hidden rather than rewritten: the text is correct and wanted later, and
+    // the GM-side build path (rigFromChassis) still reaches it by key.
+    gmOnly: true,
     description: "Monodynamic Industries flagship. Late-stage capitalism as a sleek predatory dreadnought. Heavy · T4 · APEX.",
     defaults: {
       bracket: "heavy", mobility: "mobile", tier: 4, disposition: -1,
@@ -641,9 +651,15 @@ function _factionOptions() {
 // into CHASSIS_STARTERS is preserved on data-bbttcc-idx so _wireStarterChips
 // can resolve the original entry regardless of which category it sits in.
 function _starterChipsHTML(category = "rig") {
+  const isGM = !!game.user?.isGM;
   return CHASSIS_STARTERS
-    .map((t, i) => ({ t, i }))
+    .map((t, i) => ({ t, i }))          // index BEFORE filtering — data-bbttcc-idx
+                                        // must stay a global CHASSIS_STARTERS index
     .filter(({ t }) => (t.category ?? "rig") === category)
+    // 🔒 `gmOnly` entries never render for players. The chip's title attribute
+    // is the description, so an unreleased name would leak on hover alone —
+    // omitting the chip is the fix, not sanitising its label.
+    .filter(({ t }) => isGM || !t.gmOnly)
     .map(({ t, i }) => `
     <button type="button" class="ft-manifest-chip" data-bbttcc-starter="${_esc(t.key)}"
             data-bbttcc-idx="${i}" title="${_esc(t.description)}"
