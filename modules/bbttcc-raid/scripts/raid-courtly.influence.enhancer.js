@@ -134,6 +134,14 @@
     await actor.update({ [`flags.${MODF}`]: flags });
   }
 
+  // Dialog spends are labeled OP; the opBank stores MARKS (1 OP = 10 marks).
+  // Read the payable OP so every spend can be clamped to the bank — a 0-OP
+  // faction can no longer buy bonuses on credit (2026-08-22 playtest finding).
+  function bankOpOf(actor, key) {
+    const b = actor?.flags?.[MODF]?.opBank || {};
+    return Math.max(0, Math.floor((Number(b[String(key || "").toLowerCase()]) || 0) / 10));
+  }
+
   async function sendChat(lines, {title="Courtly Intrigue"}={}) {
     if (!lines.length) return;
     await ChatMessage.create({
@@ -325,15 +333,17 @@
       if (!A || !D) throw new Error(`${TAG} attacker or defender not found`);
 
       // Spend initial commitment OPs & compute starting Influence HP
-      atkInitDip   = Math.max(0, Math.floor(Number(atkInitDip||0)));
-      atkInitSoft  = Math.max(0, Math.floor(Number(atkInitSoft||0)));
-      defInitDip   = Math.max(0, Math.floor(Number(defInitDip||0)));
-      defInitSoft  = Math.max(0, Math.floor(Number(defInitSoft||0)));
+      // Spends are OP; banks store marks. Clamp to what each side can pay,
+      // debit at marks scale (×10).
+      atkInitDip   = Math.min(Math.max(0, Math.floor(Number(atkInitDip||0))),  bankOpOf(A, "diplomacy"));
+      atkInitSoft  = Math.min(Math.max(0, Math.floor(Number(atkInitSoft||0))), bankOpOf(A, "softpower"));
+      defInitDip   = Math.min(Math.max(0, Math.floor(Number(defInitDip||0))),  bankOpOf(D, "diplomacy"));
+      defInitSoft  = Math.min(Math.max(0, Math.floor(Number(defInitSoft||0))), bankOpOf(D, "softpower"));
 
-      if (atkInitDip)  await adjustOpBank(A, "diplomacy", -atkInitDip, label);
-      if (atkInitSoft) await adjustOpBank(A, "softpower", -atkInitSoft, label);
-      if (defInitDip)  await adjustOpBank(D, "diplomacy", -defInitDip, label);
-      if (defInitSoft) await adjustOpBank(D, "softpower", -defInitSoft, label);
+      if (atkInitDip)  await adjustOpBank(A, "diplomacy", -atkInitDip * 10, label);
+      if (atkInitSoft) await adjustOpBank(A, "softpower", -atkInitSoft * 10, label);
+      if (defInitDip)  await adjustOpBank(D, "diplomacy", -defInitDip * 10, label);
+      if (defInitSoft) await adjustOpBank(D, "softpower", -defInitSoft * 10, label);
 
       let initInfluenceA = computeInfluenceHP({ baseCommitDip: atkInitDip, baseCommitSoft: atkInitSoft });
       let initInfluenceD = computeInfluenceHP({ baseCommitDip: defInitDip, baseCommitSoft: defInitSoft });
@@ -474,8 +484,8 @@
         const atkKey = actionToOpKey(atkAct);
         const defKey = actionToOpKey(defAct);
 
-        let atkSpendInt = Math.max(0, Math.floor(Number(atkSpend||0)));
-        let defSpendInt = Math.max(0, Math.floor(Number(defSpend||0)));
+        let atkSpendInt = Math.min(Math.max(0, Math.floor(Number(atkSpend||0))), atkKey ? bankOpOf(A, atkKey) : 0);
+        let defSpendInt = Math.min(Math.max(0, Math.floor(Number(defSpend||0))), defKey ? bankOpOf(D, defKey) : 0);
 
         // Phase D — Call the Question: cap spending for `roundsRemaining` round(s).
         if (state.spendLock?.roundsRemaining > 0) {
@@ -490,8 +500,8 @@
         }
 
         // Spend OP from relevant pools
-        if (atkKey && atkSpendInt) await adjustOpBank(A, atkKey, -atkSpendInt, label);
-        if (defKey && defSpendInt) await adjustOpBank(D, defKey, -defSpendInt, label);
+        if (atkKey && atkSpendInt) await adjustOpBank(A, atkKey, -atkSpendInt * 10, label);
+        if (defKey && defSpendInt) await adjustOpBank(D, defKey, -defSpendInt * 10, label);
 
         // Compute bonuses
         let atkBonus = Number(atkSkillBonus || 0);
@@ -1353,10 +1363,26 @@
         if (lines.length) await sendChat(lines, { title: `${label}: ${kind || "Outcome"}` });
       }
 
-      const apiObj = { step, getState, raiseSuspicion, lowerSuspicion, adjustFavor, queueRollMod, queueReroll, dealInfluenceDamage, clearScandal, queueActionBonus, discardSecret, lockSpend, drawSecret, converseSecret, spendFavorAndBoost, applyEffects, burnScandalScar, armLastWord };
+      // Persist a lightweight participant/outcome mirror on both actors so
+      // OTHER clients can see the live scenario — _lastCourtly exists only on
+      // the client that created it, which left the faction sheet's secret
+      // Play gate reading null on the player side (2026-08-22 playtest).
+      async function _persistCourtlyMirror() {
+        const mirror = { attackerId: state.attackerId, defenderId: state.defenderId, outcome: state.outcome, round: state.round, ts: Date.now() };
+        for (const actor of [A, D]) {
+          try { await actor.setFlag(MOD_R, "courtlyActive", mirror); } catch (e) { console.warn(TAG, "courtly mirror persist failed", e); }
+        }
+      }
+      const _stepRaw = step;
+      const _applyEffectsRaw = applyEffects;
+      async function _stepPersist(args) { const r = await _stepRaw(args); await _persistCourtlyMirror(); return r; }
+      async function _applyEffectsPersist(fx) { const r = await _applyEffectsRaw(fx); await _persistCourtlyMirror(); return r; }
+
+      const apiObj = { step: _stepPersist, getState, raiseSuspicion, lowerSuspicion, adjustFavor, queueRollMod, queueReroll, dealInfluenceDamage, clearScandal, queueActionBonus, discardSecret, lockSpend, drawSecret, converseSecret, spendFavorAndBoost, applyEffects: _applyEffectsPersist, burnScandalScar, armLastWord };
 
       // Convenience for GM
       raidApi._lastCourtly = apiObj;
+      await _persistCourtlyMirror();
 
       console.log(TAG, "Courtly Intrigue scenario created:", {
         attacker: A.name, defender: D.name,

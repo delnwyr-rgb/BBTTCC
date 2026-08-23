@@ -362,6 +362,14 @@ function _bbttccFxPanelForRound(app, idx){
 // "50" beside a 2 OP maneuver billed as "20" (owner report 2026-08-17).
 // DISPLAY ONLY — nothing downstream changes unit, so the raid math is untouched.
 const MARKS_PER_OP = 10;
+
+// Marks-migration normalization (2026-08-22, live-confirmed): staged amounts
+// are STORED in marks, but the roll/DC bonus is ceil(staged OP / 2). Halving
+// raw marks handed +25 to a 5-OP stage — 10× the intended weight — on BOTH
+// the attacker bonus and the defender DC.
+function stagedOpBonus(marks) {
+  return Math.ceil((Number(marks || 0) / MARKS_PER_OP) / 2);
+}
 function _rcOP(marks) {
   const fmt = globalThis.game?.bbttcc?.api?.op?.formatMarksAsOPNumber;
   if (typeof fmt === "function") { try { return fmt(marks); } catch (_e) {} }
@@ -842,8 +850,8 @@ async function computeContestedVsBoss(attacker, bossDef, {
   const stats = _rcBossStats(bossDef);
   const attBase = Number.isFinite(Number(attackerBaseOverride)) ? Number(attackerBaseOverride) : categoryTotalWithRoster(attacker, key);
   const defBase = Number(stats[key] || 0);
-  const attStage = Math.ceil(Number(stagedA||0) / 2);
-  const defStage = Math.ceil(Number(stagedD||0) / 2);
+  const attStage = stagedOpBonus(stagedA);
+  const defStage = stagedOpBonus(stagedD);
   const diffAdj  = Number(RAID_DIFFICULTIES[difficulty]?.modifier ?? 0);
 
   let defManBonus = 0;
@@ -858,8 +866,8 @@ async function computeContestedVsBoss(attacker, bossDef, {
 
   const mAtt = String(rollModeAtt||"normal").toLowerCase();
   const mDef = String(rollModeDef||"normal").toLowerCase();
-  const d20A = (mAtt === "adv") ? "2d20kh1" : (mAtt === "dis") ? "2d20kl1" : "2d10";
-  const d20D = (mDef === "adv") ? "2d20kh1" : (mDef === "dis") ? "2d20kl1" : "2d10";
+  const d20A = (mAtt === "adv") ? "3d10kh2" : (mAtt === "dis") ? "3d10kl2" : "2d10";
+  const d20D = (mDef === "adv") ? "3d10kh2" : (mDef === "dis") ? "3d10kl2" : "2d10";
 
   const attRoll = new Roll(`${d20A} + @b`, { b: attTotalBonus });
   const defRoll = new Roll(`${d20D} + @b`, { b: defTotalBonus });
@@ -2086,7 +2094,7 @@ async function computeDryRun(attacker, { activityKey="assault", difficulty="norm
   const DC       = Math.max(0, Number(baseDC||0) + diffAdj);
 
   const mode = String(rollMode || "normal").toLowerCase();
-  const d20 = (mode === "adv") ? "2d20kh1" : (mode === "dis") ? "2d20kl1" : "2d10";
+  const d20 = (mode === "adv") ? "3d10kh2" : (mode === "dis") ? "3d10kl2" : "2d10";
 
   const roll = new Roll(`${d20} + @b + @x`, { b: attBonus, x: Number(extraBonus||0) });
   await roll.evaluate();
@@ -2134,8 +2142,8 @@ async function computeContested(attacker, defender, {
   const attBase = Number.isFinite(Number(attackerBaseOverride)) ? Number(attackerBaseOverride) : categoryTotalWithRoster(attacker, key);
   const defBase = categoryTotalWithRoster(defender, key);
 
-  const attStage = Math.ceil(Number(stagedA||0) / 2);
-  const defStage = Math.ceil(Number(stagedD||0) / 2);
+  const attStage = stagedOpBonus(stagedA);
+  const defStage = stagedOpBonus(stagedD);
 
   const diffAdj  = Number(RAID_DIFFICULTIES[difficulty]?.modifier ?? 0);
 
@@ -2154,8 +2162,8 @@ async function computeContested(attacker, defender, {
 
   const mAtt = String(rollModeAtt||"normal").toLowerCase();
   const mDef = String(rollModeDef||"normal").toLowerCase();
-  const d20A = (mAtt === "adv") ? "2d20kh1" : (mAtt === "dis") ? "2d20kl1" : "2d10";
-  const d20D = (mDef === "adv") ? "2d20kh1" : (mDef === "dis") ? "2d20kl1" : "2d10";
+  const d20A = (mAtt === "adv") ? "3d10kh2" : (mAtt === "dis") ? "3d10kl2" : "2d10";
+  const d20D = (mDef === "adv") ? "3d10kh2" : (mDef === "dis") ? "3d10kl2" : "2d10";
 
   const attRoll = new Roll(`${d20A} + @b`, { b: attTotalBonus });
   const defRoll = new Roll(`${d20D} + @b`, { b: defTotalBonus });
@@ -3579,7 +3587,7 @@ _renderScenarioHUD(host, round){
           .forEach(cb => { const k = String(cb.dataset.maneuver||"").toLowerCase(); defBonusDC += Number(DEFENDER_DC_MAP[k]||0); });
 
         const baseDC = Number(round.DC || 0);
-        const stagedBonus = Math.ceil(stagedD / 2);
+        const stagedBonus = stagedOpBonus(stagedD);
         const diffAdj = Number(round.diffOffset || 0);
         const facDef = Number(round.view?.facDef || 0);
         const nextB  = Number(round.view?.nextB  || 0);
@@ -3759,7 +3767,7 @@ _renderScenarioHUD(host, round){
     diffTop = Number(diffOffsetTop || 0);
 
     if (defender) {
-      bonusTop = Math.ceil(stagedDTop / 2);
+      bonusTop = stagedOpBonus(stagedDTop);
       const dflags = defender?.flags?.[FCT_ID] || {};
       facDefTop = Number(dflags?.mods?.defense || 0);
       nextBTop  = Number(dflags?.bonuses?.nextRaid?.defenseBonus || 0);
@@ -3918,7 +3926,7 @@ _renderScenarioHUD(host, round){
       const remainA = Math.max(0, Number(bankAtt[cat]||0) - stagedA);
       const remainD = Math.max(0, Number(bankDef[cat]||0) - stagedD);
 
-      const defProjBonus = Math.ceil(stagedD / 2);
+      const defProjBonus = stagedOpBonus(stagedD);
       const dflagsR = def?.flags?.[FCT_ID] || {};
       const facDefR = Number(dflagsR?.mods?.defense || 0);
       const nextBR  = Number(dflagsR?.bonuses?.nextRaid?.defenseBonus || 0);
@@ -3935,7 +3943,7 @@ const coalitionRound = _rcCoalitionBonus(att, r.supportFactionIds || [], cat);
 const attBaseRoll = Number(coalitionRound.total || 0);
 const defBaseRoll = def ? categoryTotalWithRoster(def, cat) : 0;
 
-const attProj = Number(attBaseRoll || 0) + Math.ceil((stagedA + stagedSupport) / 2);
+const attProj = Number(attBaseRoll || 0) + stagedOpBonus(stagedA + stagedSupport);
 const defProj = Number(defBaseRoll || 0) + baseDefense + facDefTotal + nextBR + diffR + defProjBonus;
 const dcProjected = defProj; // keep legacy name for templates
 
@@ -3956,7 +3964,7 @@ r.view = {
   defenderName: def?.name || "(none)",
   defenderId: def?.id || "",
   coalition: coalitionRound,
-  breakdown: `Att ${(attBaseRoll||0)} + ceil((StageA + Support)/2) ${Math.ceil((stagedA + stagedSupport)/2)} = ${attProj}  •  Def ${(defBaseRoll||0)} + Base ${baseDefense} + Staged/2 ${defProjBonus}${diffR?` + Diff ${diffR}`:""}${facDefTotal?` + Defense ${facDefTotal}`:""}${nextBR?` + Next-Raid ${nextBR}`:""} = ${defProj}`};
+  breakdown: `Att ${(attBaseRoll||0)} + ceil((StageA + Support) OP/2) ${stagedOpBonus(stagedA + stagedSupport)} = ${attProj}  •  Def ${(defBaseRoll||0)} + Base ${baseDefense} + Staged/2 ${defProjBonus}${diffR?` + Diff ${diffR}`:""}${facDefTotal?` + Defense ${facDefTotal}`:""}${nextBR?` + Next-Raid ${nextBR}`:""} = ${defProj}`};
 
       // Per-player staging context: which bucket the player can stage into
       // (their own attacker or support row), with bank/staged/remain numbers
@@ -5643,9 +5651,9 @@ if (res && res.totalFinal!=null && res.dcFinal!=null) {
       dcFinal = cont.defTotal;
       rollUsed = cont.attRoll;
     } else {
-      const sBonus = Math.ceil((Number(stagedA || 0) + Number(stagedSupport || 0)) / 2);
-	const dBonus = Math.ceil((Number(stagedD)||0)/2);
-      const __d20 = (String(__b3AttModeFinal||"normal").toLowerCase()==="adv") ? "2d20kh1" : (String(__b3AttModeFinal||"normal").toLowerCase()==="dis") ? "2d20kl1" : "2d10";
+      const sBonus = stagedOpBonus(Number(stagedA || 0) + Number(stagedSupport || 0));
+	const dBonus = stagedOpBonus(stagedD);
+      const __d20 = (String(__b3AttModeFinal||"normal").toLowerCase()==="adv") ? "3d10kh2" : (String(__b3AttModeFinal||"normal").toLowerCase()==="dis") ? "3d10kl2" : "2d10";
       const r1 = new Roll(`${__d20} + @b + @s + @x`, { b: Number(__coalition.total || 0), s: sBonus, x: __b3AttExtraFinal }); await r1.evaluate();
       rollUsed = r1;
       totalFinal = r1.total;
@@ -7575,6 +7583,17 @@ Hooks.once("ready", () => {
     game.bbttcc = game.bbttcc || { api: {} };
     game.bbttcc.api = game.bbttcc.api || {};
     game.bbttcc.api.raid = game.bbttcc.api.raid || {};
+    // Base attach points for the post-round pipeline (2026-08-22). The
+    // victory/morale/optransfer/queue-drawings enhancers were all written to
+    // WRAP these, but no build ever defined the bases — so outcome awards,
+    // morale, and queued OP transfers silently never ran. The bases are
+    // deliberate pass-throughs: all behavior lives in the wrappers.
+    if (typeof game.bbttcc.api.raid.applyPostRoundEffects !== "function") {
+      game.bbttcc.api.raid.applyPostRoundEffects = async (args = {}) => args;
+    }
+    if (typeof game.bbttcc.api.raid.consumeQueuedTurnEffects !== "function") {
+      game.bbttcc.api.raid.consumeQueuedTurnEffects = async (args = {}) => args;
+    }
     game.bbttcc.api.raid.crewGrants = {
       crewMap: CREW_MANEUVER_GRANTS,
       occultMap: OCCULT_MANEUVER_GRANTS,
@@ -8801,8 +8820,8 @@ function _b3RollModeFromKey(k){
 async function _b3RerollSide({ side, bonus, mode }){
   mode = _b3RollModeFromKey(mode);
   let formula = "2d10 + @b";
-  if (mode === "advantage") formula = "2d20kh1 + @b";
-  if (mode === "disadvantage") formula = "2d20kl1 + @b";
+  if (mode === "advantage") formula = "3d10kh2 + @b";
+  if (mode === "disadvantage") formula = "3d10kl2 + @b";
   const rr = new Roll(formula, { b: Number(bonus||0) });
   await rr.evaluate();
   return rr;

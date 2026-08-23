@@ -296,7 +296,18 @@
     if (!secretMeta) { ui.notifications?.error?.("Courtly secrets: item is not a secret."); return { ok: false, error: "not-a-secret" }; }
 
     const scenario = _scenario();
-    if (!scenario) { ui.notifications?.error?.("Courtly secrets: no active courtly scenario."); return { ok: false, error: "no-scenario" }; }
+    if (!scenario) {
+      // Cross-client relay (2026-08-22): the live scenario object exists only
+      // on the GM client. A player-side play request forwards there instead of
+      // dead-ending on "no active courtly scenario".
+      if (!game.user?.isGM && game.users?.activeGM) {
+        game.socket?.emit?.(`module.${MOD_R}`, { t: "courtlyPlaySecret", actorId: actor.id, itemId, opts });
+        ui.notifications?.info?.(`"${item.name}" sent to the GM's court — it plays from there.`);
+        return { ok: true, relayed: true };
+      }
+      ui.notifications?.error?.("Courtly secrets: no active courtly scenario.");
+      return { ok: false, error: "no-scenario" };
+    }
 
     const side = _holderSide(actor, scenario);
     if (!side) { ui.notifications?.error?.("Courtly secrets: holder is not attacker or defender of the active scenario."); return { ok: false, error: "side-mismatch" }; }
@@ -410,6 +421,14 @@
   _install();
   Hooks.once("ready", () => {
     _install();
+    // GM-side receiver for player-relayed secret plays (active-GM only, so a
+    // multi-GM table doesn't double-play).
+    game.socket?.on?.(`module.${MOD_R}`, (msg) => {
+      if (msg?.t !== "courtlyPlaySecret") return;
+      if (!game.user?.isGM || game.users?.activeGM?.id !== game.user.id) return;
+      playSecret(msg.actorId, msg.itemId, msg.opts || {})
+        .catch(e => console.warn(TAG, "relayed playSecret failed", e));
+    });
     console.log(TAG, "Phase C secrets API ready → game.bbttcc.api.raid.courtlySecrets");
   });
 })();

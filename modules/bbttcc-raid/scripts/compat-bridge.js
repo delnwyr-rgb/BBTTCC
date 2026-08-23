@@ -344,7 +344,7 @@ const EFFECTS = {
     label: "Supply Overrun",
     primaryKey: "economy",
     cost: { economy: 10, violence: 10 },
-    opCosts: { economy: 1, violence: 1 },
+    opCosts: { economy: 10, violence: 10 },
     raidTypes: ["assault","siege"],
     defenderAccess: "Yes",
     text: "On Success: capture supplies; gain +1 Economy OP next round."
@@ -361,7 +361,7 @@ terrain_calibration: {
   label: "Terrain Calibration",
   primaryKey: "logistics",
   cost: { logistics: 10 },
-  opCosts: { logistics: 1 },
+  opCosts: { logistics: 10 },
   tier: 1,
   rarity: "uncommon",
   source: "narrative-unlock",
@@ -378,7 +378,7 @@ faultline_tuning: {
   label: "Faultline Tuning",
   primaryKey: "faith",
   cost: { faith: 10 },
-  opCosts: { faith: 1 },
+  opCosts: { faith: 10 },
   tier: 1,
   rarity: "uncommon",
   source: "narrative-unlock",
@@ -395,7 +395,7 @@ auto_recon_sweep: {
   label: "Auto-Recon Sweep",
   primaryKey: "intrigue",
   cost: { intrigue: 10 },
-  opCosts: { intrigue: 1 },
+  opCosts: { intrigue: 10 },
   tier: 1,
   rarity: "uncommon",
   source: "narrative-unlock",
@@ -422,7 +422,7 @@ flank_attack: {
   rarity: "common",
   label: "Flank Attack",
   cost: { violence: 10 },
-  opCosts: { violence: 1 },
+  opCosts: { violence: 10 },
   raidTypes: ["assault","occupation","liberation"],
   defenderAccess: "No",
   text: "Strike from an unexpected angle; pressure the line and seize momentum."
@@ -434,7 +434,7 @@ supply_surge: {
   rarity: "common",
   label: "Supply Surge",
   cost: { logistics: 10 },
-  opCosts: { logistics: 1 },
+  opCosts: { logistics: 10 },
   raidTypes: ["any"],
   defenderAccess: "Yes",
   text: "A sudden logistics push; gain a small tactical supply edge this round (GM adjudicates)."
@@ -446,7 +446,7 @@ defensive_entrenchment: {
   rarity: "common",
   label: "Defensive Entrenchment",
   cost: { nonlethal: 10 },
-  opCosts: { nonlethal: 1 },
+  opCosts: { nonlethal: 10 },
   raidTypes: ["assault_defense","occupation","siege"],
   defenderAccess: "Yes",
   text: "Dig in and harden positions; defender DC +3 this round."
@@ -458,7 +458,7 @@ divine_favor: {
   rarity: "common",
   label: "Divine Favor",
   cost: { faith: 10 },
-  opCosts: { faith: 1 },
+  opCosts: { faith: 10 },
   raidTypes: ["ritual","liberation","any"],
   defenderAccess: "Conditional",
   text: "Call on providence; on success reduce Darkness pressure or negate a minor setback (GM adjudicates)."
@@ -480,7 +480,7 @@ divine_favor: {
     label: "Ghost-Slip Infiltration",
     primaryKey: "intrigue",
     cost: { intrigue: 10 },
-    opCosts: { intrigue: 1 },
+    opCosts: { intrigue: 10 },
     raidTypes: ["infiltration","espionage"],
     defenderAccess: "No",
     text: "Phase through the seams: ignore one defensive circumstance this round (GM adjudicates) and gain +2 to the attacker roll if the raid type is Infiltration/Espionage."
@@ -500,7 +500,7 @@ divine_favor: {
     label: "Sympathetic Stabilization",
     primaryKey: "faith",
     cost: { faith: 10 },
-    opCosts: { faith: 1 },
+    opCosts: { faith: 10 },
     raidTypes: ["ritual","siege","liberation","assault_defense"],
     defenderAccess: "Yes",
     text: "Bind the field with resonance. Reduce one negative consequence on Fail (or reduce incoming siege damage by 1) (GM adjudicates)."
@@ -515,7 +515,7 @@ divine_favor: {
     label: "Gradient Surge",
     primaryKey: "logistics",
     cost: { logistics: 10, economy: 10 },
-    opCosts: { logistics: 1, economy: 1 },
+    opCosts: { logistics: 10, economy: 10 },
     raidTypes: ["assault","occupation","liberation","blockade","espionage"],
     defenderAccess: "No",
     text: "Reposition through an economic gradient. Before rolling, you may convert 1 staged Economy into 1 staged Logistics (or vice versa) for this round (GM adjudicates)."

@@ -88,6 +88,13 @@
     return "lockdown";
   }
 
+  // Dialog spends are labeled OP; the opBank stores MARKS (1 OP = 10 marks).
+  // Payable OP for clamping spends to the bank.
+  function _bankOpOf(actor, key) {
+    const b = actor?.flags?.[MODF]?.opBank || {};
+    return Math.max(0, Math.floor((Number(b[String(key || "").toLowerCase()]) || 0) / 10));
+  }
+
   async function adjustOpBank(actor, key, delta) {
     if (!actor || !key || !delta) return;
     const flags = dup(actor.flags?.[MODF] || {});
@@ -282,12 +289,15 @@
           }
         }
 
-        const atkSpend = Math.max(0, Math.floor(Number(spendIntrigue||0)));
-        const defSpend = Math.max(0, Math.floor(Number(spendNonlethal||0)));
+        // Spends are OP; the opBank stores MARKS (1 OP = 10 marks). Clamp to
+        // what each side can actually pay — a bankless defender can no longer
+        // buy free defense — and debit at marks scale (2026-08-22 findings).
+        const atkSpend = Math.min(Math.max(0, Math.floor(Number(spendIntrigue||0))), _bankOpOf(A, "intrigue"));
+        const defSpend = Math.min(Math.max(0, Math.floor(Number(spendNonlethal||0))), _bankOpOf(D, "nonlethal"));
 
-        // Spend OPs (negative delta)
-        if (atkSpend) await adjustOpBank(A, "intrigue", -atkSpend);
-        if (defSpend) await adjustOpBank(D, "nonlethal", -defSpend);
+        // Spend OPs (negative delta, marks scale)
+        if (atkSpend) await adjustOpBank(A, "intrigue", -atkSpend * 10);
+        if (defSpend) await adjustOpBank(D, "nonlethal", -defSpend * 10);
 
         // S3a.5: Steward chip declarations bias the attacker roll.
         const stewBonus = Math.max(0, Math.floor(Number(stewardBonus || 0)));
@@ -326,6 +336,13 @@
         afterAlarm = Math.min(afterAlarm, state.alarmMax);
         state.alarm = afterAlarm;
 
+        // Attacker round wins advance progress — the infiltration completes
+        // when the crew survives all allotted rounds (in and out on schedule).
+        const beforeProgress = state.progress;
+        if (result === "attacker") {
+          state.progress = clamp(state.progress + 1, 0, state.progressMax);
+        }
+
         const entry = {
           round: state.round,
           atkSpend,
@@ -336,6 +353,8 @@
           result,
           alarmBefore: beforeAlarm,
           alarmAfter: afterAlarm,
+          progressBefore: beforeProgress,
+          progressAfter: state.progress,
           band: bandFromAlarm(afterAlarm),
           note
         };
@@ -372,7 +391,8 @@
           `🎲 Attacker: ${atkParts.join(" ")} = <b>${atkTotal}</b>`,
           `🎲 Defender: ${defParts.join(" ")} = <b>${defTotal}</b>`,
           `Margin: <b>${margin >= 0 ? "+" : ""}${margin}</b> — Result: <b>${result.toUpperCase()}</b>`,
-          `Alarm <b>${beforeAlarm}</b> → <b>${afterAlarm}</b> (${bandFromAlarm(afterAlarm)})`
+          `Alarm <b>${beforeAlarm}</b> → <b>${afterAlarm}</b> (${bandFromAlarm(afterAlarm)})`,
+          `Progress <b>${beforeProgress}</b> → <b>${state.progress}</b>/${state.progressMax}`
         ];
         if (result === "defender" && exposureExtra > 0) lines.push(`<span style="opacity:.7;color:#fbbf24;">⚠ Exposed stewards (${exposedCount}) added +${exposureExtra} to the alarm rise.</span>`);
         if (note) lines.push(foundry.utils.escapeHTML(note));
@@ -387,6 +407,14 @@
             const payload = { before: _stepBeforeAlarm, after: state.alarm, delta: state.alarm - _stepBeforeAlarm, attackerId: A.id, defenderId: D.id };
             Hooks.callAll("bbttcc:infiltration:alarmChanged", { scenario: getState(), ...payload });
             _emitInfilHookRelay("bbttcc:infiltration:alarmChanged", payload);
+          }
+        } catch (_) {}
+
+        try {
+          if (state.progress !== beforeProgress) {
+            const payload = { before: beforeProgress, after: state.progress, delta: state.progress - beforeProgress, attackerId: A.id, defenderId: D.id };
+            Hooks.callAll("bbttcc:infiltration:progressChanged", { scenario: getState(), ...payload });
+            _emitInfilHookRelay("bbttcc:infiltration:progressChanged", payload);
           }
         } catch (_) {}
 
@@ -407,10 +435,10 @@
           return { ...state, note: "alarm already at 0" };
         }
 
-        const spend = Math.max(0, Math.floor(Number(costIntrigue||0)));
-        if (spend <= 0) return { ...state, note: "no cost specified" };
+        const spend = Math.min(Math.max(0, Math.floor(Number(costIntrigue||0))), _bankOpOf(A, "intrigue"));
+        if (spend <= 0) return { ...state, note: "cannot pay flashback cost" };
 
-        await adjustOpBank(A, "intrigue", -spend);
+        await adjustOpBank(A, "intrigue", -spend * 10);
         const before = state.alarm;
         state.alarm = Math.max(0, state.alarm - 1);
         state._flashbackUsedThisRound = true;
@@ -574,7 +602,11 @@
         } catch (e) { console.warn(TAG, "persistState (HUD mirror) failed", e); }
       }
       // Initial mirror so the meters appear the instant the scenario is created.
-      persistState();
+      // Await the create-time persist so a fresh Initialize immediately
+      // overwrites any stale infilState from a previous run — the HUD reads
+      // the flag whenever no live scenario exists (2026-08-22: stale alarm 1
+      // leaked into a fresh scenario's display).
+      await persistState();
 
       const apiObj = { step, flashback, applyEffects, reset, getState };
 
