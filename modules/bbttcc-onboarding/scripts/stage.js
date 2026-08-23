@@ -30,7 +30,12 @@ async function _folder() {
  * a run and are what keep two concurrent players from spawning their tutorial
  * scaffolding on top of each other. Entries older than RUN_STALE_MS are pruned
  * (a browser crash mid-run must not hold a lane forever).                     */
-const RUN_STALE_MS = 6 * 60 * 60 * 1000; // 6h
+// 15 min, heartbeat-backed: the director runPings every 5 while a run is live,
+// so an entry that stops aging out means the client died mid-run. The old 6h
+// window let a crashed run haunt the registry all evening — "another Steward
+// is running the same program" from a login that had long since refreshed
+// (2026-08-21 playtest).
+const RUN_STALE_MS = 15 * 60 * 1000;
 const LANE_STEP = 0.17;                  // vertical separation between concurrent runs
 
 /** Shift a fractional y-position into this run's lane, kept inside the visible band. */
@@ -78,6 +83,19 @@ function _registerOps() {
       runs[userId] = { lane, ts: Date.now(), name };
       await game.settings.set(MODULE_ID, "activeRuns", runs);
       return { lane, others: Object.keys(runs).filter(u => u !== userId).length };
+    });
+  });
+
+  // Heartbeat — keeps a live run's entry fresh. A client that dies mid-run
+  // stops pinging and its entry ages out in RUN_STALE_MS instead of lingering.
+  reg("runPing", async ({ userId }) => {
+    if (!userId) return { ok: false };
+    return _serialize(async () => {
+      const runs = _readRuns();
+      if (!runs[userId]) return { ok: false };
+      runs[userId] = { ...runs[userId], ts: Date.now() };
+      await game.settings.set(MODULE_ID, "activeRuns", runs);
+      return { ok: true };
     });
   });
 
@@ -645,7 +663,16 @@ function _registerOps() {
         ownership,
         prototypeToken: { actorLink: false, disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE, name },
         flags: {
-          "bbttcc-factions": { isFaction: true, disposition: "hostile" },
+          // Seeded bank (2026-08-22): a bankless defender can't stage, can't
+          // spend in scenario dialogs, and never shows players the defender
+          // side of raid math — the whole tutorial fought a ghost with empty
+          // pockets. 5 OP (50 marks) in each raid-relevant key, tier-0 caps,
+          // stamped marks-migrated so the sweep never inflates it.
+          "bbttcc-factions": {
+            isFaction: true, disposition: "hostile",
+            opBank: { violence: 50, nonlethal: 50, intrigue: 50, softpower: 50, diplomacy: 50, economy: 20, logistics: 20, culture: 0, faith: 0 },
+            opBankMarksMigrated: true
+          },
           [MODULE_ID]: { spawned: true, kind: "hostileFaction", ownerUserId }
         }
       });
@@ -805,6 +832,10 @@ async function runBegin(userId, name = "") {
 /** Leave the registry (frees the lane). */
 async function runEnd(userId) {
   return (await _runAsGM("runEnd", { userId })) ?? { others: 0 };
+}
+
+async function runPing(userId) {
+  return (await _runAsGM("runPing", { userId })) ?? { ok: false };
 }
 /** Who else is mid-tutorial? Returns { others: [...], count }. */
 async function runList(exceptUserId = "") {
@@ -1006,6 +1037,6 @@ Hooks.once("ready", () => {
     spawnMarker, hurt, mend, grantSecret, setElevation,
     ensureSandboxHex, claimHex, unclaimHex, spawnHostileFaction, ensureHex,
     setRaidSession, clearRaidSession, openRaidConsoleForGM, teardownFinale, cleanup, folder: _folder,
-    setRunContext, runContext, runBegin, runEnd, runList, laneFrac: _laneFrac
+    setRunContext, runContext, runBegin, runEnd, runPing, runList, laneFrac: _laneFrac
   };
 });

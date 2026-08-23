@@ -124,9 +124,24 @@ async function _askForTour(spec) {
   });
 }
 
-// Tours taken this session (by tour id) — lets a spec with skipIfTaken avoid
-// re-offering a tour the player already sat through at an earlier seam.
+// Tours taken (by tour id) — lets a spec with skipIfTaken avoid re-offering a
+// tour the player already sat through at an earlier seam. PERSISTED per-user
+// (2026-08-21): this was a page-lifetime Set, so any refresh/crash re-offered
+// tours already taken — owner hit the faction tour twice in one run.
+const MODULE_ID = "bbttcc-onboarding";
 const _toursTaken = new Set();
+function _markTourTaken(id) {
+  if (!id || _toursTaken.has(id)) return;
+  _toursTaken.add(id);
+  try { game.user?.setFlag?.(MODULE_ID, "toursTaken", [..._toursTaken]); } catch (_) {}
+}
+Hooks.once("ready", () => {
+  try { for (const id of game.user?.getFlag?.(MODULE_ID, "toursTaken") ?? []) _toursTaken.add(id); }
+  catch (_) {}
+  // Any completed tour counts, however it was launched — the flow's offer,
+  // the founding ceremony, the tours menu, or the hotbar macro.
+  Hooks.on("bbttcc:tour:ended", (payload) => _markTourTaken(payload?.id));
+});
 
 /** Offer + (if accepted) run the tour to completion before continuing. Resolves true if a tour ran. */
 async function _offerTour(spec) {
@@ -150,7 +165,7 @@ async function _offerTour(spec) {
     setTimeout(finish, TOUR_WAIT_CEILING_MS);
     Promise.resolve(tours.start(spec.tour)).catch((e) => { console.warn(TAG, "tour start failed", e); finish(); });
   });
-  _toursTaken.add(spec.tour);
+  _markTourTaken(spec.tour);
   return true;
 }
 

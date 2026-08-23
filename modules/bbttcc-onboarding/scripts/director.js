@@ -254,6 +254,7 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
   }
 
   _running = true;
+  let pingIv = null;   // declared OUTSIDE the try — the finally clears it
   try {
     let p = _progress(steward);
     if (fromStart || !p.startedAt) {
@@ -270,6 +271,9 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
       lane = Number(r?.lane) || 0;
       others = Number(r?.others) || 0;
       ns?.stage?.setRunContext?.({ userId: user.id, lane });
+      // Heartbeat: keep our registry entry fresh so a crashed client's entry
+      // (which stops pinging) ages out in minutes, not hours.
+      pingIv = setInterval(() => { try { ns?.stage?.runPing?.(user.id); } catch (_) {} }, 5 * 60 * 1000);
     } catch (e) { console.warn(TAG, "run registry unavailable — continuing solo-style", e); }
     if (others > 0) {
       await _speak(`Heads up, One — ${others === 1 ? "another Steward is" : `${others} other Stewards are`} running the same program right now. I've given you your own patch of ground; don't mind the neighbours.`);
@@ -350,6 +354,29 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
       // Stage switch: no dialog from the finished beat survives into the next.
       closeAllOnboardingPrompts();
 
+      // "Wave me through" (owner playtest 2026-08-20): a player who did what
+      // the beat asked should never have to hand-close what the beat opened.
+      // Sheets sweep at the same boundary as the dialogs; any beat that needs
+      // one re-opens it itself.
+      for (const doc of [ctx.steward, ctx.rig, ctx.faction]) {
+        try { if (doc?.sheet?.rendered) doc.sheet.close(); } catch (_) {}
+      }
+      // Module app windows the beats/tours open (hex sheet, Bridge, Market…)
+      // stack up across the run otherwise (owner playtest 2026-08-21). Title
+      // prefix keeps it conservative — only Bad Eden interface windows sweep.
+      const APP_TITLE_RE = /^Bad Eden(\s+(—|-)\s+(Hex Sheet|Manifestation Bridge)|\s+Market)/;
+      try {
+        const v2 = foundry?.applications?.instances;
+        for (const a of (v2?.values ? Array.from(v2.values()) : [])) {
+          const t = a?.window?.title ?? a?.options?.window?.title ?? "";
+          if (APP_TITLE_RE.test(String(t))) { try { a.close(); } catch (_) {} }
+        }
+        for (const a of Object.values(ui.windows ?? {})) {
+          const t = a?.title ?? a?.options?.title ?? "";
+          if (APP_TITLE_RE.test(String(t))) { try { a.close(); } catch (_) {} }
+        }
+      } catch (_) {}
+
       p = _progress(steward);
       p.steps[beat.id] = { done: true, at: Date.now() };
       await _setProgress(steward, p);
@@ -361,6 +388,7 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
     console.log(TAG, "Run finished. Completed beats:", Object.keys(p.steps || {}));
   } finally {
     // Release the lane whatever happened (completed, thrown, or bailed early).
+    try { if (pingIv) clearInterval(pingIv); } catch (_) {}
     try { await _ns()?.stage?.runEnd?.(user.id); } catch (_) {}
     try { _ns()?.stage?.setRunContext?.({ userId: "", lane: 0 }); } catch (_) {}
     _running = false;

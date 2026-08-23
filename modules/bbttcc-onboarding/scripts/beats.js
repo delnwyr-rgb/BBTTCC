@@ -148,8 +148,13 @@ const meatsuit = {
     // leave this gate waiting (2026-08-17: the system now emits a real cast
     // event, so take it as proof of life too).
     const onCast = (actor) => { if (actor?.id === ctx.steward?.id) done(); };
+    // Routed principle clicks (True-Name Touch and the rest of the per-use
+    // family) post a chat card but never animate and aren't manifestations —
+    // the dispatcher's proof-of-life emission covers them (2026-08-20).
+    const onFeature = (actor) => { if (actor?.id === ctx.steward?.id) done(); };
     Hooks.on("fourththing:itemAnimated", onAnim);
     Hooks.on("fourththing.manifestationCast", onCast);
+    Hooks.on("fourththing.featureDispatched", onFeature);
     // Untrappable fallback (owner playtest 2026-08-11: this was the only beat
     // without one — a player whose ability never animates was stuck forever).
     ctx.prompt({
@@ -162,6 +167,7 @@ const meatsuit = {
     return () => {
       Hooks.off("fourththing:itemAnimated", onAnim);
       Hooks.off("fourththing.manifestationCast", onCast);
+      Hooks.off("fourththing.featureDispatched", onFeature);
       globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(FALLBACK_TITLE);
     };
   },
@@ -725,7 +731,7 @@ const surgeBeat = {
 
     await ctx.deck({
       title: "◇ OPERATOR — Surge",
-      label: "Open my Combat tab",
+      label: "Open my Engagement tab",
       slides: [
         {
           title: "What Surge is",
@@ -742,7 +748,7 @@ const surgeBeat = {
         },
         {
           title: "How you spend it",
-          body: `<p>Your sheet's <b>Combat</b> tab has a <b>✦ Surge</b> panel with a <b>Spend</b> button.</p>
+          body: `<p>Your sheet's <b>Engagement</b> tab has a <b>✦ Surge</b> panel with a <b>Spend</b> button.</p>
             <p>It offers universal options plus whatever your class brings — Forge-Weld, Rallying Words, Brace, and the rest. Costs run from cheap tricks to the ones that end an argument.</p>
             <span class="bbttcc-deck-key">And one more use, which the next beat is entirely about: Surge is how you cast <b>above your tier</b>.</span>`
         }
@@ -752,8 +758,8 @@ const surgeBeat = {
     try { ctx.steward?.sheet?.render(true, { focus: true }); } catch (_) {}
     await _pause(600);
     await ctx.speak(cur > 0
-      ? `Combat tab, ✦ Surge panel — you're holding ${cur}. Open Spend and read what's on the menu. You don't have to buy anything; just learn where the shop is.`
-      : "Combat tab, ✦ Surge panel. You're empty right now — the bank fills the moment your dice start exploding. Open Spend anyway and read the menu so you know what you're saving for.");
+      ? `Engagement tab, ✦ Surge panel — you're holding ${cur}. Open Spend and read what's on the menu. You don't have to buy anything; just learn where the shop is.`
+      : "Engagement tab, ✦ Surge panel. You're empty right now — the bank fills the moment your dice start exploding. Open Spend anyway and read the menu so you know what you're saving for.");
     ctx.riff({ beat: "surge", line: "Player is being shown the Surge economy for the first time.", intent: "One line — the daemon is slightly embarrassed it didn't mention this earlier." });
   },
 
@@ -774,7 +780,7 @@ const surgeBeat = {
     ctx.prompt({
       title: FALLBACK_TITLE,
       content:
-        `<p>Sheet → <b>Combat</b> tab → the <b>✦ Surge</b> panel. Press <b>Spend</b> and read the menu.</p>` +
+        `<p>Sheet → <b>Engagement</b> tab → the <b>✦ Surge</b> panel. Press <b>Spend</b> and read the menu.</p>` +
         `<p>Banked by exploding dice (+1 per explosion). Spent on class powers — and on reaching above your tier, which is next.</p>`,
       label: "I know where it lives"
     }).then(() => done());
@@ -859,7 +865,8 @@ const manifestations = {
               <li><b>Surge</b> — you cast at the higher tier, but if you fail, the misfire rolls on that <em>higher</em> column.</li>
               <li><b>Blood Debt</b> — +1 Blood Debt, a clean cast, and no misfire at all.</li>
             </ul>
-            <span class="bbttcc-deck-key">Surge risks the present. Blood Debt mortgages the future. Neither is free, and the game remembers both.</span>`
+            <span class="bbttcc-deck-key">Surge risks the present. Blood Debt mortgages the future. Neither is free, and the game remembers both.</span>
+            <p style="opacity:0.8;font-size:0.85em"><i>One honest asterisk: some Paths bend these rules — Trad Caster Classes carry deeper Clarity pools and reach further without penalty. When this slide and your Invoke dialog disagree, the dialog's cost line is the truth.</i></p>`
         },
         {
           title: "The full glossary",
@@ -904,6 +911,28 @@ const manifestations = {
       built = true;
       ctx._maniName = item.name;
       ctx.speak?.(`"${item.name}" — authored and on your sheet. Now INVOKE it. Watch the stance buttons and the cost line as you do; that's the whole lesson in one dialog.`);
+      // A targeted working (save / attack / contested resolution) needs
+      // something to point at, and this classroom spawns no targets — the gap
+      // the owner hit when "Sic." (a reaction-trigger Mark) came off the press
+      // (2026-08-21). Give them what the meatsuit range gave them: a dummy.
+      (async () => {
+        try {
+          const shape = String(foundry.utils.getProperty(item, "system.resolution.shape")
+            ?? foundry.utils.getProperty(item, "flags.fourththing.resolution.shape") ?? "").toLowerCase();
+          if (!["save", "attack", "contested"].includes(shape)) return;
+          const tok = ctx.steward?.getActiveTokens?.()?.[0];
+          const scene = tok?.scene ?? canvas?.scene;
+          if (!scene || !tok) return;
+          const g = Number(scene.grid?.size) || 100;
+          const dummy = await _stage()?.spawnDummy?.(scene, {
+            x: tok.document.x + 2 * g, y: tok.document.y, name: "Peer Reviewer"
+          });
+          if (dummy) {
+            (ctx._spawned ??= []).push(dummy);
+            await ctx.speak?.("Your working wants a TARGET, so I've printed you a volunteer — say hello to the Peer Reviewer. Target it and invoke. If your working triggers off a failure, have your GM make the poor thing attempt something doomed first.");
+          }
+        } catch (e) { console.warn(TAG, "practice target spawn failed", e); }
+      })();
       finish();
     };
     // Fired: the system's real cast event (added 2026-08-17). It carries the
@@ -968,6 +997,9 @@ const manifestations = {
       : "You can author manifestations whenever the mood takes you. Keep at least one loaded before trouble finds you.");
     await _pause(700);
     await ctx.speak("Crew at your back, Surge in the bank, something of your own making in your hands. That's a Steward. *bzzt* — Now we find out whether any of it survives contact.");
+    // The Peer Reviewer's tenure ends with the classroom.
+    try { await _stage()?.cleanup?.(ctx._spawned || []); } catch (_) {}
+    ctx._spawned = [];
     ctx._maniBefore = null;
   }
 };
@@ -995,8 +1027,12 @@ const manifestations = {
 // and ~0.62/0.52, from the meatsuit beat's 2026-08-17 nudge (the earlier marks
 // put the Steward in the river). Everything below is laid out around that bank
 // and kept in ONE table so nudging is a one-line edit per foe.
-const SIM_STEWARD_AT = { xFrac: 0.62, yFrac: 0.66 };
-const SIM_RIG_AT     = { xFrac: 0.70, yFrac: 0.70 };
+// 2026-08-21 playtest: (0.62, 0.66) landed the Steward INSIDE the walled
+// arena — the finale's venue — while every wave stages in the open ground
+// (x 0.38–0.52). The sim happens in the yard; the arena door stays shut
+// until the trials send you there. Spawn just south of wave 1 instead.
+const SIM_STEWARD_AT = { xFrac: 0.46, yFrac: 0.68 };
+const SIM_RIG_AT     = { xFrac: 0.53, yFrac: 0.72 };
 
 const SIM_WAVES = [
   {
@@ -1257,9 +1293,26 @@ const combatSim = {
       rec.last = val;
 
       if (val <= 0) { resolveFoe(rec, "killed").catch(e => console.warn(TAG, "resolve(killed) failed", e)); return; }
-      // Sentients fold once they're clearly losing. Floor of 2 so a tiny-track
-      // foe still gets a window instead of jumping straight from full to dead.
-      if (rec.foeClass === "sentient" && rec.max > 0 && val <= Math.max(2, Math.ceil(rec.max * 0.4))) {
+
+      // Owner ruling 2026-08-22: both tracks count — Stress 0 = knocked out,
+      // Integrity 0 = killed. A stress-out sentient is a save (out cold, not
+      // dead); a stress-out husk just unspools. Psychic offense wins fights
+      // the old integrity-only watcher couldn't see.
+      const _ssys = actor?.system?.system ?? actor?.system;
+      const _stress = Number(foundry.utils.getProperty(_ssys, "derived.stress.value"));
+      const _stressMax = Number(foundry.utils.getProperty(_ssys, "derived.stress.max")) || 0;
+      if (!rec.isRig && _stressMax > 0 && Number.isFinite(_stress) && _stress <= 0) {
+        resolveFoe(rec, rec.foeClass === "sentient" ? "saved" : "killed")
+          .catch(e => console.warn(TAG, "resolve(stress-out) failed", e));
+        return;
+      }
+
+      // Sentients fold once they're clearly losing — on EITHER track. Floor of
+      // 2 so a tiny-track foe still gets a window instead of jumping straight
+      // from full to dead.
+      const _losing = (rec.max > 0 && val <= Math.max(2, Math.ceil(rec.max * 0.4)))
+        || (_stressMax > 0 && Number.isFinite(_stress) && _stress <= Math.max(2, Math.ceil(_stressMax * 0.4)));
+      if (rec.foeClass === "sentient" && _losing) {
         resolveFoe(rec, "saved").catch(e => console.warn(TAG, "resolve(saved) failed", e));
       }
     };
@@ -1390,15 +1443,26 @@ const PG_TRIALS = [
  *  middle of the band, so the swimmer sits in open water rather than clipping
  *  the floor or the surface. */
 function _pgDiveLevel(scene) {
-  const levels = Array.isArray(scene?.levels) ? scene.levels : [];
-  const below = levels.filter(l => Number(l?.elevation?.bottom) < 0);
+  // `scene.levels` may be a plain array OR an iterable collection depending on
+  // build — Array.isArray alone rejected the collection form and sent live
+  // playtests down the "no water layer" fallback while the dive band existed.
+  const raw = scene?.levels;
+  const levels = Array.isArray(raw) ? raw
+    : (raw && typeof raw[Symbol.iterator] === "function") ? Array.from(raw)
+    : [];
+  // Elevation band may sit nested (`l.elevation.bottom`) or flat (`l.bottom`).
+  const band = (l) => {
+    const e = (l?.elevation && typeof l.elevation === "object") ? l.elevation : l ?? {};
+    return { bottom: Number(e.bottom), top: Number(e.top) };
+  };
+  const below = levels.filter(l => band(l).bottom < 0);
   if (!below.length) return null;
   // Deepest band wins if a scene ever stacks more than one.
-  below.sort((a, b) => Number(a.elevation.bottom) - Number(b.elevation.bottom));
+  below.sort((a, b) => band(a).bottom - band(b).bottom);
   const l = below[0];
-  const bottom = Number(l.elevation.bottom) || 0;
-  const top    = Number(l.elevation.top) || 0;
-  return { id: l._id, name: l.name || "the deep", depth: Math.round((bottom + top) / 2) || bottom };
+  const bottom = band(l).bottom || 0;
+  const top    = band(l).top || 0;
+  return { id: l._id ?? l.id, name: l.name || "the deep", depth: Math.round((bottom + top) / 2) || bottom };
 }
 
 // Read off the reef art in-world (2026-08-17): you descend into open rock at
@@ -1860,31 +1924,42 @@ const finalShowdown = {
       } catch (e) { console.warn(TAG, "parley handoff failed", e); }
     };
 
-    const integrityOf = (a) => {
+    // Owner ruling 2026-08-22: BOTH tracks count. Stress 0 = knocked out,
+    // Integrity 0 = killed — easier to knock out than kill. The old
+    // integrity-only watcher was blind to psychic (stress-track) victories:
+    // Marginalia stress-killed The Pull and nothing triggered.
+    const tracksOf = (a) => {
       const sys = a?.system?.system ?? a?.system;
-      const v = Number(foundry.utils.getProperty(sys, "derived.integrity.value"));
-      return Number.isFinite(v) ? v : null;
+      const rd = (p) => { const n = Number(foundry.utils.getProperty(sys, p)); return Number.isFinite(n) ? n : null; };
+      return {
+        integ: rd("derived.integrity.value"), integMax: rd("derived.integrity.max") ?? 0,
+        stress: rd("derived.stress.value"),   stressMax: rd("derived.stress.max") ?? 0
+      };
     };
 
     const onUpd = (actor) => {
       const rec = fs.foes.get(actor?.id);
       if (!rec || rec.down || fs.resolved) return;
-      const v = integrityOf(actor);
-      if (v === null) return;
+      const t = tracksOf(actor);
+      if (t.integ === null && t.stress === null) return;
 
-      // The boss dropping below half is the moment the fight visibly turns —
-      // that's when the other side decides talking is cheaper.
-      if (rec.boss && !fs.parleyed) {
-        const sys = actor.system?.system ?? actor.system;
-        const max = Number(foundry.utils.getProperty(sys, "derived.integrity.max")) || 0;
-        if (max > 0 && v <= max * 0.5) parley().catch(e => console.warn(TAG, "parley failed", e));
+      // The boss dropping below half — on either track — is the moment the
+      // fight visibly turns; that's when the other side decides talking is
+      // cheaper.
+      const halfDown = (v, m) => v !== null && m > 0 && v <= m * 0.5;
+      if (rec.boss && !fs.parleyed && (halfDown(t.integ, t.integMax) || halfDown(t.stress, t.stressMax))) {
+        parley().catch(e => console.warn(TAG, "parley failed", e));
       }
-      if (v > 0) return;
+      const killed = t.integ !== null && t.integ <= 0;
+      const koed   = !killed && t.stress !== null && t.stressMax > 0 && t.stress <= 0;
+      if (!killed && !koed) return;
 
       rec.down = true;
       fs.downed += 1;
       if (rec.boss) {
-        ctx.speak?.("The hand comes off the lever. The pull stops— *bzzt* —and the tick rate steadies. You killed it. That was one of the two ways this ends.");
+        ctx.speak?.(killed
+          ? "The hand comes off the lever. The pull stops— *bzzt* —and the tick rate steadies. You killed it. That was one of the two ways this ends."
+          : "The hand slides off the lever. The pull stops— *bzzt* —out cold, not dead. Same silence, cleaner hands. That counts.");
         finish();
       } else {
         ctx.speak?.(`${rec.name} unspools. It was never anyone.`);
