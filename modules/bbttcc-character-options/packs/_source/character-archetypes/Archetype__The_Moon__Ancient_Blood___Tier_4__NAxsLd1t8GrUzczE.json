@@ -1,0 +1,89 @@
+{
+  "name": "Archetype: The Moon (Ancient Blood) (Tier 4)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_moon.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Moon (Ancient Blood) (Tier 4)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 (Level 17) — The Moon</strong></p>\n<ul>\n<li><strong>Tactical:</strong> —</li>\n<li><strong>Strategic:</strong> When your faction achieves a Justice/Reformation outcome, the resulting Hex immediately shifts one step closer to Keter (Crown) or Tiferet (Harmony).</li>\n</ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "archetype-moon-t4",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Level 17+",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "MGGAcIKk1sO8TgSt",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "archetype",
+      "bonuses": {},
+      "option": {
+        "category": "archetype",
+        "key": "ancient_blood",
+        "progressionType": "level",
+        "tier": 4,
+        "levelMin": 4,
+        "levelMax": 4,
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:moon",
+          "bbttcc:expression:ancient_blood",
+          "bbttcc:tier:4",
+          "bbttcc:outcome:justice_reformation",
+          "bbttcc:effect:sephirot_shift:+1"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.W9Sg3x4C3gGjLT0m",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.W9Sg3x4C3gGjLT0m",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986778048,
+    "modifiedTime": 1781116022681,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "NAxsLd1t8GrUzczE",
+  "sort": -300000,
+  "_key": "!items!NAxsLd1t8GrUzczE"
+}

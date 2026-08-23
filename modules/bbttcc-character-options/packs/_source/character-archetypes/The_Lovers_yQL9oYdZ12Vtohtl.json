@@ -1,0 +1,22 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "The Lovers",
+  "color": null,
+  "sorting": "a",
+  "_id": "yQL9oYdZ12Vtohtl",
+  "description": "",
+  "sort": 1800000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB",
+    "modifiedTime": 1774995500464
+  },
+  "_key": "!folders!yQL9oYdZ12Vtohtl"
+}

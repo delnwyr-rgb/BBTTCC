@@ -82,11 +82,11 @@
     "default": 0
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.367",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1780000000000,
-    "modifiedTime": 1782160020986,
+    "modifiedTime": 1787334670002,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,
@@ -111,7 +111,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A slab of scribed steel and hex-glyph plate that projects a small reality-stabilizing null field. The broken, corrupted, please-stop-hitting-yourself things of the Qliphoth can't get a grip on what stands behind it. Heavy. Slow. Worth it.</p><p><strong>Null Field.</strong> Resists qliphothic damage and, while braced, extends the steadying field to one adjacent ally (they ignore Compelled until they move away).</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Shield</li>\n  <li><strong>Defense:</strong> Guard +3, Evasion -1, Resolve +1</li>\n  <li><strong>Requires:</strong> Plating (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 720 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>A slab of scribed steel and hex-glyph plate that projects a small reality-stabilizing null field. The broken, corrupted, please-stop-hitting-yourself things of the Qliphoth can't get a grip on what stands behind it. Heavy. Slow. Worth it.</p><p><strong>Null Field.</strong> Resists qliphothic damage and, while braced, extends the steadying field to one adjacent ally (they ignore Compelled until they move away).</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +3, Evasion -1, Resolve +1</p></li><li><p><strong>Requires:</strong> Plating (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 720 Nonlethal marks</p></li></ul>",
       "chat": ""
     }
   },

@@ -1,0 +1,89 @@
+{
+  "name": "Archetype: The Sun (Beacon) (Tier 4)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_sun.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Sun (Beacon) (Tier 4)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 (Level 17) — The Sun (Beacon)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When resolving a public rally, morale restoration, legitimacy crisis, or visible unity scenario, the Soft Power OP cost is reduced by 3 (minimum 1).</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "archetype-sun-t4",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Level 17+",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "WkdkvtsuQtccxv6W",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "archetype",
+      "bonuses": {},
+      "option": {
+        "category": "archetype",
+        "key": "sun",
+        "progressionType": "level",
+        "tier": 4,
+        "levelMin": 4,
+        "levelMax": 4,
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:sun",
+          "bbttcc:expression:beacon",
+          "bbttcc:tier:4",
+          "bbttcc:scenario:rally_legitimacy_visible_unity",
+          "bbttcc:softpower_cost:-3"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.PfF40mf1tN1BlUdQ",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.PfF40mf1tN1BlUdQ",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986794557,
+    "modifiedTime": 1781116018878,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "EZo7krqF7v2fM4mj",
+  "sort": -300000,
+  "_key": "!items!EZo7krqF7v2fM4mj"
+}

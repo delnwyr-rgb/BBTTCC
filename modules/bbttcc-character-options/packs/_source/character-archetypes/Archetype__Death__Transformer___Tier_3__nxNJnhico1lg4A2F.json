@@ -1,0 +1,89 @@
+{
+  "name": "Archetype: Death (Transformer) (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_death.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: Death (Transformer) (Tier 3)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — Death (Transformer)</strong></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on checks against being frightened, and on checks related to corpses, endings, funerary rites, irreversible damage, or confronting what others cannot bear to face.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "archetype-death-t3",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Level 11+",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "Z28ttIM7Yzl2LgF9",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "archetype",
+      "bonuses": {},
+      "option": {
+        "category": "archetype",
+        "key": "death",
+        "progressionType": "level",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:death",
+          "bbttcc:expression:transformer",
+          "bbttcc:tier:3",
+          "bbttcc:adv_vs:frightened",
+          "bbttcc:adv:endings_damage_funerary_checks"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.OxNhTGarkjQI3VTV",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986315820,
+    "modifiedTime": 1782167238591,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "nxNJnhico1lg4A2F",
+  "sort": 400000,
+  "_key": "!items!nxNJnhico1lg4A2F"
+}

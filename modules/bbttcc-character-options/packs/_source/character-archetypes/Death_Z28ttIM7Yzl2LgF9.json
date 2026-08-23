@@ -1,0 +1,22 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Death",
+  "color": null,
+  "sorting": "a",
+  "_id": "Z28ttIM7Yzl2LgF9",
+  "description": "",
+  "sort": 300000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB",
+    "modifiedTime": 1774995492485
+  },
+  "_key": "!folders!Z28ttIM7Yzl2LgF9"
+}

@@ -1,0 +1,186 @@
+{
+  "name": "Crew Type: Storm Wardens (Tier 1)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Storm Wardens (Tier 1)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 1 — Storm Wardens</strong></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><p><em>You’ve learned the first law of bad weather: panic is usually deadlier than the rain.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Lore and Faith.</li><li><strong>Strategic:</strong> In hazardous weather or corrupted environmental conditions, your faction reduces travel and exposure penalties.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-storm-wardens-t1",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 1+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [
+    {
+      "_id": "4c4c71f0b0be4694",
+      "name": "Storm Wardens T1 Skills",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music_2.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.lore.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "system.skills.faith.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346195869,
+        "modifiedTime": 1777433499540
+      },
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!gmYnWhFhMfFVAPt4.4c4c71f0b0be4694"
+    }
+  ],
+  "folder": "UA0NkRXG1eSXe9EL",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "storm-wardens",
+        "progressionType": "level",
+        "tier": 1,
+        "levelMin": 1,
+        "levelMax": 1,
+        "domains": [
+          "travel",
+          "hazard",
+          "weather"
+        ],
+        "terrains": [
+          "swamp",
+          "mire",
+          "wasteland",
+          "desert"
+        ],
+        "scope": "hex",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:storm-wardens",
+          "bbttcc:tier:1",
+          "bbttcc:domain:travel",
+          "bbttcc:domain:hazard",
+          "bbttcc:domain:weather",
+          "bbttcc:terrain:swamp",
+          "bbttcc:terrain:mire",
+          "bbttcc:terrain:wasteland",
+          "bbttcc:terrain:desert",
+          "bbttcc:scope:hex",
+          "bbttcc:when:hazard:weather",
+          "bbttcc:when:hazard:environmental",
+          "bbttcc:when:origin_terrain:swamp",
+          "bbttcc:when:origin_terrain:mire",
+          "bbttcc:when:origin_terrain:wasteland",
+          "bbttcc:when:origin_terrain:desert",
+          "bbttcc:effect:travel:hazard_penalty:-1step",
+          "bbttcc:effect:hazard:exposure_reduction:+1step",
+          "bbttcc:theme:weather-control",
+          "bbttcc:theme:hazard-mitigation",
+          "bbttcc:theme:storm-discipline"
+        ]
+      }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.jirlWvJhUI0C4gVU",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.jirlWvJhUI0C4gVU",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986959359,
+    "modifiedTime": 1782167238953,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "gmYnWhFhMfFVAPt4",
+  "sort": 0,
+  "_key": "!items!gmYnWhFhMfFVAPt4"
+}

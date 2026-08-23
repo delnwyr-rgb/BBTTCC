@@ -1,0 +1,53 @@
+{
+  "_id": "becallingkpr0cls",
+  "name": "Keeper",
+  "type": "class",
+  "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+  "system": {
+    "category": "calling",
+    "identifier": "calling-keeper",
+    "source": "Callings",
+    "tags": [
+      "calling",
+      "keeper",
+      "soul"
+    ],
+    "description": {
+      "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling — the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 600000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "calling"
+    },
+    "fourththing": {
+      "calling": {
+        "key": "keeper",
+        "faculty": "soul",
+        "signature": "faith",
+        "secondary": "insight",
+        "pool": "Soft Power",
+        "awakens": "Pactkeeper or Dreamwalker"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": 1784006947184,
+    "modifiedTime": 1784006947184,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!becallingkpr0cls"
+}

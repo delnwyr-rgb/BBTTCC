@@ -1,0 +1,94 @@
+{
+  "name": "Occult Association: Tarot Mage",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Occult Association (Bad Eden): Tarot Mage.</em></p><p><strong>“The future is rude. I read it anyway.”</strong></p><p>Tarot Mages do not predict the future. They <em>interrogate</em> it.</p><p>They treat fate like a deck: shuffled by chaos, cut by will, and stacked by anyone reckless enough to pay the price. Where other occult traditions pursue the Great Work through doctrine, continuity, or purification, the Tarot Mage pursues it through <strong>timing</strong>. The right pressure, at the right instant, can do what a thousand sincere speeches cannot.</p><p>To a Tarot Mage, the Great Work is not just about choosing well. It is about choosing at the <em>moment that matters</em>.</p><p><strong>How Tarot Mages pursue the Great Work:</strong></p><ul><li>By reading currents before Scenarios begin</li><li>By turning uncertainty into leverage</li><li>By making coincidence behave like a trained animal</li><li>By treating timing as a resource as real as OP</li></ul><p><strong>Resonance:</strong> <strong>Keter / Signal / Probability</strong> — possibility, timing, pattern emergence, and the dangerous urge to edit what has not happened yet.</p><p><strong>Tell-tales:</strong> shuffles anything that can be shuffled — cards, choices, people.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Intrigue OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> fate does not like fingerprints. Expect backlash, strange timing, narrative inversion, and consequences that arrive sideways when you push probability too hard.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-tarot-mage",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult-associations",
+      "bonuses": {
+        "intrigue": 1
+      },
+      "option": {
+        "category": "occult",
+        "key": "tarot-mage",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:tarot-mage",
+          "bbttcc:base",
+          "bbttcc:domain:probability",
+          "bbttcc:domain:signal",
+          "bbttcc:domain:intrigue",
+          "bbttcc:scope:faction",
+          "bbttcc:when:passive",
+          "bbttcc:effect:op_roll:intrigue:+3",
+          "bbttcc:resonance:keter",
+          "bbttcc:drift:opportunistic",
+          "bbttcc:cost:fate-backlash",
+          "bbttcc:cost:timing-instability",
+          "bbttcc:theme:deck-of-futures",
+          "bbttcc:theme:outcome-editing"
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tarot_2.png",
+  "folder": "eHExqpWy9wPntvU8",
+  "_stats": {
+    "compendiumSource": "Item.29kPhQrzLJjW98fZ",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.29kPhQrzLJjW98fZ",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987105637,
+    "modifiedTime": 1781116055366,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "XfL3NGH04IDHiOZ0",
+  "sort": 100000,
+  "_key": "!items!XfL3NGH04IDHiOZ0"
+}

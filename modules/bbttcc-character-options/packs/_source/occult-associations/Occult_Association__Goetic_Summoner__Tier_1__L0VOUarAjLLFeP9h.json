@@ -1,0 +1,161 @@
+{
+  "name": "Occult Association: Goetic Summoner (Tier 1)",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 1 — Goetic Summoner</strong></p><p><strong>“First lesson: the circle protects you. Second lesson: only if it’s perfect.”</strong></p><p>You learn the etiquette of predators: names, constraints, and the price of eye contact. You are not yet strong enough to command, but you are strong enough to be heard.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Occult</strong> and <strong>Intimidation</strong></li><li>Learn <strong>Find Familiar</strong>, flavored as unsettling, watchful, or veil-adjacent</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction attempts intimidation, coercion, or violent leverage, gain <strong>+1 to the relevant Violence OP roll</strong></li><li>When your faction runs reconnaissance, blackmail, or covert acquisition, gain <strong>+1 to the relevant Intrigue OP roll</strong></li><li>When your faction attempts goodwill, legitimacy, or mass Diplomacy, suffer <strong>–1 to the relevant Soft Power OP roll</strong></li></ul><p><strong>Cost:</strong> early Goetic work leaves an obvious scent. Expect attention from the wrong entities, fear from the right people, and a reputation that arrives before you do.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "requirements": "Level 1+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-goetic-summoner-t1",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult",
+      "bonuses": {},
+      "option": {
+        "category": "occult",
+        "key": "goetic-summoner",
+        "progressionType": "level",
+        "tier": 1,
+        "levelMin": 1,
+        "levelMax": 1,
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:goetic-summoner",
+          "bbttcc:tier:1",
+          "bbttcc:domain:darkness",
+          "bbttcc:domain:coercion",
+          "bbttcc:domain:recon",
+          "bbttcc:scope:self",
+          "bbttcc:scope:faction",
+          "bbttcc:when:coercion",
+          "bbttcc:when:recon",
+          "bbttcc:when:goodwill",
+          "bbttcc:effect:proficiency:arcana",
+          "bbttcc:effect:proficiency:intimidation",
+          "bbttcc:effect:spell:find-familiar",
+          "bbttcc:effect:op_roll:violence:+2",
+          "bbttcc:effect:op_roll:intrigue:+2",
+          "bbttcc:effect:op_roll:softpower:-1",
+          "bbttcc:resonance:qliphoth",
+          "bbttcc:drift:pragmatic-corruptive",
+          "bbttcc:cost:attention",
+          "bbttcc:cost:fear-reputation",
+          "bbttcc:theme:predator-etiquette",
+          "bbttcc:theme:first-circle"
+        ]
+      }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "effects": [
+    {
+      "name": "Occult Tier1 Proficiencies",
+      "disabled": false,
+      "transfer": true,
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bellows_2.png",
+      "_id": "n2WDIGozDB5hZr0q",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.occult.value",
+            "type": "add",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "system.skills.intimidation.value",
+            "type": "add",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346196069,
+        "modifiedTime": 1777433499560
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!L0VOUarAjLLFeP9h.n2WDIGozDB5hZr0q"
+    }
+  ],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+  "folder": "8EpFv8GVkHaIuTnR",
+  "_stats": {
+    "compendiumSource": "Item.RqCQJVlh9BuZ0SsL",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.RqCQJVlh9BuZ0SsL",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774987093047,
+    "modifiedTime": 1782167239251,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "L0VOUarAjLLFeP9h",
+  "sort": 0,
+  "_key": "!items!L0VOUarAjLLFeP9h"
+}

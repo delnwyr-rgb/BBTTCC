@@ -1,0 +1,102 @@
+{
+  "name": "Occult Association: Gnostic (Tier 4)",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 — Gnostic</strong></p><p><strong>“The archons have no leverage left.”</strong></p><p>At this level, misinformation simply fails around you. False peace offers unravel. Illusions collapse under scrutiny. The system cannot trick what no longer participates in its symbolic shortcuts.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When pursuing the <strong>Spark of Truth (Tiferet)</strong>, enemy factions cannot gain bonuses from Stealth, misinformation, or false alliances</li></ul><p>The Great Work recognizes clarity. So do the things that depended on confusion.</p><p><strong>Cost:</strong> when truth reaches this level of force, it breaks camouflage for everyone nearby. Expect retaliation, exposed conflict lines, and enemies who prefer open hostility to further revelation.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "requirements": "Level 17+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-gnostic-t4",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult",
+      "bonuses": {},
+      "option": {
+        "category": "occult",
+        "key": "gnostic",
+        "progressionType": "level",
+        "tier": 4,
+        "levelMin": 4,
+        "levelMax": 4,
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:gnostic",
+          "bbttcc:tier:4",
+          "bbttcc:domain:tikkun",
+          "bbttcc:domain:truth",
+          "bbttcc:domain:anti-deception",
+          "bbttcc:scope:faction",
+          "bbttcc:scope:great-work",
+          "bbttcc:when:great_work:spark_of_truth:tiferet",
+          "bbttcc:effect:enemy_bonus_block:deception",
+          "bbttcc:effect:enemy_bonus_block:misinformation",
+          "bbttcc:effect:enemy_bonus_block:false_alliances",
+          "bbttcc:resonance:tiferet",
+          "bbttcc:drift:anti-authority",
+          "bbttcc:cost:retaliation-risk",
+          "bbttcc:cost:exposure",
+          "bbttcc:theme:spark-of-truth",
+          "bbttcc:theme:archon-denial"
+        ]
+      }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+  "folder": "cAJvL0bsu1HkZCWz",
+  "_stats": {
+    "compendiumSource": "Item.Y10YsxfQJXDWPMYw",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.Y10YsxfQJXDWPMYw",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987091124,
+    "modifiedTime": 1778970596815,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "H1FmFMfB1syR1inC",
+  "sort": -75000,
+  "_key": "!items!H1FmFMfB1syR1inC"
+}

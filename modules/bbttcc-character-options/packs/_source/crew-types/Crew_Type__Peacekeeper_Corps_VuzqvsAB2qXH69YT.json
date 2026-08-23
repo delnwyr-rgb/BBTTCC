@@ -1,0 +1,95 @@
+{
+  "name": "Crew Type: Peacekeeper Corps",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Crew Type (Bad Eden): Peacekeeper Corps.</em></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Insight and Investigation.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Non-Lethal OPs.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "crew-peacekeeper-corps",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "YYzAyfS4RhZxZ0f7",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew-types",
+      "bonuses": {
+        "nonlethal": 1
+      },
+      "option": {
+        "category": "crew",
+        "key": "peacekeeper-corps",
+        "progressionType": "level",
+        "domains": [
+          "op"
+        ],
+        "scope": "faction",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:peacekeeper-corps",
+          "bbttcc:progression:level",
+          "bbttcc:domain:op",
+          "bbttcc:scope:faction",
+          "bbttcc:effect:op:nonlethal:+8",
+          "bbttcc:theme:order",
+          "bbttcc:theme:stability",
+          "bbttcc:theme:de-escalation",
+          "bbttcc:theme:enforcement"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.9QKZMEr3XPhFcfP7",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.9QKZMEr3XPhFcfP7",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986956943,
+    "modifiedTime": 1782167238951,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "VuzqvsAB2qXH69YT",
+  "sort": 100000,
+  "_key": "!items!VuzqvsAB2qXH69YT"
+}

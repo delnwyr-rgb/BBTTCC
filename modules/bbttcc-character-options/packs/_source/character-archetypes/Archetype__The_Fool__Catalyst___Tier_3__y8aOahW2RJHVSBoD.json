@@ -1,0 +1,88 @@
+{
+  "name": "Archetype: The Fool (Catalyst) (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_fool.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Fool (Catalyst) (Tier 3)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> When you make a Intrigue or Soul check related to movement, travel hazard response, scouting, or improvising under pressure, you can treat any 2d10x10 roll of 9 or lower as a 10.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "archetype-fool-t3",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Level 11+",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "lthIAA49boUx7C1S",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "archetype",
+      "bonuses": {},
+      "option": {
+        "category": "archetype",
+        "key": "fool",
+        "progressionType": "level",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:fool",
+          "bbttcc:expression:catalyst",
+          "bbttcc:tier:3",
+          "bbttcc:dex_or_wis_checks_floor10:travel_scouting"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.D6eq7KMOXw7Hujvd",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986723243,
+    "modifiedTime": 1782167238594,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "y8aOahW2RJHVSBoD",
+  "sort": 400000,
+  "_key": "!items!y8aOahW2RJHVSBoD"
+}

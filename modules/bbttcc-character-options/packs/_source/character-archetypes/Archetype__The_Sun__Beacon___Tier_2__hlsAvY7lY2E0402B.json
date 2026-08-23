@@ -1,0 +1,88 @@
+{
+  "name": "Archetype: The Sun (Beacon) (Tier 2)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_sun.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Sun (Beacon) (Tier 2)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 (Level 5) — The Sun (Beacon)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When spending Soft Power OPs to raise morale, stabilize public confidence, or project legitimacy in open view, the effectiveness of spent OPs is increased by 25%.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "archetype-sun-t2",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Level 5+",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "WkdkvtsuQtccxv6W",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "archetype",
+      "bonuses": {},
+      "option": {
+        "category": "archetype",
+        "key": "sun",
+        "progressionType": "level",
+        "tier": 2,
+        "levelMin": 2,
+        "levelMax": 2,
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:sun",
+          "bbttcc:expression:beacon",
+          "bbttcc:tier:2",
+          "bbttcc:softpower_effect:+25%"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.TqU6wZ1aRzCGehoC",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.TqU6wZ1aRzCGehoC",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986794557,
+    "modifiedTime": 1781116028774,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "hlsAvY7lY2E0402B",
+  "sort": -100000,
+  "_key": "!items!hlsAvY7lY2E0402B"
+}

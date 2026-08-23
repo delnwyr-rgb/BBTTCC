@@ -1,0 +1,89 @@
+{
+  "name": "Archetype: The Moon (Ancient Blood) (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_moon.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Moon (Ancient Blood) (Tier 3)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Moon</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You can cast <strong>Detect Thoughts</strong> 1/Soma Break without expending a manifestation slot and reroll the lowest die on checks against being charmed.</li>\n<li><strong>Strategic:</strong> —</li>\n</ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"moonT3\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Detect Thoughts</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Cast Detect Thoughts without expending a manifestation slot. (Permanent reroll the lowest die vs. charm is passive.)</div>\n</div>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "archetype-moon-t3",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Level 11+",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "MGGAcIKk1sO8TgSt",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "archetype",
+      "bonuses": {},
+      "option": {
+        "category": "archetype",
+        "key": "ancient_blood",
+        "progressionType": "level",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:moon",
+          "bbttcc:expression:ancient_blood",
+          "bbttcc:tier:3",
+          "bbttcc:spell:detect_thoughts:1/day",
+          "bbttcc:adv_vs:charmed"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.eFSqiFFHDXTB3joM",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.eFSqiFFHDXTB3joM",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986778048,
+    "modifiedTime": 1782167238586,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "5enjuSrIeiONta6e",
+  "sort": -200000,
+  "_key": "!items!5enjuSrIeiONta6e"
+}

@@ -1,0 +1,102 @@
+{
+  "name": "Crew Type: Ironbound Ascendants",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Crew Type (Bad Eden): Ironbound Ascendants.</em></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Logistics OPs.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "crew-ironbound-ascendants",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "wmqio7Q7DY1BZeRJ",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew-types",
+      "bonuses": {
+        "logistics": 1
+      },
+      "option": {
+        "category": "crew",
+        "key": "ironbound-ascendants",
+        "progressionType": "level",
+        "domains": [
+          "op",
+          "logistics",
+          "defense"
+        ],
+        "scope": "faction",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:ironbound-ascendants",
+          "bbttcc:progression:level",
+          "bbttcc:domain:op",
+          "bbttcc:domain:logistics",
+          "bbttcc:domain:defense",
+          "bbttcc:scope:faction",
+          "bbttcc:effect:op:logistics:+8",
+          "bbttcc:theme:elevation",
+          "bbttcc:theme:fortification",
+          "bbttcc:theme:chokepoints",
+          "bbttcc:theme:mountain-discipline"
+        ]
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.mJaJH0EW1yEKJcGd",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.mJaJH0EW1yEKJcGd",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986952092,
+    "modifiedTime": 1782167238952,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "brAELAWiggUsnsox",
+  "sort": 100000,
+  "_key": "!items!brAELAWiggUsnsox"
+}

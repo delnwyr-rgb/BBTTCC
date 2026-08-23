@@ -1,0 +1,53 @@
+{
+  "_id": "becallingbrv0cls",
+  "name": "Bravo",
+  "type": "class",
+  "img": "art/devin-knight/Vikings/AxeMan3armored_WWC.webp",
+  "system": {
+    "category": "calling",
+    "identifier": "calling-bravo",
+    "source": "Callings",
+    "tags": [
+      "calling",
+      "bravo",
+      "violence"
+    ],
+    "description": {
+      "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 100000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "calling"
+    },
+    "fourththing": {
+      "calling": {
+        "key": "bravo",
+        "faculty": "violence",
+        "signature": "melee",
+        "secondary": "brawl",
+        "pool": "Violence",
+        "awakens": "Aurablade or Bulwark"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": 1784006614960,
+    "modifiedTime": 1784006614960,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!becallingbrv0cls"
+}

@@ -1,0 +1,88 @@
+{
+  "name": "Archetype: The Empress (Caretaker) (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_empress.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Empress (Caretaker) (Tier 3)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 (Level 11) — The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on Soul checks related to healing, caretaking, morale triage, or reading communal distress.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "archetype-empress-t3",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Level 11+",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "OqJxCzLIDbhxHlVV",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "archetype",
+      "bonuses": {},
+      "option": {
+        "category": "archetype",
+        "key": "empress",
+        "progressionType": "level",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:empress",
+          "bbttcc:expression:caretaker",
+          "bbttcc:tier:3",
+          "bbttcc:adv:healing_relief_checks"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.75Pb8cHjL4Tlrwoe",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986713706,
+    "modifiedTime": 1781116027467,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "cJj1AicHRHKA1IiM",
+  "sort": 400000,
+  "_key": "!items!cJj1AicHRHKA1IiM"
+}

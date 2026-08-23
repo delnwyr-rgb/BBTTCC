@@ -1,0 +1,91 @@
+{
+  "name": "Archetype: The Moon (Ancient Blood) (Tier 1)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_moon.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Moon (Ancient Blood) (Tier 1)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 1 (Level 1) — The Moon</strong></p><ul><li><strong>Tactical:</strong> You learn Message and gain a skill rank in Lore.</li><li><strong>Strategic:</strong> Soft Power OP cap +2.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "archetype-moon-t1",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Level 1+",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "MGGAcIKk1sO8TgSt",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "archetype",
+      "bonuses": {},
+      "option": {
+        "category": "archetype",
+        "key": "ancient_blood",
+        "progressionType": "level",
+        "tier": 1,
+        "levelMin": 1,
+        "levelMax": 1,
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:moon",
+          "bbttcc:expression:ancient_blood",
+          "bbttcc:tier:1",
+          "bbttcc:softpower_op_cap:+2"
+        ]
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.xGN96RKzZmHqYD2d",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986778048,
+    "modifiedTime": 1782167238586,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "85Sjjy3ID6Ob4BIQ",
+  "sort": 0,
+  "_key": "!items!85Sjjy3ID6Ob4BIQ"
+}

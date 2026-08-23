@@ -1,0 +1,89 @@
+{
+  "name": "Archetype: The Star (Hopebringer) (Tier 4)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_star.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Star (Hopebringer) (Tier 4)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 4 (Level 17) — The Star (Hopebringer)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> After your faction suffers a major setback, failed siege, or catastrophic beat, the first recovery or rally scenario attempted before the next turn rerolls the lowest die on all relevant strategic checks.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "archetype-star-t4",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Level 17+",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "LPn67mZIjggfprir",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "archetype",
+      "bonuses": {},
+      "option": {
+        "category": "archetype",
+        "key": "star",
+        "progressionType": "level",
+        "tier": 4,
+        "levelMin": 4,
+        "levelMax": 4,
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:star",
+          "bbttcc:expression:hopebringer",
+          "bbttcc:tier:4",
+          "bbttcc:scenario:rally_recovery_after_loss",
+          "bbttcc:checks:advantage"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.idWDy5PPckVnZp8U",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.idWDy5PPckVnZp8U",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986788012,
+    "modifiedTime": 1781116021737,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "LFgOIRJ3XWqcuT7s",
+  "sort": -200000,
+  "_key": "!items!LFgOIRJ3XWqcuT7s"
+}

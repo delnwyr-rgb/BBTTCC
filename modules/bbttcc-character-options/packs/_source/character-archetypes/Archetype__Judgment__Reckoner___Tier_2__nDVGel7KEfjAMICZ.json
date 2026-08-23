@@ -1,0 +1,88 @@
+{
+  "name": "Archetype: Judgment (Reckoner) (Tier 2)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_judgement.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: Judgment (Reckoner) (Tier 2)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 (Level 5) — Judgment (Reckoner)</strong></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During purge, revelation, judgment, exposure, or final-account scenarios, the first major resistance, denial, or concealment effect is ignored once.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "archetype-judgment-t2",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Level 5+",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "1Q3rl5RJCkpByKSo",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "archetype",
+      "bonuses": {},
+      "option": {
+        "category": "archetype",
+        "key": "judgment",
+        "progressionType": "level",
+        "tier": 2,
+        "levelMin": 2,
+        "levelMax": 2,
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:judgment",
+          "bbttcc:expression:reckoner",
+          "bbttcc:tier:2",
+          "bbttcc:ignore_first_major_concealment"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.m0MFZ3MxQaAQ0z4M",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986323670,
+    "modifiedTime": 1781116031646,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "nDVGel7KEfjAMICZ",
+  "sort": 300000,
+  "_key": "!items!nDVGel7KEfjAMICZ"
+}

@@ -1,0 +1,111 @@
+{
+  "name": "Archetype: The Magician (Scholar)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_magician.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You do not wave your hands and hope. You know what symbols are for.”</em></p>\n<p><strong>Archetype (Bad Eden): The Magician (Scholar).</strong> Researcher, operator, and wielder of applied understanding. You turn knowledge into leverage and leverage into effect.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> This Archetype is associated with <strong>+1 Intrigue</strong> in faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of scholarship, arcane literacy, research throughput, and recovered knowledge.</li>\n</ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {
+      "c7J15Y98WnyaPgSI": {
+        "_id": "c7J15Y98WnyaPgSI",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 3,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 1,
+        "title": "Archetype Ability Scores",
+        "hint": "Gain 3 ability score points (max +2 to any one score). See the Archetype text for recommended arrays.",
+        "flags": {}
+      }
+    },
+    "identifier": "archetype-magician",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "s1HLbsiqFwvDZzxO",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "character-archetypes",
+      "bonuses": {
+        "intrigue": 1
+      },
+      "option": {
+        "category": "archetype",
+        "key": "wizard_scholar",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:magician",
+          "bbttcc:expression:wizard_scholar",
+          "bbttcc:base"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.gImq7bkeuSrlehf1",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.gImq7bkeuSrlehf1",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986769802,
+    "modifiedTime": 1781116038489,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "zuucF5ViMQMJu8dF",
+  "sort": 100000,
+  "_key": "!items!zuucF5ViMQMJu8dF"
+}

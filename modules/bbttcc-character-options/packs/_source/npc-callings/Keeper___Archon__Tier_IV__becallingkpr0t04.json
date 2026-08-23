@@ -1,0 +1,45 @@
+{
+  "_id": "becallingkpr0t04",
+  "name": "Keeper — Archon (Tier IV)",
+  "type": "feature",
+  "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+  "system": {
+    "category": "calling",
+    "source": "Callings",
+    "tags": [
+      "calling",
+      "keeper",
+      "tier-4"
+    ],
+    "description": {
+      "value": "<p><strong>Keeper — Archon</strong> (Tier IV).</p><p><strong>Trade — Read the omens:</strong> One divination-grade answer per downtime — a true sign about a chosen course, delivered as an omen, not a sentence. <span style=\"opacity:0.7\">Standard fee 270 marks (Soft Power).</span></p><p><strong>Trick — Intercession</strong> <em>(1/scene)</em>: An ally under the Keeper's care who would drop to 0 Stress holds at 1; the Keeper visibly carries it for them.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 604000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "calling": {
+        "key": "keeper",
+        "tier": 4
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": 1784006970483,
+    "modifiedTime": 1784006970483,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!becallingkpr0t04"
+}

@@ -1,0 +1,174 @@
+{
+  "name": "Crew Type: Survivors / Militia (Tier 1)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Survivors / Militia (Tier 1)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 1 — Survivors / Militia</strong></p><p><strong>“We were here before your grand strategy, and we’ll be here after it catches fire.”</strong></p><p>Survivors and militias are what happens when ordinary people become infrastructure. They patch walls, ration supplies, drag neighbors out of burning buildings, and keep the faction alive long after cleaner doctrines would have folded.</p><p><em>You’ve learned the first law of bad times: everyone becomes useful or everyone dies tired.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Faith.</li><li><strong>Strategic:</strong> Your faction starts with +1 Non-Lethal OP and +1 Economy OP.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-survivors-militia-t1",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 1+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [
+    {
+      "_id": "c0c3df7e7b8a41c1",
+      "name": "Survivors / Militia T1 Skills",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_3.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.athletics.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "system.skills.faith.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346195768,
+        "modifiedTime": 1777433499533
+      },
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!Mrrp0XKnx1DLl4Sw.c0c3df7e7b8a41c1"
+    }
+  ],
+  "folder": "nzOz07rZNThqspSs",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "survivors-militia",
+        "progressionType": "level",
+        "tier": 1,
+        "levelMin": 1,
+        "levelMax": 1,
+        "domains": [
+          "op",
+          "survival",
+          "recovery"
+        ],
+        "scope": "faction",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:survivors-militia",
+          "bbttcc:tier:1",
+          "bbttcc:domain:op",
+          "bbttcc:domain:survival",
+          "bbttcc:domain:recovery",
+          "bbttcc:scope:faction",
+          "bbttcc:effect:op:violence:+2",
+          "bbttcc:effect:op:nonlethal:+2",
+          "bbttcc:effect:op:economy:+2",
+          "bbttcc:effect:op:softpower:+2",
+          "bbttcc:effect:recovery:baseline_stability:true",
+          "bbttcc:theme:resilience",
+          "bbttcc:theme:hardship",
+          "bbttcc:theme:mutual-aid",
+          "bbttcc:theme:continuity"
+        ]
+      }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.CvJ9ziHEodDvbNYX",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.CvJ9ziHEodDvbNYX",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986961797,
+    "modifiedTime": 1782167238950,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "Mrrp0XKnx1DLl4Sw",
+  "sort": 0,
+  "_key": "!items!Mrrp0XKnx1DLl4Sw"
+}

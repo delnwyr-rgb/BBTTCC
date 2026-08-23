@@ -1,0 +1,94 @@
+{
+  "name": "Occult Association: Prophet / Oracle",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Occult Association (Bad Eden): Prophet / Oracle.</em></p><p><strong>“The future is not hidden. It is just expensive to hear clearly.”</strong></p><p>Prophets do not control the future. They endure proximity to it.</p><p>Where Tarot Mages manipulate timing and probability like gamblers with dangerous discipline, Prophets stand closer to the signal itself. They hear pattern before it becomes event, consequence before it becomes story, and warning before anyone else admits there is something to warn about.</p><p>To a Prophet, the Great Work is not just about choosing well. It is about seeing the shape of what is coming early enough to alter who is prepared for it.</p><p><strong>How Prophets pursue the Great Work:</strong></p><ul><li>By reading emerging pressure before it resolves into action</li><li>By recognizing encounter patterns before they fully manifest</li><li>By turning foresight into factional advantage</li><li>By making ignorance more expensive than preparation</li></ul><p><strong>Resonance:</strong> <strong>Keter / Signal</strong> — possibility, revelation, pattern-emergence, and the unbearable weight of glimpsing too much too early.</p><p><strong>Tell-tales:</strong> pauses before bad news, unfinished sentences that become correct later, eyes that track causes before effects.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Intrigue, planning, or foresight-adjacent OP rolls</strong> (GM adjudicates the exact lane)</li></ul><p><strong>Cost Principle:</strong> foresight creates burden. Expect omen pressure, emotional Stress, false-positive anxiety, and resentment from people who preferred not to know what was coming.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-prophet-oracle",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult-associations",
+      "bonuses": {
+        "intrigue": 1
+      },
+      "option": {
+        "category": "occult",
+        "key": "prophet-oracle",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:prophet-oracle",
+          "bbttcc:base",
+          "bbttcc:domain:signal",
+          "bbttcc:domain:future",
+          "bbttcc:domain:foresight",
+          "bbttcc:scope:faction",
+          "bbttcc:when:passive",
+          "bbttcc:effect:op_roll:foresight-facing:+1",
+          "bbttcc:resonance:keter",
+          "bbttcc:drift:watchful-detached",
+          "bbttcc:cost:burden",
+          "bbttcc:cost:omen-pressure",
+          "bbttcc:theme:early-warning",
+          "bbttcc:theme:signal-reception"
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+  "folder": "lDdY5NMGIgNj06vQ",
+  "_stats": {
+    "compendiumSource": "Item.nZy87kN2gDBe9xLG",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.nZy87kN2gDBe9xLG",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987097550,
+    "modifiedTime": 1781116054273,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "Kb4nKMfJtxW6rvH0",
+  "sort": 100000,
+  "_key": "!items!Kb4nKMfJtxW6rvH0"
+}

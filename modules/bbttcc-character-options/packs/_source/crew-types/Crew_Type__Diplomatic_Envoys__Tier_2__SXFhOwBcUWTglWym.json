@@ -1,0 +1,102 @@
+{
+  "name": "Crew Type: Diplomatic Envoys (Tier 2)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Diplomatic Envoys (Tier 2)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 — Diplomatic Envoys</strong></p><p><strong>“We are here in peace. Don’t make that embarrassing.”</strong></p><p>Diplomatic Envoys are the faction’s public face and private threat. They shake hands with one hand and count exits with the other. Their talent is making every negotiation feel like the only sensible outcome was the one they wanted.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> During Courtly Intrigue (Social Combat) scenarios, your faction deals 20% more influence damage when spending Diplomacy or Soft Power OPs.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-diplomatic-envoys-t2",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 5+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [],
+  "folder": "IFHZoz9eqRJSNEWx",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "diplomatic-envoys",
+        "progressionType": "level",
+        "tier": 2,
+        "levelMin": 2,
+        "levelMax": 2,
+        "domains": [
+          "courtly_intrigue",
+          "social",
+          "op"
+        ],
+        "scope": "scenario",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:diplomatic-envoys",
+          "bbttcc:tier:2",
+          "bbttcc:domain:courtly_intrigue",
+          "bbttcc:domain:social",
+          "bbttcc:domain:op",
+          "bbttcc:scope:scenario",
+          "bbttcc:when:scenario:courtly_intrigue",
+          "bbttcc:when:op_spend:diplomacy",
+          "bbttcc:when:op_spend:softpower",
+          "bbttcc:effect:influence_damage:+20pct",
+          "bbttcc:theme:diplomacy",
+          "bbttcc:theme:social-combat",
+          "bbttcc:theme:pressure-control"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.k7y5arFz2SzJxnmE",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.k7y5arFz2SzJxnmE",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986946918,
+    "modifiedTime": 1781116044092,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "SXFhOwBcUWTglWym",
+  "sort": -100000,
+  "_key": "!items!SXFhOwBcUWTglWym"
+}

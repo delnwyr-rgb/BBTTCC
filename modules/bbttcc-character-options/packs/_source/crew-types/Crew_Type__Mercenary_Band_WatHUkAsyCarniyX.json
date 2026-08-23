@@ -1,0 +1,98 @@
+{
+  "name": "Crew Type: Mercenary Band",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Crew Type (Bad Eden): Mercenary Band.</em></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank with Medium Armor and one Martial Weapon of your choice.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Violence OPs.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "crew-mercenary-band",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "m4EIJI3cE6QISpe4",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew-types",
+      "bonuses": {
+        "violence": 1
+      },
+      "option": {
+        "category": "crew",
+        "key": "mercenary-band",
+        "progressionType": "level",
+        "domains": [
+          "op",
+          "combat"
+        ],
+        "scope": "faction",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:mercenary-band",
+          "bbttcc:progression:level",
+          "bbttcc:domain:op",
+          "bbttcc:domain:combat",
+          "bbttcc:scope:faction",
+          "bbttcc:effect:op:violence:+8",
+          "bbttcc:effect:op:diplomacy:-3",
+          "bbttcc:theme:contract-violence",
+          "bbttcc:theme:professional-soldiers",
+          "bbttcc:theme:battlefield-pressure",
+          "bbttcc:theme:paid-force"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.F1yxOz0g9YNgZHS4",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.F1yxOz0g9YNgZHS4",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986954715,
+    "modifiedTime": 1782167238951,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "WatHUkAsyCarniyX",
+  "sort": 100000,
+  "_key": "!items!WatHUkAsyCarniyX"
+}

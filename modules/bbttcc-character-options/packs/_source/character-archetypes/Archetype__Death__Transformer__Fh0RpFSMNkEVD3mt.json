@@ -1,0 +1,112 @@
+{
+  "name": "Archetype: Death (Transformer)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_death.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“This must end for something else to begin.”</em></p><p><strong>Archetype (Bad Eden): Death (Transformer).</strong> You are not annihilation. You are necessary ending, painful transition, and the force that cuts dead things loose so the living can survive.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens sacrifice, transition, and value recovered from collapse. This Archetype is associated with <strong>+1 Violence</strong> and <strong>+1 Culture</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {
+      "BJ6OtmB2Inina4pJ": {
+        "_id": "BJ6OtmB2Inina4pJ",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 3,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 1,
+        "title": "Archetype Ability Scores",
+        "hint": "Gain 3 ability score points (max +2 to any one score). See the Archetype text for recommended arrays.",
+        "flags": {}
+      }
+    },
+    "identifier": "archetype-death",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "Z28ttIM7Yzl2LgF9",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "character-archetypes",
+      "bonuses": {
+        "violence": 1,
+        "culture": 1
+      },
+      "option": {
+        "category": "archetype",
+        "key": "death",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:death",
+          "bbttcc:expression:transformer",
+          "bbttcc:base"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.bPpzmdnTTL0R6lMX",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986315820,
+    "modifiedTime": 1781116019971,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "Fh0RpFSMNkEVD3mt",
+  "sort": 100000,
+  "_key": "!items!Fh0RpFSMNkEVD3mt"
+}

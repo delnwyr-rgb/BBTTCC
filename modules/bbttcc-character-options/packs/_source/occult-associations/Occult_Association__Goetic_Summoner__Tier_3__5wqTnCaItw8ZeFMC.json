@@ -1,0 +1,279 @@
+{
+  "name": "Occult Association: Goetic Summoner (Tier 3)",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Goetic Summoner</strong></p><p><strong>“Now we can talk like professionals.”</strong></p><p>You can negotiate across the veil without begging. You know the difference between a threat and an offer, and you can make either one land.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>You reroll the lowest die on Presence checks when interacting with Fiends or Celestials</li><li>You can cast <strong>Magic Circle</strong> 1/Soma Break</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a Scenario begins, you may declare a <strong>Binding Posture</strong></li><li>Gain <strong>+3 to a single Intrigue OP roll</strong> made during that Scenario</li><li>If you fail a key check during the Scenario, the GM may introduce a meaningful complication tied to your bindings, terms, or assumptions</li></ul><p><strong>Cost:</strong> the more fluently you bargain, the more the other side expects you to keep bargaining. Precision does not protect you from consequences. It only makes them legally enforceable.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"goeticT3\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Binding Posture</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic (declare) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Before a Scenario, declare a Binding Posture: +3 to one Intrigue OP roll during it. (Failure may introduce a binding-tied complication.)</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": {},
+    "requirements": "Level 11+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": "1"
+    },
+    "identifier": "occult-association-goetic-summoner-t3",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult",
+      "bonuses": {},
+      "option": {
+        "category": "occult",
+        "key": "goetic-summoner",
+        "progressionType": "level",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:goetic-summoner",
+          "bbttcc:tier:3",
+          "bbttcc:domain:binding",
+          "bbttcc:domain:negotiation",
+          "bbttcc:domain:intrigue",
+          "bbttcc:scope:self",
+          "bbttcc:scope:faction",
+          "bbttcc:when:long_rest:once",
+          "bbttcc:when:scenario:start",
+          "bbttcc:effect:advantage:charisma_checks:fiends-and-celestials",
+          "bbttcc:effect:spell:magic-circle:1-per-long-rest",
+          "bbttcc:effect:op_roll:intrigue:+3",
+          "bbttcc:effect:complication:on-key-failure",
+          "bbttcc:resonance:qliphoth",
+          "bbttcc:drift:pragmatic-corruptive",
+          "bbttcc:cost:contractual-obligation",
+          "bbttcc:cost:complication",
+          "bbttcc:theme:binding-posture",
+          "bbttcc:theme:professional-bargain"
+        ]
+      }
+    },
+    "dnd5e": {},
+    "autoanimations": {
+      "id": "118e4bb0-77f6-4e13-8f58-f0a368e941e8",
+      "label": "Occult Association: Goetic Summoner (Tier 3)",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "darkpurple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+  "folder": "8EpFv8GVkHaIuTnR",
+  "_stats": {
+    "compendiumSource": "Item.CxcsREj0cffTLLly",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.CxcsREj0cffTLLly",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987093047,
+    "modifiedTime": 1781024182053,
+    "lastModifiedBy": "MRFjjbUTBd66pWBY"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "5wqTnCaItw8ZeFMC",
+  "sort": -50000,
+  "_key": "!items!5wqTnCaItw8ZeFMC"
+}

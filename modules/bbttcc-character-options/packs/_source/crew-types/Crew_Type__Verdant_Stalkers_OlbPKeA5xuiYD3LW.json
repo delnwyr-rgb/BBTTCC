@@ -1,0 +1,96 @@
+{
+  "name": "Crew Type: Verdant Stalkers",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden",
+      "revision": 2,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Crew Type (Bad Eden): Verdant Stalkers.</em></p><p><strong>“If the forest sees you, you’re already late.”</strong></p><p>Verdant Stalkers move through living terrain like they were invited. They conceal routes, read pressure from broken twigs and bent moss, and make hostile wilderness feel personal.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Stealth and Athletics.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-verdant-stalkers",
+    "requirements": "",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew-types",
+      "bonuses": {
+        "intrigue": 1
+      },
+      "option": {
+        "category": "crew",
+        "key": "verdant-stalkers",
+        "progressionType": "level",
+        "domains": [
+          "op"
+        ],
+        "scope": "faction",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:verdant-stalkers",
+          "bbttcc:progression:level",
+          "bbttcc:domain:op",
+          "bbttcc:scope:faction",
+          "bbttcc:effect:op:intrigue:+8",
+          "bbttcc:theme:ambush",
+          "bbttcc:theme:recon",
+          "bbttcc:theme:hidden-routes"
+        ]
+      }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "folder": "3hFwHalyNvJcfIyJ",
+  "_stats": {
+    "compendiumSource": "Item.zwr2HRIYMGfZVSEw",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.zwr2HRIYMGfZVSEw",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986965136,
+    "modifiedTime": 1782167238950,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "OlbPKeA5xuiYD3LW",
+  "sort": 100000,
+  "_key": "!items!OlbPKeA5xuiYD3LW"
+}

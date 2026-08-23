@@ -1,0 +1,122 @@
+{
+  "name": "Crew Type: Abyssal Cartographers (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Abyssal Cartographers (Tier 3)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You’ve learned to tell the difference between a dead passage and a sleeping one.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on checks made to navigate submerged or cavernous terrain, interpret spatial anomalies, or locate hidden access points and sealed routes.</li><li><strong>Strategic:</strong> Your faction is better at identifying unusual discovery sites and Spark-adjacent locations tied to water, depths, or buried passageways.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-abyssal-cartographers-t3",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 11+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [],
+  "folder": "RkZhM7hoNJJnRSIB",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "abyssal-cartographers",
+        "progressionType": "level",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "domains": [
+          "travel",
+          "intel",
+          "sparks",
+          "discovery"
+        ],
+        "terrains": [
+          "river",
+          "lake",
+          "sea",
+          "ocean",
+          "cavern"
+        ],
+        "scope": "hex",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:abyssal-cartographers",
+          "bbttcc:tier:3",
+          "bbttcc:domain:travel",
+          "bbttcc:domain:intel",
+          "bbttcc:domain:sparks",
+          "bbttcc:domain:discovery",
+          "bbttcc:terrain:river",
+          "bbttcc:terrain:lake",
+          "bbttcc:terrain:sea",
+          "bbttcc:terrain:ocean",
+          "bbttcc:terrain:cavern",
+          "bbttcc:scope:hex",
+          "bbttcc:when:action:navigate_submerged_terrain",
+          "bbttcc:when:action:interpret_spatial_anomaly",
+          "bbttcc:when:action:locate_hidden_access",
+          "bbttcc:when:action:locate_sealed_route",
+          "bbttcc:effect:check:advantage:navigate_submerged_terrain",
+          "bbttcc:effect:check:advantage:interpret_spatial_anomaly",
+          "bbttcc:effect:check:advantage:locate_hidden_access",
+          "bbttcc:effect:check:advantage:locate_sealed_route",
+          "bbttcc:effect:discovery:spark_adjacent_detection:+1step",
+          "bbttcc:theme:depth-navigation",
+          "bbttcc:theme:spatial-weirdness",
+          "bbttcc:theme:spark-hunting",
+          "bbttcc:theme:under-map"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.qZSqCCQaXc1D11Jc",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.qZSqCCQaXc1D11Jc",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986939199,
+    "modifiedTime": 1781116047608,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "hiS1RgUoz5iKI5Fj",
+  "sort": -200000,
+  "_key": "!items!hiS1RgUoz5iKI5Fj"
+}

@@ -1,7 +1,7 @@
 {
   "name": "Hexbane Surplice",
   "type": "armor",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "icons/equipment/chest/breastplate-layered-leather-blue.webp",
   "system": {
     "guardBonus": 2,
     "evasionBonus": 0,
@@ -22,7 +22,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A field surplice layered over a hex-lattice underlayer, cut for wardens who walk hex-blighted ground where the curse runs hot. Turns aside both the corruption and the scorch that so often comes with it.</p><p><b>Hexbane Weave.</b> Resists qliphothic and thermal. Built to be worn working, not displayed.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Guard +2, Resolve +2</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic, Thermal</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 675 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>A field surplice layered over a hex-lattice underlayer, cut for wardens who walk hex-blighted ground where the curse runs hot. Turns aside both the corruption and the scorch that so often comes with it.</p><p><strong>Hexbane Weave.</strong> Resists qliphothic and thermal. Built to be worn working, not displayed.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Defense:</strong> Guard +2, Resolve +2</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic, Thermal</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 675 Nonlethal marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -87,11 +87,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.367",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1782150391790,
-    "modifiedTime": 1782160020989,
+    "modifiedTime": 1787335078032,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

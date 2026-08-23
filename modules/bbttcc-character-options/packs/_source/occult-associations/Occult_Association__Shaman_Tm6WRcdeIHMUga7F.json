@@ -1,0 +1,94 @@
+{
+  "name": "Occult Association: Shaman",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Occult Association (Bad Eden): Shaman.</em></p><p><strong>“You don’t fix the world. You listen to what it’s trying to become.”</strong></p><p>Shamans do not impose order. They enter into relationship.</p><p>To a Shaman, the Great Work is not about forcing alignment onto a dead world. It is about hearing the pulse that is still there and deciding whether to protect it, guide it, or stand aside long enough for it to speak clearly. Every Hex is alive in some way. Every leyline has mood. Every storm is making a decision. Every spirit remembers who treated the land like a partner and who treated it like inventory.</p><p>Where Kabbalists map structure and Alchemists force conversion, Shamans work by <strong>attunement</strong>. They negotiate with terrain, weather, spirits, and flow-states that existed before factions learned to count OP.</p><p><strong>How Shamans pursue the Great Work:</strong></p><ul><li>By listening to terrain, weather, and spirit pressure</li><li>By stabilizing living systems instead of extracting from them</li><li>By redirecting corruption rather than merely containing it</li><li>By treating Hexes as relationships, not assets</li></ul><p><strong>Resonance:</strong> <strong>Netzach / Living Flow</strong> — endurance, ecology, instinctive continuity, and the intelligence of systems nobody designed.</p><p><strong>Tell-tales:</strong> mud where there should not be mud, animals that stop running, weather that feels briefly conversational.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on relevant terrain, travel, weather, or wilderness-facing OP rolls</strong> (GM adjudicates the exact OP lane)</li></ul><p><strong>Cost Principle:</strong> attunement creates obligation. The more the land speaks to you, the less you can pretend not to hear it. Expect spirit attention, place-based duty, and backlash when your faction acts against the needs of a living Hex.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-shaman",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult-associations",
+      "bonuses": {},
+      "option": {
+        "category": "occult",
+        "key": "shaman",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:shaman",
+          "bbttcc:base",
+          "bbttcc:domain:leylines",
+          "bbttcc:domain:terrain",
+          "bbttcc:domain:weather",
+          "bbttcc:domain:spirits",
+          "bbttcc:scope:hex",
+          "bbttcc:scope:faction",
+          "bbttcc:when:passive",
+          "bbttcc:effect:op_roll:wilderness-facing:+1",
+          "bbttcc:resonance:netzach",
+          "bbttcc:drift:communal-ecological",
+          "bbttcc:cost:obligation",
+          "bbttcc:cost:spirit-attention",
+          "bbttcc:theme:living-systems",
+          "bbttcc:theme:attunement"
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+  "folder": "uflkacBlUmYFCAbz",
+  "_stats": {
+    "compendiumSource": "Item.J2ZdE3vlyEO8rd4l",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.J2ZdE3vlyEO8rd4l",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987102977,
+    "modifiedTime": 1781116055093,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "Tm6WRcdeIHMUga7F",
+  "sort": 100000,
+  "_key": "!items!Tm6WRcdeIHMUga7F"
+}

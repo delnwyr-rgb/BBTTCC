@@ -1,0 +1,120 @@
+{
+  "name": "Crew Type: Abyssal Cartographers (Tier 2)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Abyssal Cartographers (Tier 2)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You’ve stopped following waterways and started interrogating them.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Your faction can uncover hidden passages, submerged shortcuts, and alternate route links through water- or cavern-connected terrain more efficiently.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-abyssal-cartographers-t2",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 5+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [],
+  "folder": "RkZhM7hoNJJnRSIB",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "abyssal-cartographers",
+        "progressionType": "level",
+        "tier": 2,
+        "levelMin": 2,
+        "levelMax": 2,
+        "domains": [
+          "travel",
+          "discovery",
+          "pathing"
+        ],
+        "terrains": [
+          "river",
+          "lake",
+          "sea",
+          "ocean",
+          "cavern"
+        ],
+        "scope": "hex",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:abyssal-cartographers",
+          "bbttcc:tier:2",
+          "bbttcc:domain:travel",
+          "bbttcc:domain:discovery",
+          "bbttcc:domain:pathing",
+          "bbttcc:terrain:river",
+          "bbttcc:terrain:lake",
+          "bbttcc:terrain:sea",
+          "bbttcc:terrain:ocean",
+          "bbttcc:terrain:cavern",
+          "bbttcc:scope:hex",
+          "bbttcc:when:action:discover_hidden_passage",
+          "bbttcc:when:action:establish_alt_route",
+          "bbttcc:when:origin_terrain:river",
+          "bbttcc:when:origin_terrain:lake",
+          "bbttcc:when:origin_terrain:sea",
+          "bbttcc:when:origin_terrain:ocean",
+          "bbttcc:when:origin_terrain:cavern",
+          "bbttcc:effect:pathing:shortcut_unlock:true",
+          "bbttcc:effect:travel:alt_route_establish:true",
+          "bbttcc:effect:travel:route_cost:-1step",
+          "bbttcc:theme:hidden-routes",
+          "bbttcc:theme:under-map",
+          "bbttcc:theme:shortcut-mastery"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.P9pVJskma7OqNWES",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.P9pVJskma7OqNWES",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986939199,
+    "modifiedTime": 1781116051125,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "z3TaBpU5PNO89Fif",
+  "sort": -100000,
+  "_key": "!items!z3TaBpU5PNO89Fif"
+}

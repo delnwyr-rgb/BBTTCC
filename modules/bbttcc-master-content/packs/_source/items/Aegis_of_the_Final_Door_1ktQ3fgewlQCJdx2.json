@@ -1,7 +1,7 @@
 {
   "name": "Aegis of the Final Door",
   "type": "armor",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "icons/equipment/shield/buckler-wooden-boss-glowing-blue.webp",
   "system": {
     "guardBonus": 3,
     "evasionBonus": 0,
@@ -21,7 +21,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A great round shield said to have been the last thing standing at a threshold no one names. Its face is featureless save for a single closed ring; the metal does not reflect, only quiets. Those who carry it report the world's whispering simply\u2026 stops at the rim.</p><p><strong>The Closed Ring.</strong> Resists qliphothic and psychic. The bearer cannot be charmed or compelled while it is raised.</p><p><strong>Soulbound.</strong> Binds at first attunement and cannot be re-bonded.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Shield</li>\n  <li><strong>Defense:</strong> Guard +3, Resolve +4</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic, Psychic</li>\n  <li><strong>Immune to:</strong> Charmed, Compelled</li>\n  <li><strong>Tier:</strong> IV</li>\n  <li><strong>Cost:</strong> 2025 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>A great round shield said to have been the last thing standing at a threshold no one names. Its face is featureless save for a single closed ring; the metal does not reflect, only quiets. Those who carry it report the world's whispering simply\u2026 stops at the rim.</p><p><strong>The Closed Ring.</strong> Resists qliphothic and psychic. The bearer cannot be charmed or compelled while it is raised.</p><p><strong>Soulbound.</strong> Binds at first attunement and cannot be re-bonded.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +3, Resolve +4</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic, Psychic</p></li><li><p><strong>Immune to:</strong> Charmed, Compelled</p></li><li><p><strong>Tier:</strong> IV</p></li><li><p><strong>Cost:</strong> 2025 Economy marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -90,11 +90,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.367",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1782150391609,
-    "modifiedTime": 1782160020983,
+    "modifiedTime": 1787334814274,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

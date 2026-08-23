@@ -1,0 +1,91 @@
+{
+  "name": "Archetype: The Magician (Scholar) (Tier 2)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_magician.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Magician (Scholar) (Tier 2)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 (Level 5) — The Magician</strong></p>\n<ul>\n<li><strong>Tactical:</strong> Your obsessive research habits begin to pay off in the metaphysical lab.</li>\n<li><strong>Strategic:</strong> During the <strong>Identification</strong> phase of <strong>The Great Work</strong>, the time or resources required to uncover the Lore of an assigned Spark (Conceptual, Vestigial, or Animate) are <strong>halved</strong>.</li>\n</ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "archetype-magician-t2",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Level 5+",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "s1HLbsiqFwvDZzxO",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "archetype",
+      "bonuses": {},
+      "option": {
+        "category": "archetype",
+        "key": "wizard_scholar",
+        "progressionType": "level",
+        "tier": 2,
+        "levelMin": 2,
+        "levelMax": 2,
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:magician",
+          "bbttcc:expression:wizard_scholar",
+          "bbttcc:tier:2",
+          "bbttcc:great_work:identification_halved"
+        ]
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.XZmI5avL9kB53ruo",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.XZmI5avL9kB53ruo",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986769802,
+    "modifiedTime": 1781116020680,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "Gu1yMRgigKSJSn4b",
+  "sort": -100000,
+  "_key": "!items!Gu1yMRgigKSJSn4b"
+}

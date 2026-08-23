@@ -1,0 +1,87 @@
+{
+  "name": "Archetype: The Lovers (Tier 1)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_lovers.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 1 — The Lovers</strong></p><ul><li><strong>Tactical:</strong> Insight + Diplomacy proficiency. Learn Friends.</li><li><strong>Strategic:</strong> +2 Diplomacy OP cap.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "archetype-lovers-t1",
+    "requirements": "Level 1+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "bonuses": {},
+      "option": {
+        "key": "lovers",
+        "tier": 1,
+        "tags": [
+          "bbttcc:lovers",
+          "bbttcc:tier:1",
+          "bbttcc:diplomacy_op_cap:+2"
+        ],
+        "category": "archetype",
+        "progressionType": "level",
+        "levelMin": 1,
+        "levelMax": 1
+      },
+      "category": "archetype"
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "effects": [],
+  "folder": "yQL9oYdZ12Vtohtl",
+  "_stats": {
+    "compendiumSource": "Item.x8FReGtjOZp46rkF",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.x8FReGtjOZp46rkF",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986761329,
+    "modifiedTime": 1778970590768,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "YtwdLwJl2KVxg8Cq",
+  "sort": 0,
+  "_key": "!items!YtwdLwJl2KVxg8Cq"
+}

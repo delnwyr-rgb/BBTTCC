@@ -1,0 +1,107 @@
+{
+  "name": "Crew Type: Ashbound Survivors (Tier 4)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ashbound_survivors.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Tier 4 — Ashbound Survivors</strong></p><p><em>The wasteland is no longer a penalty. It is infrastructure with bad manners.</em></p><ul><li><strong>Strategic:</strong> Controlled Desert, Ash Wastes, and Wasteland hexes become far more livable and productive for your faction. Harsh terrain drains less, supports movement more reliably, and can produce meaningful recovery or economic value over time.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-ashbound-survivors-t4",
+    "requirements": "Level 17+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc-character-options": {
+      "option": {
+        "category": "crew",
+        "key": "ashbound-survivors",
+        "tier": 4,
+        "levelMin": 4,
+        "levelMax": 4,
+        "domains": [
+          "hex",
+          "region",
+          "op"
+        ],
+        "terrains": [
+          "desert",
+          "wasteland",
+          "ash-wastes"
+        ],
+        "scope": "controlled_hex",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:ashbound-survivors",
+          "bbttcc:tier:4",
+          "bbttcc:domain:hex",
+          "bbttcc:domain:region",
+          "bbttcc:domain:op",
+          "bbttcc:terrain:desert",
+          "bbttcc:terrain:ash-wastes",
+          "bbttcc:terrain:wasteland",
+          "bbttcc:scope:controlled_hex",
+          "bbttcc:when:target:controlled_hex",
+          "bbttcc:effect:terrain:hostility:-major",
+          "bbttcc:effect:travel:reliability:+regional",
+          "bbttcc:effect:op:economy_from_harsh_terrain:+regional",
+          "bbttcc:effect:attrition:reduction:+regional",
+          "bbttcc:theme:wasteland-mastery",
+          "bbttcc:theme:endurance",
+          "bbttcc:theme:economic-conversion"
+        ],
+        "progressionType": "level"
+      },
+      "category": "crew"
+    }
+  },
+  "folder": "EV3LjQRYeE2vKgof",
+  "_stats": {
+    "compendiumSource": "Item.bIEAAgSAkQE3YDDE",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.bIEAAgSAkQE3YDDE",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1774986941276,
+    "modifiedTime": 1775063024157,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "52najZqVR5riorMv",
+  "sort": -300000,
+  "_key": "!items!52najZqVR5riorMv"
+}

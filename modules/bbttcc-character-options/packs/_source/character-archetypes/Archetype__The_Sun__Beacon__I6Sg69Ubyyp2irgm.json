@@ -1,0 +1,111 @@
+{
+  "name": "Archetype: The Sun (Beacon)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_sun.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“People believe because you are visible.”</em></p><p><strong>Archetype (Bad Eden): The Sun (Beacon).</strong> You are morale made public. Hope in daylight. Certainty others can gather around before the dark gets another vote.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens morale, visibility, and coordinated uplift. This Archetype is associated with <strong>+1 Soft Power</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {
+      "zTa3UVyPNz5SCHwt": {
+        "_id": "zTa3UVyPNz5SCHwt",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 3,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 1,
+        "title": "Archetype Ability Scores",
+        "hint": "Gain 3 ability score points (max +2 to any one score). See the Archetype text for recommended arrays.",
+        "flags": {}
+      }
+    },
+    "identifier": "archetype-sun",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "WkdkvtsuQtccxv6W",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "character-archetypes",
+      "bonuses": {
+        "softpower": 1
+      },
+      "option": {
+        "category": "archetype",
+        "key": "sun",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:sun",
+          "bbttcc:expression:beacon",
+          "bbttcc:base"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.tNhogkpsJf6Cxm02",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.tNhogkpsJf6Cxm02",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986794557,
+    "modifiedTime": 1781116021053,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "I6Sg69Ubyyp2irgm",
+  "sort": 100000,
+  "_key": "!items!I6Sg69Ubyyp2irgm"
+}

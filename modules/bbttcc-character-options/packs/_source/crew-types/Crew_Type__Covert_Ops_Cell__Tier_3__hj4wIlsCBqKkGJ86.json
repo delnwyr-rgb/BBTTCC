@@ -1,0 +1,104 @@
+{
+  "name": "Crew Type: Covert Ops Cell (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Covert Ops Cell (Tier 3)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> You can move at a normal pace while traveling stealthily and reroll the lowest die on checks made to create or bypass security systems.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-covert-ops-cell-t3",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 11+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [],
+  "folder": "s5WL7k82FGQGsYdL",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "covert-ops-cell",
+        "progressionType": "level",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "domains": [
+          "travel",
+          "intel",
+          "security"
+        ],
+        "scope": "self",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:covert-ops-cell",
+          "bbttcc:tier:3",
+          "bbttcc:domain:travel",
+          "bbttcc:domain:intel",
+          "bbttcc:domain:security",
+          "bbttcc:scope:self",
+          "bbttcc:when:travel:stealth",
+          "bbttcc:when:action:create_security",
+          "bbttcc:when:action:bypass_security",
+          "bbttcc:effect:travel:stealth_normal_pace:true",
+          "bbttcc:effect:check:advantage:create_security",
+          "bbttcc:effect:check:advantage:bypass_security",
+          "bbttcc:theme:stealth",
+          "bbttcc:theme:subterfuge",
+          "bbttcc:theme:security"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.2yuPZJuwVvvOAr1O",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.2yuPZJuwVvvOAr1O",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986943268,
+    "modifiedTime": 1781116047774,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "hj4wIlsCBqKkGJ86",
+  "sort": -200000,
+  "_key": "!items!hj4wIlsCBqKkGJ86"
+}

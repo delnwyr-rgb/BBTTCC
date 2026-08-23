@@ -1,0 +1,278 @@
+{
+  "name": "Occult Association: Prophet / Oracle (Tier 4)",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 — Prophet / Oracle</strong></p><p><strong>“The campaign is already telling you what it wants. I just hear it louder.”</strong></p><p>At Tier 4, prophecy becomes campaign-facing. You are no longer reacting to immediate danger alone. You can perceive approaching pattern at the level of factions, arcs, and emerging catastrophe.</p><p><strong>Strategic (Campaign / Faction Scale)</strong></p><ul><li>Once per Strategic Turn, ask the GM one major foresight question about an impending threat, faction move, campaign complication, or likely point of fracture</li><li>The answer should be truthful, though it may be symbolic, partial, or framed as pressure rather than exposition</li><li>Additionally, once per Scenario, your faction may treat one future-facing preparation action as if it had unusually accurate intelligence behind it</li></ul><p><strong>Cost:</strong> large-scale prophecy is never clean. Expect doom-bias, enemy counter-divination, omen bleed, or narrative consequences that punish overconfidence in what was seen.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT4\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Major Foresight</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Ask GM one major foresight question about an impending threat / faction move / fracture point. (Tier 4 also has a 1/Scenario unusually-accurate prep — separate.)</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": {},
+    "requirements": "Level 17+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": "1"
+    },
+    "identifier": "occult-association-prophet-oracle-t4",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult",
+      "bonuses": {},
+      "option": {
+        "category": "occult",
+        "key": "prophet-oracle",
+        "progressionType": "level",
+        "tier": 4,
+        "levelMin": 4,
+        "levelMax": 4,
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:prophet-oracle",
+          "bbttcc:tier:4",
+          "bbttcc:domain:signal",
+          "bbttcc:domain:campaign",
+          "bbttcc:domain:foresight",
+          "bbttcc:scope:campaign",
+          "bbttcc:scope:faction",
+          "bbttcc:when:strategic_turn:once",
+          "bbttcc:when:scenario:once",
+          "bbttcc:effect:ask:one_major_foresight_question",
+          "bbttcc:effect:preparation:accurate-intelligence",
+          "bbttcc:resonance:keter",
+          "bbttcc:drift:watchful-detached",
+          "bbttcc:cost:doom-bias",
+          "bbttcc:cost:counter-divination",
+          "bbttcc:cost:overconfidence-risk",
+          "bbttcc:theme:campaign-prophecy",
+          "bbttcc:theme:high-signal-reception"
+        ]
+      }
+    },
+    "dnd5e": {},
+    "autoanimations": {
+      "id": "1f979964-7c42-401b-a8e1-5e7ea2593b47",
+      "label": "Occult Association: Prophet / Oracle (Tier 4)",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "yellowwhite",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_enchant.png",
+  "folder": "lDdY5NMGIgNj06vQ",
+  "_stats": {
+    "compendiumSource": "Item.Irz8riUnN2tB3Ve5",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.Irz8riUnN2tB3Ve5",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987097550,
+    "modifiedTime": 1781024183940,
+    "lastModifiedBy": "MRFjjbUTBd66pWBY"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "h4N0B00aOmAMKUQ9",
+  "sort": -300000,
+  "_key": "!items!h4N0B00aOmAMKUQ9"
+}

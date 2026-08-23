@@ -1,0 +1,82 @@
+{
+  "name": "Archetype: The Lovers",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_lovers.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You are what you choose—and who you choose to stand with.”</em></p><p><strong>Archetype (Bad Eden): The Lovers.</strong> Bonds define you. Commitment empowers you. Division weakens you.</p>",
+      "chat": ""
+    },
+    "identifier": "archetype-lovers",
+    "requirements": "",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "character-archetypes",
+      "bonuses": {
+        "diplomacy": 1
+      },
+      "option": {
+        "category": "archetype",
+        "key": "lovers",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:lovers",
+          "bbttcc:base"
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "folder": "yQL9oYdZ12Vtohtl",
+  "_stats": {
+    "compendiumSource": "Item.FwvYsACQNKWSsdKo",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.FwvYsACQNKWSsdKo",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986761329,
+    "modifiedTime": 1781116032397,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "opM8ykoCSwTcEa4l",
+  "sort": 100000,
+  "_key": "!items!opM8ykoCSwTcEa4l"
+}

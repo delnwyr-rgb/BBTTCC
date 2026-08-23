@@ -1,0 +1,103 @@
+{
+  "name": "Crew Type: Cultural Ambassadors (Tier 2)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Cultural Ambassadors (Tier 2)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 — Cultural Ambassadors</strong></p><p><strong>“A smile is a blade if you know where to put it.”</strong></p><p>Cultural Ambassadors weaponize hospitality. They learn your customs, flatter your saints, and find the one story you tell yourself to stay brave. Then they use it to open doors—or to make you open them.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When spending Soft Power OPs for psychological warfare or propaganda during a Siege scenario, the effect on enemy morale is increased by 25%.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-cultural-ambassadors-t2",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 5+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [],
+  "folder": "GofR1cEqLCl6L5xo",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "cultural-ambassadors",
+        "progressionType": "level",
+        "tier": 2,
+        "levelMin": 2,
+        "levelMax": 2,
+        "domains": [
+          "propaganda",
+          "siege",
+          "op"
+        ],
+        "scope": "scenario",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:cultural-ambassadors",
+          "bbttcc:tier:2",
+          "bbttcc:domain:propaganda",
+          "bbttcc:domain:siege",
+          "bbttcc:domain:op",
+          "bbttcc:scope:scenario",
+          "bbttcc:when:scenario:siege",
+          "bbttcc:when:op_spend:softpower",
+          "bbttcc:when:action:psychological_warfare",
+          "bbttcc:when:action:propaganda",
+          "bbttcc:effect:enemy_morale_pressure:+25pct",
+          "bbttcc:theme:propaganda",
+          "bbttcc:theme:psywar",
+          "bbttcc:theme:morale-pressure"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.mIEOiwrzcNJOKTYH",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.mIEOiwrzcNJOKTYH",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986945169,
+    "modifiedTime": 1781116049343,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "p70fPz8LpzJsWZJc",
+  "sort": 50000,
+  "_key": "!items!p70fPz8LpzJsWZJc"
+}

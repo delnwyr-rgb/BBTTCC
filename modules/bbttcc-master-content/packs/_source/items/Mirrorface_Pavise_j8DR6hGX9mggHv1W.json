@@ -1,7 +1,7 @@
 {
   "name": "Mirrorface Pavise",
   "type": "armor",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "icons/equipment/shield/Scutum-steel-worn.webp",
   "system": {
     "guardBonus": 4,
     "evasionBonus": -1,
@@ -21,7 +21,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A full-height pavise faced in polished mirror-alloy over a hex-lattice core. Heavy enough to plant; broad enough to hide a second Steward. The mirror face scatters arc and flame back the way they came.</p><p><strong>Mirror Face.</strong> Resists electrical and thermal. Slow to carry, slower to move \u2014 but nothing gets past it cheaply.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Shield</li>\n  <li><strong>Defense:</strong> Guard +4, Evasion -1, Resolve +1</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Electrical, Thermal</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 450 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>A full-height pavise faced in polished mirror-alloy over a hex-lattice core. Heavy enough to plant; broad enough to hide a second Steward. The mirror face scatters arc and flame back the way they came.</p><p><strong>Mirror Face.</strong> Resists electrical and thermal. Slow to carry, slower to move \u2014 but nothing gets past it cheaply.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +4, Evasion -1, Resolve +1</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Electrical, Thermal</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 450 Economy marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -86,11 +86,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.367",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1782150391507,
-    "modifiedTime": 1782160020991,
+    "modifiedTime": 1787334995040,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

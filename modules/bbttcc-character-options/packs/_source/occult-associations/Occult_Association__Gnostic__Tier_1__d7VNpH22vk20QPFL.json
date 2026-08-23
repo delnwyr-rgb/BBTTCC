@@ -1,0 +1,148 @@
+{
+  "name": "Occult Association: Gnostic (Tier 1)",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Gnostic</strong></p><p><strong>“The lie is structural.”</strong></p><p>You can feel distortion now. Propaganda scrapes. Illusions itch. You may not yet know the truth, but you know when something is <em>false</em>.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong></li><li>reroll the lowest die on checks against <strong>Illusion</strong> effects</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction resists propaganda, misinformation, or psychological manipulation, gain <strong>+1 to the relevant Soft Power OP roll</strong></li></ul><p><strong>Cost:</strong> once you can feel falsehood structurally, ordinary social comfort gets harder. Expect friction when you refuse to participate in convenient lies.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "requirements": "Level 1+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-gnostic-t1",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult",
+      "bonuses": {},
+      "option": {
+        "category": "occult",
+        "key": "gnostic",
+        "progressionType": "level",
+        "tier": 1,
+        "levelMin": 1,
+        "levelMax": 1,
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:gnostic",
+          "bbttcc:tier:1",
+          "bbttcc:domain:truth",
+          "bbttcc:domain:illusion",
+          "bbttcc:domain:propaganda",
+          "bbttcc:scope:self",
+          "bbttcc:scope:faction",
+          "bbttcc:when:resist:propaganda",
+          "bbttcc:when:resist:misinformation",
+          "bbttcc:when:resist:psychological-manipulation",
+          "bbttcc:effect:proficiency:insight",
+          "bbttcc:effect:advantage:saves:illusion",
+          "bbttcc:effect:op_roll:softpower:+3",
+          "bbttcc:resonance:tiferet",
+          "bbttcc:drift:anti-authority",
+          "bbttcc:cost:alienation",
+          "bbttcc:cost:social-friction",
+          "bbttcc:theme:structural-lie",
+          "bbttcc:theme:falsehood-detection"
+        ]
+      }
+    }
+  },
+  "effects": [
+    {
+      "name": "Occult Tier1 Proficiencies",
+      "disabled": false,
+      "transfer": true,
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_binah.png",
+      "_id": "3MI7aYnvakMu0F2o",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.insight.value",
+            "type": "add",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346196115,
+        "modifiedTime": 1777433499563
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!d7VNpH22vk20QPFL.3MI7aYnvakMu0F2o"
+    }
+  ],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+  "folder": "cAJvL0bsu1HkZCWz",
+  "_stats": {
+    "compendiumSource": "Item.qOiOQ3sJVEH5psUH",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.qOiOQ3sJVEH5psUH",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774987091124,
+    "modifiedTime": 1782167239252,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "d7VNpH22vk20QPFL",
+  "sort": 0,
+  "_key": "!items!d7VNpH22vk20QPFL"
+}

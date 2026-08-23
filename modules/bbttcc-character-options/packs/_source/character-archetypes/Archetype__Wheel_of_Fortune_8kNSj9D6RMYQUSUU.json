@@ -1,0 +1,111 @@
+{
+  "name": "Archetype: Wheel of Fortune",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_wheel_of_fortune.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You do not control chaos. You time it.”</em></p><p><strong>Archetype (Bad Eden): Wheel of Fortune.</strong> You are variance and leverage.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {
+      "WhlFortASI000001": {
+        "_id": "WhlFortASI000001",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 3,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 1,
+        "title": "Archetype Ability Scores",
+        "hint": "Gain 3 ability score points (max +2 to any one score).",
+        "flags": {}
+      }
+    },
+    "identifier": "archetype-wheel-of-fortune",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": ""
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "character-archetypes",
+      "option": {
+        "category": "archetype",
+        "key": "wheel_of_fortune",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:wheel_of_fortune",
+          "bbttcc:expression:wheel_of_fortune",
+          "bbttcc:base"
+        ]
+      },
+      "bonuses": {
+        "softpower": 1,
+        "intrigue": 1
+      }
+    }
+  },
+  "folder": "8FKNMlPu7JCSX5FV",
+  "_stats": {
+    "compendiumSource": "Item.OestWlVlFryopTdl",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.OestWlVlFryopTdl",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986809498,
+    "modifiedTime": 1781116017363,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "8kNSj9D6RMYQUSUU",
+  "sort": 100000,
+  "_key": "!items!8kNSj9D6RMYQUSUU"
+}

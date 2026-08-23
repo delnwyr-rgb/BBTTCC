@@ -1,0 +1,45 @@
+{
+  "_id": "becallingkpr0t03",
+  "name": "Keeper — Master (Tier III)",
+  "type": "feature",
+  "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+  "system": {
+    "category": "calling",
+    "source": "Callings",
+    "tags": [
+      "calling",
+      "keeper",
+      "tier-3"
+    ],
+    "description": {
+      "value": "<p><strong>Keeper — Master</strong> (Tier III).</p><p><strong>Trade — Consecrate the threshold:</strong> Ward one door/room/camp — first qliphothic or psychic intrusion each scene is blunted (−2 to its effect). <span style=\"opacity:0.7\">Standard fee 90 marks (Soft Power).</span></p><p><strong>Trick — Rite of Passage</strong> <em>(1/scene)</em>: End one ongoing spiritual affliction on a willing subject.</p><p><em>Master step:</em> the Keeper's Knack (Hearthlight) improves at this tier — see the class entry.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 603000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "calling": {
+        "key": "keeper",
+        "tier": 3
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": 1784006978800,
+    "modifiedTime": 1784006978800,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!becallingkpr0t03"
+}

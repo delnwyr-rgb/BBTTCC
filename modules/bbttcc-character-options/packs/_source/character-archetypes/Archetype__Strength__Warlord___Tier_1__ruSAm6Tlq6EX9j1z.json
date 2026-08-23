@@ -1,0 +1,144 @@
+{
+  "name": "Archetype: Strength (Warlord) (Tier 1)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_strength.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: Strength (Warlord) (Tier 1)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 1 (Level 1) — Violence</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain a skill rank in <strong>Intimidation</strong> and <strong>Athletics</strong>.</li>\n<li><strong>Strategic:</strong> Your faction's <strong>Violence OP cap increases by 1</strong>.</li>\n</ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "archetype-strength-t1",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Level 1+",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "name": "Warlord Tier 1 Proficiencies",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_2.png",
+      "_id": "NtjnQwUEd8o4JP0E",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.intimidation.value",
+            "type": "add",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "system.skills.athletics.value",
+            "type": "add",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346195464,
+        "modifiedTime": 1777433499505
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!ruSAm6Tlq6EX9j1z.NtjnQwUEd8o4JP0E"
+    }
+  ],
+  "folder": "Fk51kIG29eJuaZQ0",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "archetype",
+      "bonuses": {
+        "violence": 1
+      },
+      "option": {
+        "category": "archetype",
+        "key": "warlord",
+        "progressionType": "level",
+        "tier": 1,
+        "levelMin": 1,
+        "levelMax": 1,
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:strength",
+          "bbttcc:expression:warlord",
+          "bbttcc:tier:1",
+          "bbttcc:violence_op_cap:+1"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.ruSAm6Tlq6EX9j1z",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.Dkt8ytoZFEaan9Yf",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986646202,
+    "modifiedTime": 1782167238592,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "ruSAm6Tlq6EX9j1z",
+  "sort": 200000,
+  "_key": "!items!ruSAm6Tlq6EX9j1z"
+}

@@ -1,0 +1,278 @@
+{
+  "name": "Occult Association: Shaman (Tier 2)",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 2 — Shaman</strong></p><p><strong>“You can ask now. That doesn’t mean the answer will be polite.”</strong></p><p>At Tier 2, you stop merely perceiving living systems and begin negotiating with them. A storm can be persuaded to pass slightly east. A treeline can hide you if it likes your reasons. The road does not get easier. It gets more willing.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, when your faction faces travel hazard, severe weather, or terrain-based difficulty, choose one:</li><ul><li>reduce the severity of one weather or terrain complication by one step, <em>or</em></li><li>gain <strong>Advantage</strong> on one relevant travel or wilderness-facing Strategic Roll</li></ul></ul><p><strong>Additional Benefit:</strong> when planning movement through hostile terrain, the GM should treat your faction as unusually competent at reading the path of least spiritual resistance.</p><p><strong>Cost:</strong> every favor asked of the land becomes a relationship to maintain. Expect localized spirits, weather memory, or ecological resentment if your faction takes the benefit without reciprocity.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"shamT2\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Read the Path</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Reduce one weather/terrain complication by one step OR reroll the lowest die on one travel/wilderness Strategic Roll.</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": {},
+    "requirements": "Level 5+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": "1"
+    },
+    "identifier": "occult-association-shaman-t2",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult",
+      "bonuses": {},
+      "option": {
+        "category": "occult",
+        "key": "shaman",
+        "progressionType": "level",
+        "tier": 2,
+        "levelMin": 2,
+        "levelMax": 2,
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:shaman",
+          "bbttcc:tier:2",
+          "bbttcc:domain:weather",
+          "bbttcc:domain:terrain",
+          "bbttcc:domain:travel",
+          "bbttcc:scope:faction",
+          "bbttcc:scope:hex",
+          "bbttcc:when:strategic_turn:once",
+          "bbttcc:when:travel_hazard",
+          "bbttcc:when:weather_complication",
+          "bbttcc:effect:complication_severity:-1-step",
+          "bbttcc:effect:scenario_advantage:one_relevant_travel_roll",
+          "bbttcc:resonance:netzach",
+          "bbttcc:drift:communal-ecological",
+          "bbttcc:cost:reciprocity-debt",
+          "bbttcc:cost:ecological-resentment",
+          "bbttcc:theme:weather-negotiation",
+          "bbttcc:theme:path-of-least-resistance"
+        ]
+      }
+    },
+    "dnd5e": {},
+    "autoanimations": {
+      "id": "8f37167a-ee37-486c-8e3e-220a8cd9adfe",
+      "label": "Occult Association: Shaman (Tier 2)",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "intro",
+          "color": "yellow",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+  "folder": "uflkacBlUmYFCAbz",
+  "_stats": {
+    "compendiumSource": "Item.WdO44v6vk4rmRZnd",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.WdO44v6vk4rmRZnd",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987102977,
+    "modifiedTime": 1781024184994,
+    "lastModifiedBy": "MRFjjbUTBd66pWBY"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "ue9tX6vXRWNRzIOw",
+  "sort": -100000,
+  "_key": "!items!ue9tX6vXRWNRzIOw"
+}

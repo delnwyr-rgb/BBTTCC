@@ -1,0 +1,97 @@
+{
+  "name": "Occult Association: Rosicrucian",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Occult Association (Bad Eden): Rosicrucian.</em></p><p><strong>“I carry the old codes. I also carry a knife.”</strong></p><p>Rosicrucians approach the Great Work like a courier network running through a burning city.</p><p>They preserve forbidden manuals, safeguard rituals, move people and knowledge between surviving nodes, and keep the chain of instruction alive when the world would prefer amnesia. Where some occult paths seek revelation or force, the Rosicrucian seeks <strong>continuity</strong>. The world cannot be repaired if the instructions are lost, the routes are severed, or the people who remember how to proceed are already dead.</p><p>To a Rosicrucian, the Great Work is not merely discovery. It is <strong>preservation, transit, and successful handoff</strong>.</p><p><strong>How Rosicrucians pursue the Great Work:</strong></p><ul><li>By keeping archives, techniques, and living instruction intact</li><li>By building bridges between factions before they harden into wars</li><li>By turning safe passage into a strategic asset</li><li>By making recovered Sparks actually matter after recovery</li></ul><p><strong>Resonance:</strong> <strong>Netzach / Continuity</strong> — endurance, persistence, route-memory, and the stubborn Athletics of useful truth.</p><p><strong>Tell-tales:</strong> precise manners, hidden caches, backup plans nested inside backup plans, and the calm confidence of someone who already mapped the exit.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Diplomacy OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> continuity creates obligation. Expect favors, route maintenance, political visibility, and pressure from everyone who now assumes your network will keep holding.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-rosicrucian",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult-associations",
+      "bonuses": {
+        "diplomacy": 1
+      },
+      "option": {
+        "category": "occult",
+        "key": "rosicrucian",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:rosicrucian",
+          "bbttcc:base",
+          "bbttcc:domain:continuity",
+          "bbttcc:domain:network",
+          "bbttcc:domain:diplomacy",
+          "bbttcc:scope:faction",
+          "bbttcc:when:passive",
+          "bbttcc:effect:op_roll:diplomacy:+3",
+          "bbttcc:resonance:netzach",
+          "bbttcc:drift:cooperative",
+          "bbttcc:cost:obligation",
+          "bbttcc:cost:visibility",
+          "bbttcc:theme:living-archive",
+          "bbttcc:theme:route-preservation"
+        ]
+      }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+  "folder": "k8ziUxOPhaNTau2q",
+  "_stats": {
+    "compendiumSource": "Item.RMq1jD3fJECuNnZy",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.RMq1jD3fJECuNnZy",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987100132,
+    "modifiedTime": 1781116055606,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "bZmsfKEIaPqavJDj",
+  "sort": 100000,
+  "_key": "!items!bZmsfKEIaPqavJDj"
+}

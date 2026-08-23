@@ -1,0 +1,100 @@
+{
+  "name": "Crew Type: Peacekeeper Corps (Tier 2)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Peacekeeper Corps (Tier 2)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> In Tower Trashers (Tactical Defense) scenarios, your faction's defensive structures have 25% more durability, and Demolition units are less effective.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-peacekeeper-corps-t2",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 5+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "peacekeeper-corps",
+        "progressionType": "level",
+        "tier": 2,
+        "levelMin": 2,
+        "levelMax": 2,
+        "domains": [
+          "raid",
+          "defense"
+        ],
+        "scope": "scenario",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:peacekeeper-corps",
+          "bbttcc:tier:2",
+          "bbttcc:domain:raid",
+          "bbttcc:domain:defense",
+          "bbttcc:scope:scenario",
+          "bbttcc:when:scenario:tower_trashers",
+          "bbttcc:effect:defense:durability:+25pct",
+          "bbttcc:effect:demolition:effectiveness:-25pct",
+          "bbttcc:theme:order",
+          "bbttcc:theme:fortification",
+          "bbttcc:theme:stability",
+          "bbttcc:theme:enforcement"
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "folder": "YYzAyfS4RhZxZ0f7",
+  "_stats": {
+    "compendiumSource": "Item.uH5xgO70dYgviIpr",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.uH5xgO70dYgviIpr",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986956943,
+    "modifiedTime": 1781116040026,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "5cAJRmXpbK1yOS3D",
+  "sort": -100000,
+  "_key": "!items!5cAJRmXpbK1yOS3D"
+}

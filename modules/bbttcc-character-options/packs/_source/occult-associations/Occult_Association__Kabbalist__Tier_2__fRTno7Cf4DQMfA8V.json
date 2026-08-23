@@ -1,0 +1,97 @@
+{
+  "name": "Occult Association: Kabbalist (Tier 2)",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "<p><strong>Tier 2 — Kabbalist</strong></p><p><strong>“You don’t hunt Sparks. You classify them — and classification is power.”</strong></p><p>At Tier 2, you stop mistaking mystery for depth. Most mysteries are just unlabeled containers. You bring labels.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Identification Efficiency:</strong> during the <strong>Identification</strong> phase of the Great Work, reduce the <strong>OP cost</strong> or <strong>time/resources required</strong> to identify a required Spark by <strong>25%</strong> (GM adjudicates narrative reductions as needed).</li></ul><p><em>Mechanically, you waste fewer resources on the wrong answer. Narratively, the world stops wasting your time.</em></p><p><strong>Cost:</strong> every act of correct classification closes some other possibility. Expect rigidity, social friction, or backlash from people who preferred the ambiguity.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "requirements": "Level 5+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-kabbalist-t2",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult",
+      "bonuses": {},
+      "option": {
+        "category": "occult",
+        "key": "kabbalist",
+        "progressionType": "level",
+        "tier": 2,
+        "levelMin": 2,
+        "levelMax": 2,
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:kabbalist",
+          "bbttcc:tier:2",
+          "bbttcc:domain:tikkun",
+          "bbttcc:domain:sparks",
+          "bbttcc:domain:identification",
+          "bbttcc:scope:faction",
+          "bbttcc:scope:great-work",
+          "bbttcc:when:great_work:identification",
+          "bbttcc:effect:identify_cost:required_spark:-25%",
+          "bbttcc:effect:identify_time:required_spark:-25%",
+          "bbttcc:resonance:tree",
+          "bbttcc:resonance:binah",
+          "bbttcc:drift:order",
+          "bbttcc:cost:rigidity",
+          "bbttcc:cost:friction",
+          "bbttcc:theme:classification",
+          "bbttcc:theme:correct-naming"
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+  "folder": "KAgSLTue8mMAy0rF",
+  "_stats": {
+    "compendiumSource": "Item.KMQHIMg1X85M5DJ3",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.KMQHIMg1X85M5DJ3",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1774987095107,
+    "modifiedTime": 1775063039362,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "fRTno7Cf4DQMfA8V",
+  "sort": -100000,
+  "_key": "!items!fRTno7Cf4DQMfA8V"
+}

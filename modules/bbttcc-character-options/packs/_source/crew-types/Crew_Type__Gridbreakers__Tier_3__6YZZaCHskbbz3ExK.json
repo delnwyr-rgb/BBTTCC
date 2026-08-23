@@ -1,0 +1,113 @@
+{
+  "name": "Crew Type: Gridbreakers (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Gridbreakers (Tier 3)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Gridbreakers</strong></p><p><strong>“Everything broken still remembers how it worked.”</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><p><em>You’ve learned how to make a dead system blink one more time.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on checks made to investigate urban systems, disable hostile mechanisms, or restore partial function to broken infrastructure.</li><li><strong>Strategic:</strong> Once per strategic turn, you can temporarily reactivate a dormant urban asset, granting a short-lived but meaningful local benefit.</li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"gridT3\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Reactivate Asset</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Temporarily reactivate a dormant urban asset, granting a short-lived but meaningful local benefit.</div>\n</div>",
+      "chat": ""
+    },
+    "identifier": "crew-gridbreakers-t3",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 11+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [],
+  "folder": "zTIK0Adw1QsRQovv",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "gridbreakers",
+        "progressionType": "level",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "domains": [
+          "intel",
+          "infrastructure",
+          "settlement"
+        ],
+        "terrains": [
+          "ruins",
+          "urban-wreckage"
+        ],
+        "scope": "hex",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:gridbreakers",
+          "bbttcc:tier:3",
+          "bbttcc:domain:intel",
+          "bbttcc:domain:infrastructure",
+          "bbttcc:domain:settlement",
+          "bbttcc:terrain:ruins",
+          "bbttcc:terrain:urban-wreckage",
+          "bbttcc:scope:hex",
+          "bbttcc:when:action:investigate_urban_systems",
+          "bbttcc:when:action:disable_mechanism",
+          "bbttcc:when:action:restore_partial_function",
+          "bbttcc:when:phase:strategic_turn",
+          "bbttcc:effect:check:advantage:investigate_urban_systems",
+          "bbttcc:effect:check:advantage:disable_mechanism",
+          "bbttcc:effect:check:advantage:restore_partial_function",
+          "bbttcc:effect:asset:temporary_reactivation:true",
+          "bbttcc:effect:usage:per_strategic_turn:1",
+          "bbttcc:theme:system-hacking",
+          "bbttcc:theme:reactivation",
+          "bbttcc:theme:urban-control"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.0wsYhD0vXg2epHY5",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.0wsYhD0vXg2epHY5",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986948790,
+    "modifiedTime": 1781116040261,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "6YZZaCHskbbz3ExK",
+  "sort": -100000,
+  "_key": "!items!6YZZaCHskbbz3ExK"
+}

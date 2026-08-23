@@ -1,0 +1,108 @@
+{
+  "name": "Crew Type: Cultural Ambassadors (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Cultural Ambassadors (Tier 3)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Cultural Ambassadors</strong></p><p><strong>“A smile is a blade if you know where to put it.”</strong></p><p>Cultural Ambassadors weaponize hospitality. They learn your customs, flatter your saints, and find the one story you tell yourself to stay brave. Then they use it to open doors—or to make you open them.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on Presence checks made to influence crowds, inspire hope, or spread information and rumors in a settlement.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-cultural-ambassadors-t3",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 11+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [],
+  "folder": "GofR1cEqLCl6L5xo",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "cultural-ambassadors",
+        "progressionType": "level",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "domains": [
+          "social",
+          "settlement",
+          "propaganda"
+        ],
+        "scope": "self",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:cultural-ambassadors",
+          "bbttcc:tier:3",
+          "bbttcc:domain:social",
+          "bbttcc:domain:settlement",
+          "bbttcc:domain:propaganda",
+          "bbttcc:scope:self",
+          "bbttcc:when:location:settlement",
+          "bbttcc:when:action:influence_crowds",
+          "bbttcc:when:action:inspire_hope",
+          "bbttcc:when:action:spread_information",
+          "bbttcc:when:action:spread_rumors",
+          "bbttcc:effect:check:advantage:influence_crowds",
+          "bbttcc:effect:check:advantage:inspire_hope",
+          "bbttcc:effect:check:advantage:spread_information",
+          "bbttcc:effect:check:advantage:spread_rumors",
+          "bbttcc:theme:hospitality",
+          "bbttcc:theme:hope-shaping",
+          "bbttcc:theme:crowd-control",
+          "bbttcc:theme:narrative-pressure"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.7AnhplK9b9nGdBpe",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.7AnhplK9b9nGdBpe",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986945169,
+    "modifiedTime": 1781116046640,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "gUc6xbo1GJsoszum",
+  "sort": -100000,
+  "_key": "!items!gUc6xbo1GJsoszum"
+}

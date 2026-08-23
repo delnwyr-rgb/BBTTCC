@@ -1,7 +1,7 @@
 {
   "name": "Cassock of Quiet Hours",
   "type": "armor",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "icons/equipment/chest/vest-cloth-tattered-orange.webp",
   "system": {
     "guardBonus": 1,
     "evasionBonus": 1,
@@ -82,11 +82,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.367",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1782150391699,
-    "modifiedTime": 1784518730565,
+    "modifiedTime": 1787334929167,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

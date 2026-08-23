@@ -1,0 +1,94 @@
+{
+  "name": "Occult Association: Kabbalist",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Occult Association (Bad Eden): Kabbalist.</em></p><p><strong>“The map is not the territory. The territory is also not the territory.”</strong></p><p>Kabbalists are not wizards. They are <em>cartographers of meaning</em> — the kind who draw a line and the world decides it has always been there.</p><p>They study the Tree the way an engineer studies a bridge: load, strain, failure points, and where the pressure is going when nobody is looking. Sephiroth is flow. Qliphoth is leak. And if you learn the geometry well enough, you can reroute the flood before it drowns the region.</p><p>To a Kabbalist, the Great Work is not aspiration. It is <strong>alignment</strong>. Name the thing correctly, place it correctly, and reality stops wasting energy pretending to be something else.</p><p><strong>How Kabbalists pursue the Great Work:</strong></p><ul><li>By reading Hexes like paragraphs — sephirothic intent, qliphothic rot, and the lies in-between</li><li>By reducing the cost of identifying Sparks and metaphysical conditions</li><li>By treating the Tree as infrastructure rather than metaphor</li><li>By shifting alignment deliberately, even when the world pushes back</li></ul><p><strong>Resonance:</strong> <strong>Tree / Binah-Tiferet axis</strong> — structure, pattern-recognition, and the disciplined naming of what is actually happening.</p><p><strong>Tell-tales:</strong> finger-traced grids, muttered node-names, diagrams drawn over maps that somehow make the maps more true.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Soft Power OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> Kabbalistic order clarifies, but clarification creates strain. When you force alignment, hidden contradictions surface somewhere else.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-kabbalist",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult-associations",
+      "bonuses": {
+        "softpower": 1
+      },
+      "option": {
+        "category": "occult",
+        "key": "kabbalist",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:kabbalist",
+          "bbttcc:base",
+          "bbttcc:domain:tikkun",
+          "bbttcc:domain:alignment",
+          "bbttcc:domain:leylines",
+          "bbttcc:scope:faction",
+          "bbttcc:when:passive",
+          "bbttcc:effect:op_roll:softpower:+3",
+          "bbttcc:resonance:tree",
+          "bbttcc:resonance:binah",
+          "bbttcc:drift:order",
+          "bbttcc:cost:strain",
+          "bbttcc:theme:cartography-of-meaning",
+          "bbttcc:theme:alignment-engineering"
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tree_of_life_3.png",
+  "folder": "KAgSLTue8mMAy0rF",
+  "_stats": {
+    "compendiumSource": "Item.ZRWplEBWUyjtEkXE",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.ZRWplEBWUyjtEkXE",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987095107,
+    "modifiedTime": 1781116054002,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "8inCnS9R4TZGV69D",
+  "sort": 100000,
+  "_key": "!items!8inCnS9R4TZGV69D"
+}

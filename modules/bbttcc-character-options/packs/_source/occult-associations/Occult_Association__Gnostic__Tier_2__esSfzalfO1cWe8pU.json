@@ -1,0 +1,95 @@
+{
+  "name": "Occult Association: Gnostic (Tier 2)",
+  "type": "feat",
+  "system": {
+    "description": {
+      "value": "<p><strong>Tier 2 — Gnostic</strong></p><p><strong>“Noise is the enemy.”</strong></p><p>You have learned to reduce interference. Your faction becomes harder to sway, harder to confuse, and harder to redirect with polished lies.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Enemy <strong>Soft Power</strong> actions targeting your faction or controlled Hexes suffer <strong>–3 to their OP roll</strong> (minimum 0 penalty floor as adjudicated by the table’s OP logic)</li></ul><p>This does not make you popular. It makes you <em>inconvenient</em>.</p><p><strong>Cost:</strong> clarity makes soft control fail, but it also makes diplomacy messier. Expect brittle relationships, exposed tensions, and institutions that resent becoming legible.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "requirements": "Level 5+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-gnostic-t2",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult",
+      "bonuses": {},
+      "option": {
+        "category": "occult",
+        "key": "gnostic",
+        "progressionType": "level",
+        "tier": 2,
+        "levelMin": 2,
+        "levelMax": 2,
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:gnostic",
+          "bbttcc:tier:2",
+          "bbttcc:domain:truth",
+          "bbttcc:domain:soft-power",
+          "bbttcc:domain:anti-propaganda",
+          "bbttcc:scope:faction",
+          "bbttcc:scope:hex",
+          "bbttcc:when:targeted_by:softpower",
+          "bbttcc:effect:enemy_op_roll:softpower:-3",
+          "bbttcc:resonance:tiferet",
+          "bbttcc:drift:anti-authority",
+          "bbttcc:cost:friction",
+          "bbttcc:cost:relationship-strain",
+          "bbttcc:theme:noise-reduction",
+          "bbttcc:theme:inconvenient-clarity"
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+  "folder": "cAJvL0bsu1HkZCWz",
+  "_stats": {
+    "compendiumSource": "Item.bERiG9QHp31BQukW",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.bERiG9QHp31BQukW",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1774987091124,
+    "modifiedTime": 1775063039227,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "esSfzalfO1cWe8pU",
+  "sort": -100000,
+  "_key": "!items!esSfzalfO1cWe8pU"
+}

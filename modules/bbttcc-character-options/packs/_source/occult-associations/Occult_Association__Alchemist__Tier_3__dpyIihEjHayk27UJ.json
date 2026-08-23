@@ -1,0 +1,281 @@
+{
+  "name": "Occult Association: Alchemist (Tier 3)",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Alchemist</strong></p><p><strong>“You can do it on purpose now. That’s worse.”</strong></p><p>By Tier 3, your body has adapted to your work. So has the world around you.</p><p>You understand instability not as danger, but as stored energy. You can touch volatile substances — physical or systemic — without flinching, and you know exactly how long you can keep your hands there.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain resistance to <strong>acid</strong> and <strong>poison</strong> damage</li><li>You can identify the properties and risks of a strange substance within <strong>1 minute</strong></li><li>You reroll the lowest die on checks involving contamination, purification, or controlled degradation</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>During a Scenario involving toxic environments, industrial hazards, contamination cleanup, or unstable compounds, your faction gains <strong>Advantage</strong> on <strong>one</strong> relevant Opposed Strategic Roll</li></ul><p><strong>Cost:</strong> every hazard you normalize changes your threshold for “acceptable.” The line between mastery and acclimation gets thin.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "requirements": "Level 11+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": "1"
+    },
+    "identifier": "occult-association-alchemist-t3",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult",
+      "bonuses": {},
+      "option": {
+        "category": "occult",
+        "key": "alchemist",
+        "progressionType": "level",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:alchemist",
+          "bbttcc:tier:3",
+          "bbttcc:domain:hazard",
+          "bbttcc:domain:purification",
+          "bbttcc:domain:transmutation",
+          "bbttcc:scope:self",
+          "bbttcc:scope:faction",
+          "bbttcc:when:scenario:toxic",
+          "bbttcc:when:scenario:industrial-hazard",
+          "bbttcc:when:scenario:corruption-cleanup",
+          "bbttcc:effect:resist:acid",
+          "bbttcc:effect:resist:poison",
+          "bbttcc:effect:identify:strange-substance:1-minute",
+          "bbttcc:effect:advantage:checks:contamination-purification-degradation",
+          "bbttcc:effect:scenario_advantage:one_relevant_roll",
+          "bbttcc:resonance:yesod",
+          "bbttcc:drift:utilitarian",
+          "bbttcc:cost:desensitization",
+          "bbttcc:cost:contamination-risk",
+          "bbttcc:theme:hazard-mastery",
+          "bbttcc:theme:controlled-instability"
+        ]
+      }
+    },
+    "dnd5e": {},
+    "autoanimations": {
+      "id": "5142d978-d82e-4695-a977-81337f7d8820",
+      "label": "Occult Association: Alchemist (Tier 3)",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "templatefx",
+      "primary": {
+        "video": {
+          "dbSection": "templatefx",
+          "menuType": "circle",
+          "animation": "shatter",
+          "variant": "01",
+          "color": "orange",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+  "folder": "zganGfpVDhLbTMgv",
+  "_stats": {
+    "compendiumSource": "Item.VoLqZIFbMWJbZNFj",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.VoLqZIFbMWJbZNFj",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987084174,
+    "modifiedTime": 1781024183658,
+    "lastModifiedBy": "MRFjjbUTBd66pWBY"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "dpyIihEjHayk27UJ",
+  "sort": -50000,
+  "_key": "!items!dpyIihEjHayk27UJ"
+}

@@ -1,0 +1,45 @@
+{
+  "_id": "becallingkpr0t02",
+  "name": "Keeper — Initiate (Tier II)",
+  "type": "feature",
+  "img": "art/devin-knight/Monsters_October/Giant_Cloud_M_Architect.webp",
+  "system": {
+    "category": "calling",
+    "source": "Callings",
+    "tags": [
+      "calling",
+      "keeper",
+      "tier-2"
+    ],
+    "description": {
+      "value": "<p><strong>Keeper — Initiate</strong> (Tier II).</p><p><strong>Trade — Hear the burden:</strong> One confession/counsel session clears one fear- or grief-borne condition. <span style=\"opacity:0.7\">Standard fee 30 marks (Soft Power).</span></p><p><strong>Trick — Warding Sign</strong> <em>(1/scene)</em>: Impose −2 on one incoming psychic or qliphothic effect.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 602000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "calling": {
+        "key": "keeper",
+        "tier": 2
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": 1784006974462,
+    "modifiedTime": 1784006974462,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!becallingkpr0t02"
+}

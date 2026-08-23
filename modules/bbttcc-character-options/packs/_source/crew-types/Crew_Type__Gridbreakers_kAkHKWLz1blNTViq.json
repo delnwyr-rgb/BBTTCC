@@ -1,0 +1,102 @@
+{
+  "name": "Crew Type: Gridbreakers",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Crew Type (Bad Eden): Gridbreakers.</em></p><p><strong>“Everything broken still remembers how it worked.”</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Investigation and the Tinkering aptitude.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Economy OPs.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "crew-gridbreakers",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "zTIK0Adw1QsRQovv",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew-types",
+      "bonuses": {
+        "economy": 1
+      },
+      "option": {
+        "category": "crew",
+        "key": "gridbreakers",
+        "progressionType": "level",
+        "domains": [
+          "op",
+          "economy",
+          "infrastructure"
+        ],
+        "scope": "faction",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:gridbreakers",
+          "bbttcc:progression:level",
+          "bbttcc:domain:op",
+          "bbttcc:domain:economy",
+          "bbttcc:domain:infrastructure",
+          "bbttcc:scope:faction",
+          "bbttcc:effect:op:economy:+8",
+          "bbttcc:theme:urban-recovery",
+          "bbttcc:theme:salvage",
+          "bbttcc:theme:infrastructure",
+          "bbttcc:theme:reactivation"
+        ]
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.KZW4wLAqHZh4Ftsk",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.KZW4wLAqHZh4Ftsk",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986948790,
+    "modifiedTime": 1782167238953,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "kAkHKWLz1blNTViq",
+  "sort": 100000,
+  "_key": "!items!kAkHKWLz1blNTViq"
+}

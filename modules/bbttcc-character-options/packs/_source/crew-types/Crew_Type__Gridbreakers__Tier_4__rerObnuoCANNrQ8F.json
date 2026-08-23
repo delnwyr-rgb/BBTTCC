@@ -1,0 +1,111 @@
+{
+  "name": "Crew Type: Gridbreakers (Tier 4)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_gridbreaker.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Gridbreakers (Tier 4)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 — Gridbreakers</strong></p><p><strong>“Everything broken still remembers how it worked.”</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><p><em>You no longer survive the dead city. You administer it.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Controlled Ruins and Urban Wreckage hexes become significantly more productive. Dormant infrastructure is easier to exploit, and ruined zones contribute meaningful economic and logistical value to your faction over time.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-gridbreakers-t4",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 17+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [],
+  "folder": "zTIK0Adw1QsRQovv",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "gridbreakers",
+        "progressionType": "level",
+        "tier": 4,
+        "levelMin": 4,
+        "levelMax": 4,
+        "domains": [
+          "hex",
+          "region",
+          "economy",
+          "infrastructure"
+        ],
+        "terrains": [
+          "ruins",
+          "urban-wreckage"
+        ],
+        "scope": "controlled_hex",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:gridbreakers",
+          "bbttcc:tier:4",
+          "bbttcc:domain:hex",
+          "bbttcc:domain:region",
+          "bbttcc:domain:economy",
+          "bbttcc:domain:infrastructure",
+          "bbttcc:terrain:ruins",
+          "bbttcc:terrain:urban-wreckage",
+          "bbttcc:scope:controlled_hex",
+          "bbttcc:when:target:controlled_hex",
+          "bbttcc:effect:economy:urban_ruin_value:+regional",
+          "bbttcc:effect:logistics:urban_reliability:+regional",
+          "bbttcc:effect:infrastructure:dormant_asset_exploitation:+regional",
+          "bbttcc:theme:urban-recovery",
+          "bbttcc:theme:city-control",
+          "bbttcc:theme:reactivation",
+          "bbttcc:theme:economic-conversion"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.7kLhBDThjmOr8Ed0",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.7kLhBDThjmOr8Ed0",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986948790,
+    "modifiedTime": 1781116050264,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "rerObnuoCANNrQ8F",
+  "sort": -200000,
+  "_key": "!items!rerObnuoCANNrQ8F"
+}

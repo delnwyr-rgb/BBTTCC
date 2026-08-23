@@ -1,0 +1,111 @@
+{
+  "name": "Archetype: Hierophant",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hierophant.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You speak for something bigger than yourself. Unfortunately, it has opinions.”</em></p>\n<p><strong>Archetype (Bad Eden): Hierophant.</strong> Spiritual leader and mediator between factions and the higher weirdness. You are part priest, part occult systems admin, part HR for gods and genii loci.</p>\n<p>This Archetype means you’ve stood between people and the powers they invoked, and somehow not been turned into a cautionary tale. Yet.</p>\n\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Soft Power / Faith Hooks.</strong> This Archetype integrates you deeply with Bad Eden’s Soft Power and Tikkun systems. See the Hierophant Tier feats (Tier 1–4) for the full tactical and strategic details of your miracles, sermons, and extremely pointed blessings.</li>\n</ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {
+      "Q7nB2Lx9V4cHd3Ks": {
+        "_id": "Q7nB2Lx9V4cHd3Ks",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 3,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 1,
+        "title": "Archetype Ability Scores",
+        "hint": "Gain 3 ability score points (max +2 to any one score). See the Archetype text for recommended arrays.",
+        "flags": {}
+      }
+    },
+    "identifier": "archetype-hierophant",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "yk58bbBaad5SNHkh",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "character-archetypes",
+      "bonuses": {
+        "softpower": 1,
+        "faith": 1
+      },
+      "option": {
+        "category": "archetype",
+        "key": "hierophant",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:hierophant",
+          "bbttcc:base"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.CYvfOoL0GEA3RyXC",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986744488,
+    "modifiedTime": 1781116022017,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "LakgHhzI6R4ugCEO",
+  "sort": 100000,
+  "_key": "!items!LakgHhzI6R4ugCEO"
+}

@@ -1,0 +1,160 @@
+{
+  "name": "Occult Association: Rosicrucian (Tier 1)",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 1 — Rosicrucian</strong></p><p><strong>“The secret isn’t the symbol. It’s the route.”</strong></p><p>You become a bearer of old codes and practical protocols. You know how to talk to people who do not want to be found — and how to survive when they find you first.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Lore</strong> and <strong>Diplomacy</strong></li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction negotiates treaties, ceasefires, trade pacts, or alliances, gain <strong>+1 to the relevant Diplomacy OP roll</strong></li><li>You begin play with one established positive relationship with a neutral NPC faction (GM chooses or you propose)</li></ul><p><strong>Cost:</strong> every functioning backchannel creates expectations. Old contacts become live liabilities the moment you prove the network still works.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "requirements": "Level 1+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-rosicrucian-t1",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 1
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult",
+      "bonuses": {},
+      "option": {
+        "category": "occult",
+        "key": "rosicrucian",
+        "progressionType": "level",
+        "tier": 1,
+        "levelMin": 1,
+        "levelMax": 1,
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:rosicrucian",
+          "bbttcc:tier:1",
+          "bbttcc:domain:continuity",
+          "bbttcc:domain:diplomacy",
+          "bbttcc:domain:relationship",
+          "bbttcc:scope:self",
+          "bbttcc:scope:faction",
+          "bbttcc:when:negotiate:treaty",
+          "bbttcc:when:negotiate:ceasefire",
+          "bbttcc:when:negotiate:trade-pact",
+          "bbttcc:when:negotiate:alliance",
+          "bbttcc:effect:proficiency:history",
+          "bbttcc:effect:proficiency:persuasion",
+          "bbttcc:effect:op_roll:diplomacy:+3",
+          "bbttcc:effect:relationship:neutral-faction:positive",
+          "bbttcc:resonance:netzach",
+          "bbttcc:drift:cooperative",
+          "bbttcc:cost:obligation",
+          "bbttcc:cost:contact-exposure",
+          "bbttcc:theme:old-codes",
+          "bbttcc:theme:backchannel-access"
+        ]
+      }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "effects": [
+    {
+      "name": "Occult Tier1 Proficiencies",
+      "disabled": false,
+      "transfer": true,
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music_3.png",
+      "_id": "RXBvf5g8dMfC8pAt",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.lore.value",
+            "type": "add",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "system.skills.diplomacy.value",
+            "type": "add",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346196022,
+        "modifiedTime": 1777433499557
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!36oh7xp6vQr6Fp5l.RXBvf5g8dMfC8pAt"
+    }
+  ],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
+  "folder": "k8ziUxOPhaNTau2q",
+  "_stats": {
+    "compendiumSource": "Item.dQ8tZXt1qmw2G19q",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.dQ8tZXt1qmw2G19q",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774987100132,
+    "modifiedTime": 1782167239250,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "36oh7xp6vQr6Fp5l",
+  "sort": 0,
+  "_key": "!items!36oh7xp6vQr6Fp5l"
+}

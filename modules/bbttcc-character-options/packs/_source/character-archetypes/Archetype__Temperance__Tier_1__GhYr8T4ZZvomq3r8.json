@@ -1,0 +1,86 @@
+{
+  "name": "Archetype: Temperance (Tier 1)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_temperance.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Temperance</strong></p><ul><li><strong>Tactical:</strong> Faith + Insight, Resistance Tier-0 manifestation.</li><li><strong>Strategic:</strong> +2 Logistics OP cap.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "archetype-temperance-t1",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "bonuses": {},
+      "option": {
+        "key": "temperance",
+        "tier": 1,
+        "tags": [
+          "bbttcc:temperance",
+          "bbttcc:logistics_op_cap:+2"
+        ],
+        "category": "archetype",
+        "progressionType": "level",
+        "levelMin": 1,
+        "levelMax": 1
+      },
+      "category": "archetype"
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "effects": [],
+  "folder": "oS7yNriqw8Jq5RHo",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.xb7fQgNMbM3XetEZ",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986658337,
+    "modifiedTime": 1778970590300,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "GhYr8T4ZZvomq3r8",
+  "sort": 200000,
+  "_key": "!items!GhYr8T4ZZvomq3r8"
+}

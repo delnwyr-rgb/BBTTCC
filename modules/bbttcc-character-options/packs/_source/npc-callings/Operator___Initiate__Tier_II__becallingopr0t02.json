@@ -1,0 +1,45 @@
+{
+  "_id": "becallingopr0t02",
+  "name": "Operator — Initiate (Tier II)",
+  "type": "feature",
+  "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+  "system": {
+    "category": "calling",
+    "source": "Callings",
+    "tags": [
+      "calling",
+      "operator",
+      "tier-2"
+    ],
+    "description": {
+      "value": "<p><strong>Operator — Initiate</strong> (Tier II).</p><p><strong>Trade — Fence it:</strong> Move stolen goods at ×0.30 instead of the standard fence ×0.25. <span style=\"opacity:0.7\">Standard fee 30 marks (Intrigue).</span></p><p><strong>Trick — Wasn't Me</strong> <em>(1/scene)</em>: After acting, vanish from the scene's notice if no one has them physically held.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 202000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "calling": {
+        "key": "operator",
+        "tier": 2
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": 1784007016929,
+    "modifiedTime": 1784007016929,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!becallingopr0t02"
+}

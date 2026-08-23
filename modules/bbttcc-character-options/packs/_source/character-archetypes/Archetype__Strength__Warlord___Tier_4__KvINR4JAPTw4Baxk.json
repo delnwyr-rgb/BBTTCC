@@ -1,0 +1,90 @@
+{
+  "name": "Archetype: Strength (Warlord) (Tier 4)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_strength.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: Strength (Warlord) (Tier 4)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 (Level 17) — Violence</strong></p>\n<ul>\n<li><strong>Tactical:</strong> Your mastery of force, discipline, and command places you among the most feared battlefield leaders of the age.</li>\n<li><strong>Strategic:</strong> When undertaking a major raid, siege, or direct military action, the <strong>Violence OP cost is reduced by 3</strong> (minimum 1).</li>\n</ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "archetype-strength-t4",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Level 17+",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "Fk51kIG29eJuaZQ0",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "archetype",
+      "bonuses": {},
+      "option": {
+        "category": "archetype",
+        "key": "warlord",
+        "progressionType": "level",
+        "tier": 4,
+        "levelMin": 4,
+        "levelMax": 4,
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:strength",
+          "bbttcc:expression:warlord",
+          "bbttcc:tier:4",
+          "bbttcc:scenario:raid",
+          "bbttcc:scenario:siege",
+          "bbttcc:violence_cost:-3"
+        ]
+      }
+    },
+    "dnd5e": {}
+  },
+  "_stats": {
+    "compendiumSource": "Item.KvINR4JAPTw4Baxk",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.TWZ2ljmu2WAKGIhd",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986646202,
+    "modifiedTime": 1782167238588,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "KvINR4JAPTw4Baxk",
+  "sort": 175000,
+  "_key": "!items!KvINR4JAPTw4Baxk"
+}

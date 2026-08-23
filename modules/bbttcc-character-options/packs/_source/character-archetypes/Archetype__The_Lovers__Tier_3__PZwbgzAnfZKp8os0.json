@@ -1,0 +1,83 @@
+{
+  "name": "Archetype: The Lovers (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_lovers.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 3 — The Lovers</strong></p><ul><li><strong>Tactical:</strong> Reroll the lowest die vs charm/fear near allies.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "archetype-lovers-t3",
+    "requirements": "Level 11+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "option": {
+        "key": "lovers",
+        "tier": 3,
+        "tags": [
+          "bbttcc:lovers",
+          "bbttcc:adv_vs:charmed",
+          "bbttcc:adv_vs:frightened"
+        ],
+        "category": "archetype",
+        "progressionType": "level",
+        "levelMin": 3,
+        "levelMax": 3
+      },
+      "category": "archetype"
+    }
+  },
+  "effects": [],
+  "folder": "yQL9oYdZ12Vtohtl",
+  "_stats": {
+    "compendiumSource": "Item.blOiv2rH6MeURiDs",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.blOiv2rH6MeURiDs",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986761329,
+    "modifiedTime": 1782167238588,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "PZwbgzAnfZKp8os0",
+  "sort": -200000,
+  "_key": "!items!PZwbgzAnfZKp8os0"
+}

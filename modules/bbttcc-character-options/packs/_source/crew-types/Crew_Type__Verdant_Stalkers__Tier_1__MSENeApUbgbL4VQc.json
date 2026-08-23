@@ -1,0 +1,160 @@
+{
+  "name": "Crew Type: Verdant Stalkers (Tier 1)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 1 — Verdant Stalkers</strong></p><p><em>You’ve learned the first rule of green country: visibility is a choice.</em></p><ul><li><strong>Tactical:</strong> Stealth + Athletics proficiency.</li><li><strong>Strategic:</strong> In Forest or Jungle hexes, encounter rolls are made twice and you choose the result. Routes may be concealed.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-verdant-stalkers-t1",
+    "requirements": "Level 1+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "name": "Verdant Stalkers T1 Skills",
+      "_id": "PobaIDuwSu4dCXI7",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_2.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.stealth.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 0
+          },
+          {
+            "key": "system.skills.athletics.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 0
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {},
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346195764,
+        "modifiedTime": 1777433499532
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!MSENeApUbgbL4VQc.PobaIDuwSu4dCXI7"
+    }
+  ],
+  "flags": {
+    "bbttcc-character-options": {
+      "option": {
+        "category": "crew",
+        "key": "verdant-stalkers",
+        "tier": 1,
+        "levelMin": 1,
+        "levelMax": 1,
+        "domains": [
+          "travel",
+          "encounter"
+        ],
+        "terrains": [
+          "forest",
+          "jungle"
+        ],
+        "scope": "hex",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:verdant-stalkers",
+          "bbttcc:tier:1",
+          "bbttcc:domain:travel",
+          "bbttcc:domain:encounter",
+          "bbttcc:terrain:forest",
+          "bbttcc:terrain:jungle",
+          "bbttcc:scope:hex",
+          "bbttcc:when:origin_terrain:forest",
+          "bbttcc:when:origin_terrain:jungle",
+          "bbttcc:effect:encounter:roll_twice_choose:true",
+          "bbttcc:effect:travel:conceal_routes:true",
+          "bbttcc:theme:ambush",
+          "bbttcc:theme:recon"
+        ],
+        "progressionType": "level"
+      },
+      "category": "crew"
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "folder": "3hFwHalyNvJcfIyJ",
+  "_stats": {
+    "compendiumSource": "Item.pRXK2Wvjnb54miJ0",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.pRXK2Wvjnb54miJ0",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986965136,
+    "modifiedTime": 1778970593521,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "MSENeApUbgbL4VQc",
+  "sort": 0,
+  "_key": "!items!MSENeApUbgbL4VQc"
+}

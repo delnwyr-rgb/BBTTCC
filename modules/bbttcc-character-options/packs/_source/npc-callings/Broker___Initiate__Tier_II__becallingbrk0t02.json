@@ -1,0 +1,45 @@
+{
+  "_id": "becallingbrk0t02",
+  "name": "Broker — Initiate (Tier II)",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/acolyte.webp",
+  "system": {
+    "category": "calling",
+    "source": "Callings",
+    "tags": [
+      "calling",
+      "broker",
+      "tier-2"
+    ],
+    "description": {
+      "value": "<p><strong>Broker — Initiate</strong> (Tier II).</p><p><strong>Trade — An introduction:</strong> Arrange a meeting with someone one social rung up. <span style=\"opacity:0.7\">Standard fee 30 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Crowd's Ear</strong> <em>(1/scene)</em>: Sway a crowd's disposition one step (hostile→wary, wary→listening).</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 302000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "calling": {
+        "key": "broker",
+        "tier": 2
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": 1784006908060,
+    "modifiedTime": 1784006908060,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!becallingbrk0t02"
+}

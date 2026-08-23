@@ -1,0 +1,102 @@
+{
+  "name": "Crew Type: Covert Ops Cell",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Crew Type (Bad Eden): Covert Ops Cell.</em></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Stealth and with the Tinkering aptitude.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "crew-covert-ops-cell",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "s5WL7k82FGQGsYdL",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew-types",
+      "bonuses": {
+        "intrigue": 1
+      },
+      "option": {
+        "category": "crew",
+        "key": "covert-ops-cell",
+        "progressionType": "level",
+        "domains": [
+          "op",
+          "intel",
+          "infiltration"
+        ],
+        "scope": "faction",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:covert-ops-cell",
+          "bbttcc:progression:level",
+          "bbttcc:domain:op",
+          "bbttcc:domain:intel",
+          "bbttcc:domain:infiltration",
+          "bbttcc:scope:faction",
+          "bbttcc:effect:op:intrigue:+8",
+          "bbttcc:theme:stealth",
+          "bbttcc:theme:subterfuge",
+          "bbttcc:theme:infiltration",
+          "bbttcc:theme:denial"
+        ]
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.Le37yVgfouPCBahg",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.Le37yVgfouPCBahg",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986943268,
+    "modifiedTime": 1782167238952,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "bG4aAhYeDrO1OJqY",
+  "sort": 100000,
+  "_key": "!items!bG4aAhYeDrO1OJqY"
+}

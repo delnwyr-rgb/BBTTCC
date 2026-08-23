@@ -1,0 +1,187 @@
+{
+  "name": "Crew Type: Abyssal Cartographers (Tier 1)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Abyssal Cartographers (Tier 1)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 1 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You’ve learned the first law of deep travel: the visible route is usually the stupid one.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic:</strong> In River, Lake, Sea, Ocean, or Cavern-adjacent routes, discovery and route-finding are more reliable.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-abyssal-cartographers-t1",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 1+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [
+    {
+      "_id": "ab38c4d514f24f69",
+      "name": "Abyssal Cartographers T1 Skills",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_1.png",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.athletics.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "system.skills.investigation.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346195718,
+        "modifiedTime": 1777433499531
+      },
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!Ltx4gC3Bx0tXFe7l.ab38c4d514f24f69"
+    }
+  ],
+  "folder": "RkZhM7hoNJJnRSIB",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "abyssal-cartographers",
+        "progressionType": "level",
+        "tier": 1,
+        "levelMin": 1,
+        "levelMax": 1,
+        "domains": [
+          "travel",
+          "discovery",
+          "intel"
+        ],
+        "terrains": [
+          "river",
+          "lake",
+          "sea",
+          "ocean",
+          "cavern"
+        ],
+        "scope": "hex",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:abyssal-cartographers",
+          "bbttcc:tier:1",
+          "bbttcc:domain:travel",
+          "bbttcc:domain:discovery",
+          "bbttcc:domain:intel",
+          "bbttcc:terrain:river",
+          "bbttcc:terrain:lake",
+          "bbttcc:terrain:sea",
+          "bbttcc:terrain:ocean",
+          "bbttcc:terrain:cavern",
+          "bbttcc:scope:hex",
+          "bbttcc:when:origin_terrain:river",
+          "bbttcc:when:origin_terrain:lake",
+          "bbttcc:when:origin_terrain:sea",
+          "bbttcc:when:origin_terrain:ocean",
+          "bbttcc:when:origin_terrain:cavern",
+          "bbttcc:effect:travel:hidden_route_detection:+1step",
+          "bbttcc:effect:discovery:reliability:+1step",
+          "bbttcc:theme:hidden-routes",
+          "bbttcc:theme:depth-navigation",
+          "bbttcc:theme:discovery"
+        ]
+      }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.Pn6W28Zcqgpn2mMh",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.Pn6W28Zcqgpn2mMh",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986939199,
+    "modifiedTime": 1782167238949,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "Ltx4gC3Bx0tXFe7l",
+  "sort": 0,
+  "_key": "!items!Ltx4gC3Bx0tXFe7l"
+}

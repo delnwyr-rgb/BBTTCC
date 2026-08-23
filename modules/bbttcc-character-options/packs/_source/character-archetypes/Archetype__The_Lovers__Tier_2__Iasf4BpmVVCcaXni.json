@@ -1,0 +1,80 @@
+{
+  "name": "Archetype: The Lovers (Tier 2)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_lovers.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Tier 2 — The Lovers</strong></p><ul><li><strong>Strategic:</strong> Coalition actions gain +1 effectiveness on first shared OP.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "archetype-lovers-t2",
+    "requirements": "Level 5+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "option": {
+        "key": "lovers",
+        "tier": 2,
+        "tags": [
+          "bbttcc:lovers",
+          "bbttcc:coalition_bonus:+1"
+        ],
+        "category": "archetype",
+        "progressionType": "level",
+        "levelMin": 2,
+        "levelMax": 2
+      },
+      "category": "archetype"
+    }
+  },
+  "effects": [],
+  "folder": "yQL9oYdZ12Vtohtl",
+  "_stats": {
+    "compendiumSource": "Item.smKoqOyxPCRnS7vW",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.smKoqOyxPCRnS7vW",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1774986761329,
+    "modifiedTime": 1775063009779,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "Iasf4BpmVVCcaXni",
+  "sort": -100000,
+  "_key": "!items!Iasf4BpmVVCcaXni"
+}

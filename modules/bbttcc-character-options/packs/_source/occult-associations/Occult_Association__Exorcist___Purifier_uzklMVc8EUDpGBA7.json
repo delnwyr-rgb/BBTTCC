@@ -1,0 +1,90 @@
+{
+  "name": "Occult Association: Exorcist / Purifier",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Occult Association (Bad Eden): Exorcist / Purifier.</em></p><p><strong>“You don’t negotiate with the darkness. You end it.”</strong></p><p>Exorcists do not bargain. They do not reinterpret. They do not accept corruption as a usable state.</p><p>To an Exorcist, the Great Work is not about managing the broken world. It is about <strong>removing what should not be there</strong> and restoring the conditions under which something honest can exist again.</p><p>Where Goetics bind, Exorcists sever. Where Shamans listen, Exorcists intervene. Where Kabbalists align, Exorcists cleanse.</p><p><strong>How Exorcists pursue the Great Work:</strong></p><ul><li>By removing Qliphothic influence and corruption</li><li>By stabilizing Hexes under Darkness pressure</li><li>By preventing the spread of systemic decay</li><li>By refusing to let harmful systems persist just because they are useful</li></ul><p><strong>Resonance:</strong> <strong>Tiferet / Purity</strong> — clarity, balance, and the reassertion of what should be.</p><p><strong>Tell-tales:</strong> still air where there should be movement, silence after tension, things that stop being wrong without explanation.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on actions involving stabilization, cleansing, or anti-corruption pressure</strong></li></ul><p><strong>Cost Principle:</strong> removal is violent in its own way. Expect rigidity, collateral suppression, and consequences when something removed turns out to have been holding something worse in place.</p>",
+      "chat": ""
+    },
+    "identifier": "occult-association-exorcist",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult-associations",
+      "option": {
+        "category": "occult",
+        "key": "exorcist",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:exorcist",
+          "bbttcc:base",
+          "bbttcc:domain:anti-darkness",
+          "bbttcc:domain:cleansing",
+          "bbttcc:domain:stabilization",
+          "bbttcc:scope:faction",
+          "bbttcc:effect:op_roll:stabilization:+1",
+          "bbttcc:resonance:tiferet",
+          "bbttcc:drift:rigid-order",
+          "bbttcc:cost:rigidity",
+          "bbttcc:cost:overcorrection",
+          "bbttcc:theme:purification",
+          "bbttcc:theme:removal"
+        ]
+      }
+    }
+  },
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_multiple_personas_1.png",
+  "effects": [],
+  "folder": "eZrB95VvJnQ4Pb77",
+  "_stats": {
+    "compendiumSource": "Item.0QIZuwvwNB201K3d",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.0QIZuwvwNB201K3d",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987089076,
+    "modifiedTime": 1781116056148,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "uzklMVc8EUDpGBA7",
+  "sort": 100000,
+  "_key": "!items!uzklMVc8EUDpGBA7"
+}

@@ -1,0 +1,102 @@
+{
+  "name": "Crew Type: Abyssal Cartographers",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Crew Type (Bad Eden): Abyssal Cartographers.</em></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "crew-abyssal-cartographers",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "RkZhM7hoNJJnRSIB",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew-types",
+      "bonuses": {
+        "intrigue": 1
+      },
+      "option": {
+        "category": "crew",
+        "key": "abyssal-cartographers",
+        "progressionType": "level",
+        "domains": [
+          "op",
+          "travel",
+          "discovery"
+        ],
+        "scope": "faction",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:abyssal-cartographers",
+          "bbttcc:progression:level",
+          "bbttcc:domain:op",
+          "bbttcc:domain:travel",
+          "bbttcc:domain:discovery",
+          "bbttcc:scope:faction",
+          "bbttcc:effect:op:intrigue:+8",
+          "bbttcc:theme:hidden-routes",
+          "bbttcc:theme:depth-navigation",
+          "bbttcc:theme:discovery",
+          "bbttcc:theme:under-map"
+        ]
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.KyfZwh7D2gmXOnxD",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.KyfZwh7D2gmXOnxD",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986939199,
+    "modifiedTime": 1782167238952,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "Y2ecYe4c61lDxp5A",
+  "sort": 100000,
+  "_key": "!items!Y2ecYe4c61lDxp5A"
+}

@@ -1,0 +1,93 @@
+{
+  "name": "Occult Association: Alchemist",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Occult Association (Bad Eden): Alchemist.</em></p><p><strong>“Reality is a solvent. I’m the one shaking the bottle.”</strong></p><p>Alchemists do not seek purity. They seek <strong>conversion</strong>.</p><p>Where others pursue the Great Work through revelation, alignment, or doctrine, the Alchemist treats it as a throughput problem. Matter, belief, institutions, and people are all half-finished reactions waiting for the right catalyst.</p><p>An Alchemist does not ask <em>what should this be?</em> They ask <em>what can I turn this into before it detonates?</em></p><p>They stabilize supply chains with miracles, turn contamination into leverage, and force abundance out of systems that should already have collapsed. Nothing they do is free. Every refinement leaves residue.</p><p><strong>How Alchemists pursue the Great Work:</strong></p><ul><li>By converting one form of value into another</li><li>By stabilizing volatile systems just long enough to matter</li><li>By treating Sparks, OPs, and infrastructure as reactive states</li><li>By accepting that every solution leaves chemical, moral, or metaphysical residue</li></ul><p><strong>Resonance:</strong> <strong>Yesod</strong> — foundation, transfer, containment, and the unstable bridge between idea and matter.</p><p><strong>Tell-tales:</strong> antiseptic, ozone, burnt sugar, stained gloves, reinforced glass where glass should not survive.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Economy OP rolls</strong> (especially production, infrastructure, and supply stabilization)</li></ul><p><strong>Cost Principle:</strong> Alchemical victories leave residue. Expect shortages, contamination, attention, moral debt, or unstable downstream consequences when you push too hard.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-alchemist",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult-associations",
+      "bonuses": {
+        "economy": 1
+      },
+      "option": {
+        "category": "occult",
+        "key": "alchemist",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:alchemist",
+          "bbttcc:base",
+          "bbttcc:domain:transmutation",
+          "bbttcc:domain:op",
+          "bbttcc:domain:infrastructure",
+          "bbttcc:scope:faction",
+          "bbttcc:when:passive",
+          "bbttcc:effect:op_roll:economy:+3",
+          "bbttcc:resonance:yesod",
+          "bbttcc:drift:utilitarian",
+          "bbttcc:cost:residue",
+          "bbttcc:theme:conversion",
+          "bbttcc:theme:unstable-abundance"
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_1.png",
+  "folder": "zganGfpVDhLbTMgv",
+  "_stats": {
+    "compendiumSource": "Item.xE4lGwFDQzF97yY3",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.xE4lGwFDQzF97yY3",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987084174,
+    "modifiedTime": 1781116054517,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "OyXYbyCH9EeK2Cl4",
+  "sort": 100000,
+  "_key": "!items!OyXYbyCH9EeK2Cl4"
+}

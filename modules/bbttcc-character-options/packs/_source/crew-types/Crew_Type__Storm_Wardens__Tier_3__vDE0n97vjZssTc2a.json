@@ -1,0 +1,109 @@
+{
+  "name": "Crew Type: Storm Wardens (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Storm Wardens (Tier 3)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Storm Wardens</strong></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><p><em>You’ve learned to hear danger in the air before it becomes visible.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on checks made to predict hazardous weather, navigate storms, resist environmental contamination, or stabilize people and equipment under severe conditions.</li><li><strong>Strategic:</strong> Your faction more reliably detects incoming environmental threats and corruption-weather events.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-storm-wardens-t3",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 11+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [],
+  "folder": "UA0NkRXG1eSXe9EL",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "storm-wardens",
+        "progressionType": "level",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "domains": [
+          "hazard",
+          "intel",
+          "weather",
+          "corruption"
+        ],
+        "scope": "self",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:storm-wardens",
+          "bbttcc:tier:3",
+          "bbttcc:domain:hazard",
+          "bbttcc:domain:intel",
+          "bbttcc:domain:weather",
+          "bbttcc:domain:corruption",
+          "bbttcc:scope:self",
+          "bbttcc:when:action:predict_weather",
+          "bbttcc:when:action:navigate_storm",
+          "bbttcc:when:action:resist_contamination",
+          "bbttcc:when:action:stabilize_under_severe_conditions",
+          "bbttcc:effect:check:advantage:predict_weather",
+          "bbttcc:effect:check:advantage:navigate_storm",
+          "bbttcc:effect:check:advantage:resist_contamination",
+          "bbttcc:effect:check:advantage:stabilize_under_severe_conditions",
+          "bbttcc:effect:intel:incoming_hazard_detection:+1step",
+          "bbttcc:theme:storm-discipline",
+          "bbttcc:theme:hazard-forecasting",
+          "bbttcc:theme:corruption-watch"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.Fkcx9I17oIpUYoDV",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.Fkcx9I17oIpUYoDV",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986959359,
+    "modifiedTime": 1781116050656,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "vDE0n97vjZssTc2a",
+  "sort": -200000,
+  "_key": "!items!vDE0n97vjZssTc2a"
+}

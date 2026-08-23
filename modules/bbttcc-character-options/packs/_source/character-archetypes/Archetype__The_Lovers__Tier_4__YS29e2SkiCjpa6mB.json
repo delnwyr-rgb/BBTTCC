@@ -1,0 +1,83 @@
+{
+  "name": "Archetype: The Lovers (Tier 4)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_lovers.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 — The Lovers</strong></p><ul><li><strong>Strategic:</strong> −1 coordination penalty, coalition rolls reroll the lowest die.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "archetype-lovers-t4",
+    "requirements": "Level 17+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "option": {
+        "key": "lovers",
+        "tier": 4,
+        "tags": [
+          "bbttcc:lovers",
+          "bbttcc:coordination_penalty:-1",
+          "bbttcc:coalition_advantage"
+        ],
+        "category": "archetype",
+        "progressionType": "level",
+        "levelMin": 4,
+        "levelMax": 4
+      },
+      "category": "archetype"
+    }
+  },
+  "effects": [],
+  "folder": "yQL9oYdZ12Vtohtl",
+  "_stats": {
+    "compendiumSource": "Item.kJxtES4IvL2EuBVc",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.kJxtES4IvL2EuBVc",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986761329,
+    "modifiedTime": 1782167238589,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "YS29e2SkiCjpa6mB",
+  "sort": -150000,
+  "_key": "!items!YS29e2SkiCjpa6mB"
+}

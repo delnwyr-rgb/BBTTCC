@@ -1,0 +1,102 @@
+{
+  "name": "Crew Type: Survivors / Militia (Tier 4)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Survivors / Militia (Tier 4)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 — Survivors / Militia</strong></p><p><strong>“We were here before your grand strategy, and we’ll be here after it catches fire.”</strong></p><p>Survivors and militias are what happens when ordinary people become infrastructure. They patch walls, ration supplies, drag neighbors out of burning buildings, and keep the faction alive long after cleaner doctrines would have folded.</p><p><em>When everyone else calls it over, you call it relocation.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> If your faction loses its last controlled Hex, it does not dissolve immediately. Instead, it may reform as a Nomad faction and retain 25% of its OP reserve.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-survivors-militia-t4",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 17+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [],
+  "folder": "nzOz07rZNThqspSs",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "survivors-militia",
+        "progressionType": "level",
+        "tier": 4,
+        "levelMin": 4,
+        "levelMax": 4,
+        "domains": [
+          "collapse",
+          "recovery",
+          "faction_state"
+        ],
+        "scope": "faction",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:survivors-militia",
+          "bbttcc:tier:4",
+          "bbttcc:domain:collapse",
+          "bbttcc:domain:recovery",
+          "bbttcc:domain:faction_state",
+          "bbttcc:scope:faction",
+          "bbttcc:when:faction:last_controlled_hex_lost",
+          "bbttcc:effect:fallback:reform_as:nomad",
+          "bbttcc:effect:fallback:op_pool_pct:25",
+          "bbttcc:theme:last-stand",
+          "bbttcc:theme:continuity",
+          "bbttcc:theme:resilience",
+          "bbttcc:theme:collapse-survival"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.J6Iuhsv214hart4E",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.J6Iuhsv214hart4E",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986961797,
+    "modifiedTime": 1781116049567,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "ppkofnKRyzNx6MtK",
+  "sort": -200000,
+  "_key": "!items!ppkofnKRyzNx6MtK"
+}

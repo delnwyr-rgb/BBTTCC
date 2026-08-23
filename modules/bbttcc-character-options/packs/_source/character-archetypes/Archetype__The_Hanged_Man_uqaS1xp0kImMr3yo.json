@@ -1,0 +1,110 @@
+{
+  "name": "Archetype: The Hanged Man",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hanged_man.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You understand cost.”</em></p><p><strong>Archetype (Bad Eden): The Hanged Man.</strong> You gain power through sacrifice, inversion, and delay.</p>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {
+      "HngMnASI00000001": {
+        "_id": "HngMnASI00000001",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 3,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 1,
+        "title": "Archetype Ability Scores",
+        "hint": "Gain 3 ability score points (max +2 to any one score).",
+        "flags": {}
+      }
+    },
+    "identifier": "archetype-hanged-man",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": ""
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "character-archetypes",
+      "option": {
+        "category": "archetype",
+        "key": "hanged_man",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:hanged_man",
+          "bbttcc:expression:hanged_man",
+          "bbttcc:base"
+        ]
+      },
+      "bonuses": {
+        "intrigue": 1
+      }
+    }
+  },
+  "folder": "zeyG5XSzvv004b4I",
+  "_stats": {
+    "compendiumSource": "Item.CaD9EDHlMemikr2T",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.CaD9EDHlMemikr2T",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986731225,
+    "modifiedTime": 1781116035136,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "uqaS1xp0kImMr3yo",
+  "sort": 100000,
+  "_key": "!items!uqaS1xp0kImMr3yo"
+}

@@ -1,0 +1,143 @@
+{
+  "name": "Archetype: The Hermit (Mystic-Isolator) (Tier 1)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_hermit.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "Bad Eden – Archetype: The Hermit (Mystic-Isolator) (Tier 1)",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Stealth. You learn the Light Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's Faith OP cap increases by 1 and Intrigue OP cap increases by 1.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "archetype-hermit-t1",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Level 1+",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [
+    {
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "flags": {},
+      "name": "Archetype Tier 1 Proficiencies",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_4.png",
+      "_id": "XJgwMQYkTW4ZYllF",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.skills.faith.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          },
+          {
+            "key": "system.skills.stealth.value",
+            "type": "upgrade",
+            "value": 1,
+            "phase": "initial",
+            "priority": 20
+          }
+        ]
+      },
+      "description": "",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1777346195220,
+        "modifiedTime": 1777433499495
+      },
+      "start": null,
+      "showIcon": 1,
+      "folder": null,
+      "_key": "!items.effects!af7YNbKZ7x4H7jVv.XJgwMQYkTW4ZYllF"
+    }
+  ],
+  "folder": "IOjnhZoMwrcOAdaa",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "archetype",
+      "bonuses": {
+        "faith": 1,
+        "intrigue": 1
+      },
+      "option": {
+        "category": "archetype",
+        "key": "hermit",
+        "progressionType": "level",
+        "tier": 1,
+        "levelMin": 1,
+        "levelMax": 1,
+        "tags": [
+          "bbttcc:archetype",
+          "bbttcc:arcana:hermit",
+          "bbttcc:expression:mystic-isolator",
+          "bbttcc:tier:1",
+          "bbttcc:faith_op_cap:+1",
+          "bbttcc:intrigue_op_cap:+1"
+        ]
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1773893627945,
+    "modifiedTime": 1782167238589,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "af7YNbKZ7x4H7jVv",
+  "sort": 200000,
+  "_key": "!items!af7YNbKZ7x4H7jVv"
+}

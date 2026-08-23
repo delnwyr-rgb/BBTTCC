@@ -1,0 +1,113 @@
+{
+  "name": "Crew Type: Ironbound Ascendants (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_ironbound_ascendants.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Ironbound Ascendants (Tier 3)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You’ve learned how to make distance and gravity part of the argument.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on checks made to climb, endure thin air or treacherous footing, and establish or contest a fortified high-ground position.</li><li><strong>Strategic:</strong> Enemy movement through your controlled Mountains/Highlands is less flexible and easier to predict.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-ironbound-ascendants-t3",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 11+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [],
+  "folder": "wmqio7Q7DY1BZeRJ",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "ironbound-ascendants",
+        "progressionType": "level",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "domains": [
+          "travel",
+          "positioning",
+          "intel"
+        ],
+        "terrains": [
+          "mountain",
+          "highlands"
+        ],
+        "scope": "controlled_hex",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:ironbound-ascendants",
+          "bbttcc:tier:3",
+          "bbttcc:domain:travel",
+          "bbttcc:domain:positioning",
+          "bbttcc:domain:intel",
+          "bbttcc:terrain:mountain",
+          "bbttcc:terrain:highlands",
+          "bbttcc:scope:controlled_hex",
+          "bbttcc:when:target:controlled_hex",
+          "bbttcc:when:action:climb",
+          "bbttcc:when:action:endure_elevation",
+          "bbttcc:when:action:contest_high_ground",
+          "bbttcc:effect:check:advantage:climb",
+          "bbttcc:effect:check:advantage:endure_elevation",
+          "bbttcc:effect:check:advantage:contest_high_ground",
+          "bbttcc:effect:enemy_movement:flexibility:-1step",
+          "bbttcc:effect:intel:route_predictability:+1step",
+          "bbttcc:theme:elevation",
+          "bbttcc:theme:mountain-discipline",
+          "bbttcc:theme:terrain-control"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.0A3uiD87CcEfH8Oy",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.0A3uiD87CcEfH8Oy",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986952092,
+    "modifiedTime": 1781116045755,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "ZB4P2ZQHLMSprBfT",
+  "sort": -200000,
+  "_key": "!items!ZB4P2ZQHLMSprBfT"
+}

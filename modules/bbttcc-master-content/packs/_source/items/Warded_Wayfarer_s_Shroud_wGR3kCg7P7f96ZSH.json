@@ -1,7 +1,7 @@
 {
   "name": "Warded Wayfarer's Shroud",
   "type": "armor",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "icons/equipment/chest/coat-leather-blue.webp",
   "system": {
     "guardBonus": 1,
     "evasionBonus": 1,
@@ -20,7 +20,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A hooded shroud of road-canvas with a thumb-width of prayer-thread run through the hem. Sold at sept-adjacent waystations to pilgrims who can't afford real warding but won't walk corrupted ground bare.</p><p><b>Standard Issue.</b> The thread takes the worst of the static off. Resists qliphothic. The first warding piece most Stewards ever own.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Cloth</li>\n  <li><strong>Defense:</strong> Guard +1, Evasion +1, Resolve +1</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 75 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>A hooded shroud of road-canvas with a thumb-width of prayer-thread run through the hem. Sold at sept-adjacent waystations to pilgrims who can't afford real warding but won't walk corrupted ground bare.</p><p><strong>Standard Issue.</strong> The thread takes the worst of the static off. Resists qliphothic. The first warding piece most Stewards ever own.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Cloth</p></li><li><p><strong>Defense:</strong> Guard +1, Evasion +1, Resolve +1</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Tier:</strong> I</p></li><li><p><strong>Cost:</strong> 75 Nonlethal marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -81,11 +81,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.367",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1782150391655,
-    "modifiedTime": 1782160020993,
+    "modifiedTime": 1787335075799,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,

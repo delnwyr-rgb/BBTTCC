@@ -1,0 +1,102 @@
+{
+  "name": "Crew Type: Storm Wardens",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Crew Type (Bad Eden): Storm Wardens.</em></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Lore and Faith.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Faith OPs.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "crew-storm-wardens",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "UA0NkRXG1eSXe9EL",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew-types",
+      "bonuses": {
+        "faith": 1
+      },
+      "option": {
+        "category": "crew",
+        "key": "storm-wardens",
+        "progressionType": "level",
+        "domains": [
+          "op",
+          "hazard",
+          "weather"
+        ],
+        "scope": "faction",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:storm-wardens",
+          "bbttcc:progression:level",
+          "bbttcc:domain:op",
+          "bbttcc:domain:hazard",
+          "bbttcc:domain:weather",
+          "bbttcc:scope:faction",
+          "bbttcc:effect:op:faith:+8",
+          "bbttcc:theme:weather-control",
+          "bbttcc:theme:hazard-mitigation",
+          "bbttcc:theme:environmental-authority",
+          "bbttcc:theme:storm-discipline"
+        ]
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.NuER7siSAwq9YU9j",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.NuER7siSAwq9YU9j",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986959359,
+    "modifiedTime": 1782167238947,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "1YeZ2LpzbyIhUa8X",
+  "sort": 100000,
+  "_key": "!items!1YeZ2LpzbyIhUa8X"
+}

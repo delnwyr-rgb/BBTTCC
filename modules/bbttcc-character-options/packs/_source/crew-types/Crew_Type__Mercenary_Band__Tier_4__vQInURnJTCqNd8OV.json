@@ -1,0 +1,101 @@
+{
+  "name": "Crew Type: Mercenary Band (Tier 4)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_smile_2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Mercenary Band (Tier 4)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> The Violence Point Attrition (war-weariness) mechanic affects your faction 50% less than normal. The cost to replenish Violence OPs is reduced by 10%.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-mercenary-band-t4",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 17+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [],
+  "folder": "m4EIJI3cE6QISpe4",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "mercenary-band",
+        "progressionType": "level",
+        "tier": 4,
+        "levelMin": 4,
+        "levelMax": 4,
+        "domains": [
+          "attrition",
+          "op",
+          "combat"
+        ],
+        "scope": "faction",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:mercenary-band",
+          "bbttcc:tier:4",
+          "bbttcc:domain:attrition",
+          "bbttcc:domain:op",
+          "bbttcc:domain:combat",
+          "bbttcc:scope:faction",
+          "bbttcc:effect:attrition:violence:x0.5",
+          "bbttcc:effect:op_replenish_cost:violence:-10pct",
+          "bbttcc:theme:contract-violence",
+          "bbttcc:theme:war-weariness",
+          "bbttcc:theme:professional-soldiers",
+          "bbttcc:theme:sustained-conflict"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.RNal0seVKAZ6at9V",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.RNal0seVKAZ6at9V",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986954715,
+    "modifiedTime": 1781116050925,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "vQInURnJTCqNd8OV",
+  "sort": -150000,
+  "_key": "!items!vQInURnJTCqNd8OV"
+}

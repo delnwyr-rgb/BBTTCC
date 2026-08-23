@@ -1,0 +1,280 @@
+{
+  "name": "Occult Association: Goetic Summoner (Tier 4)",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 — Goetic Summoner</strong></p><p><strong>“The monster is defeated. Good. Now sign here.”</strong></p><p>At Tier 4, you stop acting like the Darkness is weather. You treat it like an army.</p><p>You can attempt to bind a major Qliphothic entity your faction has defeated and turn it into an asset. This is not safe. It is useful.</p><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Major Binding:</strong> after your faction defeats a major Qliphothic entity in a Scenario, you may attempt to bind it</li><li>Spend <strong>10 Intrigue OP</strong>, then make an appropriate Strategic Roll as adjudicated by the GM</li><li>On success: gain a bound entity asset that grants <strong>+5 to Violence or Intrigue OP rolls</strong> (choose one) while it remains bound</li><li>On failure: the entity escapes with a grudge, and the fallout becomes a Campaign problem</li></ul><p><strong>Cost:</strong> while the entity remains bound, regional <strong>Darkness pressure escalates</strong>. This is the price of keeping a predator on a leash.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"goeticT4\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Major Binding</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Scenario &nbsp;·&nbsp; <strong>Action:</strong> Strategic (10 Mind) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">After defeating a major Qliphothic entity: spend 10 Intrigue OP, GM-adjudicated roll. Success: bound asset (+5 Vio or Mind rolls). Failure: entity escapes with a grudge.</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": {},
+    "requirements": "Level 17+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-goetic-summoner-t4",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult",
+      "bonuses": {},
+      "option": {
+        "category": "occult",
+        "key": "goetic-summoner",
+        "progressionType": "level",
+        "tier": 4,
+        "levelMin": 4,
+        "levelMax": 4,
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:goetic-summoner",
+          "bbttcc:tier:4",
+          "bbttcc:domain:darkness",
+          "bbttcc:domain:binding",
+          "bbttcc:domain:asset-creation",
+          "bbttcc:scope:faction",
+          "bbttcc:scope:region",
+          "bbttcc:when:post_scenario:defeat_major_qliphothic_entity",
+          "bbttcc:effect:op_cost:intrigue:-10",
+          "bbttcc:effect:asset:bound-entity",
+          "bbttcc:effect:op_roll:violence:+5",
+          "bbttcc:effect:op_roll:intrigue:+5",
+          "bbttcc:effect:failure:campaign_problem",
+          "bbttcc:effect:darkness_pressure:regional:+1",
+          "bbttcc:resonance:qliphoth",
+          "bbttcc:drift:pragmatic-corruptive",
+          "bbttcc:cost:darkness-pressure",
+          "bbttcc:cost:grudge-risk",
+          "bbttcc:cost:bound-predator",
+          "bbttcc:theme:major-binding",
+          "bbttcc:theme:weaponized-monster"
+        ]
+      }
+    },
+    "autoanimations": {
+      "id": "fc7f2230-65a9-447c-86db-27aa9b3849c4",
+      "label": "Occult Association: Goetic Summoner (Tier 4)",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "darkpurple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+  "folder": "8EpFv8GVkHaIuTnR",
+  "_stats": {
+    "compendiumSource": "Item.14FPN9ZUQoUZ11Qh",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.14FPN9ZUQoUZ11Qh",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774987093047,
+    "modifiedTime": 1782167239252,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "fj2m8VaRXrqz760x",
+  "sort": -75000,
+  "_key": "!items!fj2m8VaRXrqz760x"
+}

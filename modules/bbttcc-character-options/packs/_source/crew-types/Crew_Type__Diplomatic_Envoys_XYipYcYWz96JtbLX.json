@@ -1,0 +1,102 @@
+{
+  "name": "Crew Type: Diplomatic Envoys",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_peace_hand_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024",
+      "custom": "Bad Eden"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Crew Type (Bad Eden): Diplomatic Envoys.</em></p><p><strong>“We are here in peace. Don’t make that embarrassing.”</strong></p><p>Diplomatic Envoys are the faction’s public face and private threat. They shake hands with one hand and count exits with the other. Their talent is making every negotiation feel like the only sensible outcome was the one they wanted.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Insight and Diplomacy, and you learn one extra language.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Diplomacy OPs.</li></ul>",
+      "chat": ""
+    },
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "crew-diplomatic-envoys",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "folder": "IFHZoz9eqRJSNEWx",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew-types",
+      "bonuses": {
+        "diplomacy": 1
+      },
+      "option": {
+        "category": "crew",
+        "key": "diplomatic-envoys",
+        "progressionType": "level",
+        "domains": [
+          "op",
+          "social",
+          "negotiation"
+        ],
+        "scope": "faction",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:diplomatic-envoys",
+          "bbttcc:progression:level",
+          "bbttcc:domain:op",
+          "bbttcc:domain:social",
+          "bbttcc:domain:negotiation",
+          "bbttcc:scope:faction",
+          "bbttcc:effect:op:diplomacy:+8",
+          "bbttcc:theme:diplomacy",
+          "bbttcc:theme:negotiation",
+          "bbttcc:theme:soft-control",
+          "bbttcc:theme:integration"
+        ]
+      }
+    },
+    "dnd5e": {},
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.YAIsCNH1pSwiHENM",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.YAIsCNH1pSwiHENM",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986946918,
+    "modifiedTime": 1782167238951,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "XYipYcYWz96JtbLX",
+  "sort": 100000,
+  "_key": "!items!XYipYcYWz96JtbLX"
+}

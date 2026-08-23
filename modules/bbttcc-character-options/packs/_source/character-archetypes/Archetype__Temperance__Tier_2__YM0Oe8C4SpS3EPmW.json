@@ -1,0 +1,82 @@
+{
+  "name": "Archetype: Temperance (Tier 2)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_temperance.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 — Temperance</strong></p><ul><li><strong>Strategic:</strong> Retain 1 overflow OP per turn.</li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"tempT2\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Overflow Retention</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Passive (every turn) &nbsp;·&nbsp; <strong>Action:</strong> Auto &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Retain 1 overflow OP per turn that would otherwise be lost. No daily cap; reminder card only.</div>\n</div>",
+      "chat": ""
+    },
+    "identifier": "archetype-temperance-t2",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "option": {
+        "key": "temperance",
+        "tier": 2,
+        "tags": [
+          "bbttcc:temperance",
+          "bbttcc:op_overflow_buffer:+1"
+        ],
+        "category": "archetype",
+        "progressionType": "level",
+        "levelMin": 2,
+        "levelMax": 2
+      },
+      "category": "archetype"
+    }
+  },
+  "effects": [],
+  "folder": "oS7yNriqw8Jq5RHo",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.puephopDcDInvkqe",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986658337,
+    "modifiedTime": 1777339606303,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "YM0Oe8C4SpS3EPmW",
+  "sort": 300000,
+  "_key": "!items!YM0Oe8C4SpS3EPmW"
+}

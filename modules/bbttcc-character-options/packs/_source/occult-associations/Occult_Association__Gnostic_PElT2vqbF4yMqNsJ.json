@@ -1,0 +1,97 @@
+{
+  "name": "Occult Association: Gnostic",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Occult Association (Bad Eden): Gnostic.</em></p><p><strong>“I don’t believe. I remember.”</strong></p><p>Gnostics approach the Great Work as a recovery operation. The world is not merely broken. It is <em>obscured</em>.</p><p>Truth exists beneath propaganda, false heavens, corrupted consensus, and all the symbolic machinery that keeps frightened systems stable. Where others try to fix the world, the Gnostic strips it down. They interrogate assumptions, dismantle illusions, and treat certainty as a hostile force when it has not earned the right to exist.</p><p>To a Gnostic, the Great Work is not invention. It is <strong>remembrance</strong>. What is real was already real before the lie got organized.</p><p><strong>How Gnostics pursue the Great Work:</strong></p><ul><li>By exposing false narratives and corrupted consensus</li><li>By resisting manipulation, propaganda, and symbolic control</li><li>By recovering truths the world insists never existed</li><li>By making Stealth expensive to maintain</li></ul><p><strong>Resonance:</strong> <strong>Tiferet</strong> — truth, clarity, revelation, and the painful coherence that follows honest sight.</p><p><strong>Tell-tales:</strong> eyes that track patterns no one else admits are there, a habit of pausing just before the lie finishes speaking.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Soft Power OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> truth is destabilizing. Expect alienation, exposed contradictions, social friction, and pressure from systems that depended on confusion to survive.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-gnostic",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult-associations",
+      "bonuses": {
+        "softpower": 1
+      },
+      "option": {
+        "category": "occult",
+        "key": "gnostic",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:gnostic",
+          "bbttcc:base",
+          "bbttcc:domain:tikkun",
+          "bbttcc:domain:truth",
+          "bbttcc:domain:soft-power",
+          "bbttcc:scope:faction",
+          "bbttcc:when:passive",
+          "bbttcc:effect:op_roll:softpower:+3",
+          "bbttcc:resonance:tiferet",
+          "bbttcc:drift:anti-authority",
+          "bbttcc:cost:alienation",
+          "bbttcc:cost:friction",
+          "bbttcc:theme:remembrance",
+          "bbttcc:theme:truth-pressure"
+        ]
+      }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+  "folder": "cAJvL0bsu1HkZCWz",
+  "_stats": {
+    "compendiumSource": "Item.SJqoAnjAtEVP09At",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.SJqoAnjAtEVP09At",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987091124,
+    "modifiedTime": 1781116054734,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "PElT2vqbF4yMqNsJ",
+  "sort": 100000,
+  "_key": "!items!PElT2vqbF4yMqNsJ"
+}

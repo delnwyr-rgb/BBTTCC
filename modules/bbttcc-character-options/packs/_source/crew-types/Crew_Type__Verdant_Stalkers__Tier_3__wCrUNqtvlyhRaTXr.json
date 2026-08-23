@@ -1,0 +1,103 @@
+{
+  "name": "Crew Type: Verdant Stalkers (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_verdant_stalker.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Verdant Stalkers</strong></p><p><em>You hide intent, not just presence.</em></p><ul><li><strong>Tactical:</strong> reroll-lowest on Stealth (natural terrain) and Athletics (tracking/ambush).</li><li><strong>Strategic:</strong> Movement, routes, and ownership signals can be masked.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-verdant-stalkers-t3",
+    "requirements": "Level 11+",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc-character-options": {
+      "option": {
+        "category": "crew",
+        "key": "verdant-stalkers",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "domains": [
+          "intel"
+        ],
+        "terrains": [
+          "forest",
+          "jungle"
+        ],
+        "scope": "hex",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:verdant-stalkers",
+          "bbttcc:tier:3",
+          "bbttcc:domain:intel",
+          "bbttcc:terrain:forest",
+          "bbttcc:terrain:jungle",
+          "bbttcc:scope:hex",
+          "bbttcc:effect:intel:mask_presence:true",
+          "bbttcc:effect:intel:mask_route_usage:true",
+          "bbttcc:effect:intel:mask_ownership_signals:true",
+          "bbttcc:theme:deception",
+          "bbttcc:theme:recon"
+        ],
+        "progressionType": "level"
+      },
+      "category": "crew"
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "folder": "3hFwHalyNvJcfIyJ",
+  "_stats": {
+    "compendiumSource": "Item.2GYvJ98ZEOVf9ppv",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.2GYvJ98ZEOVf9ppv",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.361",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986965136,
+    "modifiedTime": 1778970595707,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "wCrUNqtvlyhRaTXr",
+  "sort": -200000,
+  "_key": "!items!wCrUNqtvlyhRaTXr"
+}

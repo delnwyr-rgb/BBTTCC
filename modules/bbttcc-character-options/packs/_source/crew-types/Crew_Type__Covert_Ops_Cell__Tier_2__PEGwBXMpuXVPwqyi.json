@@ -1,0 +1,98 @@
+{
+  "name": "Crew Type: Covert Ops Cell (Tier 2)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Covert Ops Cell (Tier 2)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 2 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’ve stopped improvising and started operating.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> When undertaking an Infiltration scenario, the Alarm Level threshold is increased, allowing for more failures before a full alert is triggered.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-covert-ops-cell-t2",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 5+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [],
+  "folder": "s5WL7k82FGQGsYdL",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "covert-ops-cell",
+        "progressionType": "level",
+        "tier": 2,
+        "levelMin": 2,
+        "levelMax": 2,
+        "domains": [
+          "infiltration",
+          "scenario_control"
+        ],
+        "scope": "scenario",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:covert-ops-cell",
+          "bbttcc:tier:2",
+          "bbttcc:domain:infiltration",
+          "bbttcc:domain:scenario_control",
+          "bbttcc:scope:scenario",
+          "bbttcc:when:scenario:infiltration",
+          "bbttcc:effect:alarm_threshold:+1",
+          "bbttcc:theme:stealth",
+          "bbttcc:theme:infiltration",
+          "bbttcc:theme:pressure-control"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.1Mh8NmV2kjmHHnP4",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.1Mh8NmV2kjmHHnP4",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986943268,
+    "modifiedTime": 1781116043621,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "PEGwBXMpuXVPwqyi",
+  "sort": -100000,
+  "_key": "!items!PEGwBXMpuXVPwqyi"
+}

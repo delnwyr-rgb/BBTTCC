@@ -1,0 +1,84 @@
+{
+  "name": "Occult Association: Biomancer / Fleshcrafter (Tier 3)",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Biomancer</strong></p><p><strong>“You are no longer baseline.”</strong></p><p><strong>Tactical</strong></p><ul><li>Resistance to environmental, radiation, or corruption-based damage</li></ul><p><strong>Strategic</strong></p><ul><li>reroll the lowest die on one roll involving hostile environments or biological stress per Scenario</li></ul><p><strong>Cost:</strong> visible or behavioral mutation becomes harder to conceal.</p>",
+      "chat": ""
+    },
+    "identifier": "occult-association-biomancer-t3",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "option": {
+        "tags": [
+          "bbttcc:tier:3",
+          "bbttcc:effect:resist:environment",
+          "bbttcc:effect:scenario_advantage",
+          "bbttcc:cost:visible-mutation"
+        ],
+        "category": "occult",
+        "key": "biomancer",
+        "progressionType": "level",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3
+      },
+      "category": "occult"
+    }
+  },
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_1.png",
+  "effects": [],
+  "folder": "3oMsaUpGcyqokYqu",
+  "_stats": {
+    "compendiumSource": "Item.LB3bI1kOdLfdWGh6",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.LB3bI1kOdLfdWGh6",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987087005,
+    "modifiedTime": 1777515322528,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "lYkcOs9rxQX9PC5E",
+  "sort": -200000,
+  "_key": "!items!lYkcOs9rxQX9PC5E"
+}

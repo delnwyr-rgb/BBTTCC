@@ -1,0 +1,97 @@
+{
+  "name": "Occult Association: Goetic Summoner",
+  "type": "feat",
+  "system": {
+    "category": "technique",
+    "source": {
+      "revision": 2,
+      "rules": "2024"
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Occult Association (Bad Eden): Goetic Summoner.</em></p><p><strong>“I have friends. They’re just… contractual.”</strong></p><p>Goetic Summoners do not worship. They do not submit. They <em>negotiate</em>.</p><p>To a Goetic, the Great Work is not merely a path of purification. It is a war over <strong>leverage</strong>. Power exists in the Shatterlands, and much of it has teeth, names, appetites, and terms. If you can name it, you can sometimes bind it. If you can bind it, you can make it useful. For a while.</p><p>Goetics build circles, memorize taboos, track debts, and turn predatory forces into temporary infrastructure. They call this control. The world calls it an incident report waiting to happen.</p><p><strong>How Goetics pursue the Great Work:</strong></p><ul><li>By extracting leverage from Qliphothic forces instead of merely resisting them</li><li>By binding hazards into assets and paying the price later</li><li>By treating Darkness as a resource with teeth</li><li>By weaponizing fear, coercion, and forbidden access where cleaner traditions would hesitate</li></ul><p><strong>Resonance:</strong> <strong>Qliphoth / Shadow</strong> — rupture, appetite, inversion, and the dangerous intelligence inside corruption.</p><p><strong>Tell-tales:</strong> counted names, precise circles, a room that feels like it already agreed to terms before anyone spoke.</p><p><strong>Faction Effects (Passive):</strong></p><ul><li><strong>+1 to Violence OP rolls</strong></li><li><strong>+1 to Intrigue OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> every Goetic gain creates obligation. Expect Debt, escalating Darkness pressure, hostile notice, and consequences that remember your name longer than you wanted them to.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "identifier": "occult-association-goetic-summoner",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "",
+    "type": {
+      "value": "",
+      "subtype": ""
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "occult-associations",
+      "bonuses": {
+        "violence": 1,
+        "intrigue": 1
+      },
+      "option": {
+        "category": "occult",
+        "key": "goetic-summoner",
+        "progressionType": "level",
+        "tags": [
+          "bbttcc:option:occult",
+          "bbttcc:occult:goetic-summoner",
+          "bbttcc:base",
+          "bbttcc:domain:darkness",
+          "bbttcc:domain:binding",
+          "bbttcc:domain:intrigue",
+          "bbttcc:domain:violence",
+          "bbttcc:scope:faction",
+          "bbttcc:when:passive",
+          "bbttcc:resonance:qliphoth",
+          "bbttcc:drift:pragmatic-corruptive",
+          "bbttcc:cost:debt",
+          "bbttcc:cost:darkness-pressure",
+          "bbttcc:theme:contractual-power",
+          "bbttcc:theme:predator-management",
+          "bbttcc:effect:op_roll:violence:+1",
+          "bbttcc:effect:op_roll:intrigue:+1"
+        ]
+      }
+    }
+  },
+  "effects": [],
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_star_1.png",
+  "folder": "8EpFv8GVkHaIuTnR",
+  "_stats": {
+    "compendiumSource": "Item.yZj20DjRfIOrMajZ",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.yZj20DjRfIOrMajZ",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774987093047,
+    "modifiedTime": 1781116055994,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "hRYPYVvWp8VaE11I",
+  "sort": 100000,
+  "_key": "!items!hRYPYVvWp8VaE11I"
+}

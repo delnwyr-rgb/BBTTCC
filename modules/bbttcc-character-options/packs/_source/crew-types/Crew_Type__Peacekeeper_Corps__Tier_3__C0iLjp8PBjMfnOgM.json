@@ -1,0 +1,110 @@
+{
+  "name": "Crew Type: Peacekeeper Corps (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_3.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Peacekeeper Corps (Tier 3)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Peacekeeper Corps</strong></p><p><strong>“Order is a gift. Stop making us wrap it in barbed wire.”</strong></p><p>Peacekeepers are what you call them when you want them to sound noble. They build ceasefires, enforce boundaries, and take the blame when someone decides ‘peace’ was optional.</p><p><em>You are now a system inside the system. People feel you before they see you.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on Presence (Diplomacy) checks made to de-escalate violence or negotiate a surrender, and on checks to grapple or restrain.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-peacekeeper-corps-t3",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 11+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "peacekeeper-corps",
+        "progressionType": "level",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "domains": [
+          "raid",
+          "social",
+          "control"
+        ],
+        "scope": "self",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:peacekeeper-corps",
+          "bbttcc:tier:3",
+          "bbttcc:domain:raid",
+          "bbttcc:domain:social",
+          "bbttcc:domain:control",
+          "bbttcc:scope:self",
+          "bbttcc:when:action:de_escalate",
+          "bbttcc:when:action:negotiate_surrender",
+          "bbttcc:when:action:grapple",
+          "bbttcc:when:action:restrain",
+          "bbttcc:effect:check:advantage:de_escalate",
+          "bbttcc:effect:check:advantage:negotiate_surrender",
+          "bbttcc:effect:check:advantage:grapple",
+          "bbttcc:effect:check:advantage:restrain",
+          "bbttcc:theme:de-escalation",
+          "bbttcc:theme:order",
+          "bbttcc:theme:control",
+          "bbttcc:theme:restraint"
+        ]
+      }
+    },
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "effects": [],
+  "folder": "YYzAyfS4RhZxZ0f7",
+  "_stats": {
+    "compendiumSource": "Item.ng3dtBmD5b41ekKg",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.ng3dtBmD5b41ekKg",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1774986956943,
+    "modifiedTime": 1782167238948,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "C0iLjp8PBjMfnOgM",
+  "sort": -200000,
+  "_key": "!items!C0iLjp8PBjMfnOgM"
+}

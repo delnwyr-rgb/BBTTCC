@@ -1,0 +1,22 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Judgement",
+  "color": null,
+  "sorting": "a",
+  "_id": "1Q3rl5RJCkpByKSo",
+  "description": "",
+  "sort": 1600000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB",
+    "modifiedTime": 1774995500464
+  },
+  "_key": "!folders!1Q3rl5RJCkpByKSo"
+}

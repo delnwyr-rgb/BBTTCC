@@ -1,0 +1,45 @@
+{
+  "_id": "becallingstw0t04",
+  "name": "Stalwart — Archon (Tier IV)",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+  "system": {
+    "category": "calling",
+    "source": "Callings",
+    "tags": [
+      "calling",
+      "stalwart",
+      "tier-4"
+    ],
+    "description": {
+      "value": "<p><strong>Stalwart — Archon</strong> (Tier IV).</p><p><strong>Trade — Foreman:</strong> Run a work crew; a facility's output counts +1 bracket for one turn. <span style=\"opacity:0.7\">Standard fee 270 marks (Economy).</span></p><p><strong>Trick — Too Stubborn to Die</strong> <em>(1/scene)</em>: Damage that would drop the Stalwart leaves them at 1 Integrity, still standing, immovable this round.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 404000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "calling": {
+        "key": "stalwart",
+        "tier": 4
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": 1784007332732,
+    "modifiedTime": 1784007332732,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!becallingstw0t04"
+}

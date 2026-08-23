@@ -1,0 +1,103 @@
+{
+  "name": "Crew Type: Survivors / Militia (Tier 3)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Survivors / Militia (Tier 3)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 3 — Survivors / Militia</strong></p><p><strong>“We were here before your grand strategy, and we’ll be here after it catches fire.”</strong></p><p>Survivors and militias are what happens when ordinary people become infrastructure. They patch walls, ration supplies, drag neighbors out of burning buildings, and keep the faction alive long after cleaner doctrines would have folded.</p><p><em>You’ve become difficult to kill, harder to scare, and annoying to outlast.</em></p><ul><li><strong>Tactical:</strong> You reroll the lowest die on saves or checks made against Stress and environmental hazards. Your Integrity maximum increases by an amount equal to your level.</li><li><strong>Strategic:</strong> —</li></ul>",
+      "chat": ""
+    },
+    "identifier": "crew-survivors-militia-t3",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 11+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [],
+  "folder": "nzOz07rZNThqspSs",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "survivors-militia",
+        "progressionType": "level",
+        "tier": 3,
+        "levelMin": 3,
+        "levelMax": 3,
+        "domains": [
+          "survival",
+          "recovery",
+          "defense"
+        ],
+        "scope": "self",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:survivors-militia",
+          "bbttcc:tier:3",
+          "bbttcc:domain:survival",
+          "bbttcc:domain:recovery",
+          "bbttcc:domain:defense",
+          "bbttcc:scope:self",
+          "bbttcc:when:hazard:environmental",
+          "bbttcc:when:pressure:exhaustion",
+          "bbttcc:effect:save:advantage:exhaustion",
+          "bbttcc:effect:save:advantage:environmental_hazard",
+          "bbttcc:effect:hp_max:bonus:+level",
+          "bbttcc:theme:endurance",
+          "bbttcc:theme:hardship",
+          "bbttcc:theme:resilience"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.r04k1l38sFglCIIu",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.r04k1l38sFglCIIu",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986961797,
+    "modifiedTime": 1781116043930,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "QcesrAhQUGNKjWgm",
+  "sort": -50000,
+  "_key": "!items!QcesrAhQUGNKjWgm"
+}

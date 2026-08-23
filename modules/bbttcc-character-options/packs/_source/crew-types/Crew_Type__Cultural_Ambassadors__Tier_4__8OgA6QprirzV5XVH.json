@@ -1,0 +1,104 @@
+{
+  "name": "Crew Type: Cultural Ambassadors (Tier 4)",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "Bad Eden – Crew Type: Cultural Ambassadors (Tier 4)",
+      "revision": 2,
+      "rules": "2024",
+      "book": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Tier 4 — Cultural Ambassadors</strong></p><p><strong>“A smile is a blade if you know where to put it.”</strong></p><p>Cultural Ambassadors weaponize hospitality. They learn your customs, flatter your saints, and find the one story you tell yourself to stay brave. Then they use it to open doors—or to make you open them.</p><p><em>You’ve become legend. Not the comforting kind.</em></p><ul><li><strong>Tactical:</strong> —</li><li><strong>Strategic:</strong> Once per strategic turn, you can attempt to shift the alignment of an adjacent neutral Hex toward your faction’s political affiliation without spending OPs.</li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"culturalT4\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Soft Annex</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Shift the alignment of an adjacent neutral Hex toward your faction's political affiliation without spending OPs.</div>\n</div>",
+      "chat": ""
+    },
+    "identifier": "crew-cultural-ambassadors-t4",
+    "activities": {},
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "crewed": false,
+    "enchant": {},
+    "requirements": "Level 17+",
+    "properties": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    }
+  },
+  "effects": [],
+  "folder": "GofR1cEqLCl6L5xo",
+  "flags": {
+    "bbttcc-character-options": {
+      "category": "crew",
+      "bonuses": {},
+      "option": {
+        "category": "crew",
+        "key": "cultural-ambassadors",
+        "progressionType": "level",
+        "tier": 4,
+        "levelMin": 4,
+        "levelMax": 4,
+        "domains": [
+          "hex",
+          "alignment",
+          "politics"
+        ],
+        "scope": "adjacent_hex",
+        "tags": [
+          "bbttcc:option:crew",
+          "bbttcc:crew:cultural-ambassadors",
+          "bbttcc:tier:4",
+          "bbttcc:domain:hex",
+          "bbttcc:domain:alignment",
+          "bbttcc:domain:politics",
+          "bbttcc:scope:adjacent_hex",
+          "bbttcc:when:phase:strategic_turn",
+          "bbttcc:when:target:adjacent_neutral_hex",
+          "bbttcc:effect:alignment_shift:toward_faction_politics",
+          "bbttcc:effect:op_cost:0",
+          "bbttcc:effect:usage:per_strategic_turn:1",
+          "bbttcc:theme:cultural-pressure",
+          "bbttcc:theme:political-drift",
+          "bbttcc:theme:soft-expansion",
+          "bbttcc:theme:narrative-territory"
+        ]
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": "Item.snQv6CToVNsxHpm2",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.snQv6CToVNsxHpm2",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "14.363",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1774986945169,
+    "modifiedTime": 1781116040494,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "8OgA6QprirzV5XVH",
+  "sort": 25000,
+  "_key": "!items!8OgA6QprirzV5XVH"
+}

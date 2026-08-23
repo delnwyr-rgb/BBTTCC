@@ -1,0 +1,45 @@
+{
+  "_id": "becallingstw0t03",
+  "name": "Stalwart — Master (Tier III)",
+  "type": "feature",
+  "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+  "system": {
+    "category": "calling",
+    "source": "Callings",
+    "tags": [
+      "calling",
+      "stalwart",
+      "tier-3"
+    ],
+    "description": {
+      "value": "<p><strong>Stalwart — Master</strong> (Tier III).</p><p><strong>Trade — Guide through:</strong> Lead a party across one hex of hostile terrain, halving travel complications. <span style=\"opacity:0.7\">Standard fee 90 marks (Economy).</span></p><p><strong>Trick — Second Wind</strong> <em>(1/scene)</em>: Recover Integrity equal to 2×tier.</p><p><em>Master step:</em> the Stalwart's Knack (Hazard-Hardened) improves at this tier — see the class entry.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 403000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "calling": {
+        "key": "stalwart",
+        "tier": 3
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": 1784007341490,
+    "modifiedTime": 1784007341490,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!items!becallingstw0t03"
+}

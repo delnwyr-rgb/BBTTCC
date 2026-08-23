@@ -1,0 +1,23 @@
+{
+  "type": "Item",
+  "folder": null,
+  "name": "Prophet/Oracle",
+  "color": null,
+  "sorting": "a",
+  "_id": "lDdY5NMGIgNj06vQ",
+  "description": "",
+  "sort": 700000,
+  "flags": {},
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1774987097500,
+    "modifiedTime": 1774987097691,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!folders!lDdY5NMGIgNj06vQ"
+}

@@ -1,7 +1,7 @@
 {
   "name": "Vestments of the Standing Vow",
   "type": "armor",
-  "img": "icons/svg/mystery-man.svg",
+  "img": "icons/equipment/chest/breastplate-layered-leather-stitched.webp",
   "system": {
     "guardBonus": 2,
     "evasionBonus": 1,
@@ -20,7 +20,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>Formal warding vestments worn when a Steward swears an oath meant to outlast them. Vow-bone toggles, a hem weighted with witness-glass beads that click once for every promise kept. While the vow stands, no one else's word can move the wearer off it.</p><p><b>Standing Vow.</b> Resists qliphothic. The wearer cannot be compelled while attuned.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Guard +2, Evasion +1, Resolve +3</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Immune to:</strong> Compelled</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 675 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>Formal warding vestments worn when a Steward swears an oath meant to outlast them. Vow-bone toggles, a hem weighted with witness-glass beads that click once for every promise kept. While the vow stands, no one else's word can move the wearer off it.</p><p><strong>Standing Vow.</strong> Resists qliphothic. The wearer cannot be compelled while attuned.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Defense:</strong> Guard +2, Evasion +1, Resolve +3</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Immune to:</strong> Compelled</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 675 Nonlethal marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -85,11 +85,11 @@
     "bytUGWIOqq9eT7Or": 3
   },
   "_stats": {
-    "coreVersion": "14.364",
+    "coreVersion": "14.367",
     "systemId": "fourththing",
     "systemVersion": "0.6.1",
     "createdTime": 1782150391745,
-    "modifiedTime": 1782160020991,
+    "modifiedTime": 1787335076404,
     "lastModifiedBy": "bytUGWIOqq9eT7Or",
     "compendiumSource": null,
     "duplicateSource": null,
