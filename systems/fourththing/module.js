@@ -362,6 +362,21 @@ function ftTierCastDC(tier) {
   return FT.CAST_DC_BY_TIER?.[t] ?? 15;
 }
 
+// Save DC ladder (owner ruling 2026-08-22): 11 + tier×2 + the caster's channel
+// faculty. The cast DC stays static-per-tier (no double-tax on caster growth);
+// the TARGET's save bar scales with the hand behind the working. When the
+// channel isn't known at the callsite, the caster's better casting faculty
+// (mind/soul) stands in.
+function ftFormulaSaveDC(caster, tier, channel) {
+  const t = Math.max(1, Math.min(4, Number(tier) || 1));
+  const sys = caster?.system?.system ?? caster?.system ?? {};
+  const key = String(channel || "").toLowerCase();
+  const fac = key && sys?.attributes?.[key]
+    ? (Number(sys.attributes[key].value) || 0)
+    : Math.max(Number(sys?.attributes?.mind?.value) || 0, Number(sys?.attributes?.soul?.value) || 0);
+  return 11 + t * 2 + fac;
+}
+
 // Trad Caster Classes — the four manifestation-as-primary-tool paths. TCCs
 // get a deeper Clarity pool, a per-cast discount, exclusive access to T0
 // Fiats (narrative "Let there be …" cues), and exclusive access to "working"-stability
@@ -398,7 +413,7 @@ const FT_SKILL_MASTER = [
   { key: "tinkering",    attribute: "intrigue", label: "Tinkering"     },
   { key: "piloting",     attribute: "intrigue", label: "Piloting"      },
   { key: "streetwise",   attribute: "intrigue", label: "Streetwise"    },
-  { key: "weave",        attribute: "intrigue", label: "Weave"         },
+  { key: "fitting",      attribute: "intrigue", label: "Fitting"       },
   { key: "diplomacy",    attribute: "presence", label: "Diplomacy"     },
   { key: "intimidation", attribute: "presence", label: "Intimidation"  },
   { key: "empathy",      attribute: "presence", label: "Empathy"       },
@@ -411,7 +426,7 @@ const FT_SKILL_MASTER = [
   { key: "meditation",   attribute: "soul",     label: "Meditation"    },
   { key: "ritual",       attribute: "soul",     label: "Ritual"        },
   { key: "insight",      attribute: "soul",     label: "Insight"       },
-  { key: "warding",      attribute: "soul",     label: "Warding"       },
+  { key: "bracing",      attribute: "soul",     label: "Bracing"       },
   { key: "plating",      attribute: "body",     label: "Plating"       }
 ];
 
@@ -1917,7 +1932,11 @@ function _ftWarnIfOutOfRange(actor, item) {
   try {
     const rangeFt = _ftItemRangeFt(item);
     if (!(rangeFt > 0)) return; // self/touch/unlimited → no check
-    const myTok = actor?.getActiveTokens?.()?.[0];
+    // Rig-weapons fire FROM the rig — a boarded steward's own token is hidden
+    // back at the boarding spot and goes stale the moment the rig moves
+    // (2026-08-21 playtest: point-blank autocannons warned "~98 ft away").
+    const originActor = (item?.parent?.type === "rig") ? item.parent : actor;
+    const myTok = originActor?.getActiveTokens?.()?.[0] ?? actor?.getActiveTokens?.()?.[0];
     const tgt   = Array.from(game.user?.targets ?? [])[0];
     if (!myTok || !tgt || tgt.id === myTok.id) return;
     const d = _ftDistanceBetweenTokens(myTok, tgt);
@@ -2741,7 +2760,7 @@ async function _ftHandleMisfireConvertClick(btn, message) {
 async function _ftPostAoeSavePromptCard(actor, target, item, mf, dr, baseDmg, trackKey, { castDc, intent, channel, rollOverride = null } = {}) {
   const r = mf.resolution ?? {};
   const saveAttr = r.saveAttribute || "body";
-  const dc = r.saveDcMode === "fixed" ? (Number(r.saveDcFixed) || 15) : (Number(castDc) || 15);
+  const dc = r.saveDcMode === "fixed" ? (Number(r.saveDcFixed) || 15) : ftFormulaSaveDC(actor, mf?.tier, channel);
   const onSave = ["negate", "half"].includes(r.onSave) ? r.onSave : "half";
   const ctx = {
     casterUuid: actor.uuid,
@@ -2797,6 +2816,7 @@ async function _ftHandleAoeSavePromptClick(btn, message) {
   try {
     const sav = await game.fourththing.rolls.resolveManifestationSave(caster, target, item, ctx.resolution, {
       castDc: ctx.castDc,
+      channel: ctx.channel || null,
       rollOverride: ctx.rollOverride || null
     });
     let mult = 1;
@@ -2816,7 +2836,7 @@ async function _ftHandleAoeSavePromptClick(btn, message) {
     }
     if (mult > 0 && Array.isArray(ctx.appliedStates?.states) && ctx.appliedStates.states.length) {
       try {
-        await game.fourththing.applyManifestationStates(caster, target, item, { appliedStates: ctx.appliedStates }, { castDc: ctx.castDc });
+        await game.fourththing.applyManifestationStates(caster, target, item, { appliedStates: ctx.appliedStates }, { castDc: ctx.castDc, channel: ctx.channel || null });
       } catch (e) {
         console.warn("AoE save prompt: applyManifestationStates failed", e);
       }
@@ -2881,7 +2901,7 @@ async function _ftHandleAoeApplyAllClick(btn, message) {
 async function _ftPostSavePromptCard(actor, target, item, mf, dr, { castDc, intent, channel, rollOverride = null } = {}) {
   const r = mf.resolution ?? {};
   const saveAttr = r.saveAttribute || "body";
-  const dc = r.saveDcMode === "fixed" ? (Number(r.saveDcFixed) || 15) : (Number(castDc) || 15);
+  const dc = r.saveDcMode === "fixed" ? (Number(r.saveDcFixed) || 15) : ftFormulaSaveDC(actor, mf?.tier, channel);
   const onSave = ["negate", "half"].includes(r.onSave) ? r.onSave : "half";
   const ctx = {
     casterUuid: actor.uuid,
@@ -2940,6 +2960,7 @@ async function _ftHandleSavePromptClick(btn, message) {
   try {
     const sav = await game.fourththing.rolls.resolveManifestationSave(caster, target, item, ctx.resolution, {
       castDc: ctx.castDc,
+      channel: ctx.channel || null,
       rollOverride: ctx.rollOverride || null
     });
     let mult = 1;
@@ -2951,13 +2972,24 @@ async function _ftHandleSavePromptClick(btn, message) {
     if (dr?.op !== "none" && Number(dr?.number) > 0 && mult > 0) {
       await ftRollManifestationDamage(caster, item, dr, { multiplier: mult });
     }
-    // Apply states with the same gate.
-    if (mult > 0 && Array.isArray(ctx.appliedStates?.states) && ctx.appliedStates.states.length) {
+    // Apply states AND Buffs & Wards with the same gate. Two latent bugs here
+    // (2026-08-21, the first stuck [sic] applied nothing):
+    //  · wards-only workings (no conditions — a pure stat-mark) never reached
+    //    the applier because this gate demanded a states ARRAY; the applier's
+    //    own item-side bridge fetches appliedEffects, it just never got called.
+    //  · wizard-authored states arrive as an object-of-booleans, which also
+    //    failed the Array.isArray check (the applier normalizes both shapes).
+    const _wardsEff = item?.system?.manifestation?.appliedEffects;
+    const _hasWards = !!(_wardsEff && ((_wardsEff.modifiers?.length) || (_wardsEff.resists?.length) || (_wardsEff.immunes?.length)));
+    const _sts = ctx.appliedStates?.states;
+    const _hasStates = Array.isArray(_sts) ? _sts.length > 0
+      : !!(_sts && typeof _sts === "object" && Object.values(_sts).some(Boolean));
+    if (mult > 0 && (_hasStates || _hasWards)) {
       // applyManifestationStates reads mf.appliedStates — pass a synthetic mf
       // shape with the snapshotted appliedStates so it doesn't re-read the
       // (potentially edited) item.
       try {
-        await game.fourththing.applyManifestationStates(caster, target, item, { appliedStates: ctx.appliedStates }, { castDc: ctx.castDc });
+        await game.fourththing.applyManifestationStates(caster, target, item, { appliedStates: ctx.appliedStates }, { castDc: ctx.castDc, channel: ctx.channel || null });
       } catch (e) {
         console.warn("Roll for Initiation | savePrompt applyManifestationStates failed", e);
       }
@@ -7322,6 +7354,14 @@ async function castManifestation(actor, item, {
   const misfireTier = reachPath ? manTier : stewardTier;
   const skipMisfire = miracle || reachPath === "bloodDebt" || cfg.ascendant;
 
+  // Noise "Lattice attention" (2026-08-17): a loud caster's failures land harder.
+  // Distinct axis from the flat `- totalNoise` already applied to the cast roll —
+  // that one decides IF you fail, this one decides how badly. Never both on the
+  // same number. Hoisted ABOVE the cost note that surfaces it — the note read
+  // this const before its declaration, which TDZ-crashed EVERY cast
+  // (2026-08-20 Marginalia playtest, first live cast after the Noise-bite work).
+  const noiseMisfireShift = _ftNoiseBite(actor).misfireShift;
+
   const costPieces = [];
   if (clarityCost > 0) costPieces.push(`Clarity ${clarityCost}`);
   if (bloodDebtCost > 0) costPieces.push(`Blood Debt +${bloodDebtCost}`);
@@ -7334,15 +7374,15 @@ async function castManifestation(actor, item, {
 
   // Discipline misfire shift folds into modeMisfireBias (negative=better).
   const disciplineBandShift = Number(getMisfireBandShift(actor)) || 0;
-  // Noise "Lattice attention" (2026-08-17): a loud caster's failures land harder.
-  // Distinct axis from the flat `- totalNoise` already applied to the cast roll —
-  // that one decides IF you fail, this one decides how badly. Never both on the
-  // same number.
-  const noiseMisfireShift = _ftNoiseBite(actor).misfireShift;
+  // noiseMisfireShift is declared above the cost note (TDZ fix 2026-08-20).
   const totalMisfireBias = cfg.misfireBias + disciplineBandShift + noiseMisfireShift;
 
   // Surface discipline shifts in the cost note so the GM/player sees the deltas.
-  const discNote = summarizeDiscipline(actor);
+  // The Reach discount only applies to Blood-Debt reach casts — on any other
+  // cast there is nothing for it to touch, so it's stripped from the note.
+  const discNoteRaw = summarizeDiscipline(actor);
+  const discNote = (reachPath === "bloodDebt") ? discNoteRaw
+    : String(discNoteRaw || "").split(" · ").filter(b => !b.startsWith("Reach −")).join(" · ");
   const finalCostNote = discNote ? `${costNote} · Discipline: ${discNote}` : costNote;
 
   // Fire the roll first so the chat card shows before we commit resource writes.
@@ -7532,6 +7572,7 @@ async function castManifestation(actor, item, {
       // Skipped under AoE — per-target saves run inside the AoE walk below.
       const sav = await game.fourththing.rolls.resolveManifestationSave(actor, target, item, resolution, {
         castDc: targetSaveCastDc,
+        channel,
         rollOverride: rs.defenseImpose > 0 ? "3d10kl2" : null
       });
       if (sav?.saved) {
@@ -7600,6 +7641,7 @@ async function castManifestation(actor, item, {
           if (effShape === "save") {
             const sav = await game.fourththing.rolls.resolveManifestationSave(actor, aoeActor, item, resolution, {
               castDc: targetSaveCastDc,
+              channel,
               rollOverride: rs.defenseImpose > 0 ? "3d10kl2" : null
             });
             if (sav?.saved) aoeMult = (sav.onSave === "negate") ? 0 : 0.5;
@@ -7633,7 +7675,7 @@ async function castManifestation(actor, item, {
           if (_ftHasManifestationApplicables(mf, item) && (game.settings?.get?.("fourththing", "autoApplyEffects") ?? true)) {
             if (aoeMult > 0) {
               try {
-                await game.fourththing.applyManifestationStates(actor, aoeActor, item, mf, { castDc: targetSaveCastDc });
+                await game.fourththing.applyManifestationStates(actor, aoeActor, item, mf, { castDc: targetSaveCastDc, channel });
                 stateLines.push(`${aoeActor.name}: states applied`);
               } catch (e) {
                 console.warn("Roll for Initiation | applyManifestationStates AoE failed", aoeActor.name, e);
@@ -7698,7 +7740,7 @@ async function castManifestation(actor, item, {
       if (target && damageMultiplier > 0 && _ftHasManifestationApplicables(mf, item)
           && (game.settings?.get?.("fourththing", "autoApplyEffects") ?? true)) {
         try {
-          await game.fourththing.applyManifestationStates(actor, target, item, mf, { castDc: targetSaveCastDc });
+          await game.fourththing.applyManifestationStates(actor, target, item, mf, { castDc: targetSaveCastDc, channel });
         } catch (e) {
           console.warn("Roll for Initiation | applyManifestationStates failed", e);
         }
@@ -8805,7 +8847,7 @@ function _ftWizV2RenderEffectPower(state) {
   }).join("");
   const saveSubFields = ap.saveEachRound ? `
       <div class="ft-cast-field"><label>Save attribute</label>${_ftWizV2Sel("appliedStates.saveAttribute", _ftWizV2FacultiesMap(), ap.saveAttribute ?? "body")}</div>
-      <div class="ft-cast-field"><label>DC mode</label>${_ftWizV2Sel("appliedStates.saveDcMode", { "cast-dc": "Cast DC (default 15)", fixed: "Fixed" }, ap.saveDcMode ?? "cast-dc")}</div>
+      <div class="ft-cast-field"><label>DC mode</label>${_ftWizV2Sel("appliedStates.saveDcMode", { "cast-dc": "Standard (11 + tier×2 + channel)", fixed: "Fixed" }, ap.saveDcMode ?? "cast-dc")}</div>
       ${ap.saveDcMode === "fixed" ? `<div class="ft-cast-field"><label>DC</label>${_ftWizV2Num("appliedStates.saveDcFixed", ap.saveDcFixed ?? 15, { min: 5, max: 40 })}</div>` : ""}
   ` : "";
   return `
@@ -8983,7 +9025,7 @@ function _ftWizV2RenderResolution(state) {
   const subSave = shape === "save" ? `
     <div class="ft-cast-grid">
       <div class="ft-cast-field"><label>Save attribute</label>${_ftWizV2Sel("resolution.saveAttribute", _ftWizV2FacultiesMap(), r.saveAttribute ?? "body")}</div>
-      <div class="ft-cast-field"><label>DC mode</label>${_ftWizV2Sel("resolution.saveDcMode", { "cast-dc": "Cast DC (default 15)", fixed: "Fixed" }, r.saveDcMode ?? "cast-dc")}</div>
+      <div class="ft-cast-field"><label>DC mode</label>${_ftWizV2Sel("resolution.saveDcMode", { "cast-dc": "Standard (11 + tier×2 + channel)", fixed: "Fixed" }, r.saveDcMode ?? "cast-dc")}</div>
       ${(r.saveDcMode === "fixed") ? `<div class="ft-cast-field"><label>DC</label>${_ftWizV2Num("resolution.saveDcFixed", r.saveDcFixed ?? 15, { min: 5, max: 40 })}</div>` : ""}
       <div class="ft-cast-field"><label>On save</label>${_ftWizV2Sel("resolution.onSave", { negate: "Negate damage", half: "Half damage" }, r.onSave ?? "half")}</div>
       <div class="ft-cast-field ft-cast-span-2"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer" data-tooltip="If on, the cast posts a Save button chat card instead of the GM auto-rolling — target's owner clicks to roll their own save. Singular-target only; AoE always GM-side.">${_ftWizV2Chk("resolution.saveByPrompt", r.saveByPrompt === true)}<span>Prompt target to roll save (chat-card button)</span></label></div>
@@ -10225,12 +10267,16 @@ FT.ARMOR_RANK_SCALE = {
   5: { mult: 1,   flat: 3, label: "Legendary — full bonuses, +3 defense" }
 };
 
-FT.ARMOR_SKILLS = ["plating", "weave", "warding"];
+FT.ARMOR_SKILLS = ["plating", "fitting", "bracing"];
 
 // Weight tag → gating skill. Tag is the canonical route; the item's
 // `system.armorSkill` field is treated as a fallback hint for armor that
 // lacks an explicit weight tag.
-FT.ARMOR_WEIGHT_SKILL = { light: "weave", medium: "warding", heavy: "plating" };
+// Owner rename 2026-08-22: weave→fitting (light), warding→bracing (medium) —
+// the old names read as spellcraft, not armor use. Legacy values keep working
+// through FT.LEGACY_SKILL_ALIASES so old items/tools need no data edits.
+FT.ARMOR_WEIGHT_SKILL = { light: "fitting", medium: "bracing", heavy: "plating" };
+FT.LEGACY_SKILL_ALIASES = { weave: "fitting", warding: "bracing", weaver: "fitting" };
 
 function _ftArmorGateSkill(item) {
   const tags = item?.system?.tags || [];
@@ -10238,14 +10284,15 @@ function _ftArmorGateSkill(item) {
     const k = FT.ARMOR_WEIGHT_SKILL[String(t).toLowerCase()];
     if (k) return k;
   }
-  const declared = item?.system?.armorSkill;
+  const declaredRaw = String(item?.system?.armorSkill || "");
+  const declared = FT.LEGACY_SKILL_ALIASES[declaredRaw] || declaredRaw;
   if (declared && FT.ARMOR_SKILLS.includes(declared)) return declared;
-  return "weave";
+  return "fitting";
 }
 
 // Equipment proficiency for inventory display. Returns null for items that
 // aren't gated by a skill (plain gear). Armor gates on its weight skill
-// (weave/warding/plating); weapons on their resolved combat skill. `trained`
+// (fitting/bracing/plating); weapons on their resolved combat skill. `trained`
 // is false only at rank 0 — the rank at which armor grants ZERO benefit (see
 // FT.ARMOR_RANK_SCALE: mult 0 at rank 0) and a weapon is wielded untrained.
 // Surfaced as a sheet warning so the otherwise-silent failure (e.g. armor that
@@ -10488,16 +10535,37 @@ function ftComputeDefenses(actor, sys) {
     }
   }
 
+  // AE grant keys + 5e-converter legacy trait keys — hoisted ABOVE the item
+  // loop (2026-08-20): the skip-bail below used to drop any item whose ONLY
+  // contribution is an AE (no flag-grants, not armor), so the AE scan under it
+  // never ran. Firmware of Identity's poison resistance was the live case —
+  // badge on the STATES tab, nothing in the defense map.
+  const GRANT_RE = /^flags\.fourththing\.grant\.(resists|resistances|immunes|immunities|vulns|vulnerabilities|condImmunes|conditionImmunities)$/;
+  const LEGACY_TRAIT_RE = /^system\.traits\.(dr|di|dv|ci)\.value$/;
+  const LEGACY_BUCKET = { dr: "resists", di: "immunes", dv: "vulns", ci: "condImmunes" };
+  // v14-era typed effects can carry their change rows at `system.changes`
+  // instead of the classic top-level `changes` — read whichever is populated.
+  const _ftAeChangeRows = (ae) => {
+    const top = Array.isArray(ae?.changes) ? ae.changes : [];
+    if (top.length) return top;
+    const sys = ae?.system?.changes;
+    return Array.isArray(sys) ? sys : [];
+  };
   if (actor?.items) {
     for (const item of actor.items) {
       const grants     = item.flags?.fourththing?.grants;
       const armorRes   = (item.type === "armor") ? item.system?.resistances : null;
       const hasArmorRes = Array.isArray(armorRes) && armorRes.length > 0;
-      // Skip items that contribute nothing — neither flag-grants nor native
-      // armor resistances. Pre-fix bug: the bail also dropped armor with native
-      // resistances on the floor, so things like Foam Finger's ["kinetic"]
-      // never reached the resist map.
-      if (!grants && !hasArmorRes) continue;
+      // Skip items that contribute nothing — no flag-grants, no native armor
+      // resistances, AND no grant/legacy-trait AE rows. Pre-fix bugs: the bail
+      // once dropped armor with native resistances (Foam Finger's ["kinetic"]),
+      // and until 2026-08-20 it also dropped AE-only contributors (see above).
+      const hasGrantAEs = !!item.effects?.some?.(ae => !ae.disabled &&
+        _ftAeChangeRows(ae).some(ch => {
+          const k = String(ch?.key || "");
+          return GRANT_RE.test(k) || LEGACY_TRAIT_RE.test(k);
+        }));
+      if (!grants && !hasArmorRes && !hasGrantAEs) continue;
 
       // Equipped gate — armor uses native system.equipped (read by armor calc
       // too); weapons + gear use the flag toggle from the inventory tab. Items
@@ -10511,8 +10579,8 @@ function ftComputeDefenses(actor, sys) {
       }
 
       // Armor skill gate — protection requires the wearer be at least Trained
-      // in the canonical skill for the armor's weight tag (light→weave,
-      // medium→warding, heavy→plating). Falls back to system.armorSkill if no
+      // in the canonical skill for the armor's weight tag (light→fitting,
+      // medium→bracing, heavy→plating). Falls back to system.armorSkill if no
       // weight tag is present. Untrained armor delivers the material but not
       // the practice; resistance grants are dormant.
       if (item.type === "armor") {
@@ -10546,7 +10614,6 @@ function ftComputeDefenses(actor, sys) {
       // on a transfer:false item effect yet still show + edit natively in the AE
       // Changes tab. resistMap is Set-keyed, so duplicating an existing flag-grant is
       // idempotent. Disabled AEs are skipped (per-effect on/off for the GM).
-      const GRANT_RE = /^flags\.fourththing\.grant\.(resists|resistances|immunes|immunities|vulns|vulnerabilities|condImmunes|conditionImmunities)$/;
       // 🪤 2026-08-16 — every ancestry/heritage that came through the 5e
       // converter authored its resistances as dnd5e trait keys
       // (system.traits.dr/di/dv/ci.value). RFI keeps resistances at
@@ -10554,14 +10621,13 @@ function ftComputeDefenses(actor, sys) {
       // branch nothing reads: 15 of them across the packs were pure dead
       // weight, which is why Cutter Isbell's Neanderthal cold resistance never
       // showed. Read them here as grants — same equipped/skill gates as every
-      // other grant, values mapped forward by _FT_LEGACY_DEFENSE_ALIASES. Same
+      // other grant. (GRANT_RE / LEGACY_TRAIT_RE / LEGACY_BUCKET are hoisted
+      // above the item loop so the skip-bail can see them too.) Same
       // read-time policy as the retired "energy" type: no pack migration, and
       // any future 5e-derived import works on arrival.
-      const LEGACY_TRAIT_RE = /^system\.traits\.(dr|di|dv|ci)\.value$/;
-      const LEGACY_BUCKET = { dr: "resists", di: "immunes", dv: "vulns", ci: "condImmunes" };
       for (const ae of item.effects) {
         if (ae.disabled) continue;
-        for (const ch of (ae.changes ?? [])) {
+        for (const ch of _ftAeChangeRows(ae)) {
           const key = String(ch?.key || "");
           const m = GRANT_RE.exec(key) ?? (() => {
             const lm = LEGACY_TRAIT_RE.exec(key);
@@ -10600,7 +10666,7 @@ function ftComputeDefenses(actor, sys) {
       }
       // Native change-row path — applyOnUse clones + any actor AE authored the
       // Bucket-A way. Merged into the same Set-keyed maps (idempotent overlap).
-      for (const ch of (ae.changes ?? [])) {
+      for (const ch of _ftAeChangeRows(ae)) {
         const m = ACTOR_GRANT_RE.exec(String(ch?.key || ""));
         if (!m) continue;
         const vals = String(ch.value ?? "").split(",").map(s => s.trim()).filter(Boolean);
@@ -11053,7 +11119,7 @@ function ftComputeArmorBonus(actor, sys) {
     const a = item.system ?? {};
     if (a.equipped === false) continue;
 
-    // Weight tag is canonical (light→weave, medium→warding, heavy→plating);
+    // Weight tag is canonical (light→fitting, medium→bracing, heavy→plating);
     // armorSkill field is the fallback for armor without a weight tag.
     const skillKey = _ftArmorGateSkill(item);
     const rank = sys?.skills?.[skillKey]?.value ?? 0;
@@ -14202,6 +14268,7 @@ Hooks.once("init", function () {
   // `saveByPrompt: true` will route to a target-clicks-button chat card.
   game.fourththing.rolls.resolveManifestationSave = async function (actor, target, item, resolution = {}, {
     castDc = 15,
+    channel = null,
     rollOverride = null
   } = {}) {
     if (!actor || !target) return { saved: false, reason: "missing-actor-or-target" };
@@ -14210,7 +14277,11 @@ Hooks.once("init", function () {
     const validAttrs = ["violence", "intrigue", "presence", "body", "mind", "soul"];
     const saveAttr   = validAttrs.includes(resolution.saveAttribute) ? resolution.saveAttribute : "body";
     const dcMode     = resolution.saveDcMode === "fixed" ? "fixed" : "cast-dc";
-    const dc         = dcMode === "fixed" ? (Number(resolution.saveDcFixed) || 15) : (Number(castDc) || 15);
+    // Non-fixed mode = the formula ladder. Tier from the item's manifestation
+    // block when present; otherwise back-derived from the tiered cast DC.
+    const _mfTier    = Number((item?.system?.system ?? item?.system)?.manifestation?.tier)
+      || Math.round((Math.max(12, Math.min(18, Number(castDc) || 12)) - 10) / 2);
+    const dc         = dcMode === "fixed" ? (Number(resolution.saveDcFixed) || 15) : ftFormulaSaveDC(actor, _mfTier, channel);
     const onSave     = ["negate", "half"].includes(resolution.onSave) ? resolution.onSave : "half";
 
     const attrVal = Number(sys?.attributes?.[saveAttr]?.value) || 0;
@@ -14593,7 +14664,13 @@ Hooks.once("init", function () {
     // Radiation Sickness — flat accuracy penalty (folded into the strike's flat
     // modifier so it's visible in the roll formula).
     const _radPen   = _ftRadiationBite(actor).rollPenalty;
-    const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus - echoPenalty - _radPen;
+    // Foe standing tier bonus (owner ruling 2026-08-22): monsters carry empty
+    // skill maps and never explode dice, so their to-hit was faculty-only and
+    // the tier badge meant nothing on the attack line. Foes add their tier to
+    // strikes — the tier IS their training. (PCs are unaffected; their tier
+    // reaches attacks through skills, ranks, and Surge instead.)
+    const foeTierBonus = (typeof _ftIsFoeActor === "function" && _ftIsFoeActor(actor)) ? tierVal : 0;
+    const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus + foeTierBonus - echoPenalty - _radPen;
     // ── Aptitude rank + roll mode → dice pool ────────────────────────────────
     // Strikes roll the SAME rank-aware pool as an Aptitude check so a weapon hit
     // benefits identically. The rank's flat +N is already in total_mod; here the
@@ -14881,7 +14958,21 @@ Hooks.once("init", function () {
         radPenalty: _radPen
       }) + restraintNote + (flankMod > 0
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">⚔ Flanking: +${flankMod} (${flankMod + 1} melee threats)</p>`
-        : "") + (aeContribs.length
+        : "") + (() => {
+          // Foe rider save DC (owner ruling 2026-08-22, "no edits"): monster
+          // ability prose carries hand-written DCs nothing machine-reads. A
+          // foe's successful strike card now computes the rider DC on the same
+          // ladder players use — 11 + tier×2 + intent — superseding the stale
+          // prose numbers with zero data edits.
+          try {
+            if (!success || !foeTierBonus) return "";
+            const it = itemUuid ? fromUuidSync(itemUuid) : null;
+            const prose = String(it?.system?.effect ?? "");
+            if (!/\bDC\b|\brolls? vs\b|\bsave\b/i.test(prose)) return "";
+            const riderDc = 11 + tierVal * 2 + attrVal;
+            return `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">⚖ Rider save DC (formula): <b>${riderDc}</b> = 11 + tier ${tierVal}×2 + ${ftCap(intent)} ${attrVal}</p>`;
+          } catch (_e) { return ""; }
+        })() + (aeContribs.length
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">Passives: ${
             aeContribs.map(c => `${c.value >= 0 ? "+" : ""}${c.value} ${c.label} (${c.src})`).join(", ")
           }</p>`
@@ -16004,7 +16095,23 @@ Hooks.once("init", function () {
   // (carrying save-each-round metadata that _ftHandleTurnStart consumes).
   // Respects derived condition immunities. Posts a single chat card listing
   // applied + skipped states.
-  game.fourththing.applyManifestationStates = async function (caster, target, item, mf, { castDc = 15 } = {}) {
+  // Owner ruling 2026-08-22: Stress 0 = KNOCKED OUT, Integrity 0 = KILLED —
+  // easier to knock out than kill. Canonical "is this thing down" read
+  // honoring BOTH tracks (psychic offense drains stress; a stress-out is a
+  // real, nonlethal defeat). Rigs read integrity.value (no derived block).
+  // Returns null while up, else { down:true, kind:"killed"|"knocked out", track }.
+  game.fourththing.defeatState = function (actor) {
+    const sys = actor?.system?.system ?? actor?.system ?? {};
+    const rd = (p) => { const n = Number(foundry.utils.getProperty(sys, p)); return Number.isFinite(n) ? n : null; };
+    const integ = rd("derived.integrity.value") ?? rd("integrity.value");
+    const stress = rd("derived.stress.value");
+    const stressMax = rd("derived.stress.max") ?? 0;
+    if (integ !== null && integ <= 0) return { down: true, kind: "killed", track: "integrity" };
+    if (stress !== null && stressMax > 0 && stress <= 0) return { down: true, kind: "knocked out", track: "stress" };
+    return null;
+  };
+
+  game.fourththing.applyManifestationStates = async function (caster, target, item, mf, { castDc = 15, channel = null } = {}) {
     if (!caster || !target) return null;
     const cfg = mf?.appliedStates ?? null;
     // Phase C — Buffs & Wards. Pull from mf first (full call sites), then
@@ -16035,11 +16142,18 @@ Hooks.once("init", function () {
     const combat = game.combat;
     const dur = cfg?.duration ?? "1-round";
     const roundsByKey = { "1-round": 1, "2-rounds": 2, "3-rounds": 3 };
+    // Owner ruling 2026-08-22 ("bite first"): a timed effect applied outside
+    // the target's own turn is padded one round, so "1 round" always lasts
+    // through the target's next full turn — it never expires before the
+    // target has acted under it.
+    const _isTargetsTurn = combat?.combatant?.actorId === target.id;
     const aeDuration = (roundsByKey[dur] && combat)
-      ? { rounds: roundsByKey[dur], startRound: combat.round, startTurn: combat.turn, combat: combat.id }
+      ? { rounds: roundsByKey[dur] + (_isTargetsTurn ? 0 : 1), startRound: combat.round, startTurn: combat.turn, combat: combat.id }
       : {};
 
-    const dc = cfg?.saveDcMode === "fixed" ? (Number(cfg?.saveDcFixed) || 15) : (Number(castDc) || 15);
+    const _mfTierAS = Number(mf?.tier ?? (item?.system?.system ?? item?.system)?.manifestation?.tier)
+      || Math.round((Math.max(12, Math.min(18, Number(castDc) || 12)) - 10) / 2);
+    const dc = cfg?.saveDcMode === "fixed" ? (Number(cfg?.saveDcFixed) || 15) : ftFormulaSaveDC(caster, _mfTierAS, channel);
     const globalSaveAttr = cfg?.saveAttribute || "body";
     const overrides = (cfg?.saveAttributeOverrides && typeof cfg.saveAttributeOverrides === "object")
       ? cfg.saveAttributeOverrides : {};
@@ -16093,6 +16207,10 @@ Hooks.once("init", function () {
               dc,
               saveAttribute: saveAttr,
               saveEachRound: cfg.saveEachRound === true,
+              // Owner ruling 2026-08-22 ("bite first"): the first turn-start
+              // save is skipped — the effect must cost the target one turn
+              // before it can be shaken off. Consumed by the shake handler.
+              pendingFirstBite: cfg.saveEachRound === true,
               durationKind:  dur,
               startRound:    combat?.round ?? null,
               startTurn:     combat?.turn ?? null
@@ -17046,7 +17164,9 @@ Hooks.once("init", function () {
           flavor:  flavorBase + surgeNote,
           flags:   { "core.initiativeRoll": true }
         }, messageOptions);
-        const chatData = await roll.toMessage(messageData, { create: false, rollMode: chatRollMode });
+        // v14: Roll#toMessage's rollMode option became messageMode (same
+        // whisper-routing strings).
+        const chatData = await roll.toMessage(messageData, { create: false, messageMode: chatRollMode });
         if (i > 0) chatData.sound = null;
         messages.push(chatData);
       }
@@ -17398,6 +17518,14 @@ Hooks.once("init", function () {
       );
       for (const eff of saveEffects) {
         const meta = eff.flags.fourththing.appliedManifestation;
+        // Bite first, then save (owner ruling 2026-08-22): skip the very
+        // first turn-start save so the effect costs the target this turn;
+        // shake-off chances begin on their NEXT turn.
+        if (meta.pendingFirstBite === true) {
+          try { await eff.update({ "flags.fourththing.appliedManifestation.pendingFirstBite": false }); }
+          catch (e) { console.warn("Roll for Initiation | pendingFirstBite clear failed", e); }
+          continue;
+        }
         const sys  = actor.system?.system ?? actor.system ?? {};
         const attrKey = meta.saveAttribute || "body";
         const dc      = Number(meta.dc) || 15;
@@ -17643,7 +17771,12 @@ Hooks.once("init", function () {
   // managed AE pack (passive / engaged / overheated layers) so the steward
   // doesn't have to manually re-cast the aura. Mirrors the change-aura dialog
   // sync but covers the openAurabladeAction / direct-edit / class-feature paths.
-  Hooks.on("updateActor", async (actor, changes) => {
+  Hooks.on("updateActor", async (actor, changes, _options, userId) => {
+    // Author's client only: this hook fires on EVERY client, and the sync
+    // writes back to the actor — non-owners got "lacks permission to update
+    // Actor" errors (2026-08-20 playtest). The change's author always has
+    // write rights, and this guarantees the sync runs exactly once.
+    if (userId !== game.user.id) return;
     if (actor.type !== "character") return;
     const burnChanged = foundry.utils.getProperty(changes, "system.resources.burn.current");
     const auraChanged = foundry.utils.getProperty(changes, "system.resources.aura.state");
@@ -17658,7 +17791,9 @@ Hooks.once("init", function () {
 
   // Integrity → 0 detector: enters Last Stand on collapse; exits if healed above 0.
   // Characters only — NPCs drop on zero without the dying cycle.
-  Hooks.on("updateActor", async (actor, changes) => {
+  Hooks.on("updateActor", async (actor, changes, _options, userId) => {
+    // Author's client only — same reasoning as the Aurablade sync above.
+    if (userId !== game.user.id) return;
     if (actor.type !== "character") return;
     const newIntegrity = foundry.utils.getProperty(changes, "system.derived.integrity.value");
     if (newIntegrity === undefined) return;
@@ -17750,7 +17885,10 @@ Hooks.once("init", function () {
   game.fourththing.syncTokenVision = _ftSyncTokenVision;
 
   for (const evt of ["createItem", "updateItem", "deleteItem"]) {
-    Hooks.on(evt, (item, _data, _opts, _userId) => {
+    Hooks.on(evt, (item, _data, _opts, userId) => {
+      // Author's client only — the sync writes prototype-token + token docs,
+      // which non-owner clients aren't allowed to touch.
+      if (userId !== game.user.id) return;
       const flags = item.flags?.fourththing?.passives?.vision;
       // Cheap gate — only re-sync if this item had/has a vision flag, or if
       // we're processing a fresh import (createItem) which might add one.
@@ -18192,7 +18330,7 @@ Hooks.once("init", function () {
         hacking:      { label: "Goblin Mode (Online)",          tip: "Hacking. Sure." },
         tinkering:    { label: "Jank-Crafting",                 tip: "OK fine, Tinkering" },
         streetwise:   { label: "Knows a Guy",                   tip: "Streetwise, I guess" },
-        weave:        { label: "Cassius Clay Energy",           tip: "Weave, whatever" },
+        fitting:      { label: "Cassius Clay Energy",           tip: "Fitting — light armor, worn right" },
         diplomacy:    { label: "Yapping",                       tip: "Diplomacy, ugh" },
         intimidation: { label: "Big Mad",                       tip: "Fine — Intimidation" },
         empathy:      { label: "I Feel You Boo",                tip: "Empathy ... sure" },
@@ -18205,7 +18343,7 @@ Hooks.once("init", function () {
         meditation:   { label: "Logged Off",                    tip: "Meditation, whatever" },
         ritual:       { label: "Ceremonial Vibes",              tip: "Ritual, sure" },
         insight:      { label: "Lie Detector",                  tip: "Insight ... sure, I guess" },
-        warding:      { label: "Boundary Setting (Lit.)",       tip: "Warding, ugh" },
+        bracing:      { label: "Boundary Setting (Lit.)",       tip: "Bracing — medium armor, worn braced" },
         plating:      { label: "Tank Mode",                     tip: "Fine — Plating" }
       };
 
@@ -19527,10 +19665,12 @@ Hooks.once("init", function () {
       const tier   = _ftCasterTier(actor);
       const cap    = _ftSurgeCap(actor);
 
-      if (surge <= 0) {
-        ui.notifications.warn(`${actor.name}: no Surge banked to spend.`);
-        return;
-      }
+      // No early bail at 0 Surge (2026-08-21, Marginalia playtest): the menu
+      // already disables every unaffordable option with a "Needs X (you have
+      // Y)" tooltip, so an empty bank opens a perfectly good BROWSE mode —
+      // which is exactly what the onboarding tells new players to do ("open
+      // Spend and read the menu so you know what you're saving for"). The old
+      // guard turned that instruction into a warning toast.
 
       // Menu spec — every cost band has at least one Offense + Defense.
       // tier is the minimum tier required (1 = no gate). bucket determines column.
@@ -22126,7 +22266,7 @@ Hooks.once("init", function () {
           save:      "Save — target rolls vs cast DC",
           contested: "Contested — both roll, higher wins"
         },
-        SAVE_DC_MODES:      { "cast-dc": "Cast DC (default 15)", "fixed": "Fixed" },
+        SAVE_DC_MODES:      { "cast-dc": "Standard (11 + tier×2 + channel)", "fixed": "Fixed" },
         ON_RESOLVE_OUTCOMES: { negate: "Negate damage", half: "Half damage" },
         CONTEST_CASTER_OPTS: { "intent+channel": "Intent + Channel (default)", violence: "Violence", intrigue: "Intrigue", presence: "Presence", body: "Body", mind: "Mind", soul: "Soul" },
         manifestationModeLabel: ftManifestationModeLabel(system, "power"),
@@ -22238,7 +22378,7 @@ Hooks.once("init", function () {
           save:      "Save — target rolls vs cast DC",
           contested: "Contested — both roll, higher wins"
         },
-        SAVE_DC_MODES:      { "cast-dc": "Cast DC (default 15)", "fixed": "Fixed" },
+        SAVE_DC_MODES:      { "cast-dc": "Standard (11 + tier×2 + channel)", "fixed": "Fixed" },
         ON_RESOLVE_OUTCOMES: { negate: "Negate damage", half: "Half damage" },
         CONTEST_CASTER_OPTS: { "intent+channel": "Intent + Channel (default)", violence: "Violence", intrigue: "Intrigue", presence: "Presence", body: "Body", mind: "Mind", soul: "Soul" },
         APPLIED_STATE_DURATIONS: { "1-round": "1 round", "2-rounds": "2 rounds", "3-rounds": "3 rounds", scene: "Scene", "until-saved": "Until saved" },
@@ -23491,6 +23631,12 @@ Hooks.on("drawToken", (token) => {
 });
 
 // Refresh badges when rig actor crew updates
+// (2026-08-21) A duplicate "crew tokens follow the rig" hook briefly lived
+// here — the canonical rig-move steward sync at _ftClearPerRoundCombatFlags's
+// neighborhood (2026-05-19, GM-side, elevation-aware) already owns that job.
+// If boarded tokens visibly fail to follow again, debug THAT hook, don't
+// re-add a second one.
+
 Hooks.on("updateActor", (actor, changes) => {
   if (actor?.type !== "rig") return;
   if (!foundry.utils.hasProperty(changes, "system.crew.slots")) return;
@@ -25450,26 +25596,30 @@ async function _ftClearPerRoundCombatFlags(actor) {
                  c.bonusManifestationUsedThisRound;
   if (!hasAny) return;
   try {
-    await actor.update({
-      "flags.fourththing.combat.-=dodging":                   null,
-      "flags.fourththing.combat.-=disengaged":                null,
-      "flags.fourththing.combat.-=holding":                   null,
-      "flags.fourththing.combat.-=rigWeaponFiredThisRound":   null,
-      "flags.fourththing.combat.-=rigWeaponsFiredThisRound":  null,
-      "flags.fourththing.combat.-=lastFiredRigId":            null,
-      "flags.fourththing.combat.-=lastFiredWeaponId":         null,
-      "flags.fourththing.combat.-=pilotActionUsedThisRound":  null,
-      "flags.fourththing.combat.-=engineerRepairedThisRound": null,
+    // v14 deprecated the `-=key` deletion syntax in favor of ForcedDeletion
+    // operators. This clearer fires for EVERY combatant on EVERY turn-start,
+    // so the legacy path spammed ~15 stack-dumping compat warnings per actor
+    // (2026-08-21 playtest console flood). Use the operator when the runtime
+    // has it; fall back to legacy syntax on older cores.
+    const CLEAR_KEYS = [
+      "dodging", "disengaged", "holding",
+      "rigWeaponFiredThisRound", "rigWeaponsFiredThisRound",
+      "lastFiredRigId", "lastFiredWeaponId",
+      "pilotActionUsedThisRound", "engineerRepairedThisRound",
       // 2026-05-19 — new crew-action flags
-      "flags.fourththing.combat.-=aimedShot":                 null,
-      "flags.fourththing.combat.-=signalBonus":               null,
-      "flags.fourththing.combat.-=holdingOn":                 null,
-      "flags.fourththing.combat.-=suppressed":                null,
+      "aimedShot", "signalBonus", "holdingOn", "suppressed",
       // 2026-08-17 — engineer cycle-power's once-per-round gate.
-      "flags.fourththing.combat.-=cycledThisRound":           null,
+      "cycledThisRound",
       // Action Economy canon §5 — Elite bonus mani once-per-round flag.
-      "flags.fourththing.combat.-=bonusManifestationUsedThisRound": null
-    });
+      "bonusManifestationUsedThisRound"
+    ];
+    const FD = foundry?.data?.operators?.ForcedDeletion;
+    const patch = {};
+    for (const k of CLEAR_KEYS) {
+      if (FD) patch[`flags.fourththing.combat.${k}`] = new FD();
+      else    patch[`flags.fourththing.combat.-=${k}`] = null;
+    }
+    await actor.update(patch);
     // Round commit also clears the lingering Suppressed AE if it survived
     // (e.g. the target never attacked, so attackTest never cleared it).
     try {

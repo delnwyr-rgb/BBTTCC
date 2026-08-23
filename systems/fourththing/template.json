@@ -148,14 +148,14 @@
           "label": "Plating",
           "value": 0
         },
-        "weave": {
+        "fitting": {
           "attribute": "intrigue",
-          "label": "Weave",
+          "label": "Fitting",
           "value": 0
         },
-        "warding": {
+        "bracing": {
           "attribute": "soul",
-          "label": "Warding",
+          "label": "Bracing",
           "value": 0
         }
       },
@@ -579,7 +579,7 @@
       "evasionBonus": 0,
       "resolveBonus": 0,
       "resistances": [],
-      "armorSkill": "weave",
+      "armorSkill": "fitting",
       "equipped": true,
       "tags": [],
       "category": "armor",

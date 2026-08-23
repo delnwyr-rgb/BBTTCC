@@ -292,10 +292,27 @@ export const FEATURE_ROUTER = {
   "soulsmith-forge-spark-reclaimer-reverse-anvil":        "generic_per_use",
   "soulsmith-forge-spark-reclaimer-spark-reclaimer":      "generic_per_use",
   "soulsmith-forge-spark-reclaimer-overcharge-cycle":     "generic_per_use",
+  // === Per-use audit 2026-08-20 (Marginalia playtest) — 12 feats whose prose
+  // promises "Click this principle to invoke" but had no route, so the click
+  // was dead. Generic surface parses cadence + action cost from their own
+  // text; bespoke automation can supersede any of these by re-routing the id.
+  "cl_init1_true_name_touch":                             "generic_per_use",
+  "pk_init1_the_bargain":                                 "generic_per_use",
+  "pk_init6_renegotiate":                                 "generic_per_use",
+  "dw_t1_oneiric_reservoir":                              "generic_per_use",
+  "dw_t2_dream_cache":                                    "generic_per_use",
+  "wyrdlens_adept_tier_1_lens_read":                      "generic_per_use",
+  "wyrdlens_adept_tier_2_probability_overlay":            "generic_per_use",
+  "wyrdlens-refraction-foresight-refraction":             "generic_per_use",
+  "wyrdlens-refraction-foresight-lens-ledger":            "generic_per_use",
+  "wyrdlens-refraction-truth-prism-ledger":               "generic_per_use",
+  "wyrdlens-refraction-truth-researchers-eye":            "generic_per_use",
+  "wyrdlens-refraction-truth-truth-refraction":           "generic_per_use",
   // Resonance Channels are spent INSIDE the cast dialog — the feat items are
-  // explainers, not actions.
+  // explainers, not actions. (Base id joined its _action sibling 2026-08-20.)
   "cosmic_linguist_resonance_strain":                     "passive_info",
   "cosmic_linguist_resonance_channel_action":             "passive_info",
+  "cosmic_linguist_resonance_channel":                    "passive_info",
   // Civic Charge pool was purged in the Surge redesign — vestigial feat.
   "pactkeeper_spend_civic_charge":                        "pactkeeper_civic_charge",
   // Shadow Courier — merged Shadowjack + Phantom Courier with Package mechanic
@@ -362,6 +379,10 @@ export const FEATURE_ROUTER = {
 
 // Also match by name fragment (fallback for identifier mismatches)
 export const NAME_ROUTER = [
+  // Echo Boons (2026-08-22): every minted crew/occult echo carries exactly one
+  // "<name> (Echo Boon)" feature — all 22 families + the fallback route to one
+  // generic 1/scene handler instead of sitting inert on the echo's sheet.
+  ["(Echo Boon)",                "echo_boon"],
   // === LEGACY (pre-Sprint-F) entries remain for backward compat ===
   // Titanbound → dispatches to Bulwark handlers
   ["Spend Frame Die",            "bulwark_spend_frame"],
@@ -7135,7 +7156,23 @@ export async function dispatchFeatureAction(actor, item) {
     }
   }
 
+  // Proof-of-life signal (2026-08-20, Marginalia playtest): one emission point
+  // for "the player fired a routed principle" — generic per-use clicks post a
+  // chat card but never animate and aren't manifestations, so nothing else
+  // announces them. Info/explainer dialogs are excluded: reading about a power
+  // isn't using one. Consumed by bbttcc-onboarding's meatsuit proof-of-life.
+  if (handler !== "passive_info" && handler !== "shadow_courier_passive") {
+    try { Hooks.callAll("fourththing.featureDispatched", actor, item, { handler }); } catch (_) {}
+  }
+
   switch (handler) {
+    // Echo Boons — one generic 1/scene tracker + chat card for every minted
+    // echo's boon (the item body IS the table-facing rules text).
+    case "echo_boon": {
+      const body = String(item?.system?.description?.value ?? item?.system?.description ?? "").trim()
+        || "<p>1/scene — see the boon's flavor on the echo's sheet.</p>";
+      return _openPerSceneAbility(actor, `echoBoon-${item.id}`, item.name, body, null);
+    }
     // === Legacy Titanbound/Shadowjack/Breaker handlers (kept) ===
     case "titanbound_spend":       return openSpendFrameDie(actor);
     case "titanbound_pool":        return openFrameDiePool(actor);
