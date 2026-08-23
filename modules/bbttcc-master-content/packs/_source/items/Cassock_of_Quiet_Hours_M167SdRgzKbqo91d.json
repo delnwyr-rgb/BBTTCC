@@ -9,7 +9,7 @@
     "resistances": [
       "psychic"
     ],
-    "armorSkill": "warding",
+    "armorSkill": "bracing",
     "equipped": false,
     "tags": [
       "warding",
@@ -20,7 +20,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A heavy sept-cassock cut for the ones who sit the night vigils — quilted, hooded, stitched with a calming refrain in a thread you can only read by touch. The mind stays the bearer's own through the long dark.</p><p><strong>Quiet Hours.</strong> Resists psychic. The refrain holds the bearer's thoughts to their own shape.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Defense:</strong> Guard +1, Evasion +1, Resolve +3</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Psychic</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 225 Nonlethal marks</p></li></ul>",
+      "value": "<p>A heavy sept-cassock cut for the ones who sit the night vigils \u2014 quilted, hooded, stitched with a calming refrain in a thread you can only read by touch. The mind stays the bearer's own through the long dark.</p><p><strong>Quiet Hours.</strong> Resists psychic. The refrain holds the bearer's thoughts to their own shape.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Defense:</strong> Guard +1, Evasion +1, Resolve +3</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Psychic</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 225 Nonlethal marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -45,7 +45,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A heavy sept-cassock cut for the ones who sit the night vigils — quilted, hooded, stitched with a calming refrain in a thread you can only read by touch. The mind stays the bearer's own through the long dark.</p><p><b>Quiet Hours.</b> Resists psychic. The refrain holds the bearer's thoughts to their own shape.</p>",
+          "lore": "<p>A heavy sept-cassock cut for the ones who sit the night vigils \u2014 quilted, hooded, stitched with a calming refrain in a thread you can only read by touch. The mind stays the bearer's own through the long dark.</p><p><b>Quiet Hours.</b> Resists psychic. The refrain holds the bearer's thoughts to their own shape.</p>",
           "materialOf": [
             "sept-cloth",
             "calming-thread",
@@ -58,7 +58,7 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TII armor × 1.50",
+            "notes": "TII armor \u00d7 1.50",
             "bound": "free",
             "saleBack": 90
           }

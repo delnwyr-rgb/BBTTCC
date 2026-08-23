@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "Not THE manager. The ASSISTANT to the regional manager. He has a clipboard, a lanyard, and the authority to ruin your whole afternoon eschatologically. He'd love to escalate this but the actual apocalypse is in a meeting. Boss-tier. Has phases. Has a quarterly review of your soul.",
     "details": {
-      "level": 12,
+      "level": 18,
       "tier": 4,
       "statPoints": 0,
       "skillPoints": 0
@@ -1248,7 +1248,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Ultimate — 1/scene below half Integrity.</strong> 6 squares Resolve vs DC 18. Fail: <code>4d8</code> qliphothic + Scarred. Half on success.</p><p><em>\"Per our records, you have not met expectations. Per the universe's records, neither has the universe. Let's circle back. Forever.\"</em></p>",
+          "value": "<p><strong>Ultimate \u2014 1/scene below half Integrity.</strong> 6 squares Resolve vs DC 18. Fail: <code>4d8</code> qliphothic + Scarred. Half on success.</p><p><em>\"Per our records, you have not met expectations. Per the universe's records, neither has the universe. Let's circle back. Forever.\"</em></p>",
           "chat": ""
         }
       },

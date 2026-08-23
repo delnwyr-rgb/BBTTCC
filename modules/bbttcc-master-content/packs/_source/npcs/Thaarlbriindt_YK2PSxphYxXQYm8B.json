@@ -274,12 +274,12 @@
         "label": "Plating",
         "value": 1
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 1
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 1
@@ -455,7 +455,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Circuitborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Exo-Knight, Parallax, Salvage, Synapse</strong>.</p><p>This root grants the shared Circuitborn core trait package (<em>Firmware of Identity</em>) and preserves live UUID compatibility for the four Line items.</p><p><em>“You are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.”</em></p><p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p><p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you, you may regain either one spent Bad Eden OP (a category you used this scene) or Integrity equal to your tier.</p><p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor.</p><p><strong>Line Memory.</strong> Choose one Circuitborn line (Exo-Knight, Parallax, Salvage, Synapse). Your line grants Tier powers as you level.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Circuitborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Exo-Knight, Parallax, Salvage, Synapse</strong>.</p><p>This root grants the shared Circuitborn core trait package (<em>Firmware of Identity</em>) and preserves live UUID compatibility for the four Line items.</p><p><em>\u201cYou are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.\u201d</em></p><p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p><p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you, you may regain either one spent Bad Eden OP (a category you used this scene) or Integrity equal to your tier.</p><p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor.</p><p><strong>Line Memory.</strong> Choose one Circuitborn line (Exo-Knight, Parallax, Salvage, Synapse). Your line grants Tier powers as you level.</p>",
           "chat": ""
         },
         "advancement": [
@@ -535,7 +535,7 @@
               "context": "defense",
               "mode": "reroll-lowest",
               "vs": "vs:poison and disease",
-              "note": "on defense checks [TODO(adv-call)] against poison and disease, and you are im…"
+              "note": "on defense checks [TODO(adv-call)] against poison and disease, and you are im\u2026"
             }
           ],
           "triggers": [
@@ -613,7 +613,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You are not a robot. You are a decision the world keeps making about itself.”</em></p>\n<p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p>\n<p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), you may regain either (a) one spent Bad Eden OP (a category you used this scene) or (b) Integrity equal to your tier.</p>\n<p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor. You reroll the lowest die on checks to identify surveillance, hidden speakers, encoded messages, or noospheric “attention traps.”</p>\n<p><strong>Glitch-Surge.</strong> When you drop to 0 Integrity, you can choose to emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In Bad Eden play, this is a perfect excuse for weird consequences.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou are not a robot. You are a decision the world keeps making about itself.\u201d</em></p>\n<p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p>\n<p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), you may regain either (a) one spent Bad Eden OP (a category you used this scene) or (b) Integrity equal to your tier.</p>\n<p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor. You reroll the lowest die on checks to identify surveillance, hidden speakers, encoded messages, or noospheric \u201cattention traps.\u201d</p>\n<p><strong>Glitch-Surge.</strong> When you drop to 0 Integrity, you can choose to emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In Bad Eden play, this is a perfect excuse for weird consequences.</p>",
           "chat": ""
         },
         "uses": {
@@ -752,7 +752,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Circuitborn Line.</strong> The war-plate. Made for impact, for holding the line, for being the thing the squad puts between itself and whatever just came through the gate.</p><p><em>“Captain Robot is not a robot. You are. Try not to make it weird about him.”</em></p><p><strong>Exo-Knight.</strong> You are a sentient chassis built around the principle of <em>presence</em>. When you stand somewhere, that ground belongs to your faction until something stronger walks you off it.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Construct-Living).</p></li><li><p><strong>Chassis Lean.</strong> Your chassis is built around <strong>VIO (Violence)</strong>—expressed primarily through Tier powers.</p></li><li><p><strong>Bulwark Frame.</strong> When an ally within 1 square of you is hit by an attack, you may use your reaction to impose 3d10 keep lowest 2 on the attack roll (1/Soma Break).</p></li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Circuitborn Line.</strong> The war-plate. Made for impact, for holding the line, for being the thing the squad puts between itself and whatever just came through the gate.</p><p><em>\u201cCaptain Robot is not a robot. You are. Try not to make it weird about him.\u201d</em></p><p><strong>Exo-Knight.</strong> You are a sentient chassis built around the principle of <em>presence</em>. When you stand somewhere, that ground belongs to your faction until something stronger walks you off it.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Construct-Living).</p></li><li><p><strong>Chassis Lean.</strong> Your chassis is built around <strong>VIO (Violence)</strong>\u2014expressed primarily through Tier powers.</p></li><li><p><strong>Bulwark Frame.</strong> When an ally within 1 square of you is hit by an attack, you may use your reaction to impose 3d10 keep lowest 2 on the attack roll (1/Soma Break).</p></li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -839,7 +839,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>“If you stand near me, you’re harder to kill. That’s the point.”</em></p><p><strong>Shield Projector (tier/Soma Break).</strong> When a creature you can see within 6 squares is hit, you can use your reaction to project a barrier. Reduce the damage by 1d6 + your tier.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><em>\u201cIf you stand near me, you\u2019re harder to kill. That\u2019s the point.\u201d</em></p><p><strong>Shield Projector (tier/Soma Break).</strong> When a creature you can see within 6 squares is hit, you can use your reaction to project a barrier. Reduce the damage by 1d6 + your tier.</p>",
           "chat": ""
         },
         "uses": {
@@ -919,7 +919,7 @@
         "source": "",
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">⚙ ENGINE NOTE — Frame &amp; Ruin are now ◆ Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the ◆ Surge menu. Automated: Polarity Mastery (melee strike, base die ≥ 8 → +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p><em>\"Set your feet. The line forms on you.\"</em></p>\n<p>The Bulwark is the wall — and the wall runs on <strong>Surge</strong>, like everyone, but yours arrives the hard way: every time you <strong>take Integrity damage you bank +1 Surge</strong> (max +2/round). You eat the blow and turn it into the power to anchor, erupt, or hold. At zero Surge you still stand in the way; soak one hit and your turn opens up.</p>\n<h3>The Fortress (spent via Surge — Bulwark only)</h3>\n<ul>\n  <li><strong>Brace Wall</strong> (1) — you and adjacent allies gain DR equal to Tier this round.</li>\n  <li><strong>Bulwark Stance</strong> (6) — adjacent allies share your defenses until your next turn.</li>\n  <li><strong>Anchor</strong> (5) — you and one ally become immune to forced movement and crowd-control until next round.</li>\n  <li><strong>Mass Aegis</strong> (8) — allies within Tier squares gain +Tier to every defense this round.</li>\n  <li><strong>Sanctum</strong> (9) — immune to one damage type for a round.</li>\n  <li><strong>Mythic Stand</strong> (10) — invulnerable until the start of your next turn.</li>\n</ul>\n<p>These were always the Bulwark's birthright; they no longer leak into everyone else's menu. <strong>Frame Dice</strong> and <strong>Ruin Charges</strong> endure as the strategic layer — Catastrophic Entry still sunders armor and breaches structures, Ruin still cuts a Siege's cost — and both refill on a Soma Break.</p>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">\u2699 ENGINE NOTE \u2014 Frame &amp; Ruin are now \u25c6 Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the \u25c6 Surge menu. Automated: Polarity Mastery (melee strike, base die \u2265 8 \u2192 +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p><em>\"Set your feet. The line forms on you.\"</em></p>\n<p>The Bulwark is the wall \u2014 and the wall runs on <strong>Surge</strong>, like everyone, but yours arrives the hard way: every time you <strong>take Integrity damage you bank +1 Surge</strong> (max +2/round). You eat the blow and turn it into the power to anchor, erupt, or hold. At zero Surge you still stand in the way; soak one hit and your turn opens up.</p>\n<h3>The Fortress (spent via Surge \u2014 Bulwark only)</h3>\n<ul>\n  <li><strong>Brace Wall</strong> (1) \u2014 you and adjacent allies gain DR equal to Tier this round.</li>\n  <li><strong>Bulwark Stance</strong> (6) \u2014 adjacent allies share your defenses until your next turn.</li>\n  <li><strong>Anchor</strong> (5) \u2014 you and one ally become immune to forced movement and crowd-control until next round.</li>\n  <li><strong>Mass Aegis</strong> (8) \u2014 allies within Tier squares gain +Tier to every defense this round.</li>\n  <li><strong>Sanctum</strong> (9) \u2014 immune to one damage type for a round.</li>\n  <li><strong>Mythic Stand</strong> (10) \u2014 invulnerable until the start of your next turn.</li>\n</ul>\n<p>These were always the Bulwark's birthright; they no longer leak into everyone else's menu. <strong>Frame Dice</strong> and <strong>Ruin Charges</strong> endure as the strategic layer \u2014 Catastrophic Entry still sunders armor and breaches structures, Ruin still cuts a Siege's cost \u2014 and both refill on a Soma Break.</p>",
           "chat": ""
         },
         "advancement": [
@@ -938,7 +938,7 @@
             },
             "value": {},
             "level": 1,
-            "title": "Bulwark — Tier 1: Founding Stance"
+            "title": "Bulwark \u2014 Tier 1: Founding Stance"
           },
           {
             "_id": "xMkzggxhV7D4dlsW",
@@ -955,7 +955,7 @@
             },
             "value": {},
             "level": 6,
-            "title": "Bulwark — Tier 2: Anchor or Advance"
+            "title": "Bulwark \u2014 Tier 2: Anchor or Advance"
           },
           {
             "_id": "1pk6AixW41XX5BKD",
@@ -972,7 +972,7 @@
             },
             "value": {},
             "level": 11,
-            "title": "Bulwark — Tier 3: Polarity Mastery"
+            "title": "Bulwark \u2014 Tier 3: Polarity Mastery"
           },
           {
             "_id": "7ATFRxDnwerU82M0",
@@ -989,7 +989,7 @@
             },
             "value": {},
             "level": 16,
-            "title": "Bulwark — Tier 4: Architect of Certainty"
+            "title": "Bulwark \u2014 Tier 4: Architect of Certainty"
           }
         ]
       },
@@ -1031,7 +1031,7 @@
       "_key": "!actors.items!YK2PSxphYxXQYm8B.ILTdffYBPOQEIDm1"
     },
     {
-      "name": "Bulwark — Tier 1: Founding Stance",
+      "name": "Bulwark \u2014 Tier 1: Founding Stance",
       "type": "feat",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_10.png",
       "system": {
@@ -1039,7 +1039,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">⚙ ENGINE NOTE — Frame &amp; Ruin are now ◆ Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the ◆ Surge menu. Automated: Polarity Mastery (melee strike, base die ≥ 8 → +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p><em>The world has two ways of saying no to change. You learn one of them today.</em></p><p><strong>On gaining Bulwark Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Athletics (Violence)</strong>.</p></li><li><p>Skill rank +1 in <strong>one tool of your choice</strong> (any single tool tracked as a skill on your sheet).</p></li><li><p><strong>Violence OP cap +3</strong> and <strong>Siege OP cap +2</strong> on the faction your character belongs to.</p></li><li><p>Your <strong>Frame Dice</strong> pool comes online (persistence — d8 dice, spend to absorb hits or fuel doctrine effects). Pool max = max(2, ceil((Violence value + Bulwark Initiation) / 3)), capped at 8.</p></li><li><p>Your <strong>Ruin Charges</strong> pool comes online (inevitability — single-use charges, spend to fuel offensive doctrine effects). Same pool-size formula.</p></li></ul><p>Both pools refill on a Soma Break. How you generate them depends on your chosen Path; see your doctrine's L1 feature.</p>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">\u2699 ENGINE NOTE \u2014 Frame &amp; Ruin are now \u25c6 Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the \u25c6 Surge menu. Automated: Polarity Mastery (melee strike, base die \u2265 8 \u2192 +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p><em>The world has two ways of saying no to change. You learn one of them today.</em></p><p><strong>On gaining Bulwark Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Athletics (Violence)</strong>.</p></li><li><p>Skill rank +1 in <strong>one tool of your choice</strong> (any single tool tracked as a skill on your sheet).</p></li><li><p><strong>Violence OP cap +3</strong> and <strong>Siege OP cap +2</strong> on the faction your character belongs to.</p></li><li><p>Your <strong>Frame Dice</strong> pool comes online (persistence \u2014 d8 dice, spend to absorb hits or fuel doctrine effects). Pool max = max(2, ceil((Violence value + Bulwark Initiation) / 3)), capped at 8.</p></li><li><p>Your <strong>Ruin Charges</strong> pool comes online (inevitability \u2014 single-use charges, spend to fuel offensive doctrine effects). Same pool-size formula.</p></li></ul><p>Both pools refill on a Soma Break. How you generate them depends on your chosen Path; see your doctrine's L1 feature.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -1171,10 +1171,10 @@
       "system": {
         "category": "doctrine",
         "classIdentifier": "bulwark",
-        "source": "Bad Eden Originals — Sprint F (2026 rules)",
+        "source": "Bad Eden Originals \u2014 Sprint F (2026 rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>\"You do not stop. They learn this the hard way.\"</em></p>\n<p><strong>Doctrine:</strong> Momentum is the point — geography deciding to move.</p>\n<p>The Avalanche is mass that arrives all at once. Your Surge spends are forward motion made lethal: barrel through, crash home, and — when it matters — become a thing nothing in the world can currently stop.</p>\n<h3>Path (spent via Surge)</h3>\n<ul>\n  <li><strong>Roll Forward</strong> (1) — your next Strike +Tier d6, and the target is knocked Prone.</li>\n  <li><strong>Crash</strong> (3) — your next Strike lands as a max-die crit; the target is Staggered.</li>\n  <li><strong>Unstoppable</strong> (5) — immune to forced-movement/CC this round; your next Strike ignores resistances and knocks the target Prone.</li>\n</ul>",
+          "value": "<p><em>\"You do not stop. They learn this the hard way.\"</em></p>\n<p><strong>Doctrine:</strong> Momentum is the point \u2014 geography deciding to move.</p>\n<p>The Avalanche is mass that arrives all at once. Your Surge spends are forward motion made lethal: barrel through, crash home, and \u2014 when it matters \u2014 become a thing nothing in the world can currently stop.</p>\n<h3>Path (spent via Surge)</h3>\n<ul>\n  <li><strong>Roll Forward</strong> (1) \u2014 your next Strike +Tier d6, and the target is knocked Prone.</li>\n  <li><strong>Crash</strong> (3) \u2014 your next Strike lands as a max-die crit; the target is Staggered.</li>\n  <li><strong>Unstoppable</strong> (5) \u2014 immune to forced-movement/CC this round; your next Strike ignores resistances and knocks the target Prone.</li>\n</ul>",
           "chat": ""
         },
         "identifier": "bbttcc-bulwark-avalanche",
@@ -1226,7 +1226,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You move before the map exists.”</em></p><p><strong>Archetype (Bad Eden): The Fool (Catalyst).</strong> You are motion before certainty, risk before consensus, and the destabilizing force that turns unknown ground into lived reality.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens exploration, scouting, improvisation, and risky openings. This Archetype is associated with <strong>+1 Intrigue</strong> and <strong>+1 Logistics</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul><h3>attributes (Archetype ASI)</h3><p>Common patterns include:</p><ul><li><strong>Wild Pathfinder:</strong> +2 Intrigue, +1 Soul</li><li><strong>Restless Scout:</strong> +2 Soul, +1 Intrigue</li><li><strong>Improvisational Menace:</strong> +1 Intrigue, +1 Soul, +1 Presence</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou move before the map exists.\u201d</em></p><p><strong>Archetype (Bad Eden): The Fool (Catalyst).</strong> You are motion before certainty, risk before consensus, and the destabilizing force that turns unknown ground into lived reality.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens exploration, scouting, improvisation, and risky openings. This Archetype is associated with <strong>+1 Intrigue</strong> and <strong>+1 Logistics</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul><h3>attributes (Archetype ASI)</h3><p>Common patterns include:</p><ul><li><strong>Wild Pathfinder:</strong> +2 Intrigue, +1 Soul</li><li><strong>Restless Scout:</strong> +2 Soul, +1 Intrigue</li><li><strong>Improvisational Menace:</strong> +1 Intrigue, +1 Soul, +1 Presence</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1339,7 +1339,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Crew Type (Bad Eden): Ironbound Ascendants.</em></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Logistics OPs.</li></ul>",
+          "value": "<p><em>Crew Type (Bad Eden): Ironbound Ascendants.</em></p><p><strong>\u201cHeight is not terrain. It is policy.\u201d</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Logistics OPs.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1516,7 +1516,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Occult Association (Bad Eden): Biomancer / Fleshcrafter.</em></p><p><strong>“You don’t survive the world. You rewrite what Athletics means.”</strong></p><p>Biomancers do not treat life as sacred. They treat it as <strong>modifiable</strong>.</p><p>Where Alchemists convert matter and Shamans negotiate with ecosystems, Biomancers operate at a more intimate scale: flesh, bone, instinct, and adaptation. To them, evolution is not a process. It is a toolkit.</p><p>The Great Work, in their hands, is not about restoring what was lost. It is about building something that can survive what is coming.</p><p><strong>How Biomancers pursue the Great Work:</strong></p><ul><li>By modifying bodies to survive hostile conditions</li><li>By reducing loss through biological adaptation</li><li>By converting harm into resilience</li><li>By treating mutation as both tool and risk</li></ul><p><strong>Resonance:</strong> <strong>Yesod / Life-State</strong> — transformation, embodiment, and the unstable boundary between identity and function.</p><p><strong>Tell-tales:</strong> asymmetry, controlled mutation, eyes that adapt faster than they should.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on Athletics, endurance, or recovery-related OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> adaptation changes you. Expect mutation, instability, and moments where you are no longer certain what “baseline” meant.</p>",
+          "value": "<p><em>Occult Association (Bad Eden): Biomancer / Fleshcrafter.</em></p><p><strong>\u201cYou don\u2019t survive the world. You rewrite what Athletics means.\u201d</strong></p><p>Biomancers do not treat life as sacred. They treat it as <strong>modifiable</strong>.</p><p>Where Alchemists convert matter and Shamans negotiate with ecosystems, Biomancers operate at a more intimate scale: flesh, bone, instinct, and adaptation. To them, evolution is not a process. It is a toolkit.</p><p>The Great Work, in their hands, is not about restoring what was lost. It is about building something that can survive what is coming.</p><p><strong>How Biomancers pursue the Great Work:</strong></p><ul><li>By modifying bodies to survive hostile conditions</li><li>By reducing loss through biological adaptation</li><li>By converting harm into resilience</li><li>By treating mutation as both tool and risk</li></ul><p><strong>Resonance:</strong> <strong>Yesod / Life-State</strong> \u2014 transformation, embodiment, and the unstable boundary between identity and function.</p><p><strong>Tell-tales:</strong> asymmetry, controlled mutation, eyes that adapt faster than they should.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on Athletics, endurance, or recovery-related OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> adaptation changes you. Expect mutation, instability, and moments where you are no longer certain what \u201cbaseline\u201d meant.</p>",
           "chat": ""
         },
         "identifier": "occult-association-biomancer",
@@ -1610,12 +1610,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden – Archetype: The Fool (Catalyst) (Tier 1)",
+          "custom": "Bad Eden \u2013 Archetype: The Fool (Catalyst) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) \u2014 The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1755,14 +1755,14 @@
       "system": {
         "category": "technique",
         "source": {
-          "custom": "Bad Eden – Crew Type: Ironbound Ascendants (Tier 1)",
+          "custom": "Bad Eden \u2013 Crew Type: Ironbound Ascendants (Tier 1)",
           "revision": 2,
           "rules": "2024",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You’ve learned the first law of altitude: the hill fights for whoever arrives prepared.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic:</strong> In Mountains and Highlands, travel is more efficient for your faction and elevation penalties are easier to manage.</li></ul>",
+          "value": "<p><strong>Tier 1 \u2014 Ironbound Ascendants</strong></p><p><strong>\u201cHeight is not terrain. It is policy.\u201d</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You\u2019ve learned the first law of altitude: the hill fights for whoever arrives prepared.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic:</strong> In Mountains and Highlands, travel is more efficient for your faction and elevation penalties are easier to manage.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-ironbound-ascendants-t1",
@@ -1935,7 +1935,7 @@
         "source": "(2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Tier 1 — Biomancer</strong></p><p><strong>“Pain is information.”</strong></p><p>You begin learning how to adjust biological response in real time.</p><p><strong>Tactical</strong></p><ul><li><p>reroll the lowest die on checks against poison, disease, or environmental hazards</p></li></ul><p><strong>Strategic</strong></p><ul><li><p>Once per Strategic Turn, reduce one Athletics, hazard, or casualty-related penalty by one step</p></li></ul><p><strong>Cost:</strong> minor mutation begins — cosmetic or behavioral shifts may occur.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"biomT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Reduce Athletics Penalty</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Strategic Turn  ·  <strong>Action:</strong> Strategic  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Reduce one Athletics/hazard/casualty penalty by one step.</span></p></div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Tier 1 \u2014 Biomancer</strong></p><p><strong>\u201cPain is information.\u201d</strong></p><p>You begin learning how to adjust biological response in real time.</p><p><strong>Tactical</strong></p><ul><li><p>reroll the lowest die on checks against poison, disease, or environmental hazards</p></li></ul><p><strong>Strategic</strong></p><ul><li><p>Once per Strategic Turn, reduce one Athletics, hazard, or casualty-related penalty by one step</p></li></ul><p><strong>Cost:</strong> minor mutation begins \u2014 cosmetic or behavioral shifts may occur.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"biomT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Reduce Athletics Penalty</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Strategic Turn \u00a0\u00b7\u00a0 <strong>Action:</strong> Strategic \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Reduce one Athletics/hazard/casualty penalty by one step.</span></p></div>",
           "chat": ""
         },
         "identifier": "occult-association-biomancer-t1",
@@ -2020,7 +2020,7 @@
         "evasionBonus": 0,
         "resolveBonus": 0,
         "resistances": [],
-        "armorSkill": "warding",
+        "armorSkill": "bracing",
         "equipped": true,
         "tags": [
           "t1-baseline",
@@ -2030,7 +2030,7 @@
         "category": "armor",
         "source": "",
         "description": {
-          "value": "<p>A small round buckler stamped from sheet steel and laced to a leather forearm cuff. Faction-pressed in batches of a thousand and handed out to whoever could close their fingers around the grip. Half ward, half noisemaker — the dent in the front is where someone else's mistake stopped.</p><p><strong>Standard Issue.</strong> Pairs with any one-handed weapon. No signature, no attunement, no apologies for the dent.</p>",
+          "value": "<p>A small round buckler stamped from sheet steel and laced to a leather forearm cuff. Faction-pressed in batches of a thousand and handed out to whoever could close their fingers around the grip. Half ward, half noisemaker \u2014 the dent in the front is where someone else's mistake stopped.</p><p><strong>Standard Issue.</strong> Pairs with any one-handed weapon. No signature, no attunement, no apologies for the dent.</p>",
           "chat": ""
         }
       },
@@ -2055,7 +2055,7 @@
                 "table": null
               },
               "signals": {},
-              "lore": "<p>A small round buckler stamped from sheet steel and laced to a leather forearm cuff. Faction-pressed in batches of a thousand and handed out to whoever could close their fingers around the grip. Half ward, half noisemaker — the dent in the front is where someone else's mistake stopped.</p><p><b>Standard Issue.</b> Pairs with any one-handed weapon. No signature, no attunement, no apologies for the dent.</p>",
+              "lore": "<p>A small round buckler stamped from sheet steel and laced to a leather forearm cuff. Faction-pressed in batches of a thousand and handed out to whoever could close their fingers around the grip. Half ward, half noisemaker \u2014 the dent in the front is where someone else's mistake stopped.</p><p><b>Standard Issue.</b> Pairs with any one-handed weapon. No signature, no attunement, no apologies for the dent.</p>",
               "materialOf": [
                 "sheet-steel",
                 "leather-cuff"
@@ -2079,7 +2079,7 @@
       "_id": "DYKiCyIO1VhTksgw",
       "effects": [
         {
-          "name": "⚙️ Defense Grant",
+          "name": "\u2699\ufe0f Defense Grant",
           "transfer": false,
           "disabled": false,
           "flags": {
@@ -2204,7 +2204,7 @@
           "energy-blade",
           "light"
         ],
-        "effect": "On a clean hit, the saber may sever a manifestation's anchor — at GM discretion, suppress one ongoing manifestation effect on the target until end of next turn.",
+        "effect": "On a clean hit, the saber may sever a manifestation's anchor \u2014 at GM discretion, suppress one ongoing manifestation effect on the target until end of next turn.",
         "flavor": "What?",
         "manifestation": {
           "tier": 1,
@@ -2951,7 +2951,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TI weapon × 1",
+                "notes": "TI weapon \u00d7 1",
                 "bound": "free",
                 "saleBack": 20
               }
@@ -3448,7 +3448,7 @@
           "rangeFt": 0,
           "maintenanceCost": "Cannot move from your hex while stance is active.",
           "riskText": "If forced to move (legitimate breakthrough, called shot, narrative consequence), you lose 1 Integrity from the violation.",
-          "pathResonance": "Bulwark — a body that has decided it is now geography.",
+          "pathResonance": "Bulwark \u2014 a body that has decided it is now geography.",
           "fictionalPermission": "You are an immovable feature of this scene. The fight has to flow around you.",
           "gmCalibration": "Tier-1 Form. Lasts as long as you remain stationary. Common-knowledge once another Bulwark sees it.",
           "mechanicalHook": "While stance is active, you cannot be moved against your will and you have +2 to Guard. Counter-attack any failed shove with the listed damage.",
@@ -3783,7 +3783,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">⚙ ENGINE NOTE — Frame &amp; Ruin are now ◆ Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the ◆ Surge menu. Automated: Polarity Mastery (melee strike, base die ≥ 8 → +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p><em>Nothing that moves can be stopped — and movement, for you, is what makes you real.</em></p><p><strong>Mode: Unstoppable Force / drift: Toward.</strong></p><p>You generate <strong>Frame Dice</strong> when you <em>end</em> a movement, not when you start one. When you move at least half your speed in a turn and end that turn with a successful Violence-attribute action or weapon strike, gain <strong>1 Frame Die</strong>. Maximum 1 Frame Die generated per turn from this feature.</p><p>Your Frame pool refreshes on a Soma Break. Pool max comes from your Bulwark class feature: <strong>max(2, ceil((Violence value + Bulwark Initiation) / 3))</strong>, capped at 8.</p>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">\u2699 ENGINE NOTE \u2014 Frame &amp; Ruin are now \u25c6 Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the \u25c6 Surge menu. Automated: Polarity Mastery (melee strike, base die \u2265 8 \u2192 +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p><em>Nothing that moves can be stopped \u2014 and movement, for you, is what makes you real.</em></p><p><strong>Mode: Unstoppable Force / drift: Toward.</strong></p><p>You generate <strong>Frame Dice</strong> when you <em>end</em> a movement, not when you start one. When you move at least half your speed in a turn and end that turn with a successful Violence-attribute action or weapon strike, gain <strong>1 Frame Die</strong>. Maximum 1 Frame Die generated per turn from this feature.</p><p>Your Frame pool refreshes on a Soma Break. Pool max comes from your Bulwark class feature: <strong>max(2, ceil((Violence value + Bulwark Initiation) / 3))</strong>, capped at 8.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -3864,7 +3864,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<h2>Breach Specialist</h2><p><em>Everything has a seam. Most people just don’t look.</em></p><hr /><h3>Rules</h3><p>You gain skill rank with thieves’ tools. If you already have it, you gain mastery.</p><p>When you hit an object, door, barrier, or construct with a weapon attack, you may treat the attack as dealing maximum damage to the target’s objects-only resistances (GM adjudication). Once you do, you can’t do so again until the start of your next turn.</p>",
+          "value": "<h2>Breach Specialist</h2><p><em>Everything has a seam. Most people just don\u2019t look.</em></p><hr /><h3>Rules</h3><p>You gain skill rank with thieves\u2019 tools. If you already have it, you gain mastery.</p><p>When you hit an object, door, barrier, or construct with a weapon attack, you may treat the attack as dealing maximum damage to the target\u2019s objects-only resistances (GM adjudication). Once you do, you can\u2019t do so again until the start of your next turn.</p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_breach_specialist",
@@ -3932,7 +3932,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Arriving is the strike.</em></p><p>When you move <strong>2 squares or more in a straight line</strong> in a turn and finish with a melee weapon strike, you may spend <strong>1 Ruin Charge</strong> as part of that strike. If you do:</p><ul><li>The strike's damage is also applied to every creature and breakable object in a <strong>1 square line directly behind your target</strong>, in your direction of travel. Each secondary target may make a Body defense check (DC 12 + your Initiation tier × 2) — on success, the secondary target takes half damage; on a failed check the full strike damage applies.</li><li>The original target is pushed <strong>2 squares</strong> in the direction of your charge (no save).</li></ul>",
+          "value": "<p><em>Arriving is the strike.</em></p><p>When you move <strong>2 squares or more in a straight line</strong> in a turn and finish with a melee weapon strike, you may spend <strong>1 Ruin Charge</strong> as part of that strike. If you do:</p><ul><li>The strike's damage is also applied to every creature and breakable object in a <strong>1 square line directly behind your target</strong>, in your direction of travel. Each secondary target may make a Body defense check (DC 12 + your Initiation tier \u00d7 2) \u2014 on success, the secondary target takes half damage; on a failed check the full strike damage applies.</li><li>The original target is pushed <strong>2 squares</strong> in the direction of your charge (no save).</li></ul>",
           "chat": ""
         },
         "advancement": {},
@@ -4241,7 +4241,7 @@
       "_key": "!actors.items!YK2PSxphYxXQYm8B.FIC18p9cySjZhE7V"
     },
     {
-      "name": "Bulwark — Tier 2: Anchor or Advance",
+      "name": "Bulwark \u2014 Tier 2: Anchor or Advance",
       "type": "feat",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_anvil_1.png.png",
       "system": {
@@ -4249,7 +4249,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>Signature move. Once a scene, you choose which kind of inevitability you are.</em></p><p><strong>Anchor or Advance — 1/scene (recovers on Soma Break).</strong> As part of any action on your turn, declare a stance. The chosen stance lasts until the end of your next turn:</p><ul><li><p><strong>Anchor.</strong> You cannot be moved against your will by any effect short of a Heroic-DC (22) push from a creature of your size or larger. Forced movement, knockback, teleportation targeting you, banishment, and dimensional swap effects all fail.</p></li><li><p><strong>Advance.</strong> You cannot be prevented from reaching a destination you declare on the same action. Difficult terrain, conditions that halve speed, opportunity reactions, and zone-of-control effects do not stop your movement toward that point. You may still take damage along the way.</p></li></ul><p>Doctrine features at L5+ extend or modify which stance you favor.</p>",
+          "value": "<p><em>Signature move. Once a scene, you choose which kind of inevitability you are.</em></p><p><strong>Anchor or Advance \u2014 1/scene (recovers on Soma Break).</strong> As part of any action on your turn, declare a stance. The chosen stance lasts until the end of your next turn:</p><ul><li><p><strong>Anchor.</strong> You cannot be moved against your will by any effect short of a Heroic-DC (22) push from a creature of your size or larger. Forced movement, knockback, teleportation targeting you, banishment, and dimensional swap effects all fail.</p></li><li><p><strong>Advance.</strong> You cannot be prevented from reaching a destination you declare on the same action. Difficult terrain, conditions that halve speed, opportunity reactions, and zone-of-control effects do not stop your movement toward that point. You may still take damage along the way.</p></li></ul><p>Doctrine features at L5+ extend or modify which stance you favor.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -4388,7 +4388,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Difficult terrain is for people who pause.</em></p><p>Your movement speed cannot be reduced below <strong>half your base speed</strong> by any effect, condition, surface, or creature short of a physical barrier substantial enough to stop a charging rhino (GM call). This includes — but is not limited to — difficult terrain, grease, web, the <strong>restrained</strong> condition, the <strong>prone</strong> condition's stand-up cost, slowed/snared effects, and being grappled by a creature your size or smaller.</p><p>You still take damage from traps and hazardous terrain along your path; you simply do not stop for them. You may end movement voluntarily.</p>",
+          "value": "<p><em>Difficult terrain is for people who pause.</em></p><p>Your movement speed cannot be reduced below <strong>half your base speed</strong> by any effect, condition, surface, or creature short of a physical barrier substantial enough to stop a charging rhino (GM call). This includes \u2014 but is not limited to \u2014 difficult terrain, grease, web, the <strong>restrained</strong> condition, the <strong>prone</strong> condition's stand-up cost, slowed/snared effects, and being grappled by a creature your size or smaller.</p><p>You still take damage from traps and hazardous terrain along your path; you simply do not stop for them. You may end movement voluntarily.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -4446,7 +4446,7 @@
       "_key": "!actors.items!YK2PSxphYxXQYm8B.BozHoUo3rYs6e1TL"
     },
     {
-      "name": "Bulwark — Tier 3: Polarity Mastery",
+      "name": "Bulwark \u2014 Tier 3: Polarity Mastery",
       "type": "feat",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_scales.png",
       "system": {
@@ -4454,7 +4454,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>Your Path's resource-generation rules learn a second voice.</em></p><p><strong>At Bulwark Initiation 11</strong>, your doctrine's pool-generation logic extends. Apply the rule for your chosen Path:</p><ul><li><p><strong>Path of the Avalanche.</strong> In addition to your normal Frame generation, gain 1 Frame Die when you score a successful melee strike (any roll where at least one die rolled before explosions shows ≥ 8). 1/turn cap.</p></li><li><p><strong>Path of the Mountain.</strong> In addition to your normal Ruin generation, gain 1 Ruin Charge when you take damage from a single instance of any source while remaining upright. 1/turn cap.</p></li><li><p><strong>Path of the Cataclyst.</strong> Once per round, you may swap 1 Frame Die for 1 Ruin Charge or vice versa as a free action (no action economy cost). The transferred die/charge is not 'charged' (see Cataclyst L1).</p></li></ul>",
+          "value": "<p><em>Your Path's resource-generation rules learn a second voice.</em></p><p><strong>At Bulwark Initiation 11</strong>, your doctrine's pool-generation logic extends. Apply the rule for your chosen Path:</p><ul><li><p><strong>Path of the Avalanche.</strong> In addition to your normal Frame generation, gain 1 Frame Die when you score a successful melee strike (any roll where at least one die rolled before explosions shows \u2265 8). 1/turn cap.</p></li><li><p><strong>Path of the Mountain.</strong> In addition to your normal Ruin generation, gain 1 Ruin Charge when you take damage from a single instance of any source while remaining upright. 1/turn cap.</p></li><li><p><strong>Path of the Cataclyst.</strong> Once per round, you may swap 1 Frame Die for 1 Ruin Charge or vice versa as a free action (no action economy cost). The transferred die/charge is not 'charged' (see Cataclyst L1).</p></li></ul>",
           "chat": ""
         },
         "advancement": {},
@@ -4604,7 +4604,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>Declare the line. The line happens.</em></p><p><strong>The Breach — 1/scene (recovers on Soma Break).</strong> On your turn, declare a straight-line path to a destination within your maximum movement for the turn. You move to that destination, and any physical barrier in your way breaks open as you pass:</p><ul><li><p>Wooden walls, doors, panes, and fortifications up to <strong>Hard hardness (DC 18)</strong> are broken open.</p></li><li><p>Stone walls and reinforced doors require a Violence attribute check vs Heroic DC 22 to pass through; on failure you stop adjacent to the barrier and lose the rest of the movement.</p></li><li><p>Any creature of size huge or smaller occupying a space along the line takes <strong>(Violence value + Bulwark Initiation) kinetic damage, damageFlavor: bludgeoning</strong>, and is knocked <strong>prone</strong>. They do not block your path.</p></li></ul><p>You arrive upright, in your normal initiative slot, with whatever debris a person carries when they have just opened a wall.</p>",
+          "value": "<p><em>Declare the line. The line happens.</em></p><p><strong>The Breach \u2014 1/scene (recovers on Soma Break).</strong> On your turn, declare a straight-line path to a destination within your maximum movement for the turn. You move to that destination, and any physical barrier in your way breaks open as you pass:</p><ul><li><p>Wooden walls, doors, panes, and fortifications up to <strong>Hard hardness (DC 18)</strong> are broken open.</p></li><li><p>Stone walls and reinforced doors require a Violence attribute check vs Heroic DC 22 to pass through; on failure you stop adjacent to the barrier and lose the rest of the movement.</p></li><li><p>Any creature of size huge or smaller occupying a space along the line takes <strong>(Violence value + Bulwark Initiation) kinetic damage, damageFlavor: bludgeoning</strong>, and is knocked <strong>prone</strong>. They do not block your path.</p></li></ul><p>You arrive upright, in your normal initiative slot, with whatever debris a person carries when they have just opened a wall.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -4853,7 +4853,7 @@
         "source": "Bad Eden Feats Expansion v1 (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<h2>Backline Commander</h2><p><em>You don’t need to be closest to steer the fight.</em></p><hr><h3>Rules</h3><p>As a Bonus action, choose one ally who can see or hear you within 6 squares That ally may immediately move up to 2 squares without provoking reaction strikes.</p><p>You can use this principle a number of times equal to your skill rank bonus, and you regain all expended uses when you finish a Sanctuary.</p>",
+          "value": "<h2>Backline Commander</h2><p><em>You don\u2019t need to be closest to steer the fight.</em></p><hr><h3>Rules</h3><p>As a Bonus action, choose one ally who can see or hear you within 6 squares That ally may immediately move up to 2 squares without provoking reaction strikes.</p><p>You can use this principle a number of times equal to your skill rank bonus, and you regain all expended uses when you finish a Sanctuary.</p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_backline_commander",
@@ -5084,7 +5084,7 @@
       "_key": "!actors.items!YK2PSxphYxXQYm8B.duSsRFkDO8vJdUu4"
     },
     {
-      "name": "Bulwark — Tier 4: Architect of Certainty",
+      "name": "Bulwark \u2014 Tier 4: Architect of Certainty",
       "type": "feat",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_4.png",
       "system": {
@@ -5239,7 +5239,7 @@
         "source": "Bad Eden Core Feats v1 (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<h2>Fluid Footwork</h2><p><em>You move like the fight is trying to catch up with you.</em></p><hr><h3>Rules</h3><p>Your movement increases by 2 squares Additionally, when you make a melee attack against a creature, that creature can’t make reaction strikes against you for the rest of the turn (hit or miss).</p>",
+          "value": "<h2>Fluid Footwork</h2><p><em>You move like the fight is trying to catch up with you.</em></p><hr><h3>Rules</h3><p>Your movement increases by 2 squares Additionally, when you make a melee attack against a creature, that creature can\u2019t make reaction strikes against you for the rest of the turn (hit or miss).</p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_fluid_footwork",
@@ -5267,7 +5267,7 @@
       "effects": [
         {
           "_id": "6tzSnWQ36xgB0Oz5",
-          "name": "Fluid Footwork — Speed",
+          "name": "Fluid Footwork \u2014 Speed",
           "origin": null,
           "disabled": false,
           "duration": {
@@ -5491,7 +5491,7 @@
                 "identityCut": true
               },
               "requiresHarmonization": true,
-              "lore": "<p>One-handed blade forged from Yesodium tempered in scribed-steel and bound with marrow tincture. When stabilized to <i>Harmonized</i>, the blade carries Yesod's signature.</p><p><b>Memory Edge.</b> Once per raid, after a roll resolves, add +1 margin retroactively.</p><p><b>Adaptive Weight.</b> Counts as the wielder's optimal metal — no encumbrance penalties.</p><p><b>Identity Cut.</b> +1 effective damageStep against constructs, gates, and dream-entities.</p><p><i>Unharmonized: stats apply, signal abilities dormant.</i></p>",
+              "lore": "<p>One-handed blade forged from Yesodium tempered in scribed-steel and bound with marrow tincture. When stabilized to <i>Harmonized</i>, the blade carries Yesod's signature.</p><p><b>Memory Edge.</b> Once per raid, after a roll resolves, add +1 margin retroactively.</p><p><b>Adaptive Weight.</b> Counts as the wielder's optimal metal \u2014 no encumbrance penalties.</p><p><b>Identity Cut.</b> +1 effective damageStep against constructs, gates, and dream-entities.</p><p><i>Unharmonized: stats apply, signal abilities dormant.</i></p>",
               "materialOf": [
                 {
                   "key": "yesodium",
@@ -5847,7 +5847,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII weapon × 1 × tech 2.0",
+                "notes": "TII weapon \u00d7 1 \u00d7 tech 2.0",
                 "bound": "free",
                 "saleBack": 120
               }
@@ -6141,7 +6141,7 @@
       "_id": "bzfjTP0Aw9XS6WPH",
       "effects": [
         {
-          "name": "⚙️ Defense Grant",
+          "name": "\u2699\ufe0f Defense Grant",
           "transfer": false,
           "disabled": false,
           "flags": {
@@ -6381,7 +6381,7 @@
           }
         },
         "description": {
-          "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Intent:</strong> Presence</li>\n  <li><strong>Action:</strong> [Object Object]</li>\n  <li><strong>Range:</strong> Near</li>\n  <li><strong>Target:</strong> Single</li>\n  <li><strong>Target:</strong> One foe</li>\n  <li><strong>Cost:</strong> 1 Clarity, Clarity 1</li>\n  <li><strong>Duration:</strong> Instant</li>\n  <li><strong>Tier:</strong> T4</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+          "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Intent:</strong> Presence</li>\n  <li><strong>Action:</strong> [Object Object]</li>\n  <li><strong>Range:</strong> Near</li>\n  <li><strong>Target:</strong> Single</li>\n  <li><strong>Target:</strong> One foe</li>\n  <li><strong>Cost:</strong> 1 Clarity, Clarity 1</li>\n  <li><strong>Duration:</strong> Instant</li>\n  <li><strong>Tier:</strong> T4</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
         }
       },
       "effects": [],
@@ -7601,7 +7601,7 @@
               "id": "RJQMAQCXByEv",
               "name": "Junko Pell",
               "role": "Graft-surgeon",
-              "notes": "Held a leyline node through three bad winters; still sends word — mostly threats, sometimes warnings.",
+              "notes": "Held a leyline node through three bad winters; still sends word \u2014 mostly threats, sometimes warnings.",
               "portrait": "",
               "defaultPresent": false,
               "actorUuid": ""
@@ -7729,7 +7729,7 @@
           }
         },
         "traitMap": {},
-        "classification": "—",
+        "classification": "\u2014",
         "mode": "manual"
       }
     },
@@ -7894,7 +7894,7 @@
           "id": "mut_mqmx886m_1718",
           "tier": "major",
           "name": "Echoed Voice",
-          "description": "Your voice always sounds like it’s speaking from two places at once.",
+          "description": "Your voice always sounds like it\u2019s speaking from two places at once.",
           "effects": [
             {
               "key": "system.derived.resolve.aeBonus",

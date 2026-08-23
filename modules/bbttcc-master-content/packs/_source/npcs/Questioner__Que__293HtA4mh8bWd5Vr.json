@@ -274,12 +274,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 1
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -447,7 +447,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Exo-Knight, Parallax, Salvage, Synapse</strong>.</p><p>This root grants the shared Circuitborn core trait package (<em>Firmware of Identity</em>) and preserves live UUID compatibility for the four Line items.</p><p><em>“You are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.”</em></p><p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p><p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you, you may regain either one spent Bad Eden OP (a category you used this scene) or Integrity equal to your tier.</p><p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor.</p><p><strong>Line Memory.</strong> Choose one Circuitborn line (Exo-Knight, Parallax, Salvage, Synapse). Your line grants Tier powers as you level.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Exo-Knight, Parallax, Salvage, Synapse</strong>.</p><p>This root grants the shared Circuitborn core trait package (<em>Firmware of Identity</em>) and preserves live UUID compatibility for the four Line items.</p><p><em>\u201cYou are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.\u201d</em></p><p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p><p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you, you may regain either one spent Bad Eden OP (a category you used this scene) or Integrity equal to your tier.</p><p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor.</p><p><strong>Line Memory.</strong> Choose one Circuitborn line (Exo-Knight, Parallax, Salvage, Synapse). Your line grants Tier powers as you level.</p>",
           "chat": ""
         },
         "advancement": [
@@ -527,7 +527,7 @@
               "context": "defense",
               "mode": "reroll-lowest",
               "vs": "vs:poison and disease",
-              "note": "on defense checks [TODO(adv-call)] against poison and disease, and you are im…"
+              "note": "on defense checks [TODO(adv-call)] against poison and disease, and you are im\u2026"
             }
           ],
           "triggers": [
@@ -605,7 +605,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You are not a robot. You are a decision the world keeps making about itself.”</em></p>\n<p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p>\n<p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), you may regain either (a) one spent Bad Eden OP (a category you used this scene) or (b) Integrity equal to your tier.</p>\n<p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor. You reroll the lowest die on checks to identify surveillance, hidden speakers, encoded messages, or noospheric “attention traps.”</p>\n<p><strong>Glitch-Surge.</strong> When you drop to 0 Integrity, you can choose to emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In Bad Eden play, this is a perfect excuse for weird consequences.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou are not a robot. You are a decision the world keeps making about itself.\u201d</em></p>\n<p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p>\n<p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), you may regain either (a) one spent Bad Eden OP (a category you used this scene) or (b) Integrity equal to your tier.</p>\n<p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor. You reroll the lowest die on checks to identify surveillance, hidden speakers, encoded messages, or noospheric \u201cattention traps.\u201d</p>\n<p><strong>Glitch-Surge.</strong> When you drop to 0 Integrity, you can choose to emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In Bad Eden play, this is a perfect excuse for weird consequences.</p>",
           "chat": ""
         },
         "uses": {
@@ -749,7 +749,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn Line.</strong> The ghost-in-the-protocol. The chassis that thinks faster than the network it’s plugged into, and feels the noosphere the way a swimmer feels the current.</p><p><em>“You don’t use the network. The network uses you, and that’s the only relationship that doesn’t collapse.”</em></p><p><strong>Synapse.</strong> You are a sentient chassis built around the principle of <em>inference</em>. Information is your home. Other people travel through it. You live there.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>MND (Mind)</strong>—expressed primarily through Tier powers.</li><li><strong>Predictive Cache.</strong> 1/Soma Break, when an enemy you can see takes an action, you may have anticipated it: reroll the lowest die on the next reaction or attack you make against that enemy this round.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn Line.</strong> The ghost-in-the-protocol. The chassis that thinks faster than the network it\u2019s plugged into, and feels the noosphere the way a swimmer feels the current.</p><p><em>\u201cYou don\u2019t use the network. The network uses you, and that\u2019s the only relationship that doesn\u2019t collapse.\u201d</em></p><p><strong>Synapse.</strong> You are a sentient chassis built around the principle of <em>inference</em>. Information is your home. Other people travel through it. You live there.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>MND (Mind)</strong>\u2014expressed primarily through Tier powers.</li><li><strong>Predictive Cache.</strong> 1/Soma Break, when an enemy you can see takes an action, you may have anticipated it: reroll the lowest die on the next reaction or attack you make against that enemy this round.</li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -808,7 +808,7 @@
             {
               "context": "attack",
               "mode": "reroll-lowest",
-              "note": "on the next reaction or attack you make against that enemy this round [TODO(a…"
+              "note": "on the next reaction or attack you make against that enemy this round [TODO(a\u2026"
             }
           ],
           "triggers": [
@@ -864,7 +864,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Reality is a database. You brought admin tools.”</em></p>\n        <p><strong>Yesod-Diver.</strong> You reroll the lowest die on checks to interpret metaphysical constructs (Sparks, slippage, noospheric entities). 1/Soma Break, you can ask the GM one direct question about a nearby “system,” and receive a truthful but incomplete answer.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cReality is a database. You brought admin tools.\u201d</em></p>\n        <p><strong>Yesod-Diver.</strong> You reroll the lowest die on checks to interpret metaphysical constructs (Sparks, slippage, noospheric entities). 1/Soma Break, you can ask the GM one direct question about a nearby \u201csystem,\u201d and receive a truthful but incomplete answer.</p>",
           "chat": ""
         },
         "uses": {
@@ -943,7 +943,7 @@
         "source": "",
         "tags": [],
         "description": {
-          "value": "<p><em>\"Strike the clause. Insert your own. Reality reads from the top.\"</em></p>\n<p>The Cosmic Linguist edits reality like text — meaning first, matter second. One currency now: <strong>Surge</strong>. The editor always has the next word, so you bank <strong>+1 Surge at the start of your turn</strong> (the old Resonance, Strain, and Editorial Authority pools are folded into this single pool).</p>\n<h3>The Edit (spent via Surge)</h3>\n<ul>\n  <li><strong>Emphasis</strong> (1) — your next Strike or manifestation hits for +Tier d6 (the word, underlined).</li>\n  <li><strong>Stabilize</strong> (2) — you gain DR equal to Tier; your next cast resists counter / dispel (the sentence holds).</li>\n  <li><strong>Impose a Reading</strong> (3) — a foe's next attack and its saves are at disadvantage (only one correct interpretation: yours).</li>\n  <li><strong>Rewrite the Sentence</strong> (5) — a foe loses its reactions and rolls saves at disadvantage; allies near you bank a reroll.</li>\n</ul>\n<p><strong>The Sentence</strong> endures as your signature stance — while held, the manifestation's primary target is bound by name and rolls its checks against you at disadvantage.</p>",
+          "value": "<p><em>\"Strike the clause. Insert your own. Reality reads from the top.\"</em></p>\n<p>The Cosmic Linguist edits reality like text \u2014 meaning first, matter second. One currency now: <strong>Surge</strong>. The editor always has the next word, so you bank <strong>+1 Surge at the start of your turn</strong> (the old Resonance, Strain, and Editorial Authority pools are folded into this single pool).</p>\n<h3>The Edit (spent via Surge)</h3>\n<ul>\n  <li><strong>Emphasis</strong> (1) \u2014 your next Strike or manifestation hits for +Tier d6 (the word, underlined).</li>\n  <li><strong>Stabilize</strong> (2) \u2014 you gain DR equal to Tier; your next cast resists counter / dispel (the sentence holds).</li>\n  <li><strong>Impose a Reading</strong> (3) \u2014 a foe's next attack and its saves are at disadvantage (only one correct interpretation: yours).</li>\n  <li><strong>Rewrite the Sentence</strong> (5) \u2014 a foe loses its reactions and rolls saves at disadvantage; allies near you bank a reroll.</li>\n</ul>\n<p><strong>The Sentence</strong> endures as your signature stance \u2014 while held, the manifestation's primary target is bound by name and rolls its checks against you at disadvantage.</p>",
           "chat": ""
         },
         "hd": {
@@ -1014,7 +1014,7 @@
             },
             "value": {},
             "level": 1,
-            "title": "Cosmic Linguist Discipline (Init 1) — True-Name Touch",
+            "title": "Cosmic Linguist Discipline (Init 1) \u2014 True-Name Touch",
             "icon": "",
             "classRestriction": "",
             "hint": "",
@@ -1042,7 +1042,7 @@
             },
             "value": {},
             "level": 6,
-            "title": "Cosmic Linguist Discipline (Init 6) — Translation",
+            "title": "Cosmic Linguist Discipline (Init 6) \u2014 Translation",
             "icon": "",
             "classRestriction": "",
             "hint": "",
@@ -1070,7 +1070,7 @@
             },
             "value": {},
             "level": 11,
-            "title": "Cosmic Linguist Discipline (Init 11) — The Sentence",
+            "title": "Cosmic Linguist Discipline (Init 11) \u2014 The Sentence",
             "icon": "",
             "classRestriction": "",
             "hint": "",
@@ -1098,7 +1098,7 @@
             },
             "value": {},
             "level": 16,
-            "title": "Cosmic Linguist Discipline (Init 16) — Word That Was",
+            "title": "Cosmic Linguist Discipline (Init 16) \u2014 Word That Was",
             "icon": "",
             "classRestriction": "",
             "hint": "",
@@ -1157,7 +1157,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“Magic is grammar. Reality is a draft.”</em></p><p>You are a prepared, academic manifestant who edits meaning directly. You do not delegate power; you channel it raw.</p><p><strong>Esoteric OS Integration:</strong> Your manifesting interacts with correspondences (school ↔ sephirah, day/slot timing). Alignment yields <strong>Resonance</strong>; misalignment accumulates <strong>Strain</strong>.</p><p><strong>Curated List (doc-only):</strong> Cosmic Linguists favor semantic leverage, control, ritual work, and correspondence-aligned craft.</p><h2 data-start=\"6208\" data-end=\"6240\"></h2>",
+          "value": "<p><em>\u201cMagic is grammar. Reality is a draft.\u201d</em></p><p>You are a prepared, academic manifestant who edits meaning directly. You do not delegate power; you channel it raw.</p><p><strong>Esoteric OS Integration:</strong> Your manifesting interacts with correspondences (school \u2194 sephirah, day/slot timing). Alignment yields <strong>Resonance</strong>; misalignment accumulates <strong>Strain</strong>.</p><p><strong>Curated List (doc-only):</strong> Cosmic Linguists favor semantic leverage, control, ritual work, and correspondence-aligned craft.</p><h2 data-start=\"6208\" data-end=\"6240\"></h2>",
           "chat": ""
         },
         "identifier": "cosmic_linguist_core_features",
@@ -1223,7 +1223,7 @@
         "source": "Bad Eden Originals (2026 rules)",
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #c8a8e8;border-left:4px solid #c8a8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(200,168,232,0.07);font-size:0.84rem\"><b style=\"color:#9a6ac8\">⚙ ENGINE NOTE — the Resonance Pool is now Resonance Channel dice, spent INSIDE the Cast dialog</b> (the ✦ Resonance Channels row: +save DC / +damage die / +duration / defense impose / stabilize). Editorial Authority's Edits live in the ◆ Surge menu.</div><div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Resonance Dice (shared pool):</strong> You gain Resonance when you cast in correspondence-aligned timing or complete proper ritual work. You may spend Resonance to increase potency (see Resonance Channel).</p><p><strong>Strain (shared meter):</strong> You gain Strain when you cast misaligned, overcharge effects, or force semantic contradictions. At thresholds, the GM triggers <strong>Backlash</strong>: reality glitches, psychic recoil, or narrative consequences.</p><p><em>Wizards get to be powerful. Wizards also pay the bill.</em></p><h2 data-start=\"5166\" data-end=\"5201\">🔮 CLASS RESOURCE: <strong data-start=\"5188\" data-end=\"5201\">Resonance</strong></h2><p data-start=\"5203\" data-end=\"5307\"><strong data-start=\"5203\" data-end=\"5212\">Type:</strong> Dice-based resource pool<br data-start=\"5237\" data-end=\"5240\"><strong data-start=\"5240\" data-end=\"5252\">Purpose:</strong> Measures alignment with reality’s underlying structure</p><h3 data-start=\"5309\" data-end=\"5327\">Resonance Dice</h3><ul data-start=\"5328\" data-end=\"5503\"><li data-start=\"5328\" data-end=\"5345\"><p data-start=\"5330\" data-end=\"5345\">Start as <strong data-start=\"5339\" data-end=\"5345\">d6</strong></p></li><li data-start=\"5346\" data-end=\"5427\"><p data-start=\"5348\" data-end=\"5360\">Increase at:</p><ul data-start=\"5363\" data-end=\"5427\"><li data-start=\"5363\" data-end=\"5381\"><p data-start=\"5365\" data-end=\"5381\">Level 5 → <strong data-start=\"5375\" data-end=\"5381\">d8</strong></p></li><li data-start=\"5384\" data-end=\"5404\"><p data-start=\"5386\" data-end=\"5404\">Level 11 → <strong data-start=\"5397\" data-end=\"5404\">d10</strong></p></li><li data-start=\"5407\" data-end=\"5427\"><p data-start=\"5409\" data-end=\"5427\">Level 17 → <strong data-start=\"5420\" data-end=\"5427\">d12</strong></p></li></ul></li><li data-start=\"5428\" data-end=\"5503\"><p data-start=\"5430\" data-end=\"5503\"><strong data-start=\"5430\" data-end=\"5454\">Maximum stored dice:</strong><br data-start=\"5454\" data-end=\"5457\">= your <strong data-start=\"5466\" data-end=\"5491\">Mind modifier</strong> (minimum 1)</p></li></ul><hr data-start=\"5505\" data-end=\"5508\"><h3 data-start=\"5510\" data-end=\"5531\">Gaining Resonance</h3><p data-start=\"5532\" data-end=\"5566\">You gain <strong data-start=\"5541\" data-end=\"5560\">1 Resonance Die</strong> when:</p><ul data-start=\"5568\" data-end=\"5766\"><li data-start=\"5568\" data-end=\"5616\"><p data-start=\"5570\" data-end=\"5616\">You cast a manifestation in correct esoteric alignment</p></li><li data-start=\"5617\" data-end=\"5658\"><p data-start=\"5619\" data-end=\"5658\">You complete a properly prepared ritual</p></li><li data-start=\"5659\" data-end=\"5704\"><p data-start=\"5661\" data-end=\"5704\">You exploit an established semantic pattern</p></li><li data-start=\"5705\" data-end=\"5766\"><p data-start=\"5707\" data-end=\"5766\">Your subclass leverages symbolism, structure, or constraint</p></li></ul><p data-start=\"5768\" data-end=\"5829\"><strong data-start=\"5768\" data-end=\"5778\">Limit:</strong><br data-start=\"5778\" data-end=\"5781\">You may gain <strong data-start=\"5794\" data-end=\"5828\">only 1 Resonance Die per round</strong>.</p><p data-start=\"5831\" data-end=\"5886\">Resonance decays quickly — it is momentum, not savings.</p><hr data-start=\"5888\" data-end=\"5891\"><h3 data-start=\"5893\" data-end=\"5915\">Spending Resonance</h3><p data-start=\"5916\" data-end=\"5981\">When you spend a Resonance Die, <strong data-start=\"5948\" data-end=\"5959\">roll it</strong> and apply one effect:</p><ul data-start=\"5983\" data-end=\"6160\"><li data-start=\"5983\" data-end=\"6018\"><p data-start=\"5985\" data-end=\"6018\">Add the result to a Resolve DC</p></li><li data-start=\"6019\" data-end=\"6054\"><p data-start=\"6021\" data-end=\"6054\">Add an extra damage or effect die</p></li><li data-start=\"6055\" data-end=\"6081\"><p data-start=\"6057\" data-end=\"6081\">Extend duration or scope</p></li><li data-start=\"6082\" data-end=\"6121\"><p data-start=\"6084\" data-end=\"6121\">Impose roll 3d10 keep lowest 2 on a defense checks</p></li><li data-start=\"6122\" data-end=\"6160\"><p data-start=\"6124\" data-end=\"6160\">Stabilize a manifestation against countering</p></li></ul><p data-start=\"6162\" data-end=\"6201\">Each die spent <strong data-start=\"6177\" data-end=\"6200\">may generate Strain</strong>.</p><hr data-start=\"6203\" data-end=\"6206\"><h2 data-start=\"6208\" data-end=\"6240\">⚠ PUSHBACK SYSTEM: <strong data-start=\"6230\" data-end=\"6240\">Strain</strong></h2><p data-start=\"6242\" data-end=\"6340\"><strong data-start=\"6242\" data-end=\"6251\">Type:</strong> Escalating consequence meter<br data-start=\"6280\" data-end=\"6283\"><strong data-start=\"6283\" data-end=\"6295\">Purpose:</strong> Measures damage to reality from forced edits</p><hr data-start=\"6342\" data-end=\"6345\"><h3 data-start=\"6347\" data-end=\"6365\">Gaining Strain</h3><p data-start=\"6366\" data-end=\"6394\">You gain <strong data-start=\"6375\" data-end=\"6388\">+1 Strain</strong> when:</p><ul data-start=\"6395\" data-end=\"6522\"><li data-start=\"6395\" data-end=\"6421\"><p data-start=\"6397\" data-end=\"6421\">Casting while misaligned</p></li><li data-start=\"6422\" data-end=\"6455\"><p data-start=\"6424\" data-end=\"6455\">Spending Resonance aggressively</p></li><li data-start=\"6456\" data-end=\"6488\"><p data-start=\"6458\" data-end=\"6488\">Forcing contradictory meanings</p></li><li data-start=\"6489\" data-end=\"6522\"><p data-start=\"6491\" data-end=\"6522\">Using certain subclass features</p></li></ul><p data-start=\"6524\" data-end=\"6564\">Some abilities add Strain automatically.</p><hr data-start=\"6566\" data-end=\"6569\"><h3 data-start=\"6571\" data-end=\"6606\">Strain Thresholds (Recommended)</h3><ul data-start=\"6607\" data-end=\"6780\"><li data-start=\"6607\" data-end=\"6651\"><p data-start=\"6609\" data-end=\"6651\"><strong data-start=\"6609\" data-end=\"6617\">1–2:</strong> Cosmetic anomalies, sensory bleed</p></li><li data-start=\"6652\" data-end=\"6695\"><p data-start=\"6654\" data-end=\"6695\"><strong data-start=\"6654\" data-end=\"6662\">3–4:</strong> Psychic damage, manifestation distortion</p></li><li data-start=\"6696\" data-end=\"6747\"><p data-start=\"6698\" data-end=\"6747\"><strong data-start=\"6698\" data-end=\"6706\">5–6:</strong> Reality glitches, hostile manifestations</p></li><li data-start=\"6748\" data-end=\"6780\"><p data-start=\"6750\" data-end=\"6780\"><strong data-start=\"6750\" data-end=\"6757\">7+:</strong> GM-controlled backlash</p></li></ul><hr data-start=\"6782\" data-end=\"6785\"><h3 data-start=\"6787\" data-end=\"6806\">Clearing Strain</h3><ul data-start=\"6807\" data-end=\"6896\"><li data-start=\"6807\" data-end=\"6813\"><p data-start=\"6809\" data-end=\"6813\">Rest</p></li><li data-start=\"6814\" data-end=\"6824\"><p data-start=\"6816\" data-end=\"6824\">Downtime</p></li><li data-start=\"6825\" data-end=\"6849\"><p data-start=\"6827\" data-end=\"6849\">Careful ritual casting</p></li><li data-start=\"6850\" data-end=\"6870\"><p data-start=\"6852\" data-end=\"6870\">Annotator features</p></li><li data-start=\"6871\" data-end=\"6896\"><p data-start=\"6873\" data-end=\"6896\">Pactkeeper intervention</p></li></ul><p data-start=\"6898\" data-end=\"6937\">Strain is dangerous but <strong data-start=\"6922\" data-end=\"6936\">manageable</strong>.</p><hr data-start=\"6939\" data-end=\"6942\"><h1 data-start=\"6944\" data-end=\"6968\">🧠 SUMMARY FOR PLAYERS</h1><ul data-start=\"6970\" data-end=\"7234\"><li data-start=\"6970\" data-end=\"7008\"><p data-start=\"6972\" data-end=\"7008\"><strong data-start=\"6972\" data-end=\"6987\">Pactkeepers</strong> manage <strong data-start=\"6995\" data-end=\"7008\">authority</strong></p></li><li data-start=\"7009\" data-end=\"7051\"><p data-start=\"7011\" data-end=\"7051\"><strong data-start=\"7011\" data-end=\"7031\">Cosmic Linguists</strong> manage <strong data-start=\"7039\" data-end=\"7051\">momentum</strong></p></li><li data-start=\"7052\" data-end=\"7100\"><p data-start=\"7054\" data-end=\"7100\">Jurisdiction = <em data-start=\"7069\" data-end=\"7100\">what you are allowed to touch</em></p></li><li data-start=\"7101\" data-end=\"7140\"><p data-start=\"7103\" data-end=\"7140\">Civic Charge = <em data-start=\"7118\" data-end=\"7140\">permission you spend</em></p></li><li data-start=\"7141\" data-end=\"7173\"><p data-start=\"7143\" data-end=\"7173\">Precedent = <em data-start=\"7155\" data-end=\"7173\">what now matters</em></p></li><li data-start=\"7174\" data-end=\"7207\"><p data-start=\"7176\" data-end=\"7207\">Resonance = <em data-start=\"7188\" data-end=\"7207\">how hard you push</em></p></li><li data-start=\"7208\" data-end=\"7234\"><p data-start=\"7210\" data-end=\"7234\">Strain = <em data-start=\"7219\" data-end=\"7234\">what it costs</em></p></li></ul><p data-start=\"7236\" data-end=\"7346\">Nothing here is vague.<br>Nothing here is hand-wavy.<br>Everything can be adjudicated at the table <strong data-start=\"7329\" data-end=\"7345\">consistently</strong>.</p>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #c8a8e8;border-left:4px solid #c8a8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(200,168,232,0.07);font-size:0.84rem\"><b style=\"color:#9a6ac8\">\u2699 ENGINE NOTE \u2014 the Resonance Pool is now Resonance Channel dice, spent INSIDE the Cast dialog</b> (the \u2726 Resonance Channels row: +save DC / +damage die / +duration / defense impose / stabilize). Editorial Authority's Edits live in the \u25c6 Surge menu.</div><div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Resonance Dice (shared pool):</strong> You gain Resonance when you cast in correspondence-aligned timing or complete proper ritual work. You may spend Resonance to increase potency (see Resonance Channel).</p><p><strong>Strain (shared meter):</strong> You gain Strain when you cast misaligned, overcharge effects, or force semantic contradictions. At thresholds, the GM triggers <strong>Backlash</strong>: reality glitches, psychic recoil, or narrative consequences.</p><p><em>Wizards get to be powerful. Wizards also pay the bill.</em></p><h2 data-start=\"5166\" data-end=\"5201\">\ud83d\udd2e CLASS RESOURCE: <strong data-start=\"5188\" data-end=\"5201\">Resonance</strong></h2><p data-start=\"5203\" data-end=\"5307\"><strong data-start=\"5203\" data-end=\"5212\">Type:</strong> Dice-based resource pool<br data-start=\"5237\" data-end=\"5240\"><strong data-start=\"5240\" data-end=\"5252\">Purpose:</strong> Measures alignment with reality\u2019s underlying structure</p><h3 data-start=\"5309\" data-end=\"5327\">Resonance Dice</h3><ul data-start=\"5328\" data-end=\"5503\"><li data-start=\"5328\" data-end=\"5345\"><p data-start=\"5330\" data-end=\"5345\">Start as <strong data-start=\"5339\" data-end=\"5345\">d6</strong></p></li><li data-start=\"5346\" data-end=\"5427\"><p data-start=\"5348\" data-end=\"5360\">Increase at:</p><ul data-start=\"5363\" data-end=\"5427\"><li data-start=\"5363\" data-end=\"5381\"><p data-start=\"5365\" data-end=\"5381\">Level 5 \u2192 <strong data-start=\"5375\" data-end=\"5381\">d8</strong></p></li><li data-start=\"5384\" data-end=\"5404\"><p data-start=\"5386\" data-end=\"5404\">Level 11 \u2192 <strong data-start=\"5397\" data-end=\"5404\">d10</strong></p></li><li data-start=\"5407\" data-end=\"5427\"><p data-start=\"5409\" data-end=\"5427\">Level 17 \u2192 <strong data-start=\"5420\" data-end=\"5427\">d12</strong></p></li></ul></li><li data-start=\"5428\" data-end=\"5503\"><p data-start=\"5430\" data-end=\"5503\"><strong data-start=\"5430\" data-end=\"5454\">Maximum stored dice:</strong><br data-start=\"5454\" data-end=\"5457\">= your <strong data-start=\"5466\" data-end=\"5491\">Mind modifier</strong> (minimum 1)</p></li></ul><hr data-start=\"5505\" data-end=\"5508\"><h3 data-start=\"5510\" data-end=\"5531\">Gaining Resonance</h3><p data-start=\"5532\" data-end=\"5566\">You gain <strong data-start=\"5541\" data-end=\"5560\">1 Resonance Die</strong> when:</p><ul data-start=\"5568\" data-end=\"5766\"><li data-start=\"5568\" data-end=\"5616\"><p data-start=\"5570\" data-end=\"5616\">You cast a manifestation in correct esoteric alignment</p></li><li data-start=\"5617\" data-end=\"5658\"><p data-start=\"5619\" data-end=\"5658\">You complete a properly prepared ritual</p></li><li data-start=\"5659\" data-end=\"5704\"><p data-start=\"5661\" data-end=\"5704\">You exploit an established semantic pattern</p></li><li data-start=\"5705\" data-end=\"5766\"><p data-start=\"5707\" data-end=\"5766\">Your subclass leverages symbolism, structure, or constraint</p></li></ul><p data-start=\"5768\" data-end=\"5829\"><strong data-start=\"5768\" data-end=\"5778\">Limit:</strong><br data-start=\"5778\" data-end=\"5781\">You may gain <strong data-start=\"5794\" data-end=\"5828\">only 1 Resonance Die per round</strong>.</p><p data-start=\"5831\" data-end=\"5886\">Resonance decays quickly \u2014 it is momentum, not savings.</p><hr data-start=\"5888\" data-end=\"5891\"><h3 data-start=\"5893\" data-end=\"5915\">Spending Resonance</h3><p data-start=\"5916\" data-end=\"5981\">When you spend a Resonance Die, <strong data-start=\"5948\" data-end=\"5959\">roll it</strong> and apply one effect:</p><ul data-start=\"5983\" data-end=\"6160\"><li data-start=\"5983\" data-end=\"6018\"><p data-start=\"5985\" data-end=\"6018\">Add the result to a Resolve DC</p></li><li data-start=\"6019\" data-end=\"6054\"><p data-start=\"6021\" data-end=\"6054\">Add an extra damage or effect die</p></li><li data-start=\"6055\" data-end=\"6081\"><p data-start=\"6057\" data-end=\"6081\">Extend duration or scope</p></li><li data-start=\"6082\" data-end=\"6121\"><p data-start=\"6084\" data-end=\"6121\">Impose roll 3d10 keep lowest 2 on a defense checks</p></li><li data-start=\"6122\" data-end=\"6160\"><p data-start=\"6124\" data-end=\"6160\">Stabilize a manifestation against countering</p></li></ul><p data-start=\"6162\" data-end=\"6201\">Each die spent <strong data-start=\"6177\" data-end=\"6200\">may generate Strain</strong>.</p><hr data-start=\"6203\" data-end=\"6206\"><h2 data-start=\"6208\" data-end=\"6240\">\u26a0 PUSHBACK SYSTEM: <strong data-start=\"6230\" data-end=\"6240\">Strain</strong></h2><p data-start=\"6242\" data-end=\"6340\"><strong data-start=\"6242\" data-end=\"6251\">Type:</strong> Escalating consequence meter<br data-start=\"6280\" data-end=\"6283\"><strong data-start=\"6283\" data-end=\"6295\">Purpose:</strong> Measures damage to reality from forced edits</p><hr data-start=\"6342\" data-end=\"6345\"><h3 data-start=\"6347\" data-end=\"6365\">Gaining Strain</h3><p data-start=\"6366\" data-end=\"6394\">You gain <strong data-start=\"6375\" data-end=\"6388\">+1 Strain</strong> when:</p><ul data-start=\"6395\" data-end=\"6522\"><li data-start=\"6395\" data-end=\"6421\"><p data-start=\"6397\" data-end=\"6421\">Casting while misaligned</p></li><li data-start=\"6422\" data-end=\"6455\"><p data-start=\"6424\" data-end=\"6455\">Spending Resonance aggressively</p></li><li data-start=\"6456\" data-end=\"6488\"><p data-start=\"6458\" data-end=\"6488\">Forcing contradictory meanings</p></li><li data-start=\"6489\" data-end=\"6522\"><p data-start=\"6491\" data-end=\"6522\">Using certain subclass features</p></li></ul><p data-start=\"6524\" data-end=\"6564\">Some abilities add Strain automatically.</p><hr data-start=\"6566\" data-end=\"6569\"><h3 data-start=\"6571\" data-end=\"6606\">Strain Thresholds (Recommended)</h3><ul data-start=\"6607\" data-end=\"6780\"><li data-start=\"6607\" data-end=\"6651\"><p data-start=\"6609\" data-end=\"6651\"><strong data-start=\"6609\" data-end=\"6617\">1\u20132:</strong> Cosmetic anomalies, sensory bleed</p></li><li data-start=\"6652\" data-end=\"6695\"><p data-start=\"6654\" data-end=\"6695\"><strong data-start=\"6654\" data-end=\"6662\">3\u20134:</strong> Psychic damage, manifestation distortion</p></li><li data-start=\"6696\" data-end=\"6747\"><p data-start=\"6698\" data-end=\"6747\"><strong data-start=\"6698\" data-end=\"6706\">5\u20136:</strong> Reality glitches, hostile manifestations</p></li><li data-start=\"6748\" data-end=\"6780\"><p data-start=\"6750\" data-end=\"6780\"><strong data-start=\"6750\" data-end=\"6757\">7+:</strong> GM-controlled backlash</p></li></ul><hr data-start=\"6782\" data-end=\"6785\"><h3 data-start=\"6787\" data-end=\"6806\">Clearing Strain</h3><ul data-start=\"6807\" data-end=\"6896\"><li data-start=\"6807\" data-end=\"6813\"><p data-start=\"6809\" data-end=\"6813\">Rest</p></li><li data-start=\"6814\" data-end=\"6824\"><p data-start=\"6816\" data-end=\"6824\">Downtime</p></li><li data-start=\"6825\" data-end=\"6849\"><p data-start=\"6827\" data-end=\"6849\">Careful ritual casting</p></li><li data-start=\"6850\" data-end=\"6870\"><p data-start=\"6852\" data-end=\"6870\">Annotator features</p></li><li data-start=\"6871\" data-end=\"6896\"><p data-start=\"6873\" data-end=\"6896\">Pactkeeper intervention</p></li></ul><p data-start=\"6898\" data-end=\"6937\">Strain is dangerous but <strong data-start=\"6922\" data-end=\"6936\">manageable</strong>.</p><hr data-start=\"6939\" data-end=\"6942\"><h1 data-start=\"6944\" data-end=\"6968\">\ud83e\udde0 SUMMARY FOR PLAYERS</h1><ul data-start=\"6970\" data-end=\"7234\"><li data-start=\"6970\" data-end=\"7008\"><p data-start=\"6972\" data-end=\"7008\"><strong data-start=\"6972\" data-end=\"6987\">Pactkeepers</strong> manage <strong data-start=\"6995\" data-end=\"7008\">authority</strong></p></li><li data-start=\"7009\" data-end=\"7051\"><p data-start=\"7011\" data-end=\"7051\"><strong data-start=\"7011\" data-end=\"7031\">Cosmic Linguists</strong> manage <strong data-start=\"7039\" data-end=\"7051\">momentum</strong></p></li><li data-start=\"7052\" data-end=\"7100\"><p data-start=\"7054\" data-end=\"7100\">Jurisdiction = <em data-start=\"7069\" data-end=\"7100\">what you are allowed to touch</em></p></li><li data-start=\"7101\" data-end=\"7140\"><p data-start=\"7103\" data-end=\"7140\">Civic Charge = <em data-start=\"7118\" data-end=\"7140\">permission you spend</em></p></li><li data-start=\"7141\" data-end=\"7173\"><p data-start=\"7143\" data-end=\"7173\">Precedent = <em data-start=\"7155\" data-end=\"7173\">what now matters</em></p></li><li data-start=\"7174\" data-end=\"7207\"><p data-start=\"7176\" data-end=\"7207\">Resonance = <em data-start=\"7188\" data-end=\"7207\">how hard you push</em></p></li><li data-start=\"7208\" data-end=\"7234\"><p data-start=\"7210\" data-end=\"7234\">Strain = <em data-start=\"7219\" data-end=\"7234\">what it costs</em></p></li></ul><p data-start=\"7236\" data-end=\"7346\">Nothing here is vague.<br>Nothing here is hand-wavy.<br>Everything can be adjudicated at the table <strong data-start=\"7329\" data-end=\"7345\">consistently</strong>.</p>",
           "chat": ""
         },
         "identifier": "cosmic_linguist_resonance_strain",
@@ -1289,7 +1289,7 @@
         "source": "Bad Eden Originals (2026 rules)",
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #c8a8e8;border-left:4px solid #c8a8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(200,168,232,0.07);font-size:0.84rem\"><b style=\"color:#9a6ac8\">⚙ ENGINE NOTE — the Resonance Pool is now Resonance Channel dice, spent INSIDE the Cast dialog</b> (the ✦ Resonance Channels row: +save DC / +damage die / +duration / defense impose / stabilize). Editorial Authority's Edits live in the ◆ Surge menu.</div><div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p>Spend <strong>1 Resonance Die</strong> and open the Resonance Channel dialog.</p><ul><li><p>+1 Resolve DC</p></li><li><p>Add one additional damage/effect die</p></li><li><p>Extend duration one step</p></li><li><p>Impose roll 3d10 keep lowest 2 on one save</p></li><li><p>Stabilize against counters / dispels</p></li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"clResChanAct\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Resonance Channel (Spend)</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/round (gain)  ·  <strong>Action:</strong> Free (with manifestation)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Spend 1 Resonance Die and pick one channel: +1 Resolve DC · add an extra damage/effect die · extend duration one step · impose roll 3d10 keep lowest 2 on one defense · stabilize against counter/dispel.</span></p></div>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #c8a8e8;border-left:4px solid #c8a8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(200,168,232,0.07);font-size:0.84rem\"><b style=\"color:#9a6ac8\">\u2699 ENGINE NOTE \u2014 the Resonance Pool is now Resonance Channel dice, spent INSIDE the Cast dialog</b> (the \u2726 Resonance Channels row: +save DC / +damage die / +duration / defense impose / stabilize). Editorial Authority's Edits live in the \u25c6 Surge menu.</div><div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p>Spend <strong>1 Resonance Die</strong> and open the Resonance Channel dialog.</p><ul><li><p>+1 Resolve DC</p></li><li><p>Add one additional damage/effect die</p></li><li><p>Extend duration one step</p></li><li><p>Impose roll 3d10 keep lowest 2 on one save</p></li><li><p>Stabilize against counters / dispels</p></li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"clResChanAct\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Resonance Channel (Spend)</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/round (gain) \u00a0\u00b7\u00a0 <strong>Action:</strong> Free (with manifestation) \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Spend 1 Resonance Die and pick one channel: +1 Resolve DC \u00b7 add an extra damage/effect die \u00b7 extend duration one step \u00b7 impose roll 3d10 keep lowest 2 on one defense \u00b7 stabilize against counter/dispel.</span></p></div>",
           "chat": ""
         },
         "identifier": "cosmic_linguist_resonance_channel_action",
@@ -1515,7 +1515,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“I am not casting. I am editing.”</em></p><p>Choose an <strong>Editing Mode</strong>: Additive, Subtractive, Transformative, Referential, or Performative. Your mode shapes how your manifestations manifest, what they cost in Strain, and what Backlash looks like.</p><p>This is semantic authority, not damage scaling.</p>",
+          "value": "<p><em>\u201cI am not casting. I am editing.\u201d</em></p><p>Choose an <strong>Editing Mode</strong>: Additive, Subtractive, Transformative, Referential, or Performative. Your mode shapes how your manifestations manifest, what they cost in Strain, and what Backlash looks like.</p><p>This is semantic authority, not damage scaling.</p>",
           "chat": ""
         },
         "identifier": "cosmic_linguist_semantic_editor",
@@ -1648,7 +1648,7 @@
       "_key": "!actors.items!293HtA4mh8bWd5Vr.Iw6tqsRJmmIDVBz7"
     },
     {
-      "name": "Cosmic Linguist: Initiation 1 — True-Name Touch",
+      "name": "Cosmic Linguist: Initiation 1 \u2014 True-Name Touch",
       "type": "feat",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cast_1.png",
       "system": {
@@ -1656,7 +1656,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #c8a8e8;border-left:4px solid #c8a8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(200,168,232,0.07);font-size:0.84rem\"><b style=\"color:#9a6ac8\">⚙ ENGINE NOTE — the Resonance Pool is now Resonance Channel dice, spent INSIDE the Cast dialog</b> (the ✦ Resonance Channels row: +save DC / +damage die / +duration / defense impose / stabilize). Editorial Authority's Edits live in the ◆ Surge menu.</div><p><strong>Initiation 1 — True-Name Touch.</strong> The Resonance Pool comes online (existing class resource — see your Doctrine for generation rule). When you spend Clarity to manifest, you may <em>name</em> the target as part of the action. For the rest of the scene, extending that manifestation's Reach to the named target costs 1 less Surge / Blood Debt (minimum 0).</p><p><span style=\"opacity: 0.7; font-size: 0.85em\">Discipline (passive): Reach discount −1 on Blood-Debt-reach. Skill rank +1 in two of: Occult, Lore, Insight, Lore.</span></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"clInit1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>True-Name Touch</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> At-will (per scene)  ·  <strong>Action:</strong> Bonus (with manifestation)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Name a target as part of your manifestation. For the rest of the scene, extending that manifestation's Reach to the named target costs 1 less Surge (min 0).</span></p></div>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #c8a8e8;border-left:4px solid #c8a8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(200,168,232,0.07);font-size:0.84rem\"><b style=\"color:#9a6ac8\">\u2699 ENGINE NOTE \u2014 the Resonance Pool is now Resonance Channel dice, spent INSIDE the Cast dialog</b> (the \u2726 Resonance Channels row: +save DC / +damage die / +duration / defense impose / stabilize). Editorial Authority's Edits live in the \u25c6 Surge menu.</div><p><strong>Initiation 1 \u2014 True-Name Touch.</strong> The Resonance Pool comes online (existing class resource \u2014 see your Doctrine for generation rule). When you spend Clarity to manifest, you may <em>name</em> the target as part of the action. For the rest of the scene, extending that manifestation's Reach to the named target costs 1 less Surge / Blood Debt (minimum 0).</p><p><span style=\"opacity: 0.7; font-size: 0.85em\">Discipline (passive): Reach discount \u22121 on Blood-Debt-reach. Skill rank +1 in two of: Occult, Lore, Insight, Lore.</span></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"clInit1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>True-Name Touch</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> At-will (per scene) \u00a0\u00b7\u00a0 <strong>Action:</strong> Bonus (with manifestation) \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Name a target as part of your manifestation. For the rest of the scene, extending that manifestation's Reach to the named target costs 1 less Surge (min 0).</span></p></div>",
           "chat": ""
         },
         "activities": {},
@@ -1725,10 +1725,10 @@
       "system": {
         "category": "doctrine",
         "classIdentifier": "cosmic_linguist",
-        "source": "Bad Eden Originals — Sprint F (2026 rules)",
+        "source": "Bad Eden Originals \u2014 Sprint F (2026 rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>\"It is not there anymore. It was never there.\"</em></p>\n<p><strong>Doctrine:</strong> Power lies in omission, silence, and removal — a good redaction is terrifying because it leaves clean edges. Ask what word, path, memory, or option disappears.</p>\n<p>The Redactor wins by deletion. Your Surge spends remove things from the sentence: an affliction off an ally, a foe's options, or the foe's entire standing as a threat.</p>\n<h3>Doctrine (spent via Surge)</h3>\n<ul>\n  <li><strong>Redact</strong> (1) — strike one condition off an ally (clean edges where it used to be).</li>\n  <li><strong>Silence</strong> (2) — a foe cannot take reactions until your next turn (its options, omitted).</li>\n  <li><strong>Erasure</strong> (5) — a foe is Staggered, cannot take reactions, and rolls its saves at disadvantage (struck from the sentence).</li>\n</ul>",
+          "value": "<p><em>\"It is not there anymore. It was never there.\"</em></p>\n<p><strong>Doctrine:</strong> Power lies in omission, silence, and removal \u2014 a good redaction is terrifying because it leaves clean edges. Ask what word, path, memory, or option disappears.</p>\n<p>The Redactor wins by deletion. Your Surge spends remove things from the sentence: an affliction off an ally, a foe's options, or the foe's entire standing as a threat.</p>\n<h3>Doctrine (spent via Surge)</h3>\n<ul>\n  <li><strong>Redact</strong> (1) \u2014 strike one condition off an ally (clean edges where it used to be).</li>\n  <li><strong>Silence</strong> (2) \u2014 a foe cannot take reactions until your next turn (its options, omitted).</li>\n  <li><strong>Erasure</strong> (5) \u2014 a foe is Staggered, cannot take reactions, and rolls its saves at disadvantage (struck from the sentence).</li>\n</ul>",
           "chat": ""
         },
         "identifier": "bbttcc-cosmic-linguist-linguist-redactor",
@@ -1780,7 +1780,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You already know. You just refuse to say it too early.”</em></p><p><strong>Archetype (Bad Eden): The High Priestess (Seer).</strong> You read the invisible pressure in a room before anyone else admits it exists. You are intuition weaponized, omen-bearing, and very difficult to surprise in ways that matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype sharpens the faction’s hidden-state awareness and information leverage. This Archetype is associated with <strong>+1 Intrigue</strong> in faction calculus in Bad Eden’s faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit; those are granted automatically by the Tier Engine at the appropriate character levels.</li></ul><h3>attributes (Archetype ASI)</h3><p>When you choose this Archetype, you gain <strong>3 attribute points</strong> to distribute using the 2024 rules (no more than +2 to any one score). Common patterns include:</p><ul><li><strong>Watcher of Omens:</strong> +2 Soul, +1 Mind</li><li><strong>Reader of Motives:</strong> +2 Soul, +1 Presence</li><li><strong>Silent Oracle:</strong> +1 Soul, +1 Mind, +1 Presence</li></ul><p>These are suggestions, not restraints. Any valid 3-point distribution is allowed.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou already know. You just refuse to say it too early.\u201d</em></p><p><strong>Archetype (Bad Eden): The High Priestess (Seer).</strong> You read the invisible pressure in a room before anyone else admits it exists. You are intuition weaponized, omen-bearing, and very difficult to surprise in ways that matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype sharpens the faction\u2019s hidden-state awareness and information leverage. This Archetype is associated with <strong>+1 Intrigue</strong> in faction calculus in Bad Eden\u2019s faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit; those are granted automatically by the Tier Engine at the appropriate character levels.</li></ul><h3>attributes (Archetype ASI)</h3><p>When you choose this Archetype, you gain <strong>3 attribute points</strong> to distribute using the 2024 rules (no more than +2 to any one score). Common patterns include:</p><ul><li><strong>Watcher of Omens:</strong> +2 Soul, +1 Mind</li><li><strong>Reader of Motives:</strong> +2 Soul, +1 Presence</li><li><strong>Silent Oracle:</strong> +1 Soul, +1 Mind, +1 Presence</li></ul><p>These are suggestions, not restraints. Any valid 3-point distribution is allowed.</p>",
           "chat": ""
         },
         "activities": {},
@@ -1891,7 +1891,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Crew Type (Bad Eden): Abyssal Cartographers.</em></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
+          "value": "<p><em>Crew Type (Bad Eden): Abyssal Cartographers.</em></p><p><strong>\u201cThere are maps beneath the map.\u201d</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2066,7 +2066,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Occult Association (Bad Eden): Alchemist.</em></p><p><strong>“Reality is a solvent. I’m the one shaking the bottle.”</strong></p><p>Alchemists do not seek purity. They seek <strong>conversion</strong>.</p><p>Where others pursue the Great Work through revelation, alignment, or doctrine, the Alchemist treats it as a throughput problem. Matter, belief, institutions, and people are all half-finished reactions waiting for the right catalyst.</p><p>An Alchemist does not ask <em>what should this be?</em> They ask <em>what can I turn this into before it detonates?</em></p><p>They stabilize supply chains with miracles, turn contamination into leverage, and force abundance out of systems that should already have collapsed. Nothing they do is free. Every refinement leaves residue.</p><p><strong>How Alchemists pursue the Great Work:</strong></p><ul><li>By converting one form of value into another</li><li>By stabilizing volatile systems just long enough to matter</li><li>By treating Sparks, OPs, and infrastructure as reactive states</li><li>By accepting that every solution leaves chemical, moral, or metaphysical residue</li></ul><p><strong>Resonance:</strong> <strong>Yesod</strong> — foundation, transfer, containment, and the unstable bridge between idea and matter.</p><p><strong>Tell-tales:</strong> antiseptic, ozone, burnt sugar, stained gloves, reinforced glass where glass should not survive.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Economy OP rolls</strong> (especially production, infrastructure, and supply stabilization)</li></ul><p><strong>Cost Principle:</strong> Alchemical victories leave residue. Expect shortages, contamination, attention, moral debt, or unstable downstream consequences when you push too hard.</p>",
+          "value": "<p><em>Occult Association (Bad Eden): Alchemist.</em></p><p><strong>\u201cReality is a solvent. I\u2019m the one shaking the bottle.\u201d</strong></p><p>Alchemists do not seek purity. They seek <strong>conversion</strong>.</p><p>Where others pursue the Great Work through revelation, alignment, or doctrine, the Alchemist treats it as a throughput problem. Matter, belief, institutions, and people are all half-finished reactions waiting for the right catalyst.</p><p>An Alchemist does not ask <em>what should this be?</em> They ask <em>what can I turn this into before it detonates?</em></p><p>They stabilize supply chains with miracles, turn contamination into leverage, and force abundance out of systems that should already have collapsed. Nothing they do is free. Every refinement leaves residue.</p><p><strong>How Alchemists pursue the Great Work:</strong></p><ul><li>By converting one form of value into another</li><li>By stabilizing volatile systems just long enough to matter</li><li>By treating Sparks, OPs, and infrastructure as reactive states</li><li>By accepting that every solution leaves chemical, moral, or metaphysical residue</li></ul><p><strong>Resonance:</strong> <strong>Yesod</strong> \u2014 foundation, transfer, containment, and the unstable bridge between idea and matter.</p><p><strong>Tell-tales:</strong> antiseptic, ozone, burnt sugar, stained gloves, reinforced glass where glass should not survive.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Economy OP rolls</strong> (especially production, infrastructure, and supply stabilization)</li></ul><p><strong>Cost Principle:</strong> Alchemical victories leave residue. Expect shortages, contamination, attention, moral debt, or unstable downstream consequences when you push too hard.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -2157,12 +2157,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden – Archetype: The High Priestess (Seer) (Tier 1)",
+          "custom": "Bad Eden \u2013 Archetype: The High Priestess (Seer) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The High Priestess (Seer)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Insight and Perception. You learn the Guidance Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) \u2014 The High Priestess (Seer)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Insight and Perception. You learn the Guidance Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2297,14 +2297,14 @@
       "system": {
         "category": "technique",
         "source": {
-          "custom": "Bad Eden – Crew Type: Abyssal Cartographers (Tier 1)",
+          "custom": "Bad Eden \u2013 Crew Type: Abyssal Cartographers (Tier 1)",
           "revision": 2,
           "rules": "2024",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You’ve learned the first law of deep travel: the visible route is usually the stupid one.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic:</strong> In River, Lake, Sea, Ocean, or Cavern-adjacent routes, discovery and route-finding are more reliable.</li></ul>",
+          "value": "<p><strong>Tier 1 \u2014 Abyssal Cartographers</strong></p><p><strong>\u201cThere are maps beneath the map.\u201d</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You\u2019ve learned the first law of deep travel: the visible route is usually the stupid one.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic:</strong> In River, Lake, Sea, Ocean, or Cavern-adjacent routes, discovery and route-finding are more reliable.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-abyssal-cartographers-t1",
@@ -2489,7 +2489,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Alchemist</strong></p><p><strong>“You’re not powerful yet. You’re noticeable.”</strong></p><p>At Tier 1, you learn the first dangerous lesson: <strong>matter listens</strong>.</p><p>You are not generating value yet. You are accelerating reactions, shortening timelines, and making crude but effective substitutions when a system would otherwise stall out.</p><p>People start bringing you problems that smell like “this should not work.”</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank with <strong>the Occult aptitude</strong></li><li>When crafting basic alchemical items, the time required is halved</li><li>You can identify substances, compounds, and chemical hazards in minutes instead of hours</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Production Reliability:</strong> once per Strategic Turn, when your faction spends <strong>Economy OP</strong> on production, infrastructure, or supply stabilization, reduce that spend by <strong>1</strong> (minimum 1)</li></ul><p><strong>Cost:</strong> every use leaves evidence — fumes, scarcity elsewhere, suspicious efficiency, or a process that now depends on you.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"alchT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Production Reliability</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When faction spends Economy OP on production / infrastructure / supply, reduce spend by 1 (min 1).</div>\n</div>",
+          "value": "<p><strong>Tier 1 \u2014 Alchemist</strong></p><p><strong>\u201cYou\u2019re not powerful yet. You\u2019re noticeable.\u201d</strong></p><p>At Tier 1, you learn the first dangerous lesson: <strong>matter listens</strong>.</p><p>You are not generating value yet. You are accelerating reactions, shortening timelines, and making crude but effective substitutions when a system would otherwise stall out.</p><p>People start bringing you problems that smell like \u201cthis should not work.\u201d</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank with <strong>the Occult aptitude</strong></li><li>When crafting basic alchemical items, the time required is halved</li><li>You can identify substances, compounds, and chemical hazards in minutes instead of hours</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Production Reliability:</strong> once per Strategic Turn, when your faction spends <strong>Economy OP</strong> on production, infrastructure, or supply stabilization, reduce that spend by <strong>1</strong> (minimum 1)</li></ul><p><strong>Cost:</strong> every use leaves evidence \u2014 fumes, scarcity elsewhere, suspicious efficiency, or a process that now depends on you.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"alchT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Production Reliability</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;\u00b7&nbsp; <strong>Action:</strong> Strategic &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When faction spends Economy OP on production / infrastructure / supply, reduce spend by 1 (min 1).</div>\n</div>",
           "chat": ""
         },
         "advancement": {},
@@ -2594,7 +2594,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p data-start=\"3566\" data-end=\"3639\">Once per Soma Break, when you remove or negate something, you may declare:</p><p data-start=\"3641\" data-end=\"3661\"><strong data-start=\"3641\" data-end=\"3661\">Total Redaction.</strong></p><p data-start=\"3663\" data-end=\"3676\">Within scope:</p><ul data-start=\"3678\" data-end=\"3820\"><li data-start=\"3678\" data-end=\"3736\"><p data-start=\"3680\" data-end=\"3736\">Summons cannot be re-summoned by that source for a time.</p></li><li data-start=\"3737\" data-end=\"3762\"><p data-start=\"3739\" data-end=\"3762\">Curses cannot reattach.</p></li><li data-start=\"3763\" data-end=\"3787\"><p data-start=\"3765\" data-end=\"3787\">Teleport anchors fail.</p></li><li data-start=\"3788\" data-end=\"3820\"><p data-start=\"3790\" data-end=\"3820\">Reanimation attempts collapse.</p></li></ul><p data-start=\"3822\" data-end=\"3840\">This does <strong data-start=\"3832\" data-end=\"3839\">not</strong>:</p><ul data-start=\"3842\" data-end=\"3900\"><li data-start=\"3842\" data-end=\"3856\"><p data-start=\"3844\" data-end=\"3856\">Erase canon.</p></li><li data-start=\"3857\" data-end=\"3874\"><p data-start=\"3859\" data-end=\"3874\">Kill immortals.</p></li><li data-start=\"3875\" data-end=\"3900\"><p data-start=\"3877\" data-end=\"3900\">Undo narrative Lore.</p></li></ul><p data-start=\"3902\" data-end=\"3948\">It enforces finality within your jurisdiction.</p><p data-start=\"3950\" data-end=\"3986\">Major Strain.<br data-start=\"3963\" data-end=\"3966\" />Backlash guaranteed.</p><p data-start=\"3988\" data-end=\"4020\">Redactors don’t erase existence.</p><p data-start=\"4022\" data-end=\"4045\">They erase permissions.</p>",
+          "value": "<p data-start=\"3566\" data-end=\"3639\">Once per Soma Break, when you remove or negate something, you may declare:</p><p data-start=\"3641\" data-end=\"3661\"><strong data-start=\"3641\" data-end=\"3661\">Total Redaction.</strong></p><p data-start=\"3663\" data-end=\"3676\">Within scope:</p><ul data-start=\"3678\" data-end=\"3820\"><li data-start=\"3678\" data-end=\"3736\"><p data-start=\"3680\" data-end=\"3736\">Summons cannot be re-summoned by that source for a time.</p></li><li data-start=\"3737\" data-end=\"3762\"><p data-start=\"3739\" data-end=\"3762\">Curses cannot reattach.</p></li><li data-start=\"3763\" data-end=\"3787\"><p data-start=\"3765\" data-end=\"3787\">Teleport anchors fail.</p></li><li data-start=\"3788\" data-end=\"3820\"><p data-start=\"3790\" data-end=\"3820\">Reanimation attempts collapse.</p></li></ul><p data-start=\"3822\" data-end=\"3840\">This does <strong data-start=\"3832\" data-end=\"3839\">not</strong>:</p><ul data-start=\"3842\" data-end=\"3900\"><li data-start=\"3842\" data-end=\"3856\"><p data-start=\"3844\" data-end=\"3856\">Erase canon.</p></li><li data-start=\"3857\" data-end=\"3874\"><p data-start=\"3859\" data-end=\"3874\">Kill immortals.</p></li><li data-start=\"3875\" data-end=\"3900\"><p data-start=\"3877\" data-end=\"3900\">Undo narrative Lore.</p></li></ul><p data-start=\"3902\" data-end=\"3948\">It enforces finality within your jurisdiction.</p><p data-start=\"3950\" data-end=\"3986\">Major Strain.<br data-start=\"3963\" data-end=\"3966\" />Backlash guaranteed.</p><p data-start=\"3988\" data-end=\"4020\">Redactors don\u2019t erase existence.</p><p data-start=\"4022\" data-end=\"4045\">They erase permissions.</p>",
           "chat": ""
         },
         "identifier": "redactor_total_redaction",
@@ -2721,7 +2721,7 @@
         "evasionBonus": 1,
         "resolveBonus": 1,
         "resistances": [],
-        "armorSkill": "weave",
+        "armorSkill": "fitting",
         "equipped": true,
         "tags": [
           "t1-baseline",
@@ -2732,7 +2732,7 @@
         "category": "armor",
         "source": "",
         "description": {
-          "value": "<p>Undyed sept-cloth cut to a long working robe with a corded belt. Issued to first-circle initiates of any chapterhouse or tutor-cell — the kind of garment that gets traded between students faster than any of them keep notebooks. Comfortable to channel in. Forgettable to anyone watching for trouble.</p><p><strong>Standard Issue.</strong> Light enough to manifest in. Dignified enough to walk past a sept-warden.</p>",
+          "value": "<p>Undyed sept-cloth cut to a long working robe with a corded belt. Issued to first-circle initiates of any chapterhouse or tutor-cell \u2014 the kind of garment that gets traded between students faster than any of them keep notebooks. Comfortable to channel in. Forgettable to anyone watching for trouble.</p><p><strong>Standard Issue.</strong> Light enough to manifest in. Dignified enough to walk past a sept-warden.</p>",
           "chat": ""
         }
       },
@@ -2757,7 +2757,7 @@
                 "table": null
               },
               "signals": {},
-              "lore": "<p>Undyed sept-cloth cut to a long working robe with a corded belt. Issued to first-circle initiates of any chapterhouse or tutor-cell — the kind of garment that gets traded between students faster than any of them keep notebooks. Comfortable to channel in. Forgettable to anyone watching for trouble.</p><p><b>Standard Issue.</b> Light enough to manifest in. Dignified enough to walk past a sept-warden.</p>",
+              "lore": "<p>Undyed sept-cloth cut to a long working robe with a corded belt. Issued to first-circle initiates of any chapterhouse or tutor-cell \u2014 the kind of garment that gets traded between students faster than any of them keep notebooks. Comfortable to channel in. Forgettable to anyone watching for trouble.</p><p><b>Standard Issue.</b> Light enough to manifest in. Dignified enough to walk past a sept-warden.</p>",
               "materialOf": [
                 "sept-cloth",
                 "corded-belt"
@@ -2781,7 +2781,7 @@
       "_id": "2ym4lMwinLaL6d6T",
       "effects": [
         {
-          "name": "⚙️ Defense Grant",
+          "name": "\u2699\ufe0f Defense Grant",
           "transfer": false,
           "disabled": false,
           "flags": {
@@ -2895,7 +2895,7 @@
         "manifestation": {
           "tier": 1,
           "family": "working",
-          "concept": "You append a small reading to a recent event — a footnote — that the room must now consider true alongside the original.",
+          "concept": "You append a small reading to a recent event \u2014 a footnote \u2014 that the room must now consider true alongside the original.",
           "form": "sigil",
           "function": "reveal",
           "stability": "instant",
@@ -2912,7 +2912,7 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "If your footnote contradicts a witnessed truth too brazenly, the footnote tears and you take 1 Noise.",
-          "pathResonance": "Cosmic Linguist (Annotator) — small surgical edit, large consequence.",
+          "pathResonance": "Cosmic Linguist (Annotator) \u2014 small surgical edit, large consequence.",
           "fictionalPermission": "You don't change what happened. You change how the room is allowed to read what happened.",
           "gmCalibration": "T1 Working. One sentence. GM and player negotiate exact wording.",
           "mechanicalHook": "Add one fact, motive, or implication to a recent event. Anyone present must reroll their lowest die on the next check that depends on understanding the event.",
@@ -3009,7 +3009,7 @@
         "manifestation": {
           "tier": 1,
           "family": "working",
-          "concept": "Your next utterance lands as inarguable. Not a compulsion — a perfect formatting of meaning. The thing you said is now what was said.",
+          "concept": "Your next utterance lands as inarguable. Not a compulsion \u2014 a perfect formatting of meaning. The thing you said is now what was said.",
           "form": "sigil",
           "function": "command",
           "stability": "instant",
@@ -3026,11 +3026,11 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "You cannot use this to force compliance. If you try, the emphasis fails and you take 1 Stress.",
-          "pathResonance": "Cosmic Linguist (Metaphor Apostle) — the said becomes the case.",
+          "pathResonance": "Cosmic Linguist (Metaphor Apostle) \u2014 the said becomes the case.",
           "fictionalPermission": "You speak in italics. The room copies it down.",
-          "gmCalibration": "T1 Working. One sentence. NPCs may still disagree — they cannot pretend they didn't hear it.",
+          "gmCalibration": "T1 Working. One sentence. NPCs may still disagree \u2014 they cannot pretend they didn't hear it.",
           "mechanicalHook": "Your next single statement (one sentence) is treated by the scene as common knowledge. Allies reroll lowest die on the next roll predicated on agreeing with you.",
-          "signature": "Your voice momentarily acquires an italic quality — slightly slanted, slightly warmer.",
+          "signature": "Your voice momentarily acquires an italic quality \u2014 slightly slanted, slightly warmer.",
           "thirdThing": "The emphasized statement is remembered with perfect verbatim accuracy by everyone in the scene, even if they would prefer not to.",
           "opCost": {
             "pool": "",
@@ -3129,7 +3129,7 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "If destroyed, you lose access to your last 1d4 Workings until a new glossary is begun. Reading rival glossaries can corrupt yours.",
-          "pathResonance": "Cosmic Linguist (Annotator) — meaning under your continuous editing.",
+          "pathResonance": "Cosmic Linguist (Annotator) \u2014 meaning under your continuous editing.",
           "fictionalPermission": "You can change what a word means. Quietly. The room follows.",
           "gmCalibration": "Tier-1 Form. Visible to other Linguists. Useless if you cannot read the language being spoken.",
           "mechanicalHook": "Once per scene, redefine a single word in the conversation. The redefinition holds for the scene. +2 to Insight rolls while open.",
@@ -3246,7 +3246,7 @@
           "riskText": "Reality resents public copy-editing; deleted momentum may come back cranky.",
           "pathResonance": "Cosmic Linguist / Annotator doctrine / modest edit, large consequence.",
           "fictionalPermission": "You can delay, soften, footnote, or partially reframe something that is already trying to happen.",
-          "gmCalibration": "Let it buy timing, ambiguity, or reduction—not total negation unless the setup was exquisite.",
+          "gmCalibration": "Let it buy timing, ambiguity, or reduction\u2014not total negation unless the setup was exquisite.",
           "mechanicalHook": "Reaction-speed delay or deflection effect for one event.",
           "signature": "A tiny glowing caret appears over the thing being corrected.",
           "thirdThing": "Every use leaves one innocent word in the scene slightly out of place.",
@@ -3349,10 +3349,10 @@
           "rangeFt": 0,
           "maintenanceCost": "1 Stress per scene maintained.",
           "riskText": "Other Linguists can read your marginalia. Annotation reveals the annotator.",
-          "pathResonance": "Cosmic Linguist (Archivist) — past and future as marginalia of the present.",
+          "pathResonance": "Cosmic Linguist (Archivist) \u2014 past and future as marginalia of the present.",
           "fictionalPermission": "You can study a thing the way a scholar studies a manuscript. The thing knows.",
           "gmCalibration": "Tier-2 Form. Visible to anyone with second sight. Excellent for investigation; expensive for action.",
-          "mechanicalHook": "While active on a target, every Insight, Investigate, or Recall roll about the target rerolls the lowest die. Once per scene, ask the GM one question about the target — they answer truthfully but minimally.",
+          "mechanicalHook": "While active on a target, every Insight, Investigate, or Recall roll about the target rerolls the lowest die. Once per scene, ask the GM one question about the target \u2014 they answer truthfully but minimally.",
           "signature": "Light, almost-readable script drifts in the air at the edge of vision around the marked subject.",
           "thirdThing": "The accumulated annotations include things no one has yet observed. The future leaks through.",
           "opCost": {
@@ -3435,7 +3435,7 @@
         "manifestation": {
           "tier": 1,
           "family": "form",
-          "concept": "A small inkling — half ink-blot, half insect — that copies what you observe. It can be sent ahead to read for you.",
+          "concept": "A small inkling \u2014 half ink-blot, half insect \u2014 that copies what you observe. It can be sent ahead to read for you.",
           "form": "construct",
           "function": "reveal",
           "stability": "enduring",
@@ -3452,7 +3452,7 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "If captured by another Linguist, they can read your recent Workings.",
-          "pathResonance": "Cosmic Linguist (Archivist) — observation as ongoing record.",
+          "pathResonance": "Cosmic Linguist (Archivist) \u2014 observation as ongoing record.",
           "fictionalPermission": "You have a small, smart, mostly-silent helper that reads on your behalf.",
           "gmCalibration": "Tier-1 Form. Easily missed; easily destroyed by anyone paying attention. GM may grant it a small personality.",
           "mechanicalHook": "Send the familiar Far range to scout. It returns with a single accurate sentence about what it saw. Once per scene, it may copy a written page verbatim.",
@@ -3546,7 +3546,7 @@
         "manifestation": {
           "tier": 2,
           "family": "working",
-          "concept": "You delete a recent sentence — a thing said, a thing acted, a thing recorded — from the canon of the scene. It happened. It is no longer the case that it happened.",
+          "concept": "You delete a recent sentence \u2014 a thing said, a thing acted, a thing recorded \u2014 from the canon of the scene. It happened. It is no longer the case that it happened.",
           "form": "sigil",
           "function": "transform",
           "stability": "instant",
@@ -3555,7 +3555,7 @@
           "costValue": 2,
           "costText": "",
           "duration": "instant",
-          "durationText": "Permanent — until someone else writes the moment back in.",
+          "durationText": "Permanent \u2014 until someone else writes the moment back in.",
           "triggerText": "",
           "scale": "personal",
           "targetText": "",
@@ -3563,7 +3563,7 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "Major edits draw attention from other Linguists, archivists, and any reality-stable witness (some saints, some children, some Pactkeepers).",
-          "pathResonance": "Cosmic Linguist (Redactor) — power lies in clean omission.",
+          "pathResonance": "Cosmic Linguist (Redactor) \u2014 power lies in clean omission.",
           "fictionalPermission": "You can take back a word that has already been said. Reality cooperates. Mostly.",
           "gmCalibration": "T2 Working. Cannot delete events that constitute the spine of the scene. GM may require a higher tier for that.",
           "mechanicalHook": "Erase one specific action, statement, or observation from the last 60 seconds. People in the scene revise their memory. Hard evidence (writing, recording) develops a flaw or smudge.",

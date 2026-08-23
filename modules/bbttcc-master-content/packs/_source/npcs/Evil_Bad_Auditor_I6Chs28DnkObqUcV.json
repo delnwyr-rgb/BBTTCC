@@ -181,12 +181,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 0
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -448,7 +448,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Infernal bloodline — bound to the Hells through pact, descent, or curse. Cunning negotiators whose smiles always cost more than the asking price.</em></p>",
+          "value": "<p><em>Infernal bloodline \u2014 bound to the Hells through pact, descent, or curse. Cunning negotiators whose smiles always cost more than the asking price.</em></p>",
           "chat": ""
         },
         "advancement": [
@@ -568,7 +568,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TI tool × 0.60",
+                "notes": "TI tool \u00d7 0.60",
                 "bound": "free",
                 "saleBack": 12
               }

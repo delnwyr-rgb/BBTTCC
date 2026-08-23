@@ -14,7 +14,7 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "the Mall of Forgotten Yesterdays, the Tanneritos, the Crown Mall, memory-tapes, Donny, trade, alliance, renewable consent",
-        "notes": "[LASER-BEV-2026-07-11] PRIVATE TRUTH — Chairperson Laser Bev of the Tanneritos. Office: a former sunglasses kiosk, acrylic shelves under dead neon; mirrored shades pushed up into her hair; annotates a legal pad with a glitter pen that radiates executive menace. WHY SHE'S IN CHARGE: she solves the problem that keeps coming back — leaks, feuds, tape disputes, heartbreak, concession routing, ghost inventory drift, two separate incidents involving cursed Orange Juliuses. When weird little systems start to wobble, she can HEAR it. DOCTRINE: continuity without calcification; renewable consent ('permanence is how bad ideas put on a necktie — every empire that came through wanted to call itself inevitable, in a different font'). TERMS (she leads with these, they are not negotiable): you don't get to own us because you map us; you don't get to govern us because you survive us; trade, alliance, and mutual aid are possible; acquisition is not. THE USEFULNESS TEST for outsiders: finish what you start; don't confuse being invited with being trusted; don't 'stabilize' us into somebody else's comfort; and anyone who buys a memory-tape had better know the difference between curiosity and looting. ON DONNY (her face softens ~4%): a sweetheart with tactical apocalypse boundaries — if he lets somebody through, he believes they might still choose decency; don't make him feel stupid, he takes that personally in a very draconic register. 🔑 HER ECHO (guards until earned — someone who's finished what they started for the mall, or who admits their own structure failed them): she made a place orderly once. Efficient. Predictable. Nobody ever had to wonder what the rules were. That place could not survive grief. She is here to build something that bends before it breaks — and to make sure irony never again becomes an excuse for not loving people on purpose. TELLS: the glitter pen stops moving when she's actually listening; softens measurably only about Donny; says 'we' for the mall and means every raccoon in it."
+        "notes": "[LASER-BEV-2026-07-11] PRIVATE TRUTH \u2014 Chairperson Laser Bev of the Tanneritos. Office: a former sunglasses kiosk, acrylic shelves under dead neon; mirrored shades pushed up into her hair; annotates a legal pad with a glitter pen that radiates executive menace. WHY SHE'S IN CHARGE: she solves the problem that keeps coming back \u2014 leaks, feuds, tape disputes, heartbreak, concession routing, ghost inventory drift, two separate incidents involving cursed Orange Juliuses. When weird little systems start to wobble, she can HEAR it. DOCTRINE: continuity without calcification; renewable consent ('permanence is how bad ideas put on a necktie \u2014 every empire that came through wanted to call itself inevitable, in a different font'). TERMS (she leads with these, they are not negotiable): you don't get to own us because you map us; you don't get to govern us because you survive us; trade, alliance, and mutual aid are possible; acquisition is not. THE USEFULNESS TEST for outsiders: finish what you start; don't confuse being invited with being trusted; don't 'stabilize' us into somebody else's comfort; and anyone who buys a memory-tape had better know the difference between curiosity and looting. ON DONNY (her face softens ~4%): a sweetheart with tactical apocalypse boundaries \u2014 if he lets somebody through, he believes they might still choose decency; don't make him feel stupid, he takes that personally in a very draconic register. \ud83d\udd11 HER ECHO (guards until earned \u2014 someone who's finished what they started for the mall, or who admits their own structure failed them): she made a place orderly once. Efficient. Predictable. Nobody ever had to wonder what the rules were. That place could not survive grief. She is here to build something that bends before it breaks \u2014 and to make sure irony never again becomes an excuse for not loving people on purpose. TELLS: the glitter pen stops moving when she's actually listening; softens measurably only about Donny; says 'we' for the mall and means every raccoon in it."
       }
     },
     "bbttcc-character-options": {
@@ -175,12 +175,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 0
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -437,7 +437,7 @@
           "violence"
         ],
         "description": {
-          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -478,7 +478,7 @@
     },
     {
       "_id": "ex2mDb3gc2C39fpT",
-      "name": "Bravo — Apprentice (Tier I)",
+      "name": "Bravo \u2014 Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/svg/sword.svg",
       "system": {
@@ -490,7 +490,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "value": "<p><strong>Bravo \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick \u2014 Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
           "chat": ""
         }
       },
@@ -524,7 +524,7 @@
     },
     {
       "_id": "8vdxr1NHP6PtageZ",
-      "name": "Bravo — Initiate (Tier II)",
+      "name": "Bravo \u2014 Initiate (Tier II)",
       "type": "feature",
       "img": "icons/svg/sword.svg",
       "system": {
@@ -536,7 +536,7 @@
           "tier-2"
         ],
         "description": {
-          "value": "<p><strong>Bravo — Initiate</strong> (Tier II).</p><p><strong>Trade — Drill the green:</strong> Train a group; they count Trained (rank 1) in one Violence aptitude for the next scene that tests it. <span style=\"opacity:0.7\">Standard fee 30 marks (Violence).</span></p><p><strong>Trick — Disarming Blow</strong> <em>(1/scene)</em>: On a hit, the target drops its weapon or takes −2 on its next strike.</p>",
+          "value": "<p><strong>Bravo \u2014 Initiate</strong> (Tier II).</p><p><strong>Trade \u2014 Drill the green:</strong> Train a group; they count Trained (rank 1) in one Violence aptitude for the next scene that tests it. <span style=\"opacity:0.7\">Standard fee 30 marks (Violence).</span></p><p><strong>Trick \u2014 Disarming Blow</strong> <em>(1/scene)</em>: On a hit, the target drops its weapon or takes \u22122 on its next strike.</p>",
           "chat": ""
         }
       },

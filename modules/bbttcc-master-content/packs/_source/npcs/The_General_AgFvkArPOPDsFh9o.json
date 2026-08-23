@@ -272,12 +272,12 @@
         "label": "Plating",
         "value": 1
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 1
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 1
@@ -532,7 +532,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin.</strong> Normalized Bad Eden ancestry root.</p><p>Select one subspecies when building the character: <strong>Chupacabra, Jackalope, Furrykin</strong>.</p><p>This root grants the shared Cryptidkin core trait package. Subspecies layer flavor, size, and Tier powers on top.</p><p><em>“Every settlement has a story about you. None of them are accurate. All of them are useful.”</em></p><hr><p><em><strong>Cryptidkin Core Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (set by subspecies).</p></li><li><p><strong>Speed.</strong> 6 squares (subspecies may override).</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Cryptidkin does not grant fixed bonuses. Subspecies lean expressed through Tier powers.</p></li></ul><p><strong>Folklore Presence.</strong> When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as <em>omen</em>, <em>trophy</em>, or <em>legend</em>. It is never neutral. People have heard of your kind. They are almost always wrong, and that is almost always useful.</p><p><strong>Wasteland Adapted.</strong> You reroll the lowest die on checks against disease and environmental poison. You ignore the first nonmagical environmental hazard you encounter each Strategic Turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor’s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 12 squares You cannot be surprised while conscious.</p><p><strong>Subspecies.</strong> Choose one Cryptidkin subspecies (Chupacabra, Jackalope, Furrykin). Your subspecies grants Tier powers as you level (Tier I at creation, then 5/11/17).</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin.</strong> Normalized Bad Eden ancestry root.</p><p>Select one subspecies when building the character: <strong>Chupacabra, Jackalope, Furrykin</strong>.</p><p>This root grants the shared Cryptidkin core trait package. Subspecies layer flavor, size, and Tier powers on top.</p><p><em>\u201cEvery settlement has a story about you. None of them are accurate. All of them are useful.\u201d</em></p><hr><p><em><strong>Cryptidkin Core Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (set by subspecies).</p></li><li><p><strong>Speed.</strong> 6 squares (subspecies may override).</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Cryptidkin does not grant fixed bonuses. Subspecies lean expressed through Tier powers.</p></li></ul><p><strong>Folklore Presence.</strong> When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as <em>omen</em>, <em>trophy</em>, or <em>legend</em>. It is never neutral. People have heard of your kind. They are almost always wrong, and that is almost always useful.</p><p><strong>Wasteland Adapted.</strong> You reroll the lowest die on checks against disease and environmental poison. You ignore the first nonmagical environmental hazard you encounter each Strategic Turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor\u2019s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 12 squares You cannot be surprised while conscious.</p><p><strong>Subspecies.</strong> Choose one Cryptidkin subspecies (Chupacabra, Jackalope, Furrykin). Your subspecies grants Tier powers as you level (Tier I at creation, then 5/11/17).</p>",
           "chat": ""
         },
         "advancement": [
@@ -659,7 +659,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-cryptidkin-folklore-frame=\"v1\" style=\"display:none\"></div><p><em>\"You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.\"</em></p><p><strong>Folklore Presence.</strong> 1/Soma Break, when you first meet a community, decide whether the rumors about you arrived first. If yes, reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering — the GM gets to colour it.</p><p><strong>Wasteland Adapted.</strong> Reroll the lowest die on defense checks against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh).</p><p><strong>Survivor's Instinct.</strong> 1/Soma Break, when you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress.</p>",
+          "value": "<div data-ft-canon-cryptidkin-folklore-frame=\"v1\" style=\"display:none\"></div><p><em>\"You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.\"</em></p><p><strong>Folklore Presence.</strong> 1/Soma Break, when you first meet a community, decide whether the rumors about you arrived first. If yes, reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering \u2014 the GM gets to colour it.</p><p><strong>Wasteland Adapted.</strong> Reroll the lowest die on defense checks against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh).</p><p><strong>Survivor's Instinct.</strong> 1/Soma Break, when you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -702,7 +702,7 @@
               "effect": {
                 "kind": "chat-prompt",
                 "args": {
-                  "body": "Survivor’s Instinct. When you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress"
+                  "body": "Survivor\u2019s Instinct. When you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress"
                 }
               }
             }
@@ -920,7 +920,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You are called. You will answer.”</em></p><p><strong>Archetype (Bad Eden): Judgment (Reckoner).</strong> You are final account, exposure, and the terrifying moment when evasion ends. You force consequences to arrive on time.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens revelation, decisive resolution, and moral or violent finality. This Archetype is associated with <strong>+1 Violence</strong> and <strong>+1 Faith</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou are called. You will answer.\u201d</em></p><p><strong>Archetype (Bad Eden): Judgment (Reckoner).</strong> You are final account, exposure, and the terrifying moment when evasion ends. You force consequences to arrive on time.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens revelation, decisive resolution, and moral or violent finality. This Archetype is associated with <strong>+1 Violence</strong> and <strong>+1 Faith</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1029,12 +1029,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden – Archetype: Judgment (Reckoner) (Tier 1)",
+          "custom": "Bad Eden \u2013 Archetype: Judgment (Reckoner) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — Judgment (Reckoner)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Intimidation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) \u2014 Judgment (Reckoner)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Intimidation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1256,7 +1256,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Ashbound Survivors</strong></p><p><em>You’ve learned the first mercy of dead land: preparation beats optimism.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Lore.</li><li><strong>Strategic:</strong> In Desert, Ash Wastes, and Wasteland hexes, environmental travel penalties are reduced and hazard pressure is easier to withstand.</li></ul>",
+          "value": "<p><strong>Tier 1 \u2014 Ashbound Survivors</strong></p><p><em>You\u2019ve learned the first mercy of dead land: preparation beats optimism.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Lore.</li><li><strong>Strategic:</strong> In Desert, Ash Wastes, and Wasteland hexes, environmental travel penalties are reduced and hazard pressure is easier to withstand.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-ashbound-survivors-t1",
@@ -1419,7 +1419,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Prophet / Oracle</strong></p><p><strong>“You don’t know the future. You just know when something has started.”</strong></p><p>At Tier 1, you begin catching the edge of events before they fully arrive. Not enough to command them. Enough to stop being surprised.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> and <strong>Perception</strong></li><li>1/Soma Break, ask the GM one focused omen-question about an immediate situation, route, or known danger; the answer should be truthful but limited, symbolic, or pressure-based</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a planning-heavy, reconnaissance, or intrigue-forward action, gain <strong>+2</strong> to one relevant OP roll by declaring what sign your faction is acting on</li></ul><p><strong>Cost:</strong> early warning is rarely comfortable. Expect unease, distraction, or tension when you sense something going wrong before anyone else can justify reacting to it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Omen Question</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Ask the GM one focused omen-question. Truthful but limited / symbolic / pressure-based.</div>\n</div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 \u2014 Prophet / Oracle</strong></p><p><strong>\u201cYou don\u2019t know the future. You just know when something has started.\u201d</strong></p><p>At Tier 1, you begin catching the edge of events before they fully arrive. Not enough to command them. Enough to stop being surprised.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> and <strong>Perception</strong></li><li>1/Soma Break, ask the GM one focused omen-question about an immediate situation, route, or known danger; the answer should be truthful but limited, symbolic, or pressure-based</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a planning-heavy, reconnaissance, or intrigue-forward action, gain <strong>+2</strong> to one relevant OP roll by declaring what sign your faction is acting on</li></ul><p><strong>Cost:</strong> early warning is rarely comfortable. Expect unease, distraction, or tension when you sense something going wrong before anyone else can justify reacting to it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Omen Question</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;\u00b7&nbsp; <strong>Action:</strong> Free &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Ask the GM one focused omen-question. Truthful but limited / symbolic / pressure-based.</div>\n</div>",
           "chat": ""
         },
         "advancement": {},
@@ -1794,7 +1794,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Cryptidkin Subspecies.</strong> This heritage preserves the original UUID for <em>Furrykin</em> while converting it from a species-root with five sub-clades into a single flexible Cryptidkin subspecies.</p><p><em>“You are not an animal that learned to talk. You are a person the world made with fur because it needed you to survive.”</em></p><p><strong>Furrykin.</strong> You are anything fur-bearing the world decided to make people out of. Talking badger, cunning fox, stoic bear, watchful rabbit, the uncle-shaped thing the trappers call Bigfoot—all valid. Size and frame are flexible; the instinct is not.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (choose at creation; Medium Furrykin can describe themselves as “large and shaggy” without mechanical change—Bigfoot-scale creatures still move and fight at Medium).</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Subspecies Lean.</strong> No fixed stat lean. Your frame is your business—the Tier powers adapt to how you play it.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor’s Instinct).</p><h3>Wildframe & Instinct (Furrykin Extras)</h3><ul><li><p><strong>Wildframe.</strong> Your body is built for a world that bites back. You already reroll the lowest die on checks against disease and environmental poison (from Wasteland Adapted); as Furrykin, you also add your tier to any Body defense check to resist Stress.</p></li><li><p><strong>Keen Sense.</strong> Choose one: <em>Keen Smell</em>, <em>Keen Hearing</em>, or <em>Keen Sight</em>. You reroll the lowest die on Perception checks relying on that sense.</p></li><li><p><strong>Frame Choice.</strong> Choose one narrative frame at creation: <em>Predator</em> (bite or claws count as unarmed strikes that deal 1d6 instead of 1d4), <em>Forager</em> (trained in Athletics), or <em>Brute</em> (count as one size larger for carrying, shoving, and grappling).</p></li></ul><h3>Furrykin Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Tier powers previously split across Felid / Leporid / Mustelid / Ursid / Vulpin are unified; choose flavor at the table without mechanical separation.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Cryptidkin Subspecies.</strong> This heritage preserves the original UUID for <em>Furrykin</em> while converting it from a species-root with five sub-clades into a single flexible Cryptidkin subspecies.</p><p><em>\u201cYou are not an animal that learned to talk. You are a person the world made with fur because it needed you to survive.\u201d</em></p><p><strong>Furrykin.</strong> You are anything fur-bearing the world decided to make people out of. Talking badger, cunning fox, stoic bear, watchful rabbit, the uncle-shaped thing the trappers call Bigfoot\u2014all valid. Size and frame are flexible; the instinct is not.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (choose at creation; Medium Furrykin can describe themselves as \u201clarge and shaggy\u201d without mechanical change\u2014Bigfoot-scale creatures still move and fight at Medium).</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Subspecies Lean.</strong> No fixed stat lean. Your frame is your business\u2014the Tier powers adapt to how you play it.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor\u2019s Instinct).</p><h3>Wildframe & Instinct (Furrykin Extras)</h3><ul><li><p><strong>Wildframe.</strong> Your body is built for a world that bites back. You already reroll the lowest die on checks against disease and environmental poison (from Wasteland Adapted); as Furrykin, you also add your tier to any Body defense check to resist Stress.</p></li><li><p><strong>Keen Sense.</strong> Choose one: <em>Keen Smell</em>, <em>Keen Hearing</em>, or <em>Keen Sight</em>. You reroll the lowest die on Perception checks relying on that sense.</p></li><li><p><strong>Frame Choice.</strong> Choose one narrative frame at creation: <em>Predator</em> (bite or claws count as unarmed strikes that deal 1d6 instead of 1d4), <em>Forager</em> (trained in Athletics), or <em>Brute</em> (count as one size larger for carrying, shoving, and grappling).</p></li></ul><h3>Furrykin Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Tier powers previously split across Felid / Leporid / Mustelid / Ursid / Vulpin are unified; choose flavor at the table without mechanical separation.</p>",
           "chat": ""
         },
         "advancement": [
@@ -1897,7 +1897,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Your body is built for a world that bites back. So is your patience.”</em></p>\n<p><strong>Wildframe.</strong> Add your tier to Body defense checks made to resist Stress.</p>\n<p><strong>Keen Sense.</strong> Choose one at character creation: <em>Keen Smell</em>, <em>Keen Hearing</em>, or <em>Keen Sight</em>. You reroll the lowest die on Soul (Perception) checks that rely on that sense.</p>\n<p><strong>Frame Choice.</strong> Choose one narrative frame at character creation; it is permanent.</p>\n<ul><li><strong>Predator.</strong> Your unarmed strikes (bite or claws) deal 1d6 instead of 1d4 and count as natural weapons.</li><li><strong>Forager.</strong> You gain a skill rank in the Athletics skill. If you already have it, you may choose another skill from the Cryptidkin list (GM adjudicates).</li><li><strong>Brute.</strong> You count as one size larger for the purposes of carrying capacity, push, drag, lift, shove, and grapple.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYour body is built for a world that bites back. So is your patience.\u201d</em></p>\n<p><strong>Wildframe.</strong> Add your tier to Body defense checks made to resist Stress.</p>\n<p><strong>Keen Sense.</strong> Choose one at character creation: <em>Keen Smell</em>, <em>Keen Hearing</em>, or <em>Keen Sight</em>. You reroll the lowest die on Soul (Perception) checks that rely on that sense.</p>\n<p><strong>Frame Choice.</strong> Choose one narrative frame at character creation; it is permanent.</p>\n<ul><li><strong>Predator.</strong> Your unarmed strikes (bite or claws) deal 1d6 instead of 1d4 and count as natural weapons.</li><li><strong>Forager.</strong> You gain a skill rank in the Athletics skill. If you already have it, you may choose another skill from the Cryptidkin list (GM adjudicates).</li><li><strong>Brute.</strong> You count as one size larger for the purposes of carrying capacity, push, drag, lift, shove, and grapple.</li></ul>",
           "chat": ""
         },
         "advancement": {},
@@ -2045,7 +2045,7 @@
           "violence"
         ],
         "description": {
-          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -2086,7 +2086,7 @@
     },
     {
       "_id": "uaHzi2nPlx8mccN5",
-      "name": "Bravo — Apprentice (Tier I)",
+      "name": "Bravo \u2014 Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/svg/sword.svg",
       "system": {
@@ -2098,7 +2098,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "value": "<p><strong>Bravo \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick \u2014 Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
           "chat": ""
         }
       },

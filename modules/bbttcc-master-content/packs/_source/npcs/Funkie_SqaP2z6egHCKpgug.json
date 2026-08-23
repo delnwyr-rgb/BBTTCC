@@ -242,12 +242,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 1
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -412,7 +412,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Oldenborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Earthbound, Lumenwrought, Stormborn Nomad, Rustland Scavenger</strong>.</p><p>This root grants the shared Oldenborn core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>“You are not an elf. You are the memory of a place that learned to walk again.”</em></p>\n<p><strong>Dream-Flesh.</strong> You do not sleep. When you rest, you drift into Yesod—symbolic memory-space—unless you choose otherwise. You are immune to magical sleep, and you can always tell when a dream, illusion, or constructed reality is present.</p>\n<p><strong>Old Memory, Old Paths.</strong> You reroll the lowest die on checks to interpret ruins, follow ley-lines, identify altered terrain, and sense metaphysical instability. You always know if a place feels <em>remembered</em>, <em>abandoned</em>, or <em>contested</em> (the GM answers vaguely).</p>\n<p><strong>Veil-Sight.</strong> You perceive the <em>presence</em> of spirits, ghosts, Spark echoes, and noospheric constructs. This grants awareness, not perfect sight.</p>\n<p><strong>You Are Remembered.</strong> When you first meet a community, the GM chooses (or rolls) whether you are met with reverence, fear, or familiarity. It’s never neutral.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Oldenborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Earthbound, Lumenwrought, Stormborn Nomad, Rustland Scavenger</strong>.</p><p>This root grants the shared Oldenborn core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>\u201cYou are not an elf. You are the memory of a place that learned to walk again.\u201d</em></p>\n<p><strong>Dream-Flesh.</strong> You do not sleep. When you rest, you drift into Yesod\u2014symbolic memory-space\u2014unless you choose otherwise. You are immune to magical sleep, and you can always tell when a dream, illusion, or constructed reality is present.</p>\n<p><strong>Old Memory, Old Paths.</strong> You reroll the lowest die on checks to interpret ruins, follow ley-lines, identify altered terrain, and sense metaphysical instability. You always know if a place feels <em>remembered</em>, <em>abandoned</em>, or <em>contested</em> (the GM answers vaguely).</p>\n<p><strong>Veil-Sight.</strong> You perceive the <em>presence</em> of spirits, ghosts, Spark echoes, and noospheric constructs. This grants awareness, not perfect sight.</p>\n<p><strong>You Are Remembered.</strong> When you first meet a community, the GM chooses (or rolls) whether you are met with reverence, fear, or familiarity. It\u2019s never neutral.</p>",
           "chat": ""
         },
         "advancement": [
@@ -491,12 +491,12 @@
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "on checks to interpret ruins, follow ley-lines, identify altered terrain, and…"
+              "note": "on checks to interpret ruins, follow ley-lines, identify altered terrain, and\u2026"
             },
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "checks to interpret ruins, follow ley-lines, identify altered terrain, and se…"
+              "note": "checks to interpret ruins, follow ley-lines, identify altered terrain, and se\u2026"
             }
           ],
           "triggers": [
@@ -567,7 +567,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Oldenborn Heritage.</strong> The branch that lit up from inside. Festival-spirit, glamour-spirit, the ancestor that taught the people to call something beautiful before they had a word for sacred.</p><p><em>“The world remembered old names. You answered—and you were lit by the answering.”</em></p><p><strong>Lumenwrought.</strong> You are the place-soul that learned to wear a mask of light. Folks call you elf, sylph, faerie, depending on what scares them prettier than it scares them honestly. You are the first reason a candle is holy.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Fey).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>PRE (Presence)</strong>—expressed primarily through Tier powers.</p></li><li><p><strong>Glamourcast.</strong> You can shed dim light in a 1 square radius at will, and snuff it out the same way. Your light is the colour of one specific moment in your past—the GM and you decide which.</p></li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Oldenborn Heritage.</strong> The branch that lit up from inside. Festival-spirit, glamour-spirit, the ancestor that taught the people to call something beautiful before they had a word for sacred.</p><p><em>\u201cThe world remembered old names. You answered\u2014and you were lit by the answering.\u201d</em></p><p><strong>Lumenwrought.</strong> You are the place-soul that learned to wear a mask of light. Folks call you elf, sylph, faerie, depending on what scares them prettier than it scares them honestly. You are the first reason a candle is holy.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Fey).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>PRE (Presence)</strong>\u2014expressed primarily through Tier powers.</p></li><li><p><strong>Glamourcast.</strong> You can shed dim light in a 1 square radius at will, and snuff it out the same way. Your light is the colour of one specific moment in your past\u2014the GM and you decide which.</p></li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -654,7 +654,7 @@
         "source": "",
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">⚙ ENGINE NOTE — Pace is now ◆ Surge.</b> Movement banks Surge (capped per round); your courier moves are the ◆ Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>\"You're already moving. The fight rearranges around it.\"</em></p>\n<p>The Shadow Courier runs on <strong>Surge</strong>, like everyone — but yours comes from <strong>motion</strong>. Move <strong>30+ ft in a turn and you bank +1 Surge</strong> (again at 12 squares, max +2/round). A courier in motion has options; a courier standing still is just a target. The old <em>Pace</em> pool folds into this — same fuel, one number.</p>\n<h3>The Courier (spent via Surge)</h3>\n<ul>\n  <li><strong>Courier's Step</strong> (1) — +half-speed move (no provoke) and a freed reaction; flow through the fight.</li>\n  <li><strong>Ghoststep</strong> (3) — DR equal to Tier till your next turn, and reposition out of danger.</li>\n  <li><strong>Flank &amp; Strike</strong> (5) — reposition, then your next Strike reroll the lowest die <em>and</em> +Tier d6.</li>\n  <li><strong>No Such Door</strong> (8) — allies within Tier squares each gain a freed reaction and a reroll; open the road for the whole team.</li>\n</ul>\n<p>The <strong>Package</strong> endures as your work — designate it, carry it, deliver it. <strong>Delivery banks your Surge to full</strong> and still triggers the route's strategic payoff (Intrigue OP, Darkness reduction, the arrival that mattered).</p>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">\u2699 ENGINE NOTE \u2014 Pace is now \u25c6 Surge.</b> Movement banks Surge (capped per round); your courier moves are the \u25c6 Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>\"You're already moving. The fight rearranges around it.\"</em></p>\n<p>The Shadow Courier runs on <strong>Surge</strong>, like everyone \u2014 but yours comes from <strong>motion</strong>. Move <strong>30+ ft in a turn and you bank +1 Surge</strong> (again at 12 squares, max +2/round). A courier in motion has options; a courier standing still is just a target. The old <em>Pace</em> pool folds into this \u2014 same fuel, one number.</p>\n<h3>The Courier (spent via Surge)</h3>\n<ul>\n  <li><strong>Courier's Step</strong> (1) \u2014 +half-speed move (no provoke) and a freed reaction; flow through the fight.</li>\n  <li><strong>Ghoststep</strong> (3) \u2014 DR equal to Tier till your next turn, and reposition out of danger.</li>\n  <li><strong>Flank &amp; Strike</strong> (5) \u2014 reposition, then your next Strike reroll the lowest die <em>and</em> +Tier d6.</li>\n  <li><strong>No Such Door</strong> (8) \u2014 allies within Tier squares each gain a freed reaction and a reroll; open the road for the whole team.</li>\n</ul>\n<p>The <strong>Package</strong> endures as your work \u2014 designate it, carry it, deliver it. <strong>Delivery banks your Surge to full</strong> and still triggers the route's strategic payoff (Intrigue OP, Darkness reduction, the arrival that mattered).</p>",
           "chat": ""
         },
         "advancement": [
@@ -719,7 +719,7 @@
             },
             "value": {},
             "level": 6,
-            "title": "Shadow Courier — Tier 2: The Crossing"
+            "title": "Shadow Courier \u2014 Tier 2: The Crossing"
           },
           {
             "_id": "XTTN4qPwzYgfQmVV",
@@ -757,7 +757,7 @@
             },
             "value": {},
             "level": 11,
-            "title": "Shadow Courier — Tier 3: Package Mastery"
+            "title": "Shadow Courier \u2014 Tier 3: Package Mastery"
           },
           {
             "_id": "T33qFY91LUnCWm0K",
@@ -795,7 +795,7 @@
             },
             "value": {},
             "level": 16,
-            "title": "Shadow Courier — Tier 4: Unfound Route"
+            "title": "Shadow Courier \u2014 Tier 4: Unfound Route"
           },
           {
             "_id": "vZgryR38AUD5g5Is",
@@ -858,7 +858,7 @@
       "_key": "!actors.items!SqaP2z6egHCKpgug.G0MUbQDIwgpbUGcr"
     },
     {
-      "name": "Shadow Courier — Tier 1: Liminal Operator",
+      "name": "Shadow Courier \u2014 Tier 1: Liminal Operator",
       "type": "feat",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_4.png",
       "system": {
@@ -866,7 +866,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">⚙ ENGINE NOTE — Pace is now ◆ Surge.</b> Movement banks Surge (capped per round); your courier moves are the ◆ Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>You cross what isn't supposed to be crossed — and you always come out the other side carrying something.</em></p><p><strong>On gaining Shadow Courier Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Stealth (Intrigue)</strong>.</p></li><li><p>Skill rank +1 in <strong>Tinkering (Intrigue)</strong>.</p></li><li><p><strong>Intrigue OP cap +2</strong> and <strong>Logistics OP cap +2</strong> on the faction your character belongs to.</p></li><li><p><strong>Pace</strong> pool comes online (movement-generated). Max = max(2, ceil((Intrigue value + Shadow Courier Initiation) / 3)), capped at 8. Refills on Soma Break and on Package delivery.</p></li><li><p><strong>Package</strong> slot comes online — one Package at a time, type set by your chosen Route at L1.</p></li></ul><p><strong>Pace generation.</strong> Gain 1 Pace when you move at least 6 squares on your turn. Maximum 1 Pace generated per turn from this feature. Doctrine features may add their own generators.</p><p><strong>Baseline Pace spends</strong> (free action, 1 Pace each):</p><ul><li><p>Move 5 extra feet without spending an action.</p></li><li><p>Reroll a single Stealth (Intrigue), Athletics (Violence), or Tinkering (Intrigue) check — keep the new result.</p></li><li><p>Ignore a single reaction strike against you on this turn.</p></li></ul><p><strong>Liminal Sense.</strong> Once per encounter, ignore the first detection-style roll an opponent attempts against you (perception, scrying, Insight to read your intent, etc.). The roll is treated as if it had failed; resources spent on the attempt are not refunded.</p>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">\u2699 ENGINE NOTE \u2014 Pace is now \u25c6 Surge.</b> Movement banks Surge (capped per round); your courier moves are the \u25c6 Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>You cross what isn't supposed to be crossed \u2014 and you always come out the other side carrying something.</em></p><p><strong>On gaining Shadow Courier Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Stealth (Intrigue)</strong>.</p></li><li><p>Skill rank +1 in <strong>Tinkering (Intrigue)</strong>.</p></li><li><p><strong>Intrigue OP cap +2</strong> and <strong>Logistics OP cap +2</strong> on the faction your character belongs to.</p></li><li><p><strong>Pace</strong> pool comes online (movement-generated). Max = max(2, ceil((Intrigue value + Shadow Courier Initiation) / 3)), capped at 8. Refills on Soma Break and on Package delivery.</p></li><li><p><strong>Package</strong> slot comes online \u2014 one Package at a time, type set by your chosen Route at L1.</p></li></ul><p><strong>Pace generation.</strong> Gain 1 Pace when you move at least 6 squares on your turn. Maximum 1 Pace generated per turn from this feature. Doctrine features may add their own generators.</p><p><strong>Baseline Pace spends</strong> (free action, 1 Pace each):</p><ul><li><p>Move 5 extra feet without spending an action.</p></li><li><p>Reroll a single Stealth (Intrigue), Athletics (Violence), or Tinkering (Intrigue) check \u2014 keep the new result.</p></li><li><p>Ignore a single reaction strike against you on this turn.</p></li></ul><p><strong>Liminal Sense.</strong> Once per encounter, ignore the first detection-style roll an opponent attempts against you (perception, scrying, Insight to read your intent, etc.). The roll is treated as if it had failed; resources spent on the attempt are not refunded.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -1075,10 +1075,10 @@
       "system": {
         "category": "doctrine",
         "classIdentifier": "shadow_courier",
-        "source": "Bad Eden Originals — Sprint F (2026 rules)",
+        "source": "Bad Eden Originals \u2014 Sprint F (2026 rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>\"Go. I'll hold the way.\"</em></p>\n<p><strong>Doctrine:</strong> Movement is mercy — routes, deliveries, impossible arrival; open the road for someone who needs it.</p>\n<p>The Wayfarer is the courier as lifeline. Your Surge spends are extraction made real: free an ally to run, escort them through untouched, and — when it's nearly too late — whisk them clear of the kill zone.</p>\n<h3>Route (spent via Surge)</h3>\n<ul>\n  <li><strong>Clear Road</strong> (1) — an ally gains a freed reaction and a reroll; their road opens.</li>\n  <li><strong>Safe Passage</strong> (2) — an ally gains DR equal to Tier and a reroll; nothing touches what you're carrying.</li>\n  <li><strong>Impossible Arrival</strong> (5) — whisk a hurt ally clear: heal them, DR equal to Tier, and a freed reaction.</li>\n</ul>",
+          "value": "<p><em>\"Go. I'll hold the way.\"</em></p>\n<p><strong>Doctrine:</strong> Movement is mercy \u2014 routes, deliveries, impossible arrival; open the road for someone who needs it.</p>\n<p>The Wayfarer is the courier as lifeline. Your Surge spends are extraction made real: free an ally to run, escort them through untouched, and \u2014 when it's nearly too late \u2014 whisk them clear of the kill zone.</p>\n<h3>Route (spent via Surge)</h3>\n<ul>\n  <li><strong>Clear Road</strong> (1) \u2014 an ally gains a freed reaction and a reroll; their road opens.</li>\n  <li><strong>Safe Passage</strong> (2) \u2014 an ally gains DR equal to Tier and a reroll; nothing touches what you're carrying.</li>\n  <li><strong>Impossible Arrival</strong> (5) \u2014 whisk a hurt ally clear: heal them, DR equal to Tier, and a freed reaction.</li>\n</ul>",
           "chat": ""
         },
         "identifier": "bbttcc-shadow-courier-courier-wayfarer-tongue",
@@ -1130,7 +1130,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“You were not beautiful. You were <strong>wanted</strong>.”</em></p>\n        <p><strong>Glamourfield (At Will, Minor).</strong> You can create subtle illusions affecting light, sound, scent, or emotional tone. It never overwhelms; it always influences.</p>\n        <p><strong>Dream Anchor.</strong> You have a +1 bonus to checks against metaphysical hazards (slippage, dream traps, Spark backlash).</p>",
+          "value": "<p><em>\u201cYou were not beautiful. You were <strong>wanted</strong>.\u201d</em></p>\n        <p><strong>Glamourfield (At Will, Minor).</strong> You can create subtle illusions affecting light, sound, scent, or emotional tone. It never overwhelms; it always influences.</p>\n        <p><strong>Dream Anchor.</strong> You have a +1 bonus to checks against metaphysical hazards (slippage, dream traps, Spark backlash).</p>",
           "chat": ""
         },
         "uses": {
@@ -1270,7 +1270,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“If it lives, you are responsible for it.”</em></p><p><strong>Archetype (Bad Eden): The Empress (Caretaker).</strong> You are abundance under pressure: not softness, but stewardship. You keep people, places, and fragile futures alive long enough to matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype nurtures resilience, relief, and sustainable flourishing. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Culture</strong> in faction calculus in Bad Eden’s faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul><h3>attributes (Archetype ASI)</h3><p>Common patterns include:</p><ul><li><strong>Merciful Steward:</strong> +2 Soul, +1 Presence</li><li><strong>Keeper of Settlements:</strong> +2 Soul, +1 Mind</li><li><strong>Builder of Futures:</strong> +1 Soul, +1 Presence, +1 Body</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cIf it lives, you are responsible for it.\u201d</em></p><p><strong>Archetype (Bad Eden): The Empress (Caretaker).</strong> You are abundance under pressure: not softness, but stewardship. You keep people, places, and fragile futures alive long enough to matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype nurtures resilience, relief, and sustainable flourishing. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Culture</strong> in faction calculus in Bad Eden\u2019s faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul><h3>attributes (Archetype ASI)</h3><p>Common patterns include:</p><ul><li><strong>Merciful Steward:</strong> +2 Soul, +1 Presence</li><li><strong>Keeper of Settlements:</strong> +2 Soul, +1 Mind</li><li><strong>Builder of Futures:</strong> +1 Soul, +1 Presence, +1 Body</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1382,7 +1382,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Crew Type (Bad Eden): Ashbound Survivors.</em></p><p><strong>“You don’t conquer the wasteland. You outlast it.”</strong></p><p>Ashbound Survivors know how to live where maps stop pretending. They ration breath, read heat shimmer like scripture, and treat hostile terrain as a negotiation instead of a death sentence.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Lore.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Economy OPs.</li></ul>",
+          "value": "<p><em>Crew Type (Bad Eden): Ashbound Survivors.</em></p><p><strong>\u201cYou don\u2019t conquer the wasteland. You outlast it.\u201d</strong></p><p>Ashbound Survivors know how to live where maps stop pretending. They ration breath, read heat shimmer like scripture, and treat hostile terrain as a negotiation instead of a death sentence.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Lore.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Economy OPs.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-ashbound-survivors",
@@ -1552,7 +1552,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Occult Association (Bad Eden): Shaman.</em></p><p><strong>“You don’t fix the world. You listen to what it’s trying to become.”</strong></p><p>Shamans do not impose order. They enter into relationship.</p><p>To a Shaman, the Great Work is not about forcing alignment onto a dead world. It is about hearing the pulse that is still there and deciding whether to protect it, guide it, or stand aside long enough for it to speak clearly. Every Hex is alive in some way. Every leyline has mood. Every storm is making a decision. Every spirit remembers who treated the land like a partner and who treated it like inventory.</p><p>Where Kabbalists map structure and Alchemists force conversion, Shamans work by <strong>attunement</strong>. They negotiate with terrain, weather, spirits, and flow-states that existed before factions learned to count OP.</p><p><strong>How Shamans pursue the Great Work:</strong></p><ul><li>By listening to terrain, weather, and spirit pressure</li><li>By stabilizing living systems instead of extracting from them</li><li>By redirecting corruption rather than merely containing it</li><li>By treating Hexes as relationships, not assets</li></ul><p><strong>Resonance:</strong> <strong>Netzach / Living Flow</strong> — endurance, ecology, instinctive continuity, and the intelligence of systems nobody designed.</p><p><strong>Tell-tales:</strong> mud where there should not be mud, animals that stop running, weather that feels briefly conversational.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on relevant terrain, travel, weather, or wilderness-facing OP rolls</strong> (GM adjudicates the exact OP lane)</li></ul><p><strong>Cost Principle:</strong> attunement creates obligation. The more the land speaks to you, the less you can pretend not to hear it. Expect spirit attention, place-based duty, and backlash when your faction acts against the needs of a living Hex.</p>",
+          "value": "<p><em>Occult Association (Bad Eden): Shaman.</em></p><p><strong>\u201cYou don\u2019t fix the world. You listen to what it\u2019s trying to become.\u201d</strong></p><p>Shamans do not impose order. They enter into relationship.</p><p>To a Shaman, the Great Work is not about forcing alignment onto a dead world. It is about hearing the pulse that is still there and deciding whether to protect it, guide it, or stand aside long enough for it to speak clearly. Every Hex is alive in some way. Every leyline has mood. Every storm is making a decision. Every spirit remembers who treated the land like a partner and who treated it like inventory.</p><p>Where Kabbalists map structure and Alchemists force conversion, Shamans work by <strong>attunement</strong>. They negotiate with terrain, weather, spirits, and flow-states that existed before factions learned to count OP.</p><p><strong>How Shamans pursue the Great Work:</strong></p><ul><li>By listening to terrain, weather, and spirit pressure</li><li>By stabilizing living systems instead of extracting from them</li><li>By redirecting corruption rather than merely containing it</li><li>By treating Hexes as relationships, not assets</li></ul><p><strong>Resonance:</strong> <strong>Netzach / Living Flow</strong> \u2014 endurance, ecology, instinctive continuity, and the intelligence of systems nobody designed.</p><p><strong>Tell-tales:</strong> mud where there should not be mud, animals that stop running, weather that feels briefly conversational.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on relevant terrain, travel, weather, or wilderness-facing OP rolls</strong> (GM adjudicates the exact OP lane)</li></ul><p><strong>Cost Principle:</strong> attunement creates obligation. The more the land speaks to you, the less you can pretend not to hear it. Expect spirit attention, place-based duty, and backlash when your faction acts against the needs of a living Hex.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -1644,12 +1644,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden – Archetype: The Empress (Caretaker) (Tier 1)",
+          "custom": "Bad Eden \u2013 Archetype: The Empress (Caretaker) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Diplomacy. You learn the Spare the Dying Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) \u2014 The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Diplomacy. You learn the Spare the Dying Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1794,7 +1794,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Ashbound Survivors</strong></p><p><em>You’ve learned the first mercy of dead land: preparation beats optimism.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Lore.</li><li><strong>Strategic:</strong> In Desert, Ash Wastes, and Wasteland hexes, environmental travel penalties are reduced and hazard pressure is easier to withstand.</li></ul>",
+          "value": "<p><strong>Tier 1 \u2014 Ashbound Survivors</strong></p><p><em>You\u2019ve learned the first mercy of dead land: preparation beats optimism.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Lore.</li><li><strong>Strategic:</strong> In Desert, Ash Wastes, and Wasteland hexes, environmental travel penalties are reduced and hazard pressure is easier to withstand.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-ashbound-survivors-t1",
@@ -1956,7 +1956,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Shaman</strong></p><p><strong>“It was talking before. You just couldn’t hear it yet.”</strong></p><p>At Tier 1, you become perceptible to the world and the world becomes perceptible to you.</p><p>You can feel when a place is hungry, when a storm is about to turn mean, and when a Hex is carrying more pressure than its surface suggests. You are not commanding Lore yet. You are learning its tone.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Lore</strong> and <strong>Athletics</strong></li><li>You can perform a brief attunement to sense whether a nearby area is spiritually calm, distressed, corrupted, or unusually resonant</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Hex Attunement:</strong> upon entering a new Hex, you learn one of the following about it: dominant flow-state, unusual weather pressure, leyline disturbance, or corruption presence</li><li>Once per Strategic Turn, gain <strong>+1</strong> to one relevant travel, terrain, or wilderness-facing OP roll</li></ul><p><strong>Cost:</strong> once the world starts speaking to you, silence gets rare. Expect distraction, omen pressure, or spirit agitation when your faction ignores what a place is telling you.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"shamT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Hex Attunement</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">+1 to one travel/terrain/wilderness OP roll. (On-entry hex read is passive.)</div>\n</div>",
+          "value": "<p><strong>Tier 1 \u2014 Shaman</strong></p><p><strong>\u201cIt was talking before. You just couldn\u2019t hear it yet.\u201d</strong></p><p>At Tier 1, you become perceptible to the world and the world becomes perceptible to you.</p><p>You can feel when a place is hungry, when a storm is about to turn mean, and when a Hex is carrying more pressure than its surface suggests. You are not commanding Lore yet. You are learning its tone.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Lore</strong> and <strong>Athletics</strong></li><li>You can perform a brief attunement to sense whether a nearby area is spiritually calm, distressed, corrupted, or unusually resonant</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Hex Attunement:</strong> upon entering a new Hex, you learn one of the following about it: dominant flow-state, unusual weather pressure, leyline disturbance, or corruption presence</li><li>Once per Strategic Turn, gain <strong>+1</strong> to one relevant travel, terrain, or wilderness-facing OP roll</li></ul><p><strong>Cost:</strong> once the world starts speaking to you, silence gets rare. Expect distraction, omen pressure, or spirit agitation when your faction ignores what a place is telling you.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"shamT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Hex Attunement</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;\u00b7&nbsp; <strong>Action:</strong> Strategic &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">+1 to one travel/terrain/wilderness OP roll. (On-entry hex read is passive.)</div>\n</div>",
           "chat": ""
         },
         "advancement": {},
@@ -2113,7 +2113,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">⚙ ENGINE NOTE — Pace is now ◆ Surge.</b> Movement banks Surge (capped per round); your courier moves are the ◆ Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>Every message is already halfway arrived.</em></p><p><strong>Mode: Herald / drift: Away.</strong></p><p>Your default Package type is <strong>Message</strong>. You may carry one Message at a time — a specific piece of information given to you by an NPC, ally, or faction, intended for a specific recipient. The Message is recorded narratively (write it on your sheet's Package field).</p><p><strong>While carrying a Message:</strong></p><ul><li><p>You <strong>reroll the lowest die</strong> on Insight (Soul) checks made about or against the Message's intended recipient.</p></li><li><p>You <strong>reroll the lowest die</strong> on Diplomacy (Presence) checks made to secure safe passage, hospitality, or audience related to delivering the Message.</p></li></ul><p><strong>On delivery:</strong> When you successfully deliver a Message to its intended recipient (the GM confirms it counts), your <strong>Pace pool refills to maximum</strong>, and the faction that entrusted the Message gains <strong>+1 Intrigue OP</strong>.</p><p>You may receive a new Message any time your Package slot is empty.</p>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">\u2699 ENGINE NOTE \u2014 Pace is now \u25c6 Surge.</b> Movement banks Surge (capped per round); your courier moves are the \u25c6 Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>Every message is already halfway arrived.</em></p><p><strong>Mode: Herald / drift: Away.</strong></p><p>Your default Package type is <strong>Message</strong>. You may carry one Message at a time \u2014 a specific piece of information given to you by an NPC, ally, or faction, intended for a specific recipient. The Message is recorded narratively (write it on your sheet's Package field).</p><p><strong>While carrying a Message:</strong></p><ul><li><p>You <strong>reroll the lowest die</strong> on Insight (Soul) checks made about or against the Message's intended recipient.</p></li><li><p>You <strong>reroll the lowest die</strong> on Diplomacy (Presence) checks made to secure safe passage, hospitality, or audience related to delivering the Message.</p></li></ul><p><strong>On delivery:</strong> When you successfully deliver a Message to its intended recipient (the GM confirms it counts), your <strong>Pace pool refills to maximum</strong>, and the faction that entrusted the Message gains <strong>+1 Intrigue OP</strong>.</p><p>You may receive a new Message any time your Package slot is empty.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -2203,7 +2203,7 @@
         "evasionBonus": 1,
         "resolveBonus": 0,
         "resistances": [],
-        "armorSkill": "weave",
+        "armorSkill": "fitting",
         "equipped": true,
         "tags": [
           "t1-baseline",
@@ -2264,7 +2264,7 @@
       "_id": "yK7wDBIurTmN3F13",
       "effects": [
         {
-          "name": "⚙️ Defense Grant",
+          "name": "\u2699\ufe0f Defense Grant",
           "transfer": false,
           "disabled": false,
           "flags": {
@@ -2370,7 +2370,7 @@
         "manifestation": {
           "tier": 1,
           "family": "form",
-          "concept": "A small wooden box (or jar, or envelope) that holds messages no one is willing to speak aloud. While you carry it, the message stays unsaid by everyone around you — until you choose to deliver it.",
+          "concept": "A small wooden box (or jar, or envelope) that holds messages no one is willing to speak aloud. While you carry it, the message stays unsaid by everyone around you \u2014 until you choose to deliver it.",
           "form": "tool",
           "function": "bind",
           "stability": "enduring",
@@ -2386,12 +2386,12 @@
           "rangeAreaText": "",
           "rangeFt": 0,
           "maintenanceCost": "1 Stress per scene the box is carried into a hostile situation.",
-          "riskText": "If the box is broken before delivery, the message comes out wrong — possibly inverted, possibly amplified, possibly heard by the wrong ear.",
-          "pathResonance": "Shadow Courier — the bearer answers for the cargo.",
+          "riskText": "If the box is broken before delivery, the message comes out wrong \u2014 possibly inverted, possibly amplified, possibly heard by the wrong ear.",
+          "pathResonance": "Shadow Courier \u2014 the bearer answers for the cargo.",
           "fictionalPermission": "You can carry a secret the world is desperate to spill, and the world will hold its tongue until you arrive.",
           "gmCalibration": "Tier-3 Form. The box is a campaign hook. Other factions will try to take it, buy it, or read it.",
-          "mechanicalHook": "While the box is sealed, no one in the scene can speak the message aloud, write it down, or imply it. Delivery imposes a condition on the recipient (Marked, Compelled, Inspired — GM/player negotiate).",
-          "signature": "The container is always the size and weight of the message it carries — sometimes a feather, sometimes a stone.",
+          "mechanicalHook": "While the box is sealed, no one in the scene can speak the message aloud, write it down, or imply it. Delivery imposes a condition on the recipient (Marked, Compelled, Inspired \u2014 GM/player negotiate).",
+          "signature": "The container is always the size and weight of the message it carries \u2014 sometimes a feather, sometimes a stone.",
           "thirdThing": "Anyone who hears the message after you deliver it remembers the room they first heard it in for the rest of their life.",
           "opCost": {
             "pool": "",
@@ -2698,7 +2698,7 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "If you cross a threshold while uninvited, you can do it once. The second uninvited crossing in the same scene costs 1 Stress and 1 Noise.",
-          "pathResonance": "Shadow Courier — the door is the deal.",
+          "pathResonance": "Shadow Courier \u2014 the door is the deal.",
           "fictionalPermission": "You have a relationship with thresholds the way other people have a relationship with their phone.",
           "gmCalibration": "Tier-2 Form. Recognizable to other Shadow Couriers, Wayfarers, and to a few institutional sentries who have been trained to notice.",
           "mechanicalHook": "Once per scene, treat any door, gate, or threshold within Near range as already-passed for purposes of being seen, challenged, or recognized.",
@@ -3306,12 +3306,12 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "If killed, you lose access to one route for the next session. The Wayhound returns at the next dawn, but it remembers the death.",
-          "pathResonance": "Shadow Courier — every delivery needs a guide.",
+          "pathResonance": "Shadow Courier \u2014 every delivery needs a guide.",
           "fictionalPermission": "You can find the way. Always. Even in a city you have never seen.",
           "gmCalibration": "Tier-1 Form. Half-visible to anyone not looking for it. Fully visible to other dogs and to those who have been couriered before.",
           "mechanicalHook": "Once per scene, the Wayhound finds the fastest unobserved route between any two points you can both name. While following its path, you and one ally have +2 Stealth.",
           "signature": "It leaves no prints, but every dog along the route reacts to it as a familiar.",
-          "thirdThing": "It cannot enter a place where it would not be welcome — even if you can.",
+          "thirdThing": "It cannot enter a place where it would not be welcome \u2014 even if you can.",
           "opCost": {
             "pool": "",
             "value": 0
@@ -3971,7 +3971,7 @@
                 "table": null
               },
               "signals": {},
-              "lore": "<p>Standard-issue field knife. Single-edge, thumb groove, hard sheath that clips to a belt or boot. The first weapon most Stewards carry and the last one they put down. Honest steel — no signature, no story, just edge.</p><p><b>Standard Issue.</b> Light enough for off-hand work; close enough for the kind of conversation knives are for.</p>",
+              "lore": "<p>Standard-issue field knife. Single-edge, thumb groove, hard sheath that clips to a belt or boot. The first weapon most Stewards carry and the last one they put down. Honest steel \u2014 no signature, no story, just edge.</p><p><b>Standard Issue.</b> Light enough for off-hand work; close enough for the kind of conversation knives are for.</p>",
               "materialOf": [
                 "scrap-steel",
                 "leather-grip"

@@ -149,7 +149,7 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "the roads, Allesh-Gilliam, St Gilliam's, Khezek Tor, the Vacancy, pilgrimage",
-        "notes": "[KHEZEK-TREATMENT-2026-07-07] PRIVATE TRUTH — Pilgrim Wick. Voice: mild, road-worn, unfailingly polite; answers questions with itineraries. COVER: a devotional walker of the old routes — St Gilliam's for the candles, Khezek Tor for 'the high shrines,' the Vacancy for the bed he never sleeps in. TRUTH: courier for the Khezek Tor Valhaulan cult. The route IS the job: collect the waxed-fiber drop from St Gilliam's drip tray (the third candle, moved a finger-width, means there's something to collect), carry it up to the upper tunnels, return with instructions folded the same way. Wick believes the cult's cause is holy the way tired people believe things — thoroughly and without examination. GUARDS: everything, mildly; caught with a drop, Wick recites pilgrimage scripture and requests to be allowed to continue on foot. Wick does not know Father Tamsin's NAME for certain and has never spoken to him directly — tradecraft: the candle talks, not the men. TELLS: pays exact to the mark; never sleeps in the bed (keeps vigil, technically); smells faintly of candle wax in a town that burns tallow; his boots know the Khezek switchbacks better than any shrine schedule justifies. IF THE DEBT RESOLVES: the channel burns and Wick simply stops coming — one more unreadable name in Verna's ledger."
+        "notes": "[KHEZEK-TREATMENT-2026-07-07] PRIVATE TRUTH \u2014 Pilgrim Wick. Voice: mild, road-worn, unfailingly polite; answers questions with itineraries. COVER: a devotional walker of the old routes \u2014 St Gilliam's for the candles, Khezek Tor for 'the high shrines,' the Vacancy for the bed he never sleeps in. TRUTH: courier for the Khezek Tor Valhaulan cult. The route IS the job: collect the waxed-fiber drop from St Gilliam's drip tray (the third candle, moved a finger-width, means there's something to collect), carry it up to the upper tunnels, return with instructions folded the same way. Wick believes the cult's cause is holy the way tired people believe things \u2014 thoroughly and without examination. GUARDS: everything, mildly; caught with a drop, Wick recites pilgrimage scripture and requests to be allowed to continue on foot. Wick does not know Father Tamsin's NAME for certain and has never spoken to him directly \u2014 tradecraft: the candle talks, not the men. TELLS: pays exact to the mark; never sleeps in the bed (keeps vigil, technically); smells faintly of candle wax in a town that burns tallow; his boots know the Khezek switchbacks better than any shrine schedule justifies. IF THE DEBT RESOLVES: the channel burns and Wick simply stops coming \u2014 one more unreadable name in Verna's ledger."
       }
     }
   },
@@ -296,12 +296,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 1
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -606,7 +606,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-menhirkin=\"v1\" style=\"display:none\"></div><p><em>\"The land is not scenery. The land is a person. You are the version of it that finally stood up and walked over to complain.\"</em></p><p>You are not descended from the land. You are the land. A hex decided to become a person and the person is you. The standing stones on the ridge are distant cousins. The bedrock under the bunker is a grandparent. Mortals call you a Hex-Giant. You don't correct them.</p><p><strong>Creature Type.</strong> Humanoid (Menhirkin). <strong>Size.</strong> Medium, but you count as Large for carrying capacity and the size of creatures you can shove or grapple. <strong>Speed.</strong> 6 squares</p><p><strong>Heartstone (passive).</strong> A fragment of your home hex is literally inside you. While in any hex your faction controls or has claimed: reroll the lowest die on Body checks (auto-fires), and you cannot be forcibly removed from the hex against your will (teleportation, banishment, forced march) without first being reduced to 0 Integrity.</p><p><strong>Land Memory (1/Soma Break).</strong> Lay a hand on any surface older than you; the GM tells you one true thing the land remembers.</p><p><strong>Living Rampart (1/Soma Break).</strong> Reaction — when a creature you can see targets an ally adjacent to you with an attack, the attacker rolls 3d10 keep lowest 2 on that attack roll.</p><p><strong>Stonebound (passive).</strong> Reroll the lowest die on Body checks to resist being pushed, knocked Prone, or otherwise forcibly moved (auto-fires). Reroll the lowest die on Body checks to build, repair, or fortify structures, siegeworks, and defensive emplacements (auto-fires).</p><p><strong>Strategic Hooks.</strong> <em>OP Edge:</em> +2 Non-Lethal OP and +1 Violence OP at campaign start. <em>Fortify Hex:</em> first Patch the Breach or structure-repair Siege activity each Turn costs 1 fewer OP (min 0). <em>Logistics Frame:</em> 1/Turn, treat one raid/operation Logistics cost as Logistics −1 (min 0). <em>Sentient Land (1/Strategic Turn):</em> consult the hex itself about a pending decision; one-sentence honest answer from the land's perspective.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"menhirkinHexGiant\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Menhirkin: Hex-Giant</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 3 active per-uses (2 Soma Break · 1 Strategic Turn) + 2 reroll passives + Heartstone hex-protection  ·  <strong>Action:</strong> Picker (Land Memory · Living Rampart · Sentient Land · Heartstone)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">4-slot picker — Land Memory (touch-the-old-stones), Living Rampart (ally-cover reaction), Sentient Land (1/Strategic Turn faction question), Heartstone passive. Stonebound reroll grants auto-fire on Body checks for forced-movement and build/repair/fortify.</span></p></div>",
+          "value": "<div data-ft-canon-menhirkin=\"v1\" style=\"display:none\"></div><p><em>\"The land is not scenery. The land is a person. You are the version of it that finally stood up and walked over to complain.\"</em></p><p>You are not descended from the land. You are the land. A hex decided to become a person and the person is you. The standing stones on the ridge are distant cousins. The bedrock under the bunker is a grandparent. Mortals call you a Hex-Giant. You don't correct them.</p><p><strong>Creature Type.</strong> Humanoid (Menhirkin). <strong>Size.</strong> Medium, but you count as Large for carrying capacity and the size of creatures you can shove or grapple. <strong>Speed.</strong> 6 squares</p><p><strong>Heartstone (passive).</strong> A fragment of your home hex is literally inside you. While in any hex your faction controls or has claimed: reroll the lowest die on Body checks (auto-fires), and you cannot be forcibly removed from the hex against your will (teleportation, banishment, forced march) without first being reduced to 0 Integrity.</p><p><strong>Land Memory (1/Soma Break).</strong> Lay a hand on any surface older than you; the GM tells you one true thing the land remembers.</p><p><strong>Living Rampart (1/Soma Break).</strong> Reaction \u2014 when a creature you can see targets an ally adjacent to you with an attack, the attacker rolls 3d10 keep lowest 2 on that attack roll.</p><p><strong>Stonebound (passive).</strong> Reroll the lowest die on Body checks to resist being pushed, knocked Prone, or otherwise forcibly moved (auto-fires). Reroll the lowest die on Body checks to build, repair, or fortify structures, siegeworks, and defensive emplacements (auto-fires).</p><p><strong>Strategic Hooks.</strong> <em>OP Edge:</em> +2 Non-Lethal OP and +1 Violence OP at campaign start. <em>Fortify Hex:</em> first Patch the Breach or structure-repair Siege activity each Turn costs 1 fewer OP (min 0). <em>Logistics Frame:</em> 1/Turn, treat one raid/operation Logistics cost as Logistics \u22121 (min 0). <em>Sentient Land (1/Strategic Turn):</em> consult the hex itself about a pending decision; one-sentence honest answer from the land's perspective.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"menhirkinHexGiant\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Menhirkin: Hex-Giant</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 3 active per-uses (2 Soma Break \u00b7 1 Strategic Turn) + 2 reroll passives + Heartstone hex-protection \u00a0\u00b7\u00a0 <strong>Action:</strong> Picker (Land Memory \u00b7 Living Rampart \u00b7 Sentient Land \u00b7 Heartstone) \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">4-slot picker \u2014 Land Memory (touch-the-old-stones), Living Rampart (ally-cover reaction), Sentient Land (1/Strategic Turn faction question), Heartstone passive. Stonebound reroll grants auto-fire on Body checks for forced-movement and build/repair/fortify.</span></p></div>",
           "chat": ""
         },
         "advancement": [
@@ -838,32 +838,32 @@
             {
               "context": "save",
               "mode": "reroll-lowest",
-              "note": "on Constitution saves and cannot be forcibly removed from the hex against you…"
+              "note": "on Constitution saves and cannot be forcibly removed from the hex against you\u2026"
             },
             {
               "context": "forced-movement",
               "mode": "reroll-lowest",
-              "note": "on ability checks you make to resist being pushed, knocked prone, or otherwis…"
+              "note": "on ability checks you make to resist being pushed, knocked prone, or otherwis\u2026"
             },
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "on checks you make to build, repair, or fortify structures, siegeworks, and d…"
+              "note": "on checks you make to build, repair, or fortify structures, siegeworks, and d\u2026"
             },
             {
               "context": "save",
               "mode": "reroll-lowest",
-              "note": "Constitution saves and cannot be forcibly removed from the hex against your w…"
+              "note": "Constitution saves and cannot be forcibly removed from the hex against your w\u2026"
             },
             {
               "context": "forced-movement",
               "mode": "reroll-lowest",
-              "note": "ability checks you make to resist being pushed, knocked prone, or otherwise f…"
+              "note": "ability checks you make to resist being pushed, knocked prone, or otherwise f\u2026"
             },
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "checks you make to build, repair, or fortify structures, siegeworks, and defe…"
+              "note": "checks you make to build, repair, or fortify structures, siegeworks, and defe\u2026"
             },
             {
               "context": "attack",
@@ -969,7 +969,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-menhirkin=\"v1\" style=\"display:none\"></div>\n<p><em>\"The first shape was softer. The second shape remembers.\"</em></p>\n<p><strong>The Thing You Were (1/Scene).</strong> Bonus action — briefly re-surface a trait of your pre-pressure self. Pick one of three options; it lasts until the end of your next turn:</p>\n<ul>\n  <li><strong>Softer:</strong> your movement increases by 2 squares and you reroll the lowest die on Intrigue checks to squeeze or slip past.</li>\n  <li><strong>Older:</strong> you gain low-light vision 12 squares if you don't already have it, or +6 squares if you do.</li>\n  <li><strong>Wetter:</strong> you become immune to the Burning and Prone conditions, and difficult terrain does not slow you.</li>\n</ul>\n<p>Each option refreshes on Soma Break — you cannot pick the same option twice before a Soma Break.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"menhirkinMetamorphicThingYouWere\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>The Thing You Were</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Scene total — each option refreshes on Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Picker (Softer · Older · Wetter) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Bonus action — re-surface one of three pre-pressure traits (Softer / Older / Wetter) until end of next turn. Each option's individual use refreshes on Soma Break.</div>\n</div>",
+          "value": "<div data-ft-canon-menhirkin=\"v1\" style=\"display:none\"></div>\n<p><em>\"The first shape was softer. The second shape remembers.\"</em></p>\n<p><strong>The Thing You Were (1/Scene).</strong> Bonus action \u2014 briefly re-surface a trait of your pre-pressure self. Pick one of three options; it lasts until the end of your next turn:</p>\n<ul>\n  <li><strong>Softer:</strong> your movement increases by 2 squares and you reroll the lowest die on Intrigue checks to squeeze or slip past.</li>\n  <li><strong>Older:</strong> you gain low-light vision 12 squares if you don't already have it, or +6 squares if you do.</li>\n  <li><strong>Wetter:</strong> you become immune to the Burning and Prone conditions, and difficult terrain does not slow you.</li>\n</ul>\n<p>Each option refreshes on Soma Break \u2014 you cannot pick the same option twice before a Soma Break.</p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"menhirkinMetamorphicThingYouWere\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>The Thing You Were</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Scene total \u2014 each option refreshes on Soma Break &nbsp;\u00b7&nbsp; <strong>Action:</strong> Picker (Softer \u00b7 Older \u00b7 Wetter) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Bonus action \u2014 re-surface one of three pre-pressure traits (Softer / Older / Wetter) until end of next turn. Each option's individual use refreshes on Soma Break.</div>\n</div>",
           "chat": ""
         },
         "advancement": {},
@@ -1239,7 +1239,7 @@
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Menhirkin heritage: Metamorphic.</p><p><em>“What you are now is not what you were. The pressure was the point.”</em></p><p><strong>Menhirkin (Metamorphic).</strong> You are land that was buried, squeezed, heated, and came back up harder and more interesting. Every Metamorphic has a before-self — a softer version of themselves that got pressed into something else. You remember being that. You are not going back.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Menhirkin).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Menhirkin does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Body</strong> in fiction and through Tier powers.</p></li></ul><h3>Menhirkin Core: The Land Stood Up</h3><p><em>Shared across all Menhirkin heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Stone Soul.</strong> You count as Large for carry, shove, and grapple despite your Medium frame. You reroll the lowest die on checks to resist being forcibly moved.</p></li><li><p><strong>Hex Recognition.</strong> Once per scene, while you are on a natural surface you are directly touching, you may whisper a single question about the place. The GM answers with one true thing the land knows.</p></li><li><p><strong>Slow to Wear.</strong> You reroll the lowest die on Body checks against Stress, long-duration physical wear, forced marches, climate exposure, and sustained labor. You do not tire the way softer things tire.</p></li><li><p><strong>Heavy Presence.</strong> Your weight and settledness are perceptible. Creatures within 2 squares of you know you are there even if they cannot see you; you roll 3d10 keep lowest 2 on Intrigue (Stealth) checks unless you are on or in stone.</p></li></ul><h3>Metamorphic Traits</h3><ul><li><p><strong>Pressure Remade.</strong> At the end of each Soma Break, the day chooses what you are until your next Soma Break. Roll a d4 or pick (GM discretion): (1) +1 Guard, (2) resistance to kinetic damage, (3) +1 rank on one skill of your choice, (4) reroll-lowest on Body checks to resist being knocked prone or grappled. You announce the result; you do not pre-pick.</p></li><li><p><strong>Unbreakable Core.</strong> You reroll the lowest die on defense checks against petrification, forced transmutation, and forced shape-change. You have been turned into something else once already; nobody does it twice without your say-so.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Non-Lethal OP</strong> and <strong>+1 Intrigue OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Any hex your faction has held for 3+ Strategic Turns</em> hexes, your faction gains +1 on defense checks in that hex.</p></li><li><p><strong>Second-Form Bearing.</strong> Once per Strategic Turn, your faction may treat one Morale or Loyalty check as if it had one additional track-band of headroom. The thing you became has held under pressure before.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Hex Recognition</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Action  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">On a natural surface you're touching, whisper a question — GM answers with one true thing the land knows.</span></p></div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Menhirkin heritage: Metamorphic.</p><p><em>\u201cWhat you are now is not what you were. The pressure was the point.\u201d</em></p><p><strong>Menhirkin (Metamorphic).</strong> You are land that was buried, squeezed, heated, and came back up harder and more interesting. Every Metamorphic has a before-self \u2014 a softer version of themselves that got pressed into something else. You remember being that. You are not going back.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Menhirkin).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Menhirkin does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Body</strong> in fiction and through Tier powers.</p></li></ul><h3>Menhirkin Core: The Land Stood Up</h3><p><em>Shared across all Menhirkin heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Stone Soul.</strong> You count as Large for carry, shove, and grapple despite your Medium frame. You reroll the lowest die on checks to resist being forcibly moved.</p></li><li><p><strong>Hex Recognition.</strong> Once per scene, while you are on a natural surface you are directly touching, you may whisper a single question about the place. The GM answers with one true thing the land knows.</p></li><li><p><strong>Slow to Wear.</strong> You reroll the lowest die on Body checks against Stress, long-duration physical wear, forced marches, climate exposure, and sustained labor. You do not tire the way softer things tire.</p></li><li><p><strong>Heavy Presence.</strong> Your weight and settledness are perceptible. Creatures within 2 squares of you know you are there even if they cannot see you; you roll 3d10 keep lowest 2 on Intrigue (Stealth) checks unless you are on or in stone.</p></li></ul><h3>Metamorphic Traits</h3><ul><li><p><strong>Pressure Remade.</strong> At the end of each Soma Break, the day chooses what you are until your next Soma Break. Roll a d4 or pick (GM discretion): (1) +1 Guard, (2) resistance to kinetic damage, (3) +1 rank on one skill of your choice, (4) reroll-lowest on Body checks to resist being knocked prone or grappled. You announce the result; you do not pre-pick.</p></li><li><p><strong>Unbreakable Core.</strong> You reroll the lowest die on defense checks against petrification, forced transmutation, and forced shape-change. You have been turned into something else once already; nobody does it twice without your say-so.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Non-Lethal OP</strong> and <strong>+1 Intrigue OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Any hex your faction has held for 3+ Strategic Turns</em> hexes, your faction gains +1 on defense checks in that hex.</p></li><li><p><strong>Second-Form Bearing.</strong> Once per Strategic Turn, your faction may treat one Morale or Loyalty check as if it had one additional track-band of headroom. The thing you became has held under pressure before.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Hex Recognition</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene \u00a0\u00b7\u00a0 <strong>Action:</strong> Action \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">On a natural surface you're touching, whisper a question \u2014 GM answers with one true thing the land knows.</span></p></div>",
           "chat": ""
         },
         "advancement": [
@@ -1305,13 +1305,13 @@
               "attribute": "body",
               "mode": "reroll-lowest",
               "vs": "vs:exhaustion",
-              "note": "on Body checks against exhaustion, long-duration physical wear, forced marche…"
+              "note": "on Body checks against exhaustion, long-duration physical wear, forced marche\u2026"
             },
             {
               "context": "defense",
               "mode": "reroll-lowest",
               "vs": "vs:petr",
-              "note": "on defense checks against petrification, forced transmutation, and forced sha…"
+              "note": "on defense checks against petrification, forced transmutation, and forced sha\u2026"
             },
             {
               "context": "check",
@@ -1335,7 +1335,7 @@
               "attribute": "body",
               "mode": "reroll-lowest",
               "vs": "vs:exhaustion",
-              "note": "Body checks against exhaustion, long-duration physical wear, forced marches, …"
+              "note": "Body checks against exhaustion, long-duration physical wear, forced marches, \u2026"
             },
             {
               "context": "check",
@@ -1352,7 +1352,7 @@
               "context": "defense",
               "mode": "reroll-lowest",
               "vs": "vs:petr",
-              "note": "defense checks against petrification, forced transmutation, and forced shape-…"
+              "note": "defense checks against petrification, forced transmutation, and forced shape-\u2026"
             },
             {
               "context": "check",
@@ -1599,7 +1599,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“If it stands, it can fall.”</em></p><p><strong>Archetype (Bad Eden): The Tower (Breaker).</strong> You are structural collapse, breach doctrine, and the terrible logic of proving that a thing was never as stable as it claimed.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens demolition, disruption, breach operations, and catastrophic openings. This Archetype is associated with <strong>+1 Violence</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cIf it stands, it can fall.\u201d</em></p><p><strong>Archetype (Bad Eden): The Tower (Breaker).</strong> You are structural collapse, breach doctrine, and the terrible logic of proving that a thing was never as stable as it claimed.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens demolition, disruption, breach operations, and catastrophic openings. This Archetype is associated with <strong>+1 Violence</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1707,12 +1707,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden – Archetype: The Tower (Breaker) (Tier 1)",
+          "custom": "Bad Eden \u2013 Archetype: The Tower (Breaker) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — The Tower (Breaker)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) \u2014 The Tower (Breaker)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1924,14 +1924,14 @@
       "system": {
         "category": "technique",
         "source": {
-          "custom": "Bad Eden – Crew Type: Mercenary Band (Tier 1)",
+          "custom": "Bad Eden \u2013 Crew Type: Mercenary Band (Tier 1)",
           "revision": 2,
           "rules": "2024",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Mercenary Band</strong></p><p><strong>“We are not a problem. We are a subscription.”</strong></p><p>Mercenary Bands turn violence into a service industry. They’re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank with Medium Armor and one Martial Weapon of your choice.</li><li><strong>Strategic:</strong> Your faction starts with +1 Violence OPs.</li></ul>",
+          "value": "<p><strong>Tier 1 \u2014 Mercenary Band</strong></p><p><strong>\u201cWe are not a problem. We are a subscription.\u201d</strong></p><p>Mercenary Bands turn violence into a service industry. They\u2019re disciplined when paid, unpredictable when not, and always looking for the next contract that lets them keep their code while breaking yours.</p><p><em>You\u2019re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank with Medium Armor and one Martial Weapon of your choice.</li><li><strong>Strategic:</strong> Your faction starts with +1 Violence OPs.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-mercenary-band-t1",
@@ -2031,7 +2031,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Goetic Summoner</strong></p><p><strong>“First lesson: the circle protects you. Second lesson: only if it’s perfect.”</strong></p><p>You learn the etiquette of predators: names, constraints, and the price of eye contact. You are not yet strong enough to command, but you are strong enough to be heard.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Occult</strong> and <strong>Intimidation</strong></li><li>Learn <strong>Find Familiar</strong>, flavored as unsettling, watchful, or veil-adjacent</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction attempts intimidation, coercion, or violent leverage, gain <strong>+1 to the relevant Violence OP roll</strong></li><li>When your faction runs reconnaissance, blackmail, or covert acquisition, gain <strong>+1 to the relevant Intrigue OP roll</strong></li><li>When your faction attempts goodwill, legitimacy, or mass Diplomacy, suffer <strong>–1 to the relevant Soft Power OP roll</strong></li></ul><p><strong>Cost:</strong> early Goetic work leaves an obvious scent. Expect attention from the wrong entities, fear from the right people, and a reputation that arrives before you do.</p>",
+          "value": "<p><strong>Tier 1 \u2014 Goetic Summoner</strong></p><p><strong>\u201cFirst lesson: the circle protects you. Second lesson: only if it\u2019s perfect.\u201d</strong></p><p>You learn the etiquette of predators: names, constraints, and the price of eye contact. You are not yet strong enough to command, but you are strong enough to be heard.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Occult</strong> and <strong>Intimidation</strong></li><li>Learn <strong>Find Familiar</strong>, flavored as unsettling, watchful, or veil-adjacent</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction attempts intimidation, coercion, or violent leverage, gain <strong>+1 to the relevant Violence OP roll</strong></li><li>When your faction runs reconnaissance, blackmail, or covert acquisition, gain <strong>+1 to the relevant Intrigue OP roll</strong></li><li>When your faction attempts goodwill, legitimacy, or mass Diplomacy, suffer <strong>\u20131 to the relevant Soft Power OP roll</strong></li></ul><p><strong>Cost:</strong> early Goetic work leaves an obvious scent. Expect attention from the wrong entities, fear from the right people, and a reputation that arrives before you do.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -2195,7 +2195,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<h2>Deep Well</h2><p><em>Your reservoir of will runs deeper than most stewards'.</em></p><hr /><h3>Rules</h3><p>Your maximum <strong>Clarity</strong> increases by <strong>2</strong>. A deeper reservoir lets you hold more manifestations at once and absorb a bad misfire without running dry.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">⚙ Applies automatically: +2 Clarity max.</p>",
+          "value": "<h2>Deep Well</h2><p><em>Your reservoir of will runs deeper than most stewards'.</em></p><hr /><h3>Rules</h3><p>Your maximum <strong>Clarity</strong> increases by <strong>2</strong>. A deeper reservoir lets you hold more manifestations at once and absorb a bad misfire without running dry.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">\u2699 Applies automatically: +2 Clarity max.</p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_deep_well",
@@ -2257,7 +2257,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>You keep a quiet accounting of what should have gone wrong.</em></p><p>When you use a <strong>refraction die</strong> from Foresight Refraction to alter a roll and the result changes a <strong>failure into a success</strong>, mark one tally in your <strong>ledger</strong>.</p><ul><li>At the end of the scene, if you have at least <strong>2 tallies</strong>, you gain  before a future scene (chosen by you) as the timeline pre-cooperates with your entry.</li><li>After you receive this initiative bonus once, your ledger resets to 0 tallies.</li></ul><p>This is purely narrative bookkeeping: you’re getting credit for every disaster you quietly deflected.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlForesightLedger\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Lens Ledger</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Tally-based &nbsp;·&nbsp; <strong>Action:</strong> Free (passive bookkeeping) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When a Foresight Refraction die converts a failure into a success, mark a tally. With 2+ tallies at scene end, gain an initiative bonus on a future scene of your choice; ledger then resets to 0.</div>\n</div>",
+          "value": "<p><em>You keep a quiet accounting of what should have gone wrong.</em></p><p>When you use a <strong>refraction die</strong> from Foresight Refraction to alter a roll and the result changes a <strong>failure into a success</strong>, mark one tally in your <strong>ledger</strong>.</p><ul><li>At the end of the scene, if you have at least <strong>2 tallies</strong>, you gain  before a future scene (chosen by you) as the timeline pre-cooperates with your entry.</li><li>After you receive this initiative bonus once, your ledger resets to 0 tallies.</li></ul><p>This is purely narrative bookkeeping: you\u2019re getting credit for every disaster you quietly deflected.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlForesightLedger\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Lens Ledger</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Tally-based &nbsp;\u00b7&nbsp; <strong>Action:</strong> Free (passive bookkeeping) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When a Foresight Refraction die converts a failure into a success, mark a tally. With 2+ tallies at scene end, gain an initiative bonus on a future scene of your choice; ledger then resets to 0.</div>\n</div>",
           "chat": ""
         },
         "activities": {},
@@ -2325,7 +2325,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Precognition through a repaired pane.</em></p><p>At the start of a <strong>scene</strong> (combat encounter, tense negotiation, or major exploration beat), roll <strong>2d20</strong> in secret and record the results as <strong>refraction dice</strong>.</p><ul><li>Before any creature (including you) rolls a 2d10x10 for an attack, attribute check, or defense check, you may choose to <strong>replace</strong> that roll with one of your stored refraction dice.</li><li>You must decide before the 2d10x10 is rolled. Once used, a refraction die is expended.</li><li>You refresh your refraction dice at the start of each new qualifying scene.</li></ul><p><strong>Strategic Layer.</strong> Once per <strong>Strategic Turn</strong>, you may spend <strong>1 Intrigue OP</strong> to force an enemy faction to <strong>reroll</strong> one of its strategic 2d10x10-based checks (GM chooses the exact check if multiple candidates exist). You must accept the new result.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlForesightRefr\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Foresight Refraction</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 2d20/scene + 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Free (declare before 2d10x10) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">At scene start, roll 2d20 in secret as refraction dice. Before any 2d10x10 (yours or anyone's) replace it with one stored die — declared before the roll. Strategic: 1/Turn, spend 1 Intrigue OP to force an enemy faction reroll.</div>\n</div>",
+          "value": "<p><em>Precognition through a repaired pane.</em></p><p>At the start of a <strong>scene</strong> (combat encounter, tense negotiation, or major exploration beat), roll <strong>2d20</strong> in secret and record the results as <strong>refraction dice</strong>.</p><ul><li>Before any creature (including you) rolls a 2d10x10 for an attack, attribute check, or defense check, you may choose to <strong>replace</strong> that roll with one of your stored refraction dice.</li><li>You must decide before the 2d10x10 is rolled. Once used, a refraction die is expended.</li><li>You refresh your refraction dice at the start of each new qualifying scene.</li></ul><p><strong>Strategic Layer.</strong> Once per <strong>Strategic Turn</strong>, you may spend <strong>1 Intrigue OP</strong> to force an enemy faction to <strong>reroll</strong> one of its strategic 2d10x10-based checks (GM chooses the exact check if multiple candidates exist). You must accept the new result.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlForesightRefr\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Foresight Refraction</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 2d20/scene + 1/Strategic Turn &nbsp;\u00b7&nbsp; <strong>Action:</strong> Free (declare before 2d10x10) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">At scene start, roll 2d20 in secret as refraction dice. Before any 2d10x10 (yours or anyone's) replace it with one stored die \u2014 declared before the roll. Strategic: 1/Turn, spend 1 Intrigue OP to force an enemy faction reroll.</div>\n</div>",
           "chat": ""
         },
         "activities": {},
@@ -2395,7 +2395,7 @@
           "mind"
         ],
         "description": {
-          "value": "<p><em>\"It's not obscure. You just haven't read it.\"</em></p><p><strong>Savant</strong> is the Mind Calling — the trade that kept its bearers alive after the Shattering. Umbrella: scholar, engineer, medic, archivist, detective, translator. A profession is a flavor label on the Calling.</p><p><strong>Knack — Library-Brain:</strong> Lore and Investigation checks never fumble; identifies items of tier ≤ own tier on sight (at Tier III, including technomagical origin).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Lore</strong> rank = tier; secondary <strong>Investigation</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Wyrdlens Adept or Cosmic Linguist. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"It's not obscure. You just haven't read it.\"</em></p><p><strong>Savant</strong> is the Mind Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: scholar, engineer, medic, archivist, detective, translator. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Library-Brain:</strong> Lore and Investigation checks never fumble; identifies items of tier \u2264 own tier on sight (at Tier III, including technomagical origin).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Lore</strong> rank = tier; secondary <strong>Investigation</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy or Soft Power (GM picks by job)</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Wyrdlens Adept or Cosmic Linguist. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -2436,7 +2436,7 @@
     },
     {
       "_id": "fR66DS34C5TeUjRI",
-      "name": "Savant — Apprentice (Tier I)",
+      "name": "Savant \u2014 Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/svg/book.svg",
       "system": {
@@ -2448,7 +2448,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Savant — Apprentice</strong> (Tier I).</p><p><strong>Trade — Appraise / identify:</strong> What it is, what it's worth, whether it's what the seller claims. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — I've Read About This</strong> <em>(1/scene)</em>: Explain the situation; one ally gets +2 on their next relevant check.</p>",
+          "value": "<p><strong>Savant \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Appraise / identify:</strong> What it is, what it's worth, whether it's what the seller claims. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick \u2014 I've Read About This</strong> <em>(1/scene)</em>: Explain the situation; one ally gets +2 on their next relevant check.</p>",
           "chat": ""
         }
       },

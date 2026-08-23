@@ -8,8 +8,8 @@
     "factionId": "",
     "notes": "<p>A person who slipped between moments and came back hungry. It flickers between where it is, where it was, and where the victim wishes it had gone.</p>",
     "details": {
-      "level": 1,
-      "tier": 1,
+      "level": 13,
+      "tier": 3,
       "statPoints": 0,
       "skillPoints": 0
     },
@@ -849,8 +849,8 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Each creature of the wraith's choice within 20 ft. rolls vs Resolve (DC 15). Half damage on success. On a failure, the target is also slowed until the end of its next turn (movement halved, no reactions, action OR bonus action — not both). Recharge 5–6.",
-        "flavor": "A second too late, a second too early — both happen to you at once.",
+        "effect": "Each creature of the wraith's choice within 20 ft. rolls vs Resolve (DC 15). Half damage on success. On a failure, the target is also slowed until the end of its next turn (movement halved, no reactions, action OR bonus action \u2014 not both). Recharge 5\u20136.",
+        "flavor": "A second too late, a second too early \u2014 both happen to you at once.",
         "manifestation": {
           "tier": 1,
           "family": "form",
@@ -883,7 +883,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Area Attack.</strong> Each creature of the wraith's choice within 4 squares rolls <strong>Resolve</strong> vs DC 15. Hit: <code>4d6</code> psychic + soul; half on success. On a failure, the target is also slowed until the end of its next turn (movement halved, no reactions, action OR bonus action — not both).<br/><em>Recharges on a Soma Break.</em></p><p><em>A second too late, a second too early — both happen to you at once.</em></p>",
+          "value": "<p><strong>Area Attack.</strong> Each creature of the wraith's choice within 4 squares rolls <strong>Resolve</strong> vs DC 15. Hit: <code>4d6</code> psychic + soul; half on success. On a failure, the target is also slowed until the end of its next turn (movement halved, no reactions, action OR bonus action \u2014 not both).<br/><em>Recharges on a Soma Break.</em></p><p><em>A second too late, a second too early \u2014 both happen to you at once.</em></p>",
           "chat": ""
         }
       },
@@ -905,7 +905,7 @@
         },
         "autoanimations": {
           "id": "ft-moment-shear-recharge-5-6-",
-          "label": "Moment Shear (Recharge 5–6)",
+          "label": "Moment Shear (Recharge 5\u20136)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -1224,7 +1224,7 @@
           "rangeFt": 0,
           "maintenanceCost": "1 Clarity per round to sustain.",
           "riskText": "The Wraith may slip too far and lose 1 Integrity to a frame it can't return from.",
-          "pathResonance": "Yesod — foundation as suggestion.",
+          "pathResonance": "Yesod \u2014 foundation as suggestion.",
           "fictionalPermission": "May refuse to be where it was.",
           "gmCalibration": "Reroll-lowest on attacks; 1d6 qliphothic to Stress on misses.",
           "mechanicalHook": "Reroll-lowest defense; reflective qliphothic damage.",
@@ -1464,7 +1464,7 @@
           "phase2-narrative"
         ],
         "description": {
-          "value": "<p><strong>Reaction.</strong> When struck, the Wraith may displace 1 hex / 1 square The attacker briefly forgets which target they aimed at — they take Disadvantage (reroll-lowest) on their next attack roll this exchange.</p>",
+          "value": "<p><strong>Reaction.</strong> When struck, the Wraith may displace 1 hex / 1 square The attacker briefly forgets which target they aimed at \u2014 they take Disadvantage (reroll-lowest) on their next attack roll this exchange.</p>",
           "chat": ""
         }
       },

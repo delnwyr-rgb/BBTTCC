@@ -9,7 +9,7 @@
     "resistances": [
       "qliphothic"
     ],
-    "armorSkill": "weave",
+    "armorSkill": "fitting",
     "equipped": false,
     "tags": [
       "light-cloth",
@@ -18,7 +18,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>Layered cloth armor stitched in a sept-house. Light, breathable, embroidered with a single prayer running spine to hem.</p><p>Wards the wearer against the static the world drags in — corruption finds the cloth quieter than the body beneath.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Guard +2, Evasion +1, Resolve +2</li>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 225 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>Layered cloth armor stitched in a sept-house. Light, breathable, embroidered with a single prayer running spine to hem.</p><p>Wards the wearer against the static the world drags in \u2014 corruption finds the cloth quieter than the body beneath.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Guard +2, Evasion +1, Resolve +2</li>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 225 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
       "chat": ""
     }
   },
@@ -43,7 +43,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>Layered cloth armor stitched in a sept-house. Light, breathable, embroidered with a single prayer running spine to hem.</p><p>Wards the wearer against the static the world drags in — corruption finds the cloth quieter than the body beneath.</p>",
+          "lore": "<p>Layered cloth armor stitched in a sept-house. Light, breathable, embroidered with a single prayer running spine to hem.</p><p>Wards the wearer against the static the world drags in \u2014 corruption finds the cloth quieter than the body beneath.</p>",
           "materialOf": [
             "sept-cloth",
             "blessed-thread",
@@ -78,7 +78,7 @@
   "_id": "A1cfzT3u0uhvQ6CN",
   "effects": [
     {
-      "name": "⚙️ Defense Grant",
+      "name": "\u2699\ufe0f Defense Grant",
       "transfer": false,
       "disabled": false,
       "flags": {

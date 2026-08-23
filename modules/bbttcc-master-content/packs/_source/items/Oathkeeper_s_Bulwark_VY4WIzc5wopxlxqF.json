@@ -9,7 +9,7 @@
     "resistances": [
       "kinetic"
     ],
-    "armorSkill": "warding",
+    "armorSkill": "bracing",
     "equipped": false,
     "tags": [
       "shield",
@@ -21,7 +21,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A reinforced heater shield carried by Pactkeeper enforcers, its rim engraved with a standing oath the bearer renews each dawn. When the oath holds, so does the shield — vow-resin lacing snags incoming force and feeds it into the bearer's stance.</p><p><strong>Eat the Blow (1/Soma Break).</strong> While attuned and equipped, the bearer may shift one die of incoming kinetic damage into Stress instead of Integrity. GM-adjudicated; tap the use tracker when spent. Resists kinetic passively.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +3, Resolve +2</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Kinetic</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 450 Economy marks</p></li></ul>",
+      "value": "<p>A reinforced heater shield carried by Pactkeeper enforcers, its rim engraved with a standing oath the bearer renews each dawn. When the oath holds, so does the shield \u2014 vow-resin lacing snags incoming force and feeds it into the bearer's stance.</p><p><strong>Eat the Blow (1/Soma Break).</strong> While attuned and equipped, the bearer may shift one die of incoming kinetic damage into Stress instead of Integrity. GM-adjudicated; tap the use tracker when spent. Resists kinetic passively.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +3, Resolve +2</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Kinetic</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 450 Economy marks</p></li></ul>",
       "chat": ""
     },
     "uses": {
@@ -50,7 +50,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A reinforced heater shield carried by Pactkeeper enforcers, its rim engraved with a standing oath the bearer renews each dawn. When the oath holds, so does the shield — vow-resin lacing snags incoming force and feeds it into the bearer's stance.</p><p><b>Eat the Blow (1/Soma Break).</b> While attuned and equipped, the bearer may shift one die of incoming kinetic damage into Stress instead of Integrity. GM-adjudicated; tap the use tracker when spent. Resists kinetic passively.</p>",
+          "lore": "<p>A reinforced heater shield carried by Pactkeeper enforcers, its rim engraved with a standing oath the bearer renews each dawn. When the oath holds, so does the shield \u2014 vow-resin lacing snags incoming force and feeds it into the bearer's stance.</p><p><b>Eat the Blow (1/Soma Break).</b> While attuned and equipped, the bearer may shift one die of incoming kinetic damage into Stress instead of Integrity. GM-adjudicated; tap the use tracker when spent. Resists kinetic passively.</p>",
           "materialOf": [
             "heart-iron",
             "vow-resin",
@@ -63,7 +63,7 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TIII shield × 1",
+            "notes": "TIII shield \u00d7 1",
             "bound": "attuned",
             "saleBack": 180
           }

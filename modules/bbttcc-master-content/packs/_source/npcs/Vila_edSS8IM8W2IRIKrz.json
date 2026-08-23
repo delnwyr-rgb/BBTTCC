@@ -274,12 +274,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 1
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -447,7 +447,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Sephirotic Scion.</strong> Your blood remembers the higher spheres. Light hangs around you a little too long, prayers sometimes answer themselves, and the world’s moral architecture feels less like an abstraction and more like the weather report.</p><hr><p><em><strong>Sephirotic Scion Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic).</p></li><li><p><strong>Size.</strong> You are Medium.</p></li><li><p><strong>Speed.</strong> Your walking speed is 6 squares</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Sephirotic Scion does not grant any attribute bonuses.</p></li></ul><p>Your Sephirotic heritage grants you additional features through advancements (Item Grants) added during character creation: sephirotic physiology, attunement to higher patterns, holy conduction, the Light of Harmony, and strategic hooks that tilt factions toward soft power, diplomacy, and alignment work.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Sephirotic Scion.</strong> Your blood remembers the higher spheres. Light hangs around you a little too long, prayers sometimes answer themselves, and the world\u2019s moral architecture feels less like an abstraction and more like the weather report.</p><hr><p><em><strong>Sephirotic Scion Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic).</p></li><li><p><strong>Size.</strong> You are Medium.</p></li><li><p><strong>Speed.</strong> Your walking speed is 6 squares</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Sephirotic Scion does not grant any attribute bonuses.</p></li></ul><p>Your Sephirotic heritage grants you additional features through advancements (Item Grants) added during character creation: sephirotic physiology, attunement to higher patterns, holy conduction, the Light of Harmony, and strategic hooks that tilt factions toward soft power, diplomacy, and alignment work.</p>",
           "chat": ""
         },
         "advancement": {
@@ -913,7 +913,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You glow a little. Sometimes metaphorically. Sometimes not.”</em></p><ul><li>You can cast <strong>calm emotions</strong> 1/Soma Break (Presence is your manifestation aptitude).</li><li>Allies within 2 squares reroll the lowest die on checks against being <strong>frightened</strong>.</li><li>You automatically sense the Sephirothic/Qliphothic tilt of any hex you enter.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou glow a little. Sometimes metaphorically. Sometimes not.\u201d</em></p><ul><li>You can cast <strong>calm emotions</strong> 1/Soma Break (Presence is your manifestation aptitude).</li><li>Allies within 2 squares reroll the lowest die on checks against being <strong>frightened</strong>.</li><li>You automatically sense the Sephirothic/Qliphothic tilt of any hex you enter.</li></ul>",
           "chat": ""
         },
         "activities": {
@@ -1241,7 +1241,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“Even the world listens when you walk in.”</em></p><ul><li>Your faction gains +2 Soft Power OP and +1 Diplomacy OP.</li><li>Shifting a controlled hex toward a Sephirah costs <strong>10% less</strong>.</li><li>The first Spark Identification each chapter is <strong>free</strong>.</li></ul>",
+          "value": "<p><em>\u201cEven the world listens when you walk in.\u201d</em></p><ul><li>Your faction gains +2 Soft Power OP and +1 Diplomacy OP.</li><li>Shifting a controlled hex toward a Sephirah costs <strong>10% less</strong>.</li><li>The first Spark Identification each chapter is <strong>free</strong>.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1378,7 +1378,7 @@
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Sephirotic Scion heritage: Ophanic.</p><p><em>“The wheels were full of eyes. You never stop turning. You never stop seeing.”</em></p><p><strong>Sephirotic Scion (Ophanic).</strong> Your blood runs rotating. The Ophanim are wheels-and-eyes — motion, sight, the order that is always already looking both ways. You are descended from a thing that could not be snuck up on because it had no back. You kept some of that. Not all. Enough.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic Scion).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Sephirotic Scion does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Sephirotic Scion Core: The Higher Register</h3><p><em>Shared across all Sephirotic Scion heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Sephirotic Physiology.</strong> You have resistance to sephirotic damage. Your blood runs a little bright under the right light; you do not technically age while on consecrated ground.</p></li><li><p><strong>Sefirot Attunement.</strong> At creation, pick one sephirah (player choice). Once per scene, you can invoke its register and gain a +1 rank bonus to one check that falls clearly within that sephirah's domain.</p></li><li><p><strong>Holy Conduit.</strong> Manifestations, rituals, and other sephirotic-register effects that target you or pass through your space treat their effective caster-attribute as +1 for the duration of that effect. Works on allies and on you; does not work on qliphothic-register effects.</p></li><li><p><strong>Light of Harmony.</strong> When two or more creatures within 6 squares of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity. This refreshes when a new agreement is reached between different creatures.</p></li></ul><h3>Ophanic Traits</h3><ul><li><p><strong>Wheel-and-Eye.</strong> You can see invisible creatures and objects within 6 squares as dimly lit shapes. You cannot be flanked.</p></li><li><p><strong>Concentric Sight.</strong> You reroll the lowest die on Mind (Perception) checks that involve noticing movement, pattern, or change over time. You roll 3d10 keep lowest 2 on Mind (Perception) checks to notice things that have been perfectly still since before you started looking — you see motion, not furniture.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Violence OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Battlefield / Procession / High-Traffic</em> hexes, your faction's observation and counter-intel operations gain +2 on the success check.</p></li><li><p><strong>Turning Witness.</strong> Once per Strategic Turn, you may observe one exchange of goods, intelligence, or personnel between two rival factions within your field of influence. You learn that it happened and between whom, though not necessarily what was exchanged.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Sefirot Attunement</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Free (declare before roll)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Invoke your chosen sephirah for +1 rank bonus on a check clearly in its domain.</span></p></div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Sephirotic Scion heritage: Ophanic.</p><p><em>\u201cThe wheels were full of eyes. You never stop turning. You never stop seeing.\u201d</em></p><p><strong>Sephirotic Scion (Ophanic).</strong> Your blood runs rotating. The Ophanim are wheels-and-eyes \u2014 motion, sight, the order that is always already looking both ways. You are descended from a thing that could not be snuck up on because it had no back. You kept some of that. Not all. Enough.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic Scion).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Sephirotic Scion does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Sephirotic Scion Core: The Higher Register</h3><p><em>Shared across all Sephirotic Scion heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Sephirotic Physiology.</strong> You have resistance to sephirotic damage. Your blood runs a little bright under the right light; you do not technically age while on consecrated ground.</p></li><li><p><strong>Sefirot Attunement.</strong> At creation, pick one sephirah (player choice). Once per scene, you can invoke its register and gain a +1 rank bonus to one check that falls clearly within that sephirah's domain.</p></li><li><p><strong>Holy Conduit.</strong> Manifestations, rituals, and other sephirotic-register effects that target you or pass through your space treat their effective caster-attribute as +1 for the duration of that effect. Works on allies and on you; does not work on qliphothic-register effects.</p></li><li><p><strong>Light of Harmony.</strong> When two or more creatures within 6 squares of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity. This refreshes when a new agreement is reached between different creatures.</p></li></ul><h3>Ophanic Traits</h3><ul><li><p><strong>Wheel-and-Eye.</strong> You can see invisible creatures and objects within 6 squares as dimly lit shapes. You cannot be flanked.</p></li><li><p><strong>Concentric Sight.</strong> You reroll the lowest die on Mind (Perception) checks that involve noticing movement, pattern, or change over time. You roll 3d10 keep lowest 2 on Mind (Perception) checks to notice things that have been perfectly still since before you started looking \u2014 you see motion, not furniture.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Violence OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Battlefield / Procession / High-Traffic</em> hexes, your faction's observation and counter-intel operations gain +2 on the success check.</p></li><li><p><strong>Turning Witness.</strong> Once per Strategic Turn, you may observe one exchange of goods, intelligence, or personnel between two rival factions within your field of influence. You learn that it happened and between whom, though not necessarily what was exchanged.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Sefirot Attunement</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene \u00a0\u00b7\u00a0 <strong>Action:</strong> Free (declare before roll) \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Invoke your chosen sephirah for +1 rank bonus on a check clearly in its domain.</span></p></div>",
           "chat": ""
         },
         "advancement": [
@@ -1448,13 +1448,13 @@
               "context": "check",
               "skill": "perception",
               "mode": "reroll-highest",
-              "note": "on Mind (Perception) checks to notice things that have been perfectly still s…"
+              "note": "on Mind (Perception) checks to notice things that have been perfectly still s\u2026"
             },
             {
               "context": "check",
               "attribute": "mind",
               "mode": "reroll-highest",
-              "note": "on Mind (Perception) checks to notice things that have been perfectly still s…"
+              "note": "on Mind (Perception) checks to notice things that have been perfectly still s\u2026"
             },
             {
               "context": "check",
@@ -1470,13 +1470,13 @@
               "context": "check",
               "skill": "perception",
               "mode": "reroll-highest",
-              "note": "Mind (Perception) checks to notice things that have been perfectly still sinc…"
+              "note": "Mind (Perception) checks to notice things that have been perfectly still sinc\u2026"
             },
             {
               "context": "check",
               "attribute": "mind",
               "mode": "reroll-highest",
-              "note": "Mind (Perception) checks to notice things that have been perfectly still sinc…"
+              "note": "Mind (Perception) checks to notice things that have been perfectly still sinc\u2026"
             }
           ],
           "resourceGrants": [
@@ -1719,7 +1719,7 @@
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><div data-ft-canon-sephirotic=\"v1\" style=\"display:none\"></div><p><em>\"There is no angle that is not a front, to a thing with no back.\"</em></p><p><strong>The Wheel Never Stops (1/Soma Break).</strong> When you move at least 2 squares on your turn, as a bonus action take either one weapon attack OR the Dash. Additional uses per Soma Break cost 1 Surge each (player-managed via Surge controls).</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"sephOphanicWheel\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>The Wheel Never Stops</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (+1 Surge per extra use)  ·  <strong>Action:</strong> Bonus action (after moving 2 squares)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">After moving ≥ 2 squares, bonus action: one weapon attack OR Dash. Each additional use this Soma Break costs 1 Surge — spend manually.</span></p></div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><div data-ft-canon-sephirotic=\"v1\" style=\"display:none\"></div><p><em>\"There is no angle that is not a front, to a thing with no back.\"</em></p><p><strong>The Wheel Never Stops (1/Soma Break).</strong> When you move at least 2 squares on your turn, as a bonus action take either one weapon attack OR the Dash. Additional uses per Soma Break cost 1 Surge each (player-managed via Surge controls).</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"sephOphanicWheel\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>The Wheel Never Stops</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (+1 Surge per extra use) \u00a0\u00b7\u00a0 <strong>Action:</strong> Bonus action (after moving 2 squares) \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">After moving \u2265 2 squares, bonus action: one weapon attack OR Dash. Each additional use this Soma Break costs 1 Surge \u2014 spend manually.</span></p></div>",
           "chat": ""
         },
         "advancement": {},
@@ -1996,7 +1996,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>\"The future is just memory pointed the other way.\"</em></p>\n<p>The Dreamwalker reads the Tree and works manifestations — and that work <em>is</em> the fuel. You run on <strong>Surge</strong> like everyone, but yours arrives when you <strong>cast a manifestation</strong> (bank +1, max +2/round). The old sprawl folds into this: Echo Dice are now Surge, and the eight soma-break feats live on as four tier powers.</p>\n<h3>The Oracle (spent via Surge)</h3>\n<ul>\n  <li><strong>Omen</strong> (1) — you or an ally saw the thread coming: banks a reroll-lowest.</li>\n  <li><strong>Dream Ward</strong> (2) — an ally drifts into a protective dreamstate: DR + a reroll.</li>\n  <li><strong>Shared Dream</strong> (3) — allies within 6 squares bank a reroll and draw 1 Clarity (refuels their casting).</li>\n  <li><strong>Reality Hack</strong> (5) — rewrite the moment: the party banks a reroll and one enemy rolls its next attack at disadvantage.</li>\n</ul>\n<p>The <strong>Dream-Cache</strong> endures — bank a manifestation between scenes, deploy it next scene without paying Clarity. And the oracle's quiet work stays out of combat: Dream Resonance still senses a hex's Sephirah, and you still Commune with the Great Work for a true answer.</p>",
+          "value": "<p><em>\"The future is just memory pointed the other way.\"</em></p>\n<p>The Dreamwalker reads the Tree and works manifestations \u2014 and that work <em>is</em> the fuel. You run on <strong>Surge</strong> like everyone, but yours arrives when you <strong>cast a manifestation</strong> (bank +1, max +2/round). The old sprawl folds into this: Echo Dice are now Surge, and the eight soma-break feats live on as four tier powers.</p>\n<h3>The Oracle (spent via Surge)</h3>\n<ul>\n  <li><strong>Omen</strong> (1) \u2014 you or an ally saw the thread coming: banks a reroll-lowest.</li>\n  <li><strong>Dream Ward</strong> (2) \u2014 an ally drifts into a protective dreamstate: DR + a reroll.</li>\n  <li><strong>Shared Dream</strong> (3) \u2014 allies within 6 squares bank a reroll and draw 1 Clarity (refuels their casting).</li>\n  <li><strong>Reality Hack</strong> (5) \u2014 rewrite the moment: the party banks a reroll and one enemy rolls its next attack at disadvantage.</li>\n</ul>\n<p>The <strong>Dream-Cache</strong> endures \u2014 bank a manifestation between scenes, deploy it next scene without paying Clarity. And the oracle's quiet work stays out of combat: Dream Resonance still senses a hex's Sephirah, and you still Commune with the Great Work for a true answer.</p>",
           "chat": ""
         },
         "advancement": {
@@ -2149,7 +2149,7 @@
             },
             "value": {},
             "level": 9,
-            "title": "Dreamer’s Poise",
+            "title": "Dreamer\u2019s Poise",
             "flags": {},
             "hint": ""
           },
@@ -2558,7 +2558,7 @@
             },
             "value": {},
             "level": 1,
-            "title": "Dreamwalker Discipline (Tier 1 — Oneiric Reservoir)",
+            "title": "Dreamwalker Discipline (Tier 1 \u2014 Oneiric Reservoir)",
             "icon": "",
             "classRestriction": "",
             "hint": "",
@@ -2586,7 +2586,7 @@
             },
             "value": {},
             "level": 5,
-            "title": "Dreamwalker Discipline (Tier 2 — Dream-Cache)",
+            "title": "Dreamwalker Discipline (Tier 2 \u2014 Dream-Cache)",
             "icon": "",
             "classRestriction": "",
             "hint": "",
@@ -2614,7 +2614,7 @@
             },
             "value": {},
             "level": 11,
-            "title": "Dreamwalker Discipline (Tier 3 — The Walking Lane (Signature Mode))",
+            "title": "Dreamwalker Discipline (Tier 3 \u2014 The Walking Lane (Signature Mode))",
             "icon": "",
             "classRestriction": "",
             "hint": "",
@@ -2642,7 +2642,7 @@
             },
             "value": {},
             "level": 17,
-            "title": "Dreamwalker Discipline (Tier 4 — Shared Dream)",
+            "title": "Dreamwalker Discipline (Tier 4 \u2014 Shared Dream)",
             "icon": "",
             "classRestriction": "",
             "hint": "",
@@ -2722,7 +2722,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Dream-Sense.</strong> Your dreams are not private—they are diagnostic readouts of the world's hidden structure.</p><ul><li>You gain a subtle, constant awareness of emotional, moral, and metaphysical gradients in your environment.</li><li>You always sense Sephirothic or Qliphothic tilt in a hex you enter.</li><li>Your Spark sensitivity is higher than most; your dreams react to metaphysical disturbances long before waking senses do.</li></ul>",
+          "value": "<p><strong>Dream-Sense.</strong> Your dreams are not private\u2014they are diagnostic readouts of the world's hidden structure.</p><ul><li>You gain a subtle, constant awareness of emotional, moral, and metaphysical gradients in your environment.</li><li>You always sense Sephirothic or Qliphothic tilt in a hex you enter.</li><li>Your Spark sensitivity is higher than most; your dreams react to metaphysical disturbances long before waking senses do.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -3028,7 +3028,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Initiate of the Great Work.</strong> Sleep is a meeting place, not a refuge.</p><ul><li>Once per Soma Break, you may choose to reroll the lowest die on an Insight (Soul) checks, a Soul check, or a Presence check as you call upon the Dream for guidance.</li><li>You may ask the Dream one question each a Soma Break—an omen, a vector, or a hidden connection. The Dream does not lie, but neither is it always literal.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Initiate of the Great Work.</strong> Sleep is a meeting place, not a refuge.</p><ul><li>Once per Soma Break, you may choose to reroll the lowest die on an Insight (Soul) checks, a Soul check, or a Presence check as you call upon the Dream for guidance.</li><li>You may ask the Dream one question each a Soma Break\u2014an omen, a vector, or a hidden connection. The Dream does not lie, but neither is it always literal.</li></ul>",
           "chat": ""
         },
         "activities": {
@@ -3154,7 +3154,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Oneiric Pulse.</strong> Close your eyes. The future blinks first.</p><ul><li>Your consciousness intermittently echoes ahead of your physical movement, granting subtle foresight.</li><li>You can feel metaphysical anomalies ‘warming up’ before they manifest.</li></ul>",
+          "value": "<p><strong>Oneiric Pulse.</strong> Close your eyes. The future blinks first.</p><ul><li>Your consciousness intermittently echoes ahead of your physical movement, granting subtle foresight.</li><li>You can feel metaphysical anomalies \u2018warming up\u2019 before they manifest.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -3269,7 +3269,7 @@
       "_key": "!actors.items!edSS8IM8W2IRIKrz.5HUa0AbgMf1EVNId"
     },
     {
-      "name": "Dreamwalker: Tier 1 — Oneiric Reservoir",
+      "name": "Dreamwalker: Tier 1 \u2014 Oneiric Reservoir",
       "type": "feat",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_1.png",
       "system": {
@@ -3281,7 +3281,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Oneiric Reservoir.</strong> Your Clarity maximum is +2. On Soma Break you recover Clarity equal to your tier instead of the flat default. Detect Spark resonance in adjacent hexes (carryover).</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (passive): Clarity max +2.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Skill rank +1 in Perception and Faith.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Oneiric Reservoir</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Passive &nbsp;·&nbsp; <strong>Action:</strong> — &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Clarity max +2. On Soma Break recover Clarity equal to your tier (instead of flat default). Detect Spark resonance in adjacent hexes (carryover).</div>\n</div>",
+          "value": "<p><strong>Tier 1 \u2014 Oneiric Reservoir.</strong> Your Clarity maximum is +2. On Soma Break you recover Clarity equal to your tier instead of the flat default. Detect Spark resonance in adjacent hexes (carryover).</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (passive): Clarity max +2.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Skill rank +1 in Perception and Faith.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Oneiric Reservoir</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Passive &nbsp;\u00b7&nbsp; <strong>Action:</strong> \u2014 &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Clarity max +2. On Soma Break recover Clarity equal to your tier (instead of flat default). Detect Spark resonance in adjacent hexes (carryover).</div>\n</div>",
           "chat": ""
         },
         "activities": {},
@@ -3351,13 +3351,13 @@
         "category": "doctrine",
         "classIdentifier": "dreamwalker",
         "source": {
-          "custom": "Bad Eden Originals — Sprint F",
+          "custom": "Bad Eden Originals \u2014 Sprint F",
           "revision": 1,
           "rules": "2026"
         },
         "tags": [],
         "description": {
-          "value": "<p><em>\"Every threshold is also a doorway.\"</em></p>\n<p><strong>Mode:</strong> Transitional · <strong>Drift:</strong> Sideways</p>\n<p>The Sapphire Gate treats walls as suggestions and distance as paperwork. Your Surge spends are repositioning made real — carrying allies clear, stepping through a threshold for the tactical edge, holding the line steady at the door.</p>\n<h3>Trance (spent via Surge)</h3>\n<ul>\n  <li><strong>Gate-Touched</strong> (1) — carry an ally through to safety: DR + a freed reaction.</li>\n  <li><strong>Sapphire Step</strong> (2) — you and an ally step through and out elsewhere: each banks a reroll + a freed reaction.</li>\n  <li><strong>Gate Held Open</strong> (3) — allies within 6 squares bank a reroll and gain DR (the threshold steadies them).</li>\n</ul>\n<p><em>Out-of-combat:</em> threshold-sight, the true teleport-by-linkage, the Gate Held Open evacuation, and the Gatewright capstone (make a door where none was) remain the explorer's powers.</p>",
+          "value": "<p><em>\"Every threshold is also a doorway.\"</em></p>\n<p><strong>Mode:</strong> Transitional \u00b7 <strong>Drift:</strong> Sideways</p>\n<p>The Sapphire Gate treats walls as suggestions and distance as paperwork. Your Surge spends are repositioning made real \u2014 carrying allies clear, stepping through a threshold for the tactical edge, holding the line steady at the door.</p>\n<h3>Trance (spent via Surge)</h3>\n<ul>\n  <li><strong>Gate-Touched</strong> (1) \u2014 carry an ally through to safety: DR + a freed reaction.</li>\n  <li><strong>Sapphire Step</strong> (2) \u2014 you and an ally step through and out elsewhere: each banks a reroll + a freed reaction.</li>\n  <li><strong>Gate Held Open</strong> (3) \u2014 allies within 6 squares bank a reroll and gain DR (the threshold steadies them).</li>\n</ul>\n<p><em>Out-of-combat:</em> threshold-sight, the true teleport-by-linkage, the Gate Held Open evacuation, and the Gatewright capstone (make a door where none was) remain the explorer's powers.</p>",
           "chat": ""
         },
         "identifier": "bbttcc-dreamwalker-sapphire-gate",
@@ -3409,7 +3409,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You were never alone in your body.”</em></p>\n<p><strong>Archetype (Bad Eden): The Moon (Ancient Blood).</strong> You carry something older than law. Memory moves through you. It expects to matter.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your presence amplifies symbolism, inherited legitimacy, buried memory, and eerie cultural authority. This Archetype is associated with <strong>+1 Soft Power</strong> in faction calculus in Bad Eden’s faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit; those are granted automatically by the Tier Engine at the appropriate character levels.</li>\n</ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou were never alone in your body.\u201d</em></p>\n<p><strong>Archetype (Bad Eden): The Moon (Ancient Blood).</strong> You carry something older than law. Memory moves through you. It expects to matter.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your presence amplifies symbolism, inherited legitimacy, buried memory, and eerie cultural authority. This Archetype is associated with <strong>+1 Soft Power</strong> in faction calculus in Bad Eden\u2019s faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit; those are granted automatically by the Tier Engine at the appropriate character levels.</li>\n</ul>",
           "chat": ""
         },
         "activities": {},
@@ -3593,7 +3593,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Occult Association (Bad Eden): Prophet / Oracle.</em></p><p><strong>“The future is not hidden. It is just expensive to hear clearly.”</strong></p><p>Prophets do not control the future. They endure proximity to it.</p><p>Where Tarot Mages manipulate timing and probability like gamblers with dangerous discipline, Prophets stand closer to the signal itself. They hear pattern before it becomes event, consequence before it becomes story, and warning before anyone else admits there is something to warn about.</p><p>To a Prophet, the Great Work is not just about choosing well. It is about seeing the shape of what is coming early enough to alter who is prepared for it.</p><p><strong>How Prophets pursue the Great Work:</strong></p><ul><li>By reading emerging pressure before it resolves into action</li><li>By recognizing encounter patterns before they fully manifest</li><li>By turning foresight into factional advantage</li><li>By making ignorance more expensive than preparation</li></ul><p><strong>Resonance:</strong> <strong>Keter / Signal</strong> — possibility, revelation, pattern-emergence, and the unbearable weight of glimpsing too much too early.</p><p><strong>Tell-tales:</strong> pauses before bad news, unfinished sentences that become correct later, eyes that track causes before effects.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Intrigue, planning, or foresight-adjacent OP rolls</strong> (GM adjudicates the exact lane)</li></ul><p><strong>Cost Principle:</strong> foresight creates burden. Expect omen pressure, emotional Stress, false-positive anxiety, and resentment from people who preferred not to know what was coming.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Occult Association (Bad Eden): Prophet / Oracle.</em></p><p><strong>\u201cThe future is not hidden. It is just expensive to hear clearly.\u201d</strong></p><p>Prophets do not control the future. They endure proximity to it.</p><p>Where Tarot Mages manipulate timing and probability like gamblers with dangerous discipline, Prophets stand closer to the signal itself. They hear pattern before it becomes event, consequence before it becomes story, and warning before anyone else admits there is something to warn about.</p><p>To a Prophet, the Great Work is not just about choosing well. It is about seeing the shape of what is coming early enough to alter who is prepared for it.</p><p><strong>How Prophets pursue the Great Work:</strong></p><ul><li>By reading emerging pressure before it resolves into action</li><li>By recognizing encounter patterns before they fully manifest</li><li>By turning foresight into factional advantage</li><li>By making ignorance more expensive than preparation</li></ul><p><strong>Resonance:</strong> <strong>Keter / Signal</strong> \u2014 possibility, revelation, pattern-emergence, and the unbearable weight of glimpsing too much too early.</p><p><strong>Tell-tales:</strong> pauses before bad news, unfinished sentences that become correct later, eyes that track causes before effects.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Intrigue, planning, or foresight-adjacent OP rolls</strong> (GM adjudicates the exact lane)</li></ul><p><strong>Cost Principle:</strong> foresight creates burden. Expect omen pressure, emotional Stress, false-positive anxiety, and resentment from people who preferred not to know what was coming.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -3685,12 +3685,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden – Archetype: The Moon (Ancient Blood) (Tier 1)",
+          "custom": "Bad Eden \u2013 Archetype: The Moon (Ancient Blood) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — The Moon</strong></p><ul><li><strong>Tactical:</strong> You learn Message and gain a skill rank in Lore.</li><li><strong>Strategic:</strong> Soft Power OP cap +2.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) \u2014 The Moon</strong></p><ul><li><strong>Tactical:</strong> You learn Message and gain a skill rank in Lore.</li><li><strong>Strategic:</strong> Soft Power OP cap +2.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -3779,7 +3779,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Prophet / Oracle</strong></p><p><strong>“You don’t know the future. You just know when something has started.”</strong></p><p>At Tier 1, you begin catching the edge of events before they fully arrive. Not enough to command them. Enough to stop being surprised.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> and <strong>Perception</strong></li><li>1/Soma Break, ask the GM one focused omen-question about an immediate situation, route, or known danger; the answer should be truthful but limited, symbolic, or pressure-based</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a planning-heavy, reconnaissance, or intrigue-forward action, gain <strong>+2</strong> to one relevant OP roll by declaring what sign your faction is acting on</li></ul><p><strong>Cost:</strong> early warning is rarely comfortable. Expect unease, distraction, or tension when you sense something going wrong before anyone else can justify reacting to it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Omen Question</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Ask the GM one focused omen-question. Truthful but limited / symbolic / pressure-based.</div>\n</div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 \u2014 Prophet / Oracle</strong></p><p><strong>\u201cYou don\u2019t know the future. You just know when something has started.\u201d</strong></p><p>At Tier 1, you begin catching the edge of events before they fully arrive. Not enough to command them. Enough to stop being surprised.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> and <strong>Perception</strong></li><li>1/Soma Break, ask the GM one focused omen-question about an immediate situation, route, or known danger; the answer should be truthful but limited, symbolic, or pressure-based</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a planning-heavy, reconnaissance, or intrigue-forward action, gain <strong>+2</strong> to one relevant OP roll by declaring what sign your faction is acting on</li></ul><p><strong>Cost:</strong> early warning is rarely comfortable. Expect unease, distraction, or tension when you sense something going wrong before anyone else can justify reacting to it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Omen Question</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;\u00b7&nbsp; <strong>Action:</strong> Free &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Ask the GM one focused omen-question. Truthful but limited / symbolic / pressure-based.</div>\n</div>",
           "chat": ""
         },
         "advancement": {},
@@ -4610,7 +4610,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "Target: Body defense vs Cast DC. On fail: Restrained for 1 round (frantic self-search; Evasion → 10).",
+        "effect": "Target: Body defense vs Cast DC. On fail: Restrained for 1 round (frantic self-search; Evasion \u2192 10).",
         "tags": [
           "mal-voiced",
           "cc",
@@ -4836,6 +4836,12 @@
             "modifiers": [],
             "resists": [],
             "immunes": []
+          },
+          "resolution": {
+            "shape": "save",
+            "saveAttribute": "mind",
+            "onSave": "half",
+            "saveDcMode": "cast-dc"
           }
         }
       },
@@ -5264,7 +5270,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "Target: Soul defense vs Cast DC each round. On fail: Compelled (must spend at least one action chasing the squirrel away from the fight) and Resolve −2 for 2 rounds.",
+        "effect": "Target: Soul defense vs Cast DC each round. On fail: Compelled (must spend at least one action chasing the squirrel away from the fight) and Resolve \u22122 for 2 rounds.",
         "tags": [
           "mal-voiced",
           "cc",
@@ -5414,7 +5420,7 @@
           "track": "stress"
         },
         "damageParts": [],
-        "effect": "Target: Soul defense vs Cast DC. On fail: 1d4 psychic (stress), Shaken, and Evasion −2 for 1 round.",
+        "effect": "Target: Soul defense vs Cast DC. On fail: 1d4 psychic (stress), Shaken, and Evasion \u22122 for 1 round.",
         "tags": [
           "mal-voiced",
           "stress",
@@ -5504,6 +5510,12 @@
             ],
             "resists": [],
             "immunes": []
+          },
+          "resolution": {
+            "shape": "save",
+            "saveAttribute": "mind",
+            "onSave": "half",
+            "saveDcMode": "cast-dc"
           }
         }
       },
@@ -5714,7 +5726,7 @@
         "manifestation": {
           "tier": 1,
           "family": "working",
-          "concept": "Step into a reflective surface — water, glass, polished metal — and emerge from another within Near range.",
+          "concept": "Step into a reflective surface \u2014 water, glass, polished metal \u2014 and emerge from another within Near range.",
           "form": "gate",
           "function": "move",
           "stability": "instant",
@@ -5731,10 +5743,10 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "If the destination mirror is occupied (animal, hidden ally, hostile dream-thing), you arrive in their space. Mostly bad outcomes.",
-          "pathResonance": "Dreamwalker — mirrors as doors.",
+          "pathResonance": "Dreamwalker \u2014 mirrors as doors.",
           "fictionalPermission": "You travel by reflection. Other Dreamwalkers know the technique. They may have set traps.",
           "gmCalibration": "T1 Working. Limited to Near range. Cannot escape combat zones unless a mirror is present.",
-          "mechanicalHook": "Move from one reflective surface to another within Near range. Counts as movement, not teleportation — line-of-sight cover is bypassed but tracking spells still tag you.",
+          "mechanicalHook": "Move from one reflective surface to another within Near range. Counts as movement, not teleportation \u2014 line-of-sight cover is bypassed but tracking spells still tag you.",
           "signature": "Both surfaces ripple at the moment of transit. Other reflections in the room flicker.",
           "thirdThing": "While in the in-between, you briefly see what the mirror's normal reflection is. Sometimes it is not what you expect.",
           "opCost": {
@@ -5818,7 +5830,7 @@
           "track": "stress"
         },
         "damageParts": [],
-        "effect": "Target: Soul defense vs Cast DC. On fail: 1d6 psychic (stress) and Guard −1 for 1 round.",
+        "effect": "Target: Soul defense vs Cast DC. On fail: 1d6 psychic (stress) and Guard \u22121 for 1 round.",
         "tags": [
           "mal-voiced",
           "stress",
@@ -5906,6 +5918,12 @@
             ],
             "resists": [],
             "immunes": []
+          },
+          "resolution": {
+            "shape": "save",
+            "saveAttribute": "mind",
+            "onSave": "half",
+            "saveDcMode": "cast-dc"
           }
         }
       },
@@ -6165,7 +6183,7 @@
               },
               "legacySystem": {
                 "description": {
-                  "value": "Boosters tuned for hex-crawl reality.\n\n<b>Travel Assist.</b> Once per travel leg, you may reduce the Travel Check DC by 2 (to a minimum of 10) for the party’s movement. This does not change faction OP costs.\n\n<i>Playtest note:</i> If you want the old behavior, add a GM-only tag and let the travel engine read it later.",
+                  "value": "Boosters tuned for hex-crawl reality.\n\n<b>Travel Assist.</b> Once per travel leg, you may reduce the Travel Check DC by 2 (to a minimum of 10) for the party\u2019s movement. This does not change faction OP costs.\n\n<i>Playtest note:</i> If you want the old behavior, add a GM-only tag and let the travel engine read it later.",
                   "chat": ""
                 },
                 "quantity": 1,
@@ -6357,7 +6375,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>A small enameled pin worn at the collar by Shadow Couriers. The sigil shifts depending on the threshold most recently crossed by the wearer.</p><p><strong>Recognized in Transit.</strong> While attuned and equipped, doors that the wearer has previously passed remain open one beat longer than they should — narratively, the courier slips through where another wouldn't.</p>",
+          "value": "<p>A small enameled pin worn at the collar by Shadow Couriers. The sigil shifts depending on the threshold most recently crossed by the wearer.</p><p><strong>Recognized in Transit.</strong> While attuned and equipped, doors that the wearer has previously passed remain open one beat longer than they should \u2014 narratively, the courier slips through where another wouldn't.</p>",
           "chat": ""
         }
       },
@@ -6384,7 +6402,7 @@
               "signals": {
                 "crossing_aligned": true
               },
-              "lore": "<p>A small enameled pin worn at the collar by Shadow Couriers. The sigil shifts depending on the threshold most recently crossed by the wearer.</p><p><b>Recognized in Transit.</b> While attuned and equipped, doors that the wearer has previously passed remain open one beat longer than they should — narratively, the courier slips through where another wouldn't.</p>",
+              "lore": "<p>A small enameled pin worn at the collar by Shadow Couriers. The sigil shifts depending on the threshold most recently crossed by the wearer.</p><p><b>Recognized in Transit.</b> While attuned and equipped, doors that the wearer has previously passed remain open one beat longer than they should \u2014 narratively, the courier slips through where another wouldn't.</p>",
               "materialOf": [
                 "enamel-pin",
                 "courier-glass",
@@ -6444,7 +6462,7 @@
         "source": "",
         "quantity": 1,
         "description": {
-          "value": "<p>Hand-ground lens of Yesodium-clouded glass, set in a Tree-of-Life-shard mount.</p><p><strong>Recall Sephirah (Harmonized, 1/scene).</strong> Look through the lens at any object, person, or location you have previously perceived under a known sephirotic alignment. Recall that alignment now — the GM names which sefirah dominated the moment.</p><p><strong>Memory Edge (Harmonized).</strong> Once per raid, after a magic test resolves, add +1 margin retroactively.</p><p><em>Unharmonized: clear glass. Pretty. Inert.</em></p>",
+          "value": "<p>Hand-ground lens of Yesodium-clouded glass, set in a Tree-of-Life-shard mount.</p><p><strong>Recall Sephirah (Harmonized, 1/scene).</strong> Look through the lens at any object, person, or location you have previously perceived under a known sephirotic alignment. Recall that alignment now \u2014 the GM names which sefirah dominated the moment.</p><p><strong>Memory Edge (Harmonized).</strong> Once per raid, after a magic test resolves, add +1 margin retroactively.</p><p><em>Unharmonized: clear glass. Pretty. Inert.</em></p>",
           "chat": ""
         }
       },
@@ -6474,7 +6492,7 @@
                 "recall_sephirah": true
               },
               "requiresHarmonization": true,
-              "lore": "<p>Hand-ground lens of Yesodium-clouded glass, set in a Tree-of-Life-shard mount.</p><p><b>Recall Sephirah (Harmonized, 1/scene).</b> Look through the lens at any object, person, or location you have previously perceived under a known sephirotic alignment. Recall that alignment now — the GM names which sefirah dominated the moment.</p><p><b>Memory Edge (Harmonized).</b> Once per raid, after a magic test resolves, add +1 margin retroactively.</p><p><i>Unharmonized: clear glass. Pretty. Inert.</i></p>",
+              "lore": "<p>Hand-ground lens of Yesodium-clouded glass, set in a Tree-of-Life-shard mount.</p><p><b>Recall Sephirah (Harmonized, 1/scene).</b> Look through the lens at any object, person, or location you have previously perceived under a known sephirotic alignment. Recall that alignment now \u2014 the GM names which sefirah dominated the moment.</p><p><b>Memory Edge (Harmonized).</b> Once per raid, after a magic test resolves, add +1 margin retroactively.</p><p><i>Unharmonized: clear glass. Pretty. Inert.</i></p>",
               "materialOf": [
                 {
                   "key": "yesodium",
@@ -7177,7 +7195,7 @@
                 "table": null
               },
               "signals": {},
-              "lore": "<p>A cheap, mass-produced stiletto with an apology engraved up the fuller. The engraving is competent. The steel is mediocre. The point is sharp. They were sold in bulk before the Shattering as novelty items at gas stations. After the Shattering, somebody noticed they actually work — and not just in the obvious ways.</p><p><b>Mercy Engraving.</b> When you reduce a creature to 0 Integrity with this knife, the kill incurs <b>no Blood Debt</b>. The engraved apology counts. Reality accepts the receipt. (Mal: \"Don't think about this too hard. The metaphysics are at minimum dubious. The mechanic is real.\")</p>",
+              "lore": "<p>A cheap, mass-produced stiletto with an apology engraved up the fuller. The engraving is competent. The steel is mediocre. The point is sharp. They were sold in bulk before the Shattering as novelty items at gas stations. After the Shattering, somebody noticed they actually work \u2014 and not just in the obvious ways.</p><p><b>Mercy Engraving.</b> When you reduce a creature to 0 Integrity with this knife, the kill incurs <b>no Blood Debt</b>. The engraved apology counts. Reality accepts the receipt. (Mal: \"Don't think about this too hard. The metaphysics are at minimum dubious. The mechanic is real.\")</p>",
               "materialOf": [
                 "pre-fall-stainless",
                 "regret",
@@ -7435,7 +7453,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<h2>Edge of Control</h2><p><em>You don’t just strike enemies. You place them.</em></p><hr /><h3>Rules</h3><p>Once per turn when you deal damage with a weapon or manifestation, choose one: push the target 1 square, pull the target 1 square, or knock the target prone if it is your size or smaller.</p>",
+          "value": "<h2>Edge of Control</h2><p><em>You don\u2019t just strike enemies. You place them.</em></p><hr /><h3>Rules</h3><p>Once per turn when you deal damage with a weapon or manifestation, choose one: push the target 1 square, pull the target 1 square, or knock the target prone if it is your size or smaller.</p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_edge_of_control",
@@ -7500,7 +7518,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Step sideways, see which kind of dream waits.</em></p><p>Once per <strong>Strategic Turn</strong>, when your faction generates or receives a <strong>Spark Lead</strong> (a clue, ping, or emergent phenomenon pointing toward a Spark), you may spend <strong>1 Soft Power OP</strong> to perform a Sapphire Lucidity check.</p><ul><li>You immediately learn whether the next Spark is <strong>Conceptual</strong>, <strong>Vestigial</strong>, or <strong>Animate</strong>.</li><li>This insight cannot reveal power level, danger tier, or location—only the metaphysical <strong>class</strong> of the Spark.</li></ul><p>This is not divination. It’s memory from the world-that-was.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwSapphireLucid\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Lucid Step</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn (1 Soft Power OP) &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When your faction generates or receives a Spark Lead, spend 1 Soft Power OP for a Sapphire Lucidity check: learn whether the next Spark is Conceptual, Vestigial, or Animate. No power level / danger / location info — class only.</div>\n</div>",
+          "value": "<p><em>Step sideways, see which kind of dream waits.</em></p><p>Once per <strong>Strategic Turn</strong>, when your faction generates or receives a <strong>Spark Lead</strong> (a clue, ping, or emergent phenomenon pointing toward a Spark), you may spend <strong>1 Soft Power OP</strong> to perform a Sapphire Lucidity check.</p><ul><li>You immediately learn whether the next Spark is <strong>Conceptual</strong>, <strong>Vestigial</strong>, or <strong>Animate</strong>.</li><li>This insight cannot reveal power level, danger tier, or location\u2014only the metaphysical <strong>class</strong> of the Spark.</li></ul><p>This is not divination. It\u2019s memory from the world-that-was.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwSapphireLucid\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Lucid Step</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn (1 Soft Power OP) &nbsp;\u00b7&nbsp; <strong>Action:</strong> Strategic &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When your faction generates or receives a Spark Lead, spend 1 Soft Power OP for a Sapphire Lucidity check: learn whether the next Spark is Conceptual, Vestigial, or Animate. No power level / danger / location info \u2014 class only.</div>\n</div>",
           "chat": ""
         },
         "activities": {},
@@ -7566,7 +7584,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Place a sapphire bead upon the map.</em></p><p>You may spend <strong>10 minutes</strong> in meditation within a Hex to <strong>anchor</strong> that Hex for the day.</p><ul><li>Until you finish a Soma Break, you have <strong>advantage</strong> on <strong>one</strong> attack roll, attribute check, or defense check made <strong>while inside that anchored Hex</strong>.</li><li>You choose which roll to apply it to after rolling but before the GM declares the result.</li></ul><p>You leave a dream-fingerprint in the landscape—small but protective.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwSapphireGate\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Gate Anchor</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Once per Hex/day &nbsp;·&nbsp; <strong>Action:</strong> Downtime (10 min) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Meditate 10 min in a Hex to anchor it. Until your next Soma Break, reroll the lowest die on one attack/attribute/defense check made in that Hex — chosen after rolling but before the GM declares the result.</div>\n</div>",
+          "value": "<p><em>Place a sapphire bead upon the map.</em></p><p>You may spend <strong>10 minutes</strong> in meditation within a Hex to <strong>anchor</strong> that Hex for the day.</p><ul><li>Until you finish a Soma Break, you have <strong>advantage</strong> on <strong>one</strong> attack roll, attribute check, or defense check made <strong>while inside that anchored Hex</strong>.</li><li>You choose which roll to apply it to after rolling but before the GM declares the result.</li></ul><p>You leave a dream-fingerprint in the landscape\u2014small but protective.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwSapphireGate\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Gate Anchor</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Once per Hex/day &nbsp;\u00b7&nbsp; <strong>Action:</strong> Downtime (10 min) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Meditate 10 min in a Hex to anchor it. Until your next Soma Break, reroll the lowest die on one attack/attribute/defense check made in that Hex \u2014 chosen after rolling but before the GM declares the result.</div>\n</div>",
           "chat": ""
         },
         "activities": {},
@@ -7764,7 +7782,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<h2>Iron Will</h2><p><em>Your mind—or your body—has learned how to say no.</em></p><hr /><h3>Rules</h3><p>Choose Soul or Body. You gain a skill rank in defense checks using that attribute. Once per Sanctuary, you may reroll a failed defense check using that attribute.</p>",
+          "value": "<h2>Iron Will</h2><p><em>Your mind\u2014or your body\u2014has learned how to say no.</em></p><hr /><h3>Rules</h3><p>Choose Soul or Body. You gain a skill rank in defense checks using that attribute. Once per Sanctuary, you may reroll a failed defense check using that attribute.</p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_iron_will",
@@ -8138,7 +8156,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Let the Spark’s afterglow pass through you safely.</em></p><p>Once per <strong>a Soma Break</strong>, when your party completes a <strong>Spark Step</strong>—stabilization, purification, negotiation, containment, or conversion—you may invoke Sapphire Conduction.</p><ul><li>Reduce an appropriate <strong>Darkness Track</strong> by <strong>1</strong>.</li><li>You gain <strong>advantage</strong> on the first defense check or skill check related to Spark falloff or Spark backlash in the next 24 hours.</li></ul><p>You ground the metaphysical heat, leaving the region a touch brighter.</p>",
+          "value": "<p><em>Let the Spark\u2019s afterglow pass through you safely.</em></p><p>Once per <strong>a Soma Break</strong>, when your party completes a <strong>Spark Step</strong>\u2014stabilization, purification, negotiation, containment, or conversion\u2014you may invoke Sapphire Conduction.</p><ul><li>Reduce an appropriate <strong>Darkness Track</strong> by <strong>1</strong>.</li><li>You gain <strong>advantage</strong> on the first defense check or skill check related to Spark falloff or Spark backlash in the next 24 hours.</li></ul><p>You ground the metaphysical heat, leaving the region a touch brighter.</p>",
           "chat": ""
         },
         "activities": {},
@@ -8341,7 +8359,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>You walk the lucid corridor between sparks.</em></p><p>Once per <strong>a Soma Break</strong>, as an <strong>action</strong>, you may open the <strong>Blue Meridian</strong> for <strong>1 minute</strong>:</p><ul><li>You may <strong>teleport up to 6 squares</strong> as part of any movement or bonus action.</li><li>You may teleport to any <strong>Gate Anchor</strong> you have placed within <strong>60 squares</strong>, provided the path does not cross solid barriers (doors are fine; walls are not).</li><li>Allies within 2 squares of a Gate Anchor you teleport to may also teleport to that Anchor as a reaction (once each per activation).</li><li>Whenever you teleport, you gain <strong>advantage</strong> on the next defense check you make before the end of your next turn.</li></ul><p><strong>Strategic Echo.</strong> If the Blue Meridian is used during a Spark Step or metaphysical crisis to reposition the party into a stabilizing or protective configuration, reduce an appropriate <strong>Darkness Track</strong> by <strong>1</strong>.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwSapphireMerid\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Blue Meridian</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break (1-min stance) &nbsp;·&nbsp; <strong>Action:</strong> Action (open) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Open the Meridian for 1 minute: teleport up to 6 squares as movement/bonus action, jump to any Gate Anchor within 60 squares (no solid barriers crossed), allies within 2 squares of that Anchor may follow as a reaction. Each teleport reroll the lowest die on your next defense check before end of next turn. Strategic Echo: if used to stabilize a Spark Step / metaphysical crisis, reduce a relevant Darkness Track by 1.</div>\n</div>",
+          "value": "<p><em>You walk the lucid corridor between sparks.</em></p><p>Once per <strong>a Soma Break</strong>, as an <strong>action</strong>, you may open the <strong>Blue Meridian</strong> for <strong>1 minute</strong>:</p><ul><li>You may <strong>teleport up to 6 squares</strong> as part of any movement or bonus action.</li><li>You may teleport to any <strong>Gate Anchor</strong> you have placed within <strong>60 squares</strong>, provided the path does not cross solid barriers (doors are fine; walls are not).</li><li>Allies within 2 squares of a Gate Anchor you teleport to may also teleport to that Anchor as a reaction (once each per activation).</li><li>Whenever you teleport, you gain <strong>advantage</strong> on the next defense check you make before the end of your next turn.</li></ul><p><strong>Strategic Echo.</strong> If the Blue Meridian is used during a Spark Step or metaphysical crisis to reposition the party into a stabilizing or protective configuration, reduce an appropriate <strong>Darkness Track</strong> by <strong>1</strong>.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"dwSapphireMerid\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Blue Meridian</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break (1-min stance) &nbsp;\u00b7&nbsp; <strong>Action:</strong> Action (open) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Open the Meridian for 1 minute: teleport up to 6 squares as movement/bonus action, jump to any Gate Anchor within 60 squares (no solid barriers crossed), allies within 2 squares of that Anchor may follow as a reaction. Each teleport reroll the lowest die on your next defense check before end of next turn. Strategic Echo: if used to stabilize a Spark Step / metaphysical crisis, reduce a relevant Darkness Track by 1.</div>\n</div>",
           "chat": ""
         },
         "activities": {},
@@ -8585,7 +8603,7 @@
         "source": "Bad Eden Feats Expansion v1 (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><h2>Calm the Mob</h2><p><em>Crowds don’t think. They feel. So you give them something else to feel.</em></p><hr><h3>Rules</h3><p>You gain a skill rank in Diplomacy (Presence) or Intimidation (Presence) (your choice). If you already have it, you gain mastery.</p><p>When you spend at least 1 minute addressing a group of non-hostile or uncertain creatures, you may make a Presence (Diplomacy (Presence) or Intimidation (Presence)) check (DC set by the GM). On a success, you reduce immediate hostility: the crowd hesitates, disperses, or agrees to hear terms. On a failure, you still buy time, but a complication occurs (a challenger steps forward, guards arrive, a rumor spreads).</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><h2>Calm the Mob</h2><p><em>Crowds don\u2019t think. They feel. So you give them something else to feel.</em></p><hr><h3>Rules</h3><p>You gain a skill rank in Diplomacy (Presence) or Intimidation (Presence) (your choice). If you already have it, you gain mastery.</p><p>When you spend at least 1 minute addressing a group of non-hostile or uncertain creatures, you may make a Presence (Diplomacy (Presence) or Intimidation (Presence)) check (DC set by the GM). On a success, you reduce immediate hostility: the crowd hesitates, disperses, or agrees to hear terms. On a failure, you still buy time, but a complication occurs (a challenger steps forward, guards arrive, a rumor spreads).</p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_calm_the_mob",
@@ -9092,7 +9110,7 @@
           }
         },
         "traitMap": {},
-        "classification": "—",
+        "classification": "\u2014",
         "mode": "manual"
       }
     },

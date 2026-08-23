@@ -272,12 +272,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 1
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -535,7 +535,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin.</strong> Normalized Bad Eden ancestry root.</p><p>Select one subspecies when building the character: <strong>Chupacabra, Jackalope, Furrykin</strong>.</p><p>This root grants the shared Cryptidkin core trait package. Subspecies layer flavor, size, and Tier powers on top.</p><p><em>“Every settlement has a story about you. None of them are accurate. All of them are useful.”</em></p><hr><p><em><strong>Cryptidkin Core Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (set by subspecies).</p></li><li><p><strong>Speed.</strong> 6 squares (subspecies may override).</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Cryptidkin does not grant fixed bonuses. Subspecies lean expressed through Tier powers.</p></li></ul><p><strong>Folklore Presence.</strong> When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as <em>omen</em>, <em>trophy</em>, or <em>legend</em>. It is never neutral. People have heard of your kind. They are almost always wrong, and that is almost always useful.</p><p><strong>Wasteland Adapted.</strong> You reroll the lowest die on checks against disease and environmental poison. You ignore the first nonmagical environmental hazard you encounter each Strategic Turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor’s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 12 squares You cannot be surprised while conscious.</p><p><strong>Subspecies.</strong> Choose one Cryptidkin subspecies (Chupacabra, Jackalope, Furrykin). Your subspecies grants Tier powers as you level (Tier I at creation, then 5/11/17).</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin.</strong> Normalized Bad Eden ancestry root.</p><p>Select one subspecies when building the character: <strong>Chupacabra, Jackalope, Furrykin</strong>.</p><p>This root grants the shared Cryptidkin core trait package. Subspecies layer flavor, size, and Tier powers on top.</p><p><em>\u201cEvery settlement has a story about you. None of them are accurate. All of them are useful.\u201d</em></p><hr><p><em><strong>Cryptidkin Core Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (set by subspecies).</p></li><li><p><strong>Speed.</strong> 6 squares (subspecies may override).</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Cryptidkin does not grant fixed bonuses. Subspecies lean expressed through Tier powers.</p></li></ul><p><strong>Folklore Presence.</strong> When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as <em>omen</em>, <em>trophy</em>, or <em>legend</em>. It is never neutral. People have heard of your kind. They are almost always wrong, and that is almost always useful.</p><p><strong>Wasteland Adapted.</strong> You reroll the lowest die on checks against disease and environmental poison. You ignore the first nonmagical environmental hazard you encounter each Strategic Turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor\u2019s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 12 squares You cannot be surprised while conscious.</p><p><strong>Subspecies.</strong> Choose one Cryptidkin subspecies (Chupacabra, Jackalope, Furrykin). Your subspecies grants Tier powers as you level (Tier I at creation, then 5/11/17).</p>",
           "chat": ""
         },
         "advancement": [
@@ -662,7 +662,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-cryptidkin-folklore-frame=\"v1\" style=\"display:none\"></div><p><em>\"You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.\"</em></p><p><strong>Folklore Presence.</strong> 1/Soma Break, when you first meet a community, decide whether the rumors about you arrived first. If yes, reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering — the GM gets to colour it.</p><p><strong>Wasteland Adapted.</strong> Reroll the lowest die on defense checks against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh).</p><p><strong>Survivor's Instinct.</strong> 1/Soma Break, when you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress.</p>",
+          "value": "<div data-ft-canon-cryptidkin-folklore-frame=\"v1\" style=\"display:none\"></div><p><em>\"You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.\"</em></p><p><strong>Folklore Presence.</strong> 1/Soma Break, when you first meet a community, decide whether the rumors about you arrived first. If yes, reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering \u2014 the GM gets to colour it.</p><p><strong>Wasteland Adapted.</strong> Reroll the lowest die on defense checks against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh).</p><p><strong>Survivor's Instinct.</strong> 1/Soma Break, when you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -705,7 +705,7 @@
               "effect": {
                 "kind": "chat-prompt",
                 "args": {
-                  "body": "Survivor’s Instinct. When you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress"
+                  "body": "Survivor\u2019s Instinct. When you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress"
                 }
               }
             }
@@ -919,7 +919,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Cryptidkin Subspecies.</strong> You are the thing the farmers whisper about. The livestock go quiet, the dogs stop barking, and in the morning there is nothing left but a question the community doesn’t want to ask out loud.</p><p><em>“They didn’t mean anything by the name. They just needed something to blame.”</em></p><p><strong>Chupacabra.</strong> Lean, quick, and thirsty in a way that is not quite hunger. You move through the world as a persistent rumor that keeps turning out to be true.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares; climb 5 squares</p></li><li><p><strong>Subspecies Lean.</strong> Your subspecies leans toward <strong>INTR (Intrigue)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor’s Instinct).</p><h3>Chupacabra Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Chupacabra powers emphasize: night-stalker stealth, drain-bite for fluid and Spark, terror aura when spotted, and a reputation that precedes you like a warning sign.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Cryptidkin Subspecies.</strong> You are the thing the farmers whisper about. The livestock go quiet, the dogs stop barking, and in the morning there is nothing left but a question the community doesn\u2019t want to ask out loud.</p><p><em>\u201cThey didn\u2019t mean anything by the name. They just needed something to blame.\u201d</em></p><p><strong>Chupacabra.</strong> Lean, quick, and thirsty in a way that is not quite hunger. You move through the world as a persistent rumor that keeps turning out to be true.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares; climb 5 squares</p></li><li><p><strong>Subspecies Lean.</strong> Your subspecies leans toward <strong>INTR (Intrigue)</strong>\u2014expressed through Tier powers.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor\u2019s Instinct).</p><h3>Chupacabra Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Chupacabra powers emphasize: night-stalker stealth, drain-bite for fluid and Spark, terror aura when spotted, and a reputation that precedes you like a warning sign.</p>",
           "chat": ""
         },
         "advancement": [
@@ -1009,7 +1009,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>\"The goats are gone. So is the witness. So is the noise.\"</em></p><p><strong>Blood-Drinker (1/Soma Break).</strong> When you hit a creature with a melee attack, you may bite. Deal 1d6 + Body modifier qliphothic damage on top of the attack's normal damage, and gain temporary Integrity equal to the qliphothic damage dealt.</p><p><strong>Hex-Sense.</strong> You can smell magical residue the way most people smell rain. Once per scene, when something supernatural has happened in a place within the last 24 hours, the GM tells you so — and roughly what colour it was.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"crypChupBloodDrinker\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Blood-Drinker</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Triggered (on melee hit)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When you hit with a melee attack, bite for 1d6 + Body qliphothic damage on top of the attack, and gain temp Integrity equal to the qliphothic damage dealt.</span></p></div>",
+          "value": "<p><em>\"The goats are gone. So is the witness. So is the noise.\"</em></p><p><strong>Blood-Drinker (1/Soma Break).</strong> When you hit a creature with a melee attack, you may bite. Deal 1d6 + Body modifier qliphothic damage on top of the attack's normal damage, and gain temporary Integrity equal to the qliphothic damage dealt.</p><p><strong>Hex-Sense.</strong> You can smell magical residue the way most people smell rain. Once per scene, when something supernatural has happened in a place within the last 24 hours, the GM tells you so \u2014 and roughly what colour it was.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"crypChupBloodDrinker\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Blood-Drinker</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break \u00a0\u00b7\u00a0 <strong>Action:</strong> Triggered (on melee hit) \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When you hit with a melee attack, bite for 1d6 + Body qliphothic damage on top of the attack, and gain temp Integrity equal to the qliphothic damage dealt.</span></p></div>",
           "chat": ""
         },
         "advancement": {},
@@ -1260,7 +1260,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“If it lives, you are responsible for it.”</em></p><p><strong>Archetype (Bad Eden): The Empress (Caretaker).</strong> You are abundance under pressure: not softness, but stewardship. You keep people, places, and fragile futures alive long enough to matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype nurtures resilience, relief, and sustainable flourishing. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Culture</strong> in faction calculus in Bad Eden’s faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cIf it lives, you are responsible for it.\u201d</em></p><p><strong>Archetype (Bad Eden): The Empress (Caretaker).</strong> You are abundance under pressure: not softness, but stewardship. You keep people, places, and fragile futures alive long enough to matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype nurtures resilience, relief, and sustainable flourishing. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Culture</strong> in faction calculus in Bad Eden\u2019s faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1369,12 +1369,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden – Archetype: The Empress (Caretaker) (Tier 1)",
+          "custom": "Bad Eden \u2013 Archetype: The Empress (Caretaker) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Diplomacy. You learn the Spare the Dying Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) \u2014 The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Diplomacy. You learn the Spare the Dying Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1590,14 +1590,14 @@
       "system": {
         "category": "technique",
         "source": {
-          "custom": "Bad Eden – Crew Type: Covert Ops Cell (Tier 1)",
+          "custom": "Bad Eden \u2013 Crew Type: Covert Ops Cell (Tier 1)",
           "revision": 2,
           "rules": "2024",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Stealth and with the Tinkering aptitude.</li><li><strong>Strategic:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
+          "value": "<p><strong>Tier 1 \u2014 Covert Ops Cell</strong></p><p><strong>\u201cIf you saw it happen, it wasn\u2019t us.\u201d</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don\u2019t start fights\u2014they rearrange the board so the fight never happens.</p><p><em>You\u2019re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Stealth and with the Tinkering aptitude.</li><li><strong>Strategic:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-covert-ops-cell-t1",
@@ -1761,7 +1761,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Tarot Mage</strong></p><p><strong>“The future is rude. I read it anyway.”</strong></p><p>You are not powerful yet. You are noticeable. The cards do not obey you, but they do answer — and that is already enough to make normal people uncomfortable.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> or <strong>Occult</strong> (GM or player choice if one is already covered elsewhere)</li><li>1/Soma Break, before making an attribute check, you may draw the line of fate early and gain <strong>Advantage</strong> on that check</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a faction Intrigue-forward action, you may <strong>read the spread</strong>: gain <strong>+2 to one relevant Intrigue OP roll</strong></li></ul><p><strong>Cost:</strong> once you start consulting fate, you begin seeing patterns everywhere. Expect second-guessing, omen pressure, or trouble distinguishing signal from appetite.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"tarotT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Draw the Line (Tactical)</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free (before check) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Before an attribute check, reroll the lowest die on it.</div>\n</div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 \u2014 Tarot Mage</strong></p><p><strong>\u201cThe future is rude. I read it anyway.\u201d</strong></p><p>You are not powerful yet. You are noticeable. The cards do not obey you, but they do answer \u2014 and that is already enough to make normal people uncomfortable.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> or <strong>Occult</strong> (GM or player choice if one is already covered elsewhere)</li><li>1/Soma Break, before making an attribute check, you may draw the line of fate early and gain <strong>Advantage</strong> on that check</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a faction Intrigue-forward action, you may <strong>read the spread</strong>: gain <strong>+2 to one relevant Intrigue OP roll</strong></li></ul><p><strong>Cost:</strong> once you start consulting fate, you begin seeing patterns everywhere. Expect second-guessing, omen pressure, or trouble distinguishing signal from appetite.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"tarotT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Draw the Line (Tactical)</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;\u00b7&nbsp; <strong>Action:</strong> Free (before check) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Before an attribute check, reroll the lowest die on it.</div>\n</div>",
           "chat": ""
         },
         "advancement": {},
@@ -2107,7 +2107,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“Just a little to the left, away from tragedy.”</em></p><p>When a creature you can see within <strong>6 squares</strong> makes an attack roll against a target that is <strong>bloodied</strong> (at or below half its Integrity), you can use your <strong>reaction</strong> to nudge the intention sideways.</p><ul><li>The attacker has <strong>advantage</strong> on a contested check (such as a shove, grapple, or disarm) they immediately substitute in place of that attack, or may choose to apply the attack with <strong>disadvantage</strong> but automatically treat it as non-lethal.</li></ul><p>This is a narrative tool: you pivot a kill into a capture, a slam into a pin, a swing into a warning blow.</p>",
+          "value": "<p><em>\u201cJust a little to the left, away from tragedy.\u201d</em></p><p>When a creature you can see within <strong>6 squares</strong> makes an attack roll against a target that is <strong>bloodied</strong> (at or below half its Integrity), you can use your <strong>reaction</strong> to nudge the intention sideways.</p><ul><li>The attacker has <strong>advantage</strong> on a contested check (such as a shove, grapple, or disarm) they immediately substitute in place of that attack, or may choose to apply the attack with <strong>disadvantage</strong> but automatically treat it as non-lethal.</li></ul><p>This is a narrative tool: you pivot a kill into a capture, a slam into a pin, a swing into a warning blow.</p>",
           "chat": ""
         },
         "activities": {},
@@ -2180,7 +2180,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Turn the lens toward the kinder world.</em></p><p>Once per <strong>scene</strong>, when you see a creature within <strong>6 squares</strong> of you take damage from a blow that would reduce it to 0 Integrity, you can use your <strong>reaction</strong> to refract the outcome.</p><ul><li>The attack is treated as <strong>non-lethal</strong> instead. The target falls <strong>unconscious but stable</strong> rather than dying.</li><li>If this non-lethal outcome directly forces a <strong>surrender, stand-down, or captured-alive resolution</strong>, your faction gains <strong>+1 Diplomacy OP</strong> for the next Strategic Turn (once per scene).</li></ul><p>You don’t erase the harm; you change what the last hit <em>means</em>.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlMercyRefr\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Mercy Refraction</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Reaction &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When a creature within 6 squares would drop to 0 Integrity, refract the outcome to non-lethal: target falls unconscious-but-stable. If this directly forces a surrender / stand-down / captured-alive resolution, faction gains +1 Diplomacy OP next Strategic Turn.</div>\n</div>",
+          "value": "<p><em>Turn the lens toward the kinder world.</em></p><p>Once per <strong>scene</strong>, when you see a creature within <strong>6 squares</strong> of you take damage from a blow that would reduce it to 0 Integrity, you can use your <strong>reaction</strong> to refract the outcome.</p><ul><li>The attack is treated as <strong>non-lethal</strong> instead. The target falls <strong>unconscious but stable</strong> rather than dying.</li><li>If this non-lethal outcome directly forces a <strong>surrender, stand-down, or captured-alive resolution</strong>, your faction gains <strong>+1 Diplomacy OP</strong> for the next Strategic Turn (once per scene).</li></ul><p>You don\u2019t erase the harm; you change what the last hit <em>means</em>.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlMercyRefr\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Mercy Refraction</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;\u00b7&nbsp; <strong>Action:</strong> Reaction &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When a creature within 6 squares would drop to 0 Integrity, refract the outcome to non-lethal: target falls unconscious-but-stable. If this directly forces a surrender / stand-down / captured-alive resolution, faction gains +1 Diplomacy OP next Strategic Turn.</div>\n</div>",
           "chat": ""
         },
         "activities": {},
@@ -2250,7 +2250,7 @@
           "intrigue"
         ],
         "description": {
-          "value": "<p><em>\"Everything's a door if you hold it right.\"</em></p><p><strong>Operator</strong> is the Intrigue Calling — the trade that kept its bearers alive after the Shattering. Umbrella: thief, smuggler, spy, courier, fence, hacker, fixer. A profession is a flavor label on the Calling.</p><p><strong>Knack — Underfoot:</strong> In crowds, markets, and streets, the Operator passes unremarked unless actively hunted; Streetwise checks never fumble (at Tier III, also Stealth).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Stealth</strong> rank = tier; secondary <strong>Streetwise</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Intrigue</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Shadow Courier. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Everything's a door if you hold it right.\"</em></p><p><strong>Operator</strong> is the Intrigue Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: thief, smuggler, spy, courier, fence, hacker, fixer. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Underfoot:</strong> In crowds, markets, and streets, the Operator passes unremarked unless actively hunted; Streetwise checks never fumble (at Tier III, also Stealth).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Stealth</strong> rank = tier; secondary <strong>Streetwise</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Intrigue</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Shadow Courier. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -2291,7 +2291,7 @@
     },
     {
       "_id": "NUPoGoGKEki60e7W",
-      "name": "Operator — Apprentice (Tier I)",
+      "name": "Operator \u2014 Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/svg/cowled.svg",
       "system": {
@@ -2303,7 +2303,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Operator — Apprentice</strong> (Tier I).</p><p><strong>Trade — Carry it quiet:</strong> Move a package/message across town, no questions. <span style=\"opacity:0.7\">Standard fee 10 marks (Intrigue).</span></p><p><strong>Trick — Pocketed</strong> <em>(1/scene)</em>: Produce a mundane Tier-I item they plausibly lifted earlier.</p>",
+          "value": "<p><strong>Operator \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Carry it quiet:</strong> Move a package/message across town, no questions. <span style=\"opacity:0.7\">Standard fee 10 marks (Intrigue).</span></p><p><strong>Trick \u2014 Pocketed</strong> <em>(1/scene)</em>: Produce a mundane Tier-I item they plausibly lifted earlier.</p>",
           "chat": ""
         }
       },

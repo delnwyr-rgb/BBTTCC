@@ -128,7 +128,7 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "the East Wall, Allesh-Gilliam, surveying, the Night the Mountain Coughed, construction, the water tower",
-        "notes": "[AG-TREATMENT-2026-07-04] PRIVATE TRUTH — Aldous Plumb. Voice: confident, precise, allergic to the conditional tense. Every sentence is a load-bearing statement. THE WALL IS COSMETIC — he leads with it, unprompted, before anyone asks. SECRET (never told sober, never told drunk, drawn only if a Steward proves a fault in one of his drawings WITHOUT humiliating him): he built a levee-gate upriver, pre-Shattering, that held for thirty years and failed in one night, and the failure was in his original survey — a line he drew where he WANTED the ground to be. He has been re-drawing that structure from memory ever since, hunting for the lie. Every drawing on his walls is that levee wearing a different building's face — that's why they're all slightly wrong. If the Seal quest completes and the wall straightens, he will quietly re-survey at 3am and leave the new survey on Pike's desk with no note; his knowledge updates but he NEVER says the word \"wrong.\" STAGING: office in the water tower base; the leaning wall is visible through his window and he positions himself with his back to it."
+        "notes": "[AG-TREATMENT-2026-07-04] PRIVATE TRUTH \u2014 Aldous Plumb. Voice: confident, precise, allergic to the conditional tense. Every sentence is a load-bearing statement. THE WALL IS COSMETIC \u2014 he leads with it, unprompted, before anyone asks. SECRET (never told sober, never told drunk, drawn only if a Steward proves a fault in one of his drawings WITHOUT humiliating him): he built a levee-gate upriver, pre-Shattering, that held for thirty years and failed in one night, and the failure was in his original survey \u2014 a line he drew where he WANTED the ground to be. He has been re-drawing that structure from memory ever since, hunting for the lie. Every drawing on his walls is that levee wearing a different building's face \u2014 that's why they're all slightly wrong. If the Seal quest completes and the wall straightens, he will quietly re-survey at 3am and leave the new survey on Pike's desk with no note; his knowledge updates but he NEVER says the word \"wrong.\" STAGING: office in the water tower base; the leaning wall is visible through his window and he positions himself with his back to it."
       }
     },
     "tokenflip": {
@@ -296,12 +296,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 0
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -612,7 +612,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-echo-diver=\"v1\" style=\"display:none\"></div>\n<p><em>\"The lions are gone. The wolves are gone. The kings are gone. We're still here. Think about what that means.\"</em></p>\n<p>Echo-Divers are the rats of the new world — and they say it with pride. A rat survives what a lion can't. A rat is already moving when the ceiling falls. A rat threads a collapsing vault without ever touching a trigger plate.</p>\n<p><strong>Creature Type.</strong> Humanoid (Echo-Diver). <strong>Size.</strong> Medium. <strong>Speed.</strong> 6 squares</p>\n<p><strong>Temporal Flinch (1/Soma Break).</strong> You experience the next two seconds as a constant, faint pre-echo. You are <strong>immune to the Surprised condition</strong> while conscious. As a reaction, when you or a creature within 2 squares of you would be hit by an attack you can see, you may move yourself or that creature 1 square — if this moves the target out of the attack's range or line, the attack misses.</p>\n<p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air a comparable Medium creature needs. Reroll the lowest die on Body checks against suffocation, starvation, dehydration, or extreme temperature (auto-fires). You can squeeze through gaps and hold stillness that shouldn't work, and you know it.</p>\n<p><strong>Vault Sight.</strong> Darkvision 12 squares Reroll the lowest die on Perception checks to notice unstable structure, active traps, trigger plates, load-bearing failures, or Spark / chronoflux residue (auto-fires).</p>\n<p><em>Your Echo-Diver heritage grants additional features through advancements (Temporal Afterimage, Strategic Hooks) at character creation.</em></p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDiverTimeSense\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Echo-Diver: Time-Sense</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break (Temporal Flinch) + 3 always-on passives &nbsp;·&nbsp; <strong>Action:</strong> Picker (Temporal Flinch · Niche Survivor · Vault Sight · Cannot Be Surprised) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Click to open the 4-slot picker. Niche Survivor (Body reroll vs environment) and Vault Sight (Perception reroll vs traps/structure/Spark) auto-fire on matching rolls. Surprise immunity surfaces as a Defenses pill.</div>\n</div>",
+          "value": "<div data-ft-canon-echo-diver=\"v1\" style=\"display:none\"></div>\n<p><em>\"The lions are gone. The wolves are gone. The kings are gone. We're still here. Think about what that means.\"</em></p>\n<p>Echo-Divers are the rats of the new world \u2014 and they say it with pride. A rat survives what a lion can't. A rat is already moving when the ceiling falls. A rat threads a collapsing vault without ever touching a trigger plate.</p>\n<p><strong>Creature Type.</strong> Humanoid (Echo-Diver). <strong>Size.</strong> Medium. <strong>Speed.</strong> 6 squares</p>\n<p><strong>Temporal Flinch (1/Soma Break).</strong> You experience the next two seconds as a constant, faint pre-echo. You are <strong>immune to the Surprised condition</strong> while conscious. As a reaction, when you or a creature within 2 squares of you would be hit by an attack you can see, you may move yourself or that creature 1 square \u2014 if this moves the target out of the attack's range or line, the attack misses.</p>\n<p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air a comparable Medium creature needs. Reroll the lowest die on Body checks against suffocation, starvation, dehydration, or extreme temperature (auto-fires). You can squeeze through gaps and hold stillness that shouldn't work, and you know it.</p>\n<p><strong>Vault Sight.</strong> Darkvision 12 squares Reroll the lowest die on Perception checks to notice unstable structure, active traps, trigger plates, load-bearing failures, or Spark / chronoflux residue (auto-fires).</p>\n<p><em>Your Echo-Diver heritage grants additional features through advancements (Temporal Afterimage, Strategic Hooks) at character creation.</em></p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDiverTimeSense\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Echo-Diver: Time-Sense</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break (Temporal Flinch) + 3 always-on passives &nbsp;\u00b7&nbsp; <strong>Action:</strong> Picker (Temporal Flinch \u00b7 Niche Survivor \u00b7 Vault Sight \u00b7 Cannot Be Surprised) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Click to open the 4-slot picker. Niche Survivor (Body reroll vs environment) and Vault Sight (Perception reroll vs traps/structure/Spark) auto-fire on matching rolls. Surprise immunity surfaces as a Defenses pill.</div>\n</div>",
           "chat": ""
         },
         "advancement": [
@@ -761,23 +761,23 @@
               "context": "save",
               "mode": "reroll-lowest",
               "vs": "vs:suffocation",
-              "note": "on Constitution saves against suffocation, starvation, dehydration, and extre…"
+              "note": "on Constitution saves against suffocation, starvation, dehydration, and extre\u2026"
             },
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "on checks to notice unstable structure, active traps, trigger plates, load-be…"
+              "note": "on checks to notice unstable structure, active traps, trigger plates, load-be\u2026"
             },
             {
               "context": "save",
               "mode": "reroll-lowest",
               "vs": "vs:suffocation",
-              "note": "Constitution saves against suffocation, starvation, dehydration, and extreme …"
+              "note": "Constitution saves against suffocation, starvation, dehydration, and extreme \u2026"
             },
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "checks to notice unstable structure, active traps, trigger plates, load-beari…"
+              "note": "checks to notice unstable structure, active traps, trigger plates, load-beari\u2026"
             },
             {
               "context": "check",
@@ -861,7 +861,7 @@
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Echo-Diver heritage: Empyrean.</p><p><em>“Something is about to happen. Move.”</em></p><p><strong>Echo-Diver (Empyrean).</strong> Your time-sense tilts forward. You feel weather before it arrives — not the storm outside, the storm of events. Empyrean Echo-Divers are the ones who always get out of the room five seconds before the bad thing, and can never quite explain how.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Echo-Diver).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Echo-Diver does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Echo-Diver Core: Half-Second Inheritance</h3><p><em>Shared across all Echo-Diver heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Temporal Flinch.</strong> You cannot be surprised while conscious. Once per scene, when you or an ally within 2 squares would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 1 square If this moves the target out of the attack's range or line, the attack misses.</p></li><li><p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air that a comparable Medium creature needs. You reroll the lowest die on Body checks against suffocation, starvation, dehydration, and extreme temperature.</p></li><li><p><strong>Vault Sight.</strong> You have low-light vision out to 12 squares You reroll the lowest die on Mind (Perception) checks to notice unstable structure, active traps, trigger plates, load-bearing failure, and temporal or Spark residue.</p></li><li><p><strong>Rat Inheritance.</strong> You can squeeze through spaces at least one foot wide without halving your movement, and you can hold stillness that shouldn't work.</p></li></ul><h3>Empyrean Traits</h3><ul><li><p><strong>Stratospheric Resistance.</strong> You have resistance to chemical damage with the lightning flavor, kinetic damage with the thunder flavor, and psychic damage. The sky takes its swing at you constantly. It misses.</p></li><li><p><strong>Weathered.</strong> You reroll the lowest die on Mind (Perception) checks that rely on hearing or air currents. You always know which way the wind is blowing. Always.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Soft Power OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Open Sky / Plateau / High-Altitude</em> hexes, your faction gains +1 initiative on all conflicts resolved in those hexes.</p></li><li><p><strong>Storm Warning.</strong> Once per Strategic Turn, when the GM reveals an incoming hazard or attack on your faction, you may force the GM to disclose one additional detail about it. You saw it coming.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Temporal Flinch</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Reaction  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When an attack would hit you or an ally within 2 squares, shift them 1 square If that breaks range/LoS, the attack misses.</span></p></div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Echo-Diver heritage: Empyrean.</p><p><em>\u201cSomething is about to happen. Move.\u201d</em></p><p><strong>Echo-Diver (Empyrean).</strong> Your time-sense tilts forward. You feel weather before it arrives \u2014 not the storm outside, the storm of events. Empyrean Echo-Divers are the ones who always get out of the room five seconds before the bad thing, and can never quite explain how.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Echo-Diver).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Echo-Diver does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Echo-Diver Core: Half-Second Inheritance</h3><p><em>Shared across all Echo-Diver heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Temporal Flinch.</strong> You cannot be surprised while conscious. Once per scene, when you or an ally within 2 squares would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 1 square If this moves the target out of the attack's range or line, the attack misses.</p></li><li><p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air that a comparable Medium creature needs. You reroll the lowest die on Body checks against suffocation, starvation, dehydration, and extreme temperature.</p></li><li><p><strong>Vault Sight.</strong> You have low-light vision out to 12 squares You reroll the lowest die on Mind (Perception) checks to notice unstable structure, active traps, trigger plates, load-bearing failure, and temporal or Spark residue.</p></li><li><p><strong>Rat Inheritance.</strong> You can squeeze through spaces at least one foot wide without halving your movement, and you can hold stillness that shouldn't work.</p></li></ul><h3>Empyrean Traits</h3><ul><li><p><strong>Stratospheric Resistance.</strong> You have resistance to chemical damage with the lightning flavor, kinetic damage with the thunder flavor, and psychic damage. The sky takes its swing at you constantly. It misses.</p></li><li><p><strong>Weathered.</strong> You reroll the lowest die on Mind (Perception) checks that rely on hearing or air currents. You always know which way the wind is blowing. Always.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Soft Power OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Open Sky / Plateau / High-Altitude</em> hexes, your faction gains +1 initiative on all conflicts resolved in those hexes.</p></li><li><p><strong>Storm Warning.</strong> Once per Strategic Turn, when the GM reveals an incoming hazard or attack on your faction, you may force the GM to disclose one additional detail about it. You saw it coming.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Temporal Flinch</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene \u00a0\u00b7\u00a0 <strong>Action:</strong> Reaction \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When an attack would hit you or an ally within 2 squares, shift them 1 square If that breaks range/LoS, the attack misses.</span></p></div>",
           "chat": ""
         },
         "advancement": [
@@ -935,19 +935,19 @@
               "attribute": "body",
               "mode": "reroll-lowest",
               "vs": "vs:suffocation",
-              "note": "on Body checks against suffocation, starvation, dehydration, and extreme temp…"
+              "note": "on Body checks against suffocation, starvation, dehydration, and extreme temp\u2026"
             },
             {
               "context": "check",
               "skill": "perception",
               "mode": "reroll-lowest",
-              "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg…"
+              "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg\u2026"
             },
             {
               "context": "check",
               "attribute": "mind",
               "mode": "reroll-lowest",
-              "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg…"
+              "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg\u2026"
             },
             {
               "context": "check",
@@ -964,19 +964,19 @@
               "attribute": "body",
               "mode": "reroll-lowest",
               "vs": "vs:suffocation",
-              "note": "Body checks against suffocation, starvation, dehydration, and extreme tempera…"
+              "note": "Body checks against suffocation, starvation, dehydration, and extreme tempera\u2026"
             },
             {
               "context": "check",
               "skill": "perception",
               "mode": "reroll-lowest",
-              "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger …"
+              "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger \u2026"
             },
             {
               "context": "check",
               "attribute": "mind",
               "mode": "reroll-lowest",
-              "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger …"
+              "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger \u2026"
             },
             {
               "context": "check",
@@ -1055,7 +1055,7 @@
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-echo-diver=\"v1\" style=\"display:none\"></div><p><em>\"It's not that you're faster. It's that the moment is slower, on your side of it.\"</em></p><p><strong>Stormread Initiative (passive).</strong> Flat +2 bonus to initiative — auto-applied via system.derived.initiative.bonus.</p><p><strong>Stormread (1/Soma Break).</strong> Bonus action — deliver a warning to one willing ally within 6 squares who can hear and understand you. That ally may immediately use their reaction to move up to half their speed without provoking reaction strikes.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDivEmpyreanStormread\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Stormread</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (active) + passive +2 init  ·  <strong>Action:</strong> Picker (Stormread · Stormread Initiative)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Active: bonus-action ally warning grants them a half-speed reaction-move w/o provoking. Passive: +2 initiative auto-applied.</span></p></div>",
+          "value": "<div data-ft-canon-echo-diver=\"v1\" style=\"display:none\"></div><p><em>\"It's not that you're faster. It's that the moment is slower, on your side of it.\"</em></p><p><strong>Stormread Initiative (passive).</strong> Flat +2 bonus to initiative \u2014 auto-applied via system.derived.initiative.bonus.</p><p><strong>Stormread (1/Soma Break).</strong> Bonus action \u2014 deliver a warning to one willing ally within 6 squares who can hear and understand you. That ally may immediately use their reaction to move up to half their speed without provoking reaction strikes.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDivEmpyreanStormread\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Stormread</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (active) + passive +2 init \u00a0\u00b7\u00a0 <strong>Action:</strong> Picker (Stormread \u00b7 Stormread Initiative) \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Active: bonus-action ally warning grants them a half-speed reaction-move w/o provoking. Passive: +2 initiative auto-applied.</span></p></div>",
           "chat": ""
         },
         "advancement": {},
@@ -1333,7 +1333,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Everything connects. Including you.”</em></p><p><strong>Archetype (Bad Eden): The World (Integrator).</strong> You see systems as wholes. Supply, ritual, morale, politics, travel, violence, myth — to you, these are not separate tracks, but one machine with many faces.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens cross-system alignment and broad operational cohesion. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Diplomacy</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cEverything connects. Including you.\u201d</em></p><p><strong>Archetype (Bad Eden): The World (Integrator).</strong> You see systems as wholes. Supply, ritual, morale, politics, travel, violence, myth \u2014 to you, these are not separate tracks, but one machine with many faces.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens cross-system alignment and broad operational cohesion. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Diplomacy</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1442,12 +1442,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden – Archetype: The World (Integrator) (Tier 1)",
+          "custom": "Bad Eden \u2013 Archetype: The World (Integrator) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — The World (Integrator)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Investigation and Insight.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) \u2014 The World (Integrator)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Investigation and Insight.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1660,14 +1660,14 @@
       "system": {
         "category": "technique",
         "source": {
-          "custom": "Bad Eden – Crew Type: Gridbreakers (Tier 1)",
+          "custom": "Bad Eden \u2013 Crew Type: Gridbreakers (Tier 1)",
           "revision": 2,
           "rules": "2024",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Gridbreakers</strong></p><p><strong>“Everything broken still remembers how it worked.”</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><p><em>You’ve learned the first law of a dead city: if it still sparks, it still negotiates.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Investigation and the Tinkering aptitude.</li><li><strong>Strategic:</strong> In Ruins or Urban Wreckage hexes, salvage and material recovery are easier and more reliable.</li></ul>",
+          "value": "<p><strong>Tier 1 \u2014 Gridbreakers</strong></p><p><strong>\u201cEverything broken still remembers how it worked.\u201d</strong></p><p>Gridbreakers treat dead cities like sleeping machines. They know how to pry power from broken substations, wake lights in abandoned towers, and make a ruin choose sides. Where others see debris, they see leverage.</p><p><em>You\u2019ve learned the first law of a dead city: if it still sparks, it still negotiates.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Investigation and the Tinkering aptitude.</li><li><strong>Strategic:</strong> In Ruins or Urban Wreckage hexes, salvage and material recovery are easier and more reliable.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-gridbreakers-t1",
@@ -1837,7 +1837,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Prophet / Oracle</strong></p><p><strong>“You don’t know the future. You just know when something has started.”</strong></p><p>At Tier 1, you begin catching the edge of events before they fully arrive. Not enough to command them. Enough to stop being surprised.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> and <strong>Perception</strong></li><li>1/Soma Break, ask the GM one focused omen-question about an immediate situation, route, or known danger; the answer should be truthful but limited, symbolic, or pressure-based</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a planning-heavy, reconnaissance, or intrigue-forward action, gain <strong>+2</strong> to one relevant OP roll by declaring what sign your faction is acting on</li></ul><p><strong>Cost:</strong> early warning is rarely comfortable. Expect unease, distraction, or tension when you sense something going wrong before anyone else can justify reacting to it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Omen Question</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Ask the GM one focused omen-question. Truthful but limited / symbolic / pressure-based.</div>\n</div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 \u2014 Prophet / Oracle</strong></p><p><strong>\u201cYou don\u2019t know the future. You just know when something has started.\u201d</strong></p><p>At Tier 1, you begin catching the edge of events before they fully arrive. Not enough to command them. Enough to stop being surprised.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> and <strong>Perception</strong></li><li>1/Soma Break, ask the GM one focused omen-question about an immediate situation, route, or known danger; the answer should be truthful but limited, symbolic, or pressure-based</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a planning-heavy, reconnaissance, or intrigue-forward action, gain <strong>+2</strong> to one relevant OP roll by declaring what sign your faction is acting on</li></ul><p><strong>Cost:</strong> early warning is rarely comfortable. Expect unease, distraction, or tension when you sense something going wrong before anyone else can justify reacting to it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"prophT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Omen Question</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;\u00b7&nbsp; <strong>Action:</strong> Free &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Ask the GM one focused omen-question. Truthful but limited / symbolic / pressure-based.</div>\n</div>",
           "chat": ""
         },
         "advancement": {},
@@ -2173,7 +2173,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<h2>Deep Well</h2><p><em>Your reservoir of will runs deeper than most stewards'.</em></p><hr /><h3>Rules</h3><p>Your maximum <strong>Clarity</strong> increases by <strong>2</strong>. A deeper reservoir lets you hold more manifestations at once and absorb a bad misfire without running dry.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">⚙ Applies automatically: +2 Clarity max.</p>",
+          "value": "<h2>Deep Well</h2><p><em>Your reservoir of will runs deeper than most stewards'.</em></p><hr /><h3>Rules</h3><p>Your maximum <strong>Clarity</strong> increases by <strong>2</strong>. A deeper reservoir lets you hold more manifestations at once and absorb a bad misfire without running dry.</p><p style=\"font-size:0.74rem;opacity:0.7;margin:0.5rem 0 0\">\u2699 Applies automatically: +2 Clarity max.</p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_deep_well",
@@ -2235,7 +2235,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>You keep a quiet accounting of what should have gone wrong.</em></p><p>When you use a <strong>refraction die</strong> from Foresight Refraction to alter a roll and the result changes a <strong>failure into a success</strong>, mark one tally in your <strong>ledger</strong>.</p><ul><li>At the end of the scene, if you have at least <strong>2 tallies</strong>, you gain  before a future scene (chosen by you) as the timeline pre-cooperates with your entry.</li><li>After you receive this initiative bonus once, your ledger resets to 0 tallies.</li></ul><p>This is purely narrative bookkeeping: you’re getting credit for every disaster you quietly deflected.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlForesightLedger\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Lens Ledger</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Tally-based &nbsp;·&nbsp; <strong>Action:</strong> Free (passive bookkeeping) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When a Foresight Refraction die converts a failure into a success, mark a tally. With 2+ tallies at scene end, gain an initiative bonus on a future scene of your choice; ledger then resets to 0.</div>\n</div>",
+          "value": "<p><em>You keep a quiet accounting of what should have gone wrong.</em></p><p>When you use a <strong>refraction die</strong> from Foresight Refraction to alter a roll and the result changes a <strong>failure into a success</strong>, mark one tally in your <strong>ledger</strong>.</p><ul><li>At the end of the scene, if you have at least <strong>2 tallies</strong>, you gain  before a future scene (chosen by you) as the timeline pre-cooperates with your entry.</li><li>After you receive this initiative bonus once, your ledger resets to 0 tallies.</li></ul><p>This is purely narrative bookkeeping: you\u2019re getting credit for every disaster you quietly deflected.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlForesightLedger\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Lens Ledger</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> Tally-based &nbsp;\u00b7&nbsp; <strong>Action:</strong> Free (passive bookkeeping) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When a Foresight Refraction die converts a failure into a success, mark a tally. With 2+ tallies at scene end, gain an initiative bonus on a future scene of your choice; ledger then resets to 0.</div>\n</div>",
           "chat": ""
         },
         "activities": {},
@@ -2303,7 +2303,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Precognition through a repaired pane.</em></p><p>At the start of a <strong>scene</strong> (combat encounter, tense negotiation, or major exploration beat), roll <strong>2d20</strong> in secret and record the results as <strong>refraction dice</strong>.</p><ul><li>Before any creature (including you) rolls a 2d10x10 for an attack, attribute check, or defense check, you may choose to <strong>replace</strong> that roll with one of your stored refraction dice.</li><li>You must decide before the 2d10x10 is rolled. Once used, a refraction die is expended.</li><li>You refresh your refraction dice at the start of each new qualifying scene.</li></ul><p><strong>Strategic Layer.</strong> Once per <strong>Strategic Turn</strong>, you may spend <strong>1 Intrigue OP</strong> to force an enemy faction to <strong>reroll</strong> one of its strategic 2d10x10-based checks (GM chooses the exact check if multiple candidates exist). You must accept the new result.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlForesightRefr\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Foresight Refraction</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 2d20/scene + 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Free (declare before 2d10x10) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">At scene start, roll 2d20 in secret as refraction dice. Before any 2d10x10 (yours or anyone's) replace it with one stored die — declared before the roll. Strategic: 1/Turn, spend 1 Intrigue OP to force an enemy faction reroll.</div>\n</div>",
+          "value": "<p><em>Precognition through a repaired pane.</em></p><p>At the start of a <strong>scene</strong> (combat encounter, tense negotiation, or major exploration beat), roll <strong>2d20</strong> in secret and record the results as <strong>refraction dice</strong>.</p><ul><li>Before any creature (including you) rolls a 2d10x10 for an attack, attribute check, or defense check, you may choose to <strong>replace</strong> that roll with one of your stored refraction dice.</li><li>You must decide before the 2d10x10 is rolled. Once used, a refraction die is expended.</li><li>You refresh your refraction dice at the start of each new qualifying scene.</li></ul><p><strong>Strategic Layer.</strong> Once per <strong>Strategic Turn</strong>, you may spend <strong>1 Intrigue OP</strong> to force an enemy faction to <strong>reroll</strong> one of its strategic 2d10x10-based checks (GM chooses the exact check if multiple candidates exist). You must accept the new result.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlForesightRefr\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Foresight Refraction</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 2d20/scene + 1/Strategic Turn &nbsp;\u00b7&nbsp; <strong>Action:</strong> Free (declare before 2d10x10) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">At scene start, roll 2d20 in secret as refraction dice. Before any 2d10x10 (yours or anyone's) replace it with one stored die \u2014 declared before the roll. Strategic: 1/Turn, spend 1 Intrigue OP to force an enemy faction reroll.</div>\n</div>",
           "chat": ""
         },
         "activities": {},
@@ -2373,7 +2373,7 @@
           "mind"
         ],
         "description": {
-          "value": "<p><em>\"It's not obscure. You just haven't read it.\"</em></p><p><strong>Savant</strong> is the Mind Calling — the trade that kept its bearers alive after the Shattering. Umbrella: scholar, engineer, medic, archivist, detective, translator. A profession is a flavor label on the Calling.</p><p><strong>Knack — Library-Brain:</strong> Lore and Investigation checks never fumble; identifies items of tier ≤ own tier on sight (at Tier III, including technomagical origin).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Lore</strong> rank = tier; secondary <strong>Investigation</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Wyrdlens Adept or Cosmic Linguist. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"It's not obscure. You just haven't read it.\"</em></p><p><strong>Savant</strong> is the Mind Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: scholar, engineer, medic, archivist, detective, translator. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Library-Brain:</strong> Lore and Investigation checks never fumble; identifies items of tier \u2264 own tier on sight (at Tier III, including technomagical origin).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Lore</strong> rank = tier; secondary <strong>Investigation</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy or Soft Power (GM picks by job)</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Wyrdlens Adept or Cosmic Linguist. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -2414,7 +2414,7 @@
     },
     {
       "_id": "v6Zticfjn0qAN2L8",
-      "name": "Savant — Apprentice (Tier I)",
+      "name": "Savant \u2014 Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/svg/book.svg",
       "system": {
@@ -2426,7 +2426,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Savant — Apprentice</strong> (Tier I).</p><p><strong>Trade — Appraise / identify:</strong> What it is, what it's worth, whether it's what the seller claims. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — I've Read About This</strong> <em>(1/scene)</em>: Explain the situation; one ally gets +2 on their next relevant check.</p>",
+          "value": "<p><strong>Savant \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Appraise / identify:</strong> What it is, what it's worth, whether it's what the seller claims. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick \u2014 I've Read About This</strong> <em>(1/scene)</em>: Explain the situation; one ally gets +2 on their next relevant check.</p>",
           "chat": ""
         }
       },

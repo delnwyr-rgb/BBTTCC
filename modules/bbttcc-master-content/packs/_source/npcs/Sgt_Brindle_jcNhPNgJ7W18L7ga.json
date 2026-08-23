@@ -182,12 +182,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 0
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -444,7 +444,7 @@
           "body"
         ],
         "description": {
-          "value": "<p><em>\"The Shattering didn't end the work. Nothing ends the work.\"</em></p><p><strong>Stalwart</strong> is the Body Calling — the trade that kept its bearers alive after the Shattering. Umbrella: laborer, teamster, forager, wall-crew, rig-hand, survivor. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hazard-Hardened:</strong> Reduce each environmental hazard/radiation tick by 1 (by 2 at Tier III), and labor output counts double for facility/build work.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Athletics</strong> rank = tier; secondary <strong>Plating</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Bulwark or Soul-Smith. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"The Shattering didn't end the work. Nothing ends the work.\"</em></p><p><strong>Stalwart</strong> is the Body Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: laborer, teamster, forager, wall-crew, rig-hand, survivor. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Hazard-Hardened:</strong> Reduce each environmental hazard/radiation tick by 1 (by 2 at Tier III), and labor output counts double for facility/build work.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Athletics</strong> rank = tier; secondary <strong>Plating</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Bulwark or Soul-Smith. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -485,7 +485,7 @@
     },
     {
       "_id": "YibIq6EuhMCUJiQT",
-      "name": "Stalwart — Apprentice (Tier I)",
+      "name": "Stalwart \u2014 Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/svg/anchor.svg",
       "system": {
@@ -497,7 +497,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Stalwart — Apprentice</strong> (Tier I).</p><p><strong>Trade — Haul and raise:</strong> A day's heavy labor — cargo moved, wall raised, field cleared. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy).</span></p><p><strong>Trick — Put Your Back Into It</strong> <em>(1/scene)</em>: Auto-succeed one feat of raw strength or endurance of tier-appropriate difficulty.</p>",
+          "value": "<p><strong>Stalwart \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Haul and raise:</strong> A day's heavy labor \u2014 cargo moved, wall raised, field cleared. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy).</span></p><p><strong>Trick \u2014 Put Your Back Into It</strong> <em>(1/scene)</em>: Auto-succeed one feat of raw strength or endurance of tier-appropriate difficulty.</p>",
           "chat": ""
         }
       },
@@ -544,7 +544,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-echo-diver=\"v1\" style=\"display:none\"></div>\n<p><em>\"The lions are gone. The wolves are gone. The kings are gone. We're still here. Think about what that means.\"</em></p>\n<p>Echo-Divers are the rats of the new world — and they say it with pride. A rat survives what a lion can't. A rat is already moving when the ceiling falls. A rat threads a collapsing vault without ever touching a trigger plate.</p>\n<p><strong>Creature Type.</strong> Humanoid (Echo-Diver). <strong>Size.</strong> Medium. <strong>Speed.</strong> 6 squares</p>\n<p><strong>Temporal Flinch (1/Soma Break).</strong> You experience the next two seconds as a constant, faint pre-echo. You are <strong>immune to the Surprised condition</strong> while conscious. As a reaction, when you or a creature within 2 squares of you would be hit by an attack you can see, you may move yourself or that creature 1 square — if this moves the target out of the attack's range or line, the attack misses.</p>\n<p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air a comparable Medium creature needs. Reroll the lowest die on Body checks against suffocation, starvation, dehydration, or extreme temperature (auto-fires). You can squeeze through gaps and hold stillness that shouldn't work, and you know it.</p>\n<p><strong>Vault Sight.</strong> Darkvision 12 squares Reroll the lowest die on Perception checks to notice unstable structure, active traps, trigger plates, load-bearing failures, or Spark / chronoflux residue (auto-fires).</p>\n<p><em>Your Echo-Diver heritage grants additional features through advancements (Temporal Afterimage, Strategic Hooks) at character creation.</em></p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDiverTimeSense\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Echo-Diver: Time-Sense</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break (Temporal Flinch) + 3 always-on passives &nbsp;·&nbsp; <strong>Action:</strong> Picker (Temporal Flinch · Niche Survivor · Vault Sight · Cannot Be Surprised) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Click to open the 4-slot picker. Niche Survivor (Body reroll vs environment) and Vault Sight (Perception reroll vs traps/structure/Spark) auto-fire on matching rolls. Surprise immunity surfaces as a Defenses pill.</div>\n</div>",
+          "value": "<div data-ft-canon-echo-diver=\"v1\" style=\"display:none\"></div>\n<p><em>\"The lions are gone. The wolves are gone. The kings are gone. We're still here. Think about what that means.\"</em></p>\n<p>Echo-Divers are the rats of the new world \u2014 and they say it with pride. A rat survives what a lion can't. A rat is already moving when the ceiling falls. A rat threads a collapsing vault without ever touching a trigger plate.</p>\n<p><strong>Creature Type.</strong> Humanoid (Echo-Diver). <strong>Size.</strong> Medium. <strong>Speed.</strong> 6 squares</p>\n<p><strong>Temporal Flinch (1/Soma Break).</strong> You experience the next two seconds as a constant, faint pre-echo. You are <strong>immune to the Surprised condition</strong> while conscious. As a reaction, when you or a creature within 2 squares of you would be hit by an attack you can see, you may move yourself or that creature 1 square \u2014 if this moves the target out of the attack's range or line, the attack misses.</p>\n<p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air a comparable Medium creature needs. Reroll the lowest die on Body checks against suffocation, starvation, dehydration, or extreme temperature (auto-fires). You can squeeze through gaps and hold stillness that shouldn't work, and you know it.</p>\n<p><strong>Vault Sight.</strong> Darkvision 12 squares Reroll the lowest die on Perception checks to notice unstable structure, active traps, trigger plates, load-bearing failures, or Spark / chronoflux residue (auto-fires).</p>\n<p><em>Your Echo-Diver heritage grants additional features through advancements (Temporal Afterimage, Strategic Hooks) at character creation.</em></p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDiverTimeSense\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Echo-Diver: Time-Sense</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break (Temporal Flinch) + 3 always-on passives &nbsp;\u00b7&nbsp; <strong>Action:</strong> Picker (Temporal Flinch \u00b7 Niche Survivor \u00b7 Vault Sight \u00b7 Cannot Be Surprised) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Click to open the 4-slot picker. Niche Survivor (Body reroll vs environment) and Vault Sight (Perception reroll vs traps/structure/Spark) auto-fire on matching rolls. Surprise immunity surfaces as a Defenses pill.</div>\n</div>",
           "chat": ""
         },
         "advancement": [
@@ -693,23 +693,23 @@
               "context": "save",
               "mode": "reroll-lowest",
               "vs": "vs:suffocation",
-              "note": "on Constitution saves against suffocation, starvation, dehydration, and extre…"
+              "note": "on Constitution saves against suffocation, starvation, dehydration, and extre\u2026"
             },
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "on checks to notice unstable structure, active traps, trigger plates, load-be…"
+              "note": "on checks to notice unstable structure, active traps, trigger plates, load-be\u2026"
             },
             {
               "context": "save",
               "mode": "reroll-lowest",
               "vs": "vs:suffocation",
-              "note": "Constitution saves against suffocation, starvation, dehydration, and extreme …"
+              "note": "Constitution saves against suffocation, starvation, dehydration, and extreme \u2026"
             },
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "checks to notice unstable structure, active traps, trigger plates, load-beari…"
+              "note": "checks to notice unstable structure, active traps, trigger plates, load-beari\u2026"
             },
             {
               "context": "check",
@@ -793,7 +793,7 @@
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Echo-Diver heritage: Empyrean.</p><p><em>“Something is about to happen. Move.”</em></p><p><strong>Echo-Diver (Empyrean).</strong> Your time-sense tilts forward. You feel weather before it arrives — not the storm outside, the storm of events. Empyrean Echo-Divers are the ones who always get out of the room five seconds before the bad thing, and can never quite explain how.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Echo-Diver).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Echo-Diver does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Echo-Diver Core: Half-Second Inheritance</h3><p><em>Shared across all Echo-Diver heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Temporal Flinch.</strong> You cannot be surprised while conscious. Once per scene, when you or an ally within 2 squares would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 1 square If this moves the target out of the attack's range or line, the attack misses.</p></li><li><p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air that a comparable Medium creature needs. You reroll the lowest die on Body checks against suffocation, starvation, dehydration, and extreme temperature.</p></li><li><p><strong>Vault Sight.</strong> You have low-light vision out to 12 squares You reroll the lowest die on Mind (Perception) checks to notice unstable structure, active traps, trigger plates, load-bearing failure, and temporal or Spark residue.</p></li><li><p><strong>Rat Inheritance.</strong> You can squeeze through spaces at least one foot wide without halving your movement, and you can hold stillness that shouldn't work.</p></li></ul><h3>Empyrean Traits</h3><ul><li><p><strong>Stratospheric Resistance.</strong> You have resistance to chemical damage with the lightning flavor, kinetic damage with the thunder flavor, and psychic damage. The sky takes its swing at you constantly. It misses.</p></li><li><p><strong>Weathered.</strong> You reroll the lowest die on Mind (Perception) checks that rely on hearing or air currents. You always know which way the wind is blowing. Always.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Soft Power OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Open Sky / Plateau / High-Altitude</em> hexes, your faction gains +1 initiative on all conflicts resolved in those hexes.</p></li><li><p><strong>Storm Warning.</strong> Once per Strategic Turn, when the GM reveals an incoming hazard or attack on your faction, you may force the GM to disclose one additional detail about it. You saw it coming.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Temporal Flinch</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Reaction  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When an attack would hit you or an ally within 2 squares, shift them 1 square If that breaks range/LoS, the attack misses.</span></p></div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Echo-Diver heritage: Empyrean.</p><p><em>\u201cSomething is about to happen. Move.\u201d</em></p><p><strong>Echo-Diver (Empyrean).</strong> Your time-sense tilts forward. You feel weather before it arrives \u2014 not the storm outside, the storm of events. Empyrean Echo-Divers are the ones who always get out of the room five seconds before the bad thing, and can never quite explain how.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Echo-Diver).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Echo-Diver does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Echo-Diver Core: Half-Second Inheritance</h3><p><em>Shared across all Echo-Diver heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Temporal Flinch.</strong> You cannot be surprised while conscious. Once per scene, when you or an ally within 2 squares would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 1 square If this moves the target out of the attack's range or line, the attack misses.</p></li><li><p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air that a comparable Medium creature needs. You reroll the lowest die on Body checks against suffocation, starvation, dehydration, and extreme temperature.</p></li><li><p><strong>Vault Sight.</strong> You have low-light vision out to 12 squares You reroll the lowest die on Mind (Perception) checks to notice unstable structure, active traps, trigger plates, load-bearing failure, and temporal or Spark residue.</p></li><li><p><strong>Rat Inheritance.</strong> You can squeeze through spaces at least one foot wide without halving your movement, and you can hold stillness that shouldn't work.</p></li></ul><h3>Empyrean Traits</h3><ul><li><p><strong>Stratospheric Resistance.</strong> You have resistance to chemical damage with the lightning flavor, kinetic damage with the thunder flavor, and psychic damage. The sky takes its swing at you constantly. It misses.</p></li><li><p><strong>Weathered.</strong> You reroll the lowest die on Mind (Perception) checks that rely on hearing or air currents. You always know which way the wind is blowing. Always.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Soft Power OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Open Sky / Plateau / High-Altitude</em> hexes, your faction gains +1 initiative on all conflicts resolved in those hexes.</p></li><li><p><strong>Storm Warning.</strong> Once per Strategic Turn, when the GM reveals an incoming hazard or attack on your faction, you may force the GM to disclose one additional detail about it. You saw it coming.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Temporal Flinch</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene \u00a0\u00b7\u00a0 <strong>Action:</strong> Reaction \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When an attack would hit you or an ally within 2 squares, shift them 1 square If that breaks range/LoS, the attack misses.</span></p></div>",
           "chat": ""
         },
         "advancement": [
@@ -867,19 +867,19 @@
               "attribute": "body",
               "mode": "reroll-lowest",
               "vs": "vs:suffocation",
-              "note": "on Body checks against suffocation, starvation, dehydration, and extreme temp…"
+              "note": "on Body checks against suffocation, starvation, dehydration, and extreme temp\u2026"
             },
             {
               "context": "check",
               "skill": "perception",
               "mode": "reroll-lowest",
-              "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg…"
+              "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg\u2026"
             },
             {
               "context": "check",
               "attribute": "mind",
               "mode": "reroll-lowest",
-              "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg…"
+              "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg\u2026"
             },
             {
               "context": "check",
@@ -896,19 +896,19 @@
               "attribute": "body",
               "mode": "reroll-lowest",
               "vs": "vs:suffocation",
-              "note": "Body checks against suffocation, starvation, dehydration, and extreme tempera…"
+              "note": "Body checks against suffocation, starvation, dehydration, and extreme tempera\u2026"
             },
             {
               "context": "check",
               "skill": "perception",
               "mode": "reroll-lowest",
-              "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger …"
+              "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger \u2026"
             },
             {
               "context": "check",
               "attribute": "mind",
               "mode": "reroll-lowest",
-              "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger …"
+              "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger \u2026"
             },
             {
               "context": "check",
@@ -987,7 +987,7 @@
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-echo-diver=\"v1\" style=\"display:none\"></div><p><em>\"It's not that you're faster. It's that the moment is slower, on your side of it.\"</em></p><p><strong>Stormread Initiative (passive).</strong> Flat +2 bonus to initiative — auto-applied via system.derived.initiative.bonus.</p><p><strong>Stormread (1/Soma Break).</strong> Bonus action — deliver a warning to one willing ally within 6 squares who can hear and understand you. That ally may immediately use their reaction to move up to half their speed without provoking reaction strikes.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDivEmpyreanStormread\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Stormread</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (active) + passive +2 init  ·  <strong>Action:</strong> Picker (Stormread · Stormread Initiative)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Active: bonus-action ally warning grants them a half-speed reaction-move w/o provoking. Passive: +2 initiative auto-applied.</span></p></div>",
+          "value": "<div data-ft-canon-echo-diver=\"v1\" style=\"display:none\"></div><p><em>\"It's not that you're faster. It's that the moment is slower, on your side of it.\"</em></p><p><strong>Stormread Initiative (passive).</strong> Flat +2 bonus to initiative \u2014 auto-applied via system.derived.initiative.bonus.</p><p><strong>Stormread (1/Soma Break).</strong> Bonus action \u2014 deliver a warning to one willing ally within 6 squares who can hear and understand you. That ally may immediately use their reaction to move up to half their speed without provoking reaction strikes.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDivEmpyreanStormread\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Stormread</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (active) + passive +2 init \u00a0\u00b7\u00a0 <strong>Action:</strong> Picker (Stormread \u00b7 Stormread Initiative) \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Active: bonus-action ally warning grants them a half-speed reaction-move w/o provoking. Passive: +2 initiative auto-applied.</span></p></div>",
           "chat": ""
         },
         "advancement": {},

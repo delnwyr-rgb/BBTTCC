@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "A would-be hero who took on a hex-pact to win and lost in slow motion.",
     "details": {
-      "level": 3,
+      "level": 13,
       "tier": 3,
       "statPoints": 0,
       "skillPoints": 0
@@ -200,7 +200,7 @@
             "ransom": 5400,
             "currency": "violence",
             "gmOverride": false,
-            "notes": "TIII medium brute (bestiary) — bounty 3240 / hire 8100 / ransom 5400 marks (paid in violence)"
+            "notes": "TIII medium brute (bestiary) \u2014 bounty 3240 / hire 8100 / ransom 5400 marks (paid in violence)"
           }
         }
       }
@@ -448,7 +448,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII attack × 1",
+                "notes": "TIII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 180
               }
@@ -680,7 +680,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 15 ft. — targets roll vs Resolve (DC 13). Half damage on success. The champion screams the name of who they were. Failed-save targets are Shaken until end of next turn AND lose the ability to take Reactions until then. Recharge 5–6.",
+        "effect": "Radius 15 ft. \u2014 targets roll vs Resolve (DC 13). Half damage on success. The champion screams the name of who they were. Failed-save targets are Shaken until end of next turn AND lose the ability to take Reactions until then. Recharge 5\u20136.",
         "flavor": "They name themselves, and the room flinches. Their own ghost recoils.",
         "manifestation": {
           "tier": 1,
@@ -736,7 +736,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII save × 1",
+                "notes": "TIII save \u00d7 1",
                 "bound": "free",
                 "saleBack": 180
               }
@@ -745,7 +745,7 @@
         },
         "autoanimations": {
           "id": "ft-taken-vow-rage-recharge-5-6-",
-          "label": "Taken-Vow Rage (Recharge 5–6)",
+          "label": "Taken-Vow Rage (Recharge 5\u20136)",
           "macro": {
             "enable": false,
             "playWhen": "0"

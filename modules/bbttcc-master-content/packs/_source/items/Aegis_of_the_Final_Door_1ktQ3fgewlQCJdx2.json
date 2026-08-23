@@ -10,7 +10,7 @@
       "qliphothic",
       "psychic"
     ],
-    "armorSkill": "warding",
+    "armorSkill": "bracing",
     "equipped": false,
     "tags": [
       "shield",
@@ -21,7 +21,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A great round shield said to have been the last thing standing at a threshold no one names. Its face is featureless save for a single closed ring; the metal does not reflect, only quiets. Those who carry it report the world's whispering simply… stops at the rim.</p><p><strong>The Closed Ring.</strong> Resists qliphothic and psychic. The bearer cannot be charmed or compelled while it is raised.</p><p><strong>Soulbound.</strong> Binds at first attunement and cannot be re-bonded.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Shield</li>\n  <li><strong>Defense:</strong> Guard +3, Resolve +4</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic, Psychic</li>\n  <li><strong>Immune to:</strong> Charmed, Compelled</li>\n  <li><strong>Tier:</strong> IV</li>\n  <li><strong>Cost:</strong> 2025 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>A great round shield said to have been the last thing standing at a threshold no one names. Its face is featureless save for a single closed ring; the metal does not reflect, only quiets. Those who carry it report the world's whispering simply\u2026 stops at the rim.</p><p><strong>The Closed Ring.</strong> Resists qliphothic and psychic. The bearer cannot be charmed or compelled while it is raised.</p><p><strong>Soulbound.</strong> Binds at first attunement and cannot be re-bonded.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Shield</li>\n  <li><strong>Defense:</strong> Guard +3, Resolve +4</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic, Psychic</li>\n  <li><strong>Immune to:</strong> Charmed, Compelled</li>\n  <li><strong>Tier:</strong> IV</li>\n  <li><strong>Cost:</strong> 2025 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
       "chat": ""
     }
   },
@@ -46,7 +46,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A great round shield said to have been the last thing standing at a threshold no one names. Its face is featureless save for a single closed ring; the metal does not reflect, only quiets. Those who carry it report the world's whispering simply… stops at the rim.</p><p><b>The Closed Ring.</b> Resists qliphothic and psychic. The bearer cannot be charmed or compelled while it is raised.</p><p><b>Soulbound.</b> Binds at first attunement and cannot be re-bonded.</p>",
+          "lore": "<p>A great round shield said to have been the last thing standing at a threshold no one names. Its face is featureless save for a single closed ring; the metal does not reflect, only quiets. Those who carry it report the world's whispering simply\u2026 stops at the rim.</p><p><b>The Closed Ring.</b> Resists qliphothic and psychic. The bearer cannot be charmed or compelled while it is raised.</p><p><b>Soulbound.</b> Binds at first attunement and cannot be re-bonded.</p>",
           "materialOf": [
             "threshold-iron",
             "silence-alloy",
@@ -59,7 +59,7 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TIV shield × 1 × soulbound 1.5",
+            "notes": "TIV shield \u00d7 1 \u00d7 soulbound 1.5",
             "bound": "soulbound",
             "saleBack": 0
           }

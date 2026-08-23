@@ -9,7 +9,7 @@
     "resistances": [
       "qliphothic"
     ],
-    "armorSkill": "warding",
+    "armorSkill": "bracing",
     "equipped": false,
     "tags": [
       "ceremonial",
@@ -19,7 +19,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>Long ceremonial mantle worn by sept-witnesses at the trials of the lost. Silence-silk weave; vow-bone clasp at the throat.</p><p>The wearer cannot be moved by what is whispered. Charm finds no purchase; compulsion forgets its own intent.</p><p><strong>Soulbound.</strong> The mantle binds at first attunement. It cannot be re-bonded.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Defense:</strong> Guard +1, Evasion +1, Resolve +5</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Immune to:</strong> Charmed, Compelled</p></li><li><p><strong>Tier:</strong> IV</p></li><li><p><strong>Cost:</strong> 3040 Nonlethal marks</p></li></ul>",
+      "value": "<p>Long ceremonial mantle worn by sept-witnesses at the trials of the lost. Silence-silk weave; vow-bone clasp at the throat.</p><p>The wearer cannot be moved by what is whispered. Charm finds no purchase; compulsion forgets its own intent.</p><p><strong>Soulbound.</strong> The mantle binds at first attunement. It cannot be re-bonded.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Defense:</strong> Guard +1, Evasion +1, Resolve +5</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Qliphothic</p></li><li><p><strong>Immune to:</strong> Charmed, Compelled</p></li><li><p><strong>Tier:</strong> IV</p></li><li><p><strong>Cost:</strong> 3040 Nonlethal marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -66,7 +66,7 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TIV armor stamp × soulbound 1.5",
+            "notes": "TIV armor stamp \u00d7 soulbound 1.5",
             "bound": "soulbound",
             "saleBack": 0
           }
@@ -87,7 +87,7 @@
   "_id": "qcPkuhiPhHJEDut5",
   "effects": [
     {
-      "name": "⚙️ Defense Grant",
+      "name": "\u2699\ufe0f Defense Grant",
       "transfer": false,
       "disabled": false,
       "flags": {

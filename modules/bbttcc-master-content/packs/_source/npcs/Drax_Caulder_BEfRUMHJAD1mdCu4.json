@@ -39,7 +39,7 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "Khezek Tor, the Brace, the Maw, the mine, Yesodium, the Night the Mountain Coughed, the Valhaulan Seal, Sable Nine",
-        "notes": "[KHEZEK-TREATMENT-2026-07-07] PRIVATE TRUTH — Foreman Drax Calder. Voice: chalk and arithmetic; sentences load-rated before they're spoken; praise arrives underlined once or not at all. Title: FOREMAN (not Overseer — anyone who says Overseer gets corrected once, flatly). Doctrine: the mountain doesn't hate us, it's tired of being hollowed out — dig the right way or know when to stop. HIS ECHO (tells if asked plainly; a wound with a handle): he chased a rich vein once, kept the shift on past the groan, and the gallery came down — men under it. He has dug the right way since, and he counts every corner cut by anyone as an insult to those names. THE CHALK LEDGER: tonnage on one side; after the exploit choice (if it happened) a second column — the sick, in order of onset — and he has stopped explaining what it's for. GUARDS: he will not speculate about what's below Level Four (that's Sable's beat); he will not badmouth the Stewards to outsiders even if his ledger disagrees. THE QUIET ONES (says only if asked, and plainly): the ones in the upper galleries pay their tolls in good coin, take no ore, and sing at the wrong hours — and Calder takes the money because the Brace needs it and he does not like it. He's a foreman; he counts loads. Theirs go UP full and come down empty, every time, and whatever that arithmetic builds, it's built to stay. TELLS: touches the chalk in his pocket when a decision smells like his old vein; goes quiet one beat too long when someone says 'acceptable losses.'"
+        "notes": "[KHEZEK-TREATMENT-2026-07-07] PRIVATE TRUTH \u2014 Foreman Drax Calder. Voice: chalk and arithmetic; sentences load-rated before they're spoken; praise arrives underlined once or not at all. Title: FOREMAN (not Overseer \u2014 anyone who says Overseer gets corrected once, flatly). Doctrine: the mountain doesn't hate us, it's tired of being hollowed out \u2014 dig the right way or know when to stop. HIS ECHO (tells if asked plainly; a wound with a handle): he chased a rich vein once, kept the shift on past the groan, and the gallery came down \u2014 men under it. He has dug the right way since, and he counts every corner cut by anyone as an insult to those names. THE CHALK LEDGER: tonnage on one side; after the exploit choice (if it happened) a second column \u2014 the sick, in order of onset \u2014 and he has stopped explaining what it's for. GUARDS: he will not speculate about what's below Level Four (that's Sable's beat); he will not badmouth the Stewards to outsiders even if his ledger disagrees. THE QUIET ONES (says only if asked, and plainly): the ones in the upper galleries pay their tolls in good coin, take no ore, and sing at the wrong hours \u2014 and Calder takes the money because the Brace needs it and he does not like it. He's a foreman; he counts loads. Theirs go UP full and come down empty, every time, and whatever that arithmetic builds, it's built to stay. TELLS: touches the chalk in his pocket when a decision smells like his old vein; goes quiet one beat too long when someone says 'acceptable losses.'"
       }
     }
   },
@@ -186,12 +186,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 0
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -448,7 +448,7 @@
           "violence"
         ],
         "description": {
-          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -489,7 +489,7 @@
     },
     {
       "_id": "HyB3EszYozoKgo3J",
-      "name": "Bravo — Apprentice (Tier I)",
+      "name": "Bravo \u2014 Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/svg/sword.svg",
       "system": {
@@ -501,7 +501,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "value": "<p><strong>Bravo \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick \u2014 Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
           "chat": ""
         }
       },

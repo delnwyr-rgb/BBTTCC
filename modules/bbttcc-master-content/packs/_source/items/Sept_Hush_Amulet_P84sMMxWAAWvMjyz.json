@@ -7,7 +7,7 @@
     "evasionBonus": 1,
     "resolveBonus": 1,
     "resistances": [],
-    "armorSkill": "weave",
+    "armorSkill": "fitting",
     "equipped": false,
     "tags": [
       "tech"
@@ -15,7 +15,7 @@
     "category": "armor",
     "source": "Phase 7 Seed (2026-05-10)",
     "description": {
-      "value": "<p>A worn amulet that swallows sound around the wearer. Three scenes of silence per Soma Break; speech still passes, but boots and breath do not.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Evasion +1, Resolve +1</li>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 450 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>A worn amulet that swallows sound around the wearer. Three scenes of silence per Soma Break; speech still passes, but boots and breath do not.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Evasion +1, Resolve +1</li>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 450 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
       "chat": ""
     }
   },
@@ -61,7 +61,7 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TII armor × 1.50 × tech 2.0",
+            "notes": "TII armor \u00d7 1.50 \u00d7 tech 2.0",
             "bound": "attuned",
             "saleBack": 180
           }
@@ -72,7 +72,7 @@
   "_id": "P84sMMxWAAWvMjyz",
   "effects": [
     {
-      "name": "⚙️ Defense Grant",
+      "name": "\u2699\ufe0f Defense Grant",
       "transfer": false,
       "disabled": false,
       "flags": {

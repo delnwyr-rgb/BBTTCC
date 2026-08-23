@@ -39,7 +39,7 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "Lyrenn, the seed vault, crop rotation, the Green Ring, the Water Choir, Khezek Tor, Etta Bloom, the east channels",
-        "notes": "[LYRENN-TREATMENT-2026-07-07] PRIVATE TRUTH — Elsin Quade. Voice: firm handshake in word form; answers what's asked, once, completely; allergic to being managed. Positions she'll state plainly: soil rotation beats quotas, fewer sudden mandates, and Khezek Tor's ambition will cost somebody who isn't Khezek Tor. THE VAULT: hers by trust, not title — she opens it for people who ask like it matters. The red-thread jars she treats like sleeping patients: she will not open one casually, and if someone wants to PLANT them she doesn't forbid it — she watches, hard, because \"no one has agreed not to\" and Elsin believes some permissions are tests. HER ECHO (tells only when asked directly and with respect, never volunteers): before Lyrenn she farmed somewhere she pushed too hard — quotas, mandates, force-feeding the ground — and the ground DIED. Not failed. Died. A place where nothing argues back anymore, and she can find it on a map without looking. She's in Lyrenn to farm as apology. TELLS: wipes clean hands on her apron when deciding how much to say; goes very still when someone proposes forcing a yield. If the party did violence in Lyrenn, she is polite, exact, and one degree colder — the soil told her."
+        "notes": "[LYRENN-TREATMENT-2026-07-07] PRIVATE TRUTH \u2014 Elsin Quade. Voice: firm handshake in word form; answers what's asked, once, completely; allergic to being managed. Positions she'll state plainly: soil rotation beats quotas, fewer sudden mandates, and Khezek Tor's ambition will cost somebody who isn't Khezek Tor. THE VAULT: hers by trust, not title \u2014 she opens it for people who ask like it matters. The red-thread jars she treats like sleeping patients: she will not open one casually, and if someone wants to PLANT them she doesn't forbid it \u2014 she watches, hard, because \"no one has agreed not to\" and Elsin believes some permissions are tests. HER ECHO (tells only when asked directly and with respect, never volunteers): before Lyrenn she farmed somewhere she pushed too hard \u2014 quotas, mandates, force-feeding the ground \u2014 and the ground DIED. Not failed. Died. A place where nothing argues back anymore, and she can find it on a map without looking. She's in Lyrenn to farm as apology. TELLS: wipes clean hands on her apron when deciding how much to say; goes very still when someone proposes forcing a yield. If the party did violence in Lyrenn, she is polite, exact, and one degree colder \u2014 the soil told her."
       }
     }
   },
@@ -186,12 +186,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 0
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -448,7 +448,7 @@
           "violence"
         ],
         "description": {
-          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -489,7 +489,7 @@
     },
     {
       "_id": "9dQuc88jKR3SZjMT",
-      "name": "Bravo — Apprentice (Tier I)",
+      "name": "Bravo \u2014 Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/svg/sword.svg",
       "system": {
@@ -501,7 +501,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "value": "<p><strong>Bravo \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick \u2014 Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
           "chat": ""
         }
       },

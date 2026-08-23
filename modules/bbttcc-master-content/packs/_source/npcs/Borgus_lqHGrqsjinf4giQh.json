@@ -242,12 +242,12 @@
         "label": "Plating",
         "value": 1
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 0
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -610,7 +610,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“Darkness climbed into your bones and decided to stay.”</em></p><p><strong>Shadow Resilience.</strong> Your scars drink in hostile power instead of letting it tear you apart.</p><ul><li>You have resistance to <strong>qliphothic damage</strong>.</li><li>Your presence carries a subtle, unsettling weight; you gain a small bonus to Intimidation checks.</li><li>The deeper interactions with corruption, Qliphothic zones, and Darkness tracks are handled by Bad Eden engines and GM judgment.</li></ul>",
+          "value": "<p><em>\u201cDarkness climbed into your bones and decided to stay.\u201d</em></p><p><strong>Shadow Resilience.</strong> Your scars drink in hostile power instead of letting it tear you apart.</p><ul><li>You have resistance to <strong>qliphothic damage</strong>.</li><li>Your presence carries a subtle, unsettling weight; you gain a small bonus to Intimidation checks.</li><li>The deeper interactions with corruption, Qliphothic zones, and Darkness tracks are handled by Bad Eden engines and GM judgment.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -665,7 +665,7 @@
             "expiry": null,
             "expired": false
           },
-          "description": "<p>You have resistance to necrotic damage and a +1 bonus to Intimidation checks. Any extra “corruption handling” stays narrative/BBTTCC-engine side, not automated rolls.</p>",
+          "description": "<p>You have resistance to necrotic damage and a +1 bonus to Intimidation checks. Any extra \u201ccorruption handling\u201d stays narrative/BBTTCC-engine side, not automated rolls.</p>",
           "origin": null,
           "tint": "#ffffff",
           "transfer": true,
@@ -751,7 +751,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Qliphothic Saturation.</strong> The hollows in you are already full of poison light.</p><ul><li>You have resistance to <strong>poison damage</strong>.</li><li>You often sense when a place is spiritually “overclocked” or unsafe; your scars hum in high-corruption zones.</li><li>Any radiation/corruption hooks in Bad Eden are driven by flags on this feature rather than automatic rolls.</li></ul>",
+          "value": "<p><strong>Qliphothic Saturation.</strong> The hollows in you are already full of poison light.</p><ul><li>You have resistance to <strong>poison damage</strong>.</li><li>You often sense when a place is spiritually \u201coverclocked\u201d or unsafe; your scars hum in high-corruption zones.</li><li>Any radiation/corruption hooks in Bad Eden are driven by flags on this feature rather than automatic rolls.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1157,7 +1157,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“Send the Qliph-Scarred into the bad places. If they come back smiling, it means the rest of probably can still come back.”</em></p><p><strong>OP Edge.</strong> Your faction leans toward problem-solving in corrupted zones, containment operations, and subtle social pressure.</p><p><strong>Corruption-Tuned.</strong> You help keep others steady in the presence of Darkness, even when it whispers to you first.</p>",
+          "value": "<p><em>\u201cSend the Qliph-Scarred into the bad places. If they come back smiling, it means the rest of probably can still come back.\u201d</em></p><p><strong>OP Edge.</strong> Your faction leans toward problem-solving in corrupted zones, containment operations, and subtle social pressure.</p><p><strong>Corruption-Tuned.</strong> You help keep others steady in the presence of Darkness, even when it whispers to you first.</p>",
           "chat": ""
         },
         "activities": {},
@@ -1300,7 +1300,7 @@
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Qliph-Scarred heritage: Chthonic.</p><p><em>“There is a place older than Hell. You remember being there. It remembers you back.”</em></p><p><strong>Qliph-Scarred (Chthonic).</strong> Your scar is a root. The unmaking that almost took you went down, not sideways — into strata of reality older than the gods that eventually got around to naming them. You walked out up through something that shouldn’t have had a staircase. Parts of that staircase are still in your legs.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Qliph-Scarred does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Body</strong> in fiction and through Tier powers.</p></li></ul><h3>Qliph-Scarred Core: What Walked Out</h3><p><em>Shared across all Qliph-Scarred heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Shadow Resilience.</strong> You have resistance to qliphothic damage. You reroll the lowest die on Body checks against effects that would drain, wither, or corrupt your body.</p></li><li><p><strong>Qliphothic Saturation.</strong> Once per scene, when you fail a Soul check, you may reroll it — but your scene's Darkness-gain count increases by 1. The scar pays for what the scar saves.</p></li><li><p><strong>Hunger Mask.</strong> You can suppress a bodily need (hunger, thirst, sleep, breath) for up to 24 hours by deciding to; you do not suffer its penalties during that window. At the end of the 24 hours, all deferred needs strike you at once, each as a separate Stress-class consequence.</p></li><li><p><strong>Shadow-Wake.</strong> Creatures with qliphothic attunement (demons, corrupt sephirot, Radiation-warped entities) can sense you at 12 squares and know you have been marked. They may not know how to read the mark.</p></li></ul><h3>Chthonic Traits</h3><ul><li><p><strong>Old-Dark Vision.</strong> You have low-light vision to 12 squares, and in darkness you see in color rather than greyscale. You have been in a dark older than eyes, and it taught you how.</p></li><li><p><strong>Root-Bound.</strong> Once per Soma Break, you may spend 10 minutes in physical contact with uncut earth or unworked stone. Until your next Soma Break, you gain a +1 rank bonus on all Body checks. The depth is lending you some of itself.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Violence OP</strong> and <strong>+1 Faith OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Underground / Sunken / Primordial</em> hexes, your faction's excavation, exhumation, and deep-passage operations cost 1 fewer OP.</p></li><li><p><strong>Downward Witness.</strong> Once per Strategic Turn, you may consult the depth beneath any hex your faction occupies. The GM answers one question about what lies structurally or historically below the surface. The depth does not lie; the depth is also not always relevant.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Qliphothic Saturation</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Free  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Reroll a failed Soul check. Cost: scene's Darkness-gain count goes up by 1.</span></p></div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Qliph-Scarred heritage: Chthonic.</p><p><em>\u201cThere is a place older than Hell. You remember being there. It remembers you back.\u201d</em></p><p><strong>Qliph-Scarred (Chthonic).</strong> Your scar is a root. The unmaking that almost took you went down, not sideways \u2014 into strata of reality older than the gods that eventually got around to naming them. You walked out up through something that shouldn\u2019t have had a staircase. Parts of that staircase are still in your legs.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Qliph-Scarred does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Body</strong> in fiction and through Tier powers.</p></li></ul><h3>Qliph-Scarred Core: What Walked Out</h3><p><em>Shared across all Qliph-Scarred heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Shadow Resilience.</strong> You have resistance to qliphothic damage. You reroll the lowest die on Body checks against effects that would drain, wither, or corrupt your body.</p></li><li><p><strong>Qliphothic Saturation.</strong> Once per scene, when you fail a Soul check, you may reroll it \u2014 but your scene's Darkness-gain count increases by 1. The scar pays for what the scar saves.</p></li><li><p><strong>Hunger Mask.</strong> You can suppress a bodily need (hunger, thirst, sleep, breath) for up to 24 hours by deciding to; you do not suffer its penalties during that window. At the end of the 24 hours, all deferred needs strike you at once, each as a separate Stress-class consequence.</p></li><li><p><strong>Shadow-Wake.</strong> Creatures with qliphothic attunement (demons, corrupt sephirot, Radiation-warped entities) can sense you at 12 squares and know you have been marked. They may not know how to read the mark.</p></li></ul><h3>Chthonic Traits</h3><ul><li><p><strong>Old-Dark Vision.</strong> You have low-light vision to 12 squares, and in darkness you see in color rather than greyscale. You have been in a dark older than eyes, and it taught you how.</p></li><li><p><strong>Root-Bound.</strong> Once per Soma Break, you may spend 10 minutes in physical contact with uncut earth or unworked stone. Until your next Soma Break, you gain a +1 rank bonus on all Body checks. The depth is lending you some of itself.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Violence OP</strong> and <strong>+1 Faith OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Underground / Sunken / Primordial</em> hexes, your faction's excavation, exhumation, and deep-passage operations cost 1 fewer OP.</p></li><li><p><strong>Downward Witness.</strong> Once per Strategic Turn, you may consult the depth beneath any hex your faction occupies. The GM answers one question about what lies structurally or historically below the surface. The depth does not lie; the depth is also not always relevant.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Qliphothic Saturation</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene \u00a0\u00b7\u00a0 <strong>Action:</strong> Free \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Reroll a failed Soul check. Cost: scene's Darkness-gain count goes up by 1.</span></p></div>",
           "chat": ""
         },
         "advancement": [
@@ -1438,7 +1438,7 @@
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-qliph-scarred=\"v1\" style=\"display:none\"></div><p><em>\"There are ways to move that the sun never got to review.\"</em></p><p><strong>What the Deep Dark Taught You (1/Soma Break).</strong> Bonus action — sink partially into shadow, earth, or stone. For up to 1 minute, while sunken you gain:</p><ul><li><p>Reroll the lowest die on Stealth (Intrigue) checks.</p></li><li><p>Difficult terrain costs you no extra movement.</p></li><li><p>You can move through spaces 1 square wide.</p></li><li><p>Resistance to qliphothic damage.</p></li></ul><p>The effect ends early if you are fully submerged in running water or take sephirotic damage.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"qliphChthonicDeepDark\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>What the Deep Dark Taught You</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Bonus action (1-min duration)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Sink into shadow/earth/stone for up to 1 min: reroll-lowest on Stealth · ignore difficult terrain · squeeze through 1 square gaps · resist qliphothic damage. Ends early on running water or sephirotic damage.</span></p></div>",
+          "value": "<div data-ft-canon-qliph-scarred=\"v1\" style=\"display:none\"></div><p><em>\"There are ways to move that the sun never got to review.\"</em></p><p><strong>What the Deep Dark Taught You (1/Soma Break).</strong> Bonus action \u2014 sink partially into shadow, earth, or stone. For up to 1 minute, while sunken you gain:</p><ul><li><p>Reroll the lowest die on Stealth (Intrigue) checks.</p></li><li><p>Difficult terrain costs you no extra movement.</p></li><li><p>You can move through spaces 1 square wide.</p></li><li><p>Resistance to qliphothic damage.</p></li></ul><p>The effect ends early if you are fully submerged in running water or take sephirotic damage.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"qliphChthonicDeepDark\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>What the Deep Dark Taught You</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break \u00a0\u00b7\u00a0 <strong>Action:</strong> Bonus action (1-min duration) \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Sink into shadow/earth/stone for up to 1 min: reroll-lowest on Stealth \u00b7 ignore difficult terrain \u00b7 squeeze through 1 square gaps \u00b7 resist qliphothic damage. Ends early on running water or sephirotic damage.</span></p></div>",
           "chat": ""
         },
         "advancement": {},
@@ -1530,7 +1530,7 @@
         "source": "",
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">⚙ ENGINE NOTE — Frame &amp; Ruin are now ◆ Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the ◆ Surge menu. Automated: Polarity Mastery (melee strike, base die ≥ 8 → +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p><em>\"Set your feet. The line forms on you.\"</em></p>\n<p>The Bulwark is the wall — and the wall runs on <strong>Surge</strong>, like everyone, but yours arrives the hard way: every time you <strong>take Integrity damage you bank +1 Surge</strong> (max +2/round). You eat the blow and turn it into the power to anchor, erupt, or hold. At zero Surge you still stand in the way; soak one hit and your turn opens up.</p>\n<h3>The Fortress (spent via Surge — Bulwark only)</h3>\n<ul>\n  <li><strong>Brace Wall</strong> (1) — you and adjacent allies gain DR equal to Tier this round.</li>\n  <li><strong>Bulwark Stance</strong> (6) — adjacent allies share your defenses until your next turn.</li>\n  <li><strong>Anchor</strong> (5) — you and one ally become immune to forced movement and crowd-control until next round.</li>\n  <li><strong>Mass Aegis</strong> (8) — allies within Tier squares gain +Tier to every defense this round.</li>\n  <li><strong>Sanctum</strong> (9) — immune to one damage type for a round.</li>\n  <li><strong>Mythic Stand</strong> (10) — invulnerable until the start of your next turn.</li>\n</ul>\n<p>These were always the Bulwark's birthright; they no longer leak into everyone else's menu. <strong>Frame Dice</strong> and <strong>Ruin Charges</strong> endure as the strategic layer — Catastrophic Entry still sunders armor and breaches structures, Ruin still cuts a Siege's cost — and both refill on a Soma Break.</p>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">\u2699 ENGINE NOTE \u2014 Frame &amp; Ruin are now \u25c6 Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the \u25c6 Surge menu. Automated: Polarity Mastery (melee strike, base die \u2265 8 \u2192 +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p><em>\"Set your feet. The line forms on you.\"</em></p>\n<p>The Bulwark is the wall \u2014 and the wall runs on <strong>Surge</strong>, like everyone, but yours arrives the hard way: every time you <strong>take Integrity damage you bank +1 Surge</strong> (max +2/round). You eat the blow and turn it into the power to anchor, erupt, or hold. At zero Surge you still stand in the way; soak one hit and your turn opens up.</p>\n<h3>The Fortress (spent via Surge \u2014 Bulwark only)</h3>\n<ul>\n  <li><strong>Brace Wall</strong> (1) \u2014 you and adjacent allies gain DR equal to Tier this round.</li>\n  <li><strong>Bulwark Stance</strong> (6) \u2014 adjacent allies share your defenses until your next turn.</li>\n  <li><strong>Anchor</strong> (5) \u2014 you and one ally become immune to forced movement and crowd-control until next round.</li>\n  <li><strong>Mass Aegis</strong> (8) \u2014 allies within Tier squares gain +Tier to every defense this round.</li>\n  <li><strong>Sanctum</strong> (9) \u2014 immune to one damage type for a round.</li>\n  <li><strong>Mythic Stand</strong> (10) \u2014 invulnerable until the start of your next turn.</li>\n</ul>\n<p>These were always the Bulwark's birthright; they no longer leak into everyone else's menu. <strong>Frame Dice</strong> and <strong>Ruin Charges</strong> endure as the strategic layer \u2014 Catastrophic Entry still sunders armor and breaches structures, Ruin still cuts a Siege's cost \u2014 and both refill on a Soma Break.</p>",
           "chat": ""
         },
         "advancement": [
@@ -1549,7 +1549,7 @@
             },
             "value": {},
             "level": 1,
-            "title": "Bulwark — Tier 1: Founding Stance"
+            "title": "Bulwark \u2014 Tier 1: Founding Stance"
           },
           {
             "_id": "xMkzggxhV7D4dlsW",
@@ -1566,7 +1566,7 @@
             },
             "value": {},
             "level": 6,
-            "title": "Bulwark — Tier 2: Anchor or Advance"
+            "title": "Bulwark \u2014 Tier 2: Anchor or Advance"
           },
           {
             "_id": "1pk6AixW41XX5BKD",
@@ -1583,7 +1583,7 @@
             },
             "value": {},
             "level": 11,
-            "title": "Bulwark — Tier 3: Polarity Mastery"
+            "title": "Bulwark \u2014 Tier 3: Polarity Mastery"
           },
           {
             "_id": "7ATFRxDnwerU82M0",
@@ -1600,7 +1600,7 @@
             },
             "value": {},
             "level": 16,
-            "title": "Bulwark — Tier 4: Architect of Certainty"
+            "title": "Bulwark \u2014 Tier 4: Architect of Certainty"
           }
         ]
       },
@@ -1642,7 +1642,7 @@
       "_key": "!actors.items!lqHGrqsjinf4giQh.khtBMt44zZkXwFHM"
     },
     {
-      "name": "Bulwark — Tier 1: Founding Stance",
+      "name": "Bulwark \u2014 Tier 1: Founding Stance",
       "type": "feat",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_10.png",
       "system": {
@@ -1650,7 +1650,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">⚙ ENGINE NOTE — Frame &amp; Ruin are now ◆ Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the ◆ Surge menu. Automated: Polarity Mastery (melee strike, base die ≥ 8 → +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p><em>The world has two ways of saying no to change. You learn one of them today.</em></p><p><strong>On gaining Bulwark Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Athletics (Violence)</strong>.</p></li><li><p>Skill rank +1 in <strong>one tool of your choice</strong> (any single tool tracked as a skill on your sheet).</p></li><li><p><strong>Violence OP cap +3</strong> and <strong>Siege OP cap +2</strong> on the faction your character belongs to.</p></li><li><p>Your <strong>Frame Dice</strong> pool comes online (persistence — d8 dice, spend to absorb hits or fuel doctrine effects). Pool max = max(2, ceil((Violence value + Bulwark Initiation) / 3)), capped at 8.</p></li><li><p>Your <strong>Ruin Charges</strong> pool comes online (inevitability — single-use charges, spend to fuel offensive doctrine effects). Same pool-size formula.</p></li></ul><p>Both pools refill on a Soma Break. How you generate them depends on your chosen Path; see your doctrine's L1 feature.</p>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">\u2699 ENGINE NOTE \u2014 Frame &amp; Ruin are now \u25c6 Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the \u25c6 Surge menu. Automated: Polarity Mastery (melee strike, base die \u2265 8 \u2192 +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p><em>The world has two ways of saying no to change. You learn one of them today.</em></p><p><strong>On gaining Bulwark Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Athletics (Violence)</strong>.</p></li><li><p>Skill rank +1 in <strong>one tool of your choice</strong> (any single tool tracked as a skill on your sheet).</p></li><li><p><strong>Violence OP cap +3</strong> and <strong>Siege OP cap +2</strong> on the faction your character belongs to.</p></li><li><p>Your <strong>Frame Dice</strong> pool comes online (persistence \u2014 d8 dice, spend to absorb hits or fuel doctrine effects). Pool max = max(2, ceil((Violence value + Bulwark Initiation) / 3)), capped at 8.</p></li><li><p>Your <strong>Ruin Charges</strong> pool comes online (inevitability \u2014 single-use charges, spend to fuel offensive doctrine effects). Same pool-size formula.</p></li></ul><p>Both pools refill on a Soma Break. How you generate them depends on your chosen Path; see your doctrine's L1 feature.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -1781,10 +1781,10 @@
       "system": {
         "category": "doctrine",
         "classIdentifier": "bulwark",
-        "source": "Bad Eden Originals — Sprint F (2026 rules)",
+        "source": "Bad Eden Originals \u2014 Sprint F (2026 rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>\"Something gives way. You aim where.\"</em></p>\n<p><strong>Doctrine:</strong> Controlled eruption — trade stability for force on purpose.</p>\n<p>The Cataclyst is the wall that decides to come down on someone. Your Surge spends turn your own stored impact into offense: a strike that erupts, a seam found in anything, a moment where the ground itself gives up standing still.</p>\n<h3>Path (spent via Surge)</h3>\n<ul>\n  <li><strong>Erupt</strong> (1) — your next Strike blazes (+Tier d6 exploding) and hurls the target back.</li>\n  <li><strong>Shatter</strong> (3) — your next Strike ignores resistances; the target is Staggered.</li>\n  <li><strong>Cataclysm</strong> (5) — your next Strike lands as a max-die crit, and foes in reach are knocked Prone.</li>\n</ul>",
+          "value": "<p><em>\"Something gives way. You aim where.\"</em></p>\n<p><strong>Doctrine:</strong> Controlled eruption \u2014 trade stability for force on purpose.</p>\n<p>The Cataclyst is the wall that decides to come down on someone. Your Surge spends turn your own stored impact into offense: a strike that erupts, a seam found in anything, a moment where the ground itself gives up standing still.</p>\n<h3>Path (spent via Surge)</h3>\n<ul>\n  <li><strong>Erupt</strong> (1) \u2014 your next Strike blazes (+Tier d6 exploding) and hurls the target back.</li>\n  <li><strong>Shatter</strong> (3) \u2014 your next Strike ignores resistances; the target is Staggered.</li>\n  <li><strong>Cataclysm</strong> (5) \u2014 your next Strike lands as a max-die crit, and foes in reach are knocked Prone.</li>\n</ul>",
           "chat": ""
         },
         "identifier": "bbttcc-bulwark-cataclyst",
@@ -1836,7 +1836,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Order is not an idea. It is a budget, a road network, and somebody staying late to sign the papers.”</em></p>\n<p><strong>Archetype (Bad Eden): The Emperor (Administrator).</strong> Civic architect, system-builder, and keeper of functional continuity. You turn collapse into policy and policy into Athletics.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your faction’s economy stretches farther around you. This Archetype is associated with <strong>+3 Economy OPs</strong> in faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of logistics, management, civic control, and state capacity.</li>\n</ul>\n<h3>attributes (Archetype ASI)</h3>\n<p>When you choose this Archetype, you gain <strong>3 attribute points</strong> to distribute using the 2024 rules (no more than +2 to any one score). Common patterns include:</p>\n<ul>\n  <li><strong>Infrastructure First:</strong> +2 Mind, +1 Soul</li>\n  <li><strong>Silver-Tongued Bureaucrat:</strong> +2 Presence, +1 Mind</li>\n  <li><strong>Crisis Manager:</strong> +1 Mind, +1 Soul, +1 Presence</li>\n</ul>\n<p>These are suggestions, not shackles. Any valid 3-point distribution is allowed.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cOrder is not an idea. It is a budget, a road network, and somebody staying late to sign the papers.\u201d</em></p>\n<p><strong>Archetype (Bad Eden): The Emperor (Administrator).</strong> Civic architect, system-builder, and keeper of functional continuity. You turn collapse into policy and policy into Athletics.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> Your faction\u2019s economy stretches farther around you. This Archetype is associated with <strong>+3 Economy OPs</strong> in faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for the full tactical and strategic expression of logistics, management, civic control, and state capacity.</li>\n</ul>\n<h3>attributes (Archetype ASI)</h3>\n<p>When you choose this Archetype, you gain <strong>3 attribute points</strong> to distribute using the 2024 rules (no more than +2 to any one score). Common patterns include:</p>\n<ul>\n  <li><strong>Infrastructure First:</strong> +2 Mind, +1 Soul</li>\n  <li><strong>Silver-Tongued Bureaucrat:</strong> +2 Presence, +1 Mind</li>\n  <li><strong>Crisis Manager:</strong> +1 Mind, +1 Soul, +1 Presence</li>\n</ul>\n<p>These are suggestions, not shackles. Any valid 3-point distribution is allowed.</p>",
           "chat": ""
         },
         "activities": {},
@@ -1944,7 +1944,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Crew Type (Bad Eden): Ironbound Ascendants.</em></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Logistics OPs.</li></ul>",
+          "value": "<p><em>Crew Type (Bad Eden): Ironbound Ascendants.</em></p><p><strong>\u201cHeight is not terrain. It is policy.\u201d</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Logistics OPs.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2044,7 +2044,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Occult Association (Bad Eden): Exorcist / Purifier.</em></p><p><strong>“You don’t negotiate with the darkness. You end it.”</strong></p><p>Exorcists do not bargain. They do not reinterpret. They do not accept corruption as a usable state.</p><p>To an Exorcist, the Great Work is not about managing the broken world. It is about <strong>removing what should not be there</strong> and restoring the conditions under which something honest can exist again.</p><p>Where Goetics bind, Exorcists sever. Where Shamans listen, Exorcists intervene. Where Kabbalists align, Exorcists cleanse.</p><p><strong>How Exorcists pursue the Great Work:</strong></p><ul><li>By removing Qliphothic influence and corruption</li><li>By stabilizing Hexes under Darkness pressure</li><li>By preventing the spread of systemic decay</li><li>By refusing to let harmful systems persist just because they are useful</li></ul><p><strong>Resonance:</strong> <strong>Tiferet / Purity</strong> — clarity, balance, and the reassertion of what should be.</p><p><strong>Tell-tales:</strong> still air where there should be movement, silence after tension, things that stop being wrong without explanation.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on actions involving stabilization, cleansing, or anti-corruption pressure</strong></li></ul><p><strong>Cost Principle:</strong> removal is violent in its own way. Expect rigidity, collateral suppression, and consequences when something removed turns out to have been holding something worse in place.</p>",
+          "value": "<p><em>Occult Association (Bad Eden): Exorcist / Purifier.</em></p><p><strong>\u201cYou don\u2019t negotiate with the darkness. You end it.\u201d</strong></p><p>Exorcists do not bargain. They do not reinterpret. They do not accept corruption as a usable state.</p><p>To an Exorcist, the Great Work is not about managing the broken world. It is about <strong>removing what should not be there</strong> and restoring the conditions under which something honest can exist again.</p><p>Where Goetics bind, Exorcists sever. Where Shamans listen, Exorcists intervene. Where Kabbalists align, Exorcists cleanse.</p><p><strong>How Exorcists pursue the Great Work:</strong></p><ul><li>By removing Qliphothic influence and corruption</li><li>By stabilizing Hexes under Darkness pressure</li><li>By preventing the spread of systemic decay</li><li>By refusing to let harmful systems persist just because they are useful</li></ul><p><strong>Resonance:</strong> <strong>Tiferet / Purity</strong> \u2014 clarity, balance, and the reassertion of what should be.</p><p><strong>Tell-tales:</strong> still air where there should be movement, silence after tension, things that stop being wrong without explanation.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on actions involving stabilization, cleansing, or anti-corruption pressure</strong></li></ul><p><strong>Cost Principle:</strong> removal is violent in its own way. Expect rigidity, collateral suppression, and consequences when something removed turns out to have been holding something worse in place.</p>",
           "chat": ""
         },
         "identifier": "occult-association-exorcist",
@@ -2207,12 +2207,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden – Archetype: The Emperor (Administrator) (Tier 1)",
+          "custom": "Bad Eden \u2013 Archetype: The Emperor (Administrator) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — The Emperor</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain a skill rank in Investigation and Diplomacy.</li>\n<li><strong>Strategic:</strong> Your faction's Economy OP cap increases by 3.</li>\n</ul>",
+          "value": "<p><strong>Tier 1 (Level 1) \u2014 The Emperor</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain a skill rank in Investigation and Diplomacy.</li>\n<li><strong>Strategic:</strong> Your faction's Economy OP cap increases by 3.</li>\n</ul>",
           "chat": ""
         },
         "activities": {},
@@ -2346,14 +2346,14 @@
       "system": {
         "category": "technique",
         "source": {
-          "custom": "Bad Eden – Crew Type: Ironbound Ascendants (Tier 1)",
+          "custom": "Bad Eden \u2013 Crew Type: Ironbound Ascendants (Tier 1)",
           "revision": 2,
           "rules": "2024",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Ironbound Ascendants</strong></p><p><strong>“Height is not terrain. It is policy.”</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You’ve learned the first law of altitude: the hill fights for whoever arrives prepared.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic:</strong> In Mountains and Highlands, travel is more efficient for your faction and elevation penalties are easier to manage.</li></ul>",
+          "value": "<p><strong>Tier 1 \u2014 Ironbound Ascendants</strong></p><p><strong>\u201cHeight is not terrain. It is policy.\u201d</strong></p><p>Ironbound Ascendants make strongholds out of bad footing and turn cliffs into arguments. They understand supply lines, choke valleys, and the spiritual value of making your enemies climb tired. If a mountain matters, they intend to own the meaning of it.</p><p><em>You\u2019ve learned the first law of altitude: the hill fights for whoever arrives prepared.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic:</strong> In Mountains and Highlands, travel is more efficient for your faction and elevation penalties are easier to manage.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-ironbound-ascendants-t1",
@@ -2529,7 +2529,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Exorcist</strong></p><p><strong>“That should not be here.”</strong></p><p>You can identify corruption, spiritual pressure, and Qliphothic influence.</p><p><strong>Tactical</strong></p><ul><li>reroll-lowest on checks vs corruption, fear, or possession</li></ul><p><strong>Strategic</strong></p><ul><li>When entering a Hex, automatically detect presence of corruption or unnatural influence</li></ul><p><strong>Cost:</strong> constant awareness of corruption creates strain and intolerance for ambiguity.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 \u2014 Exorcist</strong></p><p><strong>\u201cThat should not be here.\u201d</strong></p><p>You can identify corruption, spiritual pressure, and Qliphothic influence.</p><p><strong>Tactical</strong></p><ul><li>reroll-lowest on checks vs corruption, fear, or possession</li></ul><p><strong>Strategic</strong></p><ul><li>When entering a Hex, automatically detect presence of corruption or unnatural influence</li></ul><p><strong>Cost:</strong> constant awareness of corruption creates strain and intolerance for ambiguity.</p>",
           "chat": ""
         },
         "identifier": "occult-association-exorcist-t1",
@@ -2610,7 +2610,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">⚙ ENGINE NOTE — Frame &amp; Ruin are now ◆ Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the ◆ Surge menu. Automated: Polarity Mastery (melee strike, base die ≥ 8 → +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p><em>Polarity is a pose. The hinge is what does the work.</em></p><p><strong>Mode: Hinge / drift: Sideways.</strong></p><p>As a <strong>bonus action</strong>, you may convert <strong>1 Frame Die into 1 Ruin Charge</strong> or <strong>1 Ruin Charge into 1 Frame Die</strong>. You may use this conversion up to <strong>your Initiation tier</strong> times per Soma Break (1 at T1, 2 at T2, 3 at T3, 4 at T4).</p><p><strong>Charged.</strong> When you convert this way, the resulting die or charge becomes <em>charged</em> until spent. The next time it's used:</p><ul><li><p><strong>Frame Die (charged) spent on absorption:</strong> grants +1 die step on the absorption roll (d8 → d10).</p></li><li><p><strong>Ruin Charge (charged) spent on damage:</strong> deals +1 die step of damage (replace one d6 with a d8, or one d8 with a d10, in the spending feature's damage expression).</p></li></ul><p>Charged status is consumed by the spend whether the spend produces a roll or a flat effect.</p>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">\u2699 ENGINE NOTE \u2014 Frame &amp; Ruin are now \u25c6 Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the \u25c6 Surge menu. Automated: Polarity Mastery (melee strike, base die \u2265 8 \u2192 +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p><em>Polarity is a pose. The hinge is what does the work.</em></p><p><strong>Mode: Hinge / drift: Sideways.</strong></p><p>As a <strong>bonus action</strong>, you may convert <strong>1 Frame Die into 1 Ruin Charge</strong> or <strong>1 Ruin Charge into 1 Frame Die</strong>. You may use this conversion up to <strong>your Initiation tier</strong> times per Soma Break (1 at T1, 2 at T2, 3 at T3, 4 at T4).</p><p><strong>Charged.</strong> When you convert this way, the resulting die or charge becomes <em>charged</em> until spent. The next time it's used:</p><ul><li><p><strong>Frame Die (charged) spent on absorption:</strong> grants +1 die step on the absorption roll (d8 \u2192 d10).</p></li><li><p><strong>Ruin Charge (charged) spent on damage:</strong> deals +1 die step of damage (replace one d6 with a d8, or one d8 with a d10, in the spending feature's damage expression).</p></li></ul><p>Charged status is consumed by the spend whether the spend produces a roll or a flat effect.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -2686,7 +2686,7 @@
         "category": "armor",
         "source": "",
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">⚙ ENGINE NOTE — Frame &amp; Ruin are now ◆ Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the ◆ Surge menu. Automated: Polarity Mastery (melee strike, base die ≥ 8 → +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p>A long mail hauberk over a padded coat, with riveted plate at the chest and shoulders. The standard heavy issue for Bulwarks who haven't earned signature plate yet. Weight you have to carry. Weight that carries back.</p><p><strong>Standard Issue.</strong> Path-defining silhouette without path-defining cost. Frame Dice and Ruin Charges still come from your Bulwark features — the hauberk is just the surface they sit on.</p>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #e8c84a;border-left:4px solid #e8c84a;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(232,200,74,0.07);font-size:0.84rem\"><b style=\"color:#b8962a\">\u2699 ENGINE NOTE \u2014 Frame &amp; Ruin are now \u25c6 Surge.</b> Read <b>Frame Die</b> as banked Surge spent defensively, <b>Ruin Charge</b> as Surge spent offensively. Bulwarks bank +1 Surge when they take Integrity damage (max +2/round; +3 w/ Polarity Mastery on Mountain). Path kits live in the \u25c6 Surge menu. Automated: Polarity Mastery (melee strike, base die \u2265 8 \u2192 +1 Surge 1/round), Anchor or Advance + The Breach (clickable, 1/scene).</div><p>A long mail hauberk over a padded coat, with riveted plate at the chest and shoulders. The standard heavy issue for Bulwarks who haven't earned signature plate yet. Weight you have to carry. Weight that carries back.</p><p><strong>Standard Issue.</strong> Path-defining silhouette without path-defining cost. Frame Dice and Ruin Charges still come from your Bulwark features \u2014 the hauberk is just the surface they sit on.</p>",
           "chat": ""
         }
       },
@@ -2711,7 +2711,7 @@
                 "table": null
               },
               "signals": {},
-              "lore": "<p>A long mail hauberk over a padded coat, with riveted plate at the chest and shoulders. The standard heavy issue for Bulwarks who haven't earned signature plate yet. Weight you have to carry. Weight that carries back.</p><p><b>Standard Issue.</b> Path-defining silhouette without path-defining cost. Frame Dice and Ruin Charges still come from your Bulwark features — the hauberk is just the surface they sit on.</p>",
+              "lore": "<p>A long mail hauberk over a padded coat, with riveted plate at the chest and shoulders. The standard heavy issue for Bulwarks who haven't earned signature plate yet. Weight you have to carry. Weight that carries back.</p><p><b>Standard Issue.</b> Path-defining silhouette without path-defining cost. Frame Dice and Ruin Charges still come from your Bulwark features \u2014 the hauberk is just the surface they sit on.</p>",
               "materialOf": [
                 "mail",
                 "rivet-plate",
@@ -2736,7 +2736,7 @@
       "_id": "LVggimsPptKRQDpW",
       "effects": [
         {
-          "name": "⚙️ Defense Grant",
+          "name": "\u2699\ufe0f Defense Grant",
           "transfer": false,
           "disabled": false,
           "flags": {
@@ -2820,7 +2820,7 @@
         "evasionBonus": 0,
         "resolveBonus": 0,
         "resistances": [],
-        "armorSkill": "warding",
+        "armorSkill": "bracing",
         "equipped": true,
         "tags": [
           "t1-baseline",
@@ -2830,7 +2830,7 @@
         "category": "armor",
         "source": "",
         "description": {
-          "value": "<p>A small round buckler stamped from sheet steel and laced to a leather forearm cuff. Faction-pressed in batches of a thousand and handed out to whoever could close their fingers around the grip. Half ward, half noisemaker — the dent in the front is where someone else's mistake stopped.</p><p><strong>Standard Issue.</strong> Pairs with any one-handed weapon. No signature, no attunement, no apologies for the dent.</p>",
+          "value": "<p>A small round buckler stamped from sheet steel and laced to a leather forearm cuff. Faction-pressed in batches of a thousand and handed out to whoever could close their fingers around the grip. Half ward, half noisemaker \u2014 the dent in the front is where someone else's mistake stopped.</p><p><strong>Standard Issue.</strong> Pairs with any one-handed weapon. No signature, no attunement, no apologies for the dent.</p>",
           "chat": ""
         }
       },
@@ -2855,7 +2855,7 @@
                 "table": null
               },
               "signals": {},
-              "lore": "<p>A small round buckler stamped from sheet steel and laced to a leather forearm cuff. Faction-pressed in batches of a thousand and handed out to whoever could close their fingers around the grip. Half ward, half noisemaker — the dent in the front is where someone else's mistake stopped.</p><p><b>Standard Issue.</b> Pairs with any one-handed weapon. No signature, no attunement, no apologies for the dent.</p>",
+              "lore": "<p>A small round buckler stamped from sheet steel and laced to a leather forearm cuff. Faction-pressed in batches of a thousand and handed out to whoever could close their fingers around the grip. Half ward, half noisemaker \u2014 the dent in the front is where someone else's mistake stopped.</p><p><b>Standard Issue.</b> Pairs with any one-handed weapon. No signature, no attunement, no apologies for the dent.</p>",
               "materialOf": [
                 "sheet-steel",
                 "leather-cuff"
@@ -2879,7 +2879,7 @@
       "_id": "EBjYBftA5qJV8Yld",
       "effects": [
         {
-          "name": "⚙️ Defense Grant",
+          "name": "\u2699\ufe0f Defense Grant",
           "transfer": false,
           "disabled": false,
           "flags": {
@@ -2995,7 +2995,7 @@
           "rangeFt": 0,
           "maintenanceCost": "Cannot move from your hex while stance is active.",
           "riskText": "If forced to move (legitimate breakthrough, called shot, narrative consequence), you lose 1 Integrity from the violation.",
-          "pathResonance": "Bulwark — a body that has decided it is now geography.",
+          "pathResonance": "Bulwark \u2014 a body that has decided it is now geography.",
           "fictionalPermission": "You are an immovable feature of this scene. The fight has to flow around you.",
           "gmCalibration": "Tier-1 Form. Lasts as long as you remain stationary. Common-knowledge once another Bulwark sees it.",
           "mechanicalHook": "While stance is active, you cannot be moved against your will and you have +2 to Guard. Counter-attack any failed shove with the listed damage.",
@@ -3620,7 +3620,7 @@
           "rangeFt": 0,
           "maintenanceCost": "1 Stress per scene maintained.",
           "riskText": "Cannot be subtle. Any stealth or social stakes in the scene are renegotiated downward as soon as it appears.",
-          "pathResonance": "Bulwark — a fortification that walks.",
+          "pathResonance": "Bulwark \u2014 a fortification that walks.",
           "fictionalPermission": "You are not just hard to move. You are now the thing doing the moving.",
           "gmCalibration": "Tier-2 Form. Reads as a small siege weapon to anyone with military experience.",
           "mechanicalHook": "Once per turn while active, push a creature within Near range one zone away from you, dealing the listed damage if they collide with cover.",
@@ -3917,7 +3917,7 @@
         "manifestation": {
           "tier": 1,
           "family": "form",
-          "concept": "A translucent curtain of refusal raised between threat and ward. It does not stop blades — it stops what blades mean.",
+          "concept": "A translucent curtain of refusal raised between threat and ward. It does not stop blades \u2014 it stops what blades mean.",
           "form": "field",
           "function": "protect",
           "stability": "sustained",
@@ -3934,7 +3934,7 @@
           "rangeFt": 0,
           "maintenanceCost": "1 Stress per scene maintained past the first.",
           "riskText": "The wall is visible and audible to everyone in Far range. Anyone tracking you at the strategic level knows where you are.",
-          "pathResonance": "Bulwark — denial is shelter for those it shelters.",
+          "pathResonance": "Bulwark \u2014 denial is shelter for those it shelters.",
           "fictionalPermission": "You declare a side of the conflict. People who were unsure step over to your side.",
           "gmCalibration": "Tier-2 Form. Wall is one zone wide. Drops if you fall unconscious or stop singing.",
           "mechanicalHook": "Allies on your side of the wall have +2 Resolve and reroll the lowest die against fear, charm, and intimidation. Hostile manifestations targeting them cost +1 Clarity to push through.",
@@ -4261,7 +4261,7 @@
                 "table": null
               },
               "signals": {},
-              "lore": "<p>Standard-pattern slug-throwing sidearm. Iron sights, six-round chamber, kicks like a polite mule. The most common ranged weapon in Bad Eden — the kind of pistol you find in a glove box, a holster, or the bottom of a trade-post crate.</p><p><b>Standard Issue.</b> No signature, no electronics, no hum. It just shoots.</p>",
+              "lore": "<p>Standard-pattern slug-throwing sidearm. Iron sights, six-round chamber, kicks like a polite mule. The most common ranged weapon in Bad Eden \u2014 the kind of pistol you find in a glove box, a holster, or the bottom of a trade-post crate.</p><p><b>Standard Issue.</b> No signature, no electronics, no hum. It just shoots.</p>",
               "materialOf": [
                 "scrap-steel",
                 "casing-brass"
@@ -4582,7 +4582,7 @@
                 "table": null
               },
               "signals": {},
-              "lore": "<p>Single-bit utility axe with a hickory haft and a leather wrist-thong. Cuts kindling, cuts cord, cuts targets that get within arm's reach. Throws acceptably for short distances.</p><p><b>Standard Issue.</b> Pulls double duty as a tool. No signature, no surprise — just dependable weight.</p>",
+              "lore": "<p>Single-bit utility axe with a hickory haft and a leather wrist-thong. Cuts kindling, cuts cord, cuts targets that get within arm's reach. Throws acceptably for short distances.</p><p><b>Standard Issue.</b> Pulls double duty as a tool. No signature, no surprise \u2014 just dependable weight.</p>",
               "materialOf": [
                 "scrap-steel",
                 "hickory-haft"

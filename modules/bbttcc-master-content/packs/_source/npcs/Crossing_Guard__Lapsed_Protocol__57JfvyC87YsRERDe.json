@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "A pre-Fall civic AI still wearing its stop-sign exo, still enforcing a traffic ordinance for a road that no longer exists. It would like to see your papers. There are no papers. This is a problem it can solve violently.",
     "details": {
-      "level": 2,
+      "level": 8,
       "tier": 2,
       "statPoints": 0,
       "skillPoints": 0
@@ -320,7 +320,7 @@
           "single-target",
           "civic"
         ],
-        "effect": "One creature within 60 ft. Body vs DC 13. Fail: Restrained (speed 0) until the end of its next turn — the ordinance compels it to stop.",
+        "effect": "One creature within 60 ft. Body vs DC 13. Fail: Restrained (speed 0) until the end of its next turn \u2014 the ordinance compels it to stop.",
         "flavor": "",
         "manifestation": {
           "tier": 1,

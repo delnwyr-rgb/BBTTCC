@@ -8,8 +8,8 @@
     "factionId": "",
     "notes": "",
     "details": {
-      "level": 1,
-      "tier": 1,
+      "level": 8,
+      "tier": 2,
       "statPoints": 0,
       "skillPoints": 0
     },
@@ -174,7 +174,7 @@
           "5e-port"
         ],
         "description": {
-          "value": "<p>In the first round of combat, the bandit reroll the lowest die on attack rolls against any creature that hasn’t taken a turn yet.</p>",
+          "value": "<p>In the first round of combat, the bandit reroll the lowest die on attack rolls against any creature that hasn\u2019t taken a turn yet.</p>",
           "chat": ""
         }
       },

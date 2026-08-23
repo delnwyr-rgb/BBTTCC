@@ -7,7 +7,7 @@
     "evasionBonus": 1,
     "resolveBonus": 0,
     "resistances": [],
-    "armorSkill": "weave",
+    "armorSkill": "fitting",
     "equipped": false,
     "tags": [
       "mal-voiced",
@@ -66,7 +66,7 @@
   "_id": "oZUZBv1w6uok1FR9",
   "effects": [
     {
-      "name": "⚙️ Defense Grant",
+      "name": "\u2699\ufe0f Defense Grant",
       "transfer": false,
       "disabled": false,
       "flags": {

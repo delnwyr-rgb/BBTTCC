@@ -9,7 +9,7 @@
     "resistances": [
       "psychic"
     ],
-    "armorSkill": "warding",
+    "armorSkill": "bracing",
     "equipped": false,
     "tags": [
       "mal-voiced",
@@ -74,7 +74,7 @@
   "_id": "yXVPdB3w9hyL9h6Z",
   "effects": [
     {
-      "name": "⚙️ Defense Grant",
+      "name": "\u2699\ufe0f Defense Grant",
       "transfer": false,
       "disabled": false,
       "flags": {

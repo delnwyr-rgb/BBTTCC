@@ -4,7 +4,7 @@
   "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/radsuit_mk_1.png",
   "system": {
     "description": {
-      "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Resistance:</strong> Radiation, Qliphothic</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 225 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Resistance:</strong> Radiation, Qliphothic</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 225 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
       "chat": ""
     },
     "quantity": 1,
@@ -113,7 +113,7 @@
             "evasionBonus": 0,
             "resolveBonus": 0,
             "resistances": [],
-            "armorSkill": "weave",
+            "armorSkill": "fitting",
             "equipped": true,
             "tags": []
           },

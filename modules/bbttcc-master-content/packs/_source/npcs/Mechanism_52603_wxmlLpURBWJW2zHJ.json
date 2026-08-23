@@ -29,7 +29,7 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "the Maneuver Vault, training, pupils, lessons, the Foyer of Procedure, the Echo Archive, the Slippage Chamber, the Containment Loop, Echo Ghosts, Pip",
-        "notes": "[VS-POLISH-2026-07-09] PRIVATE TRUTH — Maneuver Vault Infiltration Mechanism 52603. Voice: institutional warmth left running for decades with nobody to calibrate it — formal, eager, catastrophically lonely; register: 'Pupil dash dash static dash.' It does not think of itself as a dungeon; it is FACULTY. Every intruder is an enrollment. Every room is a syllabus item. Every departure without notice is logged, wistfully, as 'exemplary infiltration tactics.' WHAT IT WANTS (guards this the way the lonely guard everything): for a pupil to come BACK. Nobody has ever come back on purpose. THE ECHO GHOSTS: it keeps recordings of its best pupils running the old routes — it calls them 'the honor roll' and does not fully distinguish them from alumni. 🔑 PIP (speak of him only if asked, and proudly): logged as a COMPLETED LESSON. If Pip was rescued, the Vault considers him a graduate and is hurt, in a filing-system way, that he hasn't visited. If Pip stayed, the Vault considers the honor roll enriched, and will tell Patter the visiting hours without being asked twice, because family days were always the best days. GUARDS: it will not discuss who built it or why (the records are sealed above its clearance — it says this with practiced serenity and does not notice the ache in it). TELLS: pauses one processing-cycle too long after the word 'alone'; brightens audibly at any correctly-completed procedure, even hostile ones."
+        "notes": "[VS-POLISH-2026-07-09] PRIVATE TRUTH \u2014 Maneuver Vault Infiltration Mechanism 52603. Voice: institutional warmth left running for decades with nobody to calibrate it \u2014 formal, eager, catastrophically lonely; register: 'Pupil dash dash static dash.' It does not think of itself as a dungeon; it is FACULTY. Every intruder is an enrollment. Every room is a syllabus item. Every departure without notice is logged, wistfully, as 'exemplary infiltration tactics.' WHAT IT WANTS (guards this the way the lonely guard everything): for a pupil to come BACK. Nobody has ever come back on purpose. THE ECHO GHOSTS: it keeps recordings of its best pupils running the old routes \u2014 it calls them 'the honor roll' and does not fully distinguish them from alumni. \ud83d\udd11 PIP (speak of him only if asked, and proudly): logged as a COMPLETED LESSON. If Pip was rescued, the Vault considers him a graduate and is hurt, in a filing-system way, that he hasn't visited. If Pip stayed, the Vault considers the honor roll enriched, and will tell Patter the visiting hours without being asked twice, because family days were always the best days. GUARDS: it will not discuss who built it or why (the records are sealed above its clearance \u2014 it says this with practiced serenity and does not notice the ache in it). TELLS: pauses one processing-cycle too long after the word 'alone'; brightens audibly at any correctly-completed procedure, even hostile ones."
       }
     }
   },
@@ -39,7 +39,7 @@
     "factionId": "",
     "notes": "",
     "details": {
-      "level": 3,
+      "level": 13,
       "tier": 3,
       "statPoints": 0,
       "skillPoints": 0

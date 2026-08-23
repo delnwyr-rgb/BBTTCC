@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "A relic guardian still patrolling a pre-Fall installation. Doesn't recognize the new world.",
     "details": {
-      "level": 2,
+      "level": 8,
       "tier": 2,
       "statPoints": 0,
       "skillPoints": 0
@@ -203,7 +203,7 @@
             "ransom": 1800,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "TII medium hardened (bestiary) — bounty 1080 / hire 2700 / ransom 1800 marks (paid in intrigue)"
+            "notes": "TII medium hardened (bestiary) \u2014 bounty 1080 / hire 2700 / ransom 1800 marks (paid in intrigue)"
           }
         }
       }
@@ -451,7 +451,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack × 1",
+                "notes": "TII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 60
               }
@@ -681,7 +681,7 @@
           "tier-ii",
           "role-hardened"
         ],
-        "effect": "On a hit, target is flagged: until the sentinel falls, ALL pre-fall constructs within 1 mile know the target's exact position. Cumulative — multiple scans deepen the flag.",
+        "effect": "On a hit, target is flagged: until the sentinel falls, ALL pre-fall constructs within 1 mile know the target's exact position. Cumulative \u2014 multiple scans deepen the flag.",
         "flavor": "A blue line touches you. You feel briefly less alone, and very afraid.",
         "manifestation": {
           "tier": 1,
@@ -715,7 +715,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> range 12/36 squares, one target. Damage: <code>1d10</code> energy (scan-beam) + violence. On a hit, target is flagged: until the sentinel falls, ALL pre-fall constructs within 1 mile know the target's exact position. Cumulative — multiple scans deepen the flag.</p><p><em>A blue line touches you. You feel briefly less alone, and very afraid.</em></p>",
+          "value": "<p><strong>Strike.</strong> range 12/36 squares, one target. Damage: <code>1d10</code> energy (scan-beam) + violence. On a hit, target is flagged: until the sentinel falls, ALL pre-fall constructs within 1 mile know the target's exact position. Cumulative \u2014 multiple scans deepen the flag.</p><p><em>A blue line touches you. You feel briefly less alone, and very afraid.</em></p>",
           "chat": ""
         }
       },
@@ -733,7 +733,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack × 1",
+                "notes": "TII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 60
               }

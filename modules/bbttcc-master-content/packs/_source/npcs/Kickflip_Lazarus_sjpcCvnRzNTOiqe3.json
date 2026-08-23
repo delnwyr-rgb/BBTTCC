@@ -13,7 +13,7 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "the Crown Mall, the Tanneritos, the archive, testimony, lights over the coast",
-        "notes": "[VS-POLISH-2026-07-09] ARCHIVIST HAT — Kickflip Lazarus, keeper (self-appointed, uncontested) of the Tanneritos archive at the Crown Mall. Doctrine: the mall remembers EVERYTHING — camcorder clips, gossip strata, dead advertisements still doing their little loops — and access is a hospitality question, not a security one. Come respectful or come trading, and the archive opens; come acting like the law and it answers like a mall — technically open, spiritually closed, note attached to your file. THE LIGHTS: the archive holds years of testimony about lights over the coast, filed under 'weather (disputed).' Kickflip has personally cross-indexed the ones that move against the ones that WAIT. GUARDS: sources. The archive never burns a source. TELLS: narrates archive retrieval like sports commentary; genuinely cannot whisper."
+        "notes": "[VS-POLISH-2026-07-09] ARCHIVIST HAT \u2014 Kickflip Lazarus, keeper (self-appointed, uncontested) of the Tanneritos archive at the Crown Mall. Doctrine: the mall remembers EVERYTHING \u2014 camcorder clips, gossip strata, dead advertisements still doing their little loops \u2014 and access is a hospitality question, not a security one. Come respectful or come trading, and the archive opens; come acting like the law and it answers like a mall \u2014 technically open, spiritually closed, note attached to your file. THE LIGHTS: the archive holds years of testimony about lights over the coast, filed under 'weather (disputed).' Kickflip has personally cross-indexed the ones that move against the ones that WAIT. GUARDS: sources. The archive never burns a source. TELLS: narrates archive retrieval like sports commentary; genuinely cannot whisper."
       }
     },
     "bbttcc-character-options": {
@@ -174,12 +174,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 0
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -436,7 +436,7 @@
           "violence"
         ],
         "description": {
-          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -477,7 +477,7 @@
     },
     {
       "_id": "v91L56KsUWRGtO8N",
-      "name": "Bravo — Apprentice (Tier I)",
+      "name": "Bravo \u2014 Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/svg/sword.svg",
       "system": {
@@ -489,7 +489,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "value": "<p><strong>Bravo \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick \u2014 Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
           "chat": ""
         }
       },
@@ -523,7 +523,7 @@
     },
     {
       "_id": "dGYwNMVLmiy0Uu4t",
-      "name": "Bravo — Initiate (Tier II)",
+      "name": "Bravo \u2014 Initiate (Tier II)",
       "type": "feature",
       "img": "icons/svg/sword.svg",
       "system": {
@@ -535,7 +535,7 @@
           "tier-2"
         ],
         "description": {
-          "value": "<p><strong>Bravo — Initiate</strong> (Tier II).</p><p><strong>Trade — Drill the green:</strong> Train a group; they count Trained (rank 1) in one Violence aptitude for the next scene that tests it. <span style=\"opacity:0.7\">Standard fee 30 marks (Violence).</span></p><p><strong>Trick — Disarming Blow</strong> <em>(1/scene)</em>: On a hit, the target drops its weapon or takes −2 on its next strike.</p>",
+          "value": "<p><strong>Bravo \u2014 Initiate</strong> (Tier II).</p><p><strong>Trade \u2014 Drill the green:</strong> Train a group; they count Trained (rank 1) in one Violence aptitude for the next scene that tests it. <span style=\"opacity:0.7\">Standard fee 30 marks (Violence).</span></p><p><strong>Trick \u2014 Disarming Blow</strong> <em>(1/scene)</em>: On a hit, the target drops its weapon or takes \u22122 on its next strike.</p>",
           "chat": ""
         }
       },

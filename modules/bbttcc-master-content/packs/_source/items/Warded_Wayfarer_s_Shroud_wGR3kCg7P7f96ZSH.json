@@ -9,7 +9,7 @@
     "resistances": [
       "qliphothic"
     ],
-    "armorSkill": "warding",
+    "armorSkill": "bracing",
     "equipped": false,
     "tags": [
       "t1-baseline",
@@ -20,7 +20,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A hooded shroud of road-canvas with a thumb-width of prayer-thread run through the hem. Sold at sept-adjacent waystations to pilgrims who can't afford real warding but won't walk corrupted ground bare.</p><p><b>Standard Issue.</b> The thread takes the worst of the static off. Resists qliphothic. The first warding piece most Stewards ever own.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Cloth</li>\n  <li><strong>Defense:</strong> Guard +1, Evasion +1, Resolve +1</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 75 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>A hooded shroud of road-canvas with a thumb-width of prayer-thread run through the hem. Sold at sept-adjacent waystations to pilgrims who can't afford real warding but won't walk corrupted ground bare.</p><p><b>Standard Issue.</b> The thread takes the worst of the static off. Resists qliphothic. The first warding piece most Stewards ever own.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Cloth</li>\n  <li><strong>Defense:</strong> Guard +1, Evasion +1, Resolve +1</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 75 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
       "chat": ""
     }
   },
@@ -57,7 +57,7 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TI armor × 1.50",
+            "notes": "TI armor \u00d7 1.50",
             "bound": "free",
             "saleBack": 30
           }

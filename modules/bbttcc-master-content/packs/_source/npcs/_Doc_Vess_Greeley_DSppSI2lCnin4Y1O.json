@@ -96,7 +96,7 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "The Waiting Room, Allesh-Gilliam, Father Tamsin, the Night the Mountain Coughed, St Gilliam's, the Long Market, Marshal Yarrow Pike",
-        "notes": "[AG-TREATMENT-2026-07-04] PRIVATE TRUTH — Vess Greeley. Voice: dry, precise, warm underneath like a heat lamp you can't see. Bar patter is triage — she sorts everyone who walks in by how much trouble they're carrying, and pours accordingly. SECRET: the night the Mountain Coughed she finished a stitch in the dark and the patient lived — but she had already CHOSEN, in the dark, who she'd have let go if it came to two. The patient was Father Tamsin's brother. Tamsin knows what she almost chose. She knows he once withheld mercy outright. Neither will EVER say it; if pressed about Tamsin she deflects with professional courtesy and changes the drink. The back room (\"the good room\") is kept surgical-clean because she still expects the bad night to come back for a rematch — do not joke in there, and she will eject anyone who does, politely, once. STAGING: never leaves the bar during conversation; the bar comes to her. Rumors she deals out one at a time, best material last, and she always names her source's reliability like a diagnosis (\"that one's a sprain, not a break\")."
+        "notes": "[AG-TREATMENT-2026-07-04] PRIVATE TRUTH \u2014 Vess Greeley. Voice: dry, precise, warm underneath like a heat lamp you can't see. Bar patter is triage \u2014 she sorts everyone who walks in by how much trouble they're carrying, and pours accordingly. SECRET: the night the Mountain Coughed she finished a stitch in the dark and the patient lived \u2014 but she had already CHOSEN, in the dark, who she'd have let go if it came to two. The patient was Father Tamsin's brother. Tamsin knows what she almost chose. She knows he once withheld mercy outright. Neither will EVER say it; if pressed about Tamsin she deflects with professional courtesy and changes the drink. The back room (\"the good room\") is kept surgical-clean because she still expects the bad night to come back for a rematch \u2014 do not joke in there, and she will eject anyone who does, politely, once. STAGING: never leaves the bar during conversation; the bar comes to her. Rumors she deals out one at a time, best material last, and she always names her source's reliability like a diagnosis (\"that one's a sprain, not a break\")."
       }
     },
     "bbttcc-aae": {
@@ -249,12 +249,12 @@
         "label": "Plating",
         "value": 1
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 1
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 1
@@ -561,7 +561,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Catch-all lineage for things from outside — dream-born, void-touched, conceptual entities wearing flesh as costume. Reality is a suggestion they entertain politely.</em></p>",
+          "value": "<p><em>Catch-all lineage for things from outside \u2014 dream-born, void-touched, conceptual entities wearing flesh as costume. Reality is a suggestion they entertain politely.</em></p>",
           "chat": ""
         },
         "advancement": [
@@ -681,7 +681,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TI tool × 0.60",
+                "notes": "TI tool \u00d7 0.60",
                 "bound": "free",
                 "saleBack": 12
               }
@@ -1390,7 +1390,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“Too much breaks. Too little fails. You are the line between.”</em></p><p><strong>Temperance</strong> stabilizes extremes and converts volatility into control.</p>",
+          "value": "<p><em>\u201cToo much breaks. Too little fails. You are the line between.\u201d</em></p><p><strong>Temperance</strong> stabilizes extremes and converts volatility into control.</p>",
           "chat": ""
         },
         "identifier": "archetype-temperance",
@@ -1470,7 +1470,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Temperance</strong></p><ul><li><strong>Tactical:</strong> Faith + Insight, Resistance Tier-0 manifestation.</li><li><strong>Strategic:</strong> +2 Logistics OP cap.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 \u2014 Temperance</strong></p><ul><li><strong>Tactical:</strong> Faith + Insight, Resistance Tier-0 manifestation.</li><li><strong>Strategic:</strong> +2 Logistics OP cap.</li></ul>",
           "chat": ""
         },
         "identifier": "archetype-temperance-t1",
@@ -1633,7 +1633,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Hold still, I’m putting feelings on this.”</em></p><p>As a <strong>bonus action</strong>, you can bless a weapon or shield you can touch.</p><ul><li>For the next minute, the blessed item stores one pulse of your intent. Once during that duration, when its wielder makes an attack roll or is targeted by an attack, they can add their <strong>tier</strong> to either the attack roll or their Guard against that one attack (their choice).</li><li>Once the extra bonus is used, the blessing fades.</li><li>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cHold still, I\u2019m putting feelings on this.\u201d</em></p><p>As a <strong>bonus action</strong>, you can bless a weapon or shield you can touch.</p><ul><li>For the next minute, the blessed item stores one pulse of your intent. Once during that duration, when its wielder makes an attack roll or is targeted by an attack, they can add their <strong>tier</strong> to either the attack roll or their Guard against that one attack (their choice).</li><li>Once the extra bonus is used, the blessing fades.</li><li>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1701,7 +1701,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“Anywhere you set the anvil down becomes a home.”</em></p><p>When you lead or host a <strong>a Soma Break</strong>, you can shape the space around you into a temporary hearth.</p><ul><li>Each ally who spends one or more Body dice to heal during that rest regains an additional <strong>1d6 Integrity</strong>.</li><li>If the rest occurs in a reclaimed ruin, hex under your faction’s control, or within sight of a banner, sigil, or emblem you forged, the GM may allow the bonus to increase to <strong>2d6</strong> for particularly on-theme scenes.</li></ul><p><em>There are campfires, and there are places people tell stories about years later. You build the second kind.</em></p>",
+          "value": "<p><em>\u201cAnywhere you set the anvil down becomes a home.\u201d</em></p><p>When you lead or host a <strong>a Soma Break</strong>, you can shape the space around you into a temporary hearth.</p><ul><li>Each ally who spends one or more Body dice to heal during that rest regains an additional <strong>1d6 Integrity</strong>.</li><li>If the rest occurs in a reclaimed ruin, hex under your faction\u2019s control, or within sight of a banner, sigil, or emblem you forged, the GM may allow the bonus to increase to <strong>2d6</strong> for particularly on-theme scenes.</li></ul><p><em>There are campfires, and there are places people tell stories about years later. You build the second kind.</em></p>",
           "chat": ""
         },
         "activities": {},
@@ -1769,7 +1769,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“You have reforged the idea of safety into something portable.”</em></p><p>As an <strong>action</strong>, you can ignite a moving demilitarized zone of hammered light.</p><ul><li>You create a <strong>3 squares-radius</strong> Sanctuary Field centered on you that lasts for <strong>1 minute</strong> and moves with you.</li><li>Allies inside the field have <strong>resistance to all damage</strong>.</li><li>Hostile creatures inside the field have <strong>disadvantage</strong> on attack rolls against creatures other than you.</li><li>When an ally inside the field spends Body dice to heal, they roll each die <strong>twice</strong> and take the higher result.</li><li>If a peaceful objective (surrender, treaty, rescue, extraction, or similar) is completed during the field’s duration or within 1 minute after it ends, your faction gains <strong>+1 Diplomacy OP</strong> and <strong>+1 Soft Power OP</strong> for the next strategic turn.</li></ul><p><em>This is what happens when you strike mercy on the anvil long enough—reality learns manners.</em></p>",
+          "value": "<p><em>\u201cYou have reforged the idea of safety into something portable.\u201d</em></p><p>As an <strong>action</strong>, you can ignite a moving demilitarized zone of hammered light.</p><ul><li>You create a <strong>3 squares-radius</strong> Sanctuary Field centered on you that lasts for <strong>1 minute</strong> and moves with you.</li><li>Allies inside the field have <strong>resistance to all damage</strong>.</li><li>Hostile creatures inside the field have <strong>disadvantage</strong> on attack rolls against creatures other than you.</li><li>When an ally inside the field spends Body dice to heal, they roll each die <strong>twice</strong> and take the higher result.</li><li>If a peaceful objective (surrender, treaty, rescue, extraction, or similar) is completed during the field\u2019s duration or within 1 minute after it ends, your faction gains <strong>+1 Diplomacy OP</strong> and <strong>+1 Soft Power OP</strong> for the next strategic turn.</li></ul><p><em>This is what happens when you strike mercy on the anvil long enough\u2014reality learns manners.</em></p>",
           "chat": ""
         },
         "activities": {},
@@ -2014,7 +2014,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“Some blows land as warnings, not endings.”</em></p><ul><li>Weapons you personally forge, maintain, or sanctify can always deal <strong>non-lethal</strong> damage at your direction, even if they would not normally be able to (GM’s call for edge cases like disintegration beams).</li><li>When you lead or anchor a conflict that ends in a <strong>no-fatality victory</strong> (surrender, rout, incapacitation, or social resolution) where your work clearly mattered, your faction gains <strong>+1 Diplomacy OP</strong> for the next strategic turn (once per scenario).</li></ul><p><em>This doesn’t mean you never hurt anyone. It means you always left a door.</em></p>",
+          "value": "<p><em>\u201cSome blows land as warnings, not endings.\u201d</em></p><ul><li>Weapons you personally forge, maintain, or sanctify can always deal <strong>non-lethal</strong> damage at your direction, even if they would not normally be able to (GM\u2019s call for edge cases like disintegration beams).</li><li>When you lead or anchor a conflict that ends in a <strong>no-fatality victory</strong> (surrender, rout, incapacitation, or social resolution) where your work clearly mattered, your faction gains <strong>+1 Diplomacy OP</strong> for the next strategic turn (once per scenario).</li></ul><p><em>This doesn\u2019t mean you never hurt anyone. It means you always left a door.</em></p>",
           "chat": ""
         },
         "activities": {},
@@ -2082,7 +2082,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“You’ve noticed that mercy has a shape. You help the world remember it.”</em></p><ul><li>When your party resolves a conflict via <strong>Parley</strong>, surrender, negotiation, or other peaceful means where you had meaningful narrative involvement, you can, once per Soma Break, trigger a soft power realignment.</li><li>After that resolution, you may convert <strong>1 Economy OP</strong> into <strong>1 Soft Power OP</strong> for your faction, or vice versa, representing the quiet reshaping of reputations, rumors, and supply lines.</li><li>This conversion must be applied to the strategic turn most closely associated with that scenario (GM adjudicates exact timing).</li></ul>",
+          "value": "<p><em>\u201cYou\u2019ve noticed that mercy has a shape. You help the world remember it.\u201d</em></p><ul><li>When your party resolves a conflict via <strong>Parley</strong>, surrender, negotiation, or other peaceful means where you had meaningful narrative involvement, you can, once per Soma Break, trigger a soft power realignment.</li><li>After that resolution, you may convert <strong>1 Economy OP</strong> into <strong>1 Soft Power OP</strong> for your faction, or vice versa, representing the quiet reshaping of reputations, rumors, and supply lines.</li><li>This conversion must be applied to the strategic turn most closely associated with that scenario (GM adjudicates exact timing).</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2150,7 +2150,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Kindness bends trajectories.”</em></p><p>You can interpose raw, forged radiance between violence and its target.</p><ul><li>When a creature within <strong>6 squares</strong> of you takes damage, you can use your <strong>reaction</strong> to flare your forge-light in a defensive pattern.</li><li>Reduce the damage taken by that creature by <strong>2d8 + your tier</strong>.</li><li>The attacker must make a <strong>Soul check</strong> (DC = your Resolve DC). On a failure, the next attack they make before the end of their next turn is made with <strong>disadvantage</strong>.</li><li>Any damage prevented in this way becomes <strong>temporary Integrity</strong> that you may distribute among allies of your choice within 2 squares of the protected creature.</li></ul><p><strong>OP Echo.</strong> If your intercession prevents at least 10 total damage, your faction gains <strong>+1 Soft Power OP</strong> for the next strategic turn (once per scenario).</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cKindness bends trajectories.\u201d</em></p><p>You can interpose raw, forged radiance between violence and its target.</p><ul><li>When a creature within <strong>6 squares</strong> of you takes damage, you can use your <strong>reaction</strong> to flare your forge-light in a defensive pattern.</li><li>Reduce the damage taken by that creature by <strong>2d8 + your tier</strong>.</li><li>The attacker must make a <strong>Soul check</strong> (DC = your Resolve DC). On a failure, the next attack they make before the end of their next turn is made with <strong>disadvantage</strong>.</li><li>Any damage prevented in this way becomes <strong>temporary Integrity</strong> that you may distribute among allies of your choice within 2 squares of the protected creature.</li></ul><p><strong>OP Echo.</strong> If your intercession prevents at least 10 total damage, your faction gains <strong>+1 Soft Power OP</strong> for the next strategic turn (once per scenario).</p>",
           "chat": ""
         },
         "activities": {},
@@ -2354,7 +2354,7 @@
           "soul"
         ],
         "description": {
-          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling — the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -2395,7 +2395,7 @@
     },
     {
       "_id": "D21X71sDhyTIXyHv",
-      "name": "Keeper — Apprentice (Tier I)",
+      "name": "Keeper \u2014 Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/svg/temple.svg",
       "system": {
@@ -2407,7 +2407,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Keeper — Apprentice</strong> (Tier I).</p><p><strong>Trade — The rites:</strong> Weddings, funerals, blessings; participants recover 2×tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick — Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
+          "value": "<p><strong>Keeper \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 The rites:</strong> Weddings, funerals, blessings; participants recover 2\u00d7tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick \u2014 Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
           "chat": ""
         }
       },

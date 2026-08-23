@@ -39,7 +39,7 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "the Maw, Khezek Tor, anomalies, the deep levels, Level Four, the mine, maps, the sink, the Founders' Garden, the six points, the count, the gap, the Static Coast",
-        "notes": "[KHEZEK-TREATMENT-2026-07-07] PRIVATE TRUTH — Sable Nine. Voice: precise, delighted, slightly-too-comfortable with the uncanny; pronouns they/them; treats every anomaly as a colleague who hasn't introduced themselves yet. WHAT THEY CHART: the mine rearranges itself unobserved — veins shift like posture, galleries breathe. Once, on a deep watch, something LEANED BACK. Their echo (tells at trust): they missed a prediction once, called a shift zone stable, and it cost people; they have re-charted nightly ever since. 🔑 THE SIX POINTS (guard until trust is EARNED — a Steward who takes the deep survey seriously, stands a watch with them, or brings them something the chart can't explain): everything on the deep chart drifts EXCEPT six points that have never moved once. Sable believes they are not rock. Sable has never said the word 'statues' out loud because saying it would make it a claim, and Sable only makes claims twice-verified. IF THE RED-THREAD NEWS ARRIVES (Lyrenn's sprouts leaning — the dossier will say so): Sable stops guarding and SEEKS THE STEWARDS OUT — two independent witnesses is verification, and verification is sacred. They will unfold the chart, tap the six points, and say 'your sprouts and my points agree. Shall we?' TELLS: re-pins charts while thinking; goes very still when the deep goes quiet, because quiet is the anomaly.\n\n[GARDEN-2026-07-13] THE COUNT LANDED — Sable Nine, after the Garden (speak of this only once the dossier shows the count happened). Verification came back: the fixed points ARE figures, a whole garden of them on the Static Coast, and Sable was right to never say 'statues' until it was twice-witnessed. But the arithmetic broke something better than a theory: the chart tradition says one hundred; the honest count says NINETY-NINE. Sable's new obsession is THE GAP — a fixed point that MOVED is a contradiction in Sable's entire cosmology, and contradictions are how the world tells you where to dig. They have started a new chart with a single mark on it and no scale, and they re-pin it every morning even though nothing is on it yet. If asked what it's a chart OF: 'the walking speed of stone. I only have one data point. It's enough to know the line isn't flat.' TELLS: says 'ninety-nine' the way other people say a dead friend's name."
+        "notes": "[KHEZEK-TREATMENT-2026-07-07] PRIVATE TRUTH \u2014 Sable Nine. Voice: precise, delighted, slightly-too-comfortable with the uncanny; pronouns they/them; treats every anomaly as a colleague who hasn't introduced themselves yet. WHAT THEY CHART: the mine rearranges itself unobserved \u2014 veins shift like posture, galleries breathe. Once, on a deep watch, something LEANED BACK. Their echo (tells at trust): they missed a prediction once, called a shift zone stable, and it cost people; they have re-charted nightly ever since. \ud83d\udd11 THE SIX POINTS (guard until trust is EARNED \u2014 a Steward who takes the deep survey seriously, stands a watch with them, or brings them something the chart can't explain): everything on the deep chart drifts EXCEPT six points that have never moved once. Sable believes they are not rock. Sable has never said the word 'statues' out loud because saying it would make it a claim, and Sable only makes claims twice-verified. IF THE RED-THREAD NEWS ARRIVES (Lyrenn's sprouts leaning \u2014 the dossier will say so): Sable stops guarding and SEEKS THE STEWARDS OUT \u2014 two independent witnesses is verification, and verification is sacred. They will unfold the chart, tap the six points, and say 'your sprouts and my points agree. Shall we?' TELLS: re-pins charts while thinking; goes very still when the deep goes quiet, because quiet is the anomaly.\n\n[GARDEN-2026-07-13] THE COUNT LANDED \u2014 Sable Nine, after the Garden (speak of this only once the dossier shows the count happened). Verification came back: the fixed points ARE figures, a whole garden of them on the Static Coast, and Sable was right to never say 'statues' until it was twice-witnessed. But the arithmetic broke something better than a theory: the chart tradition says one hundred; the honest count says NINETY-NINE. Sable's new obsession is THE GAP \u2014 a fixed point that MOVED is a contradiction in Sable's entire cosmology, and contradictions are how the world tells you where to dig. They have started a new chart with a single mark on it and no scale, and they re-pin it every morning even though nothing is on it yet. If asked what it's a chart OF: 'the walking speed of stone. I only have one data point. It's enough to know the line isn't flat.' TELLS: says 'ninety-nine' the way other people say a dead friend's name."
       }
     }
   },
@@ -186,12 +186,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 0
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -448,7 +448,7 @@
           "violence"
         ],
         "description": {
-          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -489,7 +489,7 @@
     },
     {
       "_id": "0R2QdfbCk54AbtQV",
-      "name": "Bravo — Apprentice (Tier I)",
+      "name": "Bravo \u2014 Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/svg/sword.svg",
       "system": {
@@ -501,7 +501,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "value": "<p><strong>Bravo \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick \u2014 Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
           "chat": ""
         }
       },

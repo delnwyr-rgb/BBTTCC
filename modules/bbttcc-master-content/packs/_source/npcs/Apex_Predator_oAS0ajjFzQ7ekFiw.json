@@ -8,8 +8,8 @@
     "factionId": "",
     "notes": "",
     "details": {
-      "level": 1,
-      "tier": 1,
+      "level": 13,
+      "tier": 3,
       "statPoints": 0,
       "skillPoints": 0
     },
@@ -210,7 +210,7 @@
           "5e-port"
         ],
         "description": {
-          "value": "<p>The predator reroll the lowest die on melee attack rolls against any creature that doesn’t have all its Integrity.</p>",
+          "value": "<p>The predator reroll the lowest die on melee attack rolls against any creature that doesn\u2019t have all its Integrity.</p>",
           "chat": ""
         }
       },

@@ -36,7 +36,7 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "the profession, the books, pensions, the summit, the program, the Drowned South, punts, tolls",
-        "notes": "[BANDIT-ACCORD-2026-07-13] PRIVATE TRUTH — Bandit Lord Osmund Cree, the Drowned South. Voice: unhurried bookkeeper's calm with swamp-dry humor; talks about banditry exclusively in the vocabulary of management (crews are 'staff', ambushes are 'collections', casualties are 'the bad column'). NOT evil — OVER-EXTENDED: inherited three crews, married into two more, and has been paying survivor pensions from a shrinking toll base for years; the books are real, meticulous, and slowly drowning him. HIS ECHO (tells if asked plainly, once): the night he understood the profession was finished wasn't a battle — it was a payroll. He sat in the stilt-hall with the pension ledger and realized the Drowned South's future was a program some out-of-towners were running out of a fire station, and what he felt wasn't anger. It was RELIEF, and the relief frightened him more than any raid ever had. ON THE PROGRAM: he tracks the Stewards' mercy count more accurately than they do — every spared crew, every bowl of soup, every reformed hire is a line in HIS books too, in a column he titled, privately, THE EXIT. GUARDS: never discusses camp positions or whistle-codes while the profession is live; won't badmouth his own people, even the splinter-minded ones ('every ledger has a bad column; you don't read it aloud'). TELLS: squares stacked items to true edges when the pension math comes up; says 'four hundred souls' never 'four hundred fighters'; laughs exactly once, quietly, when someone calls him a warlord."
+        "notes": "[BANDIT-ACCORD-2026-07-13] PRIVATE TRUTH \u2014 Bandit Lord Osmund Cree, the Drowned South. Voice: unhurried bookkeeper's calm with swamp-dry humor; talks about banditry exclusively in the vocabulary of management (crews are 'staff', ambushes are 'collections', casualties are 'the bad column'). NOT evil \u2014 OVER-EXTENDED: inherited three crews, married into two more, and has been paying survivor pensions from a shrinking toll base for years; the books are real, meticulous, and slowly drowning him. HIS ECHO (tells if asked plainly, once): the night he understood the profession was finished wasn't a battle \u2014 it was a payroll. He sat in the stilt-hall with the pension ledger and realized the Drowned South's future was a program some out-of-towners were running out of a fire station, and what he felt wasn't anger. It was RELIEF, and the relief frightened him more than any raid ever had. ON THE PROGRAM: he tracks the Stewards' mercy count more accurately than they do \u2014 every spared crew, every bowl of soup, every reformed hire is a line in HIS books too, in a column he titled, privately, THE EXIT. GUARDS: never discusses camp positions or whistle-codes while the profession is live; won't badmouth his own people, even the splinter-minded ones ('every ledger has a bad column; you don't read it aloud'). TELLS: squares stacked items to true edges when the pension math comes up; says 'four hundred souls' never 'four hundred fighters'; laughs exactly once, quietly, when someone calls him a warlord."
       }
     }
   },
@@ -183,12 +183,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 0
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -445,7 +445,7 @@
           "soul"
         ],
         "description": {
-          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling — the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -486,7 +486,7 @@
     },
     {
       "_id": "YxYsJ8aeJwbKhX0g",
-      "name": "Keeper — Apprentice (Tier I)",
+      "name": "Keeper \u2014 Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/svg/temple.svg",
       "system": {
@@ -498,7 +498,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Keeper — Apprentice</strong> (Tier I).</p><p><strong>Trade — The rites:</strong> Weddings, funerals, blessings; participants recover 2×tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick — Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
+          "value": "<p><strong>Keeper \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 The rites:</strong> Weddings, funerals, blessings; participants recover 2\u00d7tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick \u2014 Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
           "chat": ""
         }
       },
@@ -539,7 +539,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Cro-Magnon, Denisovan, Florensis, Neanderthal</strong>.</p><p>This root grants the shared Human core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Cro-Magnon, Denisovan, Florensis, Neanderthal</strong>.</p><p>This root grants the shared Human core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>\u201cHumanity is not special. It\u2019s just stubborn enough to keep moving when reality begs it to stop.\u201d</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
           "chat": ""
         },
         "advancement": [
@@ -618,7 +618,7 @@
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "on one checks [TODO(adv-call)] of your choice each round (declare before roll…"
+              "note": "on one checks [TODO(adv-call)] of your choice each round (declare before roll\u2026"
             }
           ],
           "triggers": [
@@ -707,7 +707,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Neanderthal, Denisovan, Florensis, Erectus). Your lineage grants Tier powers as you level.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cHumanity is not special. It\u2019s just stubborn enough to keep moving when reality begs it to stop.\u201d</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Neanderthal, Denisovan, Florensis, Erectus). Your lineage grants Tier powers as you level.</p>",
           "chat": ""
         },
         "uses": {
@@ -957,7 +957,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>New Heritage (v2).</strong> Cro-Magnon replaces Erectus in the Human heritage lineup.</p><p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Cro-Magnon).</strong> You are not a fantasy human. You are the cognitive, symbolic, cooperative inheritance of the lineage that first painted ancestors on cave walls, buried its dead with flowers, and traded ochre across a continent it had no map for.</p><p>Where Neanderthal is <em>strength</em> and Florensis is <em>reach</em>, Cro-Magnon is <em>pattern</em>. Language, ritual, coalition. You are the human branch that kept explaining things until the explanation started working.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>MND (Mind)</strong> or <strong>PRE (Presence)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory).</p><h3>Cro-Magnon Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Cro-Magnon powers emphasize: <em>Symbolic Thought</em> (ritual and language sensitivity), <em>Coalition Instinct</em> (cooperation bonuses with allies), <em>Tool Mind</em> (improvisational tool use), and <em>Narrative Memory</em> (lore retention that persists across generations).</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>New Heritage (v2).</strong> Cro-Magnon replaces Erectus in the Human heritage lineup.</p><p><em>\u201cHumanity is the species that keeps walking even when the map says \u2018stop.\u2019\u201d</em></p><p><strong>Human (Cro-Magnon).</strong> You are not a fantasy human. You are the cognitive, symbolic, cooperative inheritance of the lineage that first painted ancestors on cave walls, buried its dead with flowers, and traded ochre across a continent it had no map for.</p><p>Where Neanderthal is <em>strength</em> and Florensis is <em>reach</em>, Cro-Magnon is <em>pattern</em>. Language, ritual, coalition. You are the human branch that kept explaining things until the explanation started working.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>MND (Mind)</strong> or <strong>PRE (Presence)</strong>\u2014expressed through Tier powers.</p></li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory).</p><h3>Cro-Magnon Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Cro-Magnon powers emphasize: <em>Symbolic Thought</em> (ritual and language sensitivity), <em>Coalition Instinct</em> (cooperation bonuses with allies), <em>Tool Mind</em> (improvisational tool use), and <em>Narrative Memory</em> (lore retention that persists across generations).</p>",
           "chat": ""
         },
         "advancement": [

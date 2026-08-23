@@ -271,12 +271,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 1
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -425,7 +425,7 @@
     "faction": {
       "id": "LCjOiLBJcMf1GGGW",
       "loyalty": 0,
-      "name": "Shadow Rats, (The Mūs Umbral)"
+      "name": "Shadow Rats, (The M\u016bs Umbral)"
     },
     "bloodDebt": {
       "value": 0,
@@ -444,7 +444,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-cryptidkin-folklore-frame=\"v1\" style=\"display:none\"></div><p><em>\"You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.\"</em></p><p><strong>Folklore Presence.</strong> 1/Soma Break, when you first meet a community, decide whether the rumors about you arrived first. If yes, reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering — the GM gets to colour it.</p><p><strong>Wasteland Adapted.</strong> Reroll the lowest die on defense checks against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh).</p><p><strong>Survivor's Instinct.</strong> 1/Soma Break, when you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress.</p>",
+          "value": "<div data-ft-canon-cryptidkin-folklore-frame=\"v1\" style=\"display:none\"></div><p><em>\"You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.\"</em></p><p><strong>Folklore Presence.</strong> 1/Soma Break, when you first meet a community, decide whether the rumors about you arrived first. If yes, reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering \u2014 the GM gets to colour it.</p><p><strong>Wasteland Adapted.</strong> Reroll the lowest die on defense checks against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh).</p><p><strong>Survivor's Instinct.</strong> 1/Soma Break, when you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -487,7 +487,7 @@
               "effect": {
                 "kind": "chat-prompt",
                 "args": {
-                  "body": "Survivor’s Instinct. When you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress"
+                  "body": "Survivor\u2019s Instinct. When you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress"
                 }
               }
             }
@@ -704,7 +704,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin Subspecies.</strong> This heritage preserves the original UUID for <em>Jackalope (Bad Eden)</em> while converting it from a species-root to a Cryptidkin subspecies.</p><p><em>“You don’t spot a Jackalope. You notice the world flinch, and then realize why.”</em></p><p><strong>Jackalope.</strong> Fast because they have to be. Twitchy because the world has trained them that stillness is how you die. Half-remembered pre-Shattering folklore, half radiation-assembled rumor, and fully people.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium.</p></li><li><p><strong>Speed.</strong> 7 squares</p></li><li><p><strong>Subspecies Lean.</strong> Your subspecies leans toward <strong>INTR (Intrigue)</strong>—expressed through Tier powers.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor’s Instinct).</p><h3>Jackalope Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Jackalope powers emphasize: <em>Startle Reflex</em> (can’t-be-caught-flat burst), <em>Wasteland Bound</em> (long-distance run), <em>Horns of Bad Luck</em> (jinx aura), <em>Can’t Catch Me</em> (evasion), and strategic <em>Bad Omen Runner</em> faction hooks.</p><h3>Strategic Hooks (Foundry / Bad Eden)</h3><p>If you see Jackalope tracks circling your hex, you are not under attack. You are being <em>advised</em>.</p><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+1 Soft Power OP</strong> and <strong>+1 Non-Lethal OP</strong> at campaign start.</p></li><li><p><strong>Trail Whisper.</strong> Once per Strategic Turn, your faction can reroll a single Travel or Scout check made in a hex adjacent to your home territory.</p></li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin Subspecies.</strong> This heritage preserves the original UUID for <em>Jackalope (Bad Eden)</em> while converting it from a species-root to a Cryptidkin subspecies.</p><p><em>\u201cYou don\u2019t spot a Jackalope. You notice the world flinch, and then realize why.\u201d</em></p><p><strong>Jackalope.</strong> Fast because they have to be. Twitchy because the world has trained them that stillness is how you die. Half-remembered pre-Shattering folklore, half radiation-assembled rumor, and fully people.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium.</p></li><li><p><strong>Speed.</strong> 7 squares</p></li><li><p><strong>Subspecies Lean.</strong> Your subspecies leans toward <strong>INTR (Intrigue)</strong>\u2014expressed through Tier powers.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor\u2019s Instinct).</p><h3>Jackalope Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Jackalope powers emphasize: <em>Startle Reflex</em> (can\u2019t-be-caught-flat burst), <em>Wasteland Bound</em> (long-distance run), <em>Horns of Bad Luck</em> (jinx aura), <em>Can\u2019t Catch Me</em> (evasion), and strategic <em>Bad Omen Runner</em> faction hooks.</p><h3>Strategic Hooks (Foundry / Bad Eden)</h3><p>If you see Jackalope tracks circling your hex, you are not under attack. You are being <em>advised</em>.</p><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+1 Soft Power OP</strong> and <strong>+1 Non-Lethal OP</strong> at campaign start.</p></li><li><p><strong>Trail Whisper.</strong> Once per Strategic Turn, your faction can reroll a single Travel or Scout check made in a hex adjacent to your home territory.</p></li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -817,7 +817,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-startle-reflex=\"v1\" style=\"display:none\"></div><p><em>\"You aren't fast because you're fast. You're fast because the world keeps deciding to miss.\"</em></p><p><strong>Startle Reflex (1/Soma Break).</strong> Reaction when you are targeted by an attack roll or fail an Intrigue check — move up to 2 squares without provoking opportunity attacks.</p><p><strong>Horns of Bad Luck.</strong> Your natural horns ship as a Jackalope-only Manifestation when you take the heritage — see your Manifestations tab. When violence escalates around you, the GM may describe unsettling omens tied to your presence — a mirror crack, a dropped knife, a candle going out the wrong direction.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"crypJackStartleReflex\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Startle Reflex</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Reaction  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When targeted by an attack roll or you fail an Intrigue check, move up to 2 squares without provoking opportunity attacks.</span></p></div>",
+          "value": "<div data-ft-canon-startle-reflex=\"v1\" style=\"display:none\"></div><p><em>\"You aren't fast because you're fast. You're fast because the world keeps deciding to miss.\"</em></p><p><strong>Startle Reflex (1/Soma Break).</strong> Reaction when you are targeted by an attack roll or fail an Intrigue check \u2014 move up to 2 squares without provoking opportunity attacks.</p><p><strong>Horns of Bad Luck.</strong> Your natural horns ship as a Jackalope-only Manifestation when you take the heritage \u2014 see your Manifestations tab. When violence escalates around you, the GM may describe unsettling omens tied to your presence \u2014 a mirror crack, a dropped knife, a candle going out the wrong direction.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"crypJackStartleReflex\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Startle Reflex</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break \u00a0\u00b7\u00a0 <strong>Action:</strong> Reaction \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When targeted by an attack roll or you fail an Intrigue check, move up to 2 squares without provoking opportunity attacks.</span></p></div>",
           "chat": ""
         },
         "advancement": {},
@@ -1065,7 +1065,7 @@
         "source": "",
         "tags": [],
         "description": {
-          "value": "<p><em>\"You're already moving. The fight rearranges around it.\"</em></p>\n<p>The Shadow Courier runs on <strong>Surge</strong>, like everyone — but yours comes from <strong>motion</strong>. Move <strong>30+ ft in a turn and you bank +1 Surge</strong> (again at 12 squares, max +2/round). A courier in motion has options; a courier standing still is just a target. The old <em>Pace</em> pool folds into this — same fuel, one number.</p>\n<h3>The Courier (spent via Surge)</h3>\n<ul>\n  <li><strong>Courier's Step</strong> (1) — +half-speed move (no provoke) and a freed reaction; flow through the fight.</li>\n  <li><strong>Ghoststep</strong> (3) — DR equal to Tier till your next turn, and reposition out of danger.</li>\n  <li><strong>Flank &amp; Strike</strong> (5) — reposition, then your next Strike reroll the lowest die <em>and</em> +Tier d6.</li>\n  <li><strong>No Such Door</strong> (8) — allies within Tier squares each gain a freed reaction and a reroll; open the road for the whole team.</li>\n</ul>\n<p>The <strong>Package</strong> endures as your work — designate it, carry it, deliver it. <strong>Delivery banks your Surge to full</strong> and still triggers the route's strategic payoff (Intrigue OP, Darkness reduction, the arrival that mattered).</p>",
+          "value": "<p><em>\"You're already moving. The fight rearranges around it.\"</em></p>\n<p>The Shadow Courier runs on <strong>Surge</strong>, like everyone \u2014 but yours comes from <strong>motion</strong>. Move <strong>30+ ft in a turn and you bank +1 Surge</strong> (again at 12 squares, max +2/round). A courier in motion has options; a courier standing still is just a target. The old <em>Pace</em> pool folds into this \u2014 same fuel, one number.</p>\n<h3>The Courier (spent via Surge)</h3>\n<ul>\n  <li><strong>Courier's Step</strong> (1) \u2014 +half-speed move (no provoke) and a freed reaction; flow through the fight.</li>\n  <li><strong>Ghoststep</strong> (3) \u2014 DR equal to Tier till your next turn, and reposition out of danger.</li>\n  <li><strong>Flank &amp; Strike</strong> (5) \u2014 reposition, then your next Strike reroll the lowest die <em>and</em> +Tier d6.</li>\n  <li><strong>No Such Door</strong> (8) \u2014 allies within Tier squares each gain a freed reaction and a reroll; open the road for the whole team.</li>\n</ul>\n<p>The <strong>Package</strong> endures as your work \u2014 designate it, carry it, deliver it. <strong>Delivery banks your Surge to full</strong> and still triggers the route's strategic payoff (Intrigue OP, Darkness reduction, the arrival that mattered).</p>",
           "chat": ""
         },
         "advancement": [
@@ -1130,7 +1130,7 @@
             },
             "value": {},
             "level": 6,
-            "title": "Shadow Courier — Tier 2: The Crossing"
+            "title": "Shadow Courier \u2014 Tier 2: The Crossing"
           },
           {
             "_id": "XTTN4qPwzYgfQmVV",
@@ -1168,7 +1168,7 @@
             },
             "value": {},
             "level": 11,
-            "title": "Shadow Courier — Tier 3: Package Mastery"
+            "title": "Shadow Courier \u2014 Tier 3: Package Mastery"
           },
           {
             "_id": "T33qFY91LUnCWm0K",
@@ -1206,7 +1206,7 @@
             },
             "value": {},
             "level": 16,
-            "title": "Shadow Courier — Tier 4: Unfound Route"
+            "title": "Shadow Courier \u2014 Tier 4: Unfound Route"
           },
           {
             "_id": "vZgryR38AUD5g5Is",
@@ -1269,7 +1269,7 @@
       "_key": "!actors.items!cM55QgMC1c5XqHmz.AnjUKXQtD9MbC6Yf"
     },
     {
-      "name": "Shadow Courier — Tier 1: Liminal Operator",
+      "name": "Shadow Courier \u2014 Tier 1: Liminal Operator",
       "type": "feat",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_4.png",
       "system": {
@@ -1277,7 +1277,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>You cross what isn't supposed to be crossed — and you always come out the other side carrying something.</em></p><p><strong>On gaining Shadow Courier Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Stealth (Intrigue)</strong>.</p></li><li><p>Skill rank +1 in <strong>Tinkering (Intrigue)</strong>.</p></li><li><p><strong>Intrigue OP cap +2</strong> and <strong>Logistics OP cap +2</strong> on the faction your character belongs to.</p></li><li><p><strong>Pace</strong> pool comes online (movement-generated). Max = max(2, ceil((Intrigue value + Shadow Courier Initiation) / 3)), capped at 8. Refills on Soma Break and on Package delivery.</p></li><li><p><strong>Package</strong> slot comes online — one Package at a time, type set by your chosen Route at L1.</p></li></ul><p><strong>Pace generation.</strong> Gain 1 Pace when you move at least 6 squares on your turn. Maximum 1 Pace generated per turn from this feature. Doctrine features may add their own generators.</p><p><strong>Baseline Pace spends</strong> (free action, 1 Pace each):</p><ul><li><p>Move 5 extra feet without spending an action.</p></li><li><p>Reroll a single Stealth (Intrigue), Athletics (Violence), or Tinkering (Intrigue) check — keep the new result.</p></li><li><p>Ignore a single reaction strike against you on this turn.</p></li></ul><p><strong>Liminal Sense.</strong> Once per encounter, ignore the first detection-style roll an opponent attempts against you (perception, scrying, Insight to read your intent, etc.). The roll is treated as if it had failed; resources spent on the attempt are not refunded.</p>",
+          "value": "<p><em>You cross what isn't supposed to be crossed \u2014 and you always come out the other side carrying something.</em></p><p><strong>On gaining Shadow Courier Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Stealth (Intrigue)</strong>.</p></li><li><p>Skill rank +1 in <strong>Tinkering (Intrigue)</strong>.</p></li><li><p><strong>Intrigue OP cap +2</strong> and <strong>Logistics OP cap +2</strong> on the faction your character belongs to.</p></li><li><p><strong>Pace</strong> pool comes online (movement-generated). Max = max(2, ceil((Intrigue value + Shadow Courier Initiation) / 3)), capped at 8. Refills on Soma Break and on Package delivery.</p></li><li><p><strong>Package</strong> slot comes online \u2014 one Package at a time, type set by your chosen Route at L1.</p></li></ul><p><strong>Pace generation.</strong> Gain 1 Pace when you move at least 6 squares on your turn. Maximum 1 Pace generated per turn from this feature. Doctrine features may add their own generators.</p><p><strong>Baseline Pace spends</strong> (free action, 1 Pace each):</p><ul><li><p>Move 5 extra feet without spending an action.</p></li><li><p>Reroll a single Stealth (Intrigue), Athletics (Violence), or Tinkering (Intrigue) check \u2014 keep the new result.</p></li><li><p>Ignore a single reaction strike against you on this turn.</p></li></ul><p><strong>Liminal Sense.</strong> Once per encounter, ignore the first detection-style roll an opponent attempts against you (perception, scrying, Insight to read your intent, etc.). The roll is treated as if it had failed; resources spent on the attempt are not refunded.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -1488,7 +1488,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin.</strong> Normalized Bad Eden ancestry root.</p><p>Select one subspecies when building the character: <strong>Chupacabra, Jackalope, Furrykin</strong>.</p><p>This root grants the shared Cryptidkin core trait package. Subspecies layer flavor, size, and Tier powers on top.</p><p><em>“Every settlement has a story about you. None of them are accurate. All of them are useful.”</em></p><hr><p><em><strong>Cryptidkin Core Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (set by subspecies).</p></li><li><p><strong>Speed.</strong> 6 squares (subspecies may override).</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Cryptidkin does not grant fixed bonuses. Subspecies lean expressed through Tier powers.</p></li></ul><p><strong>Folklore Presence.</strong> When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as <em>omen</em>, <em>trophy</em>, or <em>legend</em>. It is never neutral. People have heard of your kind. They are almost always wrong, and that is almost always useful.</p><p><strong>Wasteland Adapted.</strong> You reroll the lowest die on checks against disease and environmental poison. You ignore the first nonmagical environmental hazard you encounter each Strategic Turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor’s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 12 squares You cannot be surprised while conscious.</p><p><strong>Subspecies.</strong> Choose one Cryptidkin subspecies (Chupacabra, Jackalope, Furrykin). Your subspecies grants Tier powers as you level (Tier I at creation, then 5/11/17).</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin.</strong> Normalized Bad Eden ancestry root.</p><p>Select one subspecies when building the character: <strong>Chupacabra, Jackalope, Furrykin</strong>.</p><p>This root grants the shared Cryptidkin core trait package. Subspecies layer flavor, size, and Tier powers on top.</p><p><em>\u201cEvery settlement has a story about you. None of them are accurate. All of them are useful.\u201d</em></p><hr><p><em><strong>Cryptidkin Core Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (set by subspecies).</p></li><li><p><strong>Speed.</strong> 6 squares (subspecies may override).</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Cryptidkin does not grant fixed bonuses. Subspecies lean expressed through Tier powers.</p></li></ul><p><strong>Folklore Presence.</strong> When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as <em>omen</em>, <em>trophy</em>, or <em>legend</em>. It is never neutral. People have heard of your kind. They are almost always wrong, and that is almost always useful.</p><p><strong>Wasteland Adapted.</strong> You reroll the lowest die on checks against disease and environmental poison. You ignore the first nonmagical environmental hazard you encounter each Strategic Turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor\u2019s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 12 squares You cannot be surprised while conscious.</p><p><strong>Subspecies.</strong> Choose one Cryptidkin subspecies (Chupacabra, Jackalope, Furrykin). Your subspecies grants Tier powers as you level (Tier I at creation, then 5/11/17).</p>",
           "chat": ""
         },
         "advancement": [
@@ -1622,7 +1622,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Crew Type (Bad Eden): Covert Ops Cell.</em></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Stealth and with the Tinkering aptitude.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
+          "value": "<p><em>Crew Type (Bad Eden): Covert Ops Cell.</em></p><p><strong>\u201cIf you saw it happen, it wasn\u2019t us.\u201d</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don\u2019t start fights\u2014they rearrange the board so the fight never happens.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Stealth and with the Tinkering aptitude.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1724,7 +1724,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You do not wave your hands and hope. You know what symbols are for.”</em></p>\n<p><strong>Archetype (Bad Eden): The Magician (Scholar).</strong> Researcher, operator, and wielder of applied understanding. You turn knowledge into leverage and leverage into effect.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> This Archetype is associated with <strong>+1 Intrigue</strong> in faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for the full tactical and strategic expression of scholarship, arcane literacy, research throughput, and recovered knowledge.</li>\n</ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou do not wave your hands and hope. You know what symbols are for.\u201d</em></p>\n<p><strong>Archetype (Bad Eden): The Magician (Scholar).</strong> Researcher, operator, and wielder of applied understanding. You turn knowledge into leverage and leverage into effect.</p>\n<h3>Archetype Effects</h3>\n<ul>\n  <li><strong>Faction Edge.</strong> This Archetype is associated with <strong>+1 Intrigue</strong> in faction calculus.</li>\n  <li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for the full tactical and strategic expression of scholarship, arcane literacy, research throughput, and recovered knowledge.</li>\n</ul>",
           "chat": ""
         },
         "activities": {},
@@ -1833,7 +1833,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Occult Association (Bad Eden): Tarot Mage.</em></p><p><strong>“The future is rude. I read it anyway.”</strong></p><p>Tarot Mages do not predict the future. They <em>interrogate</em> it.</p><p>They treat fate like a deck: shuffled by chaos, cut by will, and stacked by anyone reckless enough to pay the price. Where other occult traditions pursue the Great Work through doctrine, continuity, or purification, the Tarot Mage pursues it through <strong>timing</strong>. The right pressure, at the right instant, can do what a thousand sincere speeches cannot.</p><p>To a Tarot Mage, the Great Work is not just about choosing well. It is about choosing at the <em>moment that matters</em>.</p><p><strong>How Tarot Mages pursue the Great Work:</strong></p><ul><li>By reading currents before Scenarios begin</li><li>By turning uncertainty into leverage</li><li>By making coincidence behave like a trained animal</li><li>By treating timing as a resource as real as OP</li></ul><p><strong>Resonance:</strong> <strong>Keter / Signal / Probability</strong> — possibility, timing, pattern emergence, and the dangerous urge to edit what has not happened yet.</p><p><strong>Tell-tales:</strong> shuffles anything that can be shuffled — cards, choices, people.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Intrigue OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> fate does not like fingerprints. Expect backlash, strange timing, narrative inversion, and consequences that arrive sideways when you push probability too hard.</p>",
+          "value": "<p><em>Occult Association (Bad Eden): Tarot Mage.</em></p><p><strong>\u201cThe future is rude. I read it anyway.\u201d</strong></p><p>Tarot Mages do not predict the future. They <em>interrogate</em> it.</p><p>They treat fate like a deck: shuffled by chaos, cut by will, and stacked by anyone reckless enough to pay the price. Where other occult traditions pursue the Great Work through doctrine, continuity, or purification, the Tarot Mage pursues it through <strong>timing</strong>. The right pressure, at the right instant, can do what a thousand sincere speeches cannot.</p><p>To a Tarot Mage, the Great Work is not just about choosing well. It is about choosing at the <em>moment that matters</em>.</p><p><strong>How Tarot Mages pursue the Great Work:</strong></p><ul><li>By reading currents before Scenarios begin</li><li>By turning uncertainty into leverage</li><li>By making coincidence behave like a trained animal</li><li>By treating timing as a resource as real as OP</li></ul><p><strong>Resonance:</strong> <strong>Keter / Signal / Probability</strong> \u2014 possibility, timing, pattern emergence, and the dangerous urge to edit what has not happened yet.</p><p><strong>Tell-tales:</strong> shuffles anything that can be shuffled \u2014 cards, choices, people.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Intrigue OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> fate does not like fingerprints. Expect backlash, strange timing, narrative inversion, and consequences that arrive sideways when you push probability too hard.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -2000,12 +2000,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden – Archetype: The Magician (Scholar) (Tier 1)",
+          "custom": "Bad Eden \u2013 Archetype: The Magician (Scholar) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Magician</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain a skill rank in Occult and Lore. You learn one Tier-0 manifestation from the Wizard manifestation list.</li>\n<li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li>\n</ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) \u2014 The Magician</strong></p>\n<ul>\n<li><strong>Tactical:</strong> You gain a skill rank in Occult and Lore. You learn one Tier-0 manifestation from the Wizard manifestation list.</li>\n<li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li>\n</ul>",
           "chat": ""
         },
         "activities": {},
@@ -2144,14 +2144,14 @@
       "system": {
         "category": "technique",
         "source": {
-          "custom": "Bad Eden – Crew Type: Covert Ops Cell (Tier 1)",
+          "custom": "Bad Eden \u2013 Crew Type: Covert Ops Cell (Tier 1)",
           "revision": 2,
           "rules": "2024",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Stealth and with the Tinkering aptitude.</li><li><strong>Strategic:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
+          "value": "<p><strong>Tier 1 \u2014 Covert Ops Cell</strong></p><p><strong>\u201cIf you saw it happen, it wasn\u2019t us.\u201d</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don\u2019t start fights\u2014they rearrange the board so the fight never happens.</p><p><em>You\u2019re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Stealth and with the Tinkering aptitude.</li><li><strong>Strategic:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-covert-ops-cell-t1",
@@ -2314,7 +2314,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Tarot Mage</strong></p><p><strong>“The future is rude. I read it anyway.”</strong></p><p>You are not powerful yet. You are noticeable. The cards do not obey you, but they do answer — and that is already enough to make normal people uncomfortable.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> or <strong>Occult</strong> (GM or player choice if one is already covered elsewhere)</li><li>1/Soma Break, before making an attribute check, you may draw the line of fate early and gain <strong>Advantage</strong> on that check</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a faction Intrigue-forward action, you may <strong>read the spread</strong>: gain <strong>+2 to one relevant Intrigue OP roll</strong></li></ul><p><strong>Cost:</strong> once you start consulting fate, you begin seeing patterns everywhere. Expect second-guessing, omen pressure, or trouble distinguishing signal from appetite.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"tarotT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Draw the Line (Tactical)</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free (before check) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Before an attribute check, reroll the lowest die on it.</div>\n</div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 \u2014 Tarot Mage</strong></p><p><strong>\u201cThe future is rude. I read it anyway.\u201d</strong></p><p>You are not powerful yet. You are noticeable. The cards do not obey you, but they do answer \u2014 and that is already enough to make normal people uncomfortable.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong> or <strong>Occult</strong> (GM or player choice if one is already covered elsewhere)</li><li>1/Soma Break, before making an attribute check, you may draw the line of fate early and gain <strong>Advantage</strong> on that check</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>Once per Strategic Turn, before a faction Intrigue-forward action, you may <strong>read the spread</strong>: gain <strong>+2 to one relevant Intrigue OP roll</strong></li></ul><p><strong>Cost:</strong> once you start consulting fate, you begin seeing patterns everywhere. Expect second-guessing, omen pressure, or trouble distinguishing signal from appetite.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"tarotT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Draw the Line (Tactical)</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;\u00b7&nbsp; <strong>Action:</strong> Free (before check) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Before an attribute check, reroll the lowest die on it.</div>\n</div>",
           "chat": ""
         },
         "advancement": {},
@@ -2661,7 +2661,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Disciplined Fire</h2><p><em>It’s not about more shots. It’s about the right shot.</em></p><hr /><h3>Rules</h3><p>Once per turn when you hit with a ranged weapon attack, you may choose one:</p><ul><li><strong>Pin:</strong> The target’s movement is reduced by 2 squares until the start of your next turn.</li><li><strong>Disrupt:</strong> The next attack roll the target makes before the end of its next turn is made with keep-lowest.</li></ul><p>A creature can be affected by this principle only once per round.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Disciplined Fire</h2><p><em>It\u2019s not about more shots. It\u2019s about the right shot.</em></p><hr /><h3>Rules</h3><p>Once per turn when you hit with a ranged weapon attack, you may choose one:</p><ul><li><strong>Pin:</strong> The target\u2019s movement is reduced by 2 squares until the start of your next turn.</li><li><strong>Disrupt:</strong> The next attack roll the target makes before the end of its next turn is made with keep-lowest.</li></ul><p>A creature can be affected by this principle only once per round.</p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_disciplined_fire",
@@ -2714,7 +2714,7 @@
       "_key": "!actors.items!cM55QgMC1c5XqHmz.urGKETaQPJJyhiht"
     },
     {
-      "name": "Shadow Courier — Tier 2: The Crossing",
+      "name": "Shadow Courier \u2014 Tier 2: The Crossing",
       "type": "feat",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_river_1.png",
       "system": {
@@ -2722,7 +2722,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>Signature move. Once a scene, the membrane chooses you instead of the wall.</em></p><p><strong>The Crossing — 1/scene (recovers on Soma Break).</strong> As an action, declare a single threshold within reach: a door, wall, ward, alarm, divination perimeter, hex boundary, or similar barrier. You cross it. Resolution depends on the barrier:</p><ul><li><p><strong>Mundane barriers</strong> (locked doors, sealed walls, alarmed corridors, password gates) <strong>simply fail to register</strong> your passage. No roll. The barrier remains intact for everyone else.</p></li><li><p><strong>Magical wards or alarms</strong> (alarm manifestations, divination perimeters, scrying screens, hex-warded boundaries) require an <strong>Intrigue defense check</strong> against DC <strong>12 + (the ward source's Initiation tier × 2)</strong>. On a success you cross without triggering the ward; on a failure you still cross, but the ward fires normally and the source is alerted.</p></li></ul><p>Several Route doctrines extend or modify The Crossing — see your doctrine's L5 feature.</p>",
+          "value": "<p><em>Signature move. Once a scene, the membrane chooses you instead of the wall.</em></p><p><strong>The Crossing \u2014 1/scene (recovers on Soma Break).</strong> As an action, declare a single threshold within reach: a door, wall, ward, alarm, divination perimeter, hex boundary, or similar barrier. You cross it. Resolution depends on the barrier:</p><ul><li><p><strong>Mundane barriers</strong> (locked doors, sealed walls, alarmed corridors, password gates) <strong>simply fail to register</strong> your passage. No roll. The barrier remains intact for everyone else.</p></li><li><p><strong>Magical wards or alarms</strong> (alarm manifestations, divination perimeters, scrying screens, hex-warded boundaries) require an <strong>Intrigue defense check</strong> against DC <strong>12 + (the ward source's Initiation tier \u00d7 2)</strong>. On a success you cross without triggering the ward; on a failure you still cross, but the ward fires normally and the source is alerted.</p></li></ul><p>Several Route doctrines extend or modify The Crossing \u2014 see your doctrine's L5 feature.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -2764,7 +2764,7 @@
         },
         "autoanimations": {
           "id": "751f0e1f-1525-454a-b67e-1763aa8f0517",
-          "label": "Shadow Courier — Tier 2: The Crossing",
+          "label": "Shadow Courier \u2014 Tier 2: The Crossing",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -3026,7 +3026,7 @@
       "_key": "!actors.items!cM55QgMC1c5XqHmz.SVlc5cwiQAzA87nA"
     },
     {
-      "name": "Shadow Courier — Tier 3: Package Mastery",
+      "name": "Shadow Courier \u2014 Tier 3: Package Mastery",
       "type": "feat",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hypercube_1.png",
       "system": {
@@ -3223,7 +3223,7 @@
       "_key": "!actors.items!cM55QgMC1c5XqHmz.XgZgmxAjqcIAsA2Z"
     },
     {
-      "name": "Shadow Courier — Tier 4: Unfound Route",
+      "name": "Shadow Courier \u2014 Tier 4: Unfound Route",
       "type": "feat",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_road_1.png",
       "system": {
@@ -3231,7 +3231,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>Every threshold you have ever crossed remembers you. You may now ask one to remember you out loud.</em></p><p><strong>Unfound Route — 1/session.</strong> As an action, name two thresholds you have personally crossed earlier in this campaign (any door, arch, gate, ward, or hex boundary your character has crossed at least once before). You travel from one to the other directly, by way of the spaces in between that don't exist on any map.</p><ul><li><p>You may bring up to <strong>4 willing allies</strong> with you.</p></li><li><p>The journey takes <strong>one hour of subjective time</strong> regardless of actual distance, terrain, hostility, or planar boundary. You arrive somewhat changed by the experience.</p></li><li><p>The destination threshold must still exist (not destroyed, sealed against you specifically, or relocated).</p></li><li><p>You cannot use Unfound Route to enter a place you have not been, to escape an active combat round, or to cross a threshold someone else used (only your own).</p></li></ul>",
+          "value": "<p><em>Every threshold you have ever crossed remembers you. You may now ask one to remember you out loud.</em></p><p><strong>Unfound Route \u2014 1/session.</strong> As an action, name two thresholds you have personally crossed earlier in this campaign (any door, arch, gate, ward, or hex boundary your character has crossed at least once before). You travel from one to the other directly, by way of the spaces in between that don't exist on any map.</p><ul><li><p>You may bring up to <strong>4 willing allies</strong> with you.</p></li><li><p>The journey takes <strong>one hour of subjective time</strong> regardless of actual distance, terrain, hostility, or planar boundary. You arrive somewhat changed by the experience.</p></li><li><p>The destination threshold must still exist (not destroyed, sealed against you specifically, or relocated).</p></li><li><p>You cannot use Unfound Route to enter a place you have not been, to escape an active combat round, or to cross a threshold someone else used (only your own).</p></li></ul>",
           "chat": ""
         },
         "advancement": {},
@@ -3273,7 +3273,7 @@
         },
         "autoanimations": {
           "id": "a77f0675-8d9a-448c-b98c-2994c4bd8430",
-          "label": "Shadow Courier — Tier 4: Unfound Route",
+          "label": "Shadow Courier \u2014 Tier 4: Unfound Route",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -3547,7 +3547,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Threat Assessment</h2><p><em>You don’t look at enemies. You read them.</em></p><hr /><h3>Rules</h3><p>You gain a skill rank in Perception (Mind) or Investigation (Mind) (your choice). If you are already proficient, you gain mastery instead. Additionally, at the start of combat you may ask the GM: which enemy appears most dangerous, most injured, or is controlling the battlefield?</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Threat Assessment</h2><p><em>You don\u2019t look at enemies. You read them.</em></p><hr /><h3>Rules</h3><p>You gain a skill rank in Perception (Mind) or Investigation (Mind) (your choice). If you are already proficient, you gain mastery instead. Additionally, at the start of combat you may ask the GM: which enemy appears most dangerous, most injured, or is controlling the battlefield?</p>",
           "chat": ""
         },
         "identifier": "bbttcc_feat_threat_assessment",
@@ -3610,7 +3610,7 @@
         "resistances": [
           "necrotic"
         ],
-        "armorSkill": "warding",
+        "armorSkill": "bracing",
         "equipped": false,
         "tags": [
           "ceremonial",
@@ -3620,7 +3620,7 @@
         "category": "armor",
         "source": "",
         "description": {
-          "value": "<p>Long ceremonial mantle worn by sept-witnesses at the trials of the lost. Silence-silk weave; vow-bone clasp at the throat.</p><p>The wearer cannot be moved by what is whispered. Charm finds no purchase; compulsion forgets its own intent.</p><p><strong>Soulbound.</strong> The mantle binds at first attunement. It cannot be re-bonded.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Guard +1, Evasion +1, Resolve +5</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Immune to:</strong> Charmed, Compelled</li>\n  <li><strong>Tier:</strong> IV</li>\n  <li><strong>Cost:</strong> 3040 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "value": "<p>Long ceremonial mantle worn by sept-witnesses at the trials of the lost. Silence-silk weave; vow-bone clasp at the throat.</p><p>The wearer cannot be moved by what is whispered. Charm finds no purchase; compulsion forgets its own intent.</p><p><strong>Soulbound.</strong> The mantle binds at first attunement. It cannot be re-bonded.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Guard +1, Evasion +1, Resolve +5</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Immune to:</strong> Charmed, Compelled</li>\n  <li><strong>Tier:</strong> IV</li>\n  <li><strong>Cost:</strong> 3040 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
           "chat": ""
         }
       },
@@ -3667,7 +3667,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV armor stamp × soulbound 1.5",
+                "notes": "TIV armor stamp \u00d7 soulbound 1.5",
                 "bound": "soulbound",
                 "saleBack": 0
               }
@@ -3688,7 +3688,7 @@
       "_id": "DnzhLJEcmJQAFDxL",
       "effects": [
         {
-          "name": "⚙️ Defense Grant",
+          "name": "\u2699\ufe0f Defense Grant",
           "transfer": false,
           "disabled": false,
           "flags": {
@@ -3949,7 +3949,7 @@
           "max": "1"
         },
         "description": {
-          "value": "<p>The kinds of people who carry guns like this are called things like \"Dutch,\" or \"Sarge,\" or \"Arnold Schwarzenegger.\"</p><p></p><p>It shoots through buildings.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Penetrating Beam: ignores half cover; three-quarters cover counts as half.</p>\n<ul>\n  <li><strong>Damage:</strong> 2d8 Thermal damage to <em>Integrity</em> <span style=\"opacity:.75\">(laser)</span></li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 60 / 240</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "value": "<p>The kinds of people who carry guns like this are called things like \"Dutch,\" or \"Sarge,\" or \"Arnold Schwarzenegger.\"</p><p></p><p>It shoots through buildings.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<p>Penetrating Beam: ignores half cover; three-quarters cover counts as half.</p>\n<ul>\n  <li><strong>Damage:</strong> 2d8 Thermal damage to <em>Integrity</em> <span style=\"opacity:.75\">(laser)</span></li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 60 / 240</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
           "chat": ""
         },
         "identifier": "weapon",
@@ -4595,7 +4595,7 @@
           "max": ""
         },
         "description": {
-          "value": "<p>You know that really cool laser blaster that you saw that one time?<br /><br />This is it.</p><p></p><p>It shoots lasers.</p><p></p><p>And has a stun mode.</p><p></p><p>RIGHT??</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Stun Mode: free-action toggle; on hit, Body DC 12 or Staggered (no Integrity dealt).</p>\n<ul>\n  <li><strong>Damage:</strong> 1d10 Thermal damage to <em>Integrity</em> <span style=\"opacity:.75\">(laser)</span></li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 30 / 120</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "value": "<p>You know that really cool laser blaster that you saw that one time?<br /><br />This is it.</p><p></p><p>It shoots lasers.</p><p></p><p>And has a stun mode.</p><p></p><p>RIGHT??</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<p>Stun Mode: free-action toggle; on hit, Body DC 12 or Staggered (no Integrity dealt).</p>\n<ul>\n  <li><strong>Damage:</strong> 1d10 Thermal damage to <em>Integrity</em> <span style=\"opacity:.75\">(laser)</span></li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 30 / 120</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
           "chat": ""
         },
         "identifier": "weapon",
@@ -5139,7 +5139,7 @@
           }
         },
         "description": {
-          "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Quiet Word: +1 Evasion vs the first attack each round while attuned and equipped.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d6 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(stab)</span></li>\n  <li><strong>Attack:</strong> Melee (Intrigue)</li>\n  <li><strong>Reach:</strong> Melee</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+          "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<p>Quiet Word: +1 Evasion vs the first attack each round while attuned and equipped.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d6 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(stab)</span></li>\n  <li><strong>Attack:</strong> Melee (Intrigue)</li>\n  <li><strong>Reach:</strong> Melee</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
         }
       },
       "flags": {
@@ -5507,7 +5507,7 @@
           }
         },
         "description": {
-          "value": "<p><i>“Not every monster deserves a grave.”</i></p><p><b>Nonlethal by Design.</b> When you reduce a humanoid to 0 Integrity with this weapon, it becomes <b>unconscious and stable</b>.</p><p><b>Charges.</b> 3/day. Spend 1 charge to stabilize a creature you can see within range (no action; once per turn).</p>",
+          "value": "<p><i>\u201cNot every monster deserves a grave.\u201d</i></p><p><b>Nonlethal by Design.</b> When you reduce a humanoid to 0 Integrity with this weapon, it becomes <b>unconscious and stable</b>.</p><p><b>Charges.</b> 3/day. Spend 1 charge to stabilize a creature you can see within range (no action; once per turn).</p>",
           "chat": ""
         },
         "quantity": 1,
@@ -5750,7 +5750,7 @@
                   }
                 },
                 "description": {
-                  "value": "<p><i>“Not every monster deserves a grave.”</i></p><p><b>Nonlethal by Design.</b> When you reduce a humanoid to 0 Integrity with this weapon, it becomes <b>unconscious and stable</b>.</p><p><b>Charges.</b> 3/day. Spend 1 charge to stabilize a creature you can see within range (no action; once per turn).</p>",
+                  "value": "<p><i>\u201cNot every monster deserves a grave.\u201d</i></p><p><b>Nonlethal by Design.</b> When you reduce a humanoid to 0 Integrity with this weapon, it becomes <b>unconscious and stable</b>.</p><p><b>Charges.</b> 3/day. Spend 1 charge to stabilize a creature you can see within range (no action; once per turn).</p>",
                   "chat": ""
                 },
                 "quantity": 1,
@@ -6107,7 +6107,7 @@
         "source": "",
         "quantity": 2,
         "description": {
-          "value": "<p>Black-market field surgery in a syringe. Unbinds death from the body for a moment; the cost lands in stress, not flesh.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>On use:</strong> Restore <strong>4d6+5</strong> Integrity; Restore <strong>1</strong> Stress</p></li><li><p><strong>Charges:</strong> 1 (consumed on use)</p></li><li><p><strong>Target:</strong> Self</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 90 Economy marks</p></li></ul>",
+          "value": "<p>Black-market field surgery in a syringe. Unbinds death from the body for a moment; the cost lands in stress, not flesh.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>On use:</strong> Restore <strong>4d6+5</strong> Integrity; Restore <strong>1</strong> Stress</p></li><li><p><strong>Charges:</strong> 1 (consumed on use)</p></li><li><p><strong>Target:</strong> Self</p></li><li><p><strong>Tier:</strong> III</p></li><li><p><strong>Cost:</strong> 90 Economy marks</p></li></ul>",
           "chat": ""
         }
       },
@@ -6201,7 +6201,7 @@
         "source": "",
         "quantity": 2,
         "description": {
-          "value": "<p>Counter-resonant draught. Eats the static you've been carrying — the kind manifestations leave behind.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Restore <strong>3</strong> Noise</li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 30 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "value": "<p>Counter-resonant draught. Eats the static you've been carrying \u2014 the kind manifestations leave behind.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Restore <strong>3</strong> Noise</li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 30 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
           "chat": ""
         }
       },
@@ -6226,7 +6226,7 @@
                 "table": null
               },
               "signals": {},
-              "lore": "Counter-resonant draught. Eats the static you've been carrying — the kind manifestations leave behind.",
+              "lore": "Counter-resonant draught. Eats the static you've been carrying \u2014 the kind manifestations leave behind.",
               "charges": 1,
               "consume": {
                 "effects": [
@@ -6289,7 +6289,7 @@
         "source": "",
         "quantity": 5,
         "description": {
-          "value": "<p>Combat stim that primes the next move. Returns one Frame Die to the pool.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>On use:</strong> Gain <strong>1</strong> FrameDice</p></li><li><p><strong>Charges:</strong> 1 (consumed on use)</p></li><li><p><strong>Target:</strong> Self</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 30 Economy marks</p></li></ul>",
+          "value": "<p>Combat stim that primes the next move. Returns one Frame Die to the pool.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>On use:</strong> Gain <strong>1</strong> FrameDice</p></li><li><p><strong>Charges:</strong> 1 (consumed on use)</p></li><li><p><strong>Target:</strong> Self</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 30 Economy marks</p></li></ul>",
           "chat": ""
         }
       },
@@ -6377,7 +6377,7 @@
         "source": "",
         "quantity": 2,
         "description": {
-          "value": "<p>A dose of pacifying compound. Drops the cortisol floor; the world stays loud but stops cutting.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>On use:</strong> Inflict <strong>2</strong> Stress</p></li><li><p><strong>Charges:</strong> 1 (consumed on use)</p></li><li><p><strong>Target:</strong> Self</p></li><li><p><strong>Tier:</strong> I</p></li><li><p><strong>Cost:</strong> 10 Economy marks</p></li></ul>",
+          "value": "<p>A dose of pacifying compound. Drops the cortisol floor; the world stays loud but stops cutting.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>On use:</strong> Inflict <strong>2</strong> Stress</p></li><li><p><strong>Charges:</strong> 1 (consumed on use)</p></li><li><p><strong>Target:</strong> Self</p></li><li><p><strong>Tier:</strong> I</p></li><li><p><strong>Cost:</strong> 10 Economy marks</p></li></ul>",
           "chat": ""
         }
       },
@@ -6465,7 +6465,7 @@
         "source": "",
         "quantity": 2,
         "description": {
-          "value": "<p>Sept-blessed. Loosens one knot in the Blood Debt ledger; the wearer spends the relief in nerves.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Lose <strong>1</strong> BloodDebt; Restore <strong>2</strong> Stress</li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 30 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "value": "<p>Sept-blessed. Loosens one knot in the Blood Debt ledger; the wearer spends the relief in nerves.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Lose <strong>1</strong> BloodDebt; Restore <strong>2</strong> Stress</li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 30 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
           "chat": ""
         }
       },
@@ -6584,7 +6584,7 @@
                 "table": null
               },
               "signals": {},
-              "lore": "Ritual draught — equal parts pharmacology and naming. Strips charm and compulsion off the will.",
+              "lore": "Ritual draught \u2014 equal parts pharmacology and naming. Strips charm and compulsion off the will.",
               "charges": 1,
               "consume": {
                 "effects": [
@@ -6651,7 +6651,7 @@
         "source": "",
         "quantity": 8,
         "description": {
-          "value": "<p>Combat stim ampoule. Burns clean, knits torn meat, leaves the user steady-handed for the next exchange.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Restore <strong>2d6+2</strong> Integrity</li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 30 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "value": "<p>Combat stim ampoule. Burns clean, knits torn meat, leaves the user steady-handed for the next exchange.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Restore <strong>2d6+2</strong> Integrity</li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> II</li>\n  <li><strong>Cost:</strong> 30 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
           "chat": ""
         }
       },
@@ -6764,7 +6764,7 @@
                 "table": null
               },
               "signals": {},
-              "lore": "Retroviral scrub-kit. Targets a single mutation and unwrites it from the marrow — you choose which scar to lose.",
+              "lore": "Retroviral scrub-kit. Targets a single mutation and unwrites it from the marrow \u2014 you choose which scar to lose.",
               "charges": 1,
               "consume": {
                 "effects": [
@@ -6783,7 +6783,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII consumable × 0.20",
+                "notes": "TIII consumable \u00d7 0.20",
                 "bound": "free",
                 "saleBack": 36
               }
@@ -6826,7 +6826,7 @@
         "source": "",
         "quantity": 2,
         "description": {
-          "value": "<p>Standard battlefield seal. A pulse of restorative gel and a synthetic heartbeat — enough to keep moving, not enough to keep going.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Restore <strong>1d6+1</strong> Integrity</li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 10 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "value": "<p>Standard battlefield seal. A pulse of restorative gel and a synthetic heartbeat \u2014 enough to keep moving, not enough to keep going.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>On use:</strong> Restore <strong>1d6+1</strong> Integrity</li>\n  <li><strong>Charges:</strong> 1 (consumed on use)</li>\n  <li><strong>Target:</strong> Self</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 10 Economy marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
           "chat": ""
         }
       },
@@ -6851,7 +6851,7 @@
                 "table": null
               },
               "signals": {},
-              "lore": "Standard battlefield seal. A pulse of restorative gel and a synthetic heartbeat — enough to keep moving, not enough to keep going.",
+              "lore": "Standard battlefield seal. A pulse of restorative gel and a synthetic heartbeat \u2014 enough to keep moving, not enough to keep going.",
               "charges": 1,
               "consume": {
                 "effects": [
@@ -6914,7 +6914,7 @@
         "source": "",
         "quantity": 3,
         "description": {
-          "value": "<hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>On use:</strong> Lose <strong>50</strong> Radiation</p></li><li><p><strong>Charges:</strong> 1 (consumed on use)</p></li><li><p><strong>Target:</strong> Self</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 30 Economy marks</p></li></ul>",
+          "value": "<hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>On use:</strong> Lose <strong>50</strong> Radiation</p></li><li><p><strong>Charges:</strong> 1 (consumed on use)</p></li><li><p><strong>Target:</strong> Self</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 30 Economy marks</p></li></ul>",
           "chat": ""
         }
       },
@@ -6998,7 +6998,7 @@
         "evasionBonus": 0,
         "resolveBonus": 0,
         "resistances": [],
-        "armorSkill": "weave",
+        "armorSkill": "fitting",
         "equipped": true,
         "tags": [],
         "category": "armor",
@@ -7037,7 +7037,7 @@
                 "evasionBonus": 0,
                 "resolveBonus": 0,
                 "resistances": [],
-                "armorSkill": "weave",
+                "armorSkill": "fitting",
                 "equipped": true,
                 "tags": []
               },
@@ -7240,7 +7240,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII implant stamp × soulbound 1.5",
+                "notes": "TII implant stamp \u00d7 soulbound 1.5",
                 "bound": "soulbound",
                 "saleBack": 0
               }
@@ -7329,7 +7329,7 @@
               },
               "legacySystem": {
                 "description": {
-                  "value": "<p><i>“You remember who you were.”</i></p><p><b>Ward.</b> You gain +1 to Soul check and +1 to Insight (Soul).</p><p><b>Once per scene:</b> Ignore the first failed check caused by ambient Darkness (GM adjudication).</p>",
+                  "value": "<p><i>\u201cYou remember who you were.\u201d</i></p><p><b>Ward.</b> You gain +1 to Soul check and +1 to Insight (Soul).</p><p><b>Once per scene:</b> Ignore the first failed check caused by ambient Darkness (GM adjudication).</p>",
                   "chat": ""
                 },
                 "quantity": 1,
@@ -7533,7 +7533,7 @@
           }
         },
         "description": {
-          "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Six shots, then reload. On a hit, the target gains 1 Radiation Point. The shooter gains 1 RP for every full cylinder fired (the ore doesn't care whose hand it's in).</p>\n<ul>\n  <li><strong>Damage:</strong> 1d10 Radiation damage to <em>Integrity</em> <span style=\"opacity:.75\">(ore-cooked rounds)</span></li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 30 / 90</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+          "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<p>Six shots, then reload. On a hit, the target gains 1 Radiation Point. The shooter gains 1 RP for every full cylinder fired (the ore doesn't care whose hand it's in).</p>\n<ul>\n  <li><strong>Damage:</strong> 1d10 Radiation damage to <em>Integrity</em> <span style=\"opacity:.75\">(ore-cooked rounds)</span></li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 30 / 90</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
         }
       },
       "flags": {
@@ -7570,7 +7570,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII weapon — radiation",
+                "notes": "TII weapon \u2014 radiation",
                 "bound": "free",
                 "saleBack": 140
               }
@@ -7758,7 +7758,7 @@
       "_key": "!actors.items!cM55QgMC1c5XqHmz.kvgmhRUEiy09GvOt"
     },
     {
-      "name": "Ego‑Dragon Scale Aegis",
+      "name": "Ego\u2011Dragon Scale Aegis",
       "type": "gear",
       "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_%20ego_dragon_scale_aegis.png",
       "system": {
@@ -8018,10 +8018,10 @@
       "system": {
         "category": "doctrine",
         "classIdentifier": "shadow_courier",
-        "source": "Bad Eden Originals — Sprint F (2026 rules)",
+        "source": "Bad Eden Originals \u2014 Sprint F (2026 rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>\"You came through a door that wasn't for them.\"</em></p><p><strong>Doctrine:</strong> Thresholds weaponized — covert, predatory; who gets through and who really, really doesn't.</p><p>The Black Stair is the courier as ambush. Your Surge spends turn crossings into kills: strike from where they weren't watching, slam the threshold shut on a foe, and spring the stair that does not end.</p><h3>Route (spent via Surge)</h3><ul><li><p><strong>Ambush</strong> (1) — your next Strike +Tier d6; the target's next attack is at disadvantage.</p></li><li><p><strong>Cut Off</strong> (2) — a foe is Staggered and cannot take reactions until your next turn.</p></li><li><p><strong>Stair-Trap</strong> (5) — your next Strike lands as a max-die crit and knocks the target Prone; if it drops them, you regain a freed action.</p></li></ul>",
+          "value": "<p><em>\"You came through a door that wasn't for them.\"</em></p><p><strong>Doctrine:</strong> Thresholds weaponized \u2014 covert, predatory; who gets through and who really, really doesn't.</p><p>The Black Stair is the courier as ambush. Your Surge spends turn crossings into kills: strike from where they weren't watching, slam the threshold shut on a foe, and spring the stair that does not end.</p><h3>Route (spent via Surge)</h3><ul><li><p><strong>Ambush</strong> (1) \u2014 your next Strike +Tier d6; the target's next attack is at disadvantage.</p></li><li><p><strong>Cut Off</strong> (2) \u2014 a foe is Staggered and cannot take reactions until your next turn.</p></li><li><p><strong>Stair-Trap</strong> (5) \u2014 your next Strike lands as a max-die crit and knocks the target Prone; if it drops them, you regain a freed action.</p></li></ul>",
           "chat": ""
         },
         "identifier": "bbttcc-shadow-courier-courier-black-stair",
@@ -8101,7 +8101,7 @@
       ]
     },
     "bbttcc-territory": {
-      "faction": "Shadow Rats, (The Mūs Umbral)"
+      "faction": "Shadow Rats, (The M\u016bs Umbral)"
     },
     "bbttcc-character-options": {
       "identity": {
@@ -8303,7 +8303,7 @@
           }
         },
         "traitMap": {},
-        "classification": "—",
+        "classification": "\u2014",
         "mode": "manual"
       }
     },

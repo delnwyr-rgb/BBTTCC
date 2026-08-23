@@ -8,8 +8,8 @@
     "factionId": "",
     "notes": "",
     "details": {
-      "level": 1,
-      "tier": 1,
+      "level": 8,
+      "tier": 2,
       "statPoints": 0,
       "skillPoints": 0
     },
@@ -506,7 +506,7 @@
           "5e-port"
         ],
         "description": {
-          "value": "<p><strong>Attack.</strong> Each creature of the adept’s choice within 3 squares must succeed on a DC 13 Soul check or be disoriented until end of its next turn (cannot take reaction strikes; roll 3d10 keep lowest 2 on Perception (Mind)).</p>",
+          "value": "<p><strong>Attack.</strong> Each creature of the adept\u2019s choice within 3 squares must succeed on a DC 13 Soul check or be disoriented until end of its next turn (cannot take reaction strikes; roll 3d10 keep lowest 2 on Perception (Mind)).</p>",
           "chat": ""
         }
       },
@@ -558,7 +558,7 @@
           "track": "integrity"
         },
         "damageParts": [],
-        "effect": "Name a target and speak a vow against them. The next time that target misses an attack against you or an ally, lightning answers — they take 2d8 energy to Integrity. Vow lasts one scene; only one Spark Vow may be active at a time.",
+        "effect": "Name a target and speak a vow against them. The next time that target misses an attack against you or an ally, lightning answers \u2014 they take 2d8 energy to Integrity. Vow lasts one scene; only one Spark Vow may be active at a time.",
         "tags": [
           "translated",
           "5e-port",
@@ -587,7 +587,7 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "If the named target dies before the vow pays out, the Adept takes 1 Stress.",
-          "pathResonance": "Geburah — severity, the answer that comes back.",
+          "pathResonance": "Geburah \u2014 severity, the answer that comes back.",
           "fictionalPermission": "May call lightning on a missed attack.",
           "gmCalibration": "Resolves once and ends; one Spark Vow at a time.",
           "mechanicalHook": "2d8 energy on triggered miss.",
@@ -870,9 +870,9 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "While the ward is up, the Adept cannot benefit from cover.",
-          "pathResonance": "Geburah — bright martial discipline.",
+          "pathResonance": "Geburah \u2014 bright martial discipline.",
           "fictionalPermission": "May reflavor kinetic strikes as energy.",
-          "gmCalibration": "+1 Guard, kinetic→energy on outgoing damage.",
+          "gmCalibration": "+1 Guard, kinetic\u2192energy on outgoing damage.",
           "mechanicalHook": "+1 Guard; outgoing damage type swap.",
           "signature": "Sparks crawl up the haft.",
           "thirdThing": "Iron near the wielder rings faintly.",

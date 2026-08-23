@@ -242,12 +242,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 1
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 1
@@ -413,7 +413,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You were born with a wrench in your soul.”</em></p>\n        <p><strong>Built-In Tools.</strong> You gain a skill rank with the Tinkering aptitude and one artisan tool set of your choice. As part of a Soma Break, you can repair a damaged object or patch armor (GM adjudicates small benefit).</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou were born with a wrench in your soul.\u201d</em></p>\n        <p><strong>Built-In Tools.</strong> You gain a skill rank with the Tinkering aptitude and one artisan tool set of your choice. As part of a Soma Break, you can repair a damaged object or patch armor (GM adjudicates small benefit).</p>",
           "chat": ""
         },
         "uses": {
@@ -493,7 +493,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Exo-Knight, Parallax, Salvage, Synapse</strong>.</p><p>This root grants the shared Circuitborn core trait package (<em>Firmware of Identity</em>) and preserves live UUID compatibility for the four Line items.</p><p><em>“You are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.”</em></p><p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p><p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you, you may regain either one spent Bad Eden OP (a category you used this scene) or Integrity equal to your tier.</p><p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor.</p><p><strong>Line Memory.</strong> Choose one Circuitborn line (Exo-Knight, Parallax, Salvage, Synapse). Your line grants Tier powers as you level.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Exo-Knight, Parallax, Salvage, Synapse</strong>.</p><p>This root grants the shared Circuitborn core trait package (<em>Firmware of Identity</em>) and preserves live UUID compatibility for the four Line items.</p><p><em>\u201cYou are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.\u201d</em></p><p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p><p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you, you may regain either one spent Bad Eden OP (a category you used this scene) or Integrity equal to your tier.</p><p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor.</p><p><strong>Line Memory.</strong> Choose one Circuitborn line (Exo-Knight, Parallax, Salvage, Synapse). Your line grants Tier powers as you level.</p>",
           "chat": ""
         },
         "advancement": [
@@ -573,7 +573,7 @@
               "context": "defense",
               "mode": "reroll-lowest",
               "vs": "vs:poison and disease",
-              "note": "on defense checks [TODO(adv-call)] against poison and disease, and you are im…"
+              "note": "on defense checks [TODO(adv-call)] against poison and disease, and you are im\u2026"
             }
           ],
           "triggers": [
@@ -653,7 +653,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn Line.</strong> The salvage-recursive. Built from the parts of older Circuitborn that didn’t make it. You carry their last instructions in your firmware.</p><p><em>“Nothing in this world is wasted. Some of it is just waiting to be re-purposed.”</em></p><p><strong>Salvage.</strong> You are a sentient chassis built around the principle of <em>recovery</em>. Broken things speak to you. So do broken people, when they don’t know they’re doing it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>BOD (Body)</strong>—expressed primarily through Tier powers.</li><li><strong>Scrap Memory.</strong> You can identify the original purpose of any handheld broken object you touch (1/Soma Break, GM adjudicates depth of detail).</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn Line.</strong> The salvage-recursive. Built from the parts of older Circuitborn that didn\u2019t make it. You carry their last instructions in your firmware.</p><p><em>\u201cNothing in this world is wasted. Some of it is just waiting to be re-purposed.\u201d</em></p><p><strong>Salvage.</strong> You are a sentient chassis built around the principle of <em>recovery</em>. Broken things speak to you. So do broken people, when they don\u2019t know they\u2019re doing it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>BOD (Body)</strong>\u2014expressed primarily through Tier powers.</li><li><strong>Scrap Memory.</strong> You can identify the original purpose of any handheld broken object you touch (1/Soma Break, GM adjudicates depth of detail).</li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -732,7 +732,7 @@
       "_key": "!actors.items!6SxQsKCR1v3XH9ez.4HU7sOe2RCYgGq0k"
     },
     {
-      "name": "Wyrdlens Adept: Tier 1 — Lens Read",
+      "name": "Wyrdlens Adept: Tier 1 \u2014 Lens Read",
       "type": "feat",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_wyrdlens_adept_16.png",
       "system": {
@@ -744,7 +744,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Lens Read.</strong> You read the cracks in the world's algorithm. Your manifestation misfire band is lowered by 1 (a result that would misfire instead lands as the next-lower outcome). Once per scene, an adjacent ally borrows the reduction by spending 1 of your Clarity.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (passive): Misfire shift −1.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Strategic carryover: scenes resolved through your Refraction count as one tier of Identification already paid for the directing faction's next strategic action (GM call). Skill rank +1 in Occult and Lore.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Lens Read</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene (loan) &nbsp;·&nbsp; <strong>Action:</strong> Free (loan) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Your manifestation misfire band is lowered by 1 always. Once per scene, an adjacent ally borrows the reduction by spending 1 of your Clarity.</div>\n</div>",
+          "value": "<p><strong>Tier 1 \u2014 Lens Read.</strong> You read the cracks in the world's algorithm. Your manifestation misfire band is lowered by 1 (a result that would misfire instead lands as the next-lower outcome). Once per scene, an adjacent ally borrows the reduction by spending 1 of your Clarity.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Discipline (passive): Misfire shift \u22121.</p>\n<p style=\"opacity:0.7;font-size:0.85em\">Strategic carryover: scenes resolved through your Refraction count as one tier of Identification already paid for the directing faction's next strategic action (GM call). Skill rank +1 in Occult and Lore.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wlT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Lens Read</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene (loan) &nbsp;\u00b7&nbsp; <strong>Action:</strong> Free (loan) &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Your manifestation misfire band is lowered by 1 always. Once per scene, an adjacent ally borrows the reduction by spending 1 of your Clarity.</div>\n</div>",
           "chat": ""
         },
         "activities": {},
@@ -882,10 +882,10 @@
       "system": {
         "category": "doctrine",
         "classIdentifier": "wyrdlens-adept",
-        "source": "Bad Eden Originals — Sprint F (2026 rules)",
+        "source": "Bad Eden Originals \u2014 Sprint F (2026 rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>\"You already know how this goes.\"</em></p>\n<p><strong>Refraction:</strong> Anticipation — perception bent toward the next instant; routes, reactions, the moment before the moment.</p>\n<p>The Refraction of Foresight reads time a half-second early. Your Surge spends are that edge made real: foreseen rerolls, an ally given room time shouldn't allow, and the strike that simply declines to land.</p>\n<h3>Refraction (spent via Surge)</h3>\n<ul>\n  <li><strong>Anticipation</strong> (1) — you and an ally each bank a reroll (foreseen).</li>\n  <li><strong>The Slowed Instant</strong> (2) — an ally gains a freed reaction and DR equal to Tier.</li>\n  <li><strong>The Stopped Strike</strong> (5) — a foe is Staggered and its next attack is at disadvantage.</li>\n</ul>",
+          "value": "<p><em>\"You already know how this goes.\"</em></p>\n<p><strong>Refraction:</strong> Anticipation \u2014 perception bent toward the next instant; routes, reactions, the moment before the moment.</p>\n<p>The Refraction of Foresight reads time a half-second early. Your Surge spends are that edge made real: foreseen rerolls, an ally given room time shouldn't allow, and the strike that simply declines to land.</p>\n<h3>Refraction (spent via Surge)</h3>\n<ul>\n  <li><strong>Anticipation</strong> (1) \u2014 you and an ally each bank a reroll (foreseen).</li>\n  <li><strong>The Slowed Instant</strong> (2) \u2014 an ally gains a freed reaction and DR equal to Tier.</li>\n  <li><strong>The Stopped Strike</strong> (5) \u2014 a foe is Staggered and its next attack is at disadvantage.</li>\n</ul>",
           "chat": ""
         },
         "identifier": "bbttcc-wyrdlens-adept-foresight",
@@ -1071,7 +1071,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You are not a robot. You are a decision the world keeps making about itself.”</em></p>\n<p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p>\n<p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), you may regain either (a) one spent Bad Eden OP (a category you used this scene) or (b) Integrity equal to your tier.</p>\n<p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor. You reroll the lowest die on checks to identify surveillance, hidden speakers, encoded messages, or noospheric “attention traps.”</p>\n<p><strong>Glitch-Surge.</strong> When you drop to 0 Integrity, you can choose to emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In Bad Eden play, this is a perfect excuse for weird consequences.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou are not a robot. You are a decision the world keeps making about itself.\u201d</em></p>\n<p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p>\n<p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), you may regain either (a) one spent Bad Eden OP (a category you used this scene) or (b) Integrity equal to your tier.</p>\n<p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor. You reroll the lowest die on checks to identify surveillance, hidden speakers, encoded messages, or noospheric \u201cattention traps.\u201d</p>\n<p><strong>Glitch-Surge.</strong> When you drop to 0 Integrity, you can choose to emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In Bad Eden play, this is a perfect excuse for weird consequences.</p>",
           "chat": ""
         },
         "uses": {
@@ -1214,7 +1214,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>\"Every structure has a flaw. You only have to look at it correctly.\"</em></p>\n<p>The Wyrdlens Adept turns perception into force. You run on <strong>Surge</strong> like everyone, and yours arrives when you <strong>land a manifestation</strong> (bank +1, max +2/round) — every revelation feeds the lens. The free <strong>Probability Overlay</strong> (1/round reroll-lowest, refreshes at the start of your turn) stays as your innate edge.</p>\n<h3>The Lens (spent via Surge)</h3>\n<ul>\n  <li><strong>Foresight</strong> (1) — you or an ally banks a reroll-lowest (you saw the thread).</li>\n  <li><strong>Expose</strong> (2) — a foe's next attack and its saves are at disadvantage (you read the seam).</li>\n  <li><strong>Refract</strong> (3) — an ally gains DR equal to Tier and a freed reaction (harm bends aside).</li>\n  <li><strong>Revelation</strong> (5) — allies within 6 squares bank a reroll; a foe's next attack is at disadvantage.</li>\n</ul>\n<p><strong>Tikkun Sight</strong> endures — once per Soma Break, treat a misfire as a base-tier success (the Tree pays in Clarity instead).</p>",
+          "value": "<p><em>\"Every structure has a flaw. You only have to look at it correctly.\"</em></p>\n<p>The Wyrdlens Adept turns perception into force. You run on <strong>Surge</strong> like everyone, and yours arrives when you <strong>land a manifestation</strong> (bank +1, max +2/round) \u2014 every revelation feeds the lens. The free <strong>Probability Overlay</strong> (1/round reroll-lowest, refreshes at the start of your turn) stays as your innate edge.</p>\n<h3>The Lens (spent via Surge)</h3>\n<ul>\n  <li><strong>Foresight</strong> (1) \u2014 you or an ally banks a reroll-lowest (you saw the thread).</li>\n  <li><strong>Expose</strong> (2) \u2014 a foe's next attack and its saves are at disadvantage (you read the seam).</li>\n  <li><strong>Refract</strong> (3) \u2014 an ally gains DR equal to Tier and a freed reaction (harm bends aside).</li>\n  <li><strong>Revelation</strong> (5) \u2014 allies within 6 squares bank a reroll; a foe's next attack is at disadvantage.</li>\n</ul>\n<p><strong>Tikkun Sight</strong> endures \u2014 once per Soma Break, treat a misfire as a base-tier success (the Tree pays in Clarity instead).</p>",
           "chat": ""
         },
         "advancement": [
@@ -1829,7 +1829,7 @@
             },
             "value": {},
             "level": 17,
-            "title": "Wyrdlens Adept: Tier 4 — Nonviolent Spark Harvest"
+            "title": "Wyrdlens Adept: Tier 4 \u2014 Nonviolent Spark Harvest"
           },
           {
             "_id": "WA00000000000027",
@@ -1921,7 +1921,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Leave me alone. I’ll return with something useful.”</em></p><p><strong>Archetype (Bad Eden): The Hermit (Mystic-Isolator).</strong> You step away in order to see clearly. Solitude is not withdrawal to you. It is a forge, a lens, and a discipline.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens contemplation, covert preparation, and hidden spiritual leverage. This Archetype is associated with <strong>+1 Faith OP</strong> and <strong>+1 Intrigue OP</strong>.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul><h3>attributes (Archetype ASI)</h3><p>Common patterns include:</p><ul><li><strong>Silent Pilgrim:</strong> +2 Soul, +1 Intrigue</li><li><strong>Occult Recluse:</strong> +2 Soul, +1 Mind</li><li><strong>Watcher in Exile:</strong> +1 Soul, +1 Intrigue, +1 Mind</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cLeave me alone. I\u2019ll return with something useful.\u201d</em></p><p><strong>Archetype (Bad Eden): The Hermit (Mystic-Isolator).</strong> You step away in order to see clearly. Solitude is not withdrawal to you. It is a forge, a lens, and a discipline.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens contemplation, covert preparation, and hidden spiritual leverage. This Archetype is associated with <strong>+1 Faith OP</strong> and <strong>+1 Intrigue OP</strong>.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul><h3>attributes (Archetype ASI)</h3><p>Common patterns include:</p><ul><li><strong>Silent Pilgrim:</strong> +2 Soul, +1 Intrigue</li><li><strong>Occult Recluse:</strong> +2 Soul, +1 Mind</li><li><strong>Watcher in Exile:</strong> +1 Soul, +1 Intrigue, +1 Mind</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2027,7 +2027,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Crew Type (Bad Eden): Abyssal Cartographers.</em></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
+          "value": "<p><em>Crew Type (Bad Eden): Abyssal Cartographers.</em></p><p><strong>\u201cThere are maps beneath the map.\u201d</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2202,7 +2202,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Occult Association (Bad Eden): Gnostic.</em></p><p><strong>“I don’t believe. I remember.”</strong></p><p>Gnostics approach the Great Work as a recovery operation. The world is not merely broken. It is <em>obscured</em>.</p><p>Truth exists beneath propaganda, false heavens, corrupted consensus, and all the symbolic machinery that keeps frightened systems stable. Where others try to fix the world, the Gnostic strips it down. They interrogate assumptions, dismantle illusions, and treat certainty as a hostile force when it has not earned the right to exist.</p><p>To a Gnostic, the Great Work is not invention. It is <strong>remembrance</strong>. What is real was already real before the lie got organized.</p><p><strong>How Gnostics pursue the Great Work:</strong></p><ul><li>By exposing false narratives and corrupted consensus</li><li>By resisting manipulation, propaganda, and symbolic control</li><li>By recovering truths the world insists never existed</li><li>By making Stealth expensive to maintain</li></ul><p><strong>Resonance:</strong> <strong>Tiferet</strong> — truth, clarity, revelation, and the painful coherence that follows honest sight.</p><p><strong>Tell-tales:</strong> eyes that track patterns no one else admits are there, a habit of pausing just before the lie finishes speaking.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Soft Power OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> truth is destabilizing. Expect alienation, exposed contradictions, social friction, and pressure from systems that depended on confusion to survive.</p>",
+          "value": "<p><em>Occult Association (Bad Eden): Gnostic.</em></p><p><strong>\u201cI don\u2019t believe. I remember.\u201d</strong></p><p>Gnostics approach the Great Work as a recovery operation. The world is not merely broken. It is <em>obscured</em>.</p><p>Truth exists beneath propaganda, false heavens, corrupted consensus, and all the symbolic machinery that keeps frightened systems stable. Where others try to fix the world, the Gnostic strips it down. They interrogate assumptions, dismantle illusions, and treat certainty as a hostile force when it has not earned the right to exist.</p><p>To a Gnostic, the Great Work is not invention. It is <strong>remembrance</strong>. What is real was already real before the lie got organized.</p><p><strong>How Gnostics pursue the Great Work:</strong></p><ul><li>By exposing false narratives and corrupted consensus</li><li>By resisting manipulation, propaganda, and symbolic control</li><li>By recovering truths the world insists never existed</li><li>By making Stealth expensive to maintain</li></ul><p><strong>Resonance:</strong> <strong>Tiferet</strong> \u2014 truth, clarity, revelation, and the painful coherence that follows honest sight.</p><p><strong>Tell-tales:</strong> eyes that track patterns no one else admits are there, a habit of pausing just before the lie finishes speaking.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Soft Power OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> truth is destabilizing. Expect alienation, exposed contradictions, social friction, and pressure from systems that depended on confusion to survive.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -2297,12 +2297,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden – Archetype: The Hermit (Mystic-Isolator) (Tier 1)",
+          "custom": "Bad Eden \u2013 Archetype: The Hermit (Mystic-Isolator) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Stealth. You learn the Light Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's Faith OP cap increases by 1 and Intrigue OP cap increases by 1.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) \u2014 The Hermit (Mystic-Isolator)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Stealth. You learn the Light Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's Faith OP cap increases by 1 and Intrigue OP cap increases by 1.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2438,14 +2438,14 @@
       "system": {
         "category": "technique",
         "source": {
-          "custom": "Bad Eden – Crew Type: Abyssal Cartographers (Tier 1)",
+          "custom": "Bad Eden \u2013 Crew Type: Abyssal Cartographers (Tier 1)",
           "revision": 2,
           "rules": "2024",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Abyssal Cartographers</strong></p><p><strong>“There are maps beneath the map.”</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You’ve learned the first law of deep travel: the visible route is usually the stupid one.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic:</strong> In River, Lake, Sea, Ocean, or Cavern-adjacent routes, discovery and route-finding are more reliable.</li></ul>",
+          "value": "<p><strong>Tier 1 \u2014 Abyssal Cartographers</strong></p><p><strong>\u201cThere are maps beneath the map.\u201d</strong></p><p>Abyssal Cartographers chart what most people refuse to admit exists: drowned tunnels, pressure-cut caverns, forgotten ferry lines, and the strange geometry of places where water remembers older routes than roads do. They do not merely travel hidden ways. They prove those ways were always there.</p><p><em>You\u2019ve learned the first law of deep travel: the visible route is usually the stupid one.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Investigation.</li><li><strong>Strategic:</strong> In River, Lake, Sea, Ocean, or Cavern-adjacent routes, discovery and route-finding are more reliable.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-abyssal-cartographers-t1",
@@ -2630,7 +2630,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Gnostic</strong></p><p><strong>“The lie is structural.”</strong></p><p>You can feel distortion now. Propaganda scrapes. Illusions itch. You may not yet know the truth, but you know when something is <em>false</em>.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong></li><li>reroll the lowest die on checks against <strong>Illusion</strong> effects</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction resists propaganda, misinformation, or psychological manipulation, gain <strong>+1 to the relevant Soft Power OP roll</strong></li></ul><p><strong>Cost:</strong> once you can feel falsehood structurally, ordinary social comfort gets harder. Expect friction when you refuse to participate in convenient lies.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 \u2014 Gnostic</strong></p><p><strong>\u201cThe lie is structural.\u201d</strong></p><p>You can feel distortion now. Propaganda scrapes. Illusions itch. You may not yet know the truth, but you know when something is <em>false</em>.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong></li><li>reroll the lowest die on checks against <strong>Illusion</strong> effects</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction resists propaganda, misinformation, or psychological manipulation, gain <strong>+1 to the relevant Soft Power OP roll</strong></li></ul><p><strong>Cost:</strong> once you can feel falsehood structurally, ordinary social comfort gets harder. Expect friction when you refuse to participate in convenient lies.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -2775,7 +2775,7 @@
         "evasionBonus": 1,
         "resolveBonus": 0,
         "resistances": [],
-        "armorSkill": "weave",
+        "armorSkill": "fitting",
         "equipped": true,
         "tags": [
           "t1-baseline",
@@ -2836,7 +2836,7 @@
       "_id": "E96gCH9Z0gMkGU5D",
       "effects": [
         {
-          "name": "⚙️ Defense Grant",
+          "name": "\u2699\ufe0f Defense Grant",
           "transfer": false,
           "disabled": false,
           "flags": {
@@ -3261,7 +3261,7 @@
         "manifestation": {
           "tier": 1,
           "family": "form",
-          "concept": "An array of small lenses — physical or summoned — that maps the hidden lines of a region. Trade routes, ley lines, social ties, surveillance.",
+          "concept": "An array of small lenses \u2014 physical or summoned \u2014 that maps the hidden lines of a region. Trade routes, ley lines, social ties, surveillance.",
           "form": "field",
           "function": "reveal",
           "stability": "sustained",
@@ -3278,7 +3278,7 @@
           "rangeFt": 0,
           "maintenanceCost": "1 Stress per scene maintained.",
           "riskText": "Other Wyrdlens, certain Pactkeepers, and any sufficiently institutional surveillance apparatus will notice.",
-          "pathResonance": "Wyrdlens Adept — the map made tactical.",
+          "pathResonance": "Wyrdlens Adept \u2014 the map made tactical.",
           "fictionalPermission": "You can see a region's hidden geography. The region notices.",
           "gmCalibration": "Tier-3 Form. Excellent for strategic phases. Loud at the strategic layer; quiet at the tactical.",
           "mechanicalHook": "While active, allies have +2 to Investigate and Strategy rolls in the mapped region. GM provides a mental map of one hex's hidden lines: contraband routes, faction influence, ley resonance.",
@@ -3580,7 +3580,7 @@
         "manifestation": {
           "tier": 2,
           "family": "working",
-          "concept": "Hit a target by hitting its mirror — its reflection in water, a portrait, an effigy, a shared thread. The harm transfers.",
+          "concept": "Hit a target by hitting its mirror \u2014 its reflection in water, a portrait, an effigy, a shared thread. The harm transfers.",
           "form": "sigil",
           "function": "harm",
           "stability": "instant",
@@ -3596,8 +3596,8 @@
           "rangeAreaText": "",
           "rangeFt": 0,
           "maintenanceCost": "",
-          "riskText": "If the surrogate is destroyed in the process, the link is gone — no further strikes against this target through this object.",
-          "pathResonance": "Wyrdlens Adept — what touches the reflection touches the thing.",
+          "riskText": "If the surrogate is destroyed in the process, the link is gone \u2014 no further strikes against this target through this object.",
+          "pathResonance": "Wyrdlens Adept \u2014 what touches the reflection touches the thing.",
           "fictionalPermission": "You can hurt someone you cannot see, if you can name what they are like.",
           "gmCalibration": "T2 Working. GM may require an Insight check to find the right correspondence first. High Surge potential.",
           "mechanicalHook": "Strike a surrogate to deal 2d6 psychic damage to the original at any range, ignoring cover and most defenses.",
@@ -3621,6 +3621,12 @@
             "attribute": "",
             "dcMode": "derived",
             "dcFixed": 15
+          },
+          "resolution": {
+            "shape": "save",
+            "saveAttribute": "mind",
+            "onSave": "half",
+            "saveDcMode": "cast-dc"
           }
         }
       },
@@ -3907,10 +3913,10 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "Some things are hidden for kindness. Some things should not be looked at directly.",
-          "pathResonance": "Wyrdlens Adept — perception as force.",
+          "pathResonance": "Wyrdlens Adept \u2014 perception as force.",
           "fictionalPermission": "You can see through it. So can everyone with you.",
           "gmCalibration": "T1 Working. Single subject. GM reveals one truth. Player chooses which axis (identity, intent, condition, history).",
-          "mechanicalHook": "Reveal hidden truth about a person, place, or object — invisibility, disguise, lie, secret structure. Allies reroll lowest die on the next check that uses the revealed information.",
+          "mechanicalHook": "Reveal hidden truth about a person, place, or object \u2014 invisibility, disguise, lie, secret structure. Allies reroll lowest die on the next check that uses the revealed information.",
           "signature": "A faint glass-ring tone sounds at the moment of revelation.",
           "thirdThing": "The thing being unmasked feels it. They will know it was you.",
           "opCost": {
@@ -4201,7 +4207,7 @@
         "manifestation": {
           "tier": 1,
           "family": "form",
-          "concept": "A glyph etched somewhere on your body — palm, brow, sole of foot — that sharpens what you witness while you consciously focus on it.",
+          "concept": "A glyph etched somewhere on your body \u2014 palm, brow, sole of foot \u2014 that sharpens what you witness while you consciously focus on it.",
           "form": "vestment",
           "function": "reveal",
           "stability": "bound",
@@ -4218,7 +4224,7 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "Some things look back through it. Sleep is occasionally interrupted.",
-          "pathResonance": "Wyrdlens Adept — perception kept always, sharpened on demand.",
+          "pathResonance": "Wyrdlens Adept \u2014 perception kept always, sharpened on demand.",
           "fictionalPermission": "Your senses are visibly enhanced. People notice you noticing.",
           "gmCalibration": "Tier-1 Form. Other Wyrdlens see the sigil and recognize the school.",
           "mechanicalHook": "+2 to all Insight, Notice, and Investigate rolls. Once per scene, the GM tells you one thing the sigil saw that you did not.",
@@ -4503,7 +4509,7 @@
         "manifestation": {
           "tier": 2,
           "family": "working",
-          "concept": "Perceive the entire scene at once — every speaker, every weapon, every relationship, every untold thing — for one breath.",
+          "concept": "Perceive the entire scene at once \u2014 every speaker, every weapon, every relationship, every untold thing \u2014 for one breath.",
           "form": "sigil",
           "function": "reveal",
           "stability": "instant",
@@ -4520,7 +4526,7 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "Stress 1 from the influx. Anyone watching you closely sees the moment your eyes change.",
-          "pathResonance": "Wyrdlens Adept — the scene legible at once.",
+          "pathResonance": "Wyrdlens Adept \u2014 the scene legible at once.",
           "fictionalPermission": "You know what is happening in this room. All of it. Briefly.",
           "gmCalibration": "T2 Working. GM gives 4-7 facts. Player chooses what to act on. Other casters in the scene notice.",
           "mechanicalHook": "GM describes the scene at a level above your current vantage: who is connected to whom, who is armed, who is lying, who is afraid, where the exits are. Allies reroll lowest die on Initiative this scene.",
@@ -4797,7 +4803,7 @@
         "manifestation": {
           "tier": 1,
           "family": "form",
-          "concept": "A small blue flame in a lantern, candle, or palm. It burns brighter when truth is spoken near it — and dimmer when truth is avoided.",
+          "concept": "A small blue flame in a lantern, candle, or palm. It burns brighter when truth is spoken near it \u2014 and dimmer when truth is avoided.",
           "form": "construct",
           "function": "reveal",
           "stability": "enduring",
@@ -4814,7 +4820,7 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "The flame draws witnesses. People in trouble may seek it out. People with secrets may try to put it out.",
-          "pathResonance": "Wyrdlens Adept — truth as low ambient flame.",
+          "pathResonance": "Wyrdlens Adept \u2014 truth as low ambient flame.",
           "fictionalPermission": "You can install a lie-detector in a room, leave the room, and trust the room.",
           "gmCalibration": "Tier-2 Form. Always-on. Politically inconvenient in many settings.",
           "mechanicalHook": "Within Near range of the flame, all Insight rolls reroll the lowest die. A liar in the same room will visibly notice the flame dim and may flinch.",

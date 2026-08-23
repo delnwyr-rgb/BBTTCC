@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "Junior eye of the Witness order. Gathers, reports, dies anonymously.",
     "details": {
-      "level": 2,
+      "level": 8,
       "tier": 2,
       "statPoints": 0,
       "skillPoints": 0
@@ -191,7 +191,7 @@
             "ransom": 750,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "TII light stealth (bestiary) — bounty 450 / hire 1125 / ransom 750 marks (paid in intrigue)"
+            "notes": "TII light stealth (bestiary) \u2014 bounty 450 / hire 1125 / ransom 750 marks (paid in intrigue)"
           }
         }
       }
@@ -387,7 +387,7 @@
           "tier-ii",
           "role-stealth"
         ],
-        "effect": "No damage on a miss, but the target still senses they were seen — reroll-the-highest on their next Resolve check.",
+        "effect": "No damage on a miss, but the target still senses they were seen \u2014 reroll-the-highest on their next Resolve check.",
         "flavor": "A small ringing tone in the back of your skull. Someone wrote your name down.",
         "manifestation": {
           "tier": 1,
@@ -421,7 +421,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> range 6/18 squares, one target. Damage: <code>1d8</code> psychic (observed) + violence. No damage on a miss, but the target still senses they were seen — reroll-the-highest on their next Resolve check.</p><p><em>A small ringing tone in the back of your skull. Someone wrote your name down.</em></p>",
+          "value": "<p><strong>Strike.</strong> range 6/18 squares, one target. Damage: <code>1d8</code> psychic (observed) + violence. No damage on a miss, but the target still senses they were seen \u2014 reroll-the-highest on their next Resolve check.</p><p><em>A small ringing tone in the back of your skull. Someone wrote your name down.</em></p>",
           "chat": ""
         }
       },
@@ -439,7 +439,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack × 1",
+                "notes": "TII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 60
               }
@@ -721,7 +721,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack × 1",
+                "notes": "TII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 60
               }

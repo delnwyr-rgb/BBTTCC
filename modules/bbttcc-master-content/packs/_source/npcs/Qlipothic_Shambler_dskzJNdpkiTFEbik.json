@@ -8,8 +8,8 @@
     "factionId": "",
     "notes": "<p>A failed growth from the underside of reality: roots, carrion, wet teeth, and apologetic geometry. It drags pieces of the Qliphoth behind it like a torn cloak.</p>",
     "details": {
-      "level": 1,
-      "tier": 1,
+      "level": 13,
+      "tier": 3,
       "statPoints": 0,
       "skillPoints": 0
     },
@@ -821,7 +821,7 @@
           "aoe",
           "shape-cone"
         ],
-        "effect": "Each creature in a 15-ft. cone rolls vs Resolve (DC 14). Half damage on success. On a failure, the target also cannot regain Integrity until the start of the shambler's next turn. Recharge 5–6.",
+        "effect": "Each creature in a 15-ft. cone rolls vs Resolve (DC 14). Half damage on success. On a failure, the target also cannot regain Integrity until the start of the shambler's next turn. Recharge 5\u20136.",
         "flavor": "Black pollen, and the smell of a garden that gave up.",
         "manifestation": {
           "tier": 1,
@@ -874,7 +874,7 @@
         },
         "autoanimations": {
           "id": "ft-ruin-spore-exhalation-recharge-5-6-",
-          "label": "Ruin-Spore Exhalation (Recharge 5–6)",
+          "label": "Ruin-Spore Exhalation (Recharge 5\u20136)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -1159,7 +1159,7 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "The Shambler takes 1 Stress per pulse.",
-          "pathResonance": "Malkuth corrupted — kingdom of consumption.",
+          "pathResonance": "Malkuth corrupted \u2014 kingdom of consumption.",
           "fictionalPermission": "Players may be Shaken by what's behind the teeth.",
           "gmCalibration": "Resolve check; qliphothic to Stress.",
           "mechanicalHook": "AOE Resolve save; 2d6 qliphothic to Stress + Shaken.",

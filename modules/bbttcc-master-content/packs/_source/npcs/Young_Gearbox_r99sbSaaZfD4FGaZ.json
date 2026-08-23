@@ -241,12 +241,12 @@
         "label": "Plating",
         "value": 1
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 1
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 1
@@ -537,7 +537,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Everything connects. Including you.”</em></p><p><strong>Archetype (Bad Eden): The World (Integrator).</strong> You see systems as wholes. Supply, ritual, morale, politics, travel, violence, myth — to you, these are not separate tracks, but one machine with many faces.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens cross-system alignment and broad operational cohesion. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Diplomacy</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cEverything connects. Including you.\u201d</em></p><p><strong>Archetype (Bad Eden): The World (Integrator).</strong> You see systems as wholes. Supply, ritual, morale, politics, travel, violence, myth \u2014 to you, these are not separate tracks, but one machine with many faces.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens cross-system alignment and broad operational cohesion. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Diplomacy</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -646,12 +646,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden – Archetype: The World (Integrator) (Tier 1)",
+          "custom": "Bad Eden \u2013 Archetype: The World (Integrator) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — The World (Integrator)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Investigation and Insight.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) \u2014 The World (Integrator)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Investigation and Insight.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -872,7 +872,7 @@
           "body"
         ],
         "description": {
-          "value": "<p><em>\"The Shattering didn't end the work. Nothing ends the work.\"</em></p><p><strong>Stalwart</strong> is the Body Calling — the trade that kept its bearers alive after the Shattering. Umbrella: laborer, teamster, forager, wall-crew, rig-hand, survivor. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hazard-Hardened:</strong> Reduce each environmental hazard/radiation tick by 1 (by 2 at Tier III), and labor output counts double for facility/build work.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Athletics</strong> rank = tier; secondary <strong>Plating</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Bulwark or Soul-Smith. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"The Shattering didn't end the work. Nothing ends the work.\"</em></p><p><strong>Stalwart</strong> is the Body Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: laborer, teamster, forager, wall-crew, rig-hand, survivor. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Hazard-Hardened:</strong> Reduce each environmental hazard/radiation tick by 1 (by 2 at Tier III), and labor output counts double for facility/build work.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Athletics</strong> rank = tier; secondary <strong>Plating</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Bulwark or Soul-Smith. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -913,7 +913,7 @@
     },
     {
       "_id": "shDkBTGfcBMhlPYa",
-      "name": "Stalwart — Apprentice (Tier I)",
+      "name": "Stalwart \u2014 Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/svg/anchor.svg",
       "system": {
@@ -925,7 +925,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Stalwart — Apprentice</strong> (Tier I).</p><p><strong>Trade — Haul and raise:</strong> A day's heavy labor — cargo moved, wall raised, field cleared. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy).</span></p><p><strong>Trick — Put Your Back Into It</strong> <em>(1/scene)</em>: Auto-succeed one feat of raw strength or endurance of tier-appropriate difficulty.</p>",
+          "value": "<p><strong>Stalwart \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Haul and raise:</strong> A day's heavy labor \u2014 cargo moved, wall raised, field cleared. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy).</span></p><p><strong>Trick \u2014 Put Your Back Into It</strong> <em>(1/scene)</em>: Auto-succeed one feat of raw strength or endurance of tier-appropriate difficulty.</p>",
           "chat": ""
         }
       },

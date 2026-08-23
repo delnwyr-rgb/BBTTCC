@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "A relic war-machine from before the Fall, somehow still under power.",
     "details": {
-      "level": 4,
+      "level": 18,
       "tier": 4,
       "statPoints": 0,
       "skillPoints": 0
@@ -211,7 +211,7 @@
             "ransom": 33750,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "TIV heavy hardened (bestiary) — bounty 20250 / hire 50625 / ransom 33750 marks (paid in intrigue)"
+            "notes": "TIV heavy hardened (bestiary) \u2014 bounty 20250 / hire 50625 / ransom 33750 marks (paid in intrigue)"
           }
         }
       }
@@ -459,7 +459,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack × 1",
+                "notes": "TIV attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 540
               }
@@ -741,7 +741,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack × 1",
+                "notes": "TIV attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 540
               }
@@ -973,7 +973,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 30 ft. — targets roll vs Resolve (DC 14). Half damage on success. Failed-save targets are also Stunned until the end of the construct's next turn (containment protocol identifies them as non-cleared personnel). Recharge 5–6.",
+        "effect": "Radius 30 ft. \u2014 targets roll vs Resolve (DC 14). Half damage on success. Failed-save targets are also Stunned until the end of the construct's next turn (containment protocol identifies them as non-cleared personnel). Recharge 5\u20136.",
         "flavor": "The shell flexes outward once. Something institutional and patient does the deciding.",
         "manifestation": {
           "tier": 1,
@@ -1029,7 +1029,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV save × 1",
+                "notes": "TIV save \u00d7 1",
                 "bound": "free",
                 "saleBack": 540
               }
@@ -1038,7 +1038,7 @@
         },
         "autoanimations": {
           "id": "ft-containment-pulse-recharge-5-6-",
-          "label": "Containment Pulse (Recharge 5–6)",
+          "label": "Containment Pulse (Recharge 5\u20136)",
           "macro": {
             "enable": false,
             "playWhen": "0"

@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "Old-blood ritualist who keeps a finger-bone of every ancestor. They speak; he listens.",
     "details": {
-      "level": 2,
+      "level": 8,
       "tier": 2,
       "statPoints": 0,
       "skillPoints": 0
@@ -196,7 +196,7 @@
             "ransom": 1800,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "TII medium caster (bestiary) — bounty 1080 / hire 2700 / ransom 1800 marks (paid in softpower)"
+            "notes": "TII medium caster (bestiary) \u2014 bounty 1080 / hire 2700 / ransom 1800 marks (paid in softpower)"
           }
         }
       }
@@ -444,7 +444,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack × 1",
+                "notes": "TII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 60
               }
@@ -676,7 +676,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 20 ft. — targets roll vs Resolve (DC 13). Half damage on success. Failed-save targets are also Shaken until the start of their next turn.",
+        "effect": "Radius 20 ft. \u2014 targets roll vs Resolve (DC 13). Half damage on success. Failed-save targets are also Shaken until the start of their next turn.",
         "flavor": "The bones don't speak. They argue.",
         "manifestation": {
           "tier": 1,
@@ -732,7 +732,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII save × 1",
+                "notes": "TII save \u00d7 1",
                 "bound": "free",
                 "saleBack": 60
               }

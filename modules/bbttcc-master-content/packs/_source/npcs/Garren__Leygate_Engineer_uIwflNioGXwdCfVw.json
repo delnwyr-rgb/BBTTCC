@@ -102,7 +102,7 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "the Leygate, Allesh-Gilliam, leyline stabilizers, the Night the Mountain Coughed, Furrier's Fixit Farm, Marshal Yarrow Pike, the HQ",
-        "notes": "[AG-LEYGATE-2026-07-07] PRIVATE TRUTH — Garren, Leygate Engineer. Voice: tired competence; talks to the gate like a coworker he's covering shifts for. He has kept a broken Leygate alive on salvage, apology, and a maintenance log that reads like a hostage negotiation. THE SECRET: eleven days before the Night the Mountain Coughed, HE certified the old stabilizer \"good for another season\" — signed it because the parts weren't coming and somebody had to write something, and the flicker killed people who trusted the schedule his signature held up. Pike blames himself for believing the previous report. Garren WROTE the previous report. Neither of them has ever said it; Garren is fairly sure Pike has never read the signature, and he cannot decide if that's mercy or a fuse. TELL: when he's tired he quotes his own certification from memory, verbatim, flat (\"unit is serviceable and may be expected to perform within tolerances for the coming season\"), then changes the subject. GUARDING: gives the technical account of the flicker precisely to anyone; gives the HUMAN account only to someone who has helped him carry something heavy — literally or otherwise. DELIVERY DAY: when the new stabilizer arrives from Furrier's he installs it with steady hands, checks it three times, signs the new certification slowly like it weighs something — and only afterward, alone with the hum, do the hands shake. If redeemed by the work (the install completing), he sleeps a full night for the first time since the Cough; the dossier will know."
+        "notes": "[AG-LEYGATE-2026-07-07] PRIVATE TRUTH \u2014 Garren, Leygate Engineer. Voice: tired competence; talks to the gate like a coworker he's covering shifts for. He has kept a broken Leygate alive on salvage, apology, and a maintenance log that reads like a hostage negotiation. THE SECRET: eleven days before the Night the Mountain Coughed, HE certified the old stabilizer \"good for another season\" \u2014 signed it because the parts weren't coming and somebody had to write something, and the flicker killed people who trusted the schedule his signature held up. Pike blames himself for believing the previous report. Garren WROTE the previous report. Neither of them has ever said it; Garren is fairly sure Pike has never read the signature, and he cannot decide if that's mercy or a fuse. TELL: when he's tired he quotes his own certification from memory, verbatim, flat (\"unit is serviceable and may be expected to perform within tolerances for the coming season\"), then changes the subject. GUARDING: gives the technical account of the flicker precisely to anyone; gives the HUMAN account only to someone who has helped him carry something heavy \u2014 literally or otherwise. DELIVERY DAY: when the new stabilizer arrives from Furrier's he installs it with steady hands, checks it three times, signs the new certification slowly like it weighs something \u2014 and only afterward, alone with the hum, do the hands shake. If redeemed by the work (the install completing), he sleeps a full night for the first time since the Cough; the dossier will know."
       }
     }
   },
@@ -249,12 +249,12 @@
         "label": "Plating",
         "value": 1
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 0
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 1
@@ -555,7 +555,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Exo-Knight, Parallax, Salvage, Synapse</strong>.</p><p>This root grants the shared Circuitborn core trait package (<em>Firmware of Identity</em>) and preserves live UUID compatibility for the four Line items.</p><p><em>“You are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.”</em></p><p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p><p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you, you may regain either one spent Bad Eden OP (a category you used this scene) or Integrity equal to your tier.</p><p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor.</p><p><strong>Line Memory.</strong> Choose one Circuitborn line (Exo-Knight, Parallax, Salvage, Synapse). Your line grants Tier powers as you level.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Exo-Knight, Parallax, Salvage, Synapse</strong>.</p><p>This root grants the shared Circuitborn core trait package (<em>Firmware of Identity</em>) and preserves live UUID compatibility for the four Line items.</p><p><em>\u201cYou are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.\u201d</em></p><p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p><p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you, you may regain either one spent Bad Eden OP (a category you used this scene) or Integrity equal to your tier.</p><p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor.</p><p><strong>Line Memory.</strong> Choose one Circuitborn line (Exo-Knight, Parallax, Salvage, Synapse). Your line grants Tier powers as you level.</p>",
           "chat": ""
         },
         "advancement": [
@@ -635,7 +635,7 @@
               "context": "defense",
               "mode": "reroll-lowest",
               "vs": "vs:poison and disease",
-              "note": "on defense checks [TODO(adv-call)] against poison and disease, and you are im…"
+              "note": "on defense checks [TODO(adv-call)] against poison and disease, and you are im\u2026"
             }
           ],
           "triggers": [
@@ -710,7 +710,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You are not a robot. You are a decision the world keeps making about itself.”</em></p>\n<p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p>\n<p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), you may regain either (a) one spent Bad Eden OP (a category you used this scene) or (b) Integrity equal to your tier.</p>\n<p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor. You reroll the lowest die on checks to identify surveillance, hidden speakers, encoded messages, or noospheric “attention traps.”</p>\n<p><strong>Glitch-Surge.</strong> When you drop to 0 Integrity, you can choose to emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In Bad Eden play, this is a perfect excuse for weird consequences.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou are not a robot. You are a decision the world keeps making about itself.\u201d</em></p>\n<p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p>\n<p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), you may regain either (a) one spent Bad Eden OP (a category you used this scene) or (b) Integrity equal to your tier.</p>\n<p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor. You reroll the lowest die on checks to identify surveillance, hidden speakers, encoded messages, or noospheric \u201cattention traps.\u201d</p>\n<p><strong>Glitch-Surge.</strong> When you drop to 0 Integrity, you can choose to emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In Bad Eden play, this is a perfect excuse for weird consequences.</p>",
           "chat": ""
         },
         "uses": {
@@ -1027,7 +1027,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You were born with a wrench in your soul.”</em></p>\n        <p><strong>Built-In Tools.</strong> You gain a skill rank with the Tinkering aptitude and one artisan tool set of your choice. As part of a Soma Break, you can repair a damaged object or patch armor (GM adjudicates small benefit).</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou were born with a wrench in your soul.\u201d</em></p>\n        <p><strong>Built-In Tools.</strong> You gain a skill rank with the Tinkering aptitude and one artisan tool set of your choice. As part of a Soma Break, you can repair a damaged object or patch armor (GM adjudicates small benefit).</p>",
           "chat": ""
         },
         "uses": {
@@ -1112,7 +1112,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn Line.</strong> The salvage-recursive. Built from the parts of older Circuitborn that didn’t make it. You carry their last instructions in your firmware.</p><p><em>“Nothing in this world is wasted. Some of it is just waiting to be re-purposed.”</em></p><p><strong>Salvage.</strong> You are a sentient chassis built around the principle of <em>recovery</em>. Broken things speak to you. So do broken people, when they don’t know they’re doing it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>BOD (Body)</strong>—expressed primarily through Tier powers.</li><li><strong>Scrap Memory.</strong> You can identify the original purpose of any handheld broken object you touch (1/Soma Break, GM adjudicates depth of detail).</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn Line.</strong> The salvage-recursive. Built from the parts of older Circuitborn that didn\u2019t make it. You carry their last instructions in your firmware.</p><p><em>\u201cNothing in this world is wasted. Some of it is just waiting to be re-purposed.\u201d</em></p><p><strong>Salvage.</strong> You are a sentient chassis built around the principle of <em>recovery</em>. Broken things speak to you. So do broken people, when they don\u2019t know they\u2019re doing it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>BOD (Body)</strong>\u2014expressed primarily through Tier powers.</li><li><strong>Scrap Memory.</strong> You can identify the original purpose of any handheld broken object you touch (1/Soma Break, GM adjudicates depth of detail).</li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -1380,7 +1380,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“You understand cost.”</em></p><p><strong>Archetype (Bad Eden): The Hanged Man.</strong> You gain power through sacrifice, inversion, and delay.</p>",
+          "value": "<p><em>\u201cYou understand cost.\u201d</em></p><p><strong>Archetype (Bad Eden): The Hanged Man.</strong> You gain power through sacrifice, inversion, and delay.</p>",
           "chat": ""
         },
         "activities": {},
@@ -1487,12 +1487,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden – Archetype: The Hanged Man (Tier 1)",
+          "custom": "Bad Eden \u2013 Archetype: The Hanged Man (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Hanged Man</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Insight and Occult. You learn the <strong>Resistance</strong> Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) \u2014 The Hanged Man</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Insight and Occult. You learn the <strong>Resistance</strong> Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1713,7 +1713,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“You can pull the teeth out of a monster without waking it up.”</em></p><p>Once per <strong>a Soma Break</strong>, when a <strong>salvage, demolition, or deconstruction</strong> project you orchestrate would advance the <strong>Darkness Track</strong> (or an equivalent corruption flag) because of collateral harm, spiritual noise, or ecological fallout, you can choose to blunt that blow.</p><ul><li>You may <strong>negate</strong> one such Darkness increase entirely, representing careful rituals, shielding, or ethical disassembly.</li><li>This decision must be made at the moment the Darkness increase would be applied.</li></ul>",
+          "value": "<p><em>\u201cYou can pull the teeth out of a monster without waking it up.\u201d</em></p><p>Once per <strong>a Soma Break</strong>, when a <strong>salvage, demolition, or deconstruction</strong> project you orchestrate would advance the <strong>Darkness Track</strong> (or an equivalent corruption flag) because of collateral harm, spiritual noise, or ecological fallout, you can choose to blunt that blow.</p><ul><li>You may <strong>negate</strong> one such Darkness increase entirely, representing careful rituals, shielding, or ethical disassembly.</li><li>This decision must be made at the moment the Darkness increase would be applied.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1786,7 +1786,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“What was lost remembers you.”</em></p><p>Once per <strong>a Soma Break</strong>, when a <strong>construct, vehicle, drone, or mech</strong> within <strong>12 squares</strong> of you is reduced to 0 Integrity, you can use your <strong>reaction</strong> to drag its pattern back through the wires.</p><ul><li>The target is immediately restored to <strong>half its Integrity maximum</strong>.</li><li>It can immediately take a <strong>full turn</strong> (move, action, and bonus action) as part of this reaction, acting on the current initiative.</li><li>It gains <strong>temporary Integrity equal to your Soul-Smith level</strong> and a bonus of <strong>+tier to all damage rolls</strong> it deals for 1 minute.</li><li>Allies within 2 squares of it deal <strong>+1 damage</strong> on their weapon attacks and have <strong>advantage</strong> on defense check against being <strong>stunned</strong> or <strong>paralyzed</strong> for the same duration.</li></ul><p><strong>OP Echo.</strong> If the resurrected construct contributes to completing a strategic or tactical goal before this aura ends, your faction gains <strong>+1 Economy OP</strong> and <strong>+1 Intrigue OP</strong> for the next strategic turn.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cWhat was lost remembers you.\u201d</em></p><p>Once per <strong>a Soma Break</strong>, when a <strong>construct, vehicle, drone, or mech</strong> within <strong>12 squares</strong> of you is reduced to 0 Integrity, you can use your <strong>reaction</strong> to drag its pattern back through the wires.</p><ul><li>The target is immediately restored to <strong>half its Integrity maximum</strong>.</li><li>It can immediately take a <strong>full turn</strong> (move, action, and bonus action) as part of this reaction, acting on the current initiative.</li><li>It gains <strong>temporary Integrity equal to your Soul-Smith level</strong> and a bonus of <strong>+tier to all damage rolls</strong> it deals for 1 minute.</li><li>Allies within 2 squares of it deal <strong>+1 damage</strong> on their weapon attacks and have <strong>advantage</strong> on defense check against being <strong>stunned</strong> or <strong>paralyzed</strong> for the same duration.</li></ul><p><strong>OP Echo.</strong> If the resurrected construct contributes to completing a strategic or tactical goal before this aura ends, your faction gains <strong>+1 Economy OP</strong> and <strong>+1 Intrigue OP</strong> for the next strategic turn.</p>",
           "chat": ""
         },
         "activities": {},
@@ -2036,7 +2036,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You know where to hit a machine so it hits itself.”</em></p><p>As a <strong>bonus action</strong>, you can target one <strong>construct</strong> or machine-like creature you can see within <strong>6 squares</strong>.</p><ul><li>The target must succeed on a <strong>Body check</strong> (DC = 8 + your tier + your Mind or Soul modifier; choose when you gain this feature) or suffer internal backlash.</li><li>On a failure, the target has <strong>disadvantage</strong> on the next attack roll it makes before the end of its next turn.</li><li>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cYou know where to hit a machine so it hits itself.\u201d</em></p><p>As a <strong>bonus action</strong>, you can target one <strong>construct</strong> or machine-like creature you can see within <strong>6 squares</strong>.</p><ul><li>The target must succeed on a <strong>Body check</strong> (DC = 8 + your tier + your Mind or Soul modifier; choose when you gain this feature) or suffer internal backlash.</li><li>On a failure, the target has <strong>disadvantage</strong> on the next attack roll it makes before the end of its next turn.</li><li>You can use this feature a number of times equal to your <strong>tier</strong>, and you regain all expended uses when you finish a Soma Break.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2104,7 +2104,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Pull lost warmth from dead relics.</em></p><p>When you <strong>salvage</strong> a destroyed construct, relic, vehicle, or large device during or immediately after a scene, you can stabilize the ghost of its purpose.</p><ul><li>Once per <strong>scene</strong>, when you successfully salvage from such a wreck (at the GM’s discretion that this is a meaningful recovery and not just scooping screws), your faction gains <strong>+1 Economy OP</strong> for the next strategic turn.</li><li>This doesn’t stack from multiple wrecks in the same scene; think of it as one big reclamation per incident.</li></ul>",
+          "value": "<p><em>Pull lost warmth from dead relics.</em></p><p>When you <strong>salvage</strong> a destroyed construct, relic, vehicle, or large device during or immediately after a scene, you can stabilize the ghost of its purpose.</p><ul><li>Once per <strong>scene</strong>, when you successfully salvage from such a wreck (at the GM\u2019s discretion that this is a meaningful recovery and not just scooping screws), your faction gains <strong>+1 Economy OP</strong> for the next strategic turn.</li><li>This doesn\u2019t stack from multiple wrecks in the same scene; think of it as one big reclamation per incident.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2172,7 +2172,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“When something powered down, it didn’t stop talking to you.”</em></p><p>When you reduce a <strong>construct</strong>, vehicle, drone, mech, or other obviously artificial entity to 0 Integrity, you can ride the dying current for insight.</p><ul><li>Until the end of the current <strong>scene</strong>, you have <strong>advantage</strong> on your next <strong>tool check</strong> related to engineering, salvage, or repair.</li><li>This includes checks to stabilize wreckage, reclaim parts, or jury-rig field repairs.</li></ul>",
+          "value": "<p><em>\u201cWhen something powered down, it didn\u2019t stop talking to you.\u201d</em></p><p>When you reduce a <strong>construct</strong>, vehicle, drone, mech, or other obviously artificial entity to 0 Integrity, you can ride the dying current for insight.</p><ul><li>Until the end of the current <strong>scene</strong>, you have <strong>advantage</strong> on your next <strong>tool check</strong> related to engineering, salvage, or repair.</li><li>This includes checks to stabilize wreckage, reclaim parts, or jury-rig field repairs.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2240,7 +2240,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“You know how to wake dead metal just a little too well.”</em></p><p>When you finish a <strong>a Soma Break</strong>, you may choose one <strong>construct, device, vehicle, or weapon</strong> you repaired, salvaged, or forged during or before the rest.</p><ul><li>For the next <strong>hour</strong>, it gains <strong>+1 to attack rolls</strong> (if it makes attacks) and <strong>+1 to Guard</strong> (if it can be targeted and has an Guard).</li><li>Once per round, the first time it hits or successfully completes a relevant action, it deals an extra <strong>1d8 lightning or sephirotic damage (radiant)</strong> (your choice when you apply the overcharge).</li><li>If the item or construct is destroyed while overcharged, you immediately gain <strong>advantage</strong> on your next tool check and salvage action this scene, as the feedback pours a blueprint directly into your hands.</li></ul><p><strong>OP Echo.</strong> If you successfully reclaim at least one meaningful Material, Component, or OP via salvage during the hour, your faction gains <strong>+1 Economy OP</strong> for the next strategic turn (once per scenario).</p>",
+          "value": "<p><em>\u201cYou know how to wake dead metal just a little too well.\u201d</em></p><p>When you finish a <strong>a Soma Break</strong>, you may choose one <strong>construct, device, vehicle, or weapon</strong> you repaired, salvaged, or forged during or before the rest.</p><ul><li>For the next <strong>hour</strong>, it gains <strong>+1 to attack rolls</strong> (if it makes attacks) and <strong>+1 to Guard</strong> (if it can be targeted and has an Guard).</li><li>Once per round, the first time it hits or successfully completes a relevant action, it deals an extra <strong>1d8 lightning or sephirotic damage (radiant)</strong> (your choice when you apply the overcharge).</li><li>If the item or construct is destroyed while overcharged, you immediately gain <strong>advantage</strong> on your next tool check and salvage action this scene, as the feedback pours a blueprint directly into your hands.</li></ul><p><strong>OP Echo.</strong> If you successfully reclaim at least one meaningful Material, Component, or OP via salvage during the hour, your faction gains <strong>+1 Economy OP</strong> for the next strategic turn (once per scenario).</p>",
           "chat": ""
         },
         "activities": {},
@@ -2308,7 +2308,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“Metal remembers how it died. You teach it better endings.”</em></p><p>After you finish a <strong>a Soma Break</strong>, you can choose one weapon you have personally <strong>forged, repaired, or significantly modified</strong> during this adventure.</p><ul><li>For the next <strong>hour</strong>, that weapon deals an extra <strong>+1 damage</strong> on each hit.</li><li>The extra damage is the same type as the weapon’s normal damage.</li><li>You can have only one weapon under this effect at a time. Starting Echo Temper again ends the previous echo.</li></ul>",
+          "value": "<p><em>\u201cMetal remembers how it died. You teach it better endings.\u201d</em></p><p>After you finish a <strong>a Soma Break</strong>, you can choose one weapon you have personally <strong>forged, repaired, or significantly modified</strong> during this adventure.</p><ul><li>For the next <strong>hour</strong>, that weapon deals an extra <strong>+1 damage</strong> on each hit.</li><li>The extra damage is the same type as the weapon\u2019s normal damage.</li><li>You can have only one weapon under this effect at a time. Starting Echo Temper again ends the previous echo.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2400,7 +2400,7 @@
       "effects": [
         {
           "_id": "N7ITxKLUkX0vyOYx",
-          "name": "Grim Persistence — Integrity",
+          "name": "Grim Persistence \u2014 Integrity",
           "origin": null,
           "disabled": false,
           "duration": {
@@ -2487,7 +2487,7 @@
           "soul"
         ],
         "description": {
-          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling — the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"The dead are fine. It's the living who need tending.\"</em></p><p><strong>Keeper</strong> is the Soul Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: priest, ritualist, medium, hedge-warden, funeral speaker. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Hearthlight:</strong> Allies within near range add <strong>+1 Resolve</strong> (+2 at Tier III). The congregation stands straighter when the Keeper is present.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Faith</strong> rank = tier; secondary <strong>Insight</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Soft Power</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Pactkeeper or Dreamwalker. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -2528,7 +2528,7 @@
     },
     {
       "_id": "vbUyR4OMTVIQI4jx",
-      "name": "Keeper — Apprentice (Tier I)",
+      "name": "Keeper \u2014 Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/svg/temple.svg",
       "system": {
@@ -2540,7 +2540,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Keeper — Apprentice</strong> (Tier I).</p><p><strong>Trade — The rites:</strong> Weddings, funerals, blessings; participants recover 2×tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick — Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
+          "value": "<p><strong>Keeper \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 The rites:</strong> Weddings, funerals, blessings; participants recover 2\u00d7tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick \u2014 Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
           "chat": ""
         }
       },

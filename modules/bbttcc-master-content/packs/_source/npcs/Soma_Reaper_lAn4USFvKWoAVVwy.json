@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "A dream-fiend that harvests Soma-Break echoes from sleepers. Half-real until it strikes.",
     "details": {
-      "level": 3,
+      "level": 13,
       "tier": 3,
       "statPoints": 0,
       "skillPoints": 0
@@ -198,7 +198,7 @@
             "ransom": 5400,
             "currency": "nonlethal",
             "gmOverride": false,
-            "notes": "TIII medium stealth (bestiary) — bounty 3240 / hire 8100 / ransom 5400 marks (paid in nonlethal)"
+            "notes": "TIII medium stealth (bestiary) \u2014 bounty 3240 / hire 8100 / ransom 5400 marks (paid in nonlethal)"
           }
         }
       }
@@ -446,7 +446,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII attack × 1",
+                "notes": "TIII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 180
               }
@@ -676,7 +676,7 @@
           "tier-iii",
           "role-stealth"
         ],
-        "effect": "On a hit, the target forgets the last meaningful thing they did until end of next turn (lose access to that action's benefits — e.g., a buff just granted is missed).",
+        "effect": "On a hit, the target forgets the last meaningful thing they did until end of next turn (lose access to that action's benefits \u2014 e.g., a buff just granted is missed).",
         "flavor": "It is not stealing memory. It is just reading the strand back. Backwards.",
         "manifestation": {
           "tier": 1,
@@ -710,7 +710,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> range 6/18 squares, one target. Damage: <code>2d8</code> psychic (memory-thread) + violence. On a hit, the target forgets the last meaningful thing they did until end of next turn (lose access to that action's benefits — e.g., a buff just granted is missed).</p><p><em>It is not stealing memory. It is just reading the strand back. Backwards.</em></p>",
+          "value": "<p><strong>Strike.</strong> range 6/18 squares, one target. Damage: <code>2d8</code> psychic (memory-thread) + violence. On a hit, the target forgets the last meaningful thing they did until end of next turn (lose access to that action's benefits \u2014 e.g., a buff just granted is missed).</p><p><em>It is not stealing memory. It is just reading the strand back. Backwards.</em></p>",
           "chat": ""
         }
       },
@@ -728,7 +728,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII attack × 1",
+                "notes": "TIII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 180
               }
@@ -960,7 +960,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 20 ft. — targets roll vs Resolve (DC 13). Half damage on success. On a failed save, the target's next Soma Break restores half as much (one stage of harvest). Multiple failures stack; refreshes on a true rest. Recharge 5–6.",
+        "effect": "Radius 20 ft. \u2014 targets roll vs Resolve (DC 13). Half damage on success. On a failed save, the target's next Soma Break restores half as much (one stage of harvest). Multiple failures stack; refreshes on a true rest. Recharge 5\u20136.",
         "flavor": "The room briefly tastes of someone else's morning.",
         "manifestation": {
           "tier": 1,
@@ -1016,7 +1016,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII save × 1",
+                "notes": "TIII save \u00d7 1",
                 "bound": "free",
                 "saleBack": 180
               }
@@ -1025,7 +1025,7 @@
         },
         "autoanimations": {
           "id": "ft-soma-drain-field-recharge-5-6-",
-          "label": "Soma-Drain Field (Recharge 5–6)",
+          "label": "Soma-Drain Field (Recharge 5\u20136)",
           "macro": {
             "enable": false,
             "playWhen": "0"

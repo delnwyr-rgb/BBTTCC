@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "Standing infantry of a raider warband. Disciplined enough to hold a line.",
     "details": {
-      "level": 2,
+      "level": 8,
       "tier": 2,
       "statPoints": 0,
       "skillPoints": 0
@@ -196,7 +196,7 @@
             "ransom": 1800,
             "currency": "violence",
             "gmOverride": false,
-            "notes": "TII medium brute (bestiary) — bounty 1080 / hire 2700 / ransom 1800 marks (paid in violence)"
+            "notes": "TII medium brute (bestiary) \u2014 bounty 1080 / hire 2700 / ransom 1800 marks (paid in violence)"
           }
         }
       }
@@ -444,7 +444,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack × 1",
+                "notes": "TII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 60
               }
@@ -726,7 +726,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack × 1",
+                "notes": "TII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 60
               }

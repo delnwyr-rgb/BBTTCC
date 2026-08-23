@@ -12,7 +12,7 @@
       "max": ""
     },
     "description": {
-      "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Resistance:</strong> Radiation, Qliphothic, Poison, Kinetic</li>\n  <li><strong>Tier:</strong> IV</li>\n  <li><strong>Cost:</strong> 2025 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Resistance:</strong> Radiation, Qliphothic, Poison, Kinetic</li>\n  <li><strong>Tier:</strong> IV</li>\n  <li><strong>Cost:</strong> 2025 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
       "chat": ""
     },
     "identifier": "equipment",
@@ -120,7 +120,7 @@
             "evasionBonus": 0,
             "resolveBonus": 0,
             "resistances": [],
-            "armorSkill": "weave",
+            "armorSkill": "fitting",
             "equipped": true,
             "tags": []
           },

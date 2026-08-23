@@ -6,9 +6,9 @@
     "role": "Apex Wyrm (Directed-Energy)",
     "tier": 4,
     "factionId": "",
-    "notes": "A wyrm that ate a pre-Fall orbital weapons platform and liked it. Its scales are solar collectors; its throat is a focusing array; its breath is not fire — it is a single, perfectly coherent beam of MY-GOD-RUN. Mal's note: 'Beautiful. Genuinely. Right up until the part where it bisects the truck. Beware the magic of cinema, stewards.'",
+    "notes": "A wyrm that ate a pre-Fall orbital weapons platform and liked it. Its scales are solar collectors; its throat is a focusing array; its breath is not fire \u2014 it is a single, perfectly coherent beam of MY-GOD-RUN. Mal's note: 'Beautiful. Genuinely. Right up until the part where it bisects the truck. Beware the magic of cinema, stewards.'",
     "details": {
-      "level": 14,
+      "level": 18,
       "tier": 4,
       "statPoints": 0,
       "skillPoints": 0
@@ -371,7 +371,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Line — 12 squares</strong> Evasion check vs DC 18. Fail: <code>4d8</code> energy + Burning. Half on success. Must vent heat (skip) the turn after.</p><p><em>It does not roar before it fires. That's the rude part.</em></p>",
+          "value": "<p><strong>Line \u2014 12 squares</strong> Evasion check vs DC 18. Fail: <code>4d8</code> energy + Burning. Half on success. Must vent heat (skip) the turn after.</p><p><em>It does not roar before it fires. That's the rude part.</em></p>",
           "chat": ""
         }
       },
@@ -960,7 +960,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Cone — 4 squares</strong> Body check vs DC 17. Fail: <code>2d10</code> kinetic + Prone + pushed 2 squares Half on success.</p>",
+          "value": "<p><strong>Cone \u2014 4 squares</strong> Body check vs DC 17. Fail: <code>2d10</code> kinetic + Prone + pushed 2 squares Half on success.</p>",
           "chat": ""
         }
       },
@@ -1549,7 +1549,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Ultimate — 1/scene below half Integrity.</strong> 6 squares sphere. Evasion vs DC 18. Fail: <code>5d10</code> energy + Blinded. Half on success. Dragon Staggered next turn.</p><p><em>\"If I'm reading this back to you, the dragon overheated and so did you. Reincarnation ahoy!\"</em></p>",
+          "value": "<p><strong>Ultimate \u2014 1/scene below half Integrity.</strong> 6 squares sphere. Evasion vs DC 18. Fail: <code>5d10</code> energy + Blinded. Half on success. Dragon Staggered next turn.</p><p><em>\"If I'm reading this back to you, the dragon overheated and so did you. Reincarnation ahoy!\"</em></p>",
           "chat": ""
         }
       },

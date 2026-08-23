@@ -11,7 +11,7 @@
       "psychic",
       "sephirotic"
     ],
-    "armorSkill": "warding",
+    "armorSkill": "bracing",
     "equipped": false,
     "tags": [
       "warding",
@@ -23,7 +23,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A ceremonial mantle of the highest warding order, its collar a closed ring of sept-silver with no clasp — once bound, it has no open ends. Worn by those who stand between a congregation and the things that would unmake it. The corruption, the whisper, and the false light all break on the circle alike.</p><p><b>The Unbroken Circle.</b> Resists qliphothic, psychic, and sephirotic.</p><p><b>Soulbound.</b> Binds at first attunement and cannot be re-bonded.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Guard +2, Evasion +1, Resolve +5</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic, Psychic, Sephirotic</li>\n  <li><strong>Tier:</strong> IV</li>\n  <li><strong>Cost:</strong> 3040 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>A ceremonial mantle of the highest warding order, its collar a closed ring of sept-silver with no clasp \u2014 once bound, it has no open ends. Worn by those who stand between a congregation and the things that would unmake it. The corruption, the whisper, and the false light all break on the circle alike.</p><p><b>The Unbroken Circle.</b> Resists qliphothic, psychic, and sephirotic.</p><p><b>Soulbound.</b> Binds at first attunement and cannot be re-bonded.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Guard +2, Evasion +1, Resolve +5</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic, Psychic, Sephirotic</li>\n  <li><strong>Tier:</strong> IV</li>\n  <li><strong>Cost:</strong> 3040 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
       "chat": ""
     }
   },
@@ -48,7 +48,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A ceremonial mantle of the highest warding order, its collar a closed ring of sept-silver with no clasp — once bound, it has no open ends. Worn by those who stand between a congregation and the things that would unmake it. The corruption, the whisper, and the false light all break on the circle alike.</p><p><b>The Unbroken Circle.</b> Resists qliphothic, psychic, and sephirotic.</p><p><b>Soulbound.</b> Binds at first attunement and cannot be re-bonded.</p>",
+          "lore": "<p>A ceremonial mantle of the highest warding order, its collar a closed ring of sept-silver with no clasp \u2014 once bound, it has no open ends. Worn by those who stand between a congregation and the things that would unmake it. The corruption, the whisper, and the false light all break on the circle alike.</p><p><b>The Unbroken Circle.</b> Resists qliphothic, psychic, and sephirotic.</p><p><b>Soulbound.</b> Binds at first attunement and cannot be re-bonded.</p>",
           "materialOf": [
             "sept-silver",
             "circle-silk",
@@ -61,7 +61,7 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TIV armor × 1.50 × soulbound 1.5",
+            "notes": "TIV armor \u00d7 1.50 \u00d7 soulbound 1.5",
             "bound": "soulbound",
             "saleBack": 0
           }

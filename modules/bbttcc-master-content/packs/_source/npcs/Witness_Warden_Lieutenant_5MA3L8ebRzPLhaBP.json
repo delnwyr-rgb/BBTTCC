@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "Mid-tier spy commander. Operates from shadows, reports up the Witness chain.",
     "details": {
-      "level": 3,
+      "level": 13,
       "tier": 3,
       "statPoints": 0,
       "skillPoints": 0
@@ -196,7 +196,7 @@
             "ransom": 5400,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "TIII medium stealth (bestiary) — bounty 3240 / hire 8100 / ransom 5400 marks (paid in intrigue)"
+            "notes": "TIII medium stealth (bestiary) \u2014 bounty 3240 / hire 8100 / ransom 5400 marks (paid in intrigue)"
           }
         }
       }
@@ -444,7 +444,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII attack × 1",
+                "notes": "TIII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 180
               }
@@ -726,7 +726,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII attack × 1",
+                "notes": "TIII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 180
               }
@@ -944,7 +944,7 @@
           "role-stealth"
         ],
         "description": {
-          "value": "<p><strong>Passive.</strong> If reduced below half Integrity, the lieutenant may use a reaction to vanish into a prepared egress — leaving combat entirely. Witnesses always have an exit. The exit was prepared before combat began.</p><p><em>Mid-tier commander. The 'mid' means she's high enough to leave.</em></p>",
+          "value": "<p><strong>Passive.</strong> If reduced below half Integrity, the lieutenant may use a reaction to vanish into a prepared egress \u2014 leaving combat entirely. Witnesses always have an exit. The exit was prepared before combat began.</p><p><em>Mid-tier commander. The 'mid' means she's high enough to leave.</em></p>",
           "chat": ""
         }
       },

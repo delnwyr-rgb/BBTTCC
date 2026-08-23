@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "A walking thinning of the Veil. The world rearranges itself in their presence.",
     "details": {
-      "level": 4,
+      "level": 18,
       "tier": 4,
       "statPoints": 0,
       "skillPoints": 0
@@ -208,7 +208,7 @@
             "ransom": 33750,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "TIV heavy caster (bestiary) — bounty 20250 / hire 50625 / ransom 33750 marks (paid in softpower)"
+            "notes": "TIV heavy caster (bestiary) \u2014 bounty 20250 / hire 50625 / ransom 33750 marks (paid in softpower)"
           }
         }
       }
@@ -456,7 +456,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack × 1",
+                "notes": "TIV attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 540
               }
@@ -738,7 +738,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack × 1",
+                "notes": "TIV attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 540
               }
@@ -970,7 +970,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 30 ft. — targets roll vs Resolve (DC 15). Half damage on success. Failed-save targets swap positions with the nearest other failed-save target (GM pairs them up). They are also Shaken until end of next turn. Recharge 5–6.",
+        "effect": "Radius 30 ft. \u2014 targets roll vs Resolve (DC 15). Half damage on success. Failed-save targets swap positions with the nearest other failed-save target (GM pairs them up). They are also Shaken until end of next turn. Recharge 5\u20136.",
         "flavor": "The avatar gestures, briefly, and the rules of where things go stop being negotiable.",
         "manifestation": {
           "tier": 1,
@@ -1026,7 +1026,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV save × 1",
+                "notes": "TIV save \u00d7 1",
                 "bound": "free",
                 "saleBack": 540
               }
@@ -1035,7 +1035,7 @@
         },
         "autoanimations": {
           "id": "ft-re-arrangement-recharge-5-6-",
-          "label": "Re-Arrangement (Recharge 5–6)",
+          "label": "Re-Arrangement (Recharge 5\u20136)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -1244,7 +1244,7 @@
           "role-caster"
         ],
         "description": {
-          "value": "<p><strong>Passive.</strong> All creatures within 2 squares of the avatar — including allies — are subject to occasional Veil-thinning: at the start of their turn, on a 1 on a d10, they take 1d4 qliphothic Stress damage. The avatar does not control this and does not particularly notice it.</p><p><em>Being near them is its own debt.</em></p>",
+          "value": "<p><strong>Passive.</strong> All creatures within 2 squares of the avatar \u2014 including allies \u2014 are subject to occasional Veil-thinning: at the start of their turn, on a 1 on a d10, they take 1d4 qliphothic Stress damage. The avatar does not control this and does not particularly notice it.</p><p><em>Being near them is its own debt.</em></p>",
           "chat": ""
         }
       },

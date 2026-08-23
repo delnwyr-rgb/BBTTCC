@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "Eldritch beast that speaks in tongues no human dialect should produce. Mire and song.",
     "details": {
-      "level": 2,
+      "level": 8,
       "tier": 2,
       "statPoints": 0,
       "skillPoints": 0
@@ -196,7 +196,7 @@
             "ransom": 1800,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "TII medium caster (bestiary) — bounty 1080 / hire 2700 / ransom 1800 marks (paid in softpower)"
+            "notes": "TII medium caster (bestiary) \u2014 bounty 1080 / hire 2700 / ransom 1800 marks (paid in softpower)"
           }
         }
       }
@@ -444,7 +444,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack × 1",
+                "notes": "TII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 60
               }
@@ -676,7 +676,7 @@
           "aoe",
           "shape-cone"
         ],
-        "effect": "Cone 30 ft. — targets roll vs Resolve (DC 13). Half damage on success. Failed-save targets are Compelled to repeat the syllable themselves on their next turn (lose Action). Recharge 5–6.",
+        "effect": "Cone 30 ft. \u2014 targets roll vs Resolve (DC 13). Half damage on success. Failed-save targets are Compelled to repeat the syllable themselves on their next turn (lose Action). Recharge 5\u20136.",
         "flavor": "The hex opens its mouth wide enough to hear the inside of itself.",
         "manifestation": {
           "tier": 1,
@@ -732,7 +732,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII save × 1",
+                "notes": "TII save \u00d7 1",
                 "bound": "free",
                 "saleBack": 60
               }
@@ -741,7 +741,7 @@
         },
         "autoanimations": {
           "id": "ft-tongues-flood-recharge-5-6-",
-          "label": "Tongues-Flood (Recharge 5–6)",
+          "label": "Tongues-Flood (Recharge 5\u20136)",
           "macro": {
             "enable": false,
             "playWhen": "0"

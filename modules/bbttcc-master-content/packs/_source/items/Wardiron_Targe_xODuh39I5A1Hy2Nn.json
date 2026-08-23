@@ -9,7 +9,7 @@
     "resistances": [
       "kinetic"
     ],
-    "armorSkill": "warding",
+    "armorSkill": "bracing",
     "equipped": false,
     "tags": [
       "shield",
@@ -19,7 +19,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>A heavy round targe banded in wardiron — anchorstone smelted with the steel so the metal sits a half-beat ahead of the blow. Favored by faction line-holders who'd rather lose the shield than the arm behind it.</p><p><strong>Wardiron.</strong> The banding grounds raw force. Resists kinetic. No attunement — the iron does the remembering.</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +2, Resolve +1</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Kinetic</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 150 Economy marks</p></li></ul>",
+      "value": "<p>A heavy round targe banded in wardiron \u2014 anchorstone smelted with the steel so the metal sits a half-beat ahead of the blow. Favored by faction line-holders who'd rather lose the shield than the arm behind it.</p><p><strong>Wardiron.</strong> The banding grounds raw force. Resists kinetic. No attunement \u2014 the iron does the remembering.</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Shield</p></li><li><p><strong>Defense:</strong> Guard +2, Resolve +1</p></li><li><p><strong>Requires:</strong> Warding (trained)</p></li><li><p><strong>Resistance:</strong> Kinetic</p></li><li><p><strong>Tier:</strong> II</p></li><li><p><strong>Cost:</strong> 150 Economy marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -44,7 +44,7 @@
             "table": null
           },
           "signals": {},
-          "lore": "<p>A heavy round targe banded in wardiron — anchorstone smelted with the steel so the metal sits a half-beat ahead of the blow. Favored by faction line-holders who'd rather lose the shield than the arm behind it.</p><p><b>Wardiron.</b> The banding grounds raw force. Resists kinetic. No attunement — the iron does the remembering.</p>",
+          "lore": "<p>A heavy round targe banded in wardiron \u2014 anchorstone smelted with the steel so the metal sits a half-beat ahead of the blow. Favored by faction line-holders who'd rather lose the shield than the arm behind it.</p><p><b>Wardiron.</b> The banding grounds raw force. Resists kinetic. No attunement \u2014 the iron does the remembering.</p>",
           "materialOf": [
             "wardiron",
             "anchorstone",
@@ -57,7 +57,7 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TII shield × 1",
+            "notes": "TII shield \u00d7 1",
             "bound": "free",
             "saleBack": 60
           }

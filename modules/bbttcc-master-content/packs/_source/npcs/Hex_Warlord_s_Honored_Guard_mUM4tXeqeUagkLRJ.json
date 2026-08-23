@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "Elite bodyguard sworn to a Hex-Warlord. Has killed more heroes than they remember.",
     "details": {
-      "level": 4,
+      "level": 18,
       "tier": 4,
       "statPoints": 0,
       "skillPoints": 0
@@ -204,7 +204,7 @@
             "ransom": 33750,
             "currency": "violence",
             "gmOverride": false,
-            "notes": "TIV heavy brute (bestiary) — bounty 20250 / hire 50625 / ransom 33750 marks (paid in violence)"
+            "notes": "TIV heavy brute (bestiary) \u2014 bounty 20250 / hire 50625 / ransom 33750 marks (paid in violence)"
           }
         }
       }
@@ -452,7 +452,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack × 1",
+                "notes": "TIV attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 540
               }
@@ -684,7 +684,7 @@
           "aoe",
           "shape-cone"
         ],
-        "effect": "Cone 15 ft. — targets roll vs Guard (DC 14). Half damage on success. The guard plants and sweeps. Failed-save targets are knocked prone and pushed 10 ft. away from the warlord (the cone always opens away from the warlord). Recharge 5–6.",
+        "effect": "Cone 15 ft. \u2014 targets roll vs Guard (DC 14). Half damage on success. The guard plants and sweeps. Failed-save targets are knocked prone and pushed 10 ft. away from the warlord (the cone always opens away from the warlord). Recharge 5\u20136.",
         "flavor": "Whatever ground the warlord is standing on. That ground.",
         "manifestation": {
           "tier": 1,
@@ -740,7 +740,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV save × 1",
+                "notes": "TIV save \u00d7 1",
                 "bound": "free",
                 "saleBack": 540
               }
@@ -749,7 +749,7 @@
         },
         "autoanimations": {
           "id": "ft-wall-of-honor-recharge-5-6-",
-          "label": "Wall-of-Honor (Recharge 5–6)",
+          "label": "Wall-of-Honor (Recharge 5\u20136)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -1070,7 +1070,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack × 1",
+                "notes": "TIV attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 540
               }

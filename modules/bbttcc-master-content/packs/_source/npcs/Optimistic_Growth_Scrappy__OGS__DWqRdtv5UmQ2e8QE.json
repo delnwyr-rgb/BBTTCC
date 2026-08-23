@@ -242,12 +242,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 1
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -406,7 +406,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Cro-Magnon, Denisovan, Florensis, Neanderthal</strong>.</p><p>This root grants the shared Human core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Cro-Magnon, Denisovan, Florensis, Neanderthal</strong>.</p><p>This root grants the shared Human core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>\u201cHumanity is not special. It\u2019s just stubborn enough to keep moving when reality begs it to stop.\u201d</em></p><p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p><p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p><p><strong>Lineage Memory.</strong> Choose one human lineage (Cro-Magnon, Denisovan, Florensis, Neanderthal). Your lineage grants Tier powers as you level.</p>",
           "chat": ""
         },
         "advancement": [
@@ -485,7 +485,7 @@
             {
               "context": "check",
               "mode": "reroll-lowest",
-              "note": "on one checks [TODO(adv-call)] of your choice each round (declare before roll…"
+              "note": "on one checks [TODO(adv-call)] of your choice each round (declare before roll\u2026"
             }
           ],
           "triggers": [
@@ -577,7 +577,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Humanity is not special. It’s just stubborn enough to keep moving when reality begs it to stop.”</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Neanderthal, Denisovan, Florensis, Erectus). Your lineage grants Tier powers as you level.</p>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cHumanity is not special. It\u2019s just stubborn enough to keep moving when reality begs it to stop.\u201d</em></p>\n<p><strong>Adaptive.</strong> 1/Soma Break, when you fail a check, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 Integrity, you reroll the lowest die on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Neanderthal, Denisovan, Florensis, Erectus). Your lineage grants Tier powers as you level.</p>",
           "chat": ""
         },
         "uses": {
@@ -652,7 +652,7 @@
         "source": "Bad Eden (2024 rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human Lineage.</strong> The branch that kept the reach. Small frames, far horizons, the ancestor who learned that an island is just a problem you can outlast.</p><p><em>“The map says ‘stop.’ You keep walking.”</em></p><p><strong>Florensis.</strong> You are the diminutive lineage that survived by being the thing the predators didn’t bother to chase.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Small or Medium (choose at creation).</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>INTR (Intrigue)</strong>—expressed primarily through Tier powers.</p></li><li><p><strong>Little But Persistent.</strong> Your speed is not reduced by being Small. You can move through the space of any creature larger than you.</p></li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Human Lineage.</strong> The branch that kept the reach. Small frames, far horizons, the ancestor who learned that an island is just a problem you can outlast.</p><p><em>\u201cThe map says \u2018stop.\u2019 You keep walking.\u201d</em></p><p><strong>Florensis.</strong> You are the diminutive lineage that survived by being the thing the predators didn\u2019t bother to chase.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid.</p></li><li><p><strong>Size.</strong> Small or Medium (choose at creation).</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>INTR (Intrigue)</strong>\u2014expressed primarily through Tier powers.</p></li><li><p><strong>Little But Persistent.</strong> Your speed is not reduced by being Small. You can move through the space of any creature larger than you.</p></li></ul>",
           "chat": ""
         },
         "advancement": [
@@ -743,7 +743,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“Small is not weak. Small is <strong>opportunity</strong>.”</em></p>\n        <p><strong>Little But Mighty.</strong> You may choose to be Small. You don’t suffer penalties for using weapons sized for Medium creatures.</p>\n        <p><strong>Hide In Plain Sight.</strong> If you do not move on your turn, you can take the Hide action as a bonus action.</p>",
+          "value": "<p><em>\u201cSmall is not weak. Small is <strong>opportunity</strong>.\u201d</em></p>\n        <p><strong>Little But Mighty.</strong> You may choose to be Small. You don\u2019t suffer penalties for using weapons sized for Medium creatures.</p>\n        <p><strong>Hide In Plain Sight.</strong> If you do not move on your turn, you can take the Hide action as a bonus action.</p>",
           "chat": ""
         },
         "uses": {
@@ -819,7 +819,7 @@
         "source": "",
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">⚙ ENGINE NOTE — Pace is now ◆ Surge.</b> Movement banks Surge (capped per round); your courier moves are the ◆ Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>\"You're already moving. The fight rearranges around it.\"</em></p>\n<p>The Shadow Courier runs on <strong>Surge</strong>, like everyone — but yours comes from <strong>motion</strong>. Move <strong>30+ ft in a turn and you bank +1 Surge</strong> (again at 12 squares, max +2/round). A courier in motion has options; a courier standing still is just a target. The old <em>Pace</em> pool folds into this — same fuel, one number.</p>\n<h3>The Courier (spent via Surge)</h3>\n<ul>\n  <li><strong>Courier's Step</strong> (1) — +half-speed move (no provoke) and a freed reaction; flow through the fight.</li>\n  <li><strong>Ghoststep</strong> (3) — DR equal to Tier till your next turn, and reposition out of danger.</li>\n  <li><strong>Flank &amp; Strike</strong> (5) — reposition, then your next Strike reroll the lowest die <em>and</em> +Tier d6.</li>\n  <li><strong>No Such Door</strong> (8) — allies within Tier squares each gain a freed reaction and a reroll; open the road for the whole team.</li>\n</ul>\n<p>The <strong>Package</strong> endures as your work — designate it, carry it, deliver it. <strong>Delivery banks your Surge to full</strong> and still triggers the route's strategic payoff (Intrigue OP, Darkness reduction, the arrival that mattered).</p>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">\u2699 ENGINE NOTE \u2014 Pace is now \u25c6 Surge.</b> Movement banks Surge (capped per round); your courier moves are the \u25c6 Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>\"You're already moving. The fight rearranges around it.\"</em></p>\n<p>The Shadow Courier runs on <strong>Surge</strong>, like everyone \u2014 but yours comes from <strong>motion</strong>. Move <strong>30+ ft in a turn and you bank +1 Surge</strong> (again at 12 squares, max +2/round). A courier in motion has options; a courier standing still is just a target. The old <em>Pace</em> pool folds into this \u2014 same fuel, one number.</p>\n<h3>The Courier (spent via Surge)</h3>\n<ul>\n  <li><strong>Courier's Step</strong> (1) \u2014 +half-speed move (no provoke) and a freed reaction; flow through the fight.</li>\n  <li><strong>Ghoststep</strong> (3) \u2014 DR equal to Tier till your next turn, and reposition out of danger.</li>\n  <li><strong>Flank &amp; Strike</strong> (5) \u2014 reposition, then your next Strike reroll the lowest die <em>and</em> +Tier d6.</li>\n  <li><strong>No Such Door</strong> (8) \u2014 allies within Tier squares each gain a freed reaction and a reroll; open the road for the whole team.</li>\n</ul>\n<p>The <strong>Package</strong> endures as your work \u2014 designate it, carry it, deliver it. <strong>Delivery banks your Surge to full</strong> and still triggers the route's strategic payoff (Intrigue OP, Darkness reduction, the arrival that mattered).</p>",
           "chat": ""
         },
         "advancement": [
@@ -884,7 +884,7 @@
             },
             "value": {},
             "level": 6,
-            "title": "Shadow Courier — Tier 2: The Crossing"
+            "title": "Shadow Courier \u2014 Tier 2: The Crossing"
           },
           {
             "_id": "XTTN4qPwzYgfQmVV",
@@ -922,7 +922,7 @@
             },
             "value": {},
             "level": 11,
-            "title": "Shadow Courier — Tier 3: Package Mastery"
+            "title": "Shadow Courier \u2014 Tier 3: Package Mastery"
           },
           {
             "_id": "T33qFY91LUnCWm0K",
@@ -960,7 +960,7 @@
             },
             "value": {},
             "level": 16,
-            "title": "Shadow Courier — Tier 4: Unfound Route"
+            "title": "Shadow Courier \u2014 Tier 4: Unfound Route"
           },
           {
             "_id": "vZgryR38AUD5g5Is",
@@ -1031,7 +1031,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>Nobody stays behind.</em></p><p><strong>Mode: Psychopomp / drift: Sideways.</strong></p><p>Your default Package type is a <strong>Soul</strong> — a specific character, creature, or intangible (a secret, a confession, a deathbed wish, a refugee's name, an unfinished obligation) that cannot reach safety on its own.</p><p><strong>While carrying a Soul:</strong></p><ul><li><p>Your movement speed is <strong>reduced by 1 square</strong>, but allies traveling with you gain <strong>+1 square of movement speed</strong> (the Soul's witness-weight pulls them forward).</p></li><li><p>You <strong>reroll the lowest die</strong> on Stealth (Intrigue) and Athletics (Violence) checks made specifically to <strong>protect or conceal the Soul</strong> (not all stealth/athletics — just protective acts).</p></li></ul><p><strong>On delivery:</strong> When you successfully deliver a Soul to safety (the GM confirms the destination counts as safety for that Soul), the recipient faction gains <strong>+1 Morale OP</strong> and <strong>Darkness in the recipient's hex is reduced by 1 point</strong>.</p><p>You may receive a new Soul any time your Package slot is empty.</p>",
+          "value": "<p><em>Nobody stays behind.</em></p><p><strong>Mode: Psychopomp / drift: Sideways.</strong></p><p>Your default Package type is a <strong>Soul</strong> \u2014 a specific character, creature, or intangible (a secret, a confession, a deathbed wish, a refugee's name, an unfinished obligation) that cannot reach safety on its own.</p><p><strong>While carrying a Soul:</strong></p><ul><li><p>Your movement speed is <strong>reduced by 1 square</strong>, but allies traveling with you gain <strong>+1 square of movement speed</strong> (the Soul's witness-weight pulls them forward).</p></li><li><p>You <strong>reroll the lowest die</strong> on Stealth (Intrigue) and Athletics (Violence) checks made specifically to <strong>protect or conceal the Soul</strong> (not all stealth/athletics \u2014 just protective acts).</p></li></ul><p><strong>On delivery:</strong> When you successfully deliver a Soul to safety (the GM confirms the destination counts as safety for that Soul), the recipient faction gains <strong>+1 Morale OP</strong> and <strong>Darkness in the recipient's hex is reduced by 1 point</strong>.</p><p>You may receive a new Soul any time your Package slot is empty.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -1104,7 +1104,7 @@
       "_key": "!actors.items!DWqRdtv5UmQ2e8QE.EpXUOS9BIRMozvT9"
     },
     {
-      "name": "Shadow Courier — Tier 1: Liminal Operator",
+      "name": "Shadow Courier \u2014 Tier 1: Liminal Operator",
       "type": "feat",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_4.png",
       "system": {
@@ -1112,7 +1112,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">⚙ ENGINE NOTE — Pace is now ◆ Surge.</b> Movement banks Surge (capped per round); your courier moves are the ◆ Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>You cross what isn't supposed to be crossed — and you always come out the other side carrying something.</em></p><p><strong>On gaining Shadow Courier Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Stealth (Intrigue)</strong>.</p></li><li><p>Skill rank +1 in <strong>Tinkering (Intrigue)</strong>.</p></li><li><p><strong>Intrigue OP cap +2</strong> and <strong>Logistics OP cap +2</strong> on the faction your character belongs to.</p></li><li><p><strong>Pace</strong> pool comes online (movement-generated). Max = max(2, ceil((Intrigue value + Shadow Courier Initiation) / 3)), capped at 8. Refills on Soma Break and on Package delivery.</p></li><li><p><strong>Package</strong> slot comes online — one Package at a time, type set by your chosen Route at L1.</p></li></ul><p><strong>Pace generation.</strong> Gain 1 Pace when you move at least 6 squares on your turn. Maximum 1 Pace generated per turn from this feature. Doctrine features may add their own generators.</p><p><strong>Baseline Pace spends</strong> (free action, 1 Pace each):</p><ul><li><p>Move 5 extra feet without spending an action.</p></li><li><p>Reroll a single Stealth (Intrigue), Athletics (Violence), or Tinkering (Intrigue) check — keep the new result.</p></li><li><p>Ignore a single reaction strike against you on this turn.</p></li></ul><p><strong>Liminal Sense.</strong> Once per encounter, ignore the first detection-style roll an opponent attempts against you (perception, scrying, Insight to read your intent, etc.). The roll is treated as if it had failed; resources spent on the attempt are not refunded.</p>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">\u2699 ENGINE NOTE \u2014 Pace is now \u25c6 Surge.</b> Movement banks Surge (capped per round); your courier moves are the \u25c6 Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>You cross what isn't supposed to be crossed \u2014 and you always come out the other side carrying something.</em></p><p><strong>On gaining Shadow Courier Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Stealth (Intrigue)</strong>.</p></li><li><p>Skill rank +1 in <strong>Tinkering (Intrigue)</strong>.</p></li><li><p><strong>Intrigue OP cap +2</strong> and <strong>Logistics OP cap +2</strong> on the faction your character belongs to.</p></li><li><p><strong>Pace</strong> pool comes online (movement-generated). Max = max(2, ceil((Intrigue value + Shadow Courier Initiation) / 3)), capped at 8. Refills on Soma Break and on Package delivery.</p></li><li><p><strong>Package</strong> slot comes online \u2014 one Package at a time, type set by your chosen Route at L1.</p></li></ul><p><strong>Pace generation.</strong> Gain 1 Pace when you move at least 6 squares on your turn. Maximum 1 Pace generated per turn from this feature. Doctrine features may add their own generators.</p><p><strong>Baseline Pace spends</strong> (free action, 1 Pace each):</p><ul><li><p>Move 5 extra feet without spending an action.</p></li><li><p>Reroll a single Stealth (Intrigue), Athletics (Violence), or Tinkering (Intrigue) check \u2014 keep the new result.</p></li><li><p>Ignore a single reaction strike against you on this turn.</p></li></ul><p><strong>Liminal Sense.</strong> Once per encounter, ignore the first detection-style roll an opponent attempts against you (perception, scrying, Insight to read your intent, etc.). The roll is treated as if it had failed; resources spent on the attempt are not refunded.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -1321,10 +1321,10 @@
       "system": {
         "category": "doctrine",
         "classIdentifier": "shadow_courier",
-        "source": "Bad Eden Originals — Sprint F (2026 rules)",
+        "source": "Bad Eden Originals \u2014 Sprint F (2026 rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>\"Give it to me. I carry things.\"</em></p>\n<p><strong>Doctrine:</strong> Carry the unbearable thing to where it must go — intimate, burdensome, exact. Who bears the package now?</p>\n<p>The Last Mile is the courier as the one who refuses to let it fall. Your Surge spends take the weight off others: shoulder their wounds at your own cost, carry an ally through a place that should have killed them, and deliver the unbearable thing intact.</p>\n<h3>Route (spent via Surge)</h3>\n<ul>\n  <li><strong>Shoulder the Weight</strong> (1) — heal an ally Tier d6; you take half as Stress; they bank a reroll.</li>\n  <li><strong>Quiet Voyage</strong> (2) — an ally gains DR equal to Tier, and the next hit that would drop them is held at 1.</li>\n  <li><strong>Delivered</strong> (5) — restore a fallen or badly-hurt ally to half Integrity and clear a condition.</li>\n</ul>",
+          "value": "<p><em>\"Give it to me. I carry things.\"</em></p>\n<p><strong>Doctrine:</strong> Carry the unbearable thing to where it must go \u2014 intimate, burdensome, exact. Who bears the package now?</p>\n<p>The Last Mile is the courier as the one who refuses to let it fall. Your Surge spends take the weight off others: shoulder their wounds at your own cost, carry an ally through a place that should have killed them, and deliver the unbearable thing intact.</p>\n<h3>Route (spent via Surge)</h3>\n<ul>\n  <li><strong>Shoulder the Weight</strong> (1) \u2014 heal an ally Tier d6; you take half as Stress; they bank a reroll.</li>\n  <li><strong>Quiet Voyage</strong> (2) \u2014 an ally gains DR equal to Tier, and the next hit that would drop them is held at 1.</li>\n  <li><strong>Delivered</strong> (5) \u2014 restore a fallen or badly-hurt ally to half Integrity and clear a condition.</li>\n</ul>",
           "chat": ""
         },
         "identifier": "bbttcc-shadow-courier-courier-last-mile",
@@ -1376,7 +1376,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“If it lives, you are responsible for it.”</em></p><p><strong>Archetype (Bad Eden): The Empress (Caretaker).</strong> You are abundance under pressure: not softness, but stewardship. You keep people, places, and fragile futures alive long enough to matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype nurtures resilience, relief, and sustainable flourishing. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Culture</strong> in faction calculus in Bad Eden’s faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul><h3>attributes (Archetype ASI)</h3><p>Common patterns include:</p><ul><li><strong>Merciful Steward:</strong> +2 Soul, +1 Presence</li><li><strong>Keeper of Settlements:</strong> +2 Soul, +1 Mind</li><li><strong>Builder of Futures:</strong> +1 Soul, +1 Presence, +1 Body</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cIf it lives, you are responsible for it.\u201d</em></p><p><strong>Archetype (Bad Eden): The Empress (Caretaker).</strong> You are abundance under pressure: not softness, but stewardship. You keep people, places, and fragile futures alive long enough to matter.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype nurtures resilience, relief, and sustainable flourishing. This Archetype is associated with <strong>+1 Economy</strong> and <strong>+1 Culture</strong> in faction calculus in Bad Eden\u2019s faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul><h3>attributes (Archetype ASI)</h3><p>Common patterns include:</p><ul><li><strong>Merciful Steward:</strong> +2 Soul, +1 Presence</li><li><strong>Keeper of Settlements:</strong> +2 Soul, +1 Mind</li><li><strong>Builder of Futures:</strong> +1 Soul, +1 Presence, +1 Body</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1488,7 +1488,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Crew Type (Bad Eden): Ashbound Survivors.</em></p><p><strong>“You don’t conquer the wasteland. You outlast it.”</strong></p><p>Ashbound Survivors know how to live where maps stop pretending. They ration breath, read heat shimmer like scripture, and treat hostile terrain as a negotiation instead of a death sentence.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Lore.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Economy OPs.</li></ul>",
+          "value": "<p><em>Crew Type (Bad Eden): Ashbound Survivors.</em></p><p><strong>\u201cYou don\u2019t conquer the wasteland. You outlast it.\u201d</strong></p><p>Ashbound Survivors know how to live where maps stop pretending. They ration breath, read heat shimmer like scripture, and treat hostile terrain as a negotiation instead of a death sentence.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Lore.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Economy OPs.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-ashbound-survivors",
@@ -1658,7 +1658,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Occult Association (Bad Eden): Biomancer / Fleshcrafter.</em></p><p><strong>“You don’t survive the world. You rewrite what Athletics means.”</strong></p><p>Biomancers do not treat life as sacred. They treat it as <strong>modifiable</strong>.</p><p>Where Alchemists convert matter and Shamans negotiate with ecosystems, Biomancers operate at a more intimate scale: flesh, bone, instinct, and adaptation. To them, evolution is not a process. It is a toolkit.</p><p>The Great Work, in their hands, is not about restoring what was lost. It is about building something that can survive what is coming.</p><p><strong>How Biomancers pursue the Great Work:</strong></p><ul><li>By modifying bodies to survive hostile conditions</li><li>By reducing loss through biological adaptation</li><li>By converting harm into resilience</li><li>By treating mutation as both tool and risk</li></ul><p><strong>Resonance:</strong> <strong>Yesod / Life-State</strong> — transformation, embodiment, and the unstable boundary between identity and function.</p><p><strong>Tell-tales:</strong> asymmetry, controlled mutation, eyes that adapt faster than they should.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on Athletics, endurance, or recovery-related OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> adaptation changes you. Expect mutation, instability, and moments where you are no longer certain what “baseline” meant.</p>",
+          "value": "<p><em>Occult Association (Bad Eden): Biomancer / Fleshcrafter.</em></p><p><strong>\u201cYou don\u2019t survive the world. You rewrite what Athletics means.\u201d</strong></p><p>Biomancers do not treat life as sacred. They treat it as <strong>modifiable</strong>.</p><p>Where Alchemists convert matter and Shamans negotiate with ecosystems, Biomancers operate at a more intimate scale: flesh, bone, instinct, and adaptation. To them, evolution is not a process. It is a toolkit.</p><p>The Great Work, in their hands, is not about restoring what was lost. It is about building something that can survive what is coming.</p><p><strong>How Biomancers pursue the Great Work:</strong></p><ul><li>By modifying bodies to survive hostile conditions</li><li>By reducing loss through biological adaptation</li><li>By converting harm into resilience</li><li>By treating mutation as both tool and risk</li></ul><p><strong>Resonance:</strong> <strong>Yesod / Life-State</strong> \u2014 transformation, embodiment, and the unstable boundary between identity and function.</p><p><strong>Tell-tales:</strong> asymmetry, controlled mutation, eyes that adapt faster than they should.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on Athletics, endurance, or recovery-related OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> adaptation changes you. Expect mutation, instability, and moments where you are no longer certain what \u201cbaseline\u201d meant.</p>",
           "chat": ""
         },
         "identifier": "occult-association-biomancer",
@@ -1751,12 +1751,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden – Archetype: The Empress (Caretaker) (Tier 1)",
+          "custom": "Bad Eden \u2013 Archetype: The Empress (Caretaker) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) — The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Diplomacy. You learn the Spare the Dying Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 (Level 1) \u2014 The Empress (Caretaker)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Diplomacy. You learn the Spare the Dying Tier-0 manifestation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1901,7 +1901,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Ashbound Survivors</strong></p><p><em>You’ve learned the first mercy of dead land: preparation beats optimism.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Lore.</li><li><strong>Strategic:</strong> In Desert, Ash Wastes, and Wasteland hexes, environmental travel penalties are reduced and hazard pressure is easier to withstand.</li></ul>",
+          "value": "<p><strong>Tier 1 \u2014 Ashbound Survivors</strong></p><p><em>You\u2019ve learned the first mercy of dead land: preparation beats optimism.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Lore.</li><li><strong>Strategic:</strong> In Desert, Ash Wastes, and Wasteland hexes, environmental travel penalties are reduced and hazard pressure is easier to withstand.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-ashbound-survivors-t1",
@@ -2063,7 +2063,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Biomancer</strong></p><p><strong>“Pain is information.”</strong></p><p>You begin learning how to adjust biological response in real time.</p><p><strong>Tactical</strong></p><ul><li>reroll the lowest die on checks against poison, disease, or environmental hazards</li></ul><p><strong>Strategic</strong></p><ul><li>Once per Strategic Turn, reduce one Athletics, hazard, or casualty-related penalty by one step</li></ul><p><strong>Cost:</strong> minor mutation begins — cosmetic or behavioral shifts may occur.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"biomT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Reduce Athletics Penalty</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Reduce one Athletics/hazard/casualty penalty by one step.</div>\n</div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 \u2014 Biomancer</strong></p><p><strong>\u201cPain is information.\u201d</strong></p><p>You begin learning how to adjust biological response in real time.</p><p><strong>Tactical</strong></p><ul><li>reroll the lowest die on checks against poison, disease, or environmental hazards</li></ul><p><strong>Strategic</strong></p><ul><li>Once per Strategic Turn, reduce one Athletics, hazard, or casualty-related penalty by one step</li></ul><p><strong>Cost:</strong> minor mutation begins \u2014 cosmetic or behavioral shifts may occur.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"biomT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Reduce Athletics Penalty</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;\u00b7&nbsp; <strong>Action:</strong> Strategic &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Reduce one Athletics/hazard/casualty penalty by one step.</div>\n</div>",
           "chat": ""
         },
         "identifier": "occult-association-biomancer-t1",
@@ -2147,7 +2147,7 @@
         "evasionBonus": 1,
         "resolveBonus": 0,
         "resistances": [],
-        "armorSkill": "weave",
+        "armorSkill": "fitting",
         "equipped": true,
         "tags": [
           "t1-baseline",
@@ -2208,7 +2208,7 @@
       "_id": "LIEeUGCu3IE2kcuI",
       "effects": [
         {
-          "name": "⚙️ Defense Grant",
+          "name": "\u2699\ufe0f Defense Grant",
           "transfer": false,
           "disabled": false,
           "flags": {
@@ -2685,7 +2685,7 @@
                 "table": null
               },
               "signals": {},
-              "lore": "<p>Standard-issue field knife. Single-edge, thumb groove, hard sheath that clips to a belt or boot. The first weapon most Stewards carry and the last one they put down. Honest steel — no signature, no story, just edge.</p><p><b>Standard Issue.</b> Light enough for off-hand work; close enough for the kind of conversation knives are for.</p>",
+              "lore": "<p>Standard-issue field knife. Single-edge, thumb groove, hard sheath that clips to a belt or boot. The first weapon most Stewards carry and the last one they put down. Honest steel \u2014 no signature, no story, just edge.</p><p><b>Standard Issue.</b> Light enough for off-hand work; close enough for the kind of conversation knives are for.</p>",
               "materialOf": [
                 "scrap-steel",
                 "leather-grip"

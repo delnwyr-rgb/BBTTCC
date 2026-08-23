@@ -7,7 +7,7 @@
     "evasionBonus": 1,
     "resolveBonus": 0,
     "resistances": [],
-    "armorSkill": "weave",
+    "armorSkill": "fitting",
     "equipped": false,
     "tags": [
       "t1-baseline",
@@ -18,7 +18,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>Heavy work jacket, reinforced gloves, and a thigh-strap of tool loops. The standard kit for hex-laborers, salvage crews, scrap-line foremen, and anyone whose day involves both sharp edges and difficult conversations with their employer. Not glamorous. Hard to ruin.</p><p><strong>Standard Issue.</strong> Counts as armor for protection rolls and as gear for any skill check you can talk your way into calling \"work.\"</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Light</p></li><li><p><strong>Defense:</strong> Guard +1, Evasion +1</p></li><li><p><strong>Requires:</strong> Weave (trained)</p></li><li><p><strong>Tier:</strong> I</p></li><li><p><strong>Cost:</strong> 75 Nonlethal marks</p></li></ul>",
+      "value": "<p>Heavy work jacket, reinforced gloves, and a thigh-strap of tool loops. The standard kit for hex-laborers, salvage crews, scrap-line foremen, and anyone whose day involves both sharp edges and difficult conversations with their employer. Not glamorous. Hard to ruin.</p><p><strong>Standard Issue.</strong> Counts as armor for protection rolls and as gear for any skill check you can talk your way into calling \"work.\"</p><hr><p><strong>\u2699\ufe0f Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Light</p></li><li><p><strong>Defense:</strong> Guard +1, Evasion +1</p></li><li><p><strong>Requires:</strong> Weave (trained)</p></li><li><p><strong>Tier:</strong> I</p></li><li><p><strong>Cost:</strong> 75 Nonlethal marks</p></li></ul>",
       "chat": ""
     }
   },
@@ -68,7 +68,7 @@
   "_id": "PD8W17Vwk2Bvw0sr",
   "effects": [
     {
-      "name": "⚙️ Defense Grant",
+      "name": "\u2699\ufe0f Defense Grant",
       "transfer": false,
       "disabled": false,
       "flags": {

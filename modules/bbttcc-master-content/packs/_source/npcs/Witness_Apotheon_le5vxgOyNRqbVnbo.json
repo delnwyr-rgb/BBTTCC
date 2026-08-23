@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "A Witness who looked too long and now sees everything. Speaks only when ending things.",
     "details": {
-      "level": 4,
+      "level": 18,
       "tier": 4,
       "statPoints": 0,
       "skillPoints": 0
@@ -208,7 +208,7 @@
             "ransom": 33750,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "TIV heavy caster (bestiary) — bounty 20250 / hire 50625 / ransom 33750 marks (paid in intrigue)"
+            "notes": "TIV heavy caster (bestiary) \u2014 bounty 20250 / hire 50625 / ransom 33750 marks (paid in intrigue)"
           }
         }
       }
@@ -456,7 +456,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack × 1",
+                "notes": "TIV attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 540
               }
@@ -738,7 +738,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV attack × 1",
+                "notes": "TIV attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 540
               }
@@ -970,7 +970,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 30 ft. — targets roll vs Resolve (DC 15). Half damage on success. On a failed save, the target is Blinded until end of next turn AND the apotheon gains a Witness-Mark on them (next attack against them has reroll-the-lowest). Recharge 5–6.",
+        "effect": "Radius 30 ft. \u2014 targets roll vs Resolve (DC 15). Half damage on success. On a failed save, the target is Blinded until end of next turn AND the apotheon gains a Witness-Mark on them (next attack against them has reroll-the-lowest). Recharge 5\u20136.",
         "flavor": "It blinks. The room becomes briefly, painfully readable.",
         "manifestation": {
           "tier": 1,
@@ -1026,7 +1026,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIV save × 1",
+                "notes": "TIV save \u00d7 1",
                 "bound": "free",
                 "saleBack": 540
               }
@@ -1035,7 +1035,7 @@
         },
         "autoanimations": {
           "id": "ft-all-seeing-flash-recharge-5-6-",
-          "label": "All-Seeing Flash (Recharge 5–6)",
+          "label": "All-Seeing Flash (Recharge 5\u20136)",
           "macro": {
             "enable": false,
             "playWhen": "0"
@@ -1244,7 +1244,7 @@
           "role-caster"
         ],
         "description": {
-          "value": "<p><strong>Passive.</strong> The apotheon does not communicate during combat. The first time it speaks aloud in a scene, that scene ends within 1d4 rounds — narratively, mechanically, somehow. The GM picks how. The players know it is coming.</p><p><em>Silence, then a single sentence. The sentence is also the end credits.</em></p>",
+          "value": "<p><strong>Passive.</strong> The apotheon does not communicate during combat. The first time it speaks aloud in a scene, that scene ends within 1d4 rounds \u2014 narratively, mechanically, somehow. The GM picks how. The players know it is coming.</p><p><em>Silence, then a single sentence. The sentence is also the end credits.</em></p>",
           "chat": ""
         }
       },

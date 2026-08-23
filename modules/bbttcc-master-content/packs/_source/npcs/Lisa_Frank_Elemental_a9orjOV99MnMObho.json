@@ -8,8 +8,8 @@
     "factionId": "",
     "notes": "",
     "details": {
-      "level": 1,
-      "tier": 1,
+      "level": 8,
+      "tier": 2,
       "statPoints": 0,
       "skillPoints": 0
     },
@@ -640,7 +640,7 @@
           "manifestation"
         ],
         "category": "manifestation",
-        "flavor": "Animal silhouettes briefly inhabit the landscape behind targets — a unicorn, a kitten, a dolphin.",
+        "flavor": "Animal silhouettes briefly inhabit the landscape behind targets \u2014 a unicorn, a kitten, a dolphin.",
         "manifestation": {
           "tier": 1,
           "family": "working",
@@ -660,8 +660,8 @@
           "rangeAreaText": "Near burst.",
           "rangeFt": 0,
           "maintenanceCost": "",
-          "riskText": "The Elemental fades by 1 Integrity per Cascade — joy is expensive.",
-          "pathResonance": "Netzach — eternity of art.",
+          "riskText": "The Elemental fades by 1 Integrity per Cascade \u2014 joy is expensive.",
+          "pathResonance": "Netzach \u2014 eternity of art.",
           "fictionalPermission": "Charmed targets cannot directly attack the Elemental.",
           "gmCalibration": "Resolve check; energy damage; Charm one exchange.",
           "mechanicalHook": "AOE save; 2d6 energy + Charmed.",
@@ -901,7 +901,7 @@
           "phase2-narrative"
         ],
         "description": {
-          "value": "<p><strong>Passive.</strong> While the Elemental is present in the scene, lighting saturates impossibly. All damage to Integrity from any source is reduced by 1 (minimum 1). Manifestations cost +1 Clarity to cast — joy is expensive.</p>",
+          "value": "<p><strong>Passive.</strong> While the Elemental is present in the scene, lighting saturates impossibly. All damage to Integrity from any source is reduced by 1 (minimum 1). Manifestations cost +1 Clarity to cast \u2014 joy is expensive.</p>",
           "chat": ""
         }
       },

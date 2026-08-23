@@ -9,7 +9,7 @@
     "factionId": "",
     "notes": "",
     "details": {
-      "level": 1,
+      "level": 13,
       "tier": 3,
       "statPoints": 0,
       "skillPoints": 0,
@@ -862,7 +862,7 @@
       "_key": "!actors.items!oK7VitQikQ6FN3PI.BKBTvZMb9wAmZjSx"
     },
     {
-      "name": "Upgrade Outpost → Settlement",
+      "name": "Upgrade Outpost \u2192 Settlement",
       "type": "feat",
       "flags": {
         "bbttcc": {
@@ -875,7 +875,7 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Upgrade Outpost → Settlement</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, softPower 20, logistics 20</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Upgrade Outpost \u2192 Settlement</h3><p><em>No rules text registered for this strategic.</em></p><p><strong>OP Cost:</strong> economy 30, softPower 20, logistics 20</p></div>",
           "chat": ""
         }
       },
@@ -995,7 +995,7 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Infernal Bargain</h3><p>Offer the defender a sealed bargain: accept (+2 to defender&#39;s next roll, attacker gains 1 darkness) or refuse (defender morale −1 from the snubbed offer).</p><p><strong>Tier:</strong> 1</p><p><strong>Raid Types:</strong> presence</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Infernal Bargain</h3><p>Offer the defender a sealed bargain: accept (+2 to defender&#39;s next roll, attacker gains 1 darkness) or refuse (defender morale \u22121 from the snubbed offer).</p><p><strong>Tier:</strong> 1</p><p><strong>Raid Types:</strong> presence</p></div>",
           "chat": ""
         }
       },
@@ -1502,7 +1502,7 @@
       "_key": "!actors.items!oK7VitQikQ6FN3PI.ElP6D75Q01J21qQJ"
     },
     {
-      "name": "Defender’s Reversal",
+      "name": "Defender\u2019s Reversal",
       "type": "feat",
       "flags": {
         "bbttcc": {
@@ -1515,7 +1515,7 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Defender’s Reversal</h3><p>Reflect first enemy maneuver used this round.</p><p><strong>OP Cost:</strong> intrigue 30, nonLethal 20</p><p><strong>Tier:</strong> 3</p><p><strong>Rarity:</strong> very rare</p><p><strong>Raid Types:</strong> Occupation (defense), Siege</p><p><strong>Defender Access:</strong> Yes</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Defender\u2019s Reversal</h3><p>Reflect first enemy maneuver used this round.</p><p><strong>OP Cost:</strong> intrigue 30, nonLethal 20</p><p><strong>Tier:</strong> 3</p><p><strong>Rarity:</strong> very rare</p><p><strong>Raid Types:</strong> Occupation (defense), Siege</p><p><strong>Defender Access:</strong> Yes</p></div>",
           "chat": ""
         }
       },
@@ -1555,7 +1555,7 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Stage a Distraction</h3><p>Suspicion −1. Opponent discards a Stolen secret if held.</p><p><strong>Tier:</strong> 2</p><p><strong>Raid Types:</strong> presence</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Stage a Distraction</h3><p>Suspicion \u22121. Opponent discards a Stolen secret if held.</p><p><strong>Tier:</strong> 2</p><p><strong>Raid Types:</strong> presence</p></div>",
           "chat": ""
         }
       },
@@ -1595,7 +1595,7 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Quote the Old Law</h3><p>Suspicion −2. Cancel one Scandal on the table.</p><p><strong>Tier:</strong> 2</p><p><strong>Raid Types:</strong> presence</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Quote the Old Law</h3><p>Suspicion \u22122. Cancel one Scandal on the table.</p><p><strong>Tier:</strong> 2</p><p><strong>Raid Types:</strong> presence</p></div>",
           "chat": ""
         }
       },
@@ -1635,7 +1635,7 @@
         "source": "Bad Eden Doctrine",
         "tags": [],
         "description": {
-          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Rally the Line</h3><p>+1 to allies&#39; next attack/defense. On Success: +2 Morale and −1 Darkness (merged from Radiant Rally).</p><p><strong>OP Cost:</strong> softPower 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> Assault, Liberation, Occupation</p><p><strong>Defender Access:</strong> Yes</p></div>",
+          "value": "<div class=\"bbttcc-doctrine-desc\"><h3>Rally the Line</h3><p>+1 to allies&#39; next attack/defense. On Success: +2 Morale and \u22121 Darkness (merged from Radiant Rally).</p><p><strong>OP Cost:</strong> softPower 10</p><p><strong>Tier:</strong> 1</p><p><strong>Rarity:</strong> common</p><p><strong>Raid Types:</strong> Assault, Liberation, Occupation</p><p><strong>Defender Access:</strong> Yes</p></div>",
           "chat": ""
         }
       },
@@ -1856,7 +1856,7 @@
           "violence"
         ],
         "description": {
-          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling — the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack — Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "value": "<p><em>\"Somebody has to stand where the trouble is.\"</em></p><p><strong>Bravo</strong> is the Violence Calling \u2014 the trade that kept its bearers alive after the Shattering. Umbrella: guard, soldier, bandit, bouncer, duelist, caravan outrider. A profession is a flavor label on the Calling.</p><p><strong>Knack \u2014 Shieldwall:</strong> Allies within reach add <strong>+1 Guard</strong> (+2 at Tier III). The Bravo is why the militia line holds.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Melee</strong> rank = tier; secondary <strong>Brawl</strong> rank = tier \u2212 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Violence</strong> marks. Cross-pool \u00d71.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice \u2192 Initiate \u2192 Master \u2192 Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Aurablade or Bulwark. A Steward is a Calling that ignited into a Path \u2014 Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
           "chat": ""
         }
       },
@@ -1897,7 +1897,7 @@
     },
     {
       "_id": "iToVv617050NGtiO",
-      "name": "Bravo — Apprentice (Tier I)",
+      "name": "Bravo \u2014 Apprentice (Tier I)",
       "type": "feature",
       "img": "icons/svg/sword.svg",
       "system": {
@@ -1909,7 +1909,7 @@
           "tier-1"
         ],
         "description": {
-          "value": "<p><strong>Bravo — Apprentice</strong> (Tier I).</p><p><strong>Trade — Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick — Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
+          "value": "<p><strong>Bravo \u2014 Apprentice</strong> (Tier I).</p><p><strong>Trade \u2014 Stand a watch:</strong> Guard a person, door, or camp for a night/shift. <span style=\"opacity:0.7\">Standard fee 10 marks (Violence).</span></p><p><strong>Trick \u2014 Hold the Line</strong> <em>(1/scene)</em>: When an adjacent ally is hit, the Bravo takes the hit instead.</p>",
           "chat": ""
         }
       },
@@ -1943,7 +1943,7 @@
     },
     {
       "_id": "BGqozsqYdnAxmKeb",
-      "name": "Bravo — Initiate (Tier II)",
+      "name": "Bravo \u2014 Initiate (Tier II)",
       "type": "feature",
       "img": "icons/svg/sword.svg",
       "system": {
@@ -1955,7 +1955,7 @@
           "tier-2"
         ],
         "description": {
-          "value": "<p><strong>Bravo — Initiate</strong> (Tier II).</p><p><strong>Trade — Drill the green:</strong> Train a group; they count Trained (rank 1) in one Violence aptitude for the next scene that tests it. <span style=\"opacity:0.7\">Standard fee 30 marks (Violence).</span></p><p><strong>Trick — Disarming Blow</strong> <em>(1/scene)</em>: On a hit, the target drops its weapon or takes −2 on its next strike.</p>",
+          "value": "<p><strong>Bravo \u2014 Initiate</strong> (Tier II).</p><p><strong>Trade \u2014 Drill the green:</strong> Train a group; they count Trained (rank 1) in one Violence aptitude for the next scene that tests it. <span style=\"opacity:0.7\">Standard fee 30 marks (Violence).</span></p><p><strong>Trick \u2014 Disarming Blow</strong> <em>(1/scene)</em>: On a hit, the target drops its weapon or takes \u22122 on its next strike.</p>",
           "chat": ""
         }
       },
@@ -1989,7 +1989,7 @@
     },
     {
       "_id": "mki2BwTJQcLMWQ9M",
-      "name": "Bravo — Master (Tier III)",
+      "name": "Bravo \u2014 Master (Tier III)",
       "type": "feature",
       "img": "icons/svg/sword.svg",
       "system": {
@@ -2001,7 +2001,7 @@
           "tier-3"
         ],
         "description": {
-          "value": "<p><strong>Bravo — Master</strong> (Tier III).</p><p><strong>Trade — Muscle for the job:</strong> Accompany one operation as a combatant (full stat participation). <span style=\"opacity:0.7\">Standard fee 90 marks (Violence).</span></p><p><strong>Trick — Veteran's Read</strong> <em>(1/scene)</em>: Declare one enemy's next move aloud; all allies get +2 to defend against exactly that.</p><p><em>Master step:</em> the Bravo's Knack (Shieldwall) improves at this tier — see the class entry.</p>",
+          "value": "<p><strong>Bravo \u2014 Master</strong> (Tier III).</p><p><strong>Trade \u2014 Muscle for the job:</strong> Accompany one operation as a combatant (full stat participation). <span style=\"opacity:0.7\">Standard fee 90 marks (Violence).</span></p><p><strong>Trick \u2014 Veteran's Read</strong> <em>(1/scene)</em>: Declare one enemy's next move aloud; all allies get +2 to defend against exactly that.</p><p><em>Master step:</em> the Bravo's Knack (Shieldwall) improves at this tier \u2014 see the class entry.</p>",
           "chat": ""
         }
       },
@@ -2121,7 +2121,7 @@
           "side": "def",
           "opponent": "Action Faction",
           "outcome": "win",
-          "summary": "assault vs Blackwater Verge c — Normal; A 4 + 15 vs D 16 + 10 → A 19 vs D 26 (Δ -7) • OP−(Att) softpower:1 • OP−(Support) The Unmoved Movers [violence:10]; Mans(Att): rally_the_line; Mans(Def): —; Support: The Unmoved Movers",
+          "summary": "assault vs Blackwater Verge c \u2014 Normal; A 4 + 15 vs D 16 + 10 \u2192 A 19 vs D 26 (\u0394 -7) \u2022 OP\u2212(Att) softpower:1 \u2022 OP\u2212(Support) The Unmoved Movers [violence:10]; Mans(Att): rally_the_line; Mans(Def): \u2014; Support: The Unmoved Movers",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 19,
@@ -2148,7 +2148,7 @@
           "side": "def",
           "opponent": "The Tuesday Game",
           "outcome": "loss",
-          "summary": "assault vs Blackwater Verge c — Normal; A 19 + 6 vs D 10 + 10 → A 25 vs D 20 (Δ +5); Support: The Unmoved Movers",
+          "summary": "assault vs Blackwater Verge c \u2014 Normal; A 19 + 6 vs D 10 + 10 \u2192 A 25 vs D 20 (\u0394 +5); Support: The Unmoved Movers",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 25,
@@ -2175,7 +2175,7 @@
           "side": "def",
           "opponent": "The Tuesday Game",
           "outcome": "win",
-          "summary": "assault vs Blackwater Verge c — Normal; A 12 + 6 vs D 13 + 10 → A 18 vs D 23 (Δ -5); Support: The Unmoved Movers",
+          "summary": "assault vs Blackwater Verge c \u2014 Normal; A 12 + 6 vs D 13 + 10 \u2192 A 18 vs D 23 (\u0394 -5); Support: The Unmoved Movers",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 18,
@@ -2202,7 +2202,7 @@
           "side": "def",
           "opponent": "The Tuesday Game",
           "outcome": "loss",
-          "summary": "assault vs Blackwater Verge c — Normal; A 17 + 11 vs D 12 + 10 → A 28 vs D 22 (Δ +6) • OP−(Support) The Unmoved Movers [violence:10]; Support: The Unmoved Movers",
+          "summary": "assault vs Blackwater Verge c \u2014 Normal; A 17 + 11 vs D 12 + 10 \u2192 A 28 vs D 22 (\u0394 +6) \u2022 OP\u2212(Support) The Unmoved Movers [violence:10]; Support: The Unmoved Movers",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 28,
@@ -2229,7 +2229,7 @@
           "side": "def",
           "opponent": "The Tuesday Game",
           "outcome": "loss",
-          "summary": "assault vs Blackwater Verge c — Normal; A 12 + 6 vs D 3 + 10 → A 18 vs D 13 (Δ +5); Support: The Unmoved Movers",
+          "summary": "assault vs Blackwater Verge c \u2014 Normal; A 12 + 6 vs D 3 + 10 \u2192 A 18 vs D 13 (\u0394 +5); Support: The Unmoved Movers",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 18,
@@ -2256,7 +2256,7 @@
           "side": "def",
           "opponent": "The Tuesday Game",
           "outcome": "win",
-          "summary": "assault vs Blackwater Verge c — Normal; A 14 + 6 vs D 11 + 10 → A 20 vs D 21 (Δ -1); Support: The Unmoved Movers",
+          "summary": "assault vs Blackwater Verge c \u2014 Normal; A 14 + 6 vs D 11 + 10 \u2192 A 20 vs D 21 (\u0394 -1); Support: The Unmoved Movers",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 20,
@@ -2283,7 +2283,7 @@
           "side": "def",
           "opponent": "The Tuesday Game",
           "outcome": "win",
-          "summary": "assault vs Blackwater Verge c — Normal; A 10 + 6 vs D 17 + 10 → A 16 vs D 27 (Δ -11) • OP−(Att) violence:2; Mans(Att): suppressive_fire; Mans(Def): —; Support: The Unmoved Movers",
+          "summary": "assault vs Blackwater Verge c \u2014 Normal; A 10 + 6 vs D 17 + 10 \u2192 A 16 vs D 27 (\u0394 -11) \u2022 OP\u2212(Att) violence:2; Mans(Att): suppressive_fire; Mans(Def): \u2014; Support: The Unmoved Movers",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 16,
@@ -2310,7 +2310,7 @@
           "side": "def",
           "opponent": "The Tuesday Game",
           "outcome": "win",
-          "summary": "assault vs Blackwater Verge c — Normal; A 3 + 6 vs D 18 + 10 → A 9 vs D 28 (Δ -19) • OP−(Att) violence:2; Mans(Att): suppressive_fire; Mans(Def): —; Support: The Unmoved Movers",
+          "summary": "assault vs Blackwater Verge c \u2014 Normal; A 3 + 6 vs D 18 + 10 \u2192 A 9 vs D 28 (\u0394 -19) \u2022 OP\u2212(Att) violence:2; Mans(Att): suppressive_fire; Mans(Def): \u2014; Support: The Unmoved Movers",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 9,
@@ -2337,7 +2337,7 @@
           "side": "def",
           "opponent": "The Tuesday Game",
           "outcome": "win",
-          "summary": "assault vs Blackwater Verge c — Normal; A 7 + 6 vs D 14 + 10 → A 13 vs D 24 (Δ -11) • OP−(Att) violence:2; Mans(Att): suppressive_fire; Mans(Def): —; Support: The Unmoved Movers",
+          "summary": "assault vs Blackwater Verge c \u2014 Normal; A 7 + 6 vs D 14 + 10 \u2192 A 13 vs D 24 (\u0394 -11) \u2022 OP\u2212(Att) violence:2; Mans(Att): suppressive_fire; Mans(Def): \u2014; Support: The Unmoved Movers",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 13,
@@ -2364,7 +2364,7 @@
           "side": "def",
           "opponent": "The Tuesday Game",
           "outcome": "win",
-          "summary": "assault vs Blackwater Verge c — Normal; A 10 + 6 vs D 11 + 10 → A 16 vs D 21 (Δ -5) • OP−(Att) violence:2; Mans(Att): suppressive_fire; Mans(Def): —; Support: The Unmoved Movers",
+          "summary": "assault vs Blackwater Verge c \u2014 Normal; A 10 + 6 vs D 11 + 10 \u2192 A 16 vs D 21 (\u0394 -5) \u2022 OP\u2212(Att) violence:2; Mans(Att): suppressive_fire; Mans(Def): \u2014; Support: The Unmoved Movers",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 16,
@@ -2391,7 +2391,7 @@
           "side": "def",
           "opponent": "The Linebreakers",
           "outcome": "loss",
-          "summary": "assault vs Evil Bad Fortress — Normal; A 17 + 19 vs D 5 + 10 → A 36 vs D 15 (Δ +21) • OP−(Att) violence:2; Mans(Att): suppressive_fire; Mans(Def): —; Support: Action Faction, The Faction of the Red Hat, The Tuesday Game, Travis's Faction",
+          "summary": "assault vs Evil Bad Fortress \u2014 Normal; A 17 + 19 vs D 5 + 10 \u2192 A 36 vs D 15 (\u0394 +21) \u2022 OP\u2212(Att) violence:2; Mans(Att): suppressive_fire; Mans(Def): \u2014; Support: Action Faction, The Faction of the Red Hat, The Tuesday Game, Travis's Faction",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 36,
@@ -2424,7 +2424,7 @@
           "side": "def",
           "opponent": "The Tuesday Game",
           "outcome": "win",
-          "summary": "assault vs Evil Bad Fortress — Normal; A 12 + 6 vs D 15 + 10 → A 18 vs D 25 (Δ -7); Support: The Unmoved Movers",
+          "summary": "assault vs Evil Bad Fortress \u2014 Normal; A 12 + 6 vs D 15 + 10 \u2192 A 18 vs D 25 (\u0394 -7); Support: The Unmoved Movers",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 18,
@@ -2451,7 +2451,7 @@
           "side": "def",
           "opponent": "The Tuesday Game",
           "outcome": "win",
-          "summary": "assault vs Evil Bad Fortress — Normal; A 10 + 6 vs D 12 + 10 → A 16 vs D 22 (Δ -6); Support: The Unmoved Movers",
+          "summary": "assault vs Evil Bad Fortress \u2014 Normal; A 10 + 6 vs D 12 + 10 \u2192 A 16 vs D 22 (\u0394 -6); Support: The Unmoved Movers",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 16,
@@ -2478,7 +2478,7 @@
           "side": "def",
           "opponent": "Steryo Vights",
           "outcome": "loss",
-          "summary": "assault vs Evil Bad Fortress — Normal; A 10 + 38 vs D 10 + 10 → A 48 vs D 20 (Δ +28) • OP−(Att) violence:1; Support: Funkie Bunch, Why is joe here",
+          "summary": "assault vs Evil Bad Fortress \u2014 Normal; A 10 + 38 vs D 10 + 10 \u2192 A 48 vs D 20 (\u0394 +28) \u2022 OP\u2212(Att) violence:1; Support: Funkie Bunch, Why is joe here",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 48,
@@ -2514,7 +2514,7 @@
           "scenario": "infiltration",
           "side": "def",
           "opponent": "Steryo Vights",
-          "summary": "Infiltration: Steryo Vights vs Evil Bad Faction — 11 vs 24 • Alarm 4/5 (alerted) • ALERTED"
+          "summary": "Infiltration: Steryo Vights vs Evil Bad Faction \u2014 11 vs 24 \u2022 Alarm 4/5 (alerted) \u2022 ALERTED"
         },
         {
           "ts": 1779327309399,
@@ -2530,18 +2530,18 @@
           "scenario": "infiltration",
           "side": "def",
           "opponent": "Steryo Vights",
-          "summary": "Infiltration: Steryo Vights vs Evil Bad Faction — 68 vs 12 • Alarm 0/5 (quiet) • QUIET"
+          "summary": "Infiltration: Steryo Vights vs Evil Bad Faction \u2014 68 vs 12 \u2022 Alarm 0/5 (quiet) \u2022 QUIET"
         },
         {
           "type": "commit",
           "date": "5/30/2026, 1:51:41 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780167101000
         },
         {
           "type": "turn",
           "date": "5/30/2026, 1:51:50 PM",
-          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "summary": "Trend: Morale\u21921% \u2022 Loyalty\u21921%",
           "ts": 1780167110000
         },
         {
@@ -2554,7 +2554,7 @@
           "ts": 1780167118058,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -2573,13 +2573,13 @@
         {
           "type": "commit",
           "date": "5/30/2026, 2:05:35 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780167935000
         },
         {
           "type": "turn",
           "date": "5/30/2026, 2:05:42 PM",
-          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "summary": "Trend: Morale\u21921% \u2022 Loyalty\u21921%",
           "ts": 1780167942000
         },
         {
@@ -2592,7 +2592,7 @@
           "ts": 1780167948768,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -2611,13 +2611,13 @@
         {
           "type": "commit",
           "date": "5/30/2026, 2:17:21 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780168641000
         },
         {
           "type": "turn",
           "date": "5/30/2026, 2:17:31 PM",
-          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "summary": "Trend: Morale\u21921% \u2022 Loyalty\u21921%",
           "ts": 1780168651000
         },
         {
@@ -2630,7 +2630,7 @@
           "ts": 1780168658500,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -2649,13 +2649,13 @@
         {
           "type": "commit",
           "date": "5/30/2026, 2:18:34 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780168714000
         },
         {
           "type": "turn",
           "date": "5/30/2026, 2:18:41 PM",
-          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "summary": "Trend: Morale\u21921% \u2022 Loyalty\u21921%",
           "ts": 1780168721000
         },
         {
@@ -2668,7 +2668,7 @@
           "ts": 1780168728701,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid logistics:10]",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid logistics:10]",
           "unpaid": true,
           "moraleBonus": 0,
           "loyaltyBonus": 0,
@@ -2695,7 +2695,7 @@
           "date": "5/30/2026, 2:22:22 PM",
           "type": "siege",
           "activity": "siege_resolved",
-          "summary": "Siege Carried by Storm (defender) — turn 5.",
+          "summary": "Siege Carried by Storm (defender) \u2014 turn 5.",
           "siegeId": "siege-mpspzk5k-oxplcg",
           "hexUuid": "Scene.EPrIyhHJQxy2REce.Drawing.RQ40Tai3G7s9opal",
           "role": "defender",
@@ -2713,40 +2713,40 @@
             {
               "turn": 5,
               "kind": "layer_breached",
-              "title": "Outer Curtain Wall — Perspicacity falls",
+              "title": "Outer Curtain Wall \u2014 Perspicacity falls",
               "description": "Layer 1 of 3 breached (razed) on turn 5.",
               "payload": {
                 "layerIdx": 0,
-                "layerName": "Outer Curtain Wall — Perspicacity",
+                "layerName": "Outer Curtain Wall \u2014 Perspicacity",
                 "rule": "razed"
               }
             },
             {
               "turn": 5,
               "kind": "layer_breached",
-              "title": "The Barbican Gate — Perspicacity falls",
+              "title": "The Barbican Gate \u2014 Perspicacity falls",
               "description": "Layer 2 of 3 breached (razed) on turn 5.",
               "payload": {
                 "layerIdx": 1,
-                "layerName": "The Barbican Gate — Perspicacity",
+                "layerName": "The Barbican Gate \u2014 Perspicacity",
                 "rule": "razed"
               }
             },
             {
               "turn": 5,
               "kind": "layer_breached",
-              "title": "The Inner Keep — Perspicacity falls",
+              "title": "The Inner Keep \u2014 Perspicacity falls",
               "description": "Layer 3 of 3 breached (razed) on turn 5.",
               "payload": {
                 "layerIdx": 2,
-                "layerName": "The Inner Keep — Perspicacity",
+                "layerName": "The Inner Keep \u2014 Perspicacity",
                 "rule": "razed"
               }
             },
             {
               "turn": 5,
               "kind": "siege_storm",
-              "title": "The last layer falls — the place is carried by storm",
+              "title": "The last layer falls \u2014 the place is carried by storm",
               "description": "All 3 layer(s) breached. Outcome: won_storm (ownership / morale / war-log write-back lands in Phase F)."
             }
           ]
@@ -2754,13 +2754,13 @@
         {
           "type": "commit",
           "date": "5/30/2026, 3:31:43 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780173103000
         },
         {
           "type": "turn",
           "date": "5/30/2026, 3:31:51 PM",
-          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "summary": "Trend: Morale\u21921% \u2022 Loyalty\u21921%",
           "ts": 1780173111000
         },
         {
@@ -2773,7 +2773,7 @@
           "ts": 1780173117630,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid logistics:10]",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid logistics:10]",
           "unpaid": true,
           "moraleBonus": 0,
           "loyaltyBonus": 0,
@@ -2792,13 +2792,13 @@
         {
           "type": "commit",
           "date": "5/30/2026, 5:00:32 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780178432000
         },
         {
           "type": "turn",
           "date": "5/30/2026, 5:00:41 PM",
-          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "summary": "Trend: Morale\u21921% \u2022 Loyalty\u21921%",
           "ts": 1780178441000
         },
         {
@@ -2811,7 +2811,7 @@
           "ts": 1780178446905,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid logistics:10]",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid logistics:10]",
           "unpaid": true,
           "moraleBonus": 0,
           "loyaltyBonus": 0,
@@ -2830,13 +2830,13 @@
         {
           "type": "commit",
           "date": "5/30/2026, 5:25:15 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780179915000
         },
         {
           "type": "turn",
           "date": "5/30/2026, 5:25:23 PM",
-          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "summary": "Trend: Morale\u21921% \u2022 Loyalty\u21921%",
           "ts": 1780179923000
         },
         {
@@ -2849,7 +2849,7 @@
           "ts": 1780179930950,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:2, logistics:10]",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:2, logistics:10]",
           "unpaid": true,
           "moraleBonus": 0,
           "loyaltyBonus": 0,
@@ -2868,13 +2868,13 @@
         {
           "type": "commit",
           "date": "5/31/2026, 2:17:48 AM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780211868000
         },
         {
           "type": "turn",
           "date": "5/31/2026, 2:17:56 AM",
-          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "summary": "Trend: Morale\u21921% \u2022 Loyalty\u21921%",
           "ts": 1780211876000
         },
         {
@@ -2887,7 +2887,7 @@
           "ts": 1780211884077,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
           "unpaid": true,
           "moraleBonus": 0,
           "loyaltyBonus": 0,
@@ -2906,13 +2906,13 @@
         {
           "type": "commit",
           "date": "5/31/2026, 2:18:36 AM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780211916000
         },
         {
           "type": "turn",
           "date": "5/31/2026, 2:18:43 AM",
-          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "summary": "Trend: Morale\u21921% \u2022 Loyalty\u21921%",
           "ts": 1780211923000
         },
         {
@@ -2925,7 +2925,7 @@
           "ts": 1780211929409,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
           "unpaid": true,
           "moraleBonus": 0,
           "loyaltyBonus": 0,
@@ -2944,13 +2944,13 @@
         {
           "type": "commit",
           "date": "5/31/2026, 2:19:22 AM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780211962000
         },
         {
           "type": "turn",
           "date": "5/31/2026, 2:19:29 AM",
-          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "summary": "Trend: Morale\u21921% \u2022 Loyalty\u21921%",
           "ts": 1780211969000
         },
         {
@@ -2963,7 +2963,7 @@
           "ts": 1780211975310,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
           "unpaid": true,
           "moraleBonus": 0,
           "loyaltyBonus": 0,
@@ -2982,7 +2982,7 @@
         {
           "type": "commit",
           "date": "5/31/2026, 2:20:07 AM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780212007000
         },
         {
@@ -2994,7 +2994,7 @@
         {
           "type": "turn",
           "date": "5/31/2026, 2:20:14 AM",
-          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "summary": "Trend: Morale\u21921% \u2022 Loyalty\u21921%",
           "ts": 1780212014000
         },
         {
@@ -3007,7 +3007,7 @@
           "ts": 1780212021252,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
           "unpaid": true,
           "moraleBonus": 0,
           "loyaltyBonus": 0,
@@ -3026,13 +3026,13 @@
         {
           "type": "commit",
           "date": "5/31/2026, 2:20:52 AM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780212052000
         },
         {
           "type": "turn",
           "date": "5/31/2026, 2:20:59 AM",
-          "summary": "Trend: Morale→1% • Loyalty→1%",
+          "summary": "Trend: Morale\u21921% \u2022 Loyalty\u21921%",
           "ts": 1780212059000
         },
         {
@@ -3045,7 +3045,7 @@
           "ts": 1780212067362,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
           "unpaid": true,
           "moraleBonus": 0,
           "loyaltyBonus": 0,
@@ -3064,13 +3064,13 @@
         {
           "type": "commit",
           "date": "5/31/2026, 2:21:33 AM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780212093000
         },
         {
           "type": "turn",
           "date": "5/31/2026, 2:21:40 AM",
-          "summary": "Trend: Morale→1% • Loyalty→0%",
+          "summary": "Trend: Morale\u21921% \u2022 Loyalty\u21920%",
           "ts": 1780212100000
         },
         {
@@ -3083,7 +3083,7 @@
           "ts": 1780212105859,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
           "unpaid": true,
           "moraleBonus": 0,
           "loyaltyBonus": 0,
@@ -3102,13 +3102,13 @@
         {
           "type": "commit",
           "date": "5/31/2026, 2:22:37 AM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780212157000
         },
         {
           "type": "turn",
           "date": "5/31/2026, 2:22:44 AM",
-          "summary": "Trend: Morale→0% • Loyalty→0%",
+          "summary": "Trend: Morale\u21920% \u2022 Loyalty\u21920%",
           "ts": 1780212164000
         },
         {
@@ -3122,7 +3122,7 @@
           "date": "5/31/2026, 2:22:45 AM",
           "type": "siege",
           "activity": "siege_resolved",
-          "summary": "Siege The Siege is Broken (defender) — turn 15.",
+          "summary": "Siege The Siege is Broken (defender) \u2014 turn 15.",
           "siegeId": "siege-mpsx5ouu-kcnext",
           "hexUuid": "Scene.EPrIyhHJQxy2REce.Drawing.RQ40Tai3G7s9opal",
           "role": "defender",
@@ -3140,8 +3140,8 @@
             {
               "turn": 8,
               "kind": "tick_drain",
-              "title": "Tick 8: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 52 OP total.",
+              "title": "Tick 8: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 52 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -3159,14 +3159,14 @@
             {
               "turn": null,
               "kind": "convene",
-              "title": "Breach Scene convened — layer 1",
-              "description": "GM convened the tactical breach on Outer Curtain Wall — Perspicacity."
+              "title": "Breach Scene convened \u2014 layer 1",
+              "description": "GM convened the tactical breach on Outer Curtain Wall \u2014 Perspicacity."
             },
             {
               "turn": 9,
               "kind": "tick_drain",
-              "title": "Tick 9: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 44 OP total.",
+              "title": "Tick 9: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 44 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -3184,8 +3184,8 @@
             {
               "turn": 10,
               "kind": "tick_drain",
-              "title": "Tick 10: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 36 OP total.",
+              "title": "Tick 10: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 36 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -3204,7 +3204,7 @@
               "turn": 10,
               "kind": "event_deck",
               "title": "Event: Reinforcements Arrive",
-              "description": "A column arrives bearing supplies. — Buffer +20.",
+              "description": "A column arrives bearing supplies. \u2014 Buffer +20.",
               "payload": {
                 "eventId": "reinforcements",
                 "deckId": "generic",
@@ -3224,8 +3224,8 @@
             {
               "turn": 11,
               "kind": "tick_drain",
-              "title": "Tick 11: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 48 OP total.",
+              "title": "Tick 11: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 48 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -3243,8 +3243,8 @@
             {
               "turn": 12,
               "kind": "tick_drain",
-              "title": "Tick 12: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 40 OP total.",
+              "title": "Tick 12: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 40 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -3263,7 +3263,7 @@
               "turn": 12,
               "kind": "event_deck",
               "title": "Event: Bad Omen",
-              "description": "The augurs spoke ill. — random morale -1; defender Anytime -1.",
+              "description": "The augurs spoke ill. \u2014 random morale -1; defender Anytime -1.",
               "payload": {
                 "eventId": "bad_omen",
                 "deckId": "generic",
@@ -3283,8 +3283,8 @@
             {
               "turn": 13,
               "kind": "tick_drain",
-              "title": "Tick 13: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 32 OP total.",
+              "title": "Tick 13: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 32 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -3302,8 +3302,8 @@
             {
               "turn": 14,
               "kind": "tick_drain",
-              "title": "Tick 14: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 24 OP total.",
+              "title": "Tick 14: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 24 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -3322,7 +3322,7 @@
               "turn": 14,
               "kind": "trojan_failed",
               "title": "The ruse is discovered",
-              "description": "Trojan Horse FAILS (Sneak past the watch, Sabotage the defences). Forces halved (−0 OP), Buffer −24, attacker −2 morale (applied in Phase F).",
+              "description": "Trojan Horse FAILS (Sneak past the watch, Sabotage the defences). Forces halved (\u22120 OP), Buffer \u221224, attacker \u22122 morale (applied in Phase F).",
               "payload": {
                 "results": [
                   {
@@ -3368,7 +3368,7 @@
               "turn": 14,
               "kind": "trojan_failed",
               "title": "The ruse is discovered",
-              "description": "Trojan Horse FAILS (Sabotage the defences, Breach from within). Forces halved (−0 OP), Buffer −0, attacker −2 morale (applied in Phase F).",
+              "description": "Trojan Horse FAILS (Sabotage the defences, Breach from within). Forces halved (\u22120 OP), Buffer \u22120, attacker \u22122 morale (applied in Phase F).",
               "payload": {
                 "results": [
                   {
@@ -3413,8 +3413,8 @@
             {
               "turn": 15,
               "kind": "tick_drain",
-              "title": "Tick 15: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 0 OP total.",
+              "title": "Tick 15: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 0 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -3432,7 +3432,7 @@
             {
               "turn": 15,
               "kind": "siege_hold",
-              "title": "Buffer exhausted — attacker breaks the siege",
+              "title": "Buffer exhausted \u2014 attacker breaks the siege",
               "description": "Attacker's commitment depleted. Orderly withdrawal."
             }
           ]
@@ -3447,7 +3447,7 @@
           "ts": 1780212168825,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: PARTIAL upkeep (short_integration) [paid violence:10, logistics:10; unpaid violence:6, logistics:10]",
           "unpaid": true,
           "moraleBonus": 0,
           "loyaltyBonus": 0,
@@ -3466,7 +3466,7 @@
         {
           "type": "commit",
           "date": "6/1/2026, 12:49:57 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780336197000
         },
         {
@@ -3479,7 +3479,7 @@
           "ts": 1780336213140,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -3498,7 +3498,7 @@
         {
           "type": "commit",
           "date": "6/1/2026, 12:53:50 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780336430000
         },
         {
@@ -3511,7 +3511,7 @@
           "ts": 1780336444317,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -3530,7 +3530,7 @@
         {
           "type": "commit",
           "date": "6/2/2026, 11:49:25 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780462165000
         },
         {
@@ -3544,7 +3544,7 @@
           "date": "6/2/2026, 11:49:36 PM",
           "type": "siege",
           "activity": "siege_resolved",
-          "summary": "Siege The Siege is Broken (defender) — turn 18.",
+          "summary": "Siege The Siege is Broken (defender) \u2014 turn 18.",
           "siegeId": "siege-mpxl7b0g-t50g3e",
           "hexUuid": "Scene.EPrIyhHJQxy2REce.Drawing.RQ40Tai3G7s9opal",
           "role": "defender",
@@ -3562,8 +3562,8 @@
             {
               "turn": 18,
               "kind": "tick_drain",
-              "title": "Tick 18: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 0 OP total.",
+              "title": "Tick 18: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 0 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -3581,7 +3581,7 @@
             {
               "turn": 18,
               "kind": "siege_hold",
-              "title": "Buffer exhausted — attacker breaks the siege",
+              "title": "Buffer exhausted \u2014 attacker breaks the siege",
               "description": "Attacker's commitment depleted. Orderly withdrawal."
             }
           ]
@@ -3596,7 +3596,7 @@
           "ts": 1780462180345,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -3615,7 +3615,7 @@
         {
           "type": "commit",
           "date": "6/2/2026, 11:52:41 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780462361000
         },
         {
@@ -3629,7 +3629,7 @@
           "date": "6/2/2026, 11:52:51 PM",
           "type": "siege",
           "activity": "siege_resolved",
-          "summary": "Siege The Siege is Broken (defender) — turn 19.",
+          "summary": "Siege The Siege is Broken (defender) \u2014 turn 19.",
           "siegeId": "siege-mpxlbhsn-rrkpy6",
           "hexUuid": "Scene.EPrIyhHJQxy2REce.Drawing.RQ40Tai3G7s9opal",
           "role": "defender",
@@ -3647,8 +3647,8 @@
             {
               "turn": 19,
               "kind": "tick_drain",
-              "title": "Tick 19: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 0 OP total.",
+              "title": "Tick 19: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 0 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -3666,7 +3666,7 @@
             {
               "turn": 19,
               "kind": "siege_hold",
-              "title": "Buffer exhausted — attacker breaks the siege",
+              "title": "Buffer exhausted \u2014 attacker breaks the siege",
               "description": "Attacker's commitment depleted. Orderly withdrawal."
             }
           ]
@@ -3681,7 +3681,7 @@
           "ts": 1780462375339,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -3700,7 +3700,7 @@
         {
           "type": "commit",
           "date": "6/3/2026, 10:26:43 AM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780500403000
         },
         {
@@ -3713,7 +3713,7 @@
           "ts": 1780500417530,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -3732,7 +3732,7 @@
         {
           "type": "commit",
           "date": "6/3/2026, 1:13:10 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780510390000
         },
         {
@@ -3745,7 +3745,7 @@
           "ts": 1780510404532,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -3764,7 +3764,7 @@
         {
           "type": "commit",
           "date": "6/3/2026, 1:14:56 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780510496000
         },
         {
@@ -3777,7 +3777,7 @@
           "ts": 1780510511815,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -3796,7 +3796,7 @@
         {
           "type": "commit",
           "date": "6/3/2026, 1:16:05 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780510565000
         },
         {
@@ -3808,7 +3808,7 @@
         {
           "type": "turn",
           "date": "6/3/2026, 1:16:14 PM",
-          "summary": "Trend: Morale→1% • Loyalty→0%",
+          "summary": "Trend: Morale\u21921% \u2022 Loyalty\u21920%",
           "ts": 1780510574000
         },
         {
@@ -3821,7 +3821,7 @@
           "ts": 1780510579360,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -3840,7 +3840,7 @@
         {
           "type": "commit",
           "date": "6/3/2026, 1:17:55 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780510675000
         },
         {
@@ -3853,7 +3853,7 @@
           "ts": 1780510688880,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -3872,7 +3872,7 @@
         {
           "type": "commit",
           "date": "6/3/2026, 1:19:10 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780510750000
         },
         {
@@ -3891,7 +3891,7 @@
           "ts": 1780510764126,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -3910,7 +3910,7 @@
         {
           "type": "commit",
           "date": "6/3/2026, 2:06:28 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780513588000
         },
         {
@@ -3924,7 +3924,7 @@
           "date": "6/3/2026, 2:06:39 PM",
           "type": "siege",
           "activity": "siege_resolved",
-          "summary": "Siege The Siege is Broken (defender) — turn 26.",
+          "summary": "Siege The Siege is Broken (defender) \u2014 turn 26.",
           "siegeId": "siege-mpydwxfl-3axmg9",
           "hexUuid": "Scene.EPrIyhHJQxy2REce.Drawing.RQ40Tai3G7s9opal",
           "role": "defender",
@@ -3942,8 +3942,8 @@
             {
               "turn": 21,
               "kind": "tick_drain",
-              "title": "Tick 21: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 52 OP total.",
+              "title": "Tick 21: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 52 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -3962,7 +3962,7 @@
               "turn": 21,
               "kind": "bombard",
               "title": "Bombardment",
-              "description": "The Unmoved Movers bombard Outer Curtain Wall — Perspicacity for 25 structure damage.",
+              "description": "The Unmoved Movers bombard Outer Curtain Wall \u2014 Perspicacity for 25 structure damage.",
               "payload": {
                 "layerIdx": 0,
                 "dmg": 25
@@ -3971,8 +3971,8 @@
             {
               "turn": 22,
               "kind": "tick_drain",
-              "title": "Tick 22: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 44 OP total.",
+              "title": "Tick 22: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 44 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -3991,7 +3991,7 @@
               "turn": 22,
               "kind": "event_deck",
               "title": "Event: Bad Omen",
-              "description": "The augurs spoke ill. — random morale -1; defender Anytime -1.",
+              "description": "The augurs spoke ill. \u2014 random morale -1; defender Anytime -1.",
               "payload": {
                 "eventId": "bad_omen",
                 "deckId": "generic",
@@ -4012,7 +4012,7 @@
               "turn": 22,
               "kind": "bombard",
               "title": "Bombardment",
-              "description": "The Unmoved Movers bombard Outer Curtain Wall — Perspicacity for 27 structure damage.",
+              "description": "The Unmoved Movers bombard Outer Curtain Wall \u2014 Perspicacity for 27 structure damage.",
               "payload": {
                 "layerIdx": 0,
                 "dmg": 27
@@ -4021,8 +4021,8 @@
             {
               "turn": 23,
               "kind": "tick_drain",
-              "title": "Tick 23: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 36 OP total.",
+              "title": "Tick 23: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 36 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -4041,7 +4041,7 @@
               "turn": 23,
               "kind": "event_deck",
               "title": "Event: Bad Omen",
-              "description": "The augurs spoke ill. — random morale -1; defender Anytime -1.",
+              "description": "The augurs spoke ill. \u2014 random morale -1; defender Anytime -1.",
               "payload": {
                 "eventId": "bad_omen",
                 "deckId": "generic",
@@ -4062,7 +4062,7 @@
               "turn": 23,
               "kind": "bombard",
               "title": "Bombardment",
-              "description": "The Unmoved Movers bombard Outer Curtain Wall — Perspicacity for 25 structure damage.",
+              "description": "The Unmoved Movers bombard Outer Curtain Wall \u2014 Perspicacity for 25 structure damage.",
               "payload": {
                 "layerIdx": 0,
                 "dmg": 25
@@ -4071,8 +4071,8 @@
             {
               "turn": 24,
               "kind": "tick_drain",
-              "title": "Tick 24: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 28 OP total.",
+              "title": "Tick 24: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 28 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -4091,7 +4091,7 @@
               "turn": 24,
               "kind": "bombard",
               "title": "Bombardment",
-              "description": "The Unmoved Movers bombard Outer Curtain Wall — Perspicacity for 29 structure damage.",
+              "description": "The Unmoved Movers bombard Outer Curtain Wall \u2014 Perspicacity for 29 structure damage.",
               "payload": {
                 "layerIdx": 0,
                 "dmg": 29
@@ -4100,8 +4100,8 @@
             {
               "turn": 25,
               "kind": "tick_drain",
-              "title": "Tick 25: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 20 OP total.",
+              "title": "Tick 25: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 20 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -4120,7 +4120,7 @@
               "turn": 25,
               "kind": "event_deck",
               "title": "Event: Prophet's Visitation",
-              "description": "An oracle delivers a word — welcome to one camp, bitter to the other. — attacker morale +1, defender −1.",
+              "description": "An oracle delivers a word \u2014 welcome to one camp, bitter to the other. \u2014 attacker morale +1, defender \u22121.",
               "payload": {
                 "eventId": "prophets_visitation",
                 "deckId": "generic",
@@ -4140,14 +4140,14 @@
             {
               "turn": 25,
               "kind": "clash_maneuver",
-              "title": "Bombard — in the moment",
-              "description": "Fired during the clash (tactical tempo). Buffer −1.5 OP."
+              "title": "Bombard \u2014 in the moment",
+              "description": "Fired during the clash (tactical tempo). Buffer \u22121.5 OP."
             },
             {
               "turn": 25,
               "kind": "bombard",
               "title": "Bombardment",
-              "description": "The Unmoved Movers bombard Outer Curtain Wall — Perspicacity for 26 structure damage.",
+              "description": "The Unmoved Movers bombard Outer Curtain Wall \u2014 Perspicacity for 26 structure damage.",
               "payload": {
                 "layerIdx": 0,
                 "dmg": 26
@@ -4157,43 +4157,43 @@
               "turn": 25,
               "kind": "garrison_culled",
               "title": "The garrison falls with the wall",
-              "description": "Defenders caught in the collapse — −46, defender muster down to 20."
+              "description": "Defenders caught in the collapse \u2014 \u221246, defender muster down to 20."
             },
             {
               "turn": 25,
               "kind": "convene",
-              "title": "Breach Scene convened — layer 1",
-              "description": "GM convened the tactical breach on Outer Curtain Wall — Perspicacity."
+              "title": "Breach Scene convened \u2014 layer 1",
+              "description": "GM convened the tactical breach on Outer Curtain Wall \u2014 Perspicacity."
             },
             {
               "turn": 25,
               "kind": "garrison_culled",
               "title": "The garrison falls with the wall",
-              "description": "Defenders caught in the collapse — −22, defender muster down to 20."
+              "description": "Defenders caught in the collapse \u2014 \u221222, defender muster down to 20."
             },
             {
               "turn": 25,
               "kind": "garrison_culled",
               "title": "The garrison falls with the wall",
-              "description": "Defenders caught in the collapse — −12, defender muster down to 8."
+              "description": "Defenders caught in the collapse \u2014 \u221212, defender muster down to 8."
             },
             {
               "turn": 25,
               "kind": "garrison_culled",
               "title": "The garrison falls with the wall",
-              "description": "Defenders caught in the collapse — −14, defender muster down to 6."
+              "description": "Defenders caught in the collapse \u2014 \u221214, defender muster down to 6."
             },
             {
               "turn": 25,
               "kind": "garrison_culled",
               "title": "The garrison falls with the wall",
-              "description": "Defenders caught in the collapse — −14, defender muster down to 6."
+              "description": "Defenders caught in the collapse \u2014 \u221214, defender muster down to 6."
             },
             {
               "turn": 25,
               "kind": "champion_duel",
               "title": "Evil Bad Rig bests Evan",
-              "description": "Duel rolls — Evan 13 vs Evil Bad Rig 18. Evan is wounded.",
+              "description": "Duel rolls \u2014 Evan 13 vs Evil Bad Rig 18. Evan is wounded.",
               "actorIds": [
                 "KX1SHfWr8mN6DOeq",
                 "UIKwMI31eQtRXSj0"
@@ -4213,7 +4213,7 @@
             {
               "turn": 25,
               "kind": "champion_status",
-              "title": "Champion active → wounded",
+              "title": "Champion active \u2192 wounded",
               "description": "",
               "actorIds": [
                 "UIKwMI31eQtRXSj0"
@@ -4227,8 +4227,8 @@
             {
               "turn": 26,
               "kind": "tick_drain",
-              "title": "Tick 26: −8 OP from Buffer",
-              "description": "Drain breakdown: base 5 × terrain 1.5 × championDeficit 0 × naval 1 + distance 0.5 + harassment 0, ×grace 1. Buffer now 0 OP total.",
+              "title": "Tick 26: \u22128 OP from Buffer",
+              "description": "Drain breakdown: base 5 \u00d7 terrain 1.5 \u00d7 championDeficit 0 \u00d7 naval 1 + distance 0.5 + harassment 0, \u00d7grace 1. Buffer now 0 OP total.",
               "payload": {
                 "drain": 8,
                 "deducted": {
@@ -4246,14 +4246,14 @@
             {
               "turn": 26,
               "kind": "siege_hold",
-              "title": "Buffer exhausted — attacker breaks the siege",
+              "title": "Buffer exhausted \u2014 attacker breaks the siege",
               "description": "Attacker's commitment depleted. Orderly withdrawal."
             },
             {
               "turn": 26,
               "kind": "event_deck",
               "title": "Event: Champion Wounded",
-              "description": "Misfortune strikes a champion — illness or a training mishap. — Evil Bad Rig wounded.",
+              "description": "Misfortune strikes a champion \u2014 illness or a training mishap. \u2014 Evil Bad Rig wounded.",
               "payload": {
                 "eventId": "champion_wounded",
                 "deckId": "generic",
@@ -4274,7 +4274,7 @@
               "turn": 26,
               "kind": "champion_recovered",
               "title": "Evan recovers",
-              "description": "Wounded → active.",
+              "description": "Wounded \u2192 active.",
               "actorIds": [
                 "UIKwMI31eQtRXSj0"
               ],
@@ -4286,7 +4286,7 @@
               "turn": 26,
               "kind": "butchers_bill",
               "title": "The butcher's bill",
-              "description": "Muster losses — attacker 0, defender 108 over 0 clashes."
+              "description": "Muster losses \u2014 attacker 0, defender 108 over 0 clashes."
             }
           ]
         },
@@ -4300,7 +4300,7 @@
           "ts": 1780513603616,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4319,13 +4319,13 @@
         {
           "type": "commit",
           "date": "6/3/2026, 4:25:14 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780521914000
         },
         {
           "type": "turn",
           "date": "6/3/2026, 4:25:25 PM",
-          "summary": "Trend: Morale→0% • Loyalty→0%",
+          "summary": "Trend: Morale\u21920% \u2022 Loyalty\u21920%",
           "ts": 1780521925000
         },
         {
@@ -4338,7 +4338,7 @@
           "ts": 1780521930023,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4357,7 +4357,7 @@
         {
           "type": "commit",
           "date": "6/3/2026, 4:32:33 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780522353000
         },
         {
@@ -4370,7 +4370,7 @@
           "ts": 1780522368418,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4389,7 +4389,7 @@
         {
           "type": "commit",
           "date": "6/3/2026, 4:36:13 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780522573000
         },
         {
@@ -4402,7 +4402,7 @@
           "ts": 1780522586914,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4421,7 +4421,7 @@
         {
           "type": "commit",
           "date": "6/3/2026, 4:40:35 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780522835000
         },
         {
@@ -4434,7 +4434,7 @@
           "ts": 1780522850417,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4453,7 +4453,7 @@
         {
           "type": "commit",
           "date": "6/4/2026, 1:58:36 PM",
-          "summary": "OP Regen: <b>4</b> violence • <b>3</b> economy • <b>1</b> diplomacy",
+          "summary": "OP Regen: <b>4</b> violence \u2022 <b>3</b> economy \u2022 <b>1</b> diplomacy",
           "ts": 1780599516000
         },
         {
@@ -4466,7 +4466,7 @@
           "ts": 1780599531323,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4485,7 +4485,7 @@
         {
           "type": "commit",
           "date": "6/9/2026, 8:53:09 PM",
-          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "summary": "OP Regen (territory matrix \u00b7 flows: normal\u00d72): <b>4</b> violence \u2022 <b>3</b> nonlethal \u2022 <b>1</b> intrigue \u2022 <b>4</b> economy \u2022 <b>1</b> softpower \u2022 <b>1</b> diplomacy",
           "ts": 1781056389000
         },
         {
@@ -4498,7 +4498,7 @@
           "ts": 1781056406238,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:10, logistics:10] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4517,7 +4517,7 @@
         {
           "type": "commit",
           "date": "6/15/2026, 4:32:15 PM",
-          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "summary": "OP Regen (territory matrix \u00b7 flows: normal\u00d72): <b>4</b> violence \u2022 <b>3</b> nonlethal \u2022 <b>1</b> intrigue \u2022 <b>4</b> economy \u2022 <b>1</b> softpower \u2022 <b>1</b> diplomacy",
           "ts": 1781559135000
         },
         {
@@ -4530,7 +4530,7 @@
           "ts": 1781559149311,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4549,7 +4549,7 @@
         {
           "type": "commit",
           "date": "6/15/2026, 5:23:05 PM",
-          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "summary": "OP Regen (territory matrix \u00b7 flows: normal\u00d72): <b>4</b> violence \u2022 <b>3</b> nonlethal \u2022 <b>1</b> intrigue \u2022 <b>4</b> economy \u2022 <b>1</b> softpower \u2022 <b>1</b> diplomacy",
           "ts": 1781562185000
         },
         {
@@ -4562,7 +4562,7 @@
           "ts": 1781562198816,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4581,7 +4581,7 @@
         {
           "type": "commit",
           "date": "6/15/2026, 6:43:53 PM",
-          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "summary": "OP Regen (territory matrix \u00b7 flows: normal\u00d72): <b>4</b> violence \u2022 <b>3</b> nonlethal \u2022 <b>1</b> intrigue \u2022 <b>4</b> economy \u2022 <b>1</b> softpower \u2022 <b>1</b> diplomacy",
           "ts": 1781567033000
         },
         {
@@ -4594,7 +4594,7 @@
           "ts": 1781567047474,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4613,13 +4613,13 @@
         {
           "type": "commit",
           "date": "6/15/2026, 6:47:17 PM",
-          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "summary": "OP Regen (territory matrix \u00b7 flows: normal\u00d72): <b>4</b> violence \u2022 <b>3</b> nonlethal \u2022 <b>1</b> intrigue \u2022 <b>4</b> economy \u2022 <b>1</b> softpower \u2022 <b>1</b> diplomacy",
           "ts": 1781567237000
         },
         {
           "type": "turn",
           "date": "6/15/2026, 6:47:27 PM",
-          "summary": "Trend: Morale→0% • Loyalty→0%",
+          "summary": "Trend: Morale\u21920% \u2022 Loyalty\u21920%",
           "ts": 1781567247000
         },
         {
@@ -4632,7 +4632,7 @@
           "ts": 1781567251193,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4651,7 +4651,7 @@
         {
           "type": "commit",
           "date": "6/15/2026, 6:56:19 PM",
-          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "summary": "OP Regen (territory matrix \u00b7 flows: normal\u00d72): <b>4</b> violence \u2022 <b>3</b> nonlethal \u2022 <b>1</b> intrigue \u2022 <b>4</b> economy \u2022 <b>1</b> softpower \u2022 <b>1</b> diplomacy",
           "ts": 1781567779000
         },
         {
@@ -4664,7 +4664,7 @@
           "ts": 1781567793147,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4683,7 +4683,7 @@
         {
           "type": "commit",
           "date": "6/15/2026, 7:12:59 PM",
-          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "summary": "OP Regen (territory matrix \u00b7 flows: normal\u00d72): <b>4</b> violence \u2022 <b>3</b> nonlethal \u2022 <b>1</b> intrigue \u2022 <b>4</b> economy \u2022 <b>1</b> softpower \u2022 <b>1</b> diplomacy",
           "ts": 1781568779000
         },
         {
@@ -4696,7 +4696,7 @@
           "ts": 1781568792732,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4715,7 +4715,7 @@
         {
           "type": "commit",
           "date": "6/15/2026, 7:45:41 PM",
-          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "summary": "OP Regen (territory matrix \u00b7 flows: normal\u00d72): <b>4</b> violence \u2022 <b>3</b> nonlethal \u2022 <b>1</b> intrigue \u2022 <b>4</b> economy \u2022 <b>1</b> softpower \u2022 <b>1</b> diplomacy",
           "ts": 1781570741000
         },
         {
@@ -4728,7 +4728,7 @@
           "ts": 1781570755434,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4747,13 +4747,13 @@
         {
           "type": "commit",
           "date": "6/15/2026, 8:24:53 PM",
-          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "summary": "OP Regen (territory matrix \u00b7 flows: normal\u00d72): <b>4</b> violence \u2022 <b>3</b> nonlethal \u2022 <b>1</b> intrigue \u2022 <b>4</b> economy \u2022 <b>1</b> softpower \u2022 <b>1</b> diplomacy",
           "ts": 1781573093000
         },
         {
           "type": "turn",
           "date": "6/15/2026, 8:25:02 PM",
-          "summary": "Trend: Morale→0% • Loyalty→0%",
+          "summary": "Trend: Morale\u21920% \u2022 Loyalty\u21920%",
           "ts": 1781573102000
         },
         {
@@ -4766,7 +4766,7 @@
           "ts": 1781573107450,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4785,7 +4785,7 @@
         {
           "type": "commit",
           "date": "6/15/2026, 8:27:09 PM",
-          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "summary": "OP Regen (territory matrix \u00b7 flows: normal\u00d72): <b>4</b> violence \u2022 <b>3</b> nonlethal \u2022 <b>1</b> intrigue \u2022 <b>4</b> economy \u2022 <b>1</b> softpower \u2022 <b>1</b> diplomacy",
           "ts": 1781573229000
         },
         {
@@ -4798,7 +4798,7 @@
           "ts": 1781573242124,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4817,7 +4817,7 @@
         {
           "type": "commit",
           "date": "6/15/2026, 10:27:08 PM",
-          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "summary": "OP Regen (territory matrix \u00b7 flows: normal\u00d72): <b>4</b> violence \u2022 <b>3</b> nonlethal \u2022 <b>1</b> intrigue \u2022 <b>4</b> economy \u2022 <b>1</b> softpower \u2022 <b>1</b> diplomacy",
           "ts": 1781580428000
         },
         {
@@ -4830,7 +4830,7 @@
           "ts": 1781580442301,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4849,13 +4849,13 @@
         {
           "type": "commit",
           "date": "6/15/2026, 10:35:02 PM",
-          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "summary": "OP Regen (territory matrix \u00b7 flows: normal\u00d72): <b>4</b> violence \u2022 <b>3</b> nonlethal \u2022 <b>1</b> intrigue \u2022 <b>4</b> economy \u2022 <b>1</b> softpower \u2022 <b>1</b> diplomacy",
           "ts": 1781580902000
         },
         {
           "type": "turn",
           "date": "6/15/2026, 10:35:12 PM",
-          "summary": "Trend: Morale→0% • Loyalty→0%",
+          "summary": "Trend: Morale\u21920% \u2022 Loyalty\u21920%",
           "ts": 1781580912000
         },
         {
@@ -4868,7 +4868,7 @@
           "ts": 1781580916170,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4887,7 +4887,7 @@
         {
           "type": "commit",
           "date": "6/16/2026, 2:11:56 PM",
-          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "summary": "OP Regen (territory matrix \u00b7 flows: normal\u00d72): <b>4</b> violence \u2022 <b>3</b> nonlethal \u2022 <b>1</b> intrigue \u2022 <b>4</b> economy \u2022 <b>1</b> softpower \u2022 <b>1</b> diplomacy",
           "ts": 1781637116000
         },
         {
@@ -4900,7 +4900,7 @@
           "ts": 1781637130506,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4919,7 +4919,7 @@
         {
           "type": "commit",
           "date": "6/17/2026, 5:45:19 PM",
-          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "summary": "OP Regen (territory matrix \u00b7 flows: normal\u00d72): <b>4</b> violence \u2022 <b>3</b> nonlethal \u2022 <b>1</b> intrigue \u2022 <b>4</b> economy \u2022 <b>1</b> softpower \u2022 <b>1</b> diplomacy",
           "ts": 1781736319000
         },
         {
@@ -4932,7 +4932,7 @@
           "ts": 1781736332487,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -4962,12 +4962,12 @@
           "scenario": "infiltration",
           "side": "def",
           "opponent": "Funkie Bunch",
-          "summary": "Infiltration: Funkie Bunch vs Evil Bad Faction — 23 vs 9 • Alarm 0/5 (quiet) • QUIET"
+          "summary": "Infiltration: Funkie Bunch vs Evil Bad Faction \u2014 23 vs 9 \u2022 Alarm 0/5 (quiet) \u2022 QUIET"
         },
         {
           "type": "commit",
           "date": "6/18/2026, 9:47:39 PM",
-          "summary": "OP Regen (territory matrix · flows: normal×2): <b>4</b> violence • <b>3</b> nonlethal • <b>1</b> intrigue • <b>4</b> economy • <b>1</b> softpower • <b>1</b> diplomacy",
+          "summary": "OP Regen (territory matrix \u00b7 flows: normal\u00d72): <b>4</b> violence \u2022 <b>3</b> nonlethal \u2022 <b>1</b> intrigue \u2022 <b>4</b> economy \u2022 <b>1</b> softpower \u2022 <b>1</b> diplomacy",
           "ts": 1781837259000
         },
         {
@@ -4980,7 +4980,7 @@
           "ts": 1781837273688,
           "type": "turn",
           "activity": "garrison_upkeep",
-          "summary": "• Evil Bad Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | • Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | • Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
+          "summary": "\u2022 Evil\u00a0Bad\u00a0Fortress: Paid garrison upkeep (short_integration) [violence:5, logistics:5] | \u2022 Integration morale bonus: +1 Morale (1 short-integration, 0 full-integration hexes with paid upkeep) | \u2022 Integration loyalty bonus: +1 Loyalty (1 short-integration, 0 full-integration hexes with paid upkeep)",
           "unpaid": false,
           "moraleBonus": 1,
           "loyaltyBonus": 1,
@@ -5003,7 +5003,7 @@
           "side": "def",
           "opponent": "vilanis oscaris",
           "outcome": "loss",
-          "summary": "assault vs Evil Bad Fortress — Normal; A 6 + 13 vs D 4 + 10 → A 19 vs D 14 (Δ +5) • OP−(Att) violence:51, intrigue:10; Mans(Att): command_overdrive, tactical_overwatch, flank_attack; Mans(Def): —; Support: Circuitous Roots, Shadow Rats, (The Mūs Umbral), The Yips",
+          "summary": "assault vs Evil Bad Fortress \u2014 Normal; A 6 + 13 vs D 4 + 10 \u2192 A 19 vs D 14 (\u0394 +5) \u2022 OP\u2212(Att) violence:51, intrigue:10; Mans(Att): command_overdrive, tactical_overwatch, flank_attack; Mans(Def): \u2014; Support: Circuitous Roots, Shadow Rats, (The M\u016bs Umbral), The Yips",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 19,
@@ -5020,7 +5020,7 @@
           ],
           "supportFactionNames": [
             "Circuitous Roots",
-            "Shadow Rats, (The Mūs Umbral)",
+            "Shadow Rats, (The M\u016bs Umbral)",
             "The Yips"
           ],
           "targetType": "hex",
@@ -5034,7 +5034,7 @@
           "side": "def",
           "opponent": "vilanis oscaris",
           "outcome": "loss",
-          "summary": "assault vs Evil Bad Fortress — Normal; A 17 + 13 vs D 3 + 10 → A 30 vs D 13 (Δ +17) • OP−(Att) violence:51, intrigue:10; Mans(Att): command_overdrive, tactical_overwatch, flank_attack; Mans(Def): —; Support: Circuitous Roots, Shadow Rats, (The Mūs Umbral), The Yips",
+          "summary": "assault vs Evil Bad Fortress \u2014 Normal; A 17 + 13 vs D 3 + 10 \u2192 A 30 vs D 13 (\u0394 +17) \u2022 OP\u2212(Att) violence:51, intrigue:10; Mans(Att): command_overdrive, tactical_overwatch, flank_attack; Mans(Def): \u2014; Support: Circuitous Roots, Shadow Rats, (The M\u016bs Umbral), The Yips",
           "activityKey": "assault",
           "difficulty": "normal",
           "attackerTotal": 30,
@@ -5051,7 +5051,7 @@
           ],
           "supportFactionNames": [
             "Circuitous Roots",
-            "Shadow Rats, (The Mūs Umbral)",
+            "Shadow Rats, (The M\u016bs Umbral)",
             "The Yips"
           ],
           "targetType": "hex",
@@ -5072,7 +5072,7 @@
           "scenario": "infiltration",
           "side": "def",
           "opponent": "vilanis oscaris",
-          "summary": "Infiltration: vilanis oscaris vs Evil Bad Faction — 46 vs 24 • Alarm 0/5 (quiet) • QUIET"
+          "summary": "Infiltration: vilanis oscaris vs Evil Bad Faction \u2014 46 vs 24 \u2022 Alarm 0/5 (quiet) \u2022 QUIET"
         },
         {
           "ts": 1782078379729,
@@ -5088,7 +5088,7 @@
           "scenario": "infiltration",
           "side": "def",
           "opponent": "vilanis oscaris",
-          "summary": "Infiltration: vilanis oscaris vs Evil Bad Faction — 51 vs 24 • Alarm 0/5 (quiet) • QUIET"
+          "summary": "Infiltration: vilanis oscaris vs Evil Bad Faction \u2014 51 vs 24 \u2022 Alarm 0/5 (quiet) \u2022 QUIET"
         },
         {
           "ts": 1782078541123,
@@ -5104,7 +5104,7 @@
           "scenario": "infiltration",
           "side": "def",
           "opponent": "vilanis oscaris",
-          "summary": "Infiltration: vilanis oscaris vs Evil Bad Faction — 41 vs 39 • Alarm 0/5 (quiet) • QUIET"
+          "summary": "Infiltration: vilanis oscaris vs Evil Bad Faction \u2014 41 vs 39 \u2022 Alarm 0/5 (quiet) \u2022 QUIET"
         },
         {
           "ts": 1782078892687,
@@ -5120,7 +5120,7 @@
           "scenario": "infiltration",
           "side": "def",
           "opponent": "vilanis oscaris",
-          "summary": "Infiltration: vilanis oscaris vs Evil Bad Faction — 43 vs 19 • Alarm 0/5 (quiet) • QUIET"
+          "summary": "Infiltration: vilanis oscaris vs Evil Bad Faction \u2014 43 vs 19 \u2022 Alarm 0/5 (quiet) \u2022 QUIET"
         },
         {
           "ts": 1782078927596,
@@ -5136,7 +5136,7 @@
           "scenario": "infiltration",
           "side": "def",
           "opponent": "vilanis oscaris",
-          "summary": "Infiltration: vilanis oscaris vs Evil Bad Faction — 44 vs 22 • Alarm 0/5 (quiet) • QUIET"
+          "summary": "Infiltration: vilanis oscaris vs Evil Bad Faction \u2014 44 vs 22 \u2022 Alarm 0/5 (quiet) \u2022 QUIET"
         },
         {
           "ts": 1783979397489,
@@ -5159,7 +5159,7 @@
           "scenario": "courtly",
           "side": "def",
           "opponent": "The Unmoved Movers",
-          "summary": "Courtly: The Unmoved Movers vs Evil Bad Faction — 24 vs 9 • Influence 10/2 • ONGOING"
+          "summary": "Courtly: The Unmoved Movers vs Evil Bad Faction \u2014 24 vs 9 \u2022 Influence 10/2 \u2022 ONGOING"
         },
         {
           "ts": 1784082502222,
@@ -5175,7 +5175,7 @@
           "scenario": "courtly",
           "side": "def",
           "opponent": "The Unmoved Movers",
-          "summary": "Courtly: The Unmoved Movers vs Evil Bad Faction — 20 vs 20 • Influence 10/10 • ONGOING"
+          "summary": "Courtly: The Unmoved Movers vs Evil Bad Faction \u2014 20 vs 20 \u2022 Influence 10/10 \u2022 ONGOING"
         }
       ],
       "doctrineSeedMeta": {
@@ -5370,7 +5370,7 @@
         "activityKey": "assault",
         "difficulty": "normal",
         "targetType": "hex",
-        "targetName": "—",
+        "targetName": "\u2014",
         "targetUuid": "",
         "defenderId": "",
         "rigId": "",

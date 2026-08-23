@@ -6,10 +6,10 @@
     "role": "Sephirotic Judge (Plant)",
     "tier": 3,
     "factionId": "",
-    "notes": "<p>An awakened harmony-aspect of the forest of Early Tifaret, driven violent by refusal. It does not hate intruders — it corrects them, at scale, more in disappointment than anger. Blades and blunt force barely interest it; sephirotic force it drinks like rain. Fire is the one argument it truly fears, and it knows you know.</p>",
+    "notes": "<p>An awakened harmony-aspect of the forest of Early Tifaret, driven violent by refusal. It does not hate intruders \u2014 it corrects them, at scale, more in disappointment than anger. Blades and blunt force barely interest it; sephirotic force it drinks like rain. Fire is the one argument it truly fears, and it knows you know.</p>",
     "details": {
-      "level": 6,
-      "tier": "3",
+      "level": 13,
+      "tier": 3,
       "statPoints": 0,
       "skillPoints": 0
     },
@@ -65,9 +65,6 @@
       "streetwise": {
         "value": 0
       },
-      "weave": {
-        "value": 0
-      },
       "diplomacy": {
         "value": 0
       },
@@ -104,10 +101,13 @@
       "insight": {
         "value": 0
       },
-      "warding": {
+      "plating": {
         "value": 0
       },
-      "plating": {
+      "fitting": {
+        "value": 0
+      },
+      "bracing": {
         "value": 0
       }
     },
@@ -662,7 +662,7 @@
           "5e-port"
         ],
         "description": {
-          "value": "<p>Radiant petals erupt in a 3 squares radius. On a failure, creatures are also restrained until the start of the Tree Being’s next turn.</p>",
+          "value": "<p>Radiant petals erupt in a 3 squares radius. On a failure, creatures are also restrained until the start of the Tree Being\u2019s next turn.</p>",
           "chat": ""
         }
       },
@@ -699,7 +699,7 @@
           "5e-port"
         ],
         "description": {
-          "value": "<p>Creatures of the Tree Being’s choice within 6 squares must succeed on a Presence check or be stunned until the end of their next turn as the forest imposes alignment pressure.</p>",
+          "value": "<p>Creatures of the Tree Being\u2019s choice within 6 squares must succeed on a Presence check or be stunned until the end of their next turn as the forest imposes alignment pressure.</p>",
           "chat": ""
         }
       },
@@ -780,7 +780,7 @@
           "rangeFt": 0,
           "maintenanceCost": "",
           "riskText": "If the target speaks a truth that wounds the Tree, the Tree takes 1 Stress.",
-          "pathResonance": "Tiferet — beauty as judgment.",
+          "pathResonance": "Tiferet \u2014 beauty as judgment.",
           "fictionalPermission": "May force a public confession and apply Calmed.",
           "gmCalibration": "Sephirotic damage; only fires on a genuine evasion of fear.",
           "mechanicalHook": "2d6 sephirotic to Stress + Calmed on failed Resolve.",

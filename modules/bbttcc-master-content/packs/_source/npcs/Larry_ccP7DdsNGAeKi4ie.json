@@ -242,12 +242,12 @@
         "label": "Plating",
         "value": 0
       },
-      "weave": {
+      "fitting": {
         "attribute": "intrigue",
         "label": "Weave",
         "value": 1
       },
-      "warding": {
+      "bracing": {
         "attribute": "soul",
         "label": "Warding",
         "value": 0
@@ -613,7 +613,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“Darkness climbed into your bones and decided to stay.”</em></p><p><strong>Shadow Resilience.</strong> Your scars drink in hostile power instead of letting it tear you apart.</p><ul><li>You have resistance to <strong>qliphothic damage</strong>.</li><li>Your presence carries a subtle, unsettling weight; you gain a small bonus to Intimidation checks.</li><li>The deeper interactions with corruption, Qliphothic zones, and Darkness tracks are handled by Bad Eden engines and GM judgment.</li></ul>",
+          "value": "<p><em>\u201cDarkness climbed into your bones and decided to stay.\u201d</em></p><p><strong>Shadow Resilience.</strong> Your scars drink in hostile power instead of letting it tear you apart.</p><ul><li>You have resistance to <strong>qliphothic damage</strong>.</li><li>Your presence carries a subtle, unsettling weight; you gain a small bonus to Intimidation checks.</li><li>The deeper interactions with corruption, Qliphothic zones, and Darkness tracks are handled by Bad Eden engines and GM judgment.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -668,7 +668,7 @@
             "expiry": null,
             "expired": false
           },
-          "description": "<p>You have resistance to necrotic damage and a +1 bonus to Intimidation checks. Any extra “corruption handling” stays narrative/BBTTCC-engine side, not automated rolls.</p>",
+          "description": "<p>You have resistance to necrotic damage and a +1 bonus to Intimidation checks. Any extra \u201ccorruption handling\u201d stays narrative/BBTTCC-engine side, not automated rolls.</p>",
           "origin": null,
           "tint": "#ffffff",
           "transfer": true,
@@ -754,7 +754,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Qliphothic Saturation.</strong> The hollows in you are already full of poison light.</p><ul><li>You have resistance to <strong>poison damage</strong>.</li><li>You often sense when a place is spiritually “overclocked” or unsafe; your scars hum in high-corruption zones.</li><li>Any radiation/corruption hooks in Bad Eden are driven by flags on this feature rather than automatic rolls.</li></ul>",
+          "value": "<p><strong>Qliphothic Saturation.</strong> The hollows in you are already full of poison light.</p><ul><li>You have resistance to <strong>poison damage</strong>.</li><li>You often sense when a place is spiritually \u201coverclocked\u201d or unsafe; your scars hum in high-corruption zones.</li><li>Any radiation/corruption hooks in Bad Eden are driven by flags on this feature rather than automatic rolls.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -1160,7 +1160,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>“Send the Qliph-Scarred into the bad places. If they come back smiling, it means the rest of probably can still come back.”</em></p><p><strong>OP Edge.</strong> Your faction leans toward problem-solving in corrupted zones, containment operations, and subtle social pressure.</p><p><strong>Corruption-Tuned.</strong> You help keep others steady in the presence of Darkness, even when it whispers to you first.</p>",
+          "value": "<p><em>\u201cSend the Qliph-Scarred into the bad places. If they come back smiling, it means the rest of probably can still come back.\u201d</em></p><p><strong>OP Edge.</strong> Your faction leans toward problem-solving in corrupted zones, containment operations, and subtle social pressure.</p><p><strong>Corruption-Tuned.</strong> You help keep others steady in the presence of Darkness, even when it whispers to you first.</p>",
           "chat": ""
         },
         "activities": {},
@@ -1303,7 +1303,7 @@
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Qliph-Scarred heritage: Husk.</p><p><em>“What the void took, it didn’t replace. That’s the feature, not the bug.”</em></p><p><strong>Qliph-Scarred (Husk).</strong> Your scar is a hollow. Something was removed from you in a place that should have unmade you, and it never got put back. People who try to read you feel the draft. Manifestations that look inside find less to grab. You walked out emptier, and in this world, emptier can mean harder to kill.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Qliph-Scarred does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Mind</strong> in fiction and through Tier powers.</p></li></ul><h3>Qliph-Scarred Core: What Walked Out</h3><p><em>Shared across all Qliph-Scarred heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Shadow Resilience.</strong> You have resistance to qliphothic damage. You reroll the lowest die on Body checks against effects that would drain, wither, or corrupt your body.</p></li><li><p><strong>Qliphothic Saturation.</strong> Once per scene, when you fail a Soul check, you may reroll it — but your scene's Darkness-gain count increases by 1. The scar pays for what the scar saves.</p></li><li><p><strong>Hunger Mask.</strong> You can suppress a bodily need (hunger, thirst, sleep, breath) for up to 24 hours by deciding to; you do not suffer its penalties during that window. At the end of the 24 hours, all deferred needs strike you at once, each as a separate Stress-class consequence.</p></li><li><p><strong>Shadow-Wake.</strong> Creatures with qliphothic attunement (demons, corrupt sephirot, Radiation-warped entities) can sense you at 12 squares and know you have been marked. They may not know how to read the mark.</p></li></ul><h3>Husk Traits</h3><ul><li><p><strong>Hollow Core.</strong> You have resistance to psychic damage. Creatures attempting to read your thoughts, detect your lies, or determine your emotional state do so at disadvantage. Divination-register effects that would reveal information about you have a 50% chance to return nothing — just the hollow echo of the question.</p></li><li><p><strong>No Weight Inside.</strong> You do not need to eat or drink, though you still may. The void is not demanding, once you learn to carry it.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Non-Lethal OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Empty / Abandoned / Liminal</em> hexes, your faction's infiltration and passage operations cost 1 fewer OP.</p></li><li><p><strong>Nothing to Grab.</strong> Once per Strategic Turn, when a rival faction attempts a divination, intelligence, or surveillance operation targeting your faction, you may force them to reroll that check. They find less than they expected.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Qliphothic Saturation</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Free  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Reroll a failed Soul check. Cost: scene's Darkness-gain count goes up by 1.</span></p></div>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Qliph-Scarred heritage: Husk.</p><p><em>\u201cWhat the void took, it didn\u2019t replace. That\u2019s the feature, not the bug.\u201d</em></p><p><strong>Qliph-Scarred (Husk).</strong> Your scar is a hollow. Something was removed from you in a place that should have unmade you, and it never got put back. People who try to read you feel the draft. Manifestations that look inside find less to grab. You walked out emptier, and in this world, emptier can mean harder to kill.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Qliph-Scarred does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Mind</strong> in fiction and through Tier powers.</p></li></ul><h3>Qliph-Scarred Core: What Walked Out</h3><p><em>Shared across all Qliph-Scarred heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Shadow Resilience.</strong> You have resistance to qliphothic damage. You reroll the lowest die on Body checks against effects that would drain, wither, or corrupt your body.</p></li><li><p><strong>Qliphothic Saturation.</strong> Once per scene, when you fail a Soul check, you may reroll it \u2014 but your scene's Darkness-gain count increases by 1. The scar pays for what the scar saves.</p></li><li><p><strong>Hunger Mask.</strong> You can suppress a bodily need (hunger, thirst, sleep, breath) for up to 24 hours by deciding to; you do not suffer its penalties during that window. At the end of the 24 hours, all deferred needs strike you at once, each as a separate Stress-class consequence.</p></li><li><p><strong>Shadow-Wake.</strong> Creatures with qliphothic attunement (demons, corrupt sephirot, Radiation-warped entities) can sense you at 12 squares and know you have been marked. They may not know how to read the mark.</p></li></ul><h3>Husk Traits</h3><ul><li><p><strong>Hollow Core.</strong> You have resistance to psychic damage. Creatures attempting to read your thoughts, detect your lies, or determine your emotional state do so at disadvantage. Divination-register effects that would reveal information about you have a 50% chance to return nothing \u2014 just the hollow echo of the question.</p></li><li><p><strong>No Weight Inside.</strong> You do not need to eat or drink, though you still may. The void is not demanding, once you learn to carry it.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Non-Lethal OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Empty / Abandoned / Liminal</em> hexes, your faction's infiltration and passage operations cost 1 fewer OP.</p></li><li><p><strong>Nothing to Grab.</strong> Once per Strategic Turn, when a rival faction attempts a divination, intelligence, or surveillance operation targeting your faction, you may force them to reroll that check. They find less than they expected.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>Qliphothic Saturation</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene \u00a0\u00b7\u00a0 <strong>Action:</strong> Free \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Reroll a failed Soul check. Cost: scene's Darkness-gain count goes up by 1.</span></p></div>",
           "chat": ""
         },
         "advancement": [
@@ -1446,7 +1446,7 @@
         "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div data-ft-canon-qliph-scarred=\"v1\" style=\"display:none\"></div><p><em>\"They looked for you in all the usual places. None of them were the right shape.\"</em></p><p><strong>The Quiet Inside (1/Soma Break).</strong> Reaction — when you are targeted by a divination, mind-reading, or truth-detection effect, force the caster to roll their effect against your Resolve instead of its normal save DC.</p><p><strong>Failure:</strong> the effect returns nothing — no partial information, no awareness that a target was present.</p><p><strong>Success:</strong> you take 1 point of Stress from the pressure of the probe.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"qliphHuskQuietInside\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>The Quiet Inside</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Reaction (when probed)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When divination / mind-read / truth-detect targets you, force caster to roll vs your Resolve. Fail → effect returns nothing, no detection. Success → 1 Stress.</span></p></div>",
+          "value": "<div data-ft-canon-qliph-scarred=\"v1\" style=\"display:none\"></div><p><em>\"They looked for you in all the usual places. None of them were the right shape.\"</em></p><p><strong>The Quiet Inside (1/Soma Break).</strong> Reaction \u2014 when you are targeted by a divination, mind-reading, or truth-detection effect, force the caster to roll their effect against your Resolve instead of its normal save DC.</p><p><strong>Failure:</strong> the effect returns nothing \u2014 no partial information, no awareness that a target was present.</p><p><strong>Success:</strong> you take 1 point of Stress from the pressure of the probe.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"qliphHuskQuietInside\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">\u27c1 Per-Use Ability \u2014 <strong>The Quiet Inside</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break \u00a0\u00b7\u00a0 <strong>Action:</strong> Reaction (when probed) \u00a0\u00b7\u00a0 <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When divination / mind-read / truth-detect targets you, force caster to roll vs your Resolve. Fail \u2192 effect returns nothing, no detection. Success \u2192 1 Stress.</span></p></div>",
           "chat": ""
         },
         "advancement": {},
@@ -1531,7 +1531,7 @@
         "source": "",
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">⚙ ENGINE NOTE — Pace is now ◆ Surge.</b> Movement banks Surge (capped per round); your courier moves are the ◆ Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>\"You're already moving. The fight rearranges around it.\"</em></p>\n<p>The Shadow Courier runs on <strong>Surge</strong>, like everyone — but yours comes from <strong>motion</strong>. Move <strong>30+ ft in a turn and you bank +1 Surge</strong> (again at 12 squares, max +2/round). A courier in motion has options; a courier standing still is just a target. The old <em>Pace</em> pool folds into this — same fuel, one number.</p>\n<h3>The Courier (spent via Surge)</h3>\n<ul>\n  <li><strong>Courier's Step</strong> (1) — +half-speed move (no provoke) and a freed reaction; flow through the fight.</li>\n  <li><strong>Ghoststep</strong> (3) — DR equal to Tier till your next turn, and reposition out of danger.</li>\n  <li><strong>Flank &amp; Strike</strong> (5) — reposition, then your next Strike reroll the lowest die <em>and</em> +Tier d6.</li>\n  <li><strong>No Such Door</strong> (8) — allies within Tier squares each gain a freed reaction and a reroll; open the road for the whole team.</li>\n</ul>\n<p>The <strong>Package</strong> endures as your work — designate it, carry it, deliver it. <strong>Delivery banks your Surge to full</strong> and still triggers the route's strategic payoff (Intrigue OP, Darkness reduction, the arrival that mattered).</p>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">\u2699 ENGINE NOTE \u2014 Pace is now \u25c6 Surge.</b> Movement banks Surge (capped per round); your courier moves are the \u25c6 Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>\"You're already moving. The fight rearranges around it.\"</em></p>\n<p>The Shadow Courier runs on <strong>Surge</strong>, like everyone \u2014 but yours comes from <strong>motion</strong>. Move <strong>30+ ft in a turn and you bank +1 Surge</strong> (again at 12 squares, max +2/round). A courier in motion has options; a courier standing still is just a target. The old <em>Pace</em> pool folds into this \u2014 same fuel, one number.</p>\n<h3>The Courier (spent via Surge)</h3>\n<ul>\n  <li><strong>Courier's Step</strong> (1) \u2014 +half-speed move (no provoke) and a freed reaction; flow through the fight.</li>\n  <li><strong>Ghoststep</strong> (3) \u2014 DR equal to Tier till your next turn, and reposition out of danger.</li>\n  <li><strong>Flank &amp; Strike</strong> (5) \u2014 reposition, then your next Strike reroll the lowest die <em>and</em> +Tier d6.</li>\n  <li><strong>No Such Door</strong> (8) \u2014 allies within Tier squares each gain a freed reaction and a reroll; open the road for the whole team.</li>\n</ul>\n<p>The <strong>Package</strong> endures as your work \u2014 designate it, carry it, deliver it. <strong>Delivery banks your Surge to full</strong> and still triggers the route's strategic payoff (Intrigue OP, Darkness reduction, the arrival that mattered).</p>",
           "chat": ""
         },
         "advancement": [
@@ -1596,7 +1596,7 @@
             },
             "value": {},
             "level": 6,
-            "title": "Shadow Courier — Tier 2: The Crossing"
+            "title": "Shadow Courier \u2014 Tier 2: The Crossing"
           },
           {
             "_id": "XTTN4qPwzYgfQmVV",
@@ -1634,7 +1634,7 @@
             },
             "value": {},
             "level": 11,
-            "title": "Shadow Courier — Tier 3: Package Mastery"
+            "title": "Shadow Courier \u2014 Tier 3: Package Mastery"
           },
           {
             "_id": "T33qFY91LUnCWm0K",
@@ -1672,7 +1672,7 @@
             },
             "value": {},
             "level": 16,
-            "title": "Shadow Courier — Tier 4: Unfound Route"
+            "title": "Shadow Courier \u2014 Tier 4: Unfound Route"
           },
           {
             "_id": "vZgryR38AUD5g5Is",
@@ -1743,7 +1743,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>Nobody stays behind.</em></p><p><strong>Mode: Psychopomp / drift: Sideways.</strong></p><p>Your default Package type is a <strong>Soul</strong> — a specific character, creature, or intangible (a secret, a confession, a deathbed wish, a refugee's name, an unfinished obligation) that cannot reach safety on its own.</p><p><strong>While carrying a Soul:</strong></p><ul><li><p>Your movement speed is <strong>reduced by 1 square</strong>, but allies traveling with you gain <strong>+1 square of movement speed</strong> (the Soul's witness-weight pulls them forward).</p></li><li><p>You <strong>reroll the lowest die</strong> on Stealth (Intrigue) and Athletics (Violence) checks made specifically to <strong>protect or conceal the Soul</strong> (not all stealth/athletics — just protective acts).</p></li></ul><p><strong>On delivery:</strong> When you successfully deliver a Soul to safety (the GM confirms the destination counts as safety for that Soul), the recipient faction gains <strong>+1 Morale OP</strong> and <strong>Darkness in the recipient's hex is reduced by 1 point</strong>.</p><p>You may receive a new Soul any time your Package slot is empty.</p>",
+          "value": "<p><em>Nobody stays behind.</em></p><p><strong>Mode: Psychopomp / drift: Sideways.</strong></p><p>Your default Package type is a <strong>Soul</strong> \u2014 a specific character, creature, or intangible (a secret, a confession, a deathbed wish, a refugee's name, an unfinished obligation) that cannot reach safety on its own.</p><p><strong>While carrying a Soul:</strong></p><ul><li><p>Your movement speed is <strong>reduced by 1 square</strong>, but allies traveling with you gain <strong>+1 square of movement speed</strong> (the Soul's witness-weight pulls them forward).</p></li><li><p>You <strong>reroll the lowest die</strong> on Stealth (Intrigue) and Athletics (Violence) checks made specifically to <strong>protect or conceal the Soul</strong> (not all stealth/athletics \u2014 just protective acts).</p></li></ul><p><strong>On delivery:</strong> When you successfully deliver a Soul to safety (the GM confirms the destination counts as safety for that Soul), the recipient faction gains <strong>+1 Morale OP</strong> and <strong>Darkness in the recipient's hex is reduced by 1 point</strong>.</p><p>You may receive a new Soul any time your Package slot is empty.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -1816,7 +1816,7 @@
       "_key": "!actors.items!ccP7DdsNGAeKi4ie.fx57kbPWRM5zwnPA"
     },
     {
-      "name": "Shadow Courier — Tier 1: Liminal Operator",
+      "name": "Shadow Courier \u2014 Tier 1: Liminal Operator",
       "type": "feat",
       "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_4.png",
       "system": {
@@ -1824,7 +1824,7 @@
         "source": "Bad Eden Bulwark + Shadow Courier v1.0 (RFI-native rules)",
         "tags": [],
         "description": {
-          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">⚙ ENGINE NOTE — Pace is now ◆ Surge.</b> Movement banks Surge (capped per round); your courier moves are the ◆ Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>You cross what isn't supposed to be crossed — and you always come out the other side carrying something.</em></p><p><strong>On gaining Shadow Courier Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Stealth (Intrigue)</strong>.</p></li><li><p>Skill rank +1 in <strong>Tinkering (Intrigue)</strong>.</p></li><li><p><strong>Intrigue OP cap +2</strong> and <strong>Logistics OP cap +2</strong> on the faction your character belongs to.</p></li><li><p><strong>Pace</strong> pool comes online (movement-generated). Max = max(2, ceil((Intrigue value + Shadow Courier Initiation) / 3)), capped at 8. Refills on Soma Break and on Package delivery.</p></li><li><p><strong>Package</strong> slot comes online — one Package at a time, type set by your chosen Route at L1.</p></li></ul><p><strong>Pace generation.</strong> Gain 1 Pace when you move at least 6 squares on your turn. Maximum 1 Pace generated per turn from this feature. Doctrine features may add their own generators.</p><p><strong>Baseline Pace spends</strong> (free action, 1 Pace each):</p><ul><li><p>Move 5 extra feet without spending an action.</p></li><li><p>Reroll a single Stealth (Intrigue), Athletics (Violence), or Tinkering (Intrigue) check — keep the new result.</p></li><li><p>Ignore a single reaction strike against you on this turn.</p></li></ul><p><strong>Liminal Sense.</strong> Once per encounter, ignore the first detection-style roll an opponent attempts against you (perception, scrying, Insight to read your intent, etc.). The roll is treated as if it had failed; resources spent on the attempt are not refunded.</p>",
+          "value": "<div class=\"ft-engine-note\" style=\"border:1px solid #a0b8e8;border-left:4px solid #a0b8e8;border-radius:6px;padding:0.45rem 0.6rem;margin:0 0 0.5rem;background:rgba(160,184,232,0.07);font-size:0.84rem\"><b style=\"color:#6a86c8\">\u2699 ENGINE NOTE \u2014 Pace is now \u25c6 Surge.</b> Movement banks Surge (capped per round); your courier moves are the \u25c6 Surge menu's courier kit (Courier's Step / Ghoststep / Flank &amp; Strike / No Such Door + your route's kit). Read <b>Pace</b> as Surge wherever it appears below.</div><p><em>You cross what isn't supposed to be crossed \u2014 and you always come out the other side carrying something.</em></p><p><strong>On gaining Shadow Courier Initiation 1 you receive:</strong></p><ul><li><p>Skill rank +1 in <strong>Stealth (Intrigue)</strong>.</p></li><li><p>Skill rank +1 in <strong>Tinkering (Intrigue)</strong>.</p></li><li><p><strong>Intrigue OP cap +2</strong> and <strong>Logistics OP cap +2</strong> on the faction your character belongs to.</p></li><li><p><strong>Pace</strong> pool comes online (movement-generated). Max = max(2, ceil((Intrigue value + Shadow Courier Initiation) / 3)), capped at 8. Refills on Soma Break and on Package delivery.</p></li><li><p><strong>Package</strong> slot comes online \u2014 one Package at a time, type set by your chosen Route at L1.</p></li></ul><p><strong>Pace generation.</strong> Gain 1 Pace when you move at least 6 squares on your turn. Maximum 1 Pace generated per turn from this feature. Doctrine features may add their own generators.</p><p><strong>Baseline Pace spends</strong> (free action, 1 Pace each):</p><ul><li><p>Move 5 extra feet without spending an action.</p></li><li><p>Reroll a single Stealth (Intrigue), Athletics (Violence), or Tinkering (Intrigue) check \u2014 keep the new result.</p></li><li><p>Ignore a single reaction strike against you on this turn.</p></li></ul><p><strong>Liminal Sense.</strong> Once per encounter, ignore the first detection-style roll an opponent attempts against you (perception, scrying, Insight to read your intent, etc.). The roll is treated as if it had failed; resources spent on the attempt are not refunded.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -2033,10 +2033,10 @@
       "system": {
         "category": "doctrine",
         "classIdentifier": "shadow_courier",
-        "source": "Bad Eden Originals — Sprint F (2026 rules)",
+        "source": "Bad Eden Originals \u2014 Sprint F (2026 rules)",
         "tags": [],
         "description": {
-          "value": "<p><em>\"Give it to me. I carry things.\"</em></p>\n<p><strong>Doctrine:</strong> Carry the unbearable thing to where it must go — intimate, burdensome, exact. Who bears the package now?</p>\n<p>The Last Mile is the courier as the one who refuses to let it fall. Your Surge spends take the weight off others: shoulder their wounds at your own cost, carry an ally through a place that should have killed them, and deliver the unbearable thing intact.</p>\n<h3>Route (spent via Surge)</h3>\n<ul>\n  <li><strong>Shoulder the Weight</strong> (1) — heal an ally Tier d6; you take half as Stress; they bank a reroll.</li>\n  <li><strong>Quiet Voyage</strong> (2) — an ally gains DR equal to Tier, and the next hit that would drop them is held at 1.</li>\n  <li><strong>Delivered</strong> (5) — restore a fallen or badly-hurt ally to half Integrity and clear a condition.</li>\n</ul>",
+          "value": "<p><em>\"Give it to me. I carry things.\"</em></p>\n<p><strong>Doctrine:</strong> Carry the unbearable thing to where it must go \u2014 intimate, burdensome, exact. Who bears the package now?</p>\n<p>The Last Mile is the courier as the one who refuses to let it fall. Your Surge spends take the weight off others: shoulder their wounds at your own cost, carry an ally through a place that should have killed them, and deliver the unbearable thing intact.</p>\n<h3>Route (spent via Surge)</h3>\n<ul>\n  <li><strong>Shoulder the Weight</strong> (1) \u2014 heal an ally Tier d6; you take half as Stress; they bank a reroll.</li>\n  <li><strong>Quiet Voyage</strong> (2) \u2014 an ally gains DR equal to Tier, and the next hit that would drop them is held at 1.</li>\n  <li><strong>Delivered</strong> (5) \u2014 restore a fallen or badly-hurt ally to half Integrity and clear a condition.</li>\n</ul>",
           "chat": ""
         },
         "identifier": "bbttcc-shadow-courier-courier-last-mile",
@@ -2088,7 +2088,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“This must end for something else to begin.”</em></p><p><strong>Archetype (Bad Eden): Death (Transformer).</strong> You are not annihilation. You are necessary ending, painful transition, and the force that cuts dead things loose so the living can survive.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens sacrifice, transition, and value recovered from collapse. This Archetype is associated with <strong>+1 Violence</strong> and <strong>+1 Culture</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul><h3>attributes (Archetype ASI)</h3><p>Common patterns include:</p><ul><li><strong>Merciless Midwife:</strong> +2 Soul, +1 Violence</li><li><strong>Ruin-Reader:</strong> +2 Mind, +1 Soul</li><li><strong>Breaker of Cycles:</strong> +1 Violence, +1 Soul, +1 Body</li></ul>",
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>\u201cThis must end for something else to begin.\u201d</em></p><p><strong>Archetype (Bad Eden): Death (Transformer).</strong> You are not annihilation. You are necessary ending, painful transition, and the force that cuts dead things loose so the living can survive.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens sacrifice, transition, and value recovered from collapse. This Archetype is associated with <strong>+1 Violence</strong> and <strong>+1 Culture</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype\u2019s Tier feats (Tier 1\u20134) for your full tactical and strategic toolkit.</li></ul><h3>attributes (Archetype ASI)</h3><p>Common patterns include:</p><ul><li><strong>Merciless Midwife:</strong> +2 Soul, +1 Violence</li><li><strong>Ruin-Reader:</strong> +2 Mind, +1 Soul</li><li><strong>Breaker of Cycles:</strong> +1 Violence, +1 Soul, +1 Body</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2200,7 +2200,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Crew Type (Bad Eden): Ashbound Survivors.</em></p><p><strong>“You don’t conquer the wasteland. You outlast it.”</strong></p><p>Ashbound Survivors know how to live where maps stop pretending. They ration breath, read heat shimmer like scripture, and treat hostile terrain as a negotiation instead of a death sentence.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Lore.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Economy OPs.</li></ul>",
+          "value": "<p><em>Crew Type (Bad Eden): Ashbound Survivors.</em></p><p><strong>\u201cYou don\u2019t conquer the wasteland. You outlast it.\u201d</strong></p><p>Ashbound Survivors know how to live where maps stop pretending. They ration breath, read heat shimmer like scripture, and treat hostile terrain as a negotiation instead of a death sentence.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Athletics and Lore.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Economy OPs.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-ashbound-survivors",
@@ -2370,7 +2370,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><em>Occult Association (Bad Eden): Shaman.</em></p><p><strong>“You don’t fix the world. You listen to what it’s trying to become.”</strong></p><p>Shamans do not impose order. They enter into relationship.</p><p>To a Shaman, the Great Work is not about forcing alignment onto a dead world. It is about hearing the pulse that is still there and deciding whether to protect it, guide it, or stand aside long enough for it to speak clearly. Every Hex is alive in some way. Every leyline has mood. Every storm is making a decision. Every spirit remembers who treated the land like a partner and who treated it like inventory.</p><p>Where Kabbalists map structure and Alchemists force conversion, Shamans work by <strong>attunement</strong>. They negotiate with terrain, weather, spirits, and flow-states that existed before factions learned to count OP.</p><p><strong>How Shamans pursue the Great Work:</strong></p><ul><li>By listening to terrain, weather, and spirit pressure</li><li>By stabilizing living systems instead of extracting from them</li><li>By redirecting corruption rather than merely containing it</li><li>By treating Hexes as relationships, not assets</li></ul><p><strong>Resonance:</strong> <strong>Netzach / Living Flow</strong> — endurance, ecology, instinctive continuity, and the intelligence of systems nobody designed.</p><p><strong>Tell-tales:</strong> mud where there should not be mud, animals that stop running, weather that feels briefly conversational.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on relevant terrain, travel, weather, or wilderness-facing OP rolls</strong> (GM adjudicates the exact OP lane)</li></ul><p><strong>Cost Principle:</strong> attunement creates obligation. The more the land speaks to you, the less you can pretend not to hear it. Expect spirit attention, place-based duty, and backlash when your faction acts against the needs of a living Hex.</p>",
+          "value": "<p><em>Occult Association (Bad Eden): Shaman.</em></p><p><strong>\u201cYou don\u2019t fix the world. You listen to what it\u2019s trying to become.\u201d</strong></p><p>Shamans do not impose order. They enter into relationship.</p><p>To a Shaman, the Great Work is not about forcing alignment onto a dead world. It is about hearing the pulse that is still there and deciding whether to protect it, guide it, or stand aside long enough for it to speak clearly. Every Hex is alive in some way. Every leyline has mood. Every storm is making a decision. Every spirit remembers who treated the land like a partner and who treated it like inventory.</p><p>Where Kabbalists map structure and Alchemists force conversion, Shamans work by <strong>attunement</strong>. They negotiate with terrain, weather, spirits, and flow-states that existed before factions learned to count OP.</p><p><strong>How Shamans pursue the Great Work:</strong></p><ul><li>By listening to terrain, weather, and spirit pressure</li><li>By stabilizing living systems instead of extracting from them</li><li>By redirecting corruption rather than merely containing it</li><li>By treating Hexes as relationships, not assets</li></ul><p><strong>Resonance:</strong> <strong>Netzach / Living Flow</strong> \u2014 endurance, ecology, instinctive continuity, and the intelligence of systems nobody designed.</p><p><strong>Tell-tales:</strong> mud where there should not be mud, animals that stop running, weather that feels briefly conversational.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on relevant terrain, travel, weather, or wilderness-facing OP rolls</strong> (GM adjudicates the exact OP lane)</li></ul><p><strong>Cost Principle:</strong> attunement creates obligation. The more the land speaks to you, the less you can pretend not to hear it. Expect spirit attention, place-based duty, and backlash when your faction acts against the needs of a living Hex.</p>",
           "chat": ""
         },
         "advancement": {},
@@ -2462,12 +2462,12 @@
         "source": {
           "revision": 1,
           "rules": "2024",
-          "custom": "Bad Eden – Archetype: Death (Transformer) (Tier 1)",
+          "custom": "Bad Eden \u2013 Archetype: Death (Transformer) (Tier 1)",
           "book": ""
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 (Level 1) — Death (Transformer)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Intimidation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "value": "<p><strong>Tier 1 (Level 1) \u2014 Death (Transformer)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Intimidation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
           "chat": ""
         },
         "activities": {},
@@ -2612,7 +2612,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Ashbound Survivors</strong></p><p><em>You’ve learned the first mercy of dead land: preparation beats optimism.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Lore.</li><li><strong>Strategic:</strong> In Desert, Ash Wastes, and Wasteland hexes, environmental travel penalties are reduced and hazard pressure is easier to withstand.</li></ul>",
+          "value": "<p><strong>Tier 1 \u2014 Ashbound Survivors</strong></p><p><em>You\u2019ve learned the first mercy of dead land: preparation beats optimism.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Lore.</li><li><strong>Strategic:</strong> In Desert, Ash Wastes, and Wasteland hexes, environmental travel penalties are reduced and hazard pressure is easier to withstand.</li></ul>",
           "chat": ""
         },
         "identifier": "crew-ashbound-survivors-t1",
@@ -2774,7 +2774,7 @@
         },
         "tags": [],
         "description": {
-          "value": "<p><strong>Tier 1 — Shaman</strong></p><p><strong>“It was talking before. You just couldn’t hear it yet.”</strong></p><p>At Tier 1, you become perceptible to the world and the world becomes perceptible to you.</p><p>You can feel when a place is hungry, when a storm is about to turn mean, and when a Hex is carrying more pressure than its surface suggests. You are not commanding Lore yet. You are learning its tone.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Lore</strong> and <strong>Athletics</strong></li><li>You can perform a brief attunement to sense whether a nearby area is spiritually calm, distressed, corrupted, or unusually resonant</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Hex Attunement:</strong> upon entering a new Hex, you learn one of the following about it: dominant flow-state, unusual weather pressure, leyline disturbance, or corruption presence</li><li>Once per Strategic Turn, gain <strong>+1</strong> to one relevant travel, terrain, or wilderness-facing OP roll</li></ul><p><strong>Cost:</strong> once the world starts speaking to you, silence gets rare. Expect distraction, omen pressure, or spirit agitation when your faction ignores what a place is telling you.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"shamT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Hex Attunement</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">+1 to one travel/terrain/wilderness OP roll. (On-entry hex read is passive.)</div>\n</div>",
+          "value": "<p><strong>Tier 1 \u2014 Shaman</strong></p><p><strong>\u201cIt was talking before. You just couldn\u2019t hear it yet.\u201d</strong></p><p>At Tier 1, you become perceptible to the world and the world becomes perceptible to you.</p><p>You can feel when a place is hungry, when a storm is about to turn mean, and when a Hex is carrying more pressure than its surface suggests. You are not commanding Lore yet. You are learning its tone.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Lore</strong> and <strong>Athletics</strong></li><li>You can perform a brief attunement to sense whether a nearby area is spiritually calm, distressed, corrupted, or unusually resonant</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Hex Attunement:</strong> upon entering a new Hex, you learn one of the following about it: dominant flow-state, unusual weather pressure, leyline disturbance, or corruption presence</li><li>Once per Strategic Turn, gain <strong>+1</strong> to one relevant travel, terrain, or wilderness-facing OP roll</li></ul><p><strong>Cost:</strong> once the world starts speaking to you, silence gets rare. Expect distraction, omen pressure, or spirit agitation when your faction ignores what a place is telling you.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"shamT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">\u27c1 Per-Use Ability \u2014 <strong>Hex Attunement</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;\u00b7&nbsp; <strong>Action:</strong> Strategic &nbsp;\u00b7&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">+1 to one travel/terrain/wilderness OP roll. (On-entry hex read is passive.)</div>\n</div>",
           "chat": ""
         },
         "advancement": {},
@@ -2931,7 +2931,7 @@
         "evasionBonus": 1,
         "resolveBonus": 0,
         "resistances": [],
-        "armorSkill": "weave",
+        "armorSkill": "fitting",
         "equipped": true,
         "tags": [
           "t1-baseline",
@@ -2992,7 +2992,7 @@
       "_id": "SCl7NghN2JMjDhky",
       "effects": [
         {
-          "name": "⚙️ Defense Grant",
+          "name": "\u2699\ufe0f Defense Grant",
           "transfer": false,
           "disabled": false,
           "flags": {
@@ -3469,7 +3469,7 @@
                 "table": null
               },
               "signals": {},
-              "lore": "<p>Standard-issue field knife. Single-edge, thumb groove, hard sheath that clips to a belt or boot. The first weapon most Stewards carry and the last one they put down. Honest steel — no signature, no story, just edge.</p><p><b>Standard Issue.</b> Light enough for off-hand work; close enough for the kind of conversation knives are for.</p>",
+              "lore": "<p>Standard-issue field knife. Single-edge, thumb groove, hard sheath that clips to a belt or boot. The first weapon most Stewards carry and the last one they put down. Honest steel \u2014 no signature, no story, just edge.</p><p><b>Standard Issue.</b> Light enough for off-hand work; close enough for the kind of conversation knives are for.</p>",
               "materialOf": [
                 "scrap-steel",
                 "leather-grip"

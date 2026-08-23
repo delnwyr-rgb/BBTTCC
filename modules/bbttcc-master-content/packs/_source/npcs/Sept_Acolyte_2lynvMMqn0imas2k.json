@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "Lower-rung ritualist of the Sept. Channels small blessings and minor wards.",
     "details": {
-      "level": 2,
+      "level": 8,
       "tier": 2,
       "statPoints": 0,
       "skillPoints": 0
@@ -191,7 +191,7 @@
             "ransom": 750,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "TII light caster (bestiary) — bounty 450 / hire 1125 / ransom 750 marks (paid in softpower)"
+            "notes": "TII light caster (bestiary) \u2014 bounty 450 / hire 1125 / ransom 750 marks (paid in softpower)"
           }
         }
       }
@@ -439,7 +439,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack × 1",
+                "notes": "TII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 60
               }
@@ -671,7 +671,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 15 ft. — targets roll vs Resolve (DC 13). Half damage on success. Failed-save targets lose their Reaction until the start of their next turn (the prayer asks them, politely, to wait). Recharge 5–6.",
+        "effect": "Radius 15 ft. \u2014 targets roll vs Resolve (DC 13). Half damage on success. Failed-save targets lose their Reaction until the start of their next turn (the prayer asks them, politely, to wait). Recharge 5\u20136.",
         "flavor": "A single word, spoken by someone who hasn't quite earned it. It works anyway.",
         "manifestation": {
           "tier": 1,
@@ -727,7 +727,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII save × 1",
+                "notes": "TII save \u00d7 1",
                 "bound": "free",
                 "saleBack": 60
               }
@@ -736,7 +736,7 @@
         },
         "autoanimations": {
           "id": "ft-prayer-of-pause-recharge-5-6-",
-          "label": "Prayer-of-Pause (Recharge 5–6)",
+          "label": "Prayer-of-Pause (Recharge 5\u20136)",
           "macro": {
             "enable": false,
             "playWhen": "0"

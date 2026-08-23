@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "A broken fragment of the structure that learned exactly one trick and got stuck on it. It does not attack. It waits for you to, and then it gives it back. The Qliphoth, as Mal puts it, is the universe please-stop-hitting-yourself-ing itself.",
     "details": {
-      "level": 3,
+      "level": 13,
       "tier": 3,
       "statPoints": 0,
       "skillPoints": 0
@@ -322,7 +322,7 @@
           "reflection",
           "qliphothic"
         ],
-        "effect": "Reaction, when hit by a melee attack: the attacker rolls Mind vs DC 15. Fail: takes 2d8 qliphothic — its own force turned back on it.",
+        "effect": "Reaction, when hit by a melee attack: the attacker rolls Mind vs DC 15. Fail: takes 2d8 qliphothic \u2014 its own force turned back on it.",
         "flavor": "",
         "manifestation": {
           "tier": 1,
@@ -356,7 +356,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Reaction — Reflection.</strong> Attacker rolls Mind vs DC 15. Fail: <code>2d8</code> qliphothic (their own blow).</p><p><em>Why are you hitting yourself? Why are you hitting yourself?</em></p>",
+          "value": "<p><strong>Reaction \u2014 Reflection.</strong> Attacker rolls Mind vs DC 15. Fail: <code>2d8</code> qliphothic (their own blow).</p><p><em>Why are you hitting yourself? Why are you hitting yourself?</em></p>",
           "chat": ""
         }
       },

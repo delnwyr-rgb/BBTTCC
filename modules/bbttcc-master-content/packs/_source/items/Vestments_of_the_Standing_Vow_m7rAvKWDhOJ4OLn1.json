@@ -9,7 +9,7 @@
     "resistances": [
       "qliphothic"
     ],
-    "armorSkill": "warding",
+    "armorSkill": "bracing",
     "equipped": false,
     "tags": [
       "warding",
@@ -20,7 +20,7 @@
     "category": "armor",
     "source": "",
     "description": {
-      "value": "<p>Formal warding vestments worn when a Steward swears an oath meant to outlast them. Vow-bone toggles, a hem weighted with witness-glass beads that click once for every promise kept. While the vow stands, no one else's word can move the wearer off it.</p><p><b>Standing Vow.</b> Resists qliphothic. The wearer cannot be compelled while attuned.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Guard +2, Evasion +1, Resolve +3</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Immune to:</strong> Compelled</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 675 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+      "value": "<p>Formal warding vestments worn when a Steward swears an oath meant to outlast them. Vow-bone toggles, a hem weighted with witness-glass beads that click once for every promise kept. While the vow stands, no one else's word can move the wearer off it.</p><p><b>Standing Vow.</b> Resists qliphothic. The wearer cannot be compelled while attuned.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>\u2699\ufe0f Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Defense:</strong> Guard +2, Evasion +1, Resolve +3</li>\n  <li><strong>Requires:</strong> Warding (trained)</li>\n  <li><strong>Resistance:</strong> Qliphothic</li>\n  <li><strong>Immune to:</strong> Compelled</li>\n  <li><strong>Tier:</strong> III</li>\n  <li><strong>Cost:</strong> 675 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
       "chat": ""
     }
   },
@@ -58,7 +58,7 @@
             "altCurrencies": {},
             "split": null,
             "rarityMult": 1,
-            "notes": "TIII armor × 1.50",
+            "notes": "TIII armor \u00d7 1.50",
             "bound": "attuned",
             "saleBack": 270
           }

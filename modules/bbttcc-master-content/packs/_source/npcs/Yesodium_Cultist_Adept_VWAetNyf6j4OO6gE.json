@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "A devotee who learned to hum the Yesodium-channel. Each spell is also a wound.",
     "details": {
-      "level": 3,
+      "level": 13,
       "tier": 3,
       "statPoints": 0,
       "skillPoints": 0
@@ -196,7 +196,7 @@
             "ransom": 5400,
             "currency": "softpower",
             "gmOverride": false,
-            "notes": "TIII medium caster (bestiary) — bounty 3240 / hire 8100 / ransom 5400 marks (paid in softpower)"
+            "notes": "TIII medium caster (bestiary) \u2014 bounty 3240 / hire 8100 / ransom 5400 marks (paid in softpower)"
           }
         }
       }
@@ -444,7 +444,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII attack × 1",
+                "notes": "TIII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 180
               }
@@ -676,7 +676,7 @@
           "aoe",
           "shape-cone"
         ],
-        "effect": "Cone 25 ft. — targets roll vs Resolve (DC 14). Half damage on success. Failed-save targets cannot use Bonus Actions on their next turn (the channel-hum displaces their secondary tempo). Recharge 5–6.",
+        "effect": "Cone 25 ft. \u2014 targets roll vs Resolve (DC 14). Half damage on success. Failed-save targets cannot use Bonus Actions on their next turn (the channel-hum displaces their secondary tempo). Recharge 5\u20136.",
         "flavor": "The note finds its way into your ribs. Your ribs hum back, against your will.",
         "manifestation": {
           "tier": 1,
@@ -732,7 +732,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII save × 1",
+                "notes": "TIII save \u00d7 1",
                 "bound": "free",
                 "saleBack": 180
               }
@@ -741,7 +741,7 @@
         },
         "autoanimations": {
           "id": "ft-channel-feedback-recharge-5-6-",
-          "label": "Channel-Feedback (Recharge 5–6)",
+          "label": "Channel-Feedback (Recharge 5\u20136)",
           "macro": {
             "enable": false,
             "playWhen": "0"

@@ -1,14 +1,14 @@
 {
-  "name": "Wendigo Maître-D'",
+  "name": "Wendigo Ma\u00eetre-D'",
   "type": "npc",
   "img": "art/devin-knight/MayFantasy/Thin_Witch_hi.webp",
   "system": {
     "role": "stealth",
     "tier": 3,
     "factionId": "",
-    "notes": "Too tall for the doorway it just walked through. Asks if you have a reservation. You do, apparently. You always did. There was something a bit OFF about them though…",
+    "notes": "Too tall for the doorway it just walked through. Asks if you have a reservation. You do, apparently. You always did. There was something a bit OFF about them though\u2026",
     "details": {
-      "level": 3,
+      "level": 13,
       "tier": 3,
       "statPoints": 0,
       "skillPoints": 0
@@ -204,7 +204,7 @@
   },
   "_id": "VWt7r4vT7Ib4Nvl4",
   "prototypeToken": {
-    "name": "Wendigo Maître-D'",
+    "name": "Wendigo Ma\u00eetre-D'",
     "displayName": 30,
     "actorLink": false,
     "width": 1,
@@ -321,7 +321,7 @@
           "charm",
           "single-target"
         ],
-        "effect": "One creature within 30 ft. rolls Soul vs DC 15. Fail: Compelled — it must use its next turn moving toward the Maître-D' and may take no hostile action against it. Repeats save at end of each of its turns.",
+        "effect": "One creature within 30 ft. rolls Soul vs DC 15. Fail: Compelled \u2014 it must use its next turn moving toward the Ma\u00eetre-D' and may take no hostile action against it. Repeats save at end of each of its turns.",
         "flavor": "",
         "manifestation": {
           "tier": 1,
@@ -355,7 +355,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Compel.</strong> Soul check vs DC 15. Fail: Compelled to approach, cannot attack the Maître-D'. Re-save end of turn.</p><p><em>\"Right this way. We've been holding it for you.\"</em></p>",
+          "value": "<p><strong>Compel.</strong> Soul check vs DC 15. Fail: Compelled to approach, cannot attack the Ma\u00eetre-D'. Re-save end of turn.</p><p><em>\"Right this way. We've been holding it for you.\"</em></p>",
           "chat": ""
         }
       },
@@ -387,7 +387,7 @@
         "bbttcc": {
           "npcAbility": {
             "sources": [
-              "Wendigo Maître-D'"
+              "Wendigo Ma\u00eetre-D'"
             ],
             "worlds": [
               "ember",
@@ -678,7 +678,7 @@
         "bbttcc": {
           "npcAbility": {
             "sources": [
-              "Wendigo Maître-D'"
+              "Wendigo Ma\u00eetre-D'"
             ],
             "worlds": [
               "ember",
@@ -974,7 +974,7 @@
         "bbttcc": {
           "npcAbility": {
             "sources": [
-              "Wendigo Maître-D'"
+              "Wendigo Ma\u00eetre-D'"
             ],
             "worlds": [
               "ember",

@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "Soldier whose loyalty is enforced by a vow-bone implant. Will die before breaking it.",
     "details": {
-      "level": 2,
+      "level": 8,
       "tier": 2,
       "statPoints": 0,
       "skillPoints": 0
@@ -199,7 +199,7 @@
             "ransom": 750,
             "currency": "diplomacy",
             "gmOverride": false,
-            "notes": "TII light hardened (bestiary) — bounty 450 / hire 1125 / ransom 750 marks (paid in diplomacy)"
+            "notes": "TII light hardened (bestiary) \u2014 bounty 450 / hire 1125 / ransom 750 marks (paid in diplomacy)"
           }
         }
       }
@@ -397,7 +397,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 10 ft. — targets roll vs Guard (DC 12). Half damage on success. The thrall plants their feet. Failed-save targets are knocked prone and pushed 5 ft. away. The thrall cannot be moved by any means until the end of their next turn. 1/Day.",
+        "effect": "Radius 10 ft. \u2014 targets roll vs Guard (DC 12). Half damage on success. The thrall plants their feet. Failed-save targets are knocked prone and pushed 5 ft. away. The thrall cannot be moved by any means until the end of their next turn. 1/Day.",
         "flavor": "There is no second-to-last stand. There is only this one.",
         "manifestation": {
           "tier": 1,
@@ -453,7 +453,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII save × 1",
+                "notes": "TII save \u00d7 1",
                 "bound": "free",
                 "saleBack": 60
               }
@@ -735,7 +735,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TII attack × 1",
+                "notes": "TII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 60
               }

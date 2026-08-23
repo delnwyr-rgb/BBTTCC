@@ -8,7 +8,7 @@
     "factionId": "",
     "notes": "An ancient battlefield AI in a still-functioning frame. Patient. Catastrophic.",
     "details": {
-      "level": 3,
+      "level": 13,
       "tier": 3,
       "statPoints": 0,
       "skillPoints": 0
@@ -205,7 +205,7 @@
             "ransom": 11250,
             "currency": "intrigue",
             "gmOverride": false,
-            "notes": "TIII heavy hardened (bestiary) — bounty 6750 / hire 16875 / ransom 11250 marks (paid in intrigue)"
+            "notes": "TIII heavy hardened (bestiary) \u2014 bounty 6750 / hire 16875 / ransom 11250 marks (paid in intrigue)"
           }
         }
       }
@@ -453,7 +453,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII attack × 1",
+                "notes": "TIII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 180
               }
@@ -683,7 +683,7 @@
           "tier-iii",
           "role-hardened"
         ],
-        "effect": "The battlemind attacks all enemies within reach in a single calculated motion — make one attack roll, apply to all.",
+        "effect": "The battlemind attacks all enemies within reach in a single calculated motion \u2014 make one attack roll, apply to all.",
         "flavor": "The same swing was the optimal answer to three different problems.",
         "manifestation": {
           "tier": 1,
@@ -717,7 +717,7 @@
           }
         },
         "description": {
-          "value": "<p><strong>Strike.</strong> reach 2 squares, one target. Damage: <code>2d10</code> kinetic (frame-arm) + violence. The battlemind attacks all enemies within reach in a single calculated motion — make one attack roll, apply to all.</p><p><em>The same swing was the optimal answer to three different problems.</em></p>",
+          "value": "<p><strong>Strike.</strong> reach 2 squares, one target. Damage: <code>2d10</code> kinetic (frame-arm) + violence. The battlemind attacks all enemies within reach in a single calculated motion \u2014 make one attack roll, apply to all.</p><p><em>The same swing was the optimal answer to three different problems.</em></p>",
           "chat": ""
         }
       },
@@ -735,7 +735,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII attack × 1",
+                "notes": "TIII attack \u00d7 1",
                 "bound": "free",
                 "saleBack": 180
               }
@@ -967,7 +967,7 @@
           "aoe",
           "shape-radius"
         ],
-        "effect": "Radius 30 ft. — targets roll vs Resolve (DC 13). Half damage on success. On a failed save, the target loses any benefits they've gained this combat (buffs, marks, advantage states). The battlemind reads them in as if combat just started. Recharge 6.",
+        "effect": "Radius 30 ft. \u2014 targets roll vs Resolve (DC 13). Half damage on success. On a failed save, the target loses any benefits they've gained this combat (buffs, marks, advantage states). The battlemind reads them in as if combat just started. Recharge 6.",
         "flavor": "It restarts the simulation. You feel yourself reset, three seconds back. Three seconds you've already lost.",
         "manifestation": {
           "tier": 1,
@@ -1023,7 +1023,7 @@
                 "altCurrencies": {},
                 "split": null,
                 "rarityMult": 1,
-                "notes": "TIII save × 1",
+                "notes": "TIII save \u00d7 1",
                 "bound": "free",
                 "saleBack": 180
               }
