@@ -127,6 +127,25 @@ const SETTING_CADENCE_UNCONTESTED = "cadenceUncontested";
 // hidden 0–4 counter; every rung beat gates on it with { flag, gte }. Raised by
 // the GM today (see seed-*.macro.js headers); when the "hex refuses consequence"
 // substrate lands (`noncanon` / `stasis` / `cushioned`) the engine drives them.
+// ── GEBURAH CONDUCT LEDGER (2026-08-18) ───────────────────────────────────
+// The Lost Stone Statues grade, and they confer. Two 0–3 counters recording
+// HOW each fragment was taken; the statues' later greetings and the final
+// verdict gate on them. Canon already said they knew ("somewhere in the
+// distance, something old and martial decides you may not be a joke after
+// all") — this makes the knowing mechanical.
+const SETTING_GEBURAH_EARNED = "geburahEarned";
+const SETTING_GEBURAH_FORCED = "geburahForced";
+const GEBURAH_EARNED_BEAT_IDS = new Set([
+  "spark_geburah_northreach_b_worthy",
+  "spark_geburah_mountains_q_worthy",
+  "spark_geburah_mountains_o_worthy"
+]);
+const GEBURAH_FORCED_BEAT_IDS = new Set([
+  "spark_geburah_northreach_b_force",
+  "spark_geburah_mountains_q_force",
+  "spark_geburah_mountains_o_force"
+]);
+
 const SETTING_CHUCKLE_SEEN   = "chucklecreekSeen";
 const SETTING_STILLWATER_CRACK = "stillwaterCrack";
 const SETTING_SOFTLANDING_GIVE = "softlandingGive";
@@ -2001,6 +2020,29 @@ async function _sacrificeHpToFactionOp(actor, faction, opKey, hpCost, reason) {
 
 
 
+// fourththing lane (2026-08-22): this system has no rollSkill and stores no
+// `abilities`, so every actor-side beat check was silently falling through to
+// a NAKED 1d20 — the campaign's skill scenes were stat-blind coin flips.
+// Content was also authored with dnd5e-era 3-letter codes; alias them to the
+// system's real skill keys and roll through the system's own skillCheck
+// (2d10x10 + faculty + rank, Surge-aware). Freeform stats like
+// "Investigation (Mind)" resolve by their first word.
+const _FT_SKILL_ALIASES = {
+  per: "perception", prc: "perception", inv: "investigation", ins: "insight",
+  arc: "occult", rel: "faith", nat: "lore", his: "lore", sur: "lore",
+  prf: "performance", ath: "athletics", acr: "athletics", ste: "stealth",
+  slt: "streetwise", dec: "streetwise", itm: "intimidation", med: "meditation",
+  dip: "diplomacy", emp: "empathy", pil: "piloting", hac: "hacking", tin: "tinkering",
+  // 2026-08-22 armor-skill rename: weave→fitting (light), warding→bracing (medium).
+  weave: "fitting", warding: "bracing"
+};
+function _ftSkillKeyFor(stat) {
+  let s = String(stat || "").trim().toLowerCase();
+  const m = s.match(/^([a-z]+)/);
+  if (m) s = m[1];
+  return _FT_SKILL_ALIASES[s] || s;
+}
+
 async function _rollChoiceCheck(choice, ctx={}) {
   const stat = String(choice.checkStat || "").trim().toLowerCase();
   const dc = _num(choice.checkDC, 0);
@@ -2032,6 +2074,25 @@ async function _rollChoiceCheck(choice, ctx={}) {
   if (ctx.rosterActorId) actor = game.actors.get(ctx.rosterActorId) || null;
   if (actor) {
     try {
+
+      // fourththing lane — must run BEFORE the dnd5e-shaped branches below
+      // (this system satisfies neither `rollSkill` nor `system.abilities`).
+      const ftRolls = game.fourththing?.rolls;
+      if (ftRolls?.skillCheck) {
+        const ftSys = actor.system?.system ?? actor.system;
+        const ftKey = _ftSkillKeyFor(stat);
+        if (ftSys?.skills && ftKey && ftSys.skills[ftKey]) {
+          const r = await ftRolls.skillCheck(actor, { skill: ftKey });
+          const total = _num(r?.total, 0) + supportBonus;
+          return { kind:"actor", subkind:"ft-skill", stat, skill:ftKey, dc, actorName:actor.name, total, ok: total>=dc, roll:r?.roll ?? null, support:{ opKey:supportKey, spend:supportSpend, bonus:supportBonus } };
+        }
+        if (ftSys?.attributes && ftKey && ftSys.attributes[ftKey]) {
+          const av = _num(ftSys.attributes[ftKey]?.value, 0);
+          const r = await _evalRoll(new Roll("2d10x10 + @a", { a: av }));
+          const total = (r.total ?? 0) + supportBonus;
+          return { kind:"actor", subkind:"ft-faculty", stat, faculty:ftKey, dc, actorName:actor.name, total, ok: total>=dc, roll:r, support:{ opKey:supportKey, spend:supportSpend, bonus:supportBonus } };
+        }
+      }
 
       // Saving throw support: checkStat "save.str" / "save.dex" / etc.
       if (stat.indexOf("save.") === 0) {
@@ -4148,6 +4209,8 @@ function _resolveGateValue(name) {
     case "cadenceRespect":     return _banditMeterGet(SETTING_CADENCE_RESPECT);     // Cadence: cameo owed
     case "cadenceTribute":     return _banditMeterGet(SETTING_CADENCE_TRIBUTE);     // Cadence: rematch standing
     case "cadenceUncontested": return _banditMeterGet(SETTING_CADENCE_UNCONTESTED); // Cadence: border show
+    case "geburahEarned": return _banditMeterGet(SETTING_GEBURAH_EARNED);        // Geburah fragments taken by restraint (0-3)
+    case "geburahForced": return _banditMeterGet(SETTING_GEBURAH_FORCED);        // Geburah fragments taken by force (0-3)
     case "chucklecreekSeen": return _banditMeterGet(SETTING_CHUCKLE_SEEN);       // Chuckle Creek indict rung (0-4)
     case "stillwaterCrack":  return _banditMeterGet(SETTING_STILLWATER_CRACK);   // Stillwater crack rung (0-4)
     case "softlandingGive":  return _banditMeterGet(SETTING_SOFTLANDING_GIVE);   // Soft Landing give rung (0-4)
@@ -6553,6 +6616,28 @@ async function _postWendigoRungCard(rung) {
     warn("[wendigo-rung] card failed:", e);
   }
 }
+// The statues confer. Each fragment outcome bumps the matching counter; the
+// later arrivals and the final verdict read the ledger. Pure reaction — the
+// beat runner fires `bbttcc:beat:resolved` and this only counts.
+async function _onBeatResolvedGeburah({ beat } = {}) {
+  try {
+    if (!game.user?.isGM) return;                 // only the GM writes world settings
+    const id = beat?.id;
+    if (!id) return;
+    const earned = GEBURAH_EARNED_BEAT_IDS.has(id);
+    const forced = GEBURAH_FORCED_BEAT_IDS.has(id);
+    if (!earned && !forced) return;
+    const key = earned ? SETTING_GEBURAH_EARNED : SETTING_GEBURAH_FORCED;
+    const cur = _banditMeterGet(key);
+    const next = Math.min(3, cur + 1);
+    if (next === cur) { log(`[geburah] '${id}' fired; ${key} already at max ${cur}.`); return; }
+    await game.settings.set(MOD_ID, key, next);
+    log(`[geburah] '${id}' → ${key} ${cur} → ${next} (earned ${_banditMeterGet(SETTING_GEBURAH_EARNED)} / forced ${_banditMeterGet(SETTING_GEBURAH_FORCED)}).`);
+  } catch (e) {
+    warn("[geburah] ledger increment failed:", e);
+  }
+}
+
 async function _onBeatResolvedWendigoRung({ beat } = {}) {
   try {
     if (!game.user?.isGM) return;                 // only the GM can write world settings
@@ -7037,6 +7122,17 @@ Hooks.once("init", () => {
     default: 0
   });
 
+  // Geburah conduct ledger (0-3 each). Written by the fragment outcome beats.
+  for (const [key, name] of [
+    [SETTING_GEBURAH_EARNED, "Bad Eden Geburah Earned"],
+    [SETTING_GEBURAH_FORCED, "Bad Eden Geburah Forced"]
+  ]) {
+    game.settings.register(MOD_ID, key, {
+      name, hint: "Internal: how the Lost Stone Statues' fragments were taken. Drives the statues' later greetings and the final verdict.",
+      scope: "world", config: false, type: Number, default: 0
+    });
+  }
+
   // Grief-Refusals indict ladders (0-4). GM-raised until the frozen-hex engine exists.
   for (const [key, name] of [
     [SETTING_CHUCKLE_SEEN,     "Bad Eden Chuckle Creek Rung"],
@@ -7167,6 +7263,7 @@ Hooks.once("ready", () => {
   // Forgotten-Cause arc (step 1): bump the per-world Wendigo rung when a Wendigo
   // travel beat resolves. Pure reactive subscriber — no behavior change to beats.
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedWendigoRung);
+  Hooks.on("bbttcc:beat:resolved", _onBeatResolvedGeburah);
   // Forgotten-Cause arc (step 3): move feud state (causeRecovered / heat /
   // peace-by-deletion) when the Confluence + Cultural Summit beats resolve.
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedFeudState);

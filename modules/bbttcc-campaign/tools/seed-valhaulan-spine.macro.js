@@ -138,7 +138,7 @@
       { requires: { questBucket: Q_MALL, is: "completed" }, levelEffects: { stewardLevelFloor: 4 } }),
 
     bridge("vs_bridge_muster", "The Sky Is Waiting",
-      "It holds together now, all of it: the seal that pointed outward, the heading, the manifests, and the ledger of a mine that got hurt so somewhere else wouldn't. The Valhaulans are sitting on a pre-Shattering Containment Sink with a Yesodic Spark inside, reorienting other people's debt on Monodynamic's quiet coin — and they may not even know whose hand is on their tiller. So: muster the coalition. Count your Operations. Ask the Circuit Riders if they feel like riding along. The bunker isn't hidden — they orbit it. You aren't sneaking into a facility. You're crashing a court.",
+      "It holds together now, all of it: the seal that pointed outward, the heading, the manifests, and the ledger of a mine that got hurt so somewhere else wouldn't. The Valhaulans are sitting on a pre-Shattering Containment Sink with a Yesodic Spark inside, reorienting other people's debt on somebody else's quiet coin — and they may not even know whose hand is on their tiller. So: muster the coalition. Count your Operations. Ask the Circuit Riders if they feel like riding along. The bunker isn't hidden — they orbit it. You aren't sneaking into a facility. You're crashing a court.",
       { requires: [ { questBucket: Q_MALL, is: "completed" }, { questBucket: Q_VAULT, is: "completed" } ],
         levelEffects: { stewardLevelFloor: 5, factionTierFloor: 1 } })
   ];

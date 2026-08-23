@@ -26,7 +26,7 @@
  * DRY_RUN default true. Idempotent. GM only. Run on EACH instance.
  */
 (async () => {
-  const DRY_RUN      = true;    // <-- set false to apply
+  const DRY_RUN      = false;    // <-- set false to apply
   const HARD_DELETE  = false;   // true = remove the stray duplicate outright
   const NS = "bbttcc-campaign";
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
