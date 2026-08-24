@@ -3614,6 +3614,49 @@ async function executeBeat(campaign, beat, ctx = {}) {
   } catch (e) {
     warn("bbttcc:beat:resolved listeners failed:", e);
   }
+
+  // Quest offer (2026-08-24, owner spec): a beat may carry
+  //   offerQuest = { questId, acceptBeatId, label?, text? }
+  // On resolution it posts a public ASSIGNMENT card; accepting runs the
+  // accept beat — which should itself carry the questEffects `accept` row,
+  // so accepting IS what begins tracking. The table decides; the GM's click
+  // seals it (runBeat is a world write).
+  try {
+    const oq = beat?.offerQuest;
+    if (oq && oq.acceptBeatId && game.user?.isGM) {
+      const esc = foundry.utils.escapeHTML;
+      const qname = String(oq.label || oq.questId || "the assignment");
+      await ChatMessage.create({
+        content:
+          `<div class="bbttcc-quest-offer" data-campaign-id="${esc(String(campaign.id))}" data-accept-beat="${esc(String(oq.acceptBeatId))}">` +
+          `<h3>📜 Assignment offered: ${esc(qname)}</h3>` +
+          (oq.text ? `<p>${oq.text}</p>` : "") +
+          `<p style="font-size:0.8rem;opacity:0.8">The table decides. Accepting opens the questline.</p>` +
+          `<button type="button" class="bbttcc-quest-accept">✓ Accept the assignment</button></div>`
+      });
+    }
+  } catch (e) { warn("quest-offer card failed:", e); }
+}
+
+// Quest-offer accept binder (both chat-render hooks, per the war-log pattern
+// below). GM click runs the accept beat; players get pointed at their GM.
+for (const hk of ["renderChatMessageHTML", "renderChatMessage"]) {
+  Hooks.on(hk, (_msg, html) => {
+    const root = html?.[0] ?? html;
+    root?.querySelectorAll?.(".bbttcc-quest-accept")?.forEach(btn => {
+      if (btn.dataset.bbttccBound) return;
+      btn.dataset.bbttccBound = "1";
+      btn.addEventListener("click", async () => {
+        if (!game.user?.isGM) return ui.notifications?.warn?.("Tell your GM the table accepts — their click seals it.");
+        const wrap = btn.closest(".bbttcc-quest-offer");
+        const cid = wrap?.dataset?.campaignId, bid = wrap?.dataset?.acceptBeat;
+        if (!cid || !bid) return;
+        btn.disabled = true; btn.textContent = "✓ Accepted — opening…";
+        try { await game.bbttcc.api.campaign.runBeat(cid, bid); }
+        catch (e) { console.warn("[bbttcc-campaign] quest accept failed", e); btn.disabled = false; }
+      });
+    });
+  });
 }
 
 async function runCampaign(id, ctx = {}) {
