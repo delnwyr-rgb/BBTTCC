@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p>Spend Civic Charge to <strong>Invoke Precedent</strong>.</p><ul><li>Cite Precedent</li><li>Establish Record</li><li>Suppress Contradiction</li></ul><p>This action should route to the Pactkeeper Precedent dialog and may reduce Administrative Pressure when appropriate.</p>",
+      "value": "<p>Spend Surge to <strong>Invoke Precedent</strong>.</p><ul><li>Cite Precedent</li><li>Establish Record</li><li>Suppress Contradiction</li></ul><p>This action should route to the Pactkeeper Precedent dialog and may reduce Noise when appropriate.</p><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired \u2014 everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p>",
       "chat": ""
     },
     "identifier": "pactkeeper_invoke_precedent_action",
