@@ -221,16 +221,23 @@ function _registerOps() {
   // elevation — precisely the "vertical via token.document.elevation, never the
   // Levels module" rule. Returns the previous elevation so the caller can
   // surface the player exactly where they left off.
-  reg("setElevation", async ({ sceneId, actorId, elevation = 0 }) => {
+  reg("setElevation", async ({ sceneId, actorId, elevation = 0, levelId = "" }) => {
     const scene = game.scenes?.get?.(String(sceneId || ""));
     if (!scene) return { ok: false, from: 0 };
     const docs = scene.tokens?.filter?.(t => t.actorId === String(actorId || "")) ?? [];
     if (!docs.length) return { ok: false, from: 0 };
     const from = Number(docs[0].elevation) || 0;
+    // v14: a token BELONGS to a scene level by id — elevation alone never
+    // re-homes it, it just sinks below its current floor (owner hit this live
+    // 2026-08-24). Pass levelId to actually move it between levels.
+    const fromLevel = docs[0]._source?.level ?? null;
     try {
-      await scene.updateEmbeddedDocuments("Token", docs.map(t => ({ _id: t.id, elevation: Number(elevation) || 0 })));
-    } catch (e) { console.warn(TAG, "setElevation failed", e); return { ok: false, from }; }
-    return { ok: true, from, to: Number(elevation) || 0 };
+      const patch = { elevation: Number(elevation) || 0 };
+      if (levelId) patch.level = String(levelId);
+      await scene.updateEmbeddedDocuments("Token", docs.map(t => ({ _id: t.id, ...patch })));
+    } catch (e) { console.warn(TAG, "setElevation failed", e); return { ok: false, from, fromLevel }; }
+    return { ok: true, from, to: Number(elevation) || 0, fromLevel, toLevel: levelId || fromLevel,
+             tokenIds: docs.map(t => t.id) };
   });
 
   // Darkness is a MANUAL track (system.darkness.value, 0–10 on the sheet) — no
@@ -303,7 +310,7 @@ function _registerOps() {
    * default-OWNER for the same reasons the foes are, but disposition NEUTRAL and
    * `kind:"marker"` so nothing mistakes it for something to shoot.
    */
-  reg("spawnMarker", async ({ sceneId, x = 1000, y = 1000, elevation = 0, name = "Relic", img = "", size = 1, ownerUserId = "" }) => {
+  reg("spawnMarker", async ({ sceneId, x = 1000, y = 1000, elevation = 0, levelId = "", name = "Relic", img = "", size = 1, ownerUserId = "" }) => {
     const folder = await _folder();
     const actor = await Actor.create({
       name, type: "npc", folder: folder?.id, img: img || "icons/svg/mystery-man.svg",
@@ -321,6 +328,9 @@ function _registerOps() {
       try {
         const td = (await actor.getTokenDocument({ x, y })).toObject();
         if (Number(elevation)) td.elevation = Number(elevation);
+        // Tokens default to the scene's INITIAL level — a marker meant for a
+        // dive level must carry the level id or it lands on the ground floor.
+        if (levelId) td.level = String(levelId);
         td.flags = Object.assign({}, td.flags, { [MODULE_ID]: { spawned: true, ownerUserId } });
         const [c] = await scene.createEmbeddedDocuments("Token", [td]);
         tokenId = c.id;
@@ -892,11 +902,13 @@ async function spawnMarker(scene, opts = {}) {
   return { actor: actor || null, token: token || null };
 }
 
-/** Move an actor's token(s) to an elevation — i.e. between native scene levels.
- *  Returns { ok, from, to } so the caller can restore the original height. */
-async function setElevation(scene, actorId, elevation = 0) {
+/** Move an actor's token(s) to an elevation AND (v14) a scene level — elevation
+ *  alone never re-homes a token; pass levelId to actually change floors.
+ *  Returns { ok, from, to, fromLevel, toLevel, tokenIds } so the caller can
+ *  restore both the height and the level, and follow the view down. */
+async function setElevation(scene, actorId, elevation = 0, levelId = "") {
   if (!scene?.id || !actorId) return { ok: false, from: 0 };
-  return (await _runAsGM("setElevation", { sceneId: scene.id, actorId, elevation })) ?? { ok: false, from: 0 };
+  return (await _runAsGM("setElevation", { sceneId: scene.id, actorId, elevation, levelId })) ?? { ok: false, from: 0 };
 }
 
 /** Apply damage through the system's own pipeline. opts: {formula,type,flavor}. */

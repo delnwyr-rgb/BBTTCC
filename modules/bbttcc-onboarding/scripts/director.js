@@ -122,14 +122,19 @@ async function prompt({ title = "Operator", content = "", label = "Continue" } =
   raiseDialogByTitle(title);
   if (DV2?.wait) {
     try {
-      await DV2.wait({
+      // Return the REAL resolution: "ok" only for the button, null for a
+      // dismissed window. Callers that just .then(() => …) are unaffected
+      // (close still resolves — a closed dialog must never wedge a beat), but
+      // anything destructive can now tell a click from an X (the trials skip
+      // hatch granted all four relics off a dismissed window, 2026-08-24).
+      const picked = await DV2.wait({
         id: promptIdFor(title),
         window: { title }, content: body,
         position: { ...PROMPT_POSITION },
         buttons: [{ action: "ok", label, default: true }],
         rejectClose: false, modal: false
       });
-      return "ok";
+      return picked ?? null;
     } catch (_) { return null; }
   }
   return new Promise((res) => {

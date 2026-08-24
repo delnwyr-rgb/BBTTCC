@@ -1398,39 +1398,43 @@ const combatSim = {
  * touches the live world.
  */
 
-// ⚠ POSITIONS are read off the baked 4652×4454 art (frame-checked 2026-08-17)
-// and expressed as fractions of the VISIBLE scene rect, so they survive padding.
-// One table — nudging a site is one line.
+// ⚠ POSITIONS are read off the FINAL baked 4400×3900 v2 art (frame-checked
+// 2026-08-24) and expressed as fractions of the VISIBLE scene rect, so they
+// survive padding. One table — nudging a site is one line.
 const PG_TRIALS = [
   {
     key: "lava", name: "The Cinder Sigil", relic: "Cinder Key",
-    img: "icons/svg/fire.svg", xFrac: 0.49, yFrac: 0.48,
+    img: "icons/svg/fire.svg", xFrac: 0.51, yFrac: 0.43,
     approach: "The lava sigil — the burning one, centre of the map. It will cook you while you work.",
     // Hazard fires ON pickup: reaching in costs you something.
     hazard: { formula: "2d6", type: "thermal", flavor: "hot",
               line: "The sigil takes its toll — {n} thermal. Relics are never free." },
-    taken: "Cinder Key — still glowing. One."
+    taken: "Cinder Key — still glowing."
   },
   {
     key: "healing", name: "The Still Water", relic: "Still Draught",
-    img: "icons/svg/heal.svg", xFrac: 0.74, yFrac: 0.44,
+    img: "icons/svg/heal.svg", xFrac: 0.78, yFrac: 0.39,
     approach: "The pale pond north-east. That one's healing water — the only kind thing on this map, and it still wants paying attention to.",
     heal: { formula: "2d6", line: "The water closes over the burn — +{n} Integrity. Take it; you'll want it later." },
-    taken: "Still Draught — bottled. Two."
+    taken: "Still Draught — bottled."
   },
   {
     key: "grove", name: "The Green Circle", relic: "Verdant Mark",
-    img: "icons/svg/oak.svg", xFrac: 0.12, yFrac: 0.61,
+    img: "icons/svg/oak.svg", xFrac: 0.13, yFrac: 0.56,
     approach: "West edge, the green ring. Whatever's growing in there is growing WRONG, and it has been waiting.",
     hazard: { formula: "1d6", type: "poison", flavor: "",
               line: "The ring exhales — {n} poison. It doesn't like being read." },
-    taken: "Verdant Mark — warm, and faintly moving. Three."
+    taken: "Verdant Mark — warm, and faintly moving."
   },
   {
     key: "reef", name: "The Deep", relic: "Reef Shard",
-    img: "icons/svg/water.svg", xFrac: 0.32, yFrac: 0.82, dive: true,
+    // Marker sits at the pool's CENTRE (on the painted merkaba sigil); the
+    // trigger radius reaches past the bank, so the offer fires as the token
+    // hits the water's EDGE — the player is never auto-plunged.
+    img: "icons/svg/water.svg", xFrac: 0.36, yFrac: 0.79, dive: true,
+    triggerSquares: 3.5,   // pool is ~2.5 squares radius on the v2 art, +1 of bank
     approach: "And the dark water, south-west. That one isn't a puddle — it goes DOWN. The last relic is on the reef floor, and you'll have to swim for it.",
-    taken: "Reef Shard — cold enough to ache. Four. That's the set."
+    taken: "Reef Shard — cold enough to ache."
   }
 ];
 
@@ -1472,7 +1476,7 @@ function _pgDiveLevel(scene) {
 // there needs to be spawned.
 const PG_REEF_ENTRY = { xFrac: 0.28, yFrac: 0.27 };
 const PG_REEF_RELIC = { xFrac: 0.53, yFrac: 0.57 };
-const PG_ARENA      = { xFrac: 0.68, yFrac: 0.79 };
+const PG_ARENA      = { xFrac: 0.735, yFrac: 0.80 };
 const PG_PICKUP_SQUARES = 1.5;   // how close counts as "reached"
 
 /** Centre of a token document in canvas pixels. */
@@ -1486,10 +1490,10 @@ function _pgTokenCentre(doc, scene) {
  *  Region: a Region's behavior schema is version-specific and can't be verified
  *  from the repo, and this is testable here. Swapping in a Region trigger later
  *  is a drop-in — the rest of the beat only cares that `arrive()` fires. */
-function _pgReached(doc, scene, pt) {
+function _pgReached(doc, scene, pt, squares = PG_PICKUP_SQUARES) {
   const g = Number(scene?.grid?.size) || 100;
   const c = _pgTokenCentre(doc, scene);
-  return Math.hypot(c.x - pt.x, c.y - pt.y) <= g * PG_PICKUP_SQUARES;
+  return Math.hypot(c.x - pt.x, c.y - pt.y) <= g * squares;
 }
 
 /** Relics live on the Steward as a flag set — survives a reload, and the
@@ -1517,6 +1521,33 @@ const provingTrials = {
   enter: async (ctx) => {
     ctx._spawned = ctx._spawned || [];
     ctx._pg = { scene: null, markers: new Map(), diving: false, done: new Set() };
+
+    // A Steward already holding all four relics (relics are replay-safe and
+    // survive on a flag) gets ASKED, not silently no-opped: without this, a
+    // replay spawns no markers, nothing can fire, and the run reads as broken
+    // (owner hit exactly that 2026-08-24 after the 08-22 full playthroughs).
+    if (_pgRelics(ctx.steward).length >= PG_TRIALS.length) {
+      const again = await ctx.choose?.({
+        title: "◇ OPERATOR — Trials",
+        content:
+          `<p><b>You've already pulled all four relics out of this floor once.</b> ` +
+          `They're still in your pack, and held relics don't grow back on the map.</p>` +
+          `<p>Run the trials again from a clean slate, or keep the set and move on?</p>`,
+        options: [
+          { action: "replay", label: "⟳ Run the trials again" },
+          { action: "keep",   label: "Keep them — move on" }
+        ],
+        fallback: "keep"
+      }) ?? "keep";
+      if (again === "replay") {
+        try { await ctx.steward.unsetFlag(MODULE_ID, "provingRelics"); }
+        catch (e) { console.warn(TAG, "relic reset failed", e); }
+        await ctx.speak("Wiping the ledger. The floor grows its teeth back— *bzzt* —four sigils, four relics, same rules.");
+      } else {
+        ctx._pg.alreadyComplete = true;
+        return;                               // skip the whole staging; detect() completes immediately
+      }
+    }
 
     // ── The emergency. Everything after this line is in-fiction panic.
     await ctx.speak("— *bzzt* — hold. Hold. Something just reached into the world model from OUTSIDE and started pulling.");
@@ -1574,6 +1605,10 @@ const provingTrials = {
     const FALLBACK_TITLE = "◇ OPERATOR — Trials";
     const closeFallback = () => globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(FALLBACK_TITLE);
 
+    // Kept-relics replay: the player chose to keep the finished set in enter().
+    // Complete on the spot — BEFORE the no-scene guard (nothing was staged).
+    if (sim?.alreadyComplete) { done(); return () => {}; }
+
     if (!sim?.scene || !stage) {
       ctx.prompt({ title: FALLBACK_TITLE,
         content: "<p>The Proving Ground isn't available — no arena, or no GM online to stage it.</p><p>Continue; you can replay this later.</p>",
@@ -1598,13 +1633,48 @@ const provingTrials = {
         await ctx.speak?.(t.heal.line.replace("{n}", String(r?.amount ?? "some")));
       }
       const held = await _pgTakeRelic(ctx.steward, t.key);
-      await ctx.speak?.(t.taken);
+      // The tally is spoken from the LIVE count, not baked into the trial —
+      // there's no forced order, so any sigil can be first or fourth.
+      const n = held.length;
+      const COUNT = ["One", "Two", "Three", "Four"];
+      const tally = n >= PG_TRIALS.length ? `${COUNT[n - 1] ?? n}. That's the set.` : `${COUNT[n - 1] ?? n}.`;
+      await ctx.speak?.(`${t.taken} ${tally}`);
       try { await stage.cleanup?.([marker].filter(Boolean)); } catch (_) {}
 
       if (held.length >= PG_TRIALS.length) {
         await _pause(700);
         await ctx.speak?.("All four. The floor stops arguing with itself— *bzzt* —and the great circle in the south-east just went LIVE. Get in it.");
         finish();
+      }
+    };
+
+    /** Reaching the water's edge OFFERS the dive rather than plunging the
+     *  token — hitting the bank while lining up a different sigil shouldn't
+     *  drop you twenty feet. Declining re-arms once the token leaves the
+     *  pool's trigger ring, so walking back to the edge asks again. */
+    const offerDive = async (t) => {
+      if (sim.diving || sim.done.has(t.key) || sim.diveOfferOpen || sim.diveDeclined) return;
+      sim.diveOfferOpen = true;
+      try {
+        const picked = await ctx.choose?.({
+          title: "◇ OPERATOR — The Deep",
+          content:
+            `<p><b>You're at the water's edge.</b> The last relic is down on the reef floor — ` +
+            `the level below this one, and the way back up is the way you came in.</p>` +
+            `<p>Ready to go under?</p>`,
+          options: [
+            { action: "dive", label: "🤿 Dive" },
+            { action: "stay", label: "Not yet" }
+          ],
+          fallback: "stay"
+        }) ?? "stay";
+        if (picked === "dive") { await dive(t); return; }
+        sim.diveDeclined = true;
+        await ctx.speak?.("Fair. The water isn't going anywhere — come back to the edge when you're ready and I'll ask again.");
+      } catch (e) {
+        console.warn(TAG, "dive offer failed", e);
+      } finally {
+        sim.diveOfferOpen = false;
       }
     };
 
@@ -1619,18 +1689,43 @@ const provingTrials = {
         const lvl = _pgDiveLevel(sim.scene);
         if (lvl) {
           await ctx.speak?.("Down you go. Hold your breath — the system will tell you when that stops being a metaphor.");
-          const moved = await stage.setElevation?.(sim.scene, ctx.steward?.id, lvl.depth);
+          // v14: pass the LEVEL id with the elevation — elevation alone leaves
+          // the token on the ground floor, ten feet under its own scenery.
+          const moved = await stage.setElevation?.(sim.scene, ctx.steward?.id, lvl.depth, lvl.id);
           if (!moved?.ok) {
             console.warn(TAG, "dive: elevation write failed; handing the relic over");
+            sim.diving = false;                       // hand-over path: keep the other sigils live
             await claim(t);
             return;
           }
+          // Follow the token down. Which level the canvas RENDERS is per-client
+          // state, and this beat runs on the diver's own client — so switch it
+          // here, the same way core's changeLevel region behavior does.
+          try {
+            if (sim.scene.isView && globalThis.canvas?.level?.id !== lvl.id) {
+              await sim.scene.view({ level: lvl.id, controlledTokens: moved.tokenIds ?? [] });
+            }
+          } catch (e) { console.warn(TAG, "dive: level view switch failed (token IS on the dive level)", e); }
           await _pause(900);
           const pt = _scenePoint(sim.scene, PG_REEF_RELIC.xFrac, PG_REEF_RELIC.yFrac, ctx.lane);
-          const shard = await stage.spawnMarker?.(sim.scene, { name: t.name, img: t.img, elevation: lvl.depth, ...pt });
+          const shard = await stage.spawnMarker?.(sim.scene, { name: t.name, img: t.img, elevation: lvl.depth, levelId: lvl.id, ...pt });
           if (shard) ctx._spawned.push(shard);
           await ctx.speak?.(`${lvl.name} — ${Math.abs(lvl.depth)} feet down. The shard is out in the magenta coral, dead centre. Between you and it: a wreck, a lot of legs, and something pink I'd rather not name. Swim.`);
-          sim.reef = { scene: sim.scene, pt, marker: shard, trial: t, surfaceAt: moved.from ?? 0 };
+          // Surface height = where they were, clamped into the origin level's
+          // band: a token hand-nudged below its own floor (e.g. a manual −10 on
+          // the ground level) must not be "restored" to that nonsense height.
+          let surfaceAt = Number(moved.from) || 0;
+          try {
+            const raw = sim.scene?.levels;
+            const arr = Array.isArray(raw) ? raw
+              : (raw && typeof raw[Symbol.iterator] === "function") ? Array.from(raw) : [];
+            const gl = arr.find(l => (l._id ?? l.id) === moved.fromLevel);
+            const e = (gl?.elevation && typeof gl.elevation === "object") ? gl.elevation : {};
+            if (Number.isFinite(Number(e.bottom)) && Number.isFinite(Number(e.top))) {
+              surfaceAt = Math.min(Math.max(surfaceAt, Number(e.bottom)), Number(e.top));
+            }
+          } catch (_) {}
+          sim.reef = { scene: sim.scene, pt, marker: shard, trial: t, surfaceAt, surfaceLevel: moved.fromLevel ?? null };
           return;
         }
 
@@ -1641,6 +1736,7 @@ const provingTrials = {
           // missing art; hand it over and tell the GM exactly what to fix.
           await ctx.speak?.("There's no water layer on this map— *bzzt* —so I'm handing you the shard from the surface. Tell your GM: either add a dive LEVEL with a negative elevation band, or stamp a separate reef scene.");
           console.warn(TAG, 'dive unavailable: no scene level with elevation.bottom < 0, and no "reef" tutorial scene. Add a level, or wireScene("reef", <scene>).');
+          sim.diving = false;                         // hand-over path: keep the other sigils live
           await claim(t);
           return;
         }
@@ -1670,7 +1766,12 @@ const provingTrials = {
       if (r.surfaceAt === null) {
         await _enterScene(sim.scene, "Proving Ground", ctx.lane);   // separate-scene path
       } else {
-        await stage.setElevation?.(sim.scene, ctx.steward?.id, r.surfaceAt);
+        const back = await stage.setElevation?.(sim.scene, ctx.steward?.id, r.surfaceAt, r.surfaceLevel ?? "");
+        try {
+          if (sim.scene.isView && r.surfaceLevel && globalThis.canvas?.level?.id !== r.surfaceLevel) {
+            await sim.scene.view({ level: r.surfaceLevel, controlledTokens: back?.tokenIds ?? [] });
+          }
+        } catch (e) { console.warn(TAG, "surface: level view switch failed", e); }
       }
       await _pause(800);
       sim.diving = false;
@@ -1693,27 +1794,59 @@ const provingTrials = {
       if (tokenDoc.parent?.id !== sim.scene.id) return;
 
       for (const t of [...sim.markers.values()]) {
-        if (!_pgReached(tokenDoc, sim.scene, t.pt)) continue;
-        (t.dive ? dive(t) : claim(t)).catch(e => console.warn(TAG, "trial claim failed", e));
+        const near = _pgReached(tokenDoc, sim.scene, t.pt, t.triggerSquares ?? PG_PICKUP_SQUARES);
+        if (t.dive && !near) { sim.diveDeclined = false; continue; }  // left the edge — re-arm the offer
+        if (!near) continue;
+        (t.dive ? offerDive(t) : claim(t)).catch(e => console.warn(TAG, "trial claim failed", e));
         break;                                       // one sigil per step
       }
     };
     Hooks.on("updateToken", onMove);
 
-    ctx.prompt({
-      title: FALLBACK_TITLE,
-      content:
-        `<p><b>Walk your Steward's token onto each of the four sigils.</b> Lava (centre), still water (north-east), the green ring (west), and the deep water (south-west — that one's a dive).</p>` +
-        `<p>Each relic costs you something on the way in. Collect all four and the great circle opens.</p>` +
-        `<p><i>Stuck, or a sigil won't answer? Skip ahead — I'll hand you the rest.</i></p>`,
-      label: "Skip the trials"
-    }).then(async () => {
-      // Never trap them behind a hazard that won't fire — grant the remainder.
-      for (const t of PG_TRIALS) if (!sim.done.has(t.key)) await _pgTakeRelic(ctx.steward, t.key);
-      finish();
-    });
+    // The skip hatch GRANTS every remaining relic, so it must never fire off a
+    // DISMISSED window (owner closed a stale-looking dialog 2026-08-24 and the
+    // old handler silently completed the whole beat onto his Steward): the
+    // button now leads to an explicit confirm, any close or decline re-arms
+    // quietly after a pause, and only "yes" grants.
+    let skipTimer = null;
+    let disposed = false;
+    const offerSkip = () => {
+      if (disposed || sim.finished) return;
+      ctx.prompt({
+        title: FALLBACK_TITLE,
+        content:
+          `<p><b>Walk your Steward's token onto each of the four sigils.</b> Lava (centre), still water (north-east), the green ring (west), and the deep water (south-west — that one's a dive).</p>` +
+          `<p>Each relic costs you something on the way in. Collect all four and the great circle opens.</p>` +
+          `<p><i>Stuck, or a sigil won't answer? Skip ahead — I'll hand you the rest.</i></p>`,
+        label: "Skip the trials"
+      }).then(async (r) => {
+        if (disposed || sim.finished) return;
+        if (r === "ok") {
+          const sure = await ctx.choose?.({
+            title: FALLBACK_TITLE,
+            content:
+              `<p><b>Skip the rest of the trials?</b> I'll hand you every relic still on the floor, ` +
+              `and the great circle opens as if you'd earned them.</p>`,
+            options: [
+              { action: "skip", label: "Yes — hand them over" },
+              { action: "play", label: "No — keep playing" }
+            ],
+            fallback: "play"
+          }) ?? "play";
+          if (sure === "skip" && !disposed && !sim.finished) {
+            // Never trap them behind a hazard that won't fire — grant the remainder.
+            for (const t of PG_TRIALS) if (!sim.done.has(t.key)) await _pgTakeRelic(ctx.steward, t.key);
+            finish();
+            return;
+          }
+        }
+        // Dismissed or declined — keep the escape hatch alive without nagging.
+        skipTimer = setTimeout(offerSkip, 15000);
+      });
+    };
+    offerSkip();
 
-    return () => { Hooks.off("updateToken", onMove); closeFallback(); };
+    return () => { disposed = true; if (skipTimer) clearTimeout(skipTimer); Hooks.off("updateToken", onMove); closeFallback(); };
   },
 
   exit: async (ctx) => {
