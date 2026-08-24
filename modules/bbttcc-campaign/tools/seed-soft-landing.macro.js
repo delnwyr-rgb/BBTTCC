@@ -65,7 +65,7 @@
 
   const bridge = (id, label, description, { requires = null, priority = "background", timePoints = 0, questEffects = null, choices = null, type = "dialog" } = {}) => ({
     id, label, type, timeScale: "scene", timePoints,
-    questId: Q, tags: "soft_landing grief_refusals story", politicalTags: "",
+    questId: Q, tags: "soft_landing grief_refusals story discovery", politicalTags: "",
     description, outcomes: { success: null, failure: null },
     inject: {
       cooldownTurns: 0, repeatable: false, oncePerHex: false,
@@ -83,7 +83,7 @@
 
   const plain = (id, label, description, { timePoints = 0, choices = null, questEffects = null, memoryText = null, type = "narration" } = {}) => ({
     id, label, type, timePoints, dialogueOffer: false,
-    questId: Q, tags: "soft_landing grief_refusals story",
+    questId: Q, tags: "soft_landing grief_refusals story discovery",
     description,
     ...(questEffects ? { worldEffects: { questEffects } } : {}),
     ...(memoryText ? { memoryText } : {}),

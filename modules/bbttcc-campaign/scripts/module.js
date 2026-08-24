@@ -3583,6 +3583,22 @@ async function executeBeat(campaign, beat, ctx = {}) {
   // Time Points (optional): accumulate beat-time into world clock
   await _applyBeatTimePoints(campaign, beat, ctx);
 
+  // Record EVERY execution in the director's fired history (2026-08-23) —
+  // it was only written by the director's own auto-tick, so beats run by
+  // hand from the Visualizer never registered: the hero card never advanced,
+  // "0 fired" stood forever, and the director could re-offer beats the GM
+  // had already played. GM-side only (world-state write).
+  try {
+    if (game.user?.isGM && beat?.id) {
+      await _mutateDirectorState(async (st) => {
+        st.firedStoryBeats = st.firedStoryBeats || {};
+        if (!st.firedStoryBeats[beat.id]) {
+          st.firedStoryBeats[beat.id] = { turn: Number(campaign?.turn) || 0, ts: Date.now() };
+        }
+      });
+    }
+  } catch (e) { warn("fired-history record failed:", e); }
+
   // Subscriber hook for cross-module reactions to beat resolution. Tikkun
   // module subscribes to advance spark state when a beat carries
   // `beat.sparkLink` metadata (Phase B of B3). Other modules can subscribe
@@ -4749,6 +4765,11 @@ async function directorTick(opts = {}) {
     for (const b of story) {
       if (opts.seam && ttOnly.has(_storyChainOf(b) || "")) continue;
       if (state.firedStoryBeats[b.id] && !b.inject?.repeatable) continue;
+      // Location-anchored discovery beats (2026-08-23): tagged `discovery`
+      // or hex-targeted — they fire when the party ARRIVES (travel hex_enter
+      // injector), never by director offer. Without this the director was
+      // suggesting Chuckle Creek's delight-open at Turn 1 of Act 0.
+      if (b.targetHexUuid || /\bdiscovery\b/i.test(String(b.tags || ""))) continue;
       const sid = String(b.speakerActorId || "").trim();
       if (sid) {
         // Speaker beats are conversations: consumed ones are done, invited

@@ -2038,15 +2038,28 @@ const activeCampaignId = _getActiveCampaignId();
       return l;
     };
     const isAmbientBeat = b => !!b?.pacing?.ambient;
+    // Location-anchored discovery beats (2026-08-23): a beat tagged
+    // `discovery` (or carrying targetHexUuid) waits on the party ARRIVING
+    // somewhere — listing it as "available" reads as a choice when it isn't
+    // one (the grief-refusal delights topped the list before the game began).
+    const isDiscoveryBeat = b => !!b?.targetHexUuid || /\bdiscovery\b/i.test(String(b?.tags || ""));
+    // Fired beats leave the available list and light the Recently-fired rail.
+    let firedSet = new Set();
+    try {
+      const ds0 = api?.director?.state?.() || {};
+      firedSet = new Set([...Object.keys(ds0.firedStoryBeats || {}), ...Object.keys(ds0.dialogueFired || {})]);
+    } catch (_e) {}
 
-    const readyAll = beats.filter(b => runtime.byId[String(b.id)]?.state === "ready");
-    const readyStory = readyAll.filter(b => !isAmbientBeat(b))
+    const readyAll = beats.filter(b => runtime.byId[String(b.id)]?.state === "ready"
+      && (!firedSet.has(String(b.id)) || b?.inject?.repeatable));
+    const readyStory = readyAll.filter(b => !isAmbientBeat(b) && !isDiscoveryBeat(b))
       .sort((a, b) => {
         const ra = runtime.byId[String(a.id)], rb = runtime.byId[String(b.id)];
         const da = ra.auto.includes("director") ? 0 : 1, db = rb.auto.includes("director") ? 0 : 1;
         if (da !== db) return da - db;
         return String(a.label || a.id).localeCompare(String(b.label || b.id));
       });
+    const readyDiscovery = readyAll.filter(b => !isAmbientBeat(b) && isDiscoveryBeat(b));
     const readyAmbient = readyAll.filter(isAmbientBeat);
     const readyRow = b => {
       const rt = runtime.byId[String(b.id)];
@@ -2058,6 +2071,12 @@ const activeCampaignId = _getActiveCampaignId();
     const readyHtml =
       readyStory.slice(0, 25).map(readyRow).join("") +
       (readyStory.length > 25 ? `<div class="bbttcc-now-empty">+ ${readyStory.length - 25} more…</div>` : "") +
+      (readyDiscovery.length
+        ? `<details class="bbttcc-now-sub"><summary>📍 On location (${readyDiscovery.length}) — waits for the party to arrive; not a menu</summary>` +
+          readyDiscovery.slice(0, 15).map(readyRow).join("") +
+          (readyDiscovery.length > 15 ? `<div class="bbttcc-now-empty">+ ${readyDiscovery.length - 15} more…</div>` : "") +
+          `</details>`
+        : "") +
       (readyAmbient.length
         ? `<details class="bbttcc-now-sub"><summary>🎲 Ambient pool (${readyAmbient.length}) — fires itself via travel/hexes</summary>` +
           readyAmbient.slice(0, 15).map(readyRow).join("") +
@@ -2093,6 +2112,7 @@ const activeCampaignId = _getActiveCampaignId();
 
     let recentHtml = "";
     let histCount = 0;
+    let lastFiredId = null;
     try {
       const ds = api?.director?.state?.() || {};
       const hist = [];
@@ -2101,33 +2121,65 @@ const activeCampaignId = _getActiveCampaignId();
       }
       histCount = hist.length;
       hist.sort((a, b) => b.ts - a.ts);
+      lastFiredId = hist[0]?.id ?? null;
       recentHtml = hist.slice(0, 10).map(h =>
         flyBtn(h.id, (beatById[h.id]?.label || h.id), h.turn != null ? `T${h.turn}` : "")
       ).join("") || `<div class="bbttcc-now-empty">nothing fired yet — the world is young</div>`;
     } catch (_e) {}
 
-    // Cold-start hero: nothing has fired yet → one unmissable first verb.
-    // The campaign's explicit `openingBeatId` wins when set and ready —
-    // authoring order has NO correspondence to intended play order
-    // (2026-08-23: the array-first heuristic pointed at Thatwards Cold Open
-    // when the true opening is the Offices of Fates and Destinies suite).
-    // Falls back to the first ready story beat in authoring order.
+    // The hero is the DRIVING verb (2026-08-23, owner spec): always point at
+    // the next expected beat(s), or say plainly why there isn't one. Three
+    // states: 🎬 BEGIN (cold start — campaign.openingBeatId wins; authoring
+    // order has no correspondence to play order), ⏭ NEXT (routes out of the
+    // last fired beat that are ready and unfired; a branch shows up to three),
+    // 🧭 waiting (no route — the table has the wheel: choices, invites,
+    // travel, or discovery).
     let heroHtml = "";
-    if (histCount === 0 && readyStory.length) {
-      const openId = String(campaign?.openingBeatId || "").trim();
-      const opening = openId ? beats.find(b => String(b.id) === openId && runtime.byId[openId]?.state === "ready") : null;
-      const first = opening
-        || beats.find(b => !isAmbientBeat(b) && runtime.byId[String(b.id)]?.state === "ready");
-      if (first) {
-        const fq = questOf(first);
-        heroHtml =
-          `<div class="bbttcc-now-hero">` +
-          `<div class="k">🎬 BEGIN</div>` +
-          `<div class="t">${esc(first.label || first.id)}</div>` +
-          (fq ? `<div class="q">${esc(fq)}</div>` : "") +
-          `<button type="button" class="bbttcc-now-hero-run" data-run="${esc(first.id)}">▶ Run the opening beat</button>` +
-          (readyStory.length > 1 ? `<div class="alt">…or browse ${readyStory.length - 1} other available beat${readyStory.length === 2 ? "" : "s"} below</div>` : "") +
-          `</div>`;
+    {
+      const heroCard = (kicker, title, quest, buttonsHtml, noteHtml) =>
+        `<div class="bbttcc-now-hero">` +
+        `<div class="k">${kicker}</div>` +
+        (title ? `<div class="t">${esc(title)}</div>` : "") +
+        (quest ? `<div class="q">${esc(quest)}</div>` : "") +
+        (buttonsHtml || "") +
+        (noteHtml ? `<div class="alt">${noteHtml}</div>` : "") +
+        `</div>`;
+      const runBtn = (b, txt) =>
+        `<button type="button" class="bbttcc-now-hero-run" data-run="${esc(b.id)}">▶ ${esc(txt || stripPrefix(b.label || b.id, questOf(b)))}</button>`;
+
+      if (histCount === 0 && readyStory.length) {
+        const openId = String(campaign?.openingBeatId || "").trim();
+        const opening = openId ? beats.find(b => String(b.id) === openId && runtime.byId[openId]?.state === "ready") : null;
+        const first = opening
+          || beats.find(b => !isAmbientBeat(b) && !isDiscoveryBeat(b) && runtime.byId[String(b.id)]?.state === "ready");
+        if (first) {
+          heroHtml = heroCard("🎬 BEGIN", first.label || first.id, questOf(first),
+            runBtn(first, "Run the opening beat"),
+            readyStory.length > 1 ? `…or browse ${readyStory.length - 1} other available beat${readyStory.length === 2 ? "" : "s"} below` : "");
+        }
+      } else if (histCount > 0) {
+        const lastFired = lastFiredId ? beatById[lastFiredId] : null;
+        const lastName = lastFired ? stripPrefix(lastFired.label || lastFired.id, questOf(lastFired)) : "";
+        const nextIds = lastFired
+          ? [...new Set((lastFired.choices || []).flatMap(c => [c?.next, c?.failNext]).filter(Boolean).map(String))]
+          : [];
+        const candidates = nextIds
+          .map(id => beatById[id])
+          .filter(b => b && (!firedSet.has(String(b.id)) || b?.inject?.repeatable)
+            && runtime.byId[String(b.id)]?.state === "ready");
+        if (candidates.length === 1) {
+          heroHtml = heroCard("⏭ NEXT", candidates[0].label || candidates[0].id, questOf(candidates[0]),
+            runBtn(candidates[0], "Run the next beat"),
+            lastName ? `after “${esc(lastName)}”` : "");
+        } else if (candidates.length > 1) {
+          heroHtml = heroCard("⏭ NEXT — the story branches", "", "",
+            candidates.slice(0, 3).map(b => runBtn(b)).join(""),
+            (candidates.length > 3 ? `+ ${candidates.length - 3} more route${candidates.length === 4 ? "" : "s"} below · ` : "") +
+            (lastName ? `out of “${esc(lastName)}”` : ""));
+        } else {
+          heroHtml = heroCard("🧭 IN THE TABLE'S HANDS", "", "", "",
+            `No single next beat${lastName ? ` after “${esc(lastName)}”` : ""} — the story is waiting on the players: a choice, a conversation invite, travel, or something they have to walk into. Watch chat, or browse below.`);
+        }
       }
     }
 

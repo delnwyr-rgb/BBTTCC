@@ -19,7 +19,7 @@
  * Backup download before write, idempotent, GM only.
  */
 (async () => {
-  const DRY_RUN = true;
+  const DRY_RUN = false;
   const NS = "bbttcc-campaign";
   if (!game.user.isGM) return ui.notifications.error("GM only.");
 
