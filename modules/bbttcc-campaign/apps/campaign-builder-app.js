@@ -2228,22 +2228,30 @@ const activeCampaignId = _getActiveCampaignId();
           // ready, unfired beat of the same quest by questStep/authoring
           // sequence. Only when the quest truly has nothing next does the
           // wheel pass to the table.
-          let qNext = null;
+          let qNext = null, qGated = null;
           const lq = lastFired ? String(lastFired.questId || "").trim() : "";
           if (lq) {
             const ls = seqOf(lastFired);
-            qNext = beats
+            const qRouted = beats
               .filter(b => String(b.questId || "").trim() === lq
                 && (!firedSet.has(String(b.id)) || b?.inject?.repeatable)
-                && runtime.byId[String(b.id)]?.state === "ready"
                 && !isAmbientBeat(b) && !isDiscoveryBeat(b)
                 && seqOf(b) > ls)
-              .sort((a, b) => seqOf(a) - seqOf(b))[0] || null;
+              .sort((a, b) => seqOf(a) - seqOf(b));
+            qNext = qRouted.find(b => runtime.byId[String(b.id)]?.state === "ready") || null;
+            // Same lesson as authored routes (2026-08-24): a gated next-in-quest
+            // must be SHOWN, not swallowed — the Allesh arrival chain dead-ended
+            // on "table's hands" while Joans sat one step away behind its gate.
+            qGated = qNext ? null : (qRouted[0] || null);
           }
           if (qNext) {
             heroHtml = heroCard("⏭ NEXT — quest order", qNext.label || qNext.id, questOf(qNext),
               runBtn(qNext, "Run the next beat"),
               `no authored route after “${esc(lastName)}” — following the quest's canonical order`);
+          } else if (qGated) {
+            heroHtml = heroCard("⏭ NEXT — gated (quest order)", qGated.label || qGated.id, questOf(qGated),
+              runBtn(qGated, "Run it anyway"),
+              `next in the quest's canonical order after “${esc(lastName)}”, but its own conditions aren't met — running it pushes through`);
           } else {
             heroHtml = heroCard("🧭 IN THE TABLE'S HANDS", "", "", "",
               `No single next beat${lastName ? ` after “${esc(lastName)}”` : ""} — the story is waiting on the players: a choice, a conversation invite, travel, or something they have to walk into. Watch chat, or browse below.`);
