@@ -71,7 +71,7 @@ const BEATS_HELP = {
   timePoints: "Time Points (override) — replaces the Time Scale mapping when set. Time accrual is not live yet (world API lacks addTime), so this value is stored but currently adds no Strategic-Turn time.",
   playerFacing: "Player-Facing — when the beat runs, players get a read-only mirror window (title, description, choice list) delivered over a chat courier. They can watch but not click; only the GM's dialog resolves anything.",
   questId: "Quest — ties the beat to a questline for Builder filtering and bookkeeping. Completion is NOT automatic: to close the quest, author a Quest Effect row (World Effects tab) with action Complete on the beat that should finish it.",
-  questStep: "Quest Step — ordering hint for the Builder's quest view. No runtime effect.",
+  questStep: "Quest Step — the beat's CANONICAL ORDER within its quest (2026-08-23). Drives the Visualizer's quest-order NEXT guidance and beat sorting; beats without one fall back to authoring order. Leave gaps (10, 20, 30…) so later beats can slot between.",
   questRole: "Quest Role — start / core / optional / resolution. Only 'start' is live: when that beat runs, the GM gets a quest-acceptance prompt. The other roles are display labels.",
   turnNumber: "Available Turn — groups the beat under a Strategic Turn in the Builder and, on turn advance, whispers the GM a 'Now Available' callout (already-fired beats get badged). It never auto-fires the beat; the GM still runs it by hand.",
   description: "Description — the narrative body. Shown in the GM run dialog (and mirrored to players when Player-Facing). Safe to keep on every beat.",

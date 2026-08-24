@@ -255,12 +255,13 @@
                     <option value="{{t}}" {{#if (eq t ../beatTurnFilter)}}selected{{/if}}>Turn {{t}}</option>
                   {{/each}}
                 </select>
-                <select class="bbttcc-select bbttcc-select-sm" data-action="beats-quest" data-tooltip="{{bbttccTip 'campaign' 'beats-quest'}}">
-                  <option value="all" {{#if (eq questFilter "all")}}selected{{/if}}>(All quests)</option>
-                  {{#each questsAll as |q|}}
-                    <option value="{{q.id}}" {{#if (eq q.id ../questFilter)}}selected{{/if}}>{{q.name}}</option>
-                  {{/each}}
-                </select>
+                <input class="bbttcc-select bbttcc-select-sm" type="text" list="bbttcc-beats-quest-list"
+                  data-action="beats-quest" placeholder="All quests — type to search"
+                  value="{{questFilterName}}" data-tooltip="{{bbttccTip 'campaign' 'beats-quest'}}"
+                  style="min-width: 170px;">
+                <datalist id="bbttcc-beats-quest-list">
+                  {{#each questsAll as |q|}}<option value="{{q.name}}"></option>{{/each}}
+                </datalist>
                 <select class="bbttcc-select bbttcc-select-sm" data-action="beats-quest-status" data-tooltip="{{bbttccTip 'campaign' 'beats-quest-status'}}">
                   <option value="all" {{#if (eq beatQuestStatusFilter "all")}}selected{{/if}}>All quest status</option>
                   <option value="active" {{#if (eq beatQuestStatusFilter "active")}}selected{{/if}}>Active</option>

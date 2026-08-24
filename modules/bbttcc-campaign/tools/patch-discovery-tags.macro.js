@@ -12,7 +12,7 @@
  * hex-discovery content ships (Tidepool, Greener Pastures, Wendigo…).
  */
 (async () => {
-  const DRY_RUN = true;
+  const DRY_RUN = false;
   const CHAINS = ["chuckle_creek", "stillwater", "soft_landing"];
   const NS = "bbttcc-campaign";
   if (!game.user.isGM) return ui.notifications.error("GM only.");

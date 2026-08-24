@@ -351,6 +351,18 @@ if (q) {
 
     out.push({ beat, n: i + 1 });
   }
+  // Canonical quest order (2026-08-23): with a specific quest selected, sort
+  // by questStep (authoring order fallback via the row number), so the tab
+  // reads in the order the quest is meant to unfold. "All quests" keeps
+  // authoring order — a global re-sort would scramble cross-quest context.
+  if (questFilter && String(questFilter) !== "all") {
+    const seqOf = r => {
+      const s = Number(r.beat?.questStep);
+      return (r.beat?.questStep != null && Number.isFinite(s)) ? s : 1e6 + r.n;
+    };
+    out.sort((a, b) => seqOf(a) - seqOf(b)
+      || String(a.beat.label || a.beat.id).localeCompare(String(b.beat.label || b.beat.id), undefined, { numeric: true }));
+  }
   return out;
 }
 
@@ -1438,7 +1450,9 @@ export class BBTTCCCampaignBuilderApp extends Application {
 
     const questsApi = api.quests;
     const quests = questsApi?.listQuests ? (questsApi.listQuests({ campaignId: this.campaignId, status: "all", search: "" }) || []) : [];
-    const questsAll = Array.isArray(quests) ? quests : [];
+    const questsAll = (Array.isArray(quests) ? quests.slice() : [])
+      .sort((a, b) => String(a?.name || a?.id || "").localeCompare(String(b?.name || b?.id || ""), undefined, { numeric: true }));
+    this._questsAllCache = questsAll;
     const questMap = {};
     for (const q of questsAll) {
       if (!q) continue;
@@ -1573,6 +1587,9 @@ const activeCampaignId = _getActiveCampaignId();
       beatTypeFilter: this.beatTypeFilter,
       beatTurnFilter: this.beatTurnFilter,
       questFilter: this.questFilter,
+      questFilterName: (this.questFilter && this.questFilter !== "all")
+        ? String((questsAll.find(q => String(q?.id) === String(this.questFilter)) || {}).name || "")
+        : "",
       beatQuestStatusFilter: this.beatQuestStatusFilter,
       questStatusFilter: this.questStatusFilter,
       questSearch: this.questSearch,
@@ -2050,6 +2067,16 @@ const activeCampaignId = _getActiveCampaignId();
       firedSet = new Set([...Object.keys(ds0.firedStoryBeats || {}), ...Object.keys(ds0.dialogueFired || {})]);
     } catch (_e) {}
 
+    // Canonical quest order (2026-08-23): questStep when authored, authoring
+    // index within the campaign as fallback. Natural compare keeps
+    // "Slide 2" ahead of "Slide 10".
+    const _authIdx = new Map(beats.map((b, i) => [String(b.id), i]));
+    const seqOf = b => {
+      const s = Number(b?.questStep);
+      return (b?.questStep != null && Number.isFinite(s)) ? s : 1e6 + (_authIdx.get(String(b?.id)) ?? 0);
+    };
+    const natCmp = (a, b) => String(a).localeCompare(String(b), undefined, { numeric: true });
+
     const readyAll = beats.filter(b => runtime.byId[String(b.id)]?.state === "ready"
       && (!firedSet.has(String(b.id)) || b?.inject?.repeatable));
     const readyStory = readyAll.filter(b => !isAmbientBeat(b) && !isDiscoveryBeat(b))
@@ -2057,7 +2084,11 @@ const activeCampaignId = _getActiveCampaignId();
         const ra = runtime.byId[String(a.id)], rb = runtime.byId[String(b.id)];
         const da = ra.auto.includes("director") ? 0 : 1, db = rb.auto.includes("director") ? 0 : 1;
         if (da !== db) return da - db;
-        return String(a.label || a.id).localeCompare(String(b.label || b.id));
+        const qc = natCmp(questOf(a) || "~", questOf(b) || "~");
+        if (qc !== 0) return qc;
+        const sc = seqOf(a) - seqOf(b);
+        if (sc !== 0) return sc;
+        return natCmp(a.label || a.id, b.label || b.id);
       });
     const readyDiscovery = readyAll.filter(b => !isAmbientBeat(b) && isDiscoveryBeat(b));
     const readyAmbient = readyAll.filter(isAmbientBeat);
@@ -2177,8 +2208,30 @@ const activeCampaignId = _getActiveCampaignId();
             (candidates.length > 3 ? `+ ${candidates.length - 3} more route${candidates.length === 4 ? "" : "s"} below · ` : "") +
             (lastName ? `out of “${esc(lastName)}”` : ""));
         } else {
-          heroHtml = heroCard("🧭 IN THE TABLE'S HANDS", "", "", "",
-            `No single next beat${lastName ? ` after “${esc(lastName)}”` : ""} — the story is waiting on the players: a choice, a conversation invite, travel, or something they have to walk into. Watch chat, or browse below.`);
+          // No authored route — fall back to CANONICAL QUEST ORDER: the next
+          // ready, unfired beat of the same quest by questStep/authoring
+          // sequence. Only when the quest truly has nothing next does the
+          // wheel pass to the table.
+          let qNext = null;
+          const lq = lastFired ? String(lastFired.questId || "").trim() : "";
+          if (lq) {
+            const ls = seqOf(lastFired);
+            qNext = beats
+              .filter(b => String(b.questId || "").trim() === lq
+                && (!firedSet.has(String(b.id)) || b?.inject?.repeatable)
+                && runtime.byId[String(b.id)]?.state === "ready"
+                && !isAmbientBeat(b) && !isDiscoveryBeat(b)
+                && seqOf(b) > ls)
+              .sort((a, b) => seqOf(a) - seqOf(b))[0] || null;
+          }
+          if (qNext) {
+            heroHtml = heroCard("⏭ NEXT — quest order", qNext.label || qNext.id, questOf(qNext),
+              runBtn(qNext, "Run the next beat"),
+              `no authored route after “${esc(lastName)}” — following the quest's canonical order`);
+          } else {
+            heroHtml = heroCard("🧭 IN THE TABLE'S HANDS", "", "", "",
+              `No single next beat${lastName ? ` after “${esc(lastName)}”` : ""} — the story is waiting on the players: a choice, a conversation invite, travel, or something they have to walk into. Watch chat, or browse below.`);
+          }
         }
       }
     }
@@ -4095,9 +4148,22 @@ try {
     });
 
 
-    // Beats quest filters
+    // Beats quest filters — a searchable datalist input: the value is the
+    // quest NAME typed/picked; resolve to id (exact match, then unique
+    // prefix), empty = all.
     html.find("[data-action='beats-quest']").on("change", ev => {
-      this.questFilter = String(ev.currentTarget?.value ?? "all");
+      const typed = String(ev.currentTarget?.value ?? "").trim();
+      const all = Array.isArray(this._questsAllCache) ? this._questsAllCache : [];
+      let next = "all";
+      if (typed) {
+        const lc = typed.toLowerCase();
+        const exact = all.find(q => String(q?.name || "").toLowerCase() === lc);
+        const prefix = exact ? null : all.filter(q => String(q?.name || "").toLowerCase().startsWith(lc));
+        const hit = exact || (prefix && prefix.length === 1 ? prefix[0] : null);
+        if (hit) next = String(hit.id);
+        else { ui.notifications?.warn?.(`No quest matches "${typed}".`); ev.currentTarget.value = ""; }
+      }
+      this.questFilter = next;
       this.render(false);
     });
     html.find("[data-action='beats-quest-status']").on("change", ev => {
