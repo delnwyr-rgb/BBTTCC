@@ -19,7 +19,8 @@
 
   let campsRaw = game.settings.get(NS, "campaigns");
   const campsWasStr = typeof campsRaw === "string";
-  const camps = campsWasStr ? JSON.parse(campsRaw) : campsRaw;
+  const camps = campsWasStr ? JSON.parse(campsRaw)
+    : foundry.utils.deepClone(campsRaw); // clone: object-typed settings return the LIVE cache — a dry run must never mutate it
   const campaignId = game.bbttcc?.api?.campaign?.getActiveCampaignId?.();
   const camp = camps?.[campaignId];
   if (!camp) return ui.notifications.error(`Active campaign '${campaignId}' not found.`);
