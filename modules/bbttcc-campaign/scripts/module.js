@@ -3646,7 +3646,7 @@ Hooks.on("bbttcc:advanceTurn:end", ({ apply } = {}) => {
   try {
     if (!apply || !game.user?.isGM) return;
     if (_storyPhaseGet() !== 1) return;
-    const cid = _getActiveCampaignId?.() || game.bbttcc?.api?.campaign?.getActiveCampaignId?.();
+    const cid = game.bbttcc?.api?.campaign?.getActiveCampaignId?.();
     const camp = cid ? getCampaign(cid) : null;
     if (!camp || !(camp.beats || []).some(b => String(b?.id) === "ag_title_card")) return;
     try {
