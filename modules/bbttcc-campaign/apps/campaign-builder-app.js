@@ -2107,11 +2107,17 @@ const activeCampaignId = _getActiveCampaignId();
     } catch (_e) {}
 
     // Cold-start hero: nothing has fired yet → one unmissable first verb.
-    // "First" = the first ready story beat in AUTHORING order (the canonical
-    // opening), not the sorted list.
+    // The campaign's explicit `openingBeatId` wins when set and ready —
+    // authoring order has NO correspondence to intended play order
+    // (2026-08-23: the array-first heuristic pointed at Thatwards Cold Open
+    // when the true opening is the Offices of Fates and Destinies suite).
+    // Falls back to the first ready story beat in authoring order.
     let heroHtml = "";
     if (histCount === 0 && readyStory.length) {
-      const first = beats.find(b => !isAmbientBeat(b) && runtime.byId[String(b.id)]?.state === "ready");
+      const openId = String(campaign?.openingBeatId || "").trim();
+      const opening = openId ? beats.find(b => String(b.id) === openId && runtime.byId[openId]?.state === "ready") : null;
+      const first = opening
+        || beats.find(b => !isAmbientBeat(b) && runtime.byId[String(b.id)]?.state === "ready");
       if (first) {
         const fq = questOf(first);
         heroHtml =

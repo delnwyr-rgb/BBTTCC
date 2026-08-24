@@ -44,7 +44,66 @@ Hooks.once("init", () => {
     scope: "world", config: false, type: Object, default: {}
   });
 
+  // Campaign handoff wiring (owner's Act-0 order-of-operations, 2026-08-23):
+  // Offices of Fates and Destinies runs its dream-sayings up to "Wake up" →
+  // the table drops into onboarding → graduation hands BACK to the Offices
+  // at Teaching Slide 1 (the "employee orientation film") → Thatwards Ho.
+  game.settings.register(MODULE_ID, "campaignWakeBeatId", {
+    name: "Onboarding — campaign beat that begins training",
+    hint: "When this campaign beat resolves, a public 'Report for training' card offers every player a Begin Onboarding button. Blank disables the handoff.",
+    scope: "world", config: true, type: String, default: "fates_and_destinies_incarnate"
+  });
+  game.settings.register(MODULE_ID, "campaignResumeBeatId", {
+    name: "Onboarding — campaign beat to run after graduation",
+    hint: "When a player graduates, the GM gets a card with a button that runs this campaign beat (the orientation film). Blank disables the handoff.",
+    scope: "world", config: true, type: String, default: "fates_and_destinies_1"
+  });
+
   log("Settings registered.");
+});
+
+// ----- Campaign ⇄ onboarding handoff (2026-08-23) -----
+Hooks.once("ready", () => {
+  // Wake Up resolved (GM client runs beats) → public invitation card.
+  Hooks.on("bbttcc:beat:resolved", (data = {}) => {
+    try {
+      if (!game.user.isGM) return;
+      const wakeId = String(game.settings.get(MODULE_ID, "campaignWakeBeatId") || "").trim();
+      const beatId = String(data?.beat?.id ?? data?.beatId ?? "");
+      if (!wakeId || beatId !== wakeId) return;
+      ChatMessage.create({
+        content: `<div class="bbttcc-onb-handoff">` +
+          `<h3>🎓 Report for training</h3>` +
+          `<p>You wake on the Proving Ground. Anyone who hasn't run the gauntlet — or wants the refresher — click below. Everyone else, stretch; the orientation film starts when the class graduates.</p>` +
+          `<button type="button" class="bbttcc-onb-begin">▶ Begin Onboarding</button></div>`
+      });
+    } catch (e) { warn("wake handoff card failed", e); }
+  });
+
+  // Button binders — Begin runs on the CLICKING player's client (their lane).
+  Hooks.on("renderChatMessage", (_msg, html) => {
+    const root = html?.[0] ?? html;
+    root?.querySelectorAll?.(".bbttcc-onb-begin")?.forEach(btn => {
+      btn.addEventListener("click", () => {
+        btn.disabled = true;
+        game.bbttcc?.onboarding?.start?.({ fromStart: true })
+          ?.catch?.(e => { warn("onboarding start failed", e); btn.disabled = false; });
+      });
+    });
+    root?.querySelectorAll?.(".bbttcc-onb-resume")?.forEach(btn => {
+      btn.addEventListener("click", async () => {
+        if (!game.user.isGM) return ui.notifications.warn("GM runs the orientation film.");
+        btn.disabled = true;
+        try {
+          const resumeId = String(game.settings.get(MODULE_ID, "campaignResumeBeatId") || "").trim();
+          const cid = game.bbttcc?.api?.campaign?.getActiveCampaignId?.();
+          if (!resumeId || !cid) return ui.notifications.warn("Resume beat or active campaign not set.");
+          await game.bbttcc.api.campaign.runBeat(cid, resumeId);
+          btn.textContent = "🎬 Rolling…";
+        } catch (e) { warn("orientation film start failed", e); btn.disabled = false; }
+      });
+    });
+  });
 });
 
 // ----- Real-actor resolvers (NEVER create clones — resolve what the player owns) -----

@@ -2234,6 +2234,24 @@ const graduation = {
     }
 
     await ctx.speak("Connection handed off. You're live. Good luck, One — you'll need it. *bzzt* —Operator out.");
+
+    // Campaign handoff (2026-08-23): graduation hands BACK to the Offices of
+    // Fates and Destinies at Teaching Slide 1 — the orientation film. Player
+    // clients can post a GM-whispered card, so no socket is needed; the GM
+    // clicks once when the whole class is out.
+    try {
+      const resumeId = String(globalThis.game?.settings?.get?.(MODULE_ID, "campaignResumeBeatId") || "").trim();
+      if (resumeId) {
+        const gmIds = ChatMessage.getWhisperRecipients("GM").map(u => u.id);
+        await ChatMessage.create({
+          whisper: gmIds,
+          content: `<div class="bbttcc-onb-handoff">` +
+            `<h3>🎬 ${ctx.steward?.name || ctx.user?.name || "A Steward"} graduated</h3>` +
+            `<p>When the whole class is out, roll the orientation film (Teaching Slide 1).</p>` +
+            `<button type="button" class="bbttcc-onb-resume">🎬 Roll the orientation film</button></div>`
+        });
+      }
+    } catch (e) { console.warn(TAG, "graduation → campaign handoff card failed", e); }
   }
 };
 
