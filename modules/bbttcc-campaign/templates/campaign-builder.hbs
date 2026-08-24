@@ -282,7 +282,7 @@
               <table class="bbttcc-table bbttcc-table-beats" data-tour="campaign.beats-table">
                 <thead>
                   <tr>
-                    <th data-tooltip="Display position only — this number shifts whenever beats are reordered or inserted. The stable address every link, gate, and quest mark routes by is the beat id shown under the label.">Pos</th>
+                    <th data-tooltip="The beat's story address: Act (from its storyPhase gate) · Beat № (its questStep rank within its quest). The list sorts by this order of operations. The stable routing identity is still the beat id under the label.">Address</th>
                     <th>Beat</th>
                     <th>Type</th>
                     <th data-tooltip="{{bbttccTip 'campaign' 'turn-chip'}}">Turn</th>
@@ -292,7 +292,7 @@
                 <tbody>
                   {{#each beatsFiltered as |row|}}
                     <tr class="bbttcc-beat-row" data-beat-row-id="{{row.beat.id}}" {{#if @first}}data-tour="campaign.beat-row"{{/if}}>
-                      <td class="bbttcc-col-idx">{{row.n}}</td>
+                      <td class="bbttcc-col-idx"><span class="bbttcc-chip" data-tooltip="{{row.addrLong}} · questStep {{row.beat.questStep}} · authoring pos {{row.n}}">{{row.addrShort}}</span></td>
                       <td class="bbttcc-col-beat">
                         <div class="bbttcc-beat-primary">
                           <span class="bbttcc-beat-label">{{row.beat.label}}</span>

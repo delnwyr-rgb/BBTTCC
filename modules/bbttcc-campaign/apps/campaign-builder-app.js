@@ -270,6 +270,49 @@ function collectBeatTypes(campaign) {
   return Array.from(set).sort((a, b) => a.localeCompare(b, game.i18n.lang));
 }
 
+// ─── Canonical beat address (2026-08-24, owner overhaul) ────────────────────
+// "Beat 532" is a shelf position; the story address is ACT · QUEST · BEAT —
+// act read from the beat's storyPhase gate (an explicit numeric `beat.act`
+// overrides; ambient pool beats show 🎲), beat № = questStep rank within the
+// quest. Beat IDS remain the only routing identity; the address is display
+// truth that follows the data.
+function beatActOf(b) {
+  try {
+    if (b && b.act != null && Number.isFinite(Number(b.act))) return String(Math.floor(Number(b.act)));
+    if (b?.pacing?.ambient) return "🎲";
+    const req = b?.inject?.requires;
+    const arr = Array.isArray(req) ? req : (req ? [req] : []);
+    for (const c of arr) {
+      if (c && c.flag === "storyPhase") return String(Math.floor(Number(c.gte ?? c.eq) || 0));
+    }
+    return null;
+  } catch (_e) { return null; }
+}
+function buildBeatAddressIndex(beats) {
+  const byQuest = new Map();
+  (beats || []).forEach((b, i) => {
+    const q = String(b?.questId || "").trim() || "~unquested";
+    if (!byQuest.has(q)) byQuest.set(q, []);
+    const s = Number(b?.questStep);
+    byQuest.get(q).push({ id: String(b?.id), seq: (b?.questStep != null && Number.isFinite(s)) ? s : 1e6 + i });
+  });
+  const idx = new Map();
+  for (const rows of byQuest.values()) {
+    rows.sort((a, b) => a.seq - b.seq);
+    rows.forEach((r, i) => idx.set(r.id, { ord: i + 1, total: rows.length }));
+  }
+  return idx;
+}
+function beatAddress(b, idx) {
+  const act = beatActOf(b);
+  const a = idx?.get?.(String(b?.id)) || null;
+  const actTxt = act === null ? "—" : (act === "🎲" ? "🎲" : `A${act}`);
+  return {
+    short: `${actTxt}·B${a?.ord ?? "?"}`,
+    long: `Act ${act === null ? "— (ungated)" : act} · Beat ${a?.ord ?? "?"} of ${a?.total ?? "?"} in its quest`
+  };
+}
+
 function filterBeats(campaign, searchRaw = "", typeFilter = "all", turnFilter = "all", questFilter = "all", questStatusFilter = "all", questMap = null) {
   const beats = Array.isArray((campaign && campaign.beats)) ? campaign.beats : [];
   const q = String(searchRaw || "").trim().toLowerCase();
@@ -351,16 +394,25 @@ if (q) {
 
     out.push({ beat, n: i + 1 });
   }
-  // Canonical quest order (2026-08-23): with a specific quest selected, sort
-  // by questStep (authoring order fallback via the row number), so the tab
-  // reads in the order the quest is meant to unfold. "All quests" keeps
-  // authoring order — a global re-sort would scramble cross-quest context.
-  if (questFilter && String(questFilter) !== "all") {
+  // Canonical order of operations (2026-08-24 overhaul): Act → Quest →
+  // questStep, always. The Beats tab reads as the campaign's intended flow,
+  // not its authoring history; positional numbering is retired from display
+  // in favor of the address (authoring pos survives in the tooltip).
+  {
+    const actRank = b => {
+      const a = beatActOf(b);
+      if (a === null) return 98;
+      if (a === "🎲") return 99;
+      return Number(a);
+    };
     const seqOf = r => {
       const s = Number(r.beat?.questStep);
       return (r.beat?.questStep != null && Number.isFinite(s)) ? s : 1e6 + r.n;
     };
-    out.sort((a, b) => seqOf(a) - seqOf(b)
+    const qn = b => String((questMap && questMap[String(b.questId || "").trim()]?.name) || b.questId || "~");
+    out.sort((a, b) => actRank(a.beat) - actRank(b.beat)
+      || qn(a.beat).localeCompare(qn(b.beat), undefined, { numeric: true })
+      || seqOf(a) - seqOf(b)
       || String(a.beat.label || a.beat.id).localeCompare(String(b.beat.label || b.beat.id), undefined, { numeric: true }));
   }
   return out;
@@ -1521,7 +1573,11 @@ const activeCampaignId = _getActiveCampaignId();
       // badge + confirm on re-run, never blocked.
       let dstate = null;
       try { dstate = game.bbttcc?.api?.campaign?.director?.state?.() || null; } catch (_eDS) { dstate = null; }
+      const addrIdx = buildBeatAddressIndex(selectedCampaign?.beats || []);
       for (const row of beatsFiltered) {
+        const addr = beatAddress(row.beat, addrIdx);
+        row.addrShort = addr.short;
+        row.addrLong = addr.long;
         const qid = String(row?.beat?.questId || "").trim();
         if (qid && questMap[qid]) {
           row.questId = qid;
@@ -2102,12 +2158,14 @@ const activeCampaignId = _getActiveCampaignId();
       });
     const readyDiscovery = readyAll.filter(b => !isAmbientBeat(b) && isDiscoveryBeat(b));
     const readyAmbient = readyAll.filter(b => isAmbientBeat(b) || (isTravelBeat(b) && !isDiscoveryBeat(b)));
+    const _addrIdx = buildBeatAddressIndex(beats);
     const readyRow = b => {
       const rt = runtime.byId[String(b.id)];
       const ico = rt.auto.map(a => AUTO_ICO[a] || "").join("");
       const q = questOf(b);
+      const addr = beatAddress(b, _addrIdx).short;
       // Ambient rows: assess (fly/ⓘ) yes, execute (▶) no — they fire themselves.
-      return flyBtn(b.id, stripPrefix(b.label || b.id, q), `${ico}${rt.hasAudio ? "🔊" : ""}${q ? ` <em>${esc(q)}</em>` : ""}`, !isAmbientBeat(b));
+      return flyBtn(b.id, stripPrefix(b.label || b.id, q), `<code>${esc(addr)}</code> ${ico}${rt.hasAudio ? "🔊" : ""}${q ? ` <em>${esc(q)}</em>` : ""}`, !isAmbientBeat(b));
     };
     const readyHtml =
       readyStory.slice(0, 25).map(readyRow).join("") +
@@ -2148,7 +2206,7 @@ const activeCampaignId = _getActiveCampaignId();
       }
     }
     const comingHtml = comingRows.slice(0, 15).map(r =>
-      flyBtn(r.b.id, stripPrefix(r.b.label || r.b.id, questOf(r.b)), `<em>${esc(r.why)}</em>`)
+      flyBtn(r.b.id, stripPrefix(r.b.label || r.b.id, questOf(r.b)), `<code>${esc(beatAddress(r.b, _addrIdx).short)}</code> <em>${esc(r.why)}</em>`)
     ).join("") + (comingRows.length > 15 ? `<div class="bbttcc-now-empty">+ ${comingRows.length - 15} more…</div>` : "");
 
     let recentHtml = "";
