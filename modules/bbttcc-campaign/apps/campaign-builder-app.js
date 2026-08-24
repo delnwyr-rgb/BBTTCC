@@ -2066,6 +2066,10 @@ const activeCampaignId = _getActiveCampaignId();
     // somewhere — listing it as "available" reads as a choice when it isn't
     // one (the grief-refusal delights topped the list before the game began).
     const isDiscoveryBeat = b => !!b?.targetHexUuid || /\bdiscovery\b/i.test(String(b?.tags || ""));
+    // Travel-leg beats (canon: timeScale === "leg") fire through the travel
+    // tables — "available" is not actionable information for them (2026-08-24:
+    // The Tent at the Edge of Town topped the list at the town gate).
+    const isTravelBeat = b => String(b?.timeScale) === "leg";
     // Fired beats leave the available list and light the Recently-fired rail.
     let firedSet = new Set();
     try {
@@ -2085,7 +2089,7 @@ const activeCampaignId = _getActiveCampaignId();
 
     const readyAll = beats.filter(b => runtime.byId[String(b.id)]?.state === "ready"
       && (!firedSet.has(String(b.id)) || b?.inject?.repeatable));
-    const readyStory = readyAll.filter(b => !isAmbientBeat(b) && !isDiscoveryBeat(b))
+    const readyStory = readyAll.filter(b => !isAmbientBeat(b) && !isDiscoveryBeat(b) && !isTravelBeat(b))
       .sort((a, b) => {
         const ra = runtime.byId[String(a.id)], rb = runtime.byId[String(b.id)];
         const da = ra.auto.includes("director") ? 0 : 1, db = rb.auto.includes("director") ? 0 : 1;
@@ -2097,7 +2101,7 @@ const activeCampaignId = _getActiveCampaignId();
         return natCmp(a.label || a.id, b.label || b.id);
       });
     const readyDiscovery = readyAll.filter(b => !isAmbientBeat(b) && isDiscoveryBeat(b));
-    const readyAmbient = readyAll.filter(isAmbientBeat);
+    const readyAmbient = readyAll.filter(b => isAmbientBeat(b) || (isTravelBeat(b) && !isDiscoveryBeat(b)));
     const readyRow = b => {
       const rt = runtime.byId[String(b.id)];
       const ico = rt.auto.map(a => AUTO_ICO[a] || "").join("");
@@ -2184,7 +2188,14 @@ const activeCampaignId = _getActiveCampaignId();
       const runBtn = (b, txt) =>
         `<button type="button" class="bbttcc-now-hero-run" data-run="${esc(b.id)}">▶ ${esc(txt || stripPrefix(b.label || b.id, questOf(b)))}</button>`;
 
-      if (histCount === 0 && readyStory.length) {
+      // State zero (2026-08-24, owner spec): if a beat dialog is OPEN, the
+      // table is mid-choice — that IS what's next. Everything else waits.
+      const openDlg = (() => { try { return api?.openBeatDialog?.() || null; } catch (_e) { return null; } })();
+      if (openDlg) {
+        heroHtml = heroCard("🎭 PLAYER CHOICE IN PROGRESS", openDlg.label, "",
+          "",
+          `the table is deciding${openDlg.choices?.length ? ` — ${openDlg.choices.slice(0, 6).map(c => esc(c)).join(" · ")}${openDlg.choices.length > 6 ? " · …" : ""}` : ""}. The story continues from their pick.`);
+      } else if (histCount === 0 && readyStory.length) {
         const openId = String(campaign?.openingBeatId || "").trim();
         const opening = openId ? beats.find(b => String(b.id) === openId && runtime.byId[openId]?.state === "ready") : null;
         const first = opening
@@ -2220,9 +2231,13 @@ const activeCampaignId = _getActiveCampaignId();
             (lastName ? `out of “${esc(lastName)}”` : ""));
         } else if (gated.length) {
           const g = gated[0];
-          heroHtml = heroCard("⏭ NEXT — gated route", g.label || g.id, questOf(g),
-            runBtn(g, "Run it anyway"),
-            `the authored route${lastName ? ` out of “${esc(lastName)}”` : ""} hasn't met its own conditions yet — running it pushes through (the button will confirm if it has fired before)`);
+          const unmetR = (runtime.byId[String(g.id)]?.reasons || []).filter(r => !r.met);
+          const why = unmetR.length
+            ? unmetR.slice(0, 2).map(r => r.text + (r.current !== undefined ? ` (now ${r.current})` : "")).join(" · ")
+            : "its own conditions";
+          heroHtml = heroCard("⏳ NEXT — waiting at its gate", g.label || g.id, questOf(g),
+            runBtn(g, "Run it anyway (override the gate)"),
+            `the authored route${lastName ? ` out of “${esc(lastName)}”` : ""} waits for: <b>${esc(why)}</b> — usually the gate is the design doing its job; override only on purpose`);
         } else {
           // No authored route — fall back to CANONICAL QUEST ORDER: the next
           // ready, unfired beat of the same quest by questStep/authoring
@@ -2249,9 +2264,13 @@ const activeCampaignId = _getActiveCampaignId();
               runBtn(qNext, "Run the next beat"),
               `no authored route after “${esc(lastName)}” — following the quest's canonical order`);
           } else if (qGated) {
-            heroHtml = heroCard("⏭ NEXT — gated (quest order)", qGated.label || qGated.id, questOf(qGated),
-              runBtn(qGated, "Run it anyway"),
-              `next in the quest's canonical order after “${esc(lastName)}”, but its own conditions aren't met — running it pushes through`);
+            const unmetQ = (runtime.byId[String(qGated.id)]?.reasons || []).filter(r => !r.met);
+            const whyQ = unmetQ.length
+              ? unmetQ.slice(0, 2).map(r => r.text + (r.current !== undefined ? ` (now ${r.current})` : "")).join(" · ")
+              : "its own conditions";
+            heroHtml = heroCard("⏳ NEXT — waiting at its gate (quest order)", qGated.label || qGated.id, questOf(qGated),
+              runBtn(qGated, "Run it anyway (override the gate)"),
+              `next in the quest's canonical order after “${esc(lastName)}” waits for: <b>${esc(whyQ)}</b> — usually that's the design doing its job`);
           } else {
             heroHtml = heroCard("🧭 IN THE TABLE'S HANDS", "", "", "",
               `No single next beat${lastName ? ` after “${esc(lastName)}”` : ""} — the story is waiting on the players: a choice, a conversation invite, travel, or something they have to walk into. Watch chat, or browse below.`);
@@ -2274,7 +2293,12 @@ const activeCampaignId = _getActiveCampaignId();
       (runtime.ledger ? `<span>${esc(String(runtime.ledger.spent))}/${esc(String(runtime.ledger.budget))} days${Number(runtime.ledger.debt) ? ` · debt ${esc(String(runtime.ledger.debt))}` : ""}</span>` : "") +
       `</div>` +
       heroHtml +
-      sec(`⚡ Available now (${readyStory.length}${readyAmbient.length ? ` · 🎲 ${readyAmbient.length}` : ""})`, readyHtml || `<div class="bbttcc-now-empty">nothing eligible right now</div>`) +
+      // Browse, not a to-do list (2026-08-24, owner feedback): "available"
+      // isn't actionable information — the hero carries the guidance, this
+      // collapses to a reference shelf.
+      `<details class="bbttcc-now-sub"><summary>🗂 Browse runnable (${readyStory.length}${readyAmbient.length ? ` · 🎲 ${readyAmbient.length}` : ""}${readyDiscovery.length ? ` · 📍 ${readyDiscovery.length}` : ""}) — reference, not a to-do list</summary>` +
+      (readyHtml || `<div class="bbttcc-now-empty">nothing eligible right now</div>`) +
+      `</details>` +
       sec(`⏳ Coming up (${comingRows.length})`, comingHtml || `<div class="bbttcc-now-empty">nothing within one condition of unlocking</div>`) +
       (chainsHtml ? sec("⚙ Story chains", chainsHtml, chainsSignal) : "") +
       sec("🌡 Pressures", metersHtml, metersSignal) +

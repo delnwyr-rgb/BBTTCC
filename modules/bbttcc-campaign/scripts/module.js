@@ -4813,6 +4813,10 @@ async function directorTick(opts = {}) {
       // injector), never by director offer. Without this the director was
       // suggesting Chuckle Creek's delight-open at Turn 1 of Act 0.
       if (b.targetHexUuid || /\bdiscovery\b/i.test(String(b.tags || ""))) continue;
+      // Travel-leg beats (2026-08-24, canon: timeScale === "leg") belong to
+      // the travel tables — the director offered "The Tent at the Edge of
+      // Town" at the town gate on day one. Travel fires them, never offers.
+      if (String(b.timeScale) === "leg") continue;
       const sid = String(b.speakerActorId || "").trim();
       if (sid) {
         // Speaker beats are conversations: consumed ones are done, invited
@@ -7317,6 +7321,18 @@ Hooks.once("ready", () => {
   game.bbttcc ??= { api: {} };
   game.bbttcc.api ??= {};
   game.bbttcc.api.campaign = buildCampaignAPI();
+  // Open-choice introspection (2026-08-24): the Visualizer's hero shows the
+  // REAL state of play — when a beat dialog is open, the table is choosing,
+  // and that IS what's next. Reads the module-level current-dialog ref.
+  game.bbttcc.api.campaign.openBeatDialog = () => {
+    const b = __bbttccCurrentBeatDialogBeat;
+    if (!b) return null;
+    return {
+      beatId: b.id,
+      label: b.label || b.id,
+      choices: (b.choices || []).map(c => String(c?.label || "")).filter(Boolean)
+    };
+  };
   // Help registry is guaranteed installed by now (bbttcc-core init < any ready).
   _registerCampaignHelp();
   installInjectorHooks();
