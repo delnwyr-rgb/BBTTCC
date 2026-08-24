@@ -1399,6 +1399,11 @@ export class BBTTCCCampaignBuilderApp extends Application {
 
     this._boundOnBeatUpdated = this._onBeatUpdated.bind(this);
     Hooks.on("bbttcc-campaign:updateBeat", this._boundOnBeatUpdated);
+    // Live truth layer (2026-08-24): re-render when ANY beat resolves, so the
+    // hero/fired rail never go stale on beats that complete asynchronously
+    // (a run whose dialog parks kept the panel frozen on the pre-run state).
+    this._boundOnBeatResolved = foundry.utils.debounce(() => { if (this.rendered) this.render(false); }, 400);
+    Hooks.on("bbttcc:beat:resolved", this._boundOnBeatResolved);
   }
 
   _cleanupPortalLayer() {
@@ -1416,6 +1421,7 @@ export class BBTTCCCampaignBuilderApp extends Application {
 
   close(options = {}) {
     Hooks.off("bbttcc-campaign:updateBeat", this._boundOnBeatUpdated);
+    if (this._boundOnBeatResolved) Hooks.off("bbttcc:beat:resolved", this._boundOnBeatResolved);
     this._cleanupPortalLayer();
     return super.close(options);
   }
@@ -2194,10 +2200,15 @@ const activeCampaignId = _getActiveCampaignId();
         const nextIds = lastFired
           ? [...new Set((lastFired.choices || []).flatMap(c => [c?.next, c?.failNext]).filter(Boolean).map(String))]
           : [];
-        const candidates = nextIds
+        const routed = nextIds
           .map(id => beatById[id])
-          .filter(b => b && (!firedSet.has(String(b.id)) || b?.inject?.repeatable)
-            && runtime.byId[String(b.id)]?.state === "ready");
+          .filter(b => b && (!firedSet.has(String(b.id)) || b?.inject?.repeatable));
+        const candidates = routed.filter(b => runtime.byId[String(b.id)]?.state === "ready");
+        // Gated routes are still THE ROAD (2026-08-24): a blocked next used to
+        // vanish silently, dead-ending the hero on the last fired beat. Show
+        // it, name it gated, and let the GM push through — runBeat ignores
+        // inject.requires by design (gates are the Director's concern).
+        const gated = candidates.length ? [] : routed.filter(b => runtime.byId[String(b.id)]?.state !== "ready");
         if (candidates.length === 1) {
           heroHtml = heroCard("⏭ NEXT", candidates[0].label || candidates[0].id, questOf(candidates[0]),
             runBtn(candidates[0], "Run the next beat"),
@@ -2207,6 +2218,11 @@ const activeCampaignId = _getActiveCampaignId();
             candidates.slice(0, 3).map(b => runBtn(b)).join(""),
             (candidates.length > 3 ? `+ ${candidates.length - 3} more route${candidates.length === 4 ? "" : "s"} below · ` : "") +
             (lastName ? `out of “${esc(lastName)}”` : ""));
+        } else if (gated.length) {
+          const g = gated[0];
+          heroHtml = heroCard("⏭ NEXT — gated route", g.label || g.id, questOf(g),
+            runBtn(g, "Run it anyway"),
+            `the authored route${lastName ? ` out of “${esc(lastName)}”` : ""} hasn't met its own conditions yet — running it pushes through (the button will confirm if it has fired before)`);
         } else {
           // No authored route — fall back to CANONICAL QUEST ORDER: the next
           // ready, unfired beat of the same quest by questStep/authoring

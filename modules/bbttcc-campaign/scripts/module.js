@@ -3011,6 +3011,22 @@ async function executeBeat(campaign, beat, ctx = {}) {
 
   log("Executing beat", { campaignId: campaign.id, beatId: beat.id, type });
 
+  // Record the firing in the director's history AT ENTRY (2026-08-24) — it
+  // lived at the tail, so a beat that parks awaiting its dialog/completion
+  // (Teaching Slide 10's endless "run it again?" loop) never registered and
+  // the Visualizer's hero re-offered it forever. A beat that STARTED counts
+  // as fired for the driving layer. GM-side only (world-state write).
+  try {
+    if (game.user?.isGM && beat?.id) {
+      await _mutateDirectorState(async (st) => {
+        st.firedStoryBeats = st.firedStoryBeats || {};
+        if (!st.firedStoryBeats[beat.id]) {
+          st.firedStoryBeats[beat.id] = { turn: Number(campaign?.turn) || 0, ts: Date.now() };
+        }
+      });
+    }
+  } catch (e) { warn("fired-history record failed:", e); }
+
   // Cinematic dive: a travel trigger (hex-entry beat / travel encounter) may have
   // stashed a one-shot dive request just before running this beat. If present, this
   // beat's scene launch becomes a GM-solo cinematic dive (zoom→flash→view, with a
@@ -3582,22 +3598,6 @@ async function executeBeat(campaign, beat, ctx = {}) {
 
   // Time Points (optional): accumulate beat-time into world clock
   await _applyBeatTimePoints(campaign, beat, ctx);
-
-  // Record EVERY execution in the director's fired history (2026-08-23) —
-  // it was only written by the director's own auto-tick, so beats run by
-  // hand from the Visualizer never registered: the hero card never advanced,
-  // "0 fired" stood forever, and the director could re-offer beats the GM
-  // had already played. GM-side only (world-state write).
-  try {
-    if (game.user?.isGM && beat?.id) {
-      await _mutateDirectorState(async (st) => {
-        st.firedStoryBeats = st.firedStoryBeats || {};
-        if (!st.firedStoryBeats[beat.id]) {
-          st.firedStoryBeats[beat.id] = { turn: Number(campaign?.turn) || 0, ts: Date.now() };
-        }
-      });
-    }
-  } catch (e) { warn("fired-history record failed:", e); }
 
   // Subscriber hook for cross-module reactions to beat resolution. Tikkun
   // module subscribes to advance spark state when a beat carries
