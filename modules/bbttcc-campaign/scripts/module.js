@@ -3638,6 +3638,31 @@ async function executeBeat(campaign, beat, ctx = {}) {
   } catch (e) { warn("quest-offer card failed:", e); }
 }
 
+// Title-card trigger (2026-08-24, owner's movie model): the first applied
+// turn advance while the story sits in Act 1 (the prologue) offers the GM
+// the TITLE CARD beat — whose phaseAdvance raises Act 2 and the trouble
+// starts. Beat id `ag_title_card`; skipped once fired.
+Hooks.on("bbttcc:advanceTurn:end", ({ apply } = {}) => {
+  try {
+    if (!apply || !game.user?.isGM) return;
+    if (_storyPhaseGet() !== 1) return;
+    const cid = _getActiveCampaignId?.() || game.bbttcc?.api?.campaign?.getActiveCampaignId?.();
+    const camp = cid ? getCampaign(cid) : null;
+    if (!camp || !(camp.beats || []).some(b => String(b?.id) === "ag_title_card")) return;
+    try {
+      const ds = game.bbttcc?.api?.campaign?.director?.state?.() || {};
+      if (ds.firedStoryBeats?.ag_title_card) return;
+    } catch (_e) {}
+    ChatMessage.create({
+      whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
+      content: `<div class="bbttcc-title-card-offer" data-campaign-id="${foundry.utils.escapeHTML(String(cid))}">` +
+        `<h3>🎬 The first turn is in the books</h3>` +
+        `<p>The prologue is over. Roll the title card — Act 2 opens and the trouble starts.</p>` +
+        `<button type="button" class="bbttcc-title-card-run">🎬 Roll the title card</button></div>`
+    });
+  } catch (e) { warn("title-card offer failed:", e); }
+});
+
 // Quest-offer accept binder (both chat-render hooks, per the war-log pattern
 // below). GM click runs the accept beat; players get pointed at their GM.
 for (const hk of ["renderChatMessageHTML", "renderChatMessage"]) {
@@ -3654,6 +3679,18 @@ for (const hk of ["renderChatMessageHTML", "renderChatMessage"]) {
         btn.disabled = true; btn.textContent = "✓ Accepted — opening…";
         try { await game.bbttcc.api.campaign.runBeat(cid, bid); }
         catch (e) { console.warn("[bbttcc-campaign] quest accept failed", e); btn.disabled = false; }
+      });
+    });
+    root?.querySelectorAll?.(".bbttcc-title-card-run")?.forEach(btn => {
+      if (btn.dataset.bbttccBound) return;
+      btn.dataset.bbttccBound = "1";
+      btn.addEventListener("click", async () => {
+        if (!game.user?.isGM) return;
+        const cid = btn.closest(".bbttcc-title-card-offer")?.dataset?.campaignId;
+        if (!cid) return;
+        btn.disabled = true; btn.textContent = "🎬 Rolling…";
+        try { await game.bbttcc.api.campaign.runBeat(cid, "ag_title_card"); }
+        catch (e) { console.warn("[bbttcc-campaign] title card failed", e); btn.disabled = false; }
       });
     });
   });
