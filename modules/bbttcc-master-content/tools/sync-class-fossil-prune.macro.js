@@ -13,7 +13,7 @@
  *    updated classes compendium (match by exact name).
  */
 (async () => {
-  const DRY_RUN = true;
+  const DRY_RUN = false;
   if (!game.user.isGM) return ui.notifications.error("GM only.");
   const PACK = game.packs.get("bbttcc-master-content.classes");
   if (!PACK) return ui.notifications.error("classes compendium not found.");

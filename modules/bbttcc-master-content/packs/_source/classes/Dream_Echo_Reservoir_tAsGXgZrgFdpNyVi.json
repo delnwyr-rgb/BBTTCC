@@ -11,7 +11,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><strong>Dream Echo Reservoir.</strong> You have learned to bottle fragments of unrealized possibility. At the end of each a Soma Break, you gain <strong>1 Echo Die (d6)</strong>, and you may store up to <strong>2</strong>.</p><p>You may spend an Echo Die in the following ways:</p><ul><li><strong>Self-Resonance:</strong> When you fail an attribute check, attack roll, or defense check, add +1d6 after seeing the roll.</li><li><strong>Shared Echo:</strong> When an ally within 6 squares fails an attribute check or defense check, you may add +1d6 to their roll.</li><li><strong>World-Tuning:</strong> When the environment makes a check against you (Travel hazard, Slippage shift, Qliphothic anomaly, etc.), reduce the DC by <strong>1d6</strong>.</li></ul><p>These effects represent you nudging possible outcomes back toward resonance.</p>",
+      "value": "<p><strong>Dream Echo Reservoir.</strong> You have learned to bottle a working before the world hears it.</p><p><strong>Store (1 slot):</strong> choose a manifestation you know and seal it into the reservoir. It waits \u2014 a dream deferred, still warm.</p><p><strong>Release:</strong> cast the stored manifestation at <strong>no base cost</strong> \u2014 no Clarity, no Noise. (Reach, overcast, and misfire rules still apply if you push it beyond its tier.) The reservoir then stands empty until you store again.</p><p><em>Separate from the retired Echo Dice \u2014 this is a vessel, not a currency. The Reservoir button on your sheet manages store and release.</em></p>",
       "chat": ""
     },
     "activities": {

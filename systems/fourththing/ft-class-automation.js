@@ -1763,8 +1763,52 @@ async function _ftDwApplyFeatEffect(actor, item, effect) {
   });
 }
 
-// Dreamwalker — Dream Echo Reservoir (L13 feature, compendium tAsGXgZrgFdpNyVi).
-// Display + manual edit dialog. Echo Dice are d6, max 2, gained 1/Soma Break.
+// Dreamwalker — Dream Echo Reservoir (owner ruling 2026-08-23): one vessel,
+// one stored manifestation, released later at NO BASE COST (castManifestation
+// consumes the one-shot and zeroes Clarity + Noise; reach/overcast/misfire
+// still apply). Separate from the retired Echo Dice.
+export async function openDreamwalkerReservoir(actor) {
+  const stored = actor.getFlag("fourththing", "dwReservoir") || null;
+  const powers = (actor.items ?? []).filter(i => i.type === "power" && i.system?.manifestation);
+  const opts = powers.map(p => `<option value="${p.id}">${p.name}</option>`).join("");
+  new Dialog({
+    title: "Dreamwalker — Dream Echo Reservoir",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.8rem;margin:0 0 0.5rem">
+        ${stored ? `Sealed in the reservoir: <b style="color:#a0d8d4">${stored.name}</b> — a dream deferred, still warm.` : "The reservoir stands <b>empty</b>."}
+      </p>
+      ${powers.length ? `<div class="ft-cast-field"><label>Store a manifestation</label><select name="dwres">${opts}</select></div>` : `<p style="opacity:0.6;font-size:0.75rem">No manifestations on this sheet to store.</p>`}
+      <p style="font-size:0.7rem;opacity:0.6;margin:0.4rem 0 0">Release arms your next cast: no Clarity, no Noise. Reach, overcast, and misfire rules still apply. One slot; storing over a sealed dream replaces it.</p>
+    </div>`,
+    buttons: {
+      store: {
+        label: "🫙 Store",
+        callback: async (html) => {
+          const id = String(html.find("[name='dwres']").val() || "");
+          const it = actor.items.get(id);
+          if (!it) return ui.notifications.warn("Pick a manifestation to store.");
+          await actor.setFlag("fourththing", "dwReservoir", { name: it.name, itemId: it.id, ts: Date.now() });
+          ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content:
+            `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name">🫙 Dream Echo Reservoir — sealed: ${it.name}</span></div></div>` });
+        }
+      },
+      release: {
+        label: "✨ Release",
+        callback: async () => {
+          if (!stored) return ui.notifications.warn("The reservoir is empty — nothing to release.");
+          await actor.setFlag("fourththing", "oneShot.dwReservoirFreeCast", { name: stored.name });
+          await actor.unsetFlag("fourththing", "dwReservoir");
+          ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content:
+            `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name">✨ Dream Echo Reservoir — released: ${stored.name}</span></div><p style="font-size:0.78rem;margin:0.3rem 0 0">The next manifestation cast pays <b>no Clarity and no Noise</b>. Cast the dream while it is still warm.</p></div>` });
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: stored ? "release" : "store"
+  }).render(true);
+}
+
+// LEGACY (pre-2026-08-23 Echo Dice dialogs — unrouted, kept for reference).
 export async function openDreamwalkerEchoReservoir(actor) {
   const rawSys = actor.system?.system ?? actor.system;
   const ed = rawSys?.resources?.echoDice ?? { dice: 0, maxDice: 2 };
@@ -7187,8 +7231,11 @@ export async function dispatchFeatureAction(actor, item) {
     case "aurablade_stabilize":    return openStabilizeBurn(actor);
     case "dreamwalker_resonance":  return openDreamwalkerResonance(actor);
     case "dreamwalker_deploy_cache": return openDreamwalkerDeployCache(actor);
-    case "dream_echo_reservoir":       return openDreamwalkerEchoReservoir(actor);
-    case "dream_echo_reservoir_spend": return openDreamwalkerSpendEchoDie(actor);
+    // Owner ruling 2026-08-23: the Reservoir stores a MANIFESTATION for later
+    // release at no base cost — its own vessel, separate from the retired
+    // Echo Dice (whose old dialogs these keys used to open).
+    case "dream_echo_reservoir":       return openDreamwalkerReservoir(actor);
+    case "dream_echo_reservoir_spend": return openDreamwalkerReservoir(actor);
     case "dw_feat_activate":           return openDreamwalkerFeatActivate(actor, item);
     // Soul-Smith — canon-aligned (Phase 1.5): one handler per tier feature
     case "soul_smith_forge_initiate":      return openSoulSmithForgeInitiate(actor);

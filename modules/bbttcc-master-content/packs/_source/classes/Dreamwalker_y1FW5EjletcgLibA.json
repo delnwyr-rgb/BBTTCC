@@ -12,7 +12,7 @@
     },
     "tags": [],
     "description": {
-      "value": "<p><em>\"The future is just memory pointed the other way.\"</em></p>\n<p>The Dreamwalker reads the Tree and works manifestations — and that work <em>is</em> the fuel. You run on <strong>Surge</strong> like everyone, but yours arrives when you <strong>cast a manifestation</strong> (bank +1, max +2/round). The old sprawl folds into this: Echo Dice are now Surge, and the eight soma-break feats live on as four tier powers.</p>\n<h3>The Oracle (spent via Surge)</h3>\n<ul>\n  <li><strong>Omen</strong> (1) — you or an ally saw the thread coming: banks a reroll-lowest.</li>\n  <li><strong>Dream Ward</strong> (2) — an ally drifts into a protective dreamstate: DR + a reroll.</li>\n  <li><strong>Shared Dream</strong> (3) — allies within 6 squares bank a reroll and draw 1 Clarity (refuels their casting).</li>\n  <li><strong>Reality Hack</strong> (5) — rewrite the moment: the party banks a reroll and one enemy rolls its next attack at disadvantage.</li>\n</ul>\n<p>The <strong>Dream-Cache</strong> endures — bank a manifestation between scenes, deploy it next scene without paying Clarity. And the oracle's quiet work stays out of combat: Dream Resonance still senses a hex's Sephirah, and you still Commune with the Great Work for a true answer.</p>",
+      "value": "<p><em>\"The future is just memory pointed the other way.\"</em></p>\n<p>The Dreamwalker reads the Tree and works manifestations \u2014 and that work <em>is</em> the fuel. You run on <strong>Surge</strong> like everyone, but yours arrives when you <strong>cast a manifestation</strong> (bank +1, max +2/round). The old sprawl folds into this: the old Echo Dice fold into Surge, the eight soma-break feats live on as four tier powers \u2014 and the <strong>Dream Echo Reservoir</strong> endures as its own vessel: store a manifestation, release it later at no base cost.</p>\n<h3>The Oracle (spent via Surge)</h3>\n<ul>\n  <li><strong>Omen</strong> (1) \u2014 you or an ally saw the thread coming: banks a reroll-lowest.</li>\n  <li><strong>Dream Ward</strong> (2) \u2014 an ally drifts into a protective dreamstate: DR + a reroll.</li>\n  <li><strong>Shared Dream</strong> (3) \u2014 allies within 6 squares bank a reroll and draw 1 Clarity (refuels their casting).</li>\n  <li><strong>Reality Hack</strong> (5) \u2014 rewrite the moment: the party banks a reroll and one enemy rolls its next attack at disadvantage.</li>\n</ul>\n<p>The <strong>Dream-Cache</strong> endures \u2014 bank a manifestation between scenes, deploy it next scene without paying Clarity. And the oracle's quiet work stays out of combat: Dream Resonance still senses a hex's Sephirah, and you still Commune with the Great Work for a true answer.</p>",
       "chat": ""
     },
     "advancement": {
@@ -165,7 +165,7 @@
         },
         "value": {},
         "level": 9,
-        "title": "Dreamer’s Poise",
+        "title": "Dreamer\u2019s Poise",
         "flags": {},
         "hint": ""
       },
@@ -574,7 +574,7 @@
         },
         "value": {},
         "level": 1,
-        "title": "Dreamwalker Discipline (Tier 1 — Oneiric Reservoir)",
+        "title": "Dreamwalker Discipline (Tier 1 \u2014 Oneiric Reservoir)",
         "icon": "",
         "classRestriction": "",
         "hint": "",
@@ -602,7 +602,7 @@
         },
         "value": {},
         "level": 5,
-        "title": "Dreamwalker Discipline (Tier 2 — Dream-Cache)",
+        "title": "Dreamwalker Discipline (Tier 2 \u2014 Dream-Cache)",
         "icon": "",
         "classRestriction": "",
         "hint": "",
@@ -630,7 +630,7 @@
         },
         "value": {},
         "level": 11,
-        "title": "Dreamwalker Discipline (Tier 3 — The Walking Lane (Signature Mode))",
+        "title": "Dreamwalker Discipline (Tier 3 \u2014 The Walking Lane (Signature Mode))",
         "icon": "",
         "classRestriction": "",
         "hint": "",
@@ -658,7 +658,7 @@
         },
         "value": {},
         "level": 17,
-        "title": "Dreamwalker Discipline (Tier 4 — Shared Dream)",
+        "title": "Dreamwalker Discipline (Tier 4 \u2014 Shared Dream)",
         "icon": "",
         "classRestriction": "",
         "hint": "",

@@ -7331,7 +7331,7 @@ async function castManifestation(actor, item, {
   // freeClarity:true bypasses the Clarity cost entirely (Phase C 2026-05-07
   // — Dreamwalker Dream-Cache deploy fires this; Blood Debt + Noise still due).
   const tccDiscount = actorIsTCC ? 1 : 0;
-  const clarityCost = (cfg.ascendant || freeClarity || miracle) ? 0 : Math.max(0, baseClarity + cfg.clarityShift - tccDiscount);
+  let clarityCost = (cfg.ascendant || freeClarity || miracle) ? 0 : Math.max(0, baseClarity + cfg.clarityShift - tccDiscount);
   const casterPool = _ftCasterPool(actor);
   const curClarity = casterPool.current;
 
@@ -7343,7 +7343,18 @@ async function castManifestation(actor, item, {
   if (!miracle && cfg.ascendant) bloodDebtCost += 1;
 
   // Resolve Noise gain (mode; no base Noise cost for manifestations). A miracle is silent.
-  const noiseGain = miracle ? 0 : cfg.noiseGain;
+  let noiseGain = miracle ? 0 : cfg.noiseGain;
+
+  // Dreamwalker — Dream Echo Reservoir (owner ruling 2026-08-23): a stored
+  // manifestation releases at no base cost — no Clarity, no Noise. Reach,
+  // overcast, and misfire rules still apply. One-shot armed by the reservoir
+  // dialog; consumed here whether or not the cast succeeds.
+  const _dwReservoirFree = actor.flags?.fourththing?.oneShot?.dwReservoirFreeCast;
+  if (_dwReservoirFree) {
+    clarityCost = 0;
+    noiseGain = 0;
+    try { await actor.unsetFlag("fourththing", "oneShot.dwReservoirFreeCast"); } catch (_e) {}
+  }
 
   if (!cfg.ascendant && curClarity < clarityCost) {
     ui.notifications?.warn(`${actor.name}: need ${clarityCost} ${casterPool.label} (have ${curClarity}).`);
@@ -7368,6 +7379,7 @@ async function castManifestation(actor, item, {
   if (noiseGain > 0) costPieces.push(`Noise +${noiseGain}`);
   if (reachPath) costPieces.push(`Reach→T${manTier} via ${reachPath === "surge" ? "Surge" : "Blood Debt"}`);
   if (noiseMisfireShift > 0) costPieces.push(`Noise ${_ftNoiseBite(actor).label} — misfire +${noiseMisfireShift}`);
+  if (_dwReservoirFree) costPieces.push(`Dream Echo Reservoir — released${_dwReservoirFree?.name ? ` (${_dwReservoirFree.name})` : ""}, no base cost`);
   if (cfg.ascendant) costPieces.push("Ascendant");
   if (tccDiscount > 0 && !cfg.ascendant) costPieces.push(`TCC discount −${tccDiscount}`);
   const costNote = costPieces.join(" · ") || "No mechanical cost";
