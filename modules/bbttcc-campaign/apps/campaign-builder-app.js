@@ -2336,7 +2336,11 @@ const activeCampaignId = _getActiveCampaignId();
             }
             const qRouted = beats
               .filter(b => String(b.questId || "").trim() === lq
-                && (!firedSet.has(String(b.id)) || b?.inject?.repeatable)
+                // Fired is fired — and repeatable beats are PLACES (hubs,
+                // rounds), not steps: proposing a fired hub as NEXT loops
+                // forever (the "Cookline is the hub" lesson, 2026-08-24).
+                && !firedSet.has(String(b.id))
+                && !b?.inject?.repeatable
                 && !isAmbientBeat(b) && !isDiscoveryBeat(b)
                 && !choiceTargets.has(String(b.id))
                 && seqOf(b) > ls)

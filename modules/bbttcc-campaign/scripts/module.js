@@ -2913,10 +2913,16 @@ async function _applyQuestEffects(campaign, beat, ctx) {
       // sealed Leygate deal stayed offerable. Explicitly delete removed keys
       // first, then merge the new state.
       try {
+        // v14 deprecates the "-=key" deletion syntax (console error per write,
+        // removal promised) — use ForcedDeletion where the core provides it.
+        const FD = foundry.data?.operators?.ForcedDeletion || null;
         const del = {};
         for (const bucket of ["active", "completed", "archived"]) {
           for (const qid of Object.keys((cur && cur[bucket]) || {})) {
-            if (!next[bucket] || !next[bucket][qid]) del[`flags.${MOD}.quests.${bucket}.-=${qid}`] = null;
+            if (!next[bucket] || !next[bucket][qid]) {
+              if (FD) del[`flags.${MOD}.quests.${bucket}.${qid}`] = new FD();
+              else del[`flags.${MOD}.quests.${bucket}.-=${qid}`] = null;
+            }
           }
         }
         if (Object.keys(del).length) await faction.update(del, { render: false });
