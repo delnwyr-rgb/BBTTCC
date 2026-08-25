@@ -2859,9 +2859,11 @@ async function _applyQuestEffects(campaign, beat, ctx) {
       }
       else if (action === "complete" || action === "completed") {
         entry = moveQuest(questId, "completed");
+        entry.completedTs = entry.completedTs || nowTs();   // the log's COMPLETED pane reads this
       }
       else if (action === "archive" || action === "archived") {
         entry = moveQuest(questId, "archived");
+        entry.archivedTs = entry.archivedTs || nowTs();
       }
       else if (action === "activate" || action === "reopen") {
         entry = moveQuest(questId, "active");
