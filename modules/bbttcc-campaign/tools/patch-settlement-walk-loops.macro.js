@@ -86,11 +86,30 @@
     }
     report.push(`◈ ${t.key}: walked ${claimed.size} venue beat(s), ${rehomed} route(s) re-homed to the walk`);
 
-    /* ── 2. The leave door ── */
+    /* ── 2. Groom the walk hub's OWN choices ──
+     * Flavor picks ("Eat what Bez gives you", "Drink the well-water") were
+     * authored ∅ — and v3 filled KT's with the ARRIVAL beat, which is the
+     * dumped-at-the-gates bug. Flavor now SELF-LOOPS (re-presents the menu);
+     * "Call it a day"-style exits route to the Crossroads. */
     walk.choices = Array.isArray(walk.choices) ? walk.choices : [];
+    const isExitLabel = c => /call it a day|take your leave|leave\b.*road|head (out|back to the road)/i.test(String(c?.label || ""));
+    for (const c of walk.choices) {
+      if (!String(c?.label || "").trim()) continue;
+      const cur = String(c?.next || "").trim();
+      const misrouted = !cur || arrivals.includes(cur);
+      if (!misrouted) continue;
+      if (isExitLabel(c) && byId.has(CROSSROADS)) {
+        c.next = CROSSROADS; changes++;
+        report.push(`· ${t.key} walk: "${String(c.label).slice(0, 30)}" → Crossroads (exit)`);
+      } else {
+        c.next = t.walkId; changes++;
+        report.push(`· ${t.key} walk: "${String(c.label).slice(0, 30)}" → self-loop (menu re-presents)`);
+      }
+    }
+    /* ── 2b. The leave door (only if no crossroads exit exists after grooming) ── */
     if (byId.has(CROSSROADS)) {
       if (walk.choices.some(c => String(c?.next) === CROSSROADS)) {
-        report.push(`· ok ${t.key}: walk already exits to the Crossroads`);
+        report.push(`· ok ${t.key}: walk exits to the Crossroads`);
       } else {
         walk.choices.push({ label: "Take your leave — the road's waiting", next: CROSSROADS,
           description: "Done here for now. Back to the fork and the hand-painted signs.",
