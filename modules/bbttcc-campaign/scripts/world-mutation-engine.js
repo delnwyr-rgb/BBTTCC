@@ -1338,6 +1338,33 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
     }
 
+    // ── openTravel: hand the table to the travel engine (2026-08-24) ──
+    // worldEffects.openTravel = { hexName?, note? } — return to the world hub
+    // scene, open the Travel Console, name the destination. The ride itself
+    // (legs, encounters, weather) is the travel engine's business; arrival
+    // fires via campaign.hexOverrides[hexUuid].onEnterBeatId on hex_enter.
+    if (we.openTravel && typeof we.openTravel === "object") {
+      try {
+        const dest = String(we.openTravel.hexName || "").trim();
+        const hub = game.scenes?.find?.(s => s.getFlag?.("bbttcc-travel", "isWorldHub")) || null;
+        if (hub && canvas?.scene?.id !== hub.id) {
+          const back = get(game, "bbttcc.api.transition.back", null);
+          if (back) await back(hub.uuid, { label: "World Map" });
+          else await hub.view();
+        }
+        const console_ = get(game, "bbttcc.ui.travelConsole", null);
+        if (console_?.render) console_.render(true);
+        const note = String(we.openTravel.note || "").trim()
+          || (dest ? `🐎 Plot the ride to ${dest} — legs and encounters run through the Travel Console.`
+                   : "🐎 Plot the ride — legs and encounters run through the Travel Console.");
+        ui.notifications?.info?.(note);
+        changed = true;
+        notes.push("openTravel" + (dest ? `:${dest}` : ""));
+      } catch (e) {
+        console.warn(TAG, "openTravel failed", e);
+      }
+    }
+
     if (changed) console.log(TAG, "Applied worldEffects", { beatId: beatCtx.beatId, beatType: beatCtx.beatType, notes: notes });
     else console.log(TAG, "No worldEffects applied (no-ops)", { beatId: beatCtx.beatId });
 
