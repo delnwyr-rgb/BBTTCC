@@ -5226,11 +5226,16 @@ async function dialogueChoicesFor(actorId, ctx = {}) {
   try {
     const stripHtml = (s) => String(s || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
     const rows = [];
+    const invited = _readDirectorState()?.invited || {};
     for (const { beat } of await _dialogueOfferableBeats(actorId, ctx)) {
       const choices = Array.isArray(beat.choices) ? beat.choices : [];
       // The beat's description is the NPC's authored script for the scene —
       // the dialogue engine plays it in-voice when the conversation arrives.
-      const beatDescription = stripHtml(beat.description);
+      let beatDescription = stripHtml(beat.description);
+      // The invitation loop closes in-voice: this NPC SENT WORD asking to
+      // talk, and the party showing up IS the answer. Tell the model so.
+      if (invited[beat.id])
+        beatDescription += " (You sent word through town asking the Stewards to come speak with you — their being here is the answer. Open by acknowledging it: you're glad they got your message. Then play the scene.)";
       choices.forEach((ch, i) => {
         const label = String(ch?.label || "").trim();
         if (!label) return;
@@ -5506,6 +5511,22 @@ function _onBeatResolvedSpeakerMemory({ beat, outcome } = {}) {
         });
       } catch (_eS) {}
 
+      // Close the invitation quest, if one was accepted for this moment:
+      // the word was answered in person, so "A Word from X" completes.
+      try {
+        const qid = `word_${beat.id}`;
+        const q = getQuest(qid);
+        if (q && q.status !== "completed") {
+          await setQuestStatus(qid, "completed");
+          const campaignId = getActiveCampaignId();
+          const campaign = campaignId ? getCampaign(campaignId) : null;
+          if (campaign) await _applyQuestEffects(campaign, {
+            id: beat.id,
+            worldEffects: { questEffects: [{ action: "complete", questId: qid, text: "Word answered in person." }] }
+          }, {});
+        }
+      } catch (eQ) { warn("[dialogue] invite-quest completion failed:", eQ); }
+
       const actor = game.actors?.get?.(sid);
       if (!actor) return;
       let text = String(beat.memoryText || "").trim();
@@ -5561,10 +5582,11 @@ function _onBeatResolvedStoryMark({ beat } = {}) {
 }
 
 // (3) The invitation card — the narration→conversation handoff. Public,
-// diegetic, opt-in: a Talk button opens the NPC's dialogue window on the
-// clicking player's own client (mal-voice provides talkTo; the card degrades
-// to a plain nudge without it). Authorable `beat.inviteText` replaces the
-// default line.
+// diegetic, opt-in. Redesigned 2026-08-24 (owner): an invitation is a QUEST,
+// not a dialogue launcher — accepting it logs "A Word from <NPC>" (who /
+// where / why) in the coalition Quest Log, and the party goes and FINDS the
+// NPC. The quest completes itself when the invited moment is actually played
+// (any surface). Authorable `beat.inviteText` replaces the default line.
 async function _postTalkInvitation(actor, beats = []) {
   try {
     const esc = foundry.utils.escapeHTML;
@@ -5575,36 +5597,83 @@ async function _postTalkInvitation(actor, beats = []) {
       content: `<div class="bbttcc-talk-invite" style="border-left:3px solid #4db8b0;padding:.45em .6em;background:rgba(77,184,176,.08);">
         <img src="${esc(actor.img || "icons/svg/mystery-man.svg")}" style="width:28px;height:28px;object-fit:cover;border:1px solid #666;border-radius:4px;vertical-align:middle;margin-right:.4em;"/>
         <b>${esc(actor.name)}</b> ${esc(inviteText)}<br>
-        <button type="button" data-bbttcc-talk="${esc(actor.id)}" style="width:auto;padding:.25em .8em;margin-top:.35em;">
-          <i class="fa-solid fa-comments"></i> Talk to ${esc(actor.name)}</button>
+        <button type="button" data-bbttcc-invite-accept="${esc(actor.id)}" style="width:auto;padding:.25em .8em;margin-top:.35em;">
+          <i class="fa-solid fa-envelope-open-text"></i> Accept the invitation</button>
+        <span style="opacity:.65;font-size:.85em;margin-left:.4em;">— logs who wants you, where, and why in the Quest Log.</span>
       </div>`,
       flags: { [MOD_ID]: { talkInvite: { actorId: actor.id, beatIds: (Array.isArray(beats) ? beats : [beats]).map(b => b?.id).filter(Boolean) } } }
     });
   } catch (e) { warn("[dialogue] talk invitation failed:", e); }
 }
 
+// Accepting an invitation seals it into BOTH quest stores: the registry
+// (name + who/where/why description) and the coalition faction track (the
+// Quest Log surface) — the latter through the same questEffects engine the
+// authored offer-quest beats use, so display/history behave identically.
+async function _acceptTalkInvitation(message) {
+  const inv = message?.getFlag?.(MOD_ID, "talkInvite") || {};
+  const actor = game.actors?.get?.(inv.actorId);
+  if (!actor) { ui.notifications?.warn?.("That person is nowhere to be found."); return; }
+  const campaignId = getActiveCampaignId();
+  const campaign = campaignId ? getCampaign(campaignId) : null;
+  if (!campaign) { ui.notifications?.warn?.("No active campaign — the invitation has nowhere to land."); return; }
+  const beatId = (Array.isArray(inv.beatIds) ? inv.beatIds : []).map(s => String(s || "").trim()).filter(Boolean)[0] || "";
+  const beat = (campaign.beats || []).find(b => String(b?.id) === beatId) || null;
+  const inviteText = String(beat?.inviteText || "").trim() || "wants a word.";
+  const sid = String(beat?.sceneId || "").replace(/^Scene\./, "").trim();
+  const sceneName = sid ? String(game.scenes?.get?.(sid)?.name || "").trim() : "";
+  const whereLine = sceneName || "somewhere nearby — ask around town";
+  const esc = foundry.utils.escapeHTML;
+  const qid = `word_${beatId || actor.id}`;
+  await createQuest(qid, {
+    name: `A Word from ${actor.name}`,
+    status: "active",
+    description: `<p><b>${esc(actor.name)}</b> ${esc(inviteText)}</p>`
+      + `<p><b>Where:</b> ${esc(whereLine)}</p>`
+      + (beat?.label ? `<p><b>Regarding:</b> ${esc(String(beat.label))}</p>` : "")
+      + `<p><i>They sent this word themselves — when you find them, they'll know you came because they asked.</i></p>`
+  });
+  await _applyQuestEffects(campaign, {
+    id: beatId || `talk_invite_${actor.id}`,
+    worldEffects: { questEffects: [{ action: "accept", questId: qid, text: `${actor.name} ${inviteText}` }] }
+  }, {});
+  try { await message.setFlag(MOD_ID, "talkInvite", Object.assign({}, inv, { accepted: true, questId: qid })); } catch (_e) {}
+  await ChatMessage.create({
+    speaker: { alias: "Bad Eden" },
+    content: `<div style="border-left:3px solid #4db8b0;padding:.35em .6em;background:rgba(77,184,176,.06);">
+      📜 <b>A Word from ${esc(actor.name)}</b> — logged in the Quest Log. Find them ${sceneName ? `at <b>${esc(sceneName)}</b>` : "in town"}.</div>`
+  });
+}
+
 function _bindTalkInviteButtons(message, root) {
   try {
-    if (!root || !message?.getFlag?.(MOD_ID, "talkInvite")) return;
-    for (const btn of root.querySelectorAll("[data-bbttcc-talk]")) {
+    const inv = message?.getFlag?.(MOD_ID, "talkInvite");
+    if (!root || !inv) return;
+    // Legacy cards (pre-2026-08-24) carry data-bbttcc-talk; new cards carry
+    // data-bbttcc-invite-accept. Bind both to the accept flow.
+    for (const btn of root.querySelectorAll("[data-bbttcc-invite-accept],[data-bbttcc-talk]")) {
+      if (inv.accepted) {   // already sealed — show state, stay inert
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-check"></i> Invitation accepted`;
+        continue;
+      }
       if (btn.dataset.bbttccBound) continue;   // v13 fires BOTH render hooks — bind once
       btn.dataset.bbttccBound = "1";
-      btn.addEventListener("click", (ev) => {
+      btn.addEventListener("click", async (ev) => {
         ev.preventDefault();
-        const talkTo = game.bbttcc?.mal?.npc?.talkTo;
-        const actor = game.actors?.get?.(btn.dataset.bbttccTalk);
-        if (!actor) return ui.notifications?.warn?.("That person is nowhere to be found.");
-        if (typeof talkTo !== "function") return ui.notifications?.warn?.("NPC dialogue (bbttcc-mal-voice) is not available.");
-        talkTo(actor);
+        // Quest writes touch world settings + faction flags — GM seals it.
+        if (!game.user?.isGM)
+          return ui.notifications?.info?.("Invitation noted — your GM's click seals it into the Quest Log.");
+        try { await _acceptTalkInvitation(message); }
+        catch (e) { warn("[dialogue] invite accept failed:", e); ui.notifications?.error?.("The invitation slipped — see console."); }
       });
     }
   } catch (e) { warn("[dialogue] invite button bind failed:", e); }
 }
 
-// Talk buttons open the NPC dialogue window on the clicking user's own client
-// (players and GM alike). Top-level registration so cards already in the chat
-// log re-bind on reload; v13+ fires renderChatMessageHTML, older cores the
-// jQuery renderChatMessage — bind both defensively.
+// Invitation cards re-bind on reload (accepted ones render sealed). Top-level
+// registration; v13+ fires renderChatMessageHTML, older cores the jQuery
+// renderChatMessage — bind both defensively.
 Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindTalkInviteButtons(message, html); } catch (_e) {} });
 Hooks.on("renderChatMessage",     (message, html) => { try { _bindTalkInviteButtons(message, html?.[0] ?? html); } catch (_e) {} });
 
