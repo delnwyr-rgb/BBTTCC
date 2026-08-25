@@ -1,40 +1,62 @@
 <section class="bbttcc-scene-picker-root">
+  <style>
+    .bbttcc-scene-picker-root {
+      --sp-bg: var(--cb-bg, #0d1117);
+      --sp-panel: var(--cb-panel, #131a24);
+      --sp-line: var(--cb-line, rgba(0,229,255,.18));
+      --sp-accent: var(--cb-accent, #00e5ff);
+      --sp-text: var(--cb-text, #dce6f0);
+      --sp-muted: var(--cb-muted, #7f93a8);
+      display: flex; flex-direction: column; gap: .5rem;
+      height: 100%; color: var(--sp-text);
+    }
+    .bbttcc-scene-picker-header h2 {
+      margin: 0; border: none; font-size: 1.05rem; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--sp-accent);
+    }
+    .bbttcc-scene-picker-header p { margin: .15rem 0 0; font-size: .8rem; color: var(--sp-muted); }
+    .bbttcc-scene-picker-search {
+      width: 100%; padding: .45rem .6rem; border-radius: 4px;
+      background: var(--sp-panel); color: var(--sp-text);
+      border: 1px solid var(--sp-line);
+    }
+    .bbttcc-scene-picker-search:focus { outline: none; border-color: var(--sp-accent); box-shadow: 0 0 6px rgba(0,229,255,.25); }
+    .bbttcc-scene-picker-list { flex: 1; overflow-y: auto; border: 1px solid var(--sp-line); border-radius: 4px; background: var(--sp-panel); }
+    .bbttcc-scene-picker-row {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .45rem .65rem; cursor: pointer;
+      border-bottom: 1px solid var(--sp-line);
+    }
+    .bbttcc-scene-picker-row:last-child { border-bottom: none; }
+    .bbttcc-scene-picker-row:hover { background: rgba(0,229,255,.08); }
+    .bbttcc-scene-picker-row .sp-name { flex: 1; min-width: 0; }
+    .bbttcc-scene-picker-row .sp-name b { display: block; font-size: .9rem; }
+    .bbttcc-scene-picker-row .sp-name code { font-size: .68rem; color: var(--sp-muted); }
+    .bbttcc-scene-picker-row .sp-use {
+      flex: 0 0 auto; width: auto; padding: .25rem .9rem; border-radius: 999px;
+      background: transparent; color: var(--sp-accent);
+      border: 1px solid var(--sp-accent); font-size: .75rem; letter-spacing: .08em;
+    }
+    .bbttcc-scene-picker-row:hover .sp-use { background: var(--sp-accent); color: var(--sp-bg); }
+    .bbttcc-scene-picker-empty { padding: 1rem; text-align: center; color: var(--sp-muted); }
+  </style>
+
   <header class="bbttcc-scene-picker-header">
     <h2>Select a Scene</h2>
-    <p class="bbttcc-muted">
-      Pick a scene to link to this beat. You can always change it later.
-    </p>
+    <p>Pick a scene to link to this beat. You can always change it later.</p>
   </header>
 
-  {{#if scenes.length}}
-    <table class="bbttcc-table bbttcc-table-scenes">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>UUID</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each scenes as |scn|}}
-          <tr>
-            <td>{{scn.name}}</td>
-            <td><code>{{scn.uuid}}</code></td>
-            <td>
-              <button type="button"
-                      class="bbttcc-btn"
-                      data-action="choose-scene"
-                      data-uuid="{{scn.uuid}}">
-                Use
-              </button>
-            </td>
-          </tr>
-        {{/each}}
-      </tbody>
-    </table>
-  {{else}}
-    <p class="bbttcc-muted">
-      No scenes are available in this world.
-    </p>
-  {{/if}}
+  <input type="search" class="bbttcc-scene-picker-search"
+         placeholder="🔍 Filter scenes…" autocomplete="off" />
+
+  <div class="bbttcc-scene-picker-list">
+    {{#each scenes as |scn|}}
+      <div class="bbttcc-scene-picker-row" data-action="choose-scene" data-uuid="{{scn.uuid}}">
+        <div class="sp-name"><b>{{scn.name}}</b><code>{{scn.uuid}}</code></div>
+        <button type="button" class="sp-use" data-action="choose-scene" data-uuid="{{scn.uuid}}">Use</button>
+      </div>
+    {{/each}}
+    <div class="bbttcc-scene-picker-empty" {{#if scenes.length}}style="display:none;"{{/if}}
+         data-empty-note>No scenes {{#if scenes.length}}match the filter{{else}}are available in this world{{/if}}.</div>
+  </div>
 </section>

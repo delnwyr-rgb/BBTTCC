@@ -12,8 +12,8 @@ export class BBTTCCCampaignScenePickerApp extends Application {
       id: "bbttcc-campaign-scene-picker",
       title: "Pick Scene",
       template: "modules/bbttcc-campaign/templates/campaign-scene-picker.hbs",
-      width: 500,
-      height: 600,
+      width: 720,
+      height: 640,
       resizable: true,
       minimizable: true,
       classes: ["bbttcc-campaign-scene-picker", "bbttcc-hexchrome"]
@@ -42,9 +42,34 @@ export class BBTTCCCampaignScenePickerApp extends Application {
 
   activateListeners(html) {
     super.activateListeners(html);
+    const root = html?.[0] ?? html;
+
+    // Live filter — collapse whitespace (hex/scene names can carry NBSP) and
+    // match case-insensitively on name or uuid.
+    const search = root?.querySelector?.(".bbttcc-scene-picker-search");
+    if (search) {
+      const rows = Array.from(root.querySelectorAll(".bbttcc-scene-picker-row"));
+      const empty = root.querySelector("[data-empty-note]");
+      const norm = s => String(s || "").replace(/\s+/g, " ").trim().toLowerCase();
+      search.addEventListener("input", () => {
+        const q = norm(search.value);
+        let shown = 0;
+        for (const row of rows) {
+          const hit = !q || norm(row.textContent).includes(q);
+          row.style.display = hit ? "" : "none";
+          if (hit) shown++;
+        }
+        if (empty) {
+          empty.textContent = "No scenes match the filter.";
+          empty.style.display = shown ? "none" : "";
+        }
+      });
+      setTimeout(() => { try { search.focus(); } catch (_e) {} }, 50);
+    }
 
     html.find("[data-action='choose-scene']").on("click", ev => {
       ev.preventDefault();
+      ev.stopPropagation();   // row and button both carry the action — fire once
       const uuid = ev.currentTarget?.dataset?.uuid;
       if (!uuid) return;
 

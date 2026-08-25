@@ -5624,7 +5624,12 @@ async function _acceptTalkInvitation(message) {
   const inviteText = String(beat?.inviteText || "").trim() || "wants a word.";
   const sid = String(beat?.sceneId || "").replace(/^Scene\./, "").trim();
   const sceneName = sid ? String(game.scenes?.get?.(sid)?.name || "").trim() : "";
-  const whereLine = sceneName || "somewhere nearby — ask around town";
+  // No linked scene: fall back to the town named in the beat label's prefix
+  // ("Khezek Tor — Sable Nine, at a Polite Distance" → "Khezek Tor"). Split
+  // on spaced em/en dashes only — hyphens live inside town names (Khezek-Tor).
+  const labelTown = String(beat?.label || "").split(/\s+[—–]\s+/)[0].trim();
+  const whereLine = sceneName
+    || (labelTown && labelTown.length < 40 ? `${labelTown} — ask around town` : "somewhere nearby — ask around town");
   const esc = foundry.utils.escapeHTML;
   const qid = `word_${beatId || actor.id}`;
   await createQuest(qid, {
@@ -5677,7 +5682,10 @@ function _bindTalkInviteButtons(message, root) {
 // registration; v13+ fires renderChatMessageHTML, older cores the jQuery
 // renderChatMessage — bind both defensively.
 Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindTalkInviteButtons(message, html); } catch (_e) {} });
-Hooks.on("renderChatMessage",     (message, html) => { try { _bindTalkInviteButtons(message, html?.[0] ?? html); } catch (_e) {} });
+// Legacy fallback for pre-v13 cores only — on v13+ the HTML hook always fires
+// and a live legacy registration just spams deprecation warnings.
+if (Number(globalThis.game?.release?.generation ?? 99) < 13)
+  Hooks.on("renderChatMessage",   (message, html) => { try { _bindTalkInviteButtons(message, html?.[0] ?? html); } catch (_e) {} });
 
 // (3c) Narrative handoff — "the way forward" card. Authored per beat:
 //   beat.handoff = { beatId, focus?, text? }
@@ -5761,7 +5769,8 @@ function _bindHandoffButtons(message, root) {
   } catch (e) { warn("[dialogue] handoff button bind failed:", e); }
 }
 Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindHandoffButtons(message, html); } catch (_e) {} });
-Hooks.on("renderChatMessage",     (message, html) => { try { _bindHandoffButtons(message, html?.[0] ?? html); } catch (_e) {} });
+if (Number(globalThis.game?.release?.generation ?? 99) < 13)
+  Hooks.on("renderChatMessage",   (message, html) => { try { _bindHandoffButtons(message, html?.[0] ?? html); } catch (_e) {} });
 
 // (3d) Mid-conversation doors — point_the_way. The fiction moves before the
 // enact does ("she leads him back through the crates…") and the WORLD must

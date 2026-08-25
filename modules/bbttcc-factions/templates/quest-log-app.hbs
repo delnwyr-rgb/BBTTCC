@@ -110,8 +110,10 @@
           </div>
 
           {{#if selected.description}}
+            {{! triple-stache: descriptions are GM-authored HTML — escaping
+                them printed raw tags in the log (2026-08-24) }}
             <div class="bbttcc-quest-detail__desc">
-              {{selected.description}}
+              {{{selected.description}}}
             </div>
           {{else}}
             <div class="bbttcc-muted" style="margin-top:.35rem;">

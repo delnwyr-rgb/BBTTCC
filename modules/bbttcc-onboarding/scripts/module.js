@@ -81,7 +81,9 @@ Hooks.once("ready", () => {
   });
 
   // Button binders — Begin runs on the CLICKING player's client (their lane).
-  Hooks.on("renderChatMessage", (_msg, html) => {
+  // v13+ fires renderChatMessageHTML; the legacy hook registers only on old
+  // cores (a live legacy registration spams deprecation warnings on v13+).
+  const _bindOnbChatButtons = (_msg, html) => {
     const root = html?.[0] ?? html;
     root?.querySelectorAll?.(".bbttcc-onb-begin")?.forEach(btn => {
       btn.addEventListener("click", () => {
@@ -103,7 +105,10 @@ Hooks.once("ready", () => {
         } catch (e) { warn("orientation film start failed", e); btn.disabled = false; }
       });
     });
-  });
+  };
+  Hooks.on("renderChatMessageHTML", _bindOnbChatButtons);
+  if (Number(globalThis.game?.release?.generation ?? 99) < 13)
+    Hooks.on("renderChatMessage", _bindOnbChatButtons);
 });
 
 // ----- Real-actor resolvers (NEVER create clones — resolve what the player owns) -----
