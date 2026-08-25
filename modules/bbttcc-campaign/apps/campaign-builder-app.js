@@ -1964,6 +1964,10 @@ const activeCampaignId = _getActiveCampaignId();
       try {
         const ds = game.bbttcc?.api?.campaign?.director?.state?.() || {};
         firedAlready = !!(ds.firedStoryBeats?.[id] || ds.dialogueFired?.[id]);
+        // Repeatable beats (hubs, rounds, crossroads) are DESIGNED to re-run —
+        // re-entering one is normal play, not a re-fire worth interrupting.
+        const beat = (api.getCampaign?.(campaignId)?.beats || []).find(b => String(b?.id) === id);
+        if (beat?.inject?.repeatable) firedAlready = false;
       } catch (_e) {}
       if (firedAlready) {
         const content = `<p><code>${id}</code> is marked as already fired. Run it again?</p>`;
@@ -2318,10 +2322,23 @@ const activeCampaignId = _getActiveCampaignId();
           const lq = lastFired ? String(lastFired.questId || "").trim() : "";
           if (lq) {
             const ls = seqOf(lastFired);
+            // Beats some choice already routes INTO are player destinations —
+            // a hub menu's venues, a branch's outcomes. Proposing one as
+            // quest-order NEXT offers it out of context (the "Seat at the
+            // Cookline" lesson, 2026-08-24): the fallback exists for beats
+            // with NO authored arrival, so only those qualify.
+            const choiceTargets = new Set();
+            for (const b of beats) for (const c of (b.choices || [])) {
+              for (const t of [c?.next, c?.failNext]) {
+                const id = String(t || "").trim();
+                if (id) choiceTargets.add(id);
+              }
+            }
             const qRouted = beats
               .filter(b => String(b.questId || "").trim() === lq
                 && (!firedSet.has(String(b.id)) || b?.inject?.repeatable)
                 && !isAmbientBeat(b) && !isDiscoveryBeat(b)
+                && !choiceTargets.has(String(b.id))
                 && seqOf(b) > ls)
               .sort((a, b) => seqOf(a) - seqOf(b));
             qNext = qRouted.find(b => runtime.byId[String(b.id)]?.state === "ready") || null;
@@ -5374,8 +5391,9 @@ try {
       try {
         const dstate = game.bbttcc?.api?.campaign?.director?.state?.() || null;
         const f = dstate ? (dstate.firedStoryBeats?.[beatId] || dstate.dialogueFired?.[beatId]) : null;
-        if (f) {
-          const beat = (api.getCampaign?.(campaignId)?.beats || []).find(b => String(b?.id) === String(beatId));
+        // Repeatable beats (hubs) re-run as normal play — no interruption.
+        const beat = (api.getCampaign?.(campaignId)?.beats || []).find(b => String(b?.id) === String(beatId));
+        if (f && !beat?.inject?.repeatable) {
           const ok = await Dialog.confirm({
             title: "Beat already fired",
             content: `<p><b>${foundry.utils.escapeHTML(beat?.label || beatId)}</b> has already fired${f.turn ? ` (turn ${f.turn})` : ""} according to the Story Director record.</p><p>Run it again anyway?</p>`
