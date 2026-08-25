@@ -1396,7 +1396,6 @@ function _buildPlayerFacingDialogHtml(payload) {
       parts.push('<div style="opacity:.8; margin-top:8px;">No choices are available for players on this beat.</div>');
     }
 
-    parts.push('<div style="opacity:.72; font-size:12px; margin-top:10px;">Player-facing view. The GM resolves the outcome.</div>');
     parts.push('</div>');
     return parts.join("");
   } catch (_e) {
@@ -1774,9 +1773,12 @@ async function _computeFactionOpRollBonusMap(faction) {
     for (const k of keys) {
       const key = String(k || "").trim().toLowerCase();
       if (!key) continue;
-      const base = _num(bank[key], 0);
+      // Mirror _rollChoiceCheck exactly: bank contributes whole OPs (marks/10
+      // floor), roster contributions are already authored in OP units. The
+      // chips previously showed raw marks (+45 for 4.5 OP) — display-only bug.
+      const baseOp = Math.floor(_num(bank[key], 0) / _OP_TO_MARKS);
       const rosterSum = Array.isArray(roster) ? roster.reduce((s, a) => s + _readActorOp(a, key), 0) : 0;
-      out[key] = base + rosterSum;
+      out[key] = baseOp + rosterSum;
     }
     return out;
   } catch (_e) { return {}; }
