@@ -1063,6 +1063,22 @@ function _escapeHtml(s) {
     .replace(/'/g, "&#039;");
 }
 
+// Beat descriptions are GM-authored and may carry markup (<b>, <i>, <p> —
+// the chat-narration path already posts them raw). The dialogs used to
+// escape them, printing literal tags on screen. Render instead: plain text
+// still escapes; real markup gets a light scrub (scripts, handlers,
+// javascript: urls) and renders.
+function _beatDescHtml(desc) {
+  const s = String(desc == null ? "" : desc);
+  if (!/<[a-zA-Z][^>]*>/.test(s)) return _escapeHtml(s).replace(/\n/g, "<br/>");
+  return s
+    .replace(/<\s*(script|style|iframe|object|embed)[^>]*>[\s\S]*?<\s*\/\s*\1\s*>/gi, "")
+    .replace(/<\s*(script|style|iframe|object|embed)[^>]*\/?>/gi, "")
+    .replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "")
+    .replace(/\s(href|src)\s*=\s*(["']?)\s*javascript:[^"'\s>]*\2/gi, "")
+    .replace(/\n/g, "<br/>");
+}
+
 // ---------------------------------------------------------------------------
 // Journal auto-open (Beat.journal)  -  GM-only
 // - beat.journal: { enabled:boolean, entryId:"JournalEntry.<id>"|"<id>", force:boolean }
@@ -1371,7 +1387,7 @@ function _buildPlayerFacingDialogHtml(payload) {
     parts.push('<div style="font-weight:800; margin-bottom:8px;">' + title + '</div>');
 
     if (desc) {
-      parts.push('<div class="bbttcc-campaign-dialog-desc" style="margin-bottom:10px;">' + _escapeHtml(desc).replace(/\n/g, "<br/>") + '</div>');
+      parts.push('<div class="bbttcc-campaign-dialog-desc" style="margin-bottom:10px;">' + _beatDescHtml(desc) + '</div>');
     }
 
     if (choices.length) {
@@ -2221,7 +2237,7 @@ ${
        </div>`
     : ""
 }
-      ${desc ? `<div class="bbttcc-campaign-dialog-desc">${_escapeHtml(desc).replaceAll("\n", "<br/>")}</div>` : ""}
+      ${desc ? `<div class="bbttcc-campaign-dialog-desc">${_beatDescHtml(desc)}</div>` : ""}
       ${rosterHtml}
       ${opChipsHtml ? `<div class="bbttcc-muted" style="margin-top:6px;">Faction OP Pools</div>${opChipsHtml}` : ""}
       ${opRollBonusHtml ? `<div class="bbttcc-muted" style="margin-top:6px;">Faction Roll Bonuses</div>${opRollBonusHtml}` : ""}
