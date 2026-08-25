@@ -2214,10 +2214,23 @@ const activeCampaignId = _getActiveCampaignId();
     let lastFiredId = null;
     try {
       const ds = api?.director?.state?.() || {};
-      const hist = [];
+      // A speaker beat fired through the menu lands in BOTH ledgers (story
+      // run + dialogue consumption) — merge by id, keeping the record that
+      // knows its turn, then the freshest timestamp (dupe seen 2026-08-24).
+      const byBeat = new Map();
       for (const src of [ds.firedStoryBeats || {}, ds.dialogueFired || {}]) {
-        for (const [id, m] of Object.entries(src)) hist.push({ id, turn: m?.turn, ts: Number(m?.ts) || 0 });
+        for (const [id, m] of Object.entries(src)) {
+          const row = { id, turn: m?.turn, ts: Number(m?.ts) || 0 };
+          const prev = byBeat.get(id);
+          if (!prev) { byBeat.set(id, row); continue; }
+          byBeat.set(id, {
+            id,
+            turn: prev.turn != null ? prev.turn : row.turn,
+            ts: Math.max(prev.ts, row.ts)
+          });
+        }
       }
+      const hist = [...byBeat.values()];
       histCount = hist.length;
       hist.sort((a, b) => b.ts - a.ts);
       lastFiredId = hist[0]?.id ?? null;
