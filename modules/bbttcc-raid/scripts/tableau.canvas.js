@@ -186,7 +186,12 @@
         // somewhere past it, so it scales like the art it is next to instead of
         // sitting off-stage at full front scale.
         const band = stageBand(scene, cfg);
-        const y = clamp(Number(token.document?.y ?? 0), band.top, band.bottom);
+        // Anchor on the footprint CENTER, matching the tuner's "Set from
+        // selected" (which records the selected token's center) — doc.y is the
+        // top-left corner, half a footprint further back than where the token
+        // visually stands.
+        const centerY = Number(token.document?.y ?? 0) + Number(token.h || 0) / 2;
+        const y = clamp(centerY, band.top, band.bottom);
         const range = (cfg.frontY - cfg.backY) || 1;
         tRaw = clamp((y - cfg.backY) / range, 0, 1);
         sortKey = y;
