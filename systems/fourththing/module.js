@@ -23233,11 +23233,27 @@ function _ftBroadcastBoardSelection(payload) {
   _ftSyncBoardSelection(payload);
 }
 
-async function ftBoardRig(steward, rig, role = null, { initiatorUserId = game.user?.id ?? null } = {}) {
+async function ftBoardRig(steward, rig, role = null, { initiatorUserId = game.user?.id ?? null, force = false } = {}) {
   if (!steward || !rig || rig.type !== "rig") return;
   if (rig.system?.identity?.state === "destroyed") {
     ui.notifications?.warn(`${rig.name} is destroyed and cannot be boarded.`);
     return;
+  }
+  // 2026-08-27 — Monsters don't take the wheel. A GM running foes has hostile
+  // tokens selected half the time, and both boarding doors (token-HUD "Board a
+  // Rig…" + rig-sheet crew-slot drop) happily seated a Ghagielite Blinder as
+  // pilot (owner playtest: "a bad guy was in my car!"). An npc that reads as a
+  // BESTIARY creature (rfi.actor.bestiary block) or carries a hostile
+  // prototype is refused — real NPC crew (Echo Mint members, friendly
+  // disposition, no bestiary block) still board fine. `force: true` overrides
+  // for whatever glorious campaign moment genuinely wants a monster chauffeur.
+  if (!force && steward.type === "npc") {
+    const isBestiary   = !!steward.flags?.fourththing?.rfi?.actor?.bestiary;
+    const hostileProto = steward.prototypeToken?.disposition === CONST.TOKEN_DISPOSITIONS.HOSTILE;
+    if (isBestiary || hostileProto) {
+      ui.notifications?.warn(`${steward.name} is not crew material — it does not get a seat in ${rig.name}.`);
+      return;
+    }
   }
   // 2026-08-17 — the crew action `counter-sabotage` ("repel boarders") is a
   // reaction that seals the rig for the round; this is its consumer. Only NEW
@@ -25571,13 +25587,19 @@ Hooks.on("updateToken", async (tokenDoc, change) => {
     const scene = tokenDoc.parent;
     if (!scene) return;
 
-    const slots = actor.system?.crew?.slots ?? [];
+    // Crew resolution is DUAL-SOURCE (2026-08-27): the rig's crew.slots AND
+    // each steward's own boardedRig flag. The two are known to drift
+    // (delete-replace slot edits, partial boards), and this sync failing is
+    // SILENT — the boarded player's vision and weapon VFX stay stranded at
+    // the boarding spot ("Invisible Toblerone", owner playtest).
+    const slots = actor.system?.crew?.slots ?? actor.system?.system?.crew?.slots ?? [];
     const stewardIds = new Set(slots.filter(s => s?.actorId).map(s => s.actorId));
-    if (!stewardIds.size) return;
 
     const updates = [];
     for (const t of scene.tokens) {
-      if (!stewardIds.has(t.actorId)) continue;
+      if (t.id === tokenDoc.id) continue;
+      const byBoardFlag = t.actor?.flags?.fourththing?.boardedRig?.rigId === actor.id;
+      if (!stewardIds.has(t.actorId) && !byBoardFlag) continue;
       const u = { _id: t.id };
       if ("x" in change) u.x = tokenDoc.x;
       if ("y" in change) u.y = tokenDoc.y;
@@ -25586,6 +25608,10 @@ Hooks.on("updateToken", async (tokenDoc, change) => {
     }
     if (updates.length) {
       await scene.updateEmbeddedDocuments("Token", updates);
+    } else if (stewardIds.size) {
+      // Crew is aboard but no token followed — somebody's vision is stranded.
+      // Say so instead of shrugging: this is the breadcrumb for the next debug.
+      console.warn(`[fourththing] rig-move sync: "${actor.name}" moved with ${stewardIds.size} crew slot(s) filled but no crew token was found to follow on scene "${scene.name}".`);
     }
   } catch (e) { console.warn("[fourththing] rig-move steward sync failed", e); }
 });
