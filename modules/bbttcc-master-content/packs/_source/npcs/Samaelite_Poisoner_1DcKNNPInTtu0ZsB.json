@@ -1,0 +1,449 @@
+{
+  "name": "Samaelite Poisoner",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/samaelite-poisoner.webp",
+  "system": {
+    "role": "Qliphothic Seducer (Samael — Lesser)",
+    "tier": 2,
+    "factionId": "",
+    "notes": "<p>A beautiful serpentine creature — statuesque humanoid torso, shimmering iridescent scales, the long coiling tail of a massive serpent in vibrant, unnatural jewel tones. It speaks with a silver tongue, offering praise, secrets, and shortcuts to power. Its bite injects a venom that doesn't just kill the body: it floods the mind with delusions of grandeur, so the victim feels invincible even as their life ebbs away.</p><p><strong>Qliphah:</strong> Samael, the Poisons — the Hull of Hod. Splendor twisted into false glory: the poisoned compliment made flesh.</p><p><em>Mal's note: 'Anyone who opens with three sincere compliments and a shortcut is billing you later. This one bills in blood pressure.'</em></p>",
+    "details": {
+      "level": 8,
+      "tier": 2,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 4
+      },
+      "intrigue": {
+        "value": 3
+      },
+      "presence": {
+        "value": 5
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 55,
+        "max": 55
+      },
+      "stress": {
+        "value": 25,
+        "max": 25
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 12
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "aura": {
+        "state": "none"
+      },
+      "package": {
+        "carried": false,
+        "id": "",
+        "type": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "dreamResonance": {
+        "active": false,
+        "hexSephirah": "",
+        "insightUsed": false
+      }
+    },
+    "conditions": {
+      "blinded": false,
+      "burning": false,
+      "calmed": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "prone": false,
+      "radiationIrradiated": false,
+      "radiationPoisoned": false,
+      "radiationSickened": false,
+      "radiationTerminal": false,
+      "restrained": false,
+      "scarred": false,
+      "shaken": false,
+      "staggered": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementBudgetFt": 30,
+      "movementUsedFt": 0
+    },
+    "defenses": {
+      "resistances": [
+        "qliphothic"
+      ],
+      "immunities": [
+        "poison"
+      ],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-8",
+      "qliphah-samael",
+      "hull-of-hod",
+      "lesser"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Samaelite Poisoner",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 2,
+    "height": 2,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/samaelite-poisoner.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    }
+  },
+  "items": [
+    {
+      "_id": "G52jUyOR5M5iARWh",
+      "name": "Venomous Words",
+      "type": "feature",
+      "img": "icons/svg/cowled.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>The Poisoner rolls twice and keeps the better result on Presence checks to flatter, seduce, or deceive. Every word is technically true the way a syringe is technically a gift.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "t3nhTU10T4W9z4WM",
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>The Poisoner makes two attacks: one with its Bite of Pride and one Constrict.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "5U1saOoTAX6TL5VS",
+      "name": "Bite of Pride",
+      "type": "weapon",
+      "img": "icons/svg/poison.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [],
+        "effect": "On a hit the target takes an extra 2d6 poison damage and rolls Body vs DC 14. Fail: for one minute the venom's false glory takes hold — the target is immune to Shaken but Compelled to spend its action each turn attacking whatever it deems the greatest threat, friend or foe. It feels magnificent. Repeat the check at the end of each of its turns.",
+        "flavor": "Fangs dripping a shimmering, golden-colored venom.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "Xb2Zb0VNaXqYGVd2",
+      "name": "Constrict",
+      "type": "weapon",
+      "img": "icons/svg/net.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 2,
+          "long": 2
+        },
+        "tags": [],
+        "effect": "Reach 2. On a hit the target is grappled in jewel-toned coils (escape: Violence check vs DC 14) and Restrained. The Poisoner can only constrict one guest of honor at a time.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "II",
+          "bracket": "heavy",
+          "archetype": "samaelite-poisoner",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "samael",
+              "seducer",
+              "serpent"
+            ],
+            "role": "Qliphothic Seducer (Samael — Lesser)",
+            "lootTable": [
+              {
+                "name": "Iridescent Scale",
+                "qty": "2d4",
+                "weight": 6
+              },
+              {
+                "name": "Golden Venom Sac",
+                "qty": "1d2",
+                "weight": 3
+              },
+              {
+                "name": "Flattery, Transcribed (Evidence)",
+                "qty": "1d4",
+                "weight": 4
+              }
+            ]
+          },
+          "price": {
+            "marks": 450,
+            "bounty": 650,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "II heavy Qliphothic Seducer (Samael — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "samael",
+            "hullOf": "hod",
+            "grade": "lesser"
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_id": "1DcKNNPInTtu0ZsB",
+  "_key": "!actors!1DcKNNPInTtu0ZsB"
+}

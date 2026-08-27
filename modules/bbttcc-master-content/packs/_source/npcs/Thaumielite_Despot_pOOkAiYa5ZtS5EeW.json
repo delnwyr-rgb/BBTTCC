@@ -1,0 +1,403 @@
+{
+  "name": "Thaumielite Despot",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/thaumielite-despot.webp",
+  "system": {
+    "role": "Qliphothic Tyrant (Thaumiel — Lesser)",
+    "tier": 1,
+    "factionId": "",
+    "notes": "<p>Psychic residue of a tyrant who believed every contradictory whim was law. Two faces on one split head — one whispers grandeur into its own ear while the other barks impossible commands. It gathers husks and rules a patch of the Wastes with nonsensical, brutal edicts.</p><p><strong>Qliphah:</strong> Thaumiel, the Split Crown — the Hull of Keter. Unity broken into duality and tyranny.</p><p><em>Mal's note: 'It argues with itself about how to kill you. Do not wait for them to reach consensus.'</em></p>",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 2
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 2
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 22,
+        "max": 22
+      },
+      "stress": {
+        "value": 14,
+        "max": 14
+      },
+      "guard": {
+        "value": 12
+      },
+      "evasion": {
+        "value": 12
+      },
+      "resolve": {
+        "value": 13
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 1,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "aura": {
+        "state": "none"
+      },
+      "package": {
+        "carried": false,
+        "id": "",
+        "type": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "dreamResonance": {
+        "active": false,
+        "hexSephirah": "",
+        "insightUsed": false
+      }
+    },
+    "conditions": {
+      "blinded": false,
+      "burning": false,
+      "calmed": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "prone": false,
+      "radiationIrradiated": false,
+      "radiationPoisoned": false,
+      "radiationSickened": false,
+      "radiationTerminal": false,
+      "restrained": false,
+      "scarred": false,
+      "shaken": false,
+      "staggered": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementBudgetFt": 30,
+      "movementUsedFt": 0
+    },
+    "defenses": {
+      "resistances": [
+        "qliphothic"
+      ],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [
+      "charmed"
+    ],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-2",
+      "qliphah-thaumiel",
+      "hull-of-keter",
+      "lesser"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Thaumielite Despot",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/thaumielite-despot.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    }
+  },
+  "items": [
+    {
+      "_id": "Pybtte4bR646JG9U",
+      "name": "Two Minds, One Body",
+      "type": "feature",
+      "img": "icons/svg/daze.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>Two wills argue inside one skull. The despot rolls twice and keeps the better result on checks to resist being Charmed or Compelled — one head is always too paranoid to listen.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "Khmuno22FHdLj46O",
+      "name": "Tyrant's Aura",
+      "type": "feature",
+      "img": "icons/svg/aura.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>Any creature that starts its turn within 2 squares of the despot is battered by contradictory commands: it rolls twice and keeps the worse result on skill checks until the start of its next turn (Resolve check vs DC 12 to shrug it off).</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "GbGLFiiqSgPcTyNE",
+      "name": "Broken Scepter",
+      "type": "weapon",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [],
+        "effect": "On a hit, the sceptre whispers its other command straight into the wound: the target also takes 1d4 qliphothic damage to Stress.",
+        "flavor": "A cracked rod of office, still giving orders.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "K3jMdAW9RDdazH0O",
+      "name": "Duplicitous Command",
+      "type": "feat",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "category": "technique",
+        "description": {
+          "value": "<p>One creature within 6 squares that can hear the despot rolls vs Resolve (DC 13). On a failure it is Compelled until the end of its next turn: the despot chooses the target of its next attack, and both faces smile.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "I",
+          "bracket": "medium",
+          "archetype": "thaumielite-despot",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "thaumiel",
+              "tyrant",
+              "humanoid"
+            ],
+            "role": "Qliphothic Tyrant (Thaumiel — Lesser)",
+            "lootTable": [
+              {
+                "name": "Broken Scepter Shard",
+                "qty": "1",
+                "weight": 3
+              },
+              {
+                "name": "Two-Faced Mask Fragment",
+                "qty": "1d2",
+                "weight": 4
+              },
+              {
+                "name": "Contradictory Edict (Readable)",
+                "qty": "1d3",
+                "weight": 5
+              }
+            ]
+          },
+          "price": {
+            "marks": 150,
+            "bounty": 200,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "I medium Qliphothic Tyrant (Thaumiel — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "thaumiel",
+            "hullOf": "keter",
+            "grade": "lesser"
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_id": "pOOkAiYa5ZtS5EeW",
+  "_key": "!actors!pOOkAiYa5ZtS5EeW"
+}

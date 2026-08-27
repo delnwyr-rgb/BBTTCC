@@ -1,0 +1,575 @@
+{
+  "name": "Angel of Hollow Glory",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/angel-of-hollow-glory.webp",
+  "system": {
+    "role": "Qliphothic Idol (Samael — Greater)",
+    "tier": 4,
+    "factionId": "",
+    "notes": "<p>A monument to vanity: a fallen celestial who became so enamored with its own beauty and light that it decided it was their source, not their reflection. Tall, androgynous, impossibly beautiful, six massive white wings, radiating brilliant golden light — but its shadow on the ground belongs to something skeletal with broken wings. It reigns over a desolate corner of the Wastes as a lost god, 'blessing' desperate followers with gifts of hollow light that corrupt them into beautiful, empty shells built to adore it.</p><p><strong>Qliphah:</strong> Samael, the Poisons — the Hull of Hod. False glory at full wattage.</p><p><em>Mal's note: 'Check the shadow. Always check the shadow. The lighting budget is the tell — real grace doesn't need it.'</em></p>",
+    "details": {
+      "level": 18,
+      "tier": 4,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 4
+      },
+      "intrigue": {
+        "value": 5
+      },
+      "presence": {
+        "value": 6
+      },
+      "body": {
+        "value": 5
+      },
+      "mind": {
+        "value": 4
+      },
+      "soul": {
+        "value": 5
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 125,
+        "max": 125
+      },
+      "stress": {
+        "value": 50,
+        "max": 50
+      },
+      "guard": {
+        "value": 17
+      },
+      "evasion": {
+        "value": 15
+      },
+      "resolve": {
+        "value": 18
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 4,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "aura": {
+        "state": "none"
+      },
+      "package": {
+        "carried": false,
+        "id": "",
+        "type": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "dreamResonance": {
+        "active": false,
+        "hexSephirah": "",
+        "insightUsed": false
+      }
+    },
+    "conditions": {
+      "blinded": false,
+      "burning": false,
+      "calmed": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "prone": false,
+      "radiationIrradiated": false,
+      "radiationPoisoned": false,
+      "radiationSickened": false,
+      "radiationTerminal": false,
+      "restrained": false,
+      "scarred": false,
+      "shaken": false,
+      "staggered": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementBudgetFt": 30,
+      "movementUsedFt": 0
+    },
+    "defenses": {
+      "resistances": [
+        "psychic",
+        "kinetic"
+      ],
+      "immunities": [
+        "qliphothic"
+      ],
+      "vulnerabilities": [
+        "sephirotic"
+      ]
+    },
+    "conditionImmunities": [
+      "charmed",
+      "shaken"
+    ],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-19",
+      "qliphah-samael",
+      "hull-of-hod",
+      "greater"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Angel of Hollow Glory",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 2,
+    "height": 2,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/angel-of-hollow-glory.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    }
+  },
+  "items": [
+    {
+      "_id": "Pi9kS4tNYUm3akSo",
+      "name": "Deific Presence",
+      "type": "feature",
+      "img": "icons/svg/angel.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>Any creature that starts its turn within 12 squares and can see the Angel rolls vs Resolve (DC 18). Fail: Charmed and Staggered — incapacitated with adoration. The effect breaks if the creature takes damage or an ally spends an action shaking them out of it. On a success, the creature is immune to this Presence for a day: it has seen the shadow.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "dqsLXtluEd6hnvJI",
+      "name": "Fractured Will (3/scene)",
+      "type": "feature",
+      "img": "icons/svg/mage-shield.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>When the Angel fails a check, it declares the failure beneath it, and succeeds instead. Three times per scene. The mask cracks a little each time.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "OeoYt6Ez57gdZnQx",
+      "name": "Hollow Radiance",
+      "type": "feature",
+      "img": "icons/svg/holy-shield.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>The Angel rolls twice and keeps the better result on checks to resist manifestations. Other people's workings are, frankly, in poor taste.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "NCiIMP4CYX5bI9wW",
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>The Angel makes two attacks with its Scepter of Vanity.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "DP9aUnWgKxutnO1k",
+      "name": "Scepter of Vanity",
+      "type": "weapon",
+      "img": "icons/svg/light.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "channel",
+        "damage": {
+          "formula": "3d8",
+          "attribute": "presence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [],
+        "effect": "A rod of gorgeous, devouring gold light. What it burns away doesn't scar — it just isn't yours anymore.",
+        "flavor": "Beautiful. Genuinely. That's the problem.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "Qrnvu1BZbzvXIXAR",
+      "name": "Hollow Light",
+      "type": "weapon",
+      "img": "icons/svg/sun.svg",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "warding",
+        "damage": {
+          "formula": "4d8",
+          "attribute": "presence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 18,
+          "long": 18
+        },
+        "tags": [
+          "aoe",
+          "shape-line",
+          "signature"
+        ],
+        "effect": "An 18-square line of false radiance, one square wide. Each creature in the line rolls an Evasion check vs DC 18. Fail: full damage to Stress and Blinded — the beam is full of tiny screaming skulls, and seeing that costs. Repeat Body vs DC 18 at end of turns to clear the blindness. Success: half damage, eyes shut in time.",
+        "flavor": "Brilliant gold, and wrong all the way through.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "zIm7TbmnHqVrFFRZ",
+      "name": "Golden Chains of Servitude (Recharge 5–6)",
+      "type": "feat",
+      "img": "icons/svg/padlock.svg",
+      "system": {
+        "category": "technique",
+        "description": {
+          "value": "<p>Up to three creatures within 24 squares roll vs Resolve (DC 18) or are Restrained by chains of golden light for a minute, taking 2d8 psychic damage (Stress) at the start of each of their turns. A chained creature can spend its action on a Presence check vs DC 18 — denying the Angel's glory out loud — to burst the chains. The Angel finds this genuinely hurtful.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 700000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "EmbyXYkGdwFzFkal",
+      "name": "Shattered Facade",
+      "type": "feat",
+      "img": "icons/svg/terror.svg",
+      "system": {
+        "category": "technique",
+        "description": {
+          "value": "<p>The beautiful form flickers, and for one instant everyone sees what casts that shadow. Each creature within 6 squares that can see the Angel rolls vs Resolve (DC 18). Fail: 3d10 psychic damage (Stress) and Shaken. Repeat the check at the end of each of its turns to recover. The Angel does not use this ability by choice — the GM may fire it when the Angel drops below half Integrity.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 800000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "BoFjK417qmVdS4Ed",
+      "name": "Teleport",
+      "type": "feat",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "category": "technique",
+        "description": {
+          "value": "<p>The Angel relocates up to 24 squares in a flourish of golden light. It never simply walks. Walking is for the adored.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 900000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "IV",
+          "bracket": "elite",
+          "archetype": "angel-of-hollow-glory",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "samael",
+              "boss",
+              "false-divine",
+              "legendary"
+            ],
+            "role": "Qliphothic Idol (Samael — Greater)",
+            "lootTable": [
+              {
+                "name": "Hollow-Light Feather (Six-Winged)",
+                "qty": "2d6",
+                "weight": 6
+              },
+              {
+                "name": "Porcelain Mask Fragment, Cracked",
+                "qty": "1d4",
+                "weight": 4
+              },
+              {
+                "name": "Devotee's Emptied Locket",
+                "qty": "1d6",
+                "weight": 5
+              },
+              {
+                "name": "The Shadow's Broken Wing-Joint",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "price": {
+            "marks": 1800,
+            "bounty": 3000,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "IV elite Qliphothic Idol (Samael — Greater) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "samael",
+            "hullOf": "hod",
+            "grade": "greater"
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_id": "VAfHQqhNFdZeKl25",
+  "_key": "!actors!VAfHQqhNFdZeKl25"
+}

@@ -1,0 +1,403 @@
+{
+  "name": "Nahemoth Husk",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/nahemoth-husk.webp",
+  "system": {
+    "role": "Qliphothic Remnant (Nahemoth — Lesser)",
+    "tier": 1,
+    "factionId": "",
+    "notes": "<p>The endpoint of a life consumed by materialism: the physical shell of a person whose soul faded from neglect, leaving only a mindless echo driven by the base impulse to acquire and possess. Husks shamble through the ruins of opulent pre-Disaster places, still going through the motions of their former lives, hands locked in a death grip around one meaningless object — a shattered smartphone, a tarnished medal.</p><p><strong>Qliphah:</strong> Nahemoth, the Whispering Ones — the Hull of Malkuth. The Kingdom with the spirit gone: matter, inertia, and grip.</p><p><em>Mal's note: 'You cannot have the thing it is holding. Nobody can. That is the whole tragedy, and also the treasure policy.'</em></p>",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 2
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 2
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 25,
+        "max": 25
+      },
+      "stress": {
+        "value": 8,
+        "max": 8
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 9
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 0,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "aura": {
+        "state": "none"
+      },
+      "package": {
+        "carried": false,
+        "id": "",
+        "type": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "dreamResonance": {
+        "active": false,
+        "hexSephirah": "",
+        "insightUsed": false
+      }
+    },
+    "conditions": {
+      "blinded": false,
+      "burning": false,
+      "calmed": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "prone": false,
+      "radiationIrradiated": false,
+      "radiationPoisoned": false,
+      "radiationSickened": false,
+      "radiationTerminal": false,
+      "restrained": false,
+      "scarred": false,
+      "shaken": false,
+      "staggered": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementBudgetFt": 30,
+      "movementUsedFt": 0
+    },
+    "defenses": {
+      "resistances": [
+        "qliphothic",
+        "poison"
+      ],
+      "immunities": [],
+      "vulnerabilities": [
+        "sephirotic"
+      ]
+    },
+    "conditionImmunities": [
+      "charmed",
+      "shaken",
+      "calmed"
+    ],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-1",
+      "qliphah-nahemoth",
+      "hull-of-malkuth",
+      "lesser"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Nahemoth Husk",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/nahemoth-husk.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    }
+  },
+  "items": [
+    {
+      "_id": "T8jBBA0InjtQJyMP",
+      "name": "Mindless Materialism",
+      "type": "feature",
+      "img": "icons/svg/daze.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>There are no thoughts in there to read, and nothing left that can be frightened or reasoned with. Immune to Shaken, Charmed, and Calmed, and to anything that reads minds.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "ZQTwfoduz8IRPh0P",
+      "name": "Husk Fortitude",
+      "type": "feature",
+      "img": "icons/svg/bones.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>When damage reduces the Husk to 0 Integrity, it rolls a Body check vs DC 5 + the damage taken (auto-fail against sephirotic damage or a critical hit). On a success it drops to 1 Integrity instead, and keeps shambling. The grip does not know it is dead.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "3rTOcwdNw3Ze5q5o",
+      "name": "Inertial Grasp",
+      "type": "weapon",
+      "img": "icons/svg/padlock.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [],
+        "effect": "On a hit against a creature its size or smaller, the target is grappled (escape: Violence check vs DC 12) — the same unbreakable grip that holds the trinket now holds you.",
+        "flavor": "A skeletal grey hand, locked.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "0VacG3sHhI1PuXot",
+      "name": "Apathetic Gaze",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "category": "technique",
+        "description": {
+          "value": "<p>One creature within 6 squares meets its wide, vacant eyes and rolls vs Resolve (DC 12). Fail: crushed by pure pointlessness until the end of its next turn — Staggered, speed halved, no reactions. Why hurry. Why anything.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "I",
+          "bracket": "light",
+          "archetype": "nahemoth-husk",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "nahemoth",
+              "remnant",
+              "undead-adjacent"
+            ],
+            "role": "Qliphothic Remnant (Nahemoth — Lesser)",
+            "lootTable": [
+              {
+                "name": "The Clutched Object (Worthless. Priceless. Worthless.)",
+                "qty": "1",
+                "weight": 6
+              },
+              {
+                "name": "Once-Expensive Cloth Scraps",
+                "qty": "1d4",
+                "weight": 5
+              }
+            ]
+          },
+          "price": {
+            "marks": 150,
+            "bounty": 200,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "I light Qliphothic Remnant (Nahemoth — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "nahemoth",
+            "hullOf": "malkuth",
+            "grade": "lesser"
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_id": "jHAX2VchsbAMNuyP",
+  "_key": "!actors!jHAX2VchsbAMNuyP"
+}

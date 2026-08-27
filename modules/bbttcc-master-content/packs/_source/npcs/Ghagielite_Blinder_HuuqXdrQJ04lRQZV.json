@@ -1,0 +1,374 @@
+{
+  "name": "Ghagielite Blinder",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/ghagielite-blinder.webp",
+  "system": {
+    "role": "Qliphothic Vermin (Ghagiel — Lesser)",
+    "tier": 1,
+    "factionId": "",
+    "notes": "<p>A thought, interrupted, given wings. Blinders flutter through the Wastes in disorienting swarms, drawn to any display of complex thought, planning, or manifestation. Their wings carry hypnotic, impossible patterns; their dissonant hum clouds the mind until simple deductions feel like mountain climbs. They don't want to kill you. They want you stupid.</p><p><strong>Qliphah:</strong> Ghagiel, the Obstructions — the Hull of Chokmah. Wisdom snuffed to stagnation.</p><p><em>Mal's note: 'If you suddenly can't remember why you drew your gun, shoot the moth. That IS why you drew your gun.'</em></p>",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 3
+      },
+      "presence": {
+        "value": 1
+      },
+      "body": {
+        "value": 2
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 20,
+        "max": 20
+      },
+      "stress": {
+        "value": 12,
+        "max": 12
+      },
+      "guard": {
+        "value": 11
+      },
+      "evasion": {
+        "value": 13
+      },
+      "resolve": {
+        "value": 11
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 0,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "aura": {
+        "state": "none"
+      },
+      "package": {
+        "carried": false,
+        "id": "",
+        "type": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "dreamResonance": {
+        "active": false,
+        "hexSephirah": "",
+        "insightUsed": false
+      }
+    },
+    "conditions": {
+      "blinded": false,
+      "burning": false,
+      "calmed": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "prone": false,
+      "radiationIrradiated": false,
+      "radiationPoisoned": false,
+      "radiationSickened": false,
+      "radiationTerminal": false,
+      "restrained": false,
+      "scarred": false,
+      "shaken": false,
+      "staggered": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementBudgetFt": 30,
+      "movementUsedFt": 0
+    },
+    "defenses": {
+      "resistances": [
+        "qliphothic"
+      ],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-1",
+      "qliphah-ghagiel",
+      "hull-of-chokmah",
+      "lesser"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Ghagielite Blinder",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/ghagielite-blinder.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    }
+  },
+  "items": [
+    {
+      "_id": "fuyL6Zp1Op7Srnc9",
+      "name": "Droning Stupor",
+      "type": "feature",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>Any other creature that starts its turn within 4 squares of the Blinder rolls twice and keeps the worse result on Mind checks, and on any check made to maintain a manifestation. The hum gets between you and your own thoughts.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "z3r5n5UPrHvjf8o5",
+      "name": "Mind-Cluttering Bite",
+      "type": "weapon",
+      "img": "icons/svg/paralysis.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d4",
+          "attribute": "intrigue",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [],
+        "effect": "On a hit, the bite injects static: Resolve check vs DC 12 or the target cannot take reactions until the start of its next turn.",
+        "flavor": "Small teeth, big interruption.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "HA0fsi5fBmX68Lhk",
+      "name": "Thought-Obstructing Veil (1/scene)",
+      "type": "feat",
+      "img": "icons/svg/blind.svg",
+      "system": {
+        "category": "technique",
+        "description": {
+          "value": "<p>The Blinder sheds a 3-square cube of grey mental haze centred on itself. The area is heavily obscured. A creature that ends its turn in the haze rolls Mind vs DC 12 or is Compelled on its next turn — it acts, but not on any plan it remembers making. The haze lasts a minute or until real wind takes it.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "I",
+          "bracket": "light",
+          "archetype": "ghagielite-blinder",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "ghagiel",
+              "vermin",
+              "swarm-adjacent"
+            ],
+            "role": "Qliphothic Vermin (Ghagiel — Lesser)",
+            "lootTable": [
+              {
+                "name": "Hypnotic Wing-Scale Dust",
+                "qty": "1d4",
+                "weight": 5
+              },
+              {
+                "name": "Dissonance Gland (Still Humming)",
+                "qty": "1",
+                "weight": 2
+              }
+            ]
+          },
+          "price": {
+            "marks": 150,
+            "bounty": 200,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "I light Qliphothic Vermin (Ghagiel — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "ghagiel",
+            "hullOf": "chokmah",
+            "grade": "lesser"
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_id": "HuuqXdrQJ04lRQZV",
+  "_key": "!actors!HuuqXdrQJ04lRQZV"
+}

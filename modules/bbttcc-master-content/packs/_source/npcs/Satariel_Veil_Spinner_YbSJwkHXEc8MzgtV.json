@@ -1,0 +1,469 @@
+{
+  "name": "Satariel Veil-Spinner",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/satariel-veil-spinner.webp",
+  "system": {
+    "role": "Qliphothic Ambusher (Satariel — Lesser)",
+    "tier": 1,
+    "factionId": "",
+    "notes": "<p>Spider legs, a gaunt shadow-torso, too many white eyes. Veil-Spinners weave webs of pure deceit — illusory oases, familiar pathways that end in cliffs — and feed on the exact moment their prey realizes the beautiful thing was a lie. Patient hunters, embodying the Qliphah's principle: hide the truth behind a pleasing or terrifying face.</p><p><strong>Qliphah:</strong> Satariel, the Veils — the Hull of Binah. Understanding inverted into concealment.</p><p><em>Mal's note: 'Rule of thumb: in the Wastes, anything that looks like exactly what you needed to see is a mouth.'</em></p>",
+    "details": {
+      "level": 1,
+      "tier": 1,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 2
+      },
+      "intrigue": {
+        "value": 4
+      },
+      "presence": {
+        "value": 2
+      },
+      "body": {
+        "value": 2
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 1
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 25,
+        "max": 25
+      },
+      "stress": {
+        "value": 14,
+        "max": 14
+      },
+      "guard": {
+        "value": 12
+      },
+      "evasion": {
+        "value": 13
+      },
+      "resolve": {
+        "value": 12
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 1,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "aura": {
+        "state": "none"
+      },
+      "package": {
+        "carried": false,
+        "id": "",
+        "type": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "dreamResonance": {
+        "active": false,
+        "hexSephirah": "",
+        "insightUsed": false
+      }
+    },
+    "conditions": {
+      "blinded": false,
+      "burning": false,
+      "calmed": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "prone": false,
+      "radiationIrradiated": false,
+      "radiationPoisoned": false,
+      "radiationSickened": false,
+      "radiationTerminal": false,
+      "restrained": false,
+      "scarred": false,
+      "shaken": false,
+      "staggered": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementBudgetFt": 30,
+      "movementUsedFt": 0
+    },
+    "defenses": {
+      "resistances": [
+        "qliphothic"
+      ],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-3",
+      "qliphah-satariel",
+      "hull-of-binah",
+      "lesser"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Satariel Veil-Spinner",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/satariel-veil-spinner.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    }
+  },
+  "items": [
+    {
+      "_id": "hbcVzB1ZSZY55ZFO",
+      "name": "Veil Climber",
+      "type": "feature",
+      "img": "icons/svg/pawprint.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>Climbs any surface, including upside down, without a check — and ignores movement restrictions from any webbing, its own or otherwise.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "lOeoirQSiDn9Lk0C",
+      "name": "Sun-Shy",
+      "type": "feature",
+      "img": "icons/svg/sun.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>In direct sunlight the Veil-Spinner rolls twice and keeps the worse result on attacks and sight-based checks. Honest light is the one thing it cannot spin.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "9bf22AGrhBdsAcr6",
+      "name": "Psychic Venom Bite",
+      "type": "weapon",
+      "img": "icons/svg/poison.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "intrigue",
+          "type": "psychic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [],
+        "effect": "Venom that attacks certainty instead of flesh. Damage goes to Stress as the target briefly cannot tell which of its memories are real.",
+        "flavor": "A fang dripping doubt.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "8vkU6fozR5aMxvDs",
+      "name": "Web of Deceit",
+      "type": "weapon",
+      "img": "icons/svg/net.svg",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "ranged",
+        "damage": {
+          "formula": "",
+          "attribute": "intrigue",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 12
+        },
+        "tags": [],
+        "effect": "Ranged, 6/12 squares. On a hit the target is Restrained by shadow-silk (escape: Violence check vs DC 12). While Restrained, the web shows the target its worst fear wearing a familiar face: Resolve check vs DC 12 or Shaken while the web holds.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "KjVB2eh8SUGez6rz",
+      "name": "Veil of Shadows (Recharge 5–6)",
+      "type": "feat",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "category": "technique",
+        "description": {
+          "value": "<p>The Veil-Spinner wraps itself in spun nothing and turns invisible until it attacks or loses the thread of the working.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "I",
+          "bracket": "medium",
+          "archetype": "satariel-veil-spinner",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "satariel",
+              "ambusher",
+              "spider"
+            ],
+            "role": "Qliphothic Ambusher (Satariel — Lesser)",
+            "lootTable": [
+              {
+                "name": "Deceit-Silk Spool",
+                "qty": "1d6",
+                "weight": 6
+              },
+              {
+                "name": "Clustered White Eye",
+                "qty": "1d4",
+                "weight": 3
+              },
+              {
+                "name": "A Lie, Bottled (Unlabeled)",
+                "qty": "1",
+                "weight": 2
+              }
+            ]
+          },
+          "price": {
+            "marks": 150,
+            "bounty": 200,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "intrigue",
+            "gmOverride": false,
+            "notes": "I medium Qliphothic Ambusher (Satariel — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "satariel",
+            "hullOf": "binah",
+            "grade": "lesser"
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_id": "YbSJwkHXEc8MzgtV",
+  "_key": "!actors!YbSJwkHXEc8MzgtV"
+}

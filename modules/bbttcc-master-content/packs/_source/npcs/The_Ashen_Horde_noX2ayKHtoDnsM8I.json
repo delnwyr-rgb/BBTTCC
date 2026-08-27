@@ -1,0 +1,500 @@
+{
+  "name": "The Ashen Horde",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/the-ashen-horde.webp",
+  "system": {
+    "role": "Qliphothic Calamity (Harab Serapel — Greater)",
+    "tier": 4,
+    "factionId": "",
+    "notes": "<p>A single Scavenger is a menace; the Ashen Horde is a natural disaster. A mobile storm of countless burning ravens acting with one voracious intelligence — the manifestation of a kingdom that fell to its own greed. It descends on whole regions and strips them of life, magic, and treasure, leaving silent grey ash. To be caught inside it is to be torn apart by a thousand fiery beaks while an infinite, cawing hunger swallows your soul.</p><p><strong>Qliphah:</strong> Harab Serapel, the Ravens of Burning — the Hull of Netzach. What is left of triumph when only the taking remains.</p><p><em>Mal's note: 'You cannot fight weather. You can, however, be somewhere else. Strongly recommend somewhere else.'</em></p>",
+    "details": {
+      "level": 18,
+      "tier": 4,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 4
+      },
+      "intrigue": {
+        "value": 6
+      },
+      "presence": {
+        "value": 6
+      },
+      "body": {
+        "value": 5
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 4
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 110,
+        "max": 110
+      },
+      "stress": {
+        "value": 48,
+        "max": 48
+      },
+      "guard": {
+        "value": 15
+      },
+      "evasion": {
+        "value": 16
+      },
+      "resolve": {
+        "value": 17
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "aura": {
+        "state": "none"
+      },
+      "package": {
+        "carried": false,
+        "id": "",
+        "type": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "dreamResonance": {
+        "active": false,
+        "hexSephirah": "",
+        "insightUsed": false
+      }
+    },
+    "conditions": {
+      "blinded": false,
+      "burning": false,
+      "calmed": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "prone": false,
+      "radiationIrradiated": false,
+      "radiationPoisoned": false,
+      "radiationSickened": false,
+      "radiationTerminal": false,
+      "restrained": false,
+      "scarred": false,
+      "shaken": false,
+      "staggered": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementBudgetFt": 30,
+      "movementUsedFt": 0
+    },
+    "defenses": {
+      "resistances": [
+        "kinetic",
+        "thermal",
+        "qliphothic"
+      ],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [
+      "charmed",
+      "shaken",
+      "prone",
+      "restrained"
+    ],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-17",
+      "qliphah-harab-serapel",
+      "hull-of-netzach",
+      "greater"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "The Ashen Horde",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 4,
+    "height": 4,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/the-ashen-horde.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    }
+  },
+  "items": [
+    {
+      "_id": "prul436qRURut1uI",
+      "name": "The Horde Is One",
+      "type": "feature",
+      "img": "icons/svg/wing.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>The Horde occupies other creatures' spaces freely and pours through any opening a single raven could pass. It cannot regain Integrity or gain temporary Integrity — except through Consume Magic. It is not healing. It is replacing.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "f5Nhv5Psi65ig7Tr",
+      "name": "Fractured Will (3/scene)",
+      "type": "feature",
+      "img": "icons/svg/mage-shield.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>When the Horde fails a check, ten thousand birds simply disagree. Three times per scene.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "agNngL4jU23gqrre",
+      "name": "Aura of Avarice",
+      "type": "feature",
+      "img": "icons/svg/chest.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>Any creature that starts its turn within 12 squares of the Horde rolls vs Resolve (DC 18). Fail: overcome with hunger for possession for one round — it must either move toward and attack whoever holds the most valuable-looking gear, or spend its action clutching and admiring a possession of its own. Repeat the check at the end of each of its turns.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "LS2bmFwZBiur9UzD",
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>The Horde makes one Whispering Flames attack and uses Consume Magic.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "YcEN7o3ABAhUO2y4",
+      "name": "Whispering Flames",
+      "type": "weapon",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "warding",
+        "damage": {
+          "formula": "3d10",
+          "attribute": "intrigue",
+          "type": "kinetic",
+          "damageFlavor": "hot",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 6
+        },
+        "tags": [
+          "aoe",
+          "shape-cone"
+        ],
+        "effect": "A torrent of fiery ravens in a 6-square cone. Each creature rolls an Evasion check vs DC 18. Fail: 3d10 kinetic AND 3d10 thermal (hot). Success: half of each. The whispering is each bird pricing your organs.",
+        "flavor": "The cloud leans toward you and becomes beaks.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "m7zDB9v2eayGRZ6m",
+      "name": "Consume Magic",
+      "type": "feat",
+      "img": "icons/svg/book.svg",
+      "system": {
+        "category": "technique",
+        "description": {
+          "value": "<p>The Horde swarms one creature or object within 12 squares and strips an active manifestation from it — the working ends, visibly dimming as ravens swallow its light. If it ends a substantial working (GM's call), the Horde regains 10 Integrity: the one meal that mends it. A magic item so targeted goes dark for an hour instead.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "LgsZf9eiJxTijHlE",
+      "name": "Blinding Cinders",
+      "type": "feat",
+      "img": "icons/svg/blind.svg",
+      "system": {
+        "category": "technique",
+        "description": {
+          "value": "<p>A cloud of thick ash bursts in a 4-square-radius sphere centred anywhere within 24 squares. Each creature inside rolls Body vs DC 18 or is Blinded until the end of its next turn.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 700000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "hsdUT0KvjUDFt64Y",
+      "name": "Disperse and Reform (Recharge 5–6)",
+      "type": "feat",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "category": "technique",
+        "description": {
+          "value": "<p>The Horde scatters into individual birds — it is immune to all damage until the start of its next turn, when it reforms anywhere it likes within 24 squares. The silence while it is dispersed is worse than the cawing.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 800000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "IV",
+          "bracket": "elite",
+          "archetype": "the-ashen-horde",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "harab-serapel",
+              "boss",
+              "swarm",
+              "legendary"
+            ],
+            "role": "Qliphothic Calamity (Harab Serapel — Greater)",
+            "lootTable": [
+              {
+                "name": "Ash That Was a Kingdom",
+                "qty": "2d6",
+                "weight": 6
+              },
+              {
+                "name": "Ember-Raven Skull (Warm)",
+                "qty": "1d6",
+                "weight": 5
+              },
+              {
+                "name": "Crown Swallowed Whole",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "price": {
+            "marks": 1800,
+            "bounty": 3000,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "IV elite Qliphothic Calamity (Harab Serapel — Greater) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "harab-serapel",
+            "hullOf": "netzach",
+            "grade": "greater"
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_id": "noX2ayKHtoDnsM8I",
+  "_key": "!actors!noX2ayKHtoDnsM8I"
+}

@@ -1,0 +1,402 @@
+{
+  "name": "Golachab Flayer",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/golachab-flayer.webp",
+  "system": {
+    "role": "Qliphothic Tormentor (Golachab — Lesser)",
+    "tier": 2,
+    "factionId": "",
+    "notes": "<p>Master of the Wastes' torture pits: a tall, emaciated figure of blackened charcoal skin glowing from within, needle teeth, and a long whip of solidified flame. Flayers patrol the sites of old atrocities, drawn to the lingering psychic residue of pain, and their greatest joy is an echo — a scream coming back off the desolation.</p><p><strong>Qliphah:</strong> Golachab, the Pyres — the Hull of Gevurah. Severity unmoored from judgment: burning cruelty for its own sake.</p><p><em>Mal's note: 'It is an artist, and you are the medium. Deny it an audience: fight quiet.'</em></p>",
+    "details": {
+      "level": 8,
+      "tier": 2,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 4
+      },
+      "intrigue": {
+        "value": 3
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 45,
+        "max": 45
+      },
+      "stress": {
+        "value": 25,
+        "max": 25
+      },
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 13
+      },
+      "resolve": {
+        "value": 13
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 1,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "aura": {
+        "state": "none"
+      },
+      "package": {
+        "carried": false,
+        "id": "",
+        "type": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "dreamResonance": {
+        "active": false,
+        "hexSephirah": "",
+        "insightUsed": false
+      }
+    },
+    "conditions": {
+      "blinded": false,
+      "burning": false,
+      "calmed": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "prone": false,
+      "radiationIrradiated": false,
+      "radiationPoisoned": false,
+      "radiationSickened": false,
+      "radiationTerminal": false,
+      "restrained": false,
+      "scarred": false,
+      "shaken": false,
+      "staggered": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementBudgetFt": 30,
+      "movementUsedFt": 0
+    },
+    "defenses": {
+      "resistances": [
+        "thermal",
+        "qliphothic"
+      ],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-5",
+      "qliphah-golachab",
+      "hull-of-gevurah",
+      "lesser"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Golachab Flayer",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/golachab-flayer.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    }
+  },
+  "items": [
+    {
+      "_id": "7xTEDIi2BbmLUL3Z",
+      "name": "Aura of Pain",
+      "type": "feature",
+      "img": "icons/svg/blood.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>Any creature that takes damage while within 4 squares of the Flayer takes an extra 1d4 psychic damage (Stress) — the Flayer's attention makes every wound articulate.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "8saNBNaidv8kjMxy",
+      "name": "Sadistic Glee",
+      "type": "feature",
+      "img": "icons/svg/regen.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>Whenever a creature within 4 squares of the Flayer fails a check, the Flayer gains 5 temporary Integrity. Your bad day is load-bearing for it.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "E8BamWUx5eIvYuOy",
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>The Flayer makes two attacks with its Whip of Agony.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "op3clD2465FnlvTt",
+      "name": "Whip of Agony",
+      "type": "weapon",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d10",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "hot",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 2,
+          "long": 2
+        },
+        "tags": [],
+        "effect": "Reach 2. On a hit the target takes an extra 1d6 thermal (hot) damage and rolls Body vs DC 14 or is Burning — the agonizing flames cling until extinguished.",
+        "flavor": "Nine lashes, each ending in a licking flame instead of a barb.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "II",
+          "bracket": "medium",
+          "archetype": "golachab-flayer",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "golachab",
+              "tormentor",
+              "fiend"
+            ],
+            "role": "Qliphothic Tormentor (Golachab — Lesser)",
+            "lootTable": [
+              {
+                "name": "Solidified Flame Lash-Tip",
+                "qty": "1d4",
+                "weight": 5
+              },
+              {
+                "name": "Ember-Vein Charcoal",
+                "qty": "2d4",
+                "weight": 6
+              },
+              {
+                "name": "Needle Tooth",
+                "qty": "1d6",
+                "weight": 4
+              }
+            ]
+          },
+          "price": {
+            "marks": 450,
+            "bounty": 600,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "violence",
+            "gmOverride": false,
+            "notes": "II medium Qliphothic Tormentor (Golachab — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "golachab",
+            "hullOf": "gevurah",
+            "grade": "lesser"
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_id": "Mn6jPjJ55R25T7jA",
+  "_key": "!actors!Mn6jPjJ55R25T7jA"
+}

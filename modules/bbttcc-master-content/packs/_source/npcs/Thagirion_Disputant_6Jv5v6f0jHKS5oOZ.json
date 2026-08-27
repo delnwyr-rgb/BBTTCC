@@ -1,0 +1,403 @@
+{
+  "name": "Thagirion Disputant",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/thagirion-disputant.webp",
+  "system": {
+    "role": "Qliphothic Agitator (Thagirion — Lesser)",
+    "tier": 2,
+    "factionId": "",
+    "notes": "<p>A walking argument: unnaturally tall and thin, skin a bruised patchwork of clashing colors, head featureless except for a single oversized, sneering mouth that never stops moving. Drawn to peace like flies to sugar — negotiations, gatherings, quiet libraries — where its whispers exploit every insecurity until civil discussion becomes bloodshed. It doesn't need to win fights. Only to start them.</p><p><strong>Qliphah:</strong> Thagirion, the Conflicts — the Hull of Tiferet. Harmony shattered into endless, ugly strife.</p><p><em>Mal's note: 'If everyone at the table is suddenly RIGHT and FURIOUS about it, someone let a Disputant in the door.'</em></p>",
+    "details": {
+      "level": 8,
+      "tier": 2,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 3
+      },
+      "presence": {
+        "value": 5
+      },
+      "body": {
+        "value": 4
+      },
+      "mind": {
+        "value": 3
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 50,
+        "max": 50
+      },
+      "stress": {
+        "value": 28,
+        "max": 28
+      },
+      "guard": {
+        "value": 12
+      },
+      "evasion": {
+        "value": 13
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "aura": {
+        "state": "none"
+      },
+      "package": {
+        "carried": false,
+        "id": "",
+        "type": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "dreamResonance": {
+        "active": false,
+        "hexSephirah": "",
+        "insightUsed": false
+      }
+    },
+    "conditions": {
+      "blinded": false,
+      "burning": false,
+      "calmed": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "prone": false,
+      "radiationIrradiated": false,
+      "radiationPoisoned": false,
+      "radiationSickened": false,
+      "radiationTerminal": false,
+      "restrained": false,
+      "scarred": false,
+      "shaken": false,
+      "staggered": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementBudgetFt": 30,
+      "movementUsedFt": 0
+    },
+    "defenses": {
+      "resistances": [
+        "qliphothic"
+      ],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [
+      "calmed"
+    ],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-6",
+      "qliphah-thagirion",
+      "hull-of-tiferet",
+      "lesser"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Thagirion Disputant",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/thagirion-disputant.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    }
+  },
+  "items": [
+    {
+      "_id": "AtxG5zIR80rCuX3s",
+      "name": "Aura of Contention",
+      "type": "feature",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>Any creature that starts its turn within 6 squares of the Disputant grows argumentative: it rolls twice-keep-worse on Presence checks to persuade or de-escalate, and rolls vs Resolve (DC 14) or becomes hostile toward one random creature within 6 squares — friend or foe — until the start of its next turn.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "3aoozAci9UhiTkku",
+      "name": "Psychic Mirror",
+      "type": "feat",
+      "img": "icons/svg/mage-shield.svg",
+      "system": {
+        "category": "technique",
+        "description": {
+          "value": "<p><strong>Reaction.</strong> When a manifestation or effect targets the Disputant's Resolve, it can throw the argument back: the originator rolls vs its own DC or suffers the effect instead. The Disputant considers this winning on a technicality, its favorite kind.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "GjDSYfDcz6rEo6r9",
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>The Disputant uses Inciting Word twice.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "TSg0Wp4Tc3eI1CGQ",
+      "name": "Inciting Word",
+      "type": "weapon",
+      "img": "icons/svg/silenced.svg",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "channel",
+        "damage": {
+          "formula": "2d8",
+          "attribute": "presence",
+          "type": "psychic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 12,
+          "long": 12
+        },
+        "tags": [],
+        "effect": "One creature within 12 squares that can hear it rolls vs Resolve (DC 14). Fail: full damage to Stress, and the target immediately spends its reaction making one attack against a creature of the Disputant's choice — the perfect insult, perfectly placed. Success: half damage, no swing.",
+        "flavor": "A venomous whisper slithering into the ear like a snake.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "II",
+          "bracket": "medium",
+          "archetype": "thagirion-disputant",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "thagirion",
+              "agitator",
+              "fiend"
+            ],
+            "role": "Qliphothic Agitator (Thagirion — Lesser)",
+            "lootTable": [
+              {
+                "name": "Sneer-Muscle (Preserved)",
+                "qty": "1",
+                "weight": 3
+              },
+              {
+                "name": "Bruise-Patchwork Hide Swatch",
+                "qty": "1d4",
+                "weight": 5
+              },
+              {
+                "name": "Transcript of the Fight It Started",
+                "qty": "1d2",
+                "weight": 4
+              }
+            ]
+          },
+          "price": {
+            "marks": 450,
+            "bounty": 600,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "II medium Qliphothic Agitator (Thagirion — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "thagirion",
+            "hullOf": "tiferet",
+            "grade": "lesser"
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_id": "6Jv5v6f0jHKS5oOZ",
+  "_key": "!actors!6Jv5v6f0jHKS5oOZ"
+}

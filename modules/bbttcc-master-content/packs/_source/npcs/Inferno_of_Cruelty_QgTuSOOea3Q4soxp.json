@@ -1,0 +1,526 @@
+{
+  "name": "Inferno of Cruelty",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/inferno-of-cruelty.webp",
+  "system": {
+    "role": "Qliphothic Cataclysm (Golachab — Greater)",
+    "tier": 4,
+    "factionId": "",
+    "notes": "<p>Not a creature of flesh but a conflagration of pure hate: a sentient cataclysm born from an act of mass immolation, forever bound to the agony of its own creation. A swirling vortex of emerald-green soulfire, its flames crowded with the screaming psychic impressions of everyone it has ever burned. It does not merely want to burn you — it wants you to feel all of them.</p><p><strong>Qliphah:</strong> Golachab, the Pyres — the Hull of Gevurah. The executioner's fire that never learned to stop.</p><p><em>Mal's note: 'Green fire that screams. Every instinct you have about water is wrong and it knows.'</em></p>",
+    "details": {
+      "level": 18,
+      "tier": 4,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 5
+      },
+      "intrigue": {
+        "value": 4
+      },
+      "presence": {
+        "value": 5
+      },
+      "body": {
+        "value": 5
+      },
+      "mind": {
+        "value": 3
+      },
+      "soul": {
+        "value": 5
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 105,
+        "max": 105
+      },
+      "stress": {
+        "value": 52,
+        "max": 52
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 15
+      },
+      "resolve": {
+        "value": 16
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 3,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "aura": {
+        "state": "none"
+      },
+      "package": {
+        "carried": false,
+        "id": "",
+        "type": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "dreamResonance": {
+        "active": false,
+        "hexSephirah": "",
+        "insightUsed": false
+      }
+    },
+    "conditions": {
+      "blinded": false,
+      "burning": false,
+      "calmed": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "prone": false,
+      "radiationIrradiated": false,
+      "radiationPoisoned": false,
+      "radiationSickened": false,
+      "radiationTerminal": false,
+      "restrained": false,
+      "scarred": false,
+      "shaken": false,
+      "staggered": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementBudgetFt": 30,
+      "movementUsedFt": 0
+    },
+    "defenses": {
+      "resistances": [
+        "qliphothic",
+        "kinetic"
+      ],
+      "immunities": [
+        "thermal:hot"
+      ],
+      "vulnerabilities": [
+        "thermal:cold"
+      ]
+    },
+    "conditionImmunities": [
+      "prone",
+      "restrained",
+      "charmed"
+    ],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-16",
+      "qliphah-golachab",
+      "hull-of-gevurah",
+      "greater"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Inferno of Cruelty",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 3,
+    "height": 3,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/inferno-of-cruelty.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    }
+  },
+  "items": [
+    {
+      "_id": "urjfbKXejTt7J4Qm",
+      "name": "Aura of Immolation",
+      "type": "feature",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>At the start of each of the Inferno's turns, every creature within 6 squares takes 2d6 thermal (hot) damage — and any protection it has against thermal damage is burned away until the start of the Inferno's next turn (treat thermal resistance as absent).</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "SLEZN5BKwQlKgs7s",
+      "name": "Soulfire Form",
+      "type": "feature",
+      "img": "icons/svg/fire-shield.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>The Inferno flows through gaps an inch wide. A creature that touches it or hits it with a melee attack from within 1 square takes 2d6 thermal (hot) damage. It can enter hostile spaces and stop there; the first time it enters a creature's space on a turn, that creature takes 2d6 thermal (hot).</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "0SwDdDsA5u4k3M5U",
+      "name": "Fractured Will (3/scene)",
+      "type": "feature",
+      "img": "icons/svg/mage-shield.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>When the Inferno fails a check, one of the thousand screaming impressions inside it succeeds instead. Three times per scene.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "LVrRMj6RoD8Izdys",
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>The Inferno makes two Streams of Vengeance attacks.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "ZmIbRPKhGpxFiVbz",
+      "name": "Streams of Vengeance",
+      "type": "weapon",
+      "img": "icons/svg/lightning.svg",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "channel",
+        "damage": {
+          "formula": "3d8",
+          "attribute": "soul",
+          "type": "thermal",
+          "damageFlavor": "hot",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 24,
+          "long": 24
+        },
+        "tags": [],
+        "effect": "Ranged, 24 squares. On a hit, fiery tendrils solidify into a grasping hand: the target is grappled (escape: Violence check vs DC 18) and Restrained; while held, the Inferno's Streams hit it automatically.",
+        "flavor": "A jet of green fire that solidifies into a clawed, grasping hand.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "S83NTa6lDadSr06U",
+      "name": "Soul Supernova (Recharge 6)",
+      "type": "weapon",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "warding",
+        "damage": {
+          "formula": "4d8",
+          "attribute": "soul",
+          "type": "thermal",
+          "damageFlavor": "hot",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 6,
+          "long": 6
+        },
+        "tags": [
+          "aoe",
+          "signature"
+        ],
+        "effect": "The Inferno detonates. Every creature within 6 squares rolls an Evasion check vs DC 18. Fail: 4d8 thermal (hot) AND 4d8 psychic to Stress — the collective pain of all who came before, delivered at once. Success: half of each.",
+        "flavor": "A blinding green blast with a screaming skull at its heart.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "YpKiImFjyNo41uSt",
+      "name": "Melt Ground",
+      "type": "feat",
+      "img": "icons/svg/cave.svg",
+      "system": {
+        "category": "technique",
+        "description": {
+          "value": "<p>The Inferno chooses a 2×2-square patch of ground within 12 squares. It becomes molten slag for a minute: difficult terrain, and 2d10 thermal (hot) damage to any creature that starts its turn there or enters for the first time on a turn.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 700000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "IV",
+          "bracket": "heavy",
+          "archetype": "inferno-of-cruelty",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "golachab",
+              "boss",
+              "elemental",
+              "soulfire"
+            ],
+            "role": "Qliphothic Cataclysm (Golachab — Greater)",
+            "lootTable": [
+              {
+                "name": "Vial of Green Soulfire (Screaming Faintly)",
+                "qty": "1d3",
+                "weight": 3
+              },
+              {
+                "name": "Vitrified Grief-Glass",
+                "qty": "2d6",
+                "weight": 6
+              },
+              {
+                "name": "The First Spark (Cold to the Touch)",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "price": {
+            "marks": 1800,
+            "bounty": 2400,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "IV heavy Qliphothic Cataclysm (Golachab — Greater) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "golachab",
+            "hullOf": "gevurah",
+            "grade": "greater"
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_id": "QgTuSOOea3Q4soxp",
+  "_key": "!actors!QgTuSOOea3Q4soxp"
+}

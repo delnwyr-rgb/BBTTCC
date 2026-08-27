@@ -1,0 +1,473 @@
+{
+  "name": "War Incarnate",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/war-incarnate.webp",
+  "system": {
+    "role": "Qliphothic Engine (Thagirion — Greater)",
+    "tier": 3,
+    "factionId": "",
+    "notes": "<p>The metaphysical embodiment of war itself — not a soldier fighting for a cause; the cause. Fifteen feet of rusted swords, broken spears, dented shields and twisted plate, swirling with ghostly green energy, four arms each ending in a different brutal weapon. It forms in the hearts of battlefields where conflict raged for centuries. It will arm one side of a fight solely to turn on them later. Its only goal is that the battle never ends.</p><p><strong>Qliphah:</strong> Thagirion, the Conflicts — the Hull of Tiferet. The balance point of the Tree, replaced by a blade's edge.</p><p><em>Mal's note: 'It cannot be Calmed. It CAN be bored. No one has ever survived long enough to bore it. Aim for the flail arm first.'</em></p>",
+    "details": {
+      "level": 13,
+      "tier": 3,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 6
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 4
+      },
+      "body": {
+        "value": 6
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 4
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 95,
+        "max": 95
+      },
+      "stress": {
+        "value": 45,
+        "max": 45
+      },
+      "guard": {
+        "value": 15
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 1,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "aura": {
+        "state": "none"
+      },
+      "package": {
+        "carried": false,
+        "id": "",
+        "type": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "dreamResonance": {
+        "active": false,
+        "hexSephirah": "",
+        "insightUsed": false
+      }
+    },
+    "conditions": {
+      "blinded": false,
+      "burning": false,
+      "calmed": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "prone": false,
+      "radiationIrradiated": false,
+      "radiationPoisoned": false,
+      "radiationSickened": false,
+      "radiationTerminal": false,
+      "restrained": false,
+      "scarred": false,
+      "shaken": false,
+      "staggered": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementBudgetFt": 30,
+      "movementUsedFt": 0
+    },
+    "defenses": {
+      "resistances": [
+        "kinetic",
+        "qliphothic"
+      ],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [
+      "charmed",
+      "shaken",
+      "calmed"
+    ],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-14",
+      "qliphah-thagirion",
+      "hull-of-tiferet",
+      "greater"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "War Incarnate",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 3,
+    "height": 3,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/war-incarnate.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    }
+  },
+  "items": [
+    {
+      "_id": "Nm0vHgsdufe9H9Wi",
+      "name": "Aura of Battle Fury",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>Any creature that starts its turn within 6 squares is flooded with bloodlust: it rolls twice-keep-better on melee attacks, but must roll vs Resolve (DC 16) or spend its action attacking the nearest creature — whoever that happens to be. The effect ends when it starts a turn outside the aura, breathing hard.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "1F5WFkUYcXHWFN5g",
+      "name": "Fractured Will (3/scene)",
+      "type": "feature",
+      "img": "icons/svg/mage-shield.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>When the War Incarnate fails a check, ten thousand fallen soldiers refuse the outcome on its behalf. Three times per scene.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "RxVGu3vDUNWQBLTw",
+      "name": "Siege-Thing",
+      "type": "feature",
+      "img": "icons/svg/ruins.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>Deals double damage to objects and structures. Walls are just slow enemies.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "sjU5La8L4G8KfR7o",
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "description": {
+          "value": "<p>The War Incarnate makes three Weapon Limb attacks.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "ICrV9YonU3OENY2I",
+      "name": "Weapon Limb",
+      "type": "weapon",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 2,
+          "long": 2
+        },
+        "tags": [],
+        "effect": "Reach 2. Axe, maul, greatsword, or flail — its choice, and it likes variety within a single turn.",
+        "flavor": "Four arms, four arguments, one conclusion.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "VPCkYyUmgJVPkp6D",
+      "name": "Armor Shatter",
+      "type": "feat",
+      "img": "icons/svg/downgrade.svg",
+      "system": {
+        "category": "technique",
+        "description": {
+          "value": "<p>The War Incarnate makes one Weapon Limb attack against an armored creature. On a hit, besides the damage, the target's Guard drops by 2 until the armor is repaired or the wearer's next Soma Break. A given creature can only be Shattered once — after that there is nothing left to disrespect.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "hqE5pj8v7uVoqsP1",
+      "name": "Summon Echoes of War (Recharge 5–6)",
+      "type": "feat",
+      "img": "icons/svg/bones.svg",
+      "system": {
+        "category": "technique",
+        "description": {
+          "value": "<p>1d3 war-echoes rise from the ground in unoccupied squares within 6 squares (GM: use a T1 wraith-type statblock, e.g. Salt Wraith). They act on the Incarnate's initiative, fight for it, and disperse after a minute — or when the battle does, whichever it can prevent longer.</p>",
+          "chat": ""
+        },
+        "source": "Qliphothic Bestiary",
+        "tags": []
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 700000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "III",
+          "bracket": "heavy",
+          "archetype": "war-incarnate",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "thagirion",
+              "boss",
+              "construct",
+              "siege"
+            ],
+            "role": "Qliphothic Engine (Thagirion — Greater)",
+            "lootTable": [
+              {
+                "name": "Weapon That Remembers Its Owner",
+                "qty": "1d4",
+                "weight": 6
+              },
+              {
+                "name": "Green War-Ghost Residue",
+                "qty": "1d6",
+                "weight": 4
+              },
+              {
+                "name": "Breastplate, Pre-Fall, One Careful Owner",
+                "qty": "1",
+                "weight": 2
+              }
+            ]
+          },
+          "price": {
+            "marks": 900,
+            "bounty": 1100,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "violence",
+            "gmOverride": false,
+            "notes": "III heavy Qliphothic Engine (Thagirion — Greater) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "thagirion",
+            "hullOf": "tiferet",
+            "grade": "greater"
+          }
+        }
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.364",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null
+  },
+  "_id": "UdYtulFvT1aPi8wD",
+  "_key": "!actors!UdYtulFvT1aPi8wD"
+}
