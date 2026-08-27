@@ -1,0 +1,632 @@
+{
+  "name": "Harab Serapel Scavenger",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/harab-serapel-scavenger.webp",
+  "system": {
+    "role": "Qliphothic Predator (Harab Serapel — Lesser)",
+    "tier": 2,
+    "factionId": "",
+    "notes": "<p>A giant raven the size of a lion, feathers scorched black with embers still clinging to wing and tail, a beak of jagged volcanic rock. The embodiment of avarice on the wing: it mesmerizes victims with visions of treasure, holding them captivated while it swoops in to take their valuables and their life force, in that order of preference.</p><p><strong>Qliphah:</strong> Harab Serapel, the Ravens of Burning — the Hull of Netzach. Victory hollowed into rapacious greed.</p><p><em>Mal's note: 'It will show you exactly what you want. That is not generosity. That is aiming.'</em></p>",
+    "details": {
+      "level": 8,
+      "tier": 2,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 4
+      },
+      "intrigue": {
+        "value": 3
+      },
+      "presence": {
+        "value": 4
+      },
+      "body": {
+        "value": 4
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 50,
+        "max": 50
+      },
+      "stress": {
+        "value": 25,
+        "max": 25
+      },
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 12
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 1,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "thermal",
+        "qliphothic"
+      ],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-7",
+      "qliphah-harab-serapel",
+      "hull-of-netzach",
+      "lesser"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Harab Serapel Scavenger",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 2,
+    "height": 2,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/harab-serapel-scavenger.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "_id": "d5AkKwUk95bNgXoJ",
+      "name": "Flyby",
+      "type": "feature",
+      "img": "icons/svg/wing.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Scavenger doesn't provoke opportunity attacks when it flies out of reach. It was never really there for you anyway — just your pockets.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188165,
+        "modifiedTime": 1787799188165,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!SmVDBIAjrDFTRjxt.d5AkKwUk95bNgXoJ"
+    },
+    {
+      "_id": "mbFGEHPjw3SUztnt",
+      "name": "Keen Sight",
+      "type": "feature",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>Rolls twice and keeps the better result on sight-based checks to notice things. Especially things that glitter.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188165,
+        "modifiedTime": 1787799188165,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!SmVDBIAjrDFTRjxt.mbFGEHPjw3SUztnt"
+    },
+    {
+      "_id": "Mlx1jTBQuLunleR5",
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Scavenger makes two attacks: one with its Soulfire Beak and one with its Talons.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188165,
+        "modifiedTime": 1787799188165,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!SmVDBIAjrDFTRjxt.Mlx1jTBQuLunleR5"
+    },
+    {
+      "_id": "uOEfoBLF6Ik4M3By",
+      "name": "Soulfire Beak",
+      "type": "weapon",
+      "img": "icons/svg/fire.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d10",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "hot",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 2,
+          "long": 2
+        },
+        "tags": [],
+        "effect": "On a hit the target takes an extra 1d6 thermal (hot) damage and rolls Body vs DC 14 — on a failure its maximum Integrity is reduced by the thermal damage dealt, until its next Soma Break. The bird is eating the part of you that heals.",
+        "flavor": "Jagged volcanic rock, wreathed in ghostly white and orange flame.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188165,
+        "modifiedTime": 1787799188165,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!SmVDBIAjrDFTRjxt.uOEfoBLF6Ik4M3By"
+    },
+    {
+      "_id": "uipuL4skts5m2S8u",
+      "name": "Talons",
+      "type": "weapon",
+      "img": "icons/svg/pawprint.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [],
+        "effect": "Grasping, weighing, appraising.",
+        "flavor": "",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188165,
+        "modifiedTime": 1787799188165,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!SmVDBIAjrDFTRjxt.uipuL4skts5m2S8u"
+    },
+    {
+      "_id": "t283p3TRB4uEsBl5",
+      "name": "Avaricious Gaze (Recharge 5–6)",
+      "type": "feat",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>One creature within 12 squares meets its coin-pupiled eye and rolls vs Resolve (DC 14). Fail: Charmed and Staggered — captivated by a vision of its greatest desire, hanging just out of reach. Repeat the check at the end of each of its turns. On a success, immune to any Scavenger's Gaze for a day.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188165,
+        "modifiedTime": 1787799188165,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!SmVDBIAjrDFTRjxt.t283p3TRB4uEsBl5"
+    }
+  ],
+  "effects": [],
+  "folder": "Ps7zW26xgejTIfav",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "II",
+          "bracket": "medium",
+          "archetype": "harab-serapel-scavenger",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "harab-serapel",
+              "predator",
+              "flyer"
+            ],
+            "role": "Qliphothic Predator (Harab Serapel — Lesser)",
+            "lootTable": [
+              {
+                "name": "Scorched Pinion",
+                "qty": "2d4",
+                "weight": 6
+              },
+              {
+                "name": "Volcanic Beak Chip",
+                "qty": "1d4",
+                "weight": 4
+              },
+              {
+                "name": "Someone Else's Valuables",
+                "qty": "1d6",
+                "weight": 5
+              }
+            ]
+          },
+          "price": {
+            "marks": 450,
+            "bounty": 600,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "intrigue",
+            "gmOverride": false,
+            "notes": "II medium Qliphothic Predator (Harab Serapel — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "harab-serapel",
+            "hullOf": "netzach",
+            "grade": "lesser"
+          }
+        }
+      },
+      "kind": "npc"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "createdTime": 1787799188165,
+    "modifiedTime": 1787799188165,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_id": "SmVDBIAjrDFTRjxt",
+  "_key": "!actors!SmVDBIAjrDFTRjxt"
+}

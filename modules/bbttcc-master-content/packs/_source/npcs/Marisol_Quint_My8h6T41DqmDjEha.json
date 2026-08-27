@@ -1,0 +1,2354 @@
+{
+  "name": "Marisol Quint",
+  "type": "character",
+  "folder": "C2ow2Hk1WhQ1T3bS",
+  "img": "icons/svg/mystery-man.svg",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc",
+      "createdViaEchoMint": true,
+      "createdAt": 1787274854667,
+      "echo": {
+        "stewardUuid": "Actor.zu2mcj4USN0AwjFZ",
+        "stewardName": "Toblerone",
+        "entryName": "Covert Ops Cell",
+        "kind": "crew",
+        "family": "covert-ops-cell",
+        "memberId": "sVJqLFtqlTdr"
+      }
+    },
+    "bbttcc-factions": {
+      "factionId": "eIXghZ73hKSXmP3x"
+    },
+    "fourththing": {
+      "kind": "npc"
+    },
+    "bbttcc-character-options": {
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.0030cd75eb3ea792",
+      "nativeLinks": {
+        "heritageName": "Circuitborn Heritage: Synapse",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.0030cd75eb3ea792",
+        "heritageApplied": true,
+        "ancestryName": "Circuitborn",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.84f23a0c6bb4d55d",
+        "ancestryApplied": true
+      }
+    }
+  },
+  "system": {
+    "biography": {
+      "concept": "Forger — Covert Ops Cell crew, echo of Toblerone",
+      "notes": "She still cuts your travel papers for free because the last set you forged for her kept a Sweet Release skimmer out of a Monodynamic cage."
+    },
+    "details": {
+      "level": 1,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1
+    },
+    "attributes": {
+      "violence": {
+        "value": 2
+      },
+      "intrigue": {
+        "value": 5
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 4
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 0
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 0
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 0
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 1
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 0
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 0
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 0
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "fitting": {
+        "attribute": "intrigue",
+        "label": "Fitting",
+        "value": 0
+      },
+      "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 16,
+        "max": 16
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": 1,
+    "name": "Marisol Quint",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "My8h6T41DqmDjEha",
+  "items": [
+    {
+      "_id": "2BoVh3lxlpHI7arS",
+      "name": "Operator",
+      "type": "class",
+      "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-operator",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "operator",
+          "intrigue"
+        ],
+        "description": {
+          "value": "<p><em>\"Everything's a door if you hold it right.\"</em></p><p><strong>Operator</strong> is the Intrigue Calling — the trade that kept its bearers alive after the Shattering. Umbrella: thief, smuggler, spy, courier, fence, hacker, fixer. A profession is a flavor label on the Calling.</p><p><strong>Knack — Underfoot:</strong> In crowds, markets, and streets, the Operator passes unremarked unless actively hunted; Streetwise checks never fumble (at Tier III, also Stealth).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Stealth</strong> rank = tier; secondary <strong>Streetwise</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Intrigue</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Shadow Courier. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "operator",
+            "faculty": "intrigue",
+            "signature": "stealth",
+            "secondary": "streetwise",
+            "pool": "Intrigue",
+            "awakens": "Shadow Courier"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236965,
+        "modifiedTime": 1787799236965,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!My8h6T41DqmDjEha.2BoVh3lxlpHI7arS"
+    },
+    {
+      "_id": "Ph19JzqQHF0Yf2Uw",
+      "name": "Operator — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "art/devin-knight/Monsters2_October/Bandit_leader.webp",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "operator",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Operator — Apprentice</strong> (Tier I).</p><p><strong>Trade — Carry it quiet:</strong> Move a package/message across town, no questions. <span style=\"opacity:0.7\">Standard fee 10 marks (Intrigue).</span></p><p><strong>Trick — Pocketed</strong> <em>(1/scene)</em>: Produce a mundane Tier-I item they plausibly lifted earlier.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 201000,
+      "ownership": {
+        "default": 0,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "operator",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236965,
+        "modifiedTime": 1787799236965,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!My8h6T41DqmDjEha.Ph19JzqQHF0Yf2Uw"
+    },
+    {
+      "name": "Never Here (Echo Boon)",
+      "type": "feature",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "category": "echo",
+        "source": "Echo Rosters",
+        "tags": [
+          "echo",
+          "covert-ops-cell",
+          "tier-1"
+        ],
+        "description": {
+          "value": "\n    <p><em>Echoes are the past made flesh — people out of a Steward's former\n    lives, walking beside them again. Marisol Quint is an echo of\n    Toblerone's time with the\n    <strong>Covert Ops Cell</strong> crew. Being remembered\n    leaves a mark.</em></p>\n    <p><strong>Forger</strong> — She still cuts your travel papers for free because the last set you forged for her kept a Sweet Release skimmer out of a Monodynamic cage.</p>\n    <p><strong>Never Here — Apprentice (Echo Boon)</strong></p>\n    <p>Once per scene, retroactively establish the echo was somewhere else; one witness&#x27;s account of them unravels.</p>\n    <p><strong>Echo's Mark:</strong> while their Steward can see them, the echo adds\n    +1 on any check made in direct support of the Steward.</p>\n    <p><em>Officially, this person does not exist. Officially never changed.</em></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "echo": {
+            "family": "covert-ops-cell",
+            "kind": "crew",
+            "tier": 1,
+            "crewEcho": true
+          }
+        }
+      },
+      "_id": "qFT9LaEmEU6xHr0O",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236965,
+        "modifiedTime": 1787799236965,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!My8h6T41DqmDjEha.qFT9LaEmEU6xHr0O"
+    },
+    {
+      "name": "Circuitborn",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_1.png",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Exo-Knight, Parallax, Salvage, Synapse</strong>.</p><p>This root grants the shared Circuitborn core trait package (<em>Firmware of Identity</em>) and preserves live UUID compatibility for the four Line items.</p><p><em>“You are not a robot. You are a decision the world keeps making about itself. The networks are alive and they recognize you on sight.”</em></p><p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p><p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you, you may regain either one spent Bad Eden OP (a category you used this scene) or Integrity equal to your tier.</p><p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor.</p><p><strong>Line Memory.</strong> Choose one Circuitborn line (Exo-Knight, Parallax, Salvage, Synapse). Your line grants Tier powers as you level.</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "cbsizeadvancmnt0",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium.",
+            "value": {}
+          },
+          {
+            "_id": "cbfirmwareadvnc0",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.MLNWLvI12pEWb6tN",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Firmware of Identity",
+            "hint": "Gain the shared Circuitborn core trait package."
+          }
+        ],
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": "Informational Matrix Sense (radio / signal / ritual / rumor networks)."
+        },
+        "type": {
+          "value": "humanoid",
+          "custom": "Construct-Living",
+          "subtype": "Circuitborn"
+        },
+        "identifier": "circuitborn"
+      },
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "family": "circuitborn",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "heritageList": [
+            "exo_knight",
+            "parallax",
+            "salvage",
+            "synapse"
+          ],
+          "refactorNotes": "v2: Introduced Circuitborn species root to mirror the v2 species + heritage pattern. Existing Line items remain race-typed for backward compat."
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "defense",
+              "mode": "reroll-lowest",
+              "vs": "vs:poison and disease",
+              "note": "on defense checks [TODO(adv-call)] against poison and disease, and you are im…"
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-rest",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "You do not eat, drink, or sleep. You enter maintenance trance when you rest"
+                }
+              }
+            },
+            {
+              "event": "on-rest",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "You do not eat, drink, or sleep. You enter maintenance trance when you rest"
+                }
+              }
+            }
+          ],
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "grantedByAncestry": "Circuitborn"
+        }
+      },
+      "effects": [],
+      "folder": "3H6h9q66XbEDFtAN",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236965,
+        "modifiedTime": 1787799236965,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "sort": 0,
+      "_id": "9GgkxsY2cdr2ljKX",
+      "_key": "!actors.items!My8h6T41DqmDjEha.9GgkxsY2cdr2ljKX"
+    },
+    {
+      "name": "Circuitborn: Firmware of Identity",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_14.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You are not a robot. You are a decision the world keeps making about itself.”</em></p>\n<p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You reroll the lowest die on checks against poison and disease, and you are immune to magical sleep.</p>\n<p><strong>Attention Resonance.</strong> 1/Soma Break, when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), you may regain either (a) one spent Bad Eden OP (a category you used this scene) or (b) Integrity equal to your tier.</p>\n<p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor. You reroll the lowest die on checks to identify surveillance, hidden speakers, encoded messages, or noospheric “attention traps.”</p>\n<p><strong>Glitch-Surge.</strong> When you drop to 0 Integrity, you can choose to emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In Bad Eden play, this is a perfect excuse for weird consequences.</p>",
+          "chat": ""
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "circuitborn-firmware-of-identity",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Circuitborn",
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "activities": {}
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "circuitborn",
+          "feature": "core",
+          "chassis": "any",
+          "version": "1.0.0"
+        },
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "autoanimations": {
+          "id": "4b9e33bb-5b8c-4140-a837-38b5e590759c",
+          "label": "Circuitborn: Firmware of Identity",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "grantedByAncestry": "Circuitborn"
+        }
+      },
+      "effects": [
+        {
+          "_id": "3e7f9ff1fcf44207",
+          "name": "Circuitborn: Poison Resistance",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_book_4.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.traits.dr.value",
+                "value": "poison",
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Safe automation: poison resistance. Other parts are table-facing.",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "dnd5e": {
+              "riders": {
+                "statuses": []
+              }
+            }
+          },
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1787799236965,
+            "modifiedTime": 1787799236965
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!My8h6T41DqmDjEha.XH7ShWt3g1wWLV3u.3e7f9ff1fcf44207"
+        }
+      ],
+      "folder": "3H6h9q66XbEDFtAN",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.a0bpTg2C1TVKxpLf",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236965,
+        "modifiedTime": 1787799236965,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 2,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "sort": 100000,
+      "_id": "XH7ShWt3g1wWLV3u",
+      "_key": "!actors.items!My8h6T41DqmDjEha.XH7ShWt3g1wWLV3u"
+    },
+    {
+      "name": "Circuitborn Heritage: Synapse",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_Synapse_1.png",
+      "system": {
+        "category": "heritage",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 2,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Circuitborn Line.</strong> The ghost-in-the-protocol. The chassis that thinks faster than the network it’s plugged into, and feels the noosphere the way a swimmer feels the current.</p><p><em>“You don’t use the network. The network uses you, and that’s the only relationship that doesn’t collapse.”</em></p><p><strong>Synapse.</strong> You are a sentient chassis built around the principle of <em>inference</em>. Information is your home. Other people travel through it. You live there.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>MND (Mind)</strong>—expressed primarily through Tier powers.</li><li><strong>Predictive Cache.</strong> 1/Soma Break, when an enemy you can see takes an action, you may have anticipated it: reroll the lowest die on the next reaction or attack you make against that enemy this round.</li></ul>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "cbsynapseadv0001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.SvHyGSSUNq8UmDUM",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Synapse Tier I",
+            "hint": "Gain your Synapse Line Tier I power (Yesod-Diver)."
+          }
+        ],
+        "identifier": "circuitborn_synapse_heritage",
+        "requirements": "Circuitborn",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "circuitborn",
+          "lineage": "Synapse",
+          "version": "2.0.0",
+          "date": "2026-04-18"
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "attack",
+              "mode": "reroll-lowest",
+              "note": "on the next reaction or attack you make against that enemy this round [TODO(a…"
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-enemy-action",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Predictive Cache. Once per a Soma Break, when an enemy you can see takes an action, you may have anticipated it: gain reroll the lowest die on the next reaction or attack you mak..."
+                }
+              }
+            }
+          ],
+          "grantedByHeritage": "Synapse"
+        }
+      },
+      "folder": "PF38YkXCmwDX2JTC",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236965,
+        "modifiedTime": 1787799236965,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "sort": 100000,
+      "_id": "K7pOGM8UNjejPz6V",
+      "_key": "!actors.items!My8h6T41DqmDjEha.K7pOGM8UNjejPz6V"
+    },
+    {
+      "name": "Circuitborn (Synapse Line): Yesod-Diver",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dream_moon_gate.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Reality is a database. You brought admin tools.”</em></p>\n        <p><strong>Yesod-Diver.</strong> You reroll the lowest die on checks to interpret metaphysical constructs (Sparks, slippage, noospheric entities). 1/Soma Break, you can ask the GM one direct question about a nearby “system,” and receive a truthful but incomplete answer.</p>",
+          "chat": ""
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "circuitborn-synapse-yesod_diver",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Circuitborn",
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "activities": {}
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "circuitborn",
+          "feature": "yesod_diver",
+          "chassis": "Synapse Line",
+          "tierLevel": 0,
+          "version": "1.0.0"
+        },
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "autoanimations": {
+          "id": "2de19e65-0895-48c9-8f9d-86ca2f77de4c",
+          "label": "Circuitborn (Synapse Line): Yesod-Diver",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "principleSource": "ancestry",
+          "grantedByHeritage": "Synapse"
+        }
+      },
+      "effects": [],
+      "folder": "p55I6SPWK2zZhU7n",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.JX9IN39VYqOsRT2o",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236965,
+        "modifiedTime": 1787799236965,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "sort": 300000,
+      "_id": "WxaVozqGOidAqpDu",
+      "_key": "!actors.items!My8h6T41DqmDjEha.WxaVozqGOidAqpDu"
+    },
+    {
+      "name": "Combat Knife",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dagger_2.png",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "blade",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "t1-baseline",
+          "knife",
+          "light",
+          "finesse"
+        ],
+        "effect": "Light, finesse-friendly. No signature ability.",
+        "flavor": "Cheap. Honest. Always sharp enough.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>Standard-issue field knife. Single-edge, thumb groove, hard sheath that clips to a belt or boot. The first weapon most Stewards carry and the last one they put down. Honest steel — no signature, no story, just edge.</p><p><b>Standard Issue.</b> Light enough for off-hand work; close enough for the kind of conversation knives are for.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Light, finesse-friendly. No signature ability.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d6 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(blade)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Melee (Violence)</li>\n  <li><strong>Reach:</strong> Melee</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "footprint": 1,
+              "reach": "5",
+              "frame": "weapon",
+              "signature": "Sharpened on a thousand other days like this one.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>Standard-issue field knife. Single-edge, thumb groove, hard sheath that clips to a belt or boot. The first weapon most Stewards carry and the last one they put down. Honest steel — no signature, no story, just edge.</p><p><b>Standard Issue.</b> Light enough for off-hand work; close enough for the kind of conversation knives are for.</p>",
+              "materialOf": [
+                "scrap-steel",
+                "leather-grip"
+              ],
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "bc02ed23-8978-493d-9da4-6f9f745b8c6d",
+          "label": "Combat Knife",
+          "levels3d": {
+            "type": "explosion",
+            "data": {
+              "color01": "#FFFFFF",
+              "color02": "#FFFFFF",
+              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+            },
+            "sound": {
+              "enable": false
+            },
+            "secondary": {
+              "enable": false,
+              "data": {
+                "color01": "#FFFFFF",
+                "color02": "#FFFFFF",
+                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+              }
+            }
+          },
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "meleeSwitch": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "arrow",
+              "variant": "regular",
+              "color": "regular"
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "detect": "automatic",
+              "range": 2,
+              "returning": false,
+              "switchType": "on"
+            }
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "dagger",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "bQhXd1gwJXtaVLGh",
+      "_id": "aQKGf24qpPKHTWkl",
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236965,
+        "modifiedTime": 1787799236965,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!My8h6T41DqmDjEha.aQKGf24qpPKHTWkl"
+    },
+    {
+      "name": "Sap",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_quarterstaff%20Background%20Removed.png",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "subdual",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "t1-baseline",
+          "sap",
+          "concealable",
+          "subdual"
+        ],
+        "effect": "Concealable. Damage easily declared nonlethal at the wielder's option.",
+        "flavor": "Compact. Apologetic. Functional.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>Leather-wrapped lead-shot bludgeon, palm-sized. Lives in a pocket or a sleeve. Designed to put someone out without breaking anything that won't heal in a week.</p><p><b>Standard Issue (Subdual).</b> Damage is subdual-flavored — narratively kinetic but easy to declare nonlethal. Useful for Couriers, intriguers, and anyone whose plan ended with \"and then we walk away.\"</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Concealable. Damage easily declared nonlethal at the wielder's option.</p>\n<ul>\n <li><strong>Damage:</strong> 1d6 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(subdual)</span></li>\n <li><strong>Faculty:</strong> Violence</li>\n <li><strong>Attack:</strong> Melee (Violence)</li>\n <li><strong>Reach:</strong> Melee</li>\n <li><strong>Duration:</strong> Scene</li>\n <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "footprint": 1,
+              "reach": "5",
+              "frame": "weapon",
+              "signature": "A short conversation about the back of a head.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>Leather-wrapped lead-shot bludgeon, palm-sized. Lives in a pocket or a sleeve. Designed to put someone out without breaking anything that won't heal in a week.</p><p><b>Standard Issue (Subdual).</b> Damage is subdual-flavored — narratively kinetic but easy to declare nonlethal. Useful for Couriers, intriguers, and anyone whose plan ended with \"and then we walk away.\"</p>",
+              "materialOf": [
+                "lead-shot",
+                "wrapped-leather"
+              ],
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "d645f26d-5cd9-4627-8990-7fdd643d681e",
+          "label": "Sap",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "club",
+              "variant": "01",
+              "color": "white",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5,
+          "meleeSwitch": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "arrow",
+              "variant": "regular",
+              "color": "regular",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "detect": "automatic",
+              "range": 2,
+              "returning": false,
+              "switchType": "on"
+            }
+          }
+        }
+      },
+      "folder": "bQhXd1gwJXtaVLGh",
+      "_id": "ub6MIVZY3D1qxkwd",
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236965,
+        "modifiedTime": 1787799236965,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!My8h6T41DqmDjEha.ub6MIVZY3D1qxkwd"
+    },
+    {
+      "name": "Drifter's Weave",
+      "type": "armor",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/drifter_weave.png",
+      "system": {
+        "guardBonus": 1,
+        "evasionBonus": 1,
+        "resolveBonus": 0,
+        "resistances": [],
+        "armorSkill": "fitting",
+        "equipped": false,
+        "tags": [
+          "t1-baseline",
+          "light",
+          "cloth"
+        ],
+        "category": "armor",
+        "source": "",
+        "description": {
+          "value": "<p>Layered travel cloth — patchwork canvas over a quilted underlayer, road-stained at the cuffs. Cut for moving. Sold on every frontier table from Allesh Gilliam to the edge of the Lyrenn line. The first armor most Stewards ever buy, and the first they outgrow.</p><p><strong>Standard Issue.</strong> Worn in the field, not the throne room. Easy to repair, easy to replace, easy to forget you have it on.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Light</li>\n  <li><strong>Defense:</strong> Guard +1, Evasion +1</li>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 75 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "footprint": 1,
+              "reach": "self",
+              "frame": "armor",
+              "signature": "Cloth that's already walked further than you have.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>Layered travel cloth — patchwork canvas over a quilted underlayer, road-stained at the cuffs. Cut for moving. Sold on every frontier table from Allesh Gilliam to the edge of the Lyrenn line. The first armor most Stewards ever buy, and the first they outgrow.</p><p><b>Standard Issue.</b> Worn in the field, not the throne room. Easy to repair, easy to replace, easy to forget you have it on.</p>",
+              "materialOf": [
+                "road-canvas",
+                "quilted-liner"
+              ],
+              "price": {
+                "marks": 75,
+                "currency": "nonlethal",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI armor stamp",
+                "bound": "free",
+                "saleBack": 30
+              }
+            }
+          }
+        }
+      },
+      "folder": "2yW6O57xUFtROfpB",
+      "_id": "88pZOftuuuxchuYU",
+      "effects": [
+        {
+          "name": "⚙️ Defense Grant",
+          "transfer": false,
+          "disabled": false,
+          "flags": {
+            "fourththing": {
+              "defenseGrant": true
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "flags.fourththing.grant.guard",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.evasion",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "NbDBxSqwNNwXa5Fh",
+          "img": "icons/svg/aura.svg",
+          "type": "base",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "createdTime": 1787799236965,
+            "modifiedTime": 1787799236965,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!My8h6T41DqmDjEha.88pZOftuuuxchuYU.NbDBxSqwNNwXa5Fh"
+        }
+      ],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236965,
+        "modifiedTime": 1787799236965,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!My8h6T41DqmDjEha.88pZOftuuuxchuYU"
+    },
+    {
+      "name": "Stabilizer Patch",
+      "type": "gear",
+      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_stabilizer_patch.jpeg",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "bbttcc": {
+          "tags": []
+        },
+        "rfi": {
+          "item": {
+            "tier": "I",
+            "footprint": 0,
+            "reach": "self",
+            "frame": "consumable",
+            "signature": "",
+            "origin": "looted",
+            "originator": null,
+            "bound": "free",
+            "upkeep": {
+              "mode": "passive",
+              "per": "none"
+            },
+            "misfire": {
+              "tierClamp": true,
+              "table": null
+            },
+            "signals": {}
+          }
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              },
+              "tier": "I",
+              "frame": "consumable",
+              "origin": "looted",
+              "bound": "free",
+              "reach": "self",
+              "footprint": 0,
+              "legacySystem": {
+                "description": {
+                  "value": "<p>Adhesive med patch. Bonus Action: remove 1 level of Stress from environmental travel once per Soma Break.</p>"
+                }
+              }
+            }
+          }
+        }
+      },
+      "effects": [],
+      "folder": "TNrB6kEiHS0KwwJT",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236965,
+        "modifiedTime": 1787799236965,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "_id": "GplfIoUN47YcGWFB",
+      "sort": 1900000,
+      "_key": "!actors.items!My8h6T41DqmDjEha.GplfIoUN47YcGWFB"
+    }
+  ],
+  "effects": [],
+  "sort": 25000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1787799236965,
+    "modifiedTime": 1787799237124,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!My8h6T41DqmDjEha"
+}

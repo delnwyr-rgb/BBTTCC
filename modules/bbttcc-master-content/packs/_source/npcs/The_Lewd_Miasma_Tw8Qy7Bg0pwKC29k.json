@@ -1,0 +1,669 @@
+{
+  "name": "The Lewd Miasma",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/the-lewd-miasma.webp",
+  "system": {
+    "role": "Qliphothic Weather (Gamaliel — Greater)",
+    "tier": 4,
+    "factionId": "",
+    "notes": "<p>Not a single creature but a sentient psychic weather system — the collective filth of a billion nightmares given form. A slow-rolling bank of sickly purple, grey and black fog covering a huge area, within which the most repressed, obscene, violent fantasies of mortal minds are made terrifyingly real: a distorted screaming face here, a grasping claw of teeth there, a weeping eye the size of a boulder. A walking zone of madness. A living dream from which there is no awakening — only weathering it.</p><p><strong>Qliphah:</strong> Gamaliel, the Obscenities — the Hull of Yesod. The sewer under the Foundation, risen to street level.</p><p><em>Mal's note: 'It is a landscape that happens to be hungry, and it is ALWAYS your own id catering the buffet. Rope-line your people together and do not trust anything you are ashamed of wanting.'</em></p>",
+    "details": {
+      "level": 18,
+      "tier": 4,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 5
+      },
+      "presence": {
+        "value": 6
+      },
+      "body": {
+        "value": 6
+      },
+      "mind": {
+        "value": 5
+      },
+      "soul": {
+        "value": 6
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 135,
+        "max": 135
+      },
+      "stress": {
+        "value": 60,
+        "max": 60
+      },
+      "guard": {
+        "value": 16
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 19
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 4,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "kinetic",
+        "poison",
+        "thermal"
+      ],
+      "immunities": [
+        "qliphothic"
+      ],
+      "vulnerabilities": [
+        "sephirotic"
+      ]
+    },
+    "conditionImmunities": [
+      "charmed",
+      "prone",
+      "restrained",
+      "shaken",
+      "staggered"
+    ],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-20",
+      "qliphah-gamaliel",
+      "hull-of-yesod",
+      "greater"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "The Lewd Miasma",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 4,
+    "height": 4,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/the-lewd-miasma.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "_id": "M17lfkh8J1NVoQjc",
+      "name": "Miasmic Form",
+      "type": "feature",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Miasma moves through creatures and objects freely, and can enter and remain in hostile creatures' spaces. Its entire space is heavily obscured — you are not fighting in fog; you are fighting in someone's worst idea.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188177,
+        "modifiedTime": 1787799188177,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.M17lfkh8J1NVoQjc"
+    },
+    {
+      "_id": "VxA5t8HkGnqUOnUB",
+      "name": "Fractured Will (3/scene)",
+      "type": "feature",
+      "img": "icons/svg/mage-shield.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>When the Miasma fails a check, a billion dreamers roll over in their sleep and the outcome changes. Three times per scene.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188177,
+        "modifiedTime": 1787799188177,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.VxA5t8HkGnqUOnUB"
+    },
+    {
+      "_id": "BdjDnXzUxhGC0gET",
+      "name": "Psychic Corrosion",
+      "type": "feature",
+      "img": "icons/svg/biohazard.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>A creature that starts its turn inside the Miasma's space rolls vs Resolve (DC 18). Fail: 3d8 psychic damage (Stress), and the GM names one repressed impulse the fog is currently showing everyone on the target's behalf. It isn't real. It is accurate.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188177,
+        "modifiedTime": 1787799188177,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.BdjDnXzUxhGC0gET"
+    },
+    {
+      "_id": "ysCVfDe32Hl2bXwS",
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Miasma uses Manifest Id twice.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188177,
+        "modifiedTime": 1787799188177,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.ysCVfDe32Hl2bXwS"
+    },
+    {
+      "_id": "ZbqnKblR4CWmG6ia",
+      "name": "Manifest Id",
+      "type": "weapon",
+      "img": "icons/svg/terror.svg",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "channel",
+        "damage": {
+          "formula": "4d10",
+          "attribute": "presence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 4,
+          "long": 4
+        },
+        "tags": [
+          "signature"
+        ],
+        "effect": "One creature inside the Miasma's space watches its deepest fear or most obscene desire assemble itself out of fog, in front of everyone. Mind check vs DC 18. Fail: full damage to Stress and Staggered until the end of the Miasma's next turn. Success: half damage, eyes averted in time.",
+        "flavor": "A monstrous doppelgänger tearing itself free of your silhouette.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188177,
+        "modifiedTime": 1787799188177,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.ZbqnKblR4CWmG6ia"
+    },
+    {
+      "_id": "insmoKU5glfJmXot",
+      "name": "Oneirophage (Recharge 5–6)",
+      "type": "feat",
+      "img": "icons/svg/sleep.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The fog leans in and starts eating minds. Every creature in the Miasma's space rolls vs Resolve (DC 18) or collapses into dreaming — helpless and unconscious for a minute, waking early only if damaged or shaken awake by an ally's action. For each dreamer it takes, the Miasma regains 15 Integrity. The dreams are not restful.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188177,
+        "modifiedTime": 1787799188177,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.insmoKU5glfJmXot"
+    },
+    {
+      "_id": "4e1s4UicnyNRlP7j",
+      "name": "Psychic Static",
+      "type": "feat",
+      "img": "icons/svg/silenced.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>One creature within 24 squares rolls Mind vs DC 18 or cannot manifest until the end of its next turn — the channel is full of other people's nightmares, all of them shouting.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 700000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188177,
+        "modifiedTime": 1787799188177,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.4e1s4UicnyNRlP7j"
+    },
+    {
+      "_id": "eHFWuEX4nbNHPRfJ",
+      "name": "Reality Inversion",
+      "type": "feat",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Miasma folds the local dream like paper: two creatures in its space swap positions instantly. Each rolls Soul vs DC 18 or spends its reaction making one attack against itself — for a heartbeat, each was standing exactly where its own strike was already going.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 800000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188177,
+        "modifiedTime": 1787799188177,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!Tw8Qy7Bg0pwKC29k.eHFWuEX4nbNHPRfJ"
+    }
+  ],
+  "effects": [],
+  "folder": "Ps7zW26xgejTIfav",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "IV",
+          "bracket": "elite",
+          "archetype": "the-lewd-miasma",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "gamaliel",
+              "boss",
+              "weather",
+              "legendary",
+              "dream"
+            ],
+            "role": "Qliphothic Weather (Gamaliel — Greater)",
+            "lootTable": [
+              {
+                "name": "Condensed Id (Triple-Sealed)",
+                "qty": "1d3",
+                "weight": 3
+              },
+              {
+                "name": "Fog That Won't Pour Out",
+                "qty": "1d6",
+                "weight": 5
+              },
+              {
+                "name": "The Weeping Eye's Tear (Boulder-Sized, Somehow Portable)",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "price": {
+            "marks": 1800,
+            "bounty": 3200,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "IV elite Qliphothic Weather (Gamaliel — Greater) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "gamaliel",
+            "hullOf": "yesod",
+            "grade": "greater"
+          }
+        }
+      },
+      "kind": "npc"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "createdTime": 1787799188177,
+    "modifiedTime": 1787799188177,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_id": "Tw8Qy7Bg0pwKC29k",
+  "_key": "!actors!Tw8Qy7Bg0pwKC29k"
+}

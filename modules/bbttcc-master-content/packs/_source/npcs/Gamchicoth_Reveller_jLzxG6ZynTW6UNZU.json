@@ -1,0 +1,551 @@
+{
+  "name": "Gamchicoth Reveller",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/gamchicoth-reveller.webp",
+  "system": {
+    "role": "Qliphothic Tempter (Gamchicoth — Lesser)",
+    "tier": 2,
+    "factionId": "",
+    "notes": "<p>A manic, capering satyr-thing with feverish pink eyes and a plain wooden chalice that is never empty. It invites onlookers to the dance; those who drink are flooded with euphoric energy and then spend the rest of their short lives craving another sip. The Reveller feeds on the downward spiral, dancing gleefully in the wreckage.</p><p><strong>Qliphah:</strong> Gamchicoth, the Tumults — the Hull of Chesed. Generosity untempered by structure: the gift that consumes the receiver.</p><p><em>Mal's note: 'The first cup is free. So is the fall. Everything between costs.'</em></p>",
+    "details": {
+      "level": 8,
+      "tier": 2,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 2
+      },
+      "intrigue": {
+        "value": 4
+      },
+      "presence": {
+        "value": 4
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 2
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 32,
+        "max": 32
+      },
+      "stress": {
+        "value": 20,
+        "max": 20
+      },
+      "guard": {
+        "value": 12
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 13
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "qliphothic"
+      ],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-4",
+      "qliphah-gamchicoth",
+      "hull-of-chesed",
+      "lesser"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Gamchicoth Reveller",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/gamchicoth-reveller.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "_id": "faHWgtKYbAklqXkH",
+      "name": "Chaotic Dance",
+      "type": "feature",
+      "img": "icons/svg/walk.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>As a bonus action the Reveller lets the dance carry it: it teleports up to 4 squares to a space it can see, arriving mid-caper.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188149,
+        "modifiedTime": 1787799188149,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!jLzxG6ZynTW6UNZU.faHWgtKYbAklqXkH"
+    },
+    {
+      "_id": "i6kRXt6rR5VaYwEt",
+      "name": "Slippery Grace",
+      "type": "feature",
+      "img": "icons/svg/mage-shield.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Reveller rolls twice and keeps the better result on checks to resist manifestations. Order slides right off it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188149,
+        "modifiedTime": 1787799188149,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!jLzxG6ZynTW6UNZU.i6kRXt6rR5VaYwEt"
+    },
+    {
+      "_id": "VTTSoKRDSbVWyL4Z",
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Reveller makes two Addictive Touch attacks.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188149,
+        "modifiedTime": 1787799188149,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!jLzxG6ZynTW6UNZU.VTTSoKRDSbVWyL4Z"
+    },
+    {
+      "_id": "8PFOTuS5Zp2bzMDA",
+      "name": "Addictive Touch",
+      "type": "weapon",
+      "img": "icons/svg/heal.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "channel",
+        "damage": {
+          "formula": "3d6",
+          "attribute": "presence",
+          "type": "psychic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [],
+        "effect": "On a hit: Soul check vs DC 14 or the euphoria takes the wheel — the target is Compelled on its next turn to do one reckless, pleasurable thing (GM narrates). It will remember enjoying it.",
+        "flavor": "Swirling pink energy at the fingertips, reaching for you.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188149,
+        "modifiedTime": 1787799188149,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!jLzxG6ZynTW6UNZU.8PFOTuS5Zp2bzMDA"
+    },
+    {
+      "_id": "ifJ6a0lyoF2EH7Ru",
+      "name": "Chalice of Excess (Recharge 5–6)",
+      "type": "feat",
+      "img": "icons/svg/tankard.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Reveller offers the chalice to one creature within 6 squares. Resolve check vs DC 14. Fail: the target drinks — it gains 10 temporary Integrity and rolls twice-keep-better on attacks for one round… and is now <strong>addicted</strong>: at the start of each of its turns, Soul check vs DC 14 or it must spend its action getting to the chalice for another drink. The addiction breaks on a Soma Break, or if the drinker is Calmed.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188149,
+        "modifiedTime": 1787799188149,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!jLzxG6ZynTW6UNZU.ifJ6a0lyoF2EH7Ru"
+    }
+  ],
+  "effects": [],
+  "folder": "Ps7zW26xgejTIfav",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "II",
+          "bracket": "light",
+          "archetype": "gamchicoth-reveller",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "gamchicoth",
+              "tempter",
+              "fiend"
+            ],
+            "role": "Qliphothic Tempter (Gamchicoth — Lesser)",
+            "lootTable": [
+              {
+                "name": "The Chalice (Empty. For Now.)",
+                "qty": "1",
+                "weight": 2
+              },
+              {
+                "name": "Fuchsia Residue",
+                "qty": "1d4",
+                "weight": 5
+              },
+              {
+                "name": "Cloven Hoof Charm",
+                "qty": "1d2",
+                "weight": 4
+              }
+            ]
+          },
+          "price": {
+            "marks": 450,
+            "bounty": 600,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "II light Qliphothic Tempter (Gamchicoth — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "gamchicoth",
+            "hullOf": "chesed",
+            "grade": "lesser"
+          }
+        }
+      },
+      "kind": "npc"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "createdTime": 1787799188149,
+    "modifiedTime": 1787799188149,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_id": "jLzxG6ZynTW6UNZU",
+  "_key": "!actors!jLzxG6ZynTW6UNZU"
+}

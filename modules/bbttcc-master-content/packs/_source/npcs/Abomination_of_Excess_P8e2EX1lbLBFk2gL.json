@@ -1,0 +1,716 @@
+{
+  "name": "Abomination of Excess",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/abomination-of-excess.webp",
+  "system": {
+    "role": "Qliphothic Catastrophe (Gamchicoth — Greater)",
+    "tier": 4,
+    "factionId": "",
+    "notes": "<p>What happens when the impulse to grow is given infinite fuel: a sprawling, amorphous pile of glistening flesh — dozens of mouths, clusters of mismatched eyes, edges always bubbling outward in pseudopods. It may have started as an organism, a town, an ecosystem. Now it is a walking engine of absorption leaving a mutated wasteland behind it. Less a creature than a biological verdict.</p><p><strong>Qliphah:</strong> Gamchicoth, the Tumults — the Hull of Chesed. Growth as devourer of form.</p><p><em>Mal's note: 'Do not name it. People who name it start calling it “she”. People who call it “she” walk toward it.'</em></p>",
+    "details": {
+      "level": 18,
+      "tier": 4,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 6
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 2
+      },
+      "body": {
+        "value": 6
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 4
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 120,
+        "max": 120
+      },
+      "stress": {
+        "value": 45,
+        "max": 45
+      },
+      "guard": {
+        "value": 15
+      },
+      "evasion": {
+        "value": 9
+      },
+      "resolve": {
+        "value": 13
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 1,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "chemical",
+        "qliphothic"
+      ],
+      "immunities": [],
+      "vulnerabilities": [
+        "sephirotic"
+      ]
+    },
+    "conditionImmunities": [
+      "charmed",
+      "shaken",
+      "prone"
+    ],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-15",
+      "qliphah-gamchicoth",
+      "hull-of-chesed",
+      "greater"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Abomination of Excess",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 3,
+    "height": 3,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/abomination-of-excess.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "_id": "wvtM4Bu9co0XkKoK",
+      "name": "Aura of Chaos",
+      "type": "feature",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>At the start of each of the Abomination's turns, roll 1d6:<br>1 — every creature within 6 squares takes 2d6 kinetic damage (reality hiccups).<br>2 — every creature within 6 squares rolls Body vs DC 18 or is flung 6 squares in a random direction.<br>3 — the Abomination regains 15 Integrity.<br>4 — all active manifestations within 12 squares are suppressed until its next turn.<br>5 — gravity forgets its job in a 6-square radius: flying, floating, falling upward, GM narrates.<br>6 — the Abomination takes an extra action this turn.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188152,
+        "modifiedTime": 1787799188152,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!P8e2EX1lbLBFk2gL.wvtM4Bu9co0XkKoK"
+    },
+    {
+      "_id": "nk1vH2yIAgOingxo",
+      "name": "Fractured Will (3/scene)",
+      "type": "feature",
+      "img": "icons/svg/mage-shield.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>When the Abomination fails a check, some absorbed part of it succeeds instead. Three times per scene.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188152,
+        "modifiedTime": 1787799188152,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!P8e2EX1lbLBFk2gL.nk1vH2yIAgOingxo"
+    },
+    {
+      "_id": "5LbaVmLwFOTpL7lH",
+      "name": "Siege-Thing",
+      "type": "feature",
+      "img": "icons/svg/ruins.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Abomination deals double damage to objects, structures, and anything else foolish enough to be architecture near it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188152,
+        "modifiedTime": 1787799188152,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!P8e2EX1lbLBFk2gL.5LbaVmLwFOTpL7lH"
+    },
+    {
+      "_id": "vTPDzgsl58RNSJ5G",
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Abomination makes two Pseudopod attacks, and can use Engulf if anyone is within reach of regret.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188152,
+        "modifiedTime": 1787799188152,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!P8e2EX1lbLBFk2gL.vTPDzgsl58RNSJ5G"
+    },
+    {
+      "_id": "nJpqlQebrCWvltQZ",
+      "name": "Pseudopod",
+      "type": "weapon",
+      "img": "icons/svg/acid.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d6",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "acid",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 2,
+          "long": 2
+        },
+        "tags": [],
+        "effect": "On a hit the target also takes 1d6 chemical (acid) damage as digestion begins early.",
+        "flavor": "An arm that wasn't there a second ago.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188152,
+        "modifiedTime": 1787799188152,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!P8e2EX1lbLBFk2gL.nJpqlQebrCWvltQZ"
+    },
+    {
+      "_id": "qJR96xybRn9NDHB8",
+      "name": "Mutagenic Spew (Recharge 5–6)",
+      "type": "weapon",
+      "img": "icons/svg/biohazard.svg",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "warding",
+        "damage": {
+          "formula": "4d8",
+          "attribute": "body",
+          "type": "chemical",
+          "damageFlavor": "acid",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 12,
+          "long": 12
+        },
+        "tags": [
+          "aoe",
+          "shape-cone",
+          "signature"
+        ],
+        "effect": "12-square cone of caustic slime. Evasion check vs DC 18. Fail: full damage and the body briefly mutates in a painful, wrong direction — the target also gains 5 RP as the flesh forgets its blueprint. Success: half damage, no mutation.",
+        "flavor": "A torrent of green and purple, malformed helices visible in the stream.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188152,
+        "modifiedTime": 1787799188152,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!P8e2EX1lbLBFk2gL.qJR96xybRn9NDHB8"
+    },
+    {
+      "_id": "Lm0zELigOutRuAt2",
+      "name": "Engulf",
+      "type": "feat",
+      "img": "icons/svg/downgrade.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Abomination moves up to its speed, flowing into the spaces of creatures its size or smaller. Each rolls an Evasion check vs DC 18: success — pushed 1 square aside; fail — engulfed: 2d6 chemical damage, Blinded and Restrained inside it, and 2d6 chemical at the start of each of the Abomination's turns. Escape: Violence check vs DC 18, exiting prone in an adjacent square, filmed in ichor.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 700000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188152,
+        "modifiedTime": 1787799188152,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!P8e2EX1lbLBFk2gL.Lm0zELigOutRuAt2"
+    },
+    {
+      "_id": "zlI85wWTRMoANFxr",
+      "name": "Spawn Fragment",
+      "type": "feat",
+      "img": "icons/svg/degen.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>A piece of the Abomination buds off into an unoccupied adjacent square as a Tier-1 fragment (GM: reuse any T1 horror statblock at half Integrity). It acts on its own and adores its parent, insofar as hunger is adoration.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 800000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188152,
+        "modifiedTime": 1787799188152,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!P8e2EX1lbLBFk2gL.zlI85wWTRMoANFxr"
+    }
+  ],
+  "effects": [],
+  "folder": "Ps7zW26xgejTIfav",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "IV",
+          "bracket": "heavy",
+          "archetype": "abomination-of-excess",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "gamchicoth",
+              "boss",
+              "aberration",
+              "siege"
+            ],
+            "role": "Qliphothic Catastrophe (Gamchicoth — Greater)",
+            "lootTable": [
+              {
+                "name": "Ever-Budding Tissue Sample (Twitching)",
+                "qty": "1d6",
+                "weight": 6
+              },
+              {
+                "name": "Absorbed Keepsake (Random Former Owner)",
+                "qty": "2d4",
+                "weight": 5
+              },
+              {
+                "name": "Mutagenic Ichor Flask",
+                "qty": "1d4",
+                "weight": 3
+              },
+              {
+                "name": "The Original Cell (Inert. Probably.)",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "price": {
+            "marks": 1800,
+            "bounty": 2400,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "violence",
+            "gmOverride": false,
+            "notes": "IV heavy Qliphothic Catastrophe (Gamchicoth — Greater) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "gamchicoth",
+            "hullOf": "chesed",
+            "grade": "greater"
+          }
+        }
+      },
+      "kind": "npc"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "createdTime": 1787799188152,
+    "modifiedTime": 1787799188152,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_id": "P8e2EX1lbLBFk2gL",
+  "_key": "!actors!P8e2EX1lbLBFk2gL"
+}

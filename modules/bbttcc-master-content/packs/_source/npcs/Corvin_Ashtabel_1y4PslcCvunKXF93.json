@@ -1,0 +1,2672 @@
+{
+  "name": "Corvin Ashtabel",
+  "type": "character",
+  "folder": "WeFquFpimjobx66c",
+  "img": "icons/svg/mystery-man.svg",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc",
+      "createdViaEchoMint": true,
+      "createdAt": 1787336470221,
+      "echo": {
+        "stewardUuid": "Actor.IgTzmf0detjLtZFc",
+        "stewardName": "Marginalia",
+        "entryName": "Kabbalist",
+        "kind": "occult",
+        "family": "kabbalist",
+        "memberId": "idOjDi5UYw2T"
+      }
+    },
+    "bbttcc-factions": {
+      "factionId": "6H5Grt3HybAs1rSq"
+    },
+    "fourththing": {
+      "kind": "npc",
+      "startingGrantsFiredItems": {
+        "9GpiGpz5GwZcfc8o": {
+          "firedAt": 1787336471607,
+          "itemName": "Sephirotic Scion Heritage: Seraphic",
+          "viaSwap": true
+        }
+      }
+    },
+    "bbttcc-character-options": {
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.Lk2uVTVkzWJEUG9l",
+      "nativeLinks": {
+        "heritageName": "Sephirotic Scion Heritage: Seraphic",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.Lk2uVTVkzWJEUG9l",
+        "heritageApplied": true,
+        "ancestryName": "Sephirotic Scion",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.bIjHUVRVXKpYcUMJ",
+        "ancestryApplied": true
+      }
+    }
+  },
+  "system": {
+    "biography": {
+      "concept": "Letter-mason — Kabbalist association, echo of Marginalia",
+      "notes": "He carved the correction into a load-bearing glyph that saved Marginalia's arm at Threshhold Nine, and the stiffness never left his own hands — he still sends the bill as a joke, but he means it a little."
+    },
+    "details": {
+      "level": 1,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1
+    },
+    "attributes": {
+      "violence": {
+        "value": 4
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 2
+      },
+      "body": {
+        "value": 5
+      },
+      "mind": {
+        "value": 3
+      },
+      "soul": {
+        "value": 3
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 0
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 0
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 1
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 0
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 0
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 0
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "fitting": {
+        "attribute": "intrigue",
+        "label": "Fitting",
+        "value": 0
+      },
+      "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 16,
+        "max": 16
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": 1,
+    "name": "Corvin Ashtabel",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "1y4PslcCvunKXF93",
+  "items": [
+    {
+      "_id": "sCIUp0n5EHtjCwiC",
+      "name": "Stalwart — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "stalwart",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Stalwart — Apprentice</strong> (Tier I).</p><p><strong>Trade — Haul and raise:</strong> A day's heavy labor — cargo moved, wall raised, field cleared. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy).</span></p><p><strong>Trick — Put Your Back Into It</strong> <em>(1/scene)</em>: Auto-succeed one feat of raw strength or endurance of tier-appropriate difficulty.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 401000,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "stalwart",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237053,
+        "modifiedTime": 1787799237053,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!1y4PslcCvunKXF93.sCIUp0n5EHtjCwiC"
+    },
+    {
+      "_id": "rhwcMYcBj9rJrwt6",
+      "name": "Stalwart",
+      "type": "class",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/blacksmith.webp",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-stalwart",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "stalwart",
+          "body"
+        ],
+        "description": {
+          "value": "<p><em>\"The Shattering didn't end the work. Nothing ends the work.\"</em></p><p><strong>Stalwart</strong> is the Body Calling — the trade that kept its bearers alive after the Shattering. Umbrella: laborer, teamster, forager, wall-crew, rig-hand, survivor. A profession is a flavor label on the Calling.</p><p><strong>Knack — Hazard-Hardened:</strong> Reduce each environmental hazard/radiation tick by 1 (by 2 at Tier III), and labor output counts double for facility/build work.</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Athletics</strong> rank = tier; secondary <strong>Plating</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Bulwark or Soul-Smith. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "stalwart",
+            "faculty": "body",
+            "signature": "athletics",
+            "secondary": "plating",
+            "pool": "Economy",
+            "awakens": "Bulwark or Soul-Smith"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237053,
+        "modifiedTime": 1787799237053,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!1y4PslcCvunKXF93.rhwcMYcBj9rJrwt6"
+    },
+    {
+      "name": "Letter of Making (Echo Boon)",
+      "type": "feature",
+      "img": "icons/svg/book.svg",
+      "system": {
+        "category": "echo",
+        "source": "Echo Rosters",
+        "tags": [
+          "echo",
+          "kabbalist",
+          "tier-1"
+        ],
+        "description": {
+          "value": "\n    <p><em>Echoes are the past made flesh — people out of a Steward's former\n    lives, walking beside them again. Corvin Ashtabel is an echo of\n    Marginalia's time with the\n    <strong>Kabbalist</strong> occult association. Being remembered\n    leaves a mark.</em></p>\n    <p><strong>Letter-mason</strong> — He carved the correction into a load-bearing glyph that saved Marginalia&#x27;s arm at Threshhold Nine, and the stiffness never left his own hands — he still sends the bill as a joke, but he means it a little.</p>\n    <p><strong>Letter of Making — Apprentice (Echo Boon)</strong></p>\n    <p>Once per scene, inscribe one Letter upon a door or object: it counts sealed and warded, −1 to any attempt to breach it, until the scene ends.</p>\n    <p><strong>Echo's Mark:</strong> while their Steward can see them, the echo adds\n    +1 on any check made in direct support of the Steward.</p>\n    <p><em>Some letters were taught to them before the world got its name back.</em></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "echo": {
+            "family": "kabbalist",
+            "kind": "occult",
+            "tier": 1,
+            "crewEcho": true
+          }
+        }
+      },
+      "_id": "bftfYSWnbjp0Tv17",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237053,
+        "modifiedTime": 1787799237053,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!1y4PslcCvunKXF93.bftfYSWnbjp0Tv17"
+    },
+    {
+      "name": "Sephirotic Scion",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/SephiroticScion4.png",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Sephirotic Scion.</strong> Your blood remembers the higher spheres. Light hangs around you a little too long, prayers sometimes answer themselves, and the world’s moral architecture feels less like an abstraction and more like the weather report.</p><hr><p><em><strong>Sephirotic Scion Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic).</p></li><li><p><strong>Size.</strong> You are Medium.</p></li><li><p><strong>Speed.</strong> Your walking speed is 6 squares</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Sephirotic Scion does not grant any attribute bonuses.</p></li></ul><p>Your Sephirotic heritage grants you additional features through advancements (Item Grants) added during character creation: sephirotic physiology, attunement to higher patterns, holy conduction, the Light of Harmony, and strategic hooks that tilt factions toward soft power, diplomacy, and alignment work.</p>",
+          "chat": ""
+        },
+        "advancement": {
+          "A1B2C3D4E5F6G7H8": {
+            "_id": "A1B2C3D4E5F6G7H8",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium Sephirotic Scion.",
+            "value": {},
+            "flags": {}
+          },
+          "I1J2K3L4M5N6O7P8": {
+            "_id": "I1J2K3L4M5N6O7P8",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.e0c6wt6GiL8dL33I",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Sephirotic Physiology",
+            "hint": "Gain the Sephirotic Physiology feature.",
+            "flags": {}
+          },
+          "Q1R2S3T4U5V6W7X8": {
+            "_id": "Q1R2S3T4U5V6W7X8",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.hW51wp7YORbeUToi",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Sefirot Attunement",
+            "hint": "Gain the Sefirot Attunement feature.",
+            "flags": {}
+          },
+          "Y1Z2A3B4C5D6E7F8": {
+            "_id": "Y1Z2A3B4C5D6E7F8",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.SlKMUA0gElcOjrZ4",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Holy Conduit",
+            "hint": "Gain the Holy Conduit feature.",
+            "flags": {}
+          },
+          "G1H2I3J4K5L6M7N8": {
+            "_id": "G1H2I3J4K5L6M7N8",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.zrNHJoHr6sjpY4ik",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Light of Harmony",
+            "hint": "Gain the Scion: Light of Harmony feature.",
+            "flags": {}
+          },
+          "O1P2Q3R4S5T6U7V8": {
+            "_id": "O1P2Q3R4S5T6U7V8",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.dlHWQbSNuwpfn6Xc",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Scion: Strategic Hooks",
+            "hint": "Grants OP bonuses and Sephirotic-alignment hooks used by Bad Eden faction and world systems.",
+            "flags": {}
+          }
+        },
+        "identifier": "sephirotic-scion",
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": ""
+        },
+        "type": {
+          "value": "humanoid",
+          "subtype": "Sephirotic Scion",
+          "custom": ""
+        }
+      },
+      "effects": [],
+      "folder": "087LoHAORwCBuexO",
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "race",
+          "ancestryKey": "sephirotic_scion",
+          "version": "1.0.0",
+          "date": "2025-12-08"
+        },
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "grantedByAncestry": "Sephirotic Scion"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237053,
+        "modifiedTime": 1787799237053,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 100000,
+      "_id": "43AX5knAxkIiOs9g",
+      "_key": "!actors.items!1y4PslcCvunKXF93.43AX5knAxkIiOs9g"
+    },
+    {
+      "name": "Sefirot Attunement",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_binah.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Sefirot Attunement.</strong> You perceive the harmonic structure beneath events.</p><ul><li>You gain a bonus to <strong>Perception</strong> checks and passive Perception.</li><li>Your intuition occasionally warns you about moral or spiritual imbalances (GM discretion).</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "sefirot-attunement",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Sephirotic Scion",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Sefirot Attunement (Perception Edge)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_brawl_2.png",
+          "type": "base",
+          "disabled": false,
+          "transfer": true,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1787799237053,
+            "modifiedTime": 1787799237053
+          },
+          "_id": "4cyMaXGkbAbpqpUx",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.perception.value",
+                "type": "add",
+                "value": "+1",
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!1y4PslcCvunKXF93.V88Jk0OWgVSQZeNg.4cyMaXGkbAbpqpUx"
+        }
+      ],
+      "folder": "FehDulVPgqIjjQEa",
+      "flags": {
+        "bbttcc": {
+          "speciesTrait": "scion_attunement"
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "grantedByAncestry": "Sephirotic Scion"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.QLk2SUnHLglsiQwR",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237053,
+        "modifiedTime": 1787799237053,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 300000,
+      "_id": "V88Jk0OWgVSQZeNg",
+      "_key": "!actors.items!1y4PslcCvunKXF93.V88Jk0OWgVSQZeNg"
+    },
+    {
+      "name": "Sephirotic Scion: Holy Conduit",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_symbol_4.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Holy Conduit.</strong> Your body routes excess metaphysical charge safely.</p><ul><li>You have resistance to <strong>psychic damage</strong>.</li><li>Your presence stabilizes magically turbulent areas.</li><li>Bad Eden engines treat you as a low-level metaphysical conductor (see world logic).</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "holy-conduit",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Sephirotic Scion",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Holy Conduit (Psychic Resistance)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_2.png",
+          "type": "base",
+          "disabled": false,
+          "transfer": true,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1787799237053,
+            "modifiedTime": 1787799237053
+          },
+          "_id": "Ss0vEkuN1Vv6vz40",
+          "system": {
+            "changes": [
+              {
+                "key": "system.traits.dr.value",
+                "value": "psychic",
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!1y4PslcCvunKXF93.uJfxhF1pZqXm7jZW.Ss0vEkuN1Vv6vz40"
+        }
+      ],
+      "folder": "FehDulVPgqIjjQEa",
+      "flags": {
+        "bbttcc": {
+          "speciesTrait": "scion_conduit",
+          "sparkAffinity": 1
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "grantedByAncestry": "Sephirotic Scion"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.6RJBcRcIeUIDAHuz",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237053,
+        "modifiedTime": 1787799237053,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 250000,
+      "_id": "uJfxhF1pZqXm7jZW",
+      "_key": "!actors.items!1y4PslcCvunKXF93.uJfxhF1pZqXm7jZW"
+    },
+    {
+      "name": "Scion: Light of Harmony",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_holy_ray_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You glow a little. Sometimes metaphorically. Sometimes not.”</em></p><ul><li>You can cast <strong>calm emotions</strong> 1/Soma Break (Presence is your manifestation aptitude).</li><li>Allies within 2 squares reroll the lowest die on checks against being <strong>frightened</strong>.</li><li>You automatically sense the Sephirothic/Qliphothic tilt of any hex you enter.</li></ul>",
+          "chat": ""
+        },
+        "activities": {
+          "castCalmEmotions": {
+            "type": "spell",
+            "spell": {
+              "uuid": "Compendium.dnd5e.spells.Item.M4qAVn7fB0p0X8Rv"
+            },
+            "activation": {
+              "type": "action",
+              "cost": 1
+            },
+            "consumption": {
+              "targets": [
+                "uses"
+              ],
+              "type": "charges",
+              "value": 1
+            }
+          }
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [
+            {
+              "period": "lr",
+              "type": "recoverAll"
+            }
+          ],
+          "max": "1"
+        },
+        "advancement": {},
+        "identifier": "scion-light-of-harmony",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Sephirotic Scion",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Aura of Harmony (Frightened Resistance)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_btools_2.png",
+          "type": "base",
+          "disabled": false,
+          "transfer": true,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1787799237053,
+            "modifiedTime": 1787799237053
+          },
+          "_id": "No3Pkmg20U8O9kab",
+          "system": {
+            "changes": [
+              {
+                "key": "system.traits.tooltips",
+                "value": "Allies within 10 feet gain advantage on saves vs frightened.",
+                "priority": 20,
+                "type": "custom",
+                "phase": "initial"
+              }
+            ]
+          },
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!1y4PslcCvunKXF93.F9bpARczjMGne6O0.No3Pkmg20U8O9kab"
+        }
+      ],
+      "folder": "FehDulVPgqIjjQEa",
+      "flags": {
+        "bbttcc": {
+          "speciesTrait": "scion_light",
+          "senseAlignment": true
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "autoanimations": {
+          "id": "3fb253ee-5ee1-4960-bb04-8b6a4dd81d7a",
+          "label": "Scion: Light of Harmony",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "sacredflame",
+              "variant": "target",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "grantedByAncestry": "Sephirotic Scion"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.lixFTlqcjyCv52Uh",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237053,
+        "modifiedTime": 1787799237053,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 100000,
+      "_id": "F9bpARczjMGne6O0",
+      "_key": "!actors.items!1y4PslcCvunKXF93.F9bpARczjMGne6O0"
+    },
+    {
+      "name": "Scion: Strategic Hooks",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sunset_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“Even the world listens when you walk in.”</em></p><ul><li>Your faction gains +2 Soft Power OP and +1 Diplomacy OP.</li><li>Shifting a controlled hex toward a Sephirah costs <strong>10% less</strong>.</li><li>The first Spark Identification each chapter is <strong>free</strong>.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "scion-strategic-hooks",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Sephirotic Scion",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "name": "Scion Strategic Hooks (OP Bonuses)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_box_1.png",
+          "type": "base",
+          "disabled": false,
+          "transfer": true,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1787799237053,
+            "modifiedTime": 1787799237053
+          },
+          "_id": "QrSTwtebIPNt67Rh",
+          "system": {
+            "changes": [
+              {
+                "key": "flags.bbttcc.op.softPower.baseBonus",
+                "value": 1,
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.bbttcc.op.diplomacy.baseBonus",
+                "value": 1,
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!1y4PslcCvunKXF93.5Ts5z6YFSSvPDwSW.QrSTwtebIPNt67Rh"
+        }
+      ],
+      "folder": "FehDulVPgqIjjQEa",
+      "flags": {
+        "bbttcc": {
+          "kind": "ancestryHooks",
+          "opEffects": {
+            "softPower": 1,
+            "diplomacy": 1
+          },
+          "alignmentShiftDiscount": 0.1,
+          "sparkFreeIdentifyPerChapter": true,
+          "senseAlignment": true
+        },
+        "dnd5e": {},
+        "bbttcc-character-options": {
+          "option": {}
+        },
+        "fourththing": {
+          "grantedByAncestry": "Sephirotic Scion"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.I3NyRgkTbi52qnJq",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237053,
+        "modifiedTime": 1787799237053,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 200000,
+      "_id": "5Ts5z6YFSSvPDwSW",
+      "_key": "!actors.items!1y4PslcCvunKXF93.5Ts5z6YFSSvPDwSW"
+    },
+    {
+      "name": "Sephirotic Scion Heritage: Seraphic",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wings_1.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Sephirotic Scion heritage: Seraphic.</p><p><em>“What the Seraphim did to the wicked was sing them clean. Try not to be wicked around one.”</em></p><p><strong>Sephirotic Scion (Seraphic).</strong> Your blood runs burning. The Seraphim are six-winged fire — the order closest to the throne, the order whose job is purification. You don’t run hot in the Igneous Menhirkin sense; you run hot in the moral sense. Things around you either align or combust. There is not a middle option.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Sephirotic Scion).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Sephirotic Scion does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Presence</strong> in fiction and through Tier powers.</p></li></ul><h3>Sephirotic Scion Core: The Higher Register</h3><p><em>Shared across all Sephirotic Scion heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Sephirotic Physiology.</strong> You have resistance to sephirotic damage. Your blood runs a little bright under the right light; you do not technically age while on consecrated ground.</p></li><li><p><strong>Sefirot Attunement.</strong> At creation, pick one sephirah (player choice). Once per scene, you can invoke its register and gain a +1 rank bonus to one check that falls clearly within that sephirah's domain.</p></li><li><p><strong>Holy Conduit.</strong> Manifestations, rituals, and other sephirotic-register effects that target you or pass through your space treat their effective caster-attribute as +1 for the duration of that effect. Works on allies and on you; does not work on qliphothic-register effects.</p></li><li><p><strong>Light of Harmony.</strong> When two or more creatures within 6 squares of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity. This refreshes when a new agreement is reached between different creatures.</p></li></ul><h3>Seraphic Traits</h3><ul><li><p><strong>Coal-Song.</strong> You know a minor manifestation that produces a single point of sephirotic damage at close range (flavor: holy fire). Your channel for it is Presence.</p></li><li><p><strong>Unburning.</strong> You have resistance to sephirotic damage with the fire flavor, and to sephirotic damage. What you are is not flammable to itself.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Faith OP</strong> and <strong>+1 Violence OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Consecrated / Pyre-Marked / Witnessed</em> hexes, your faction's cleansing, judgment, and pyre operations cost 1 fewer OP.</p></li><li><p><strong>Burning Witness.</strong> Once per Strategic Turn, when your faction confronts a rival faction in open negotiation, the rival must commit to one truth they would have preferred to conceal. The flame is close to the throne; lying hurts.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Sefirot Attunement</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Free (declare before roll)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Invoke your chosen sephirah for +1 rank bonus on a check clearly in its domain.</span></p></div>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "5b31beade294aa1e",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.Q7mL51Eam3PiWmF4",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Seraphic Tier I",
+            "hint": "Gain your Seraphic Tier I feat."
+          }
+        ],
+        "identifier": "sephirotic_scion_seraphic_heritage",
+        "requirements": "Sephirotic Scion",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "sephirotic_scion",
+          "lineage": "Seraphic",
+          "version": "1.1.0",
+          "date": "2026-04-19",
+          "rfiNative": true,
+          "opEffects": {
+            "faith": 2,
+            "violence": 1
+          }
+        },
+        "fourththing": {
+          "grants": {
+            "resistances": [
+              {
+                "type": "energy",
+                "flavor": "fire"
+              },
+              "sephirotic"
+            ]
+          },
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "violence-op",
+              "amount": 2
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "faith-op",
+              "amount": 2
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-agreement",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Light of Harmony. When two or more creatures within 30 feet of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity"
+                }
+              }
+            }
+          ],
+          "grantedByHeritage": "Seraphic"
+        },
+        "autoanimations": {
+          "id": "5b029e38-62fa-483d-a4c8-91a0f8355fef",
+          "label": "Sephirotic Scion Heritage: Seraphic",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "intro",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "cPWZqWg2fJ3M0V7I",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-heritages-v1.1",
+          "uuid": "Item.Lk2uVTVkzWJEUG9l",
+          "coreVersion": "13.351",
+          "systemId": "fourththing",
+          "systemVersion": "0.6.0"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237053,
+        "modifiedTime": 1787799237053,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 0,
+      "_id": "9GpiGpz5GwZcfc8o",
+      "_key": "!actors.items!1y4PslcCvunKXF93.9GpiGpz5GwZcfc8o"
+    },
+    {
+      "name": "Sephirotic Scion (Seraphic): Cleansing Breath",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_8.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-canon-sephirotic=\"v1\" style=\"display:none\"></div><p><em>\"What couldn't stand the light was never going to last anyway.\"</em></p><p><strong>Cleansing Breath (1/Soma Break).</strong> Action — exhale a 3 squares cone of radiant fire. Each creature in the cone makes an Intrigue check vs. your Resolve. On a failure, take 2d10 exploding sephirotic damage (flavor: holy fire); half on a success.</p><p><strong>Tier scaling:</strong> 3d10 at Tier 2 · 4d10 at Tier 3 · 5d10 at Tier 4.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"sephSeraphicCleansingBreath\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Cleansing Breath</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break  ·  <strong>Action:</strong> Action (3 squares cone)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Exhale radiant fire — each creature in the cone makes Intrigue check vs your Resolve. Failure: 2d10 exploding sephirotic (holy fire); success: half. Tier-scaled: T2 3d10, T3 4d10, T4 5d10.</span></p></div>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "sephirotic_scion_seraphic_tier1",
+        "requirements": "Sephirotic Scion (Seraphic)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [
+            {
+              "period": "sr",
+              "type": "recoverAll",
+              "formula": ""
+            }
+          ],
+          "max": "1"
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "sephirotic_scion",
+          "feature": "cleansing_breath",
+          "lineage": "Seraphic",
+          "tierLevel": 1,
+          "version": "1.1.0",
+          "date": "2026-04-19",
+          "rfiNative": true
+        },
+        "fourththing": {
+          "grants": {
+            "resistances": [
+              {
+                "type": "energy",
+                "flavor": "fire"
+              },
+              "sephirotic"
+            ]
+          },
+          "principleSource": "ancestry",
+          "grantedByHeritage": "Seraphic"
+        },
+        "autoanimations": {
+          "id": "ed92ebc5-eb7c-4f37-97da-035f9c2f50b0",
+          "label": "Sephirotic Scion (Seraphic): Cleansing Breath",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "templatefx",
+          "primary": {
+            "video": {
+              "dbSection": "templatefx",
+              "menuType": "cone",
+              "animation": "coneofcold",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "80VQrKOcxZLc2pDe",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-heritages-v1.1",
+          "uuid": "Item.Q7mL51Eam3PiWmF4",
+          "coreVersion": "13.351",
+          "systemId": "fourththing",
+          "systemVersion": "0.6.0"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237053,
+        "modifiedTime": 1787799237053,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 0,
+      "_id": "gZlYNAfos5ia8ROZ",
+      "_key": "!actors.items!1y4PslcCvunKXF93.gZlYNAfos5ia8ROZ"
+    },
+    {
+      "name": "Maul",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hammer_1.png",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d12",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "blunt",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [
+          "t1-baseline",
+          "maul",
+          "two-handed",
+          "heavy"
+        ],
+        "effect": "Two-handed, heavy. Pairs well with Bulwark Frame.",
+        "flavor": "Not subtle. Not trying to be.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>Two-handed iron-headed maul on a long ash haft. Heavy, slow, and absolutely uninterested in your finesse. The Bulwark's first real weapon — the one you swing when subtlety has already failed.</p><p><b>Standard Issue.</b> Heavy two-handed kinetic. No signature — Frame Dice and Ruin Charges still do their work; the maul just makes the impact mean it.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Two-handed, heavy. Pairs well with Bulwark Frame.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d12 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(blunt)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Melee (Violence)</li>\n  <li><strong>Reach:</strong> Melee</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "footprint": 1,
+              "reach": "5",
+              "frame": "weapon",
+              "signature": "When the door is the problem, the maul is the answer.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>Two-handed iron-headed maul on a long ash haft. Heavy, slow, and absolutely uninterested in your finesse. The Bulwark's first real weapon — the one you swing when subtlety has already failed.</p><p><b>Standard Issue.</b> Heavy two-handed kinetic. No signature — Frame Dice and Ruin Charges still do their work; the maul just makes the impact mean it.</p>",
+              "materialOf": [
+                "pig-iron",
+                "ash-haft"
+              ],
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "295c9eda-4e4c-4533-9aa9-efffa8ebb49e",
+          "label": "Maul",
+          "levels3d": {
+            "type": "explosion",
+            "data": {
+              "color01": "#FFFFFF",
+              "color02": "#FFFFFF",
+              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+            },
+            "sound": {
+              "enable": false
+            },
+            "secondary": {
+              "enable": false,
+              "data": {
+                "color01": "#FFFFFF",
+                "color02": "#FFFFFF",
+                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+              }
+            }
+          },
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "meleeSwitch": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "arrow",
+              "variant": "regular",
+              "color": "regular"
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "detect": "automatic",
+              "range": 2,
+              "returning": false,
+              "switchType": "on"
+            }
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "maul",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "bQhXd1gwJXtaVLGh",
+      "_id": "pUvjiHhghqqVapit",
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237053,
+        "modifiedTime": 1787799237053,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!1y4PslcCvunKXF93.pUvjiHhghqqVapit"
+    },
+    {
+      "name": "Worker's Leathers",
+      "type": "armor",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/aurablade_florensis.png",
+      "system": {
+        "guardBonus": 1,
+        "evasionBonus": 1,
+        "resolveBonus": 0,
+        "resistances": [],
+        "armorSkill": "fitting",
+        "equipped": false,
+        "tags": [
+          "t1-baseline",
+          "light",
+          "leather",
+          "utility"
+        ],
+        "category": "armor",
+        "source": "",
+        "description": {
+          "value": "<p>Heavy work jacket, reinforced gloves, and a thigh-strap of tool loops. The standard kit for hex-laborers, salvage crews, scrap-line foremen, and anyone whose day involves both sharp edges and difficult conversations with their employer. Not glamorous. Hard to ruin.</p><p><strong>Standard Issue.</strong> Counts as armor for protection rolls and as gear for any skill check you can talk your way into calling \"work.\"</p><hr><p><strong>⚙️ Mechanical Effects</strong></p><ul><li><p><strong>Armor:</strong> Light</p></li><li><p><strong>Defense:</strong> Guard +1, Evasion +1</p></li><li><p><strong>Requires:</strong> Weave (trained)</p></li><li><p><strong>Tier:</strong> I</p></li><li><p><strong>Cost:</strong> 75 Nonlethal marks</p></li></ul>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "footprint": 1,
+              "reach": "self",
+              "frame": "armor",
+              "signature": "Built for the kind of day where something might fall on you.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>Heavy work jacket, reinforced gloves, and a thigh-strap of tool loops. The standard kit for hex-laborers, salvage crews, scrap-line foremen, and anyone whose day involves both sharp edges and difficult conversations with their employer. Not glamorous. Hard to ruin.</p><p><b>Standard Issue.</b> Counts as armor for protection rolls and as gear for any skill check you can talk your way into calling \"work.\"</p>",
+              "materialOf": [
+                "work-leather",
+                "rivet-strap",
+                "tool-loop"
+              ],
+              "price": {
+                "marks": 75,
+                "currency": "nonlethal",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI armor stamp",
+                "bound": "free",
+                "saleBack": 30
+              }
+            }
+          }
+        }
+      },
+      "folder": "2yW6O57xUFtROfpB",
+      "_id": "KO5YumSbOFSMZdzN",
+      "effects": [
+        {
+          "name": "⚙️ Defense Grant",
+          "transfer": false,
+          "disabled": false,
+          "flags": {
+            "fourththing": {
+              "defenseGrant": true
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "flags.fourththing.grant.guard",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.evasion",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "wYpVcJpecmF8ZKHo",
+          "img": "icons/svg/aura.svg",
+          "type": "base",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "createdTime": 1787799237053,
+            "modifiedTime": 1787799237053,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!1y4PslcCvunKXF93.KO5YumSbOFSMZdzN.wYpVcJpecmF8ZKHo"
+        }
+      ],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237053,
+        "modifiedTime": 1787799237053,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!1y4PslcCvunKXF93.KO5YumSbOFSMZdzN"
+    },
+    {
+      "name": "Stabilizer Patch",
+      "type": "gear",
+      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_stabilizer_patch.jpeg",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "bbttcc": {
+          "tags": []
+        },
+        "rfi": {
+          "item": {
+            "tier": "I",
+            "footprint": 0,
+            "reach": "self",
+            "frame": "consumable",
+            "signature": "",
+            "origin": "looted",
+            "originator": null,
+            "bound": "free",
+            "upkeep": {
+              "mode": "passive",
+              "per": "none"
+            },
+            "misfire": {
+              "tierClamp": true,
+              "table": null
+            },
+            "signals": {}
+          }
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              },
+              "tier": "I",
+              "frame": "consumable",
+              "origin": "looted",
+              "bound": "free",
+              "reach": "self",
+              "footprint": 0,
+              "legacySystem": {
+                "description": {
+                  "value": "<p>Adhesive med patch. Bonus Action: remove 1 level of Stress from environmental travel once per Soma Break.</p>"
+                }
+              }
+            }
+          }
+        }
+      },
+      "effects": [],
+      "folder": "TNrB6kEiHS0KwwJT",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237053,
+        "modifiedTime": 1787799237053,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_id": "mmCm2BS8cvPdQvsC",
+      "sort": 1900000,
+      "_key": "!actors.items!1y4PslcCvunKXF93.mmCm2BS8cvPdQvsC"
+    }
+  ],
+  "effects": [],
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "rzJQNVz5H3SHfP2i": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1787799237053,
+    "modifiedTime": 1787799237158,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!1y4PslcCvunKXF93"
+}

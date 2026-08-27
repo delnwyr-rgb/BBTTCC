@@ -1,0 +1,592 @@
+{
+  "name": "Gamalielite Dream-Twister",
+  "type": "npc",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "role": "Qliphothic Parasite (Gamaliel — Lesser)",
+    "tier": 3,
+    "factionId": "",
+    "notes": "<p>A predator of the subconscious: swirling oily black-and-purple smoke, featureless except that its silhouette keeps subtly shifting to mimic whoever is looking at it, two points of cold white light where eyes should be. It slips into sleeping minds and turns dreams into personalized hells, drinking terror and despair, leaving its victims exhausted, madness-touched — or not waking at all. It rarely manifests physically. In the dreamscape, it is the landlord.</p><p><strong>Qliphah:</strong> Gamaliel, the Obscenities — the Hull of Yesod. The Foundation's dream-layer, polluted at the source.</p><p><em>Mal's note: 'Post watches in pairs and wake each other on a timer. It cannot twist a dream you refuse to finish.'</em></p>",
+    "details": {
+      "level": 13,
+      "tier": 3,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 5
+      },
+      "presence": {
+        "value": 4
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 4
+      },
+      "soul": {
+        "value": 4
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 48,
+        "max": 48
+      },
+      "stress": {
+        "value": 40,
+        "max": 40
+      },
+      "guard": {
+        "value": 12
+      },
+      "evasion": {
+        "value": 15
+      },
+      "resolve": {
+        "value": 16
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 3,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "kinetic",
+        "qliphothic"
+      ],
+      "immunities": [],
+      "vulnerabilities": [
+        "sephirotic"
+      ]
+    },
+    "conditionImmunities": [
+      "restrained",
+      "prone"
+    ],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-9",
+      "qliphah-gamaliel",
+      "hull-of-yesod",
+      "lesser"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Gamalielite Dream-Twister",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "_id": "1favJ9zXVA6t4Bll",
+      "name": "Unbodied",
+      "type": "feature",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Dream-Twister moves through creatures and objects as if they were difficult terrain, taking 1d10 kinetic damage if it ends its turn inside something solid. It hovers; floors are a fiction it declines to sign.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188174,
+        "modifiedTime": 1787799188174,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!usU6xHOysv7adf8j.1favJ9zXVA6t4Bll"
+    },
+    {
+      "_id": "KumwGnSBxPh3QE1t",
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Dream-Twister makes two Dread Touch attacks.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188174,
+        "modifiedTime": 1787799188174,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!usU6xHOysv7adf8j.KumwGnSBxPh3QE1t"
+    },
+    {
+      "_id": "AgMIGFtkY02qs4lM",
+      "name": "Dread Touch",
+      "type": "weapon",
+      "img": "icons/svg/terror.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "channel",
+        "damage": {
+          "formula": "3d8",
+          "attribute": "soul",
+          "type": "psychic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [],
+        "effect": "A hand of smoke closes around the waking mind. Damage goes straight to Stress.",
+        "flavor": "A shadowy, clawed hand reaching into a sleeping head — except you're awake.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188174,
+        "modifiedTime": 1787799188174,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!usU6xHOysv7adf8j.AgMIGFtkY02qs4lM"
+    },
+    {
+      "_id": "URFqu9CskOUWq4Ea",
+      "name": "Dream-Shallows Slip (Recharge 5–6)",
+      "type": "feat",
+      "img": "icons/svg/sleep.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Dream-Twister slides halfway out of the world into the shallow edge of the dream-layer. Until the start of its next turn only psychic or sephirotic damage can touch it; everything else passes through the space where it almost is.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188174,
+        "modifiedTime": 1787799188174,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!usU6xHOysv7adf8j.URFqu9CskOUWq4Ea"
+    },
+    {
+      "_id": "aQKJqSngbJHDglwQ",
+      "name": "Nightmare Intrusion (1/scene)",
+      "type": "feat",
+      "img": "icons/svg/unconscious.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>One sleeping or unconscious creature within 12 squares. It rolls vs Resolve (DC 16). Fail: 4d10 psychic damage (Stress), the rest is ruined — no benefit from it, no Soma Break refresh — and until it completes an untwisted night's sleep it rolls twice-keep-worse on Resolve checks, deeply disturbed by what it almost remembers dreaming.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188174,
+        "modifiedTime": 1787799188174,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!usU6xHOysv7adf8j.aQKJqSngbJHDglwQ"
+    },
+    {
+      "_id": "5rDiDUhV2SmShcGZ",
+      "name": "Manifest Fear (Recharge 5–6)",
+      "type": "feat",
+      "img": "icons/svg/statue.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Dream-Twister reaches into one Shaken creature within 12 squares and pulls its fear out through the mirror of the world: a shadow-thing steps free (GM: use a T1 wraith-type statblock, hostile to everyone). It lasts a minute — or until someone is brave enough at it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188174,
+        "modifiedTime": 1787799188174,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!usU6xHOysv7adf8j.5rDiDUhV2SmShcGZ"
+    }
+  ],
+  "effects": [],
+  "folder": "Ps7zW26xgejTIfav",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "III",
+          "bracket": "light",
+          "archetype": "gamalielite-dream-twister",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "gamaliel",
+              "parasite",
+              "incorporeal",
+              "dream"
+            ],
+            "role": "Qliphothic Parasite (Gamaliel — Lesser)",
+            "lootTable": [
+              {
+                "name": "Bottled Nightmare (Contents Shift)",
+                "qty": "1d3",
+                "weight": 4
+              },
+              {
+                "name": "Oily Dream-Smoke Residue",
+                "qty": "1d6",
+                "weight": 6
+              },
+              {
+                "name": "Cold White Eye-Light (Paired)",
+                "qty": "1",
+                "weight": 2
+              }
+            ]
+          },
+          "price": {
+            "marks": 900,
+            "bounty": 1100,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "intrigue",
+            "gmOverride": false,
+            "notes": "III light Qliphothic Parasite (Gamaliel — Lesser) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "gamaliel",
+            "hullOf": "yesod",
+            "grade": "lesser"
+          }
+        }
+      },
+      "kind": "npc"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "createdTime": 1787799188174,
+    "modifiedTime": 1787799188174,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_id": "usU6xHOysv7adf8j",
+  "_key": "!actors!usU6xHOysv7adf8j"
+}

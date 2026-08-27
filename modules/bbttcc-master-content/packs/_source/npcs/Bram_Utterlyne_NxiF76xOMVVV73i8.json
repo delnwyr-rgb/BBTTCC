@@ -1,0 +1,1900 @@
+{
+  "name": "Bram Utterlyne",
+  "type": "character",
+  "folder": "WeFquFpimjobx66c",
+  "img": "icons/svg/mystery-man.svg",
+  "flags": {
+    "bbttcc-auto-link": {
+      "entityKind": "npc",
+      "createdViaEchoMint": true,
+      "createdAt": 1787336432236,
+      "echo": {
+        "stewardUuid": "Actor.IgTzmf0detjLtZFc",
+        "stewardName": "Marginalia",
+        "entryName": "Abyssal Cartographers",
+        "kind": "crew",
+        "family": "abyssal-cartographers",
+        "memberId": "ApZFPMoSsXu5"
+      }
+    },
+    "bbttcc-factions": {
+      "factionId": "6H5Grt3HybAs1rSq"
+    },
+    "fourththing": {
+      "kind": "npc",
+      "startingGrantsFiredItems": {
+        "mT1hNmbf2DQV1sHl": {
+          "firedAt": 1787336433305,
+          "itemName": "Echo-Diver",
+          "viaSwap": true
+        },
+        "WnuZSsgBlED258t5": {
+          "firedAt": 1787336433697,
+          "itemName": "Echo-Diver Heritage: Empyrean",
+          "viaSwap": true
+        }
+      }
+    },
+    "bbttcc-character-options": {
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.Uryua7cj6XkhMzgl",
+      "nativeLinks": {
+        "heritageName": "Echo-Diver Heritage: Empyrean",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.Uryua7cj6XkhMzgl",
+        "heritageApplied": true,
+        "ancestryName": "Echo-Diver",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.nogYQMk7SGB41Ipj",
+        "ancestryApplied": true
+      }
+    }
+  },
+  "system": {
+    "biography": {
+      "concept": "Lantern-bearer — Abyssal Cartographers crew, echo of Marginalia",
+      "notes": "Owes Marginalia a debt neither of them names anymore: he held the light steady for six hours in the Choked Fathom while Marginalia redrew a passage from memory, and he's fairly sure that's the only reason either of them came up breathing."
+    },
+    "details": {
+      "level": 1,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1
+    },
+    "attributes": {
+      "violence": {
+        "value": 2
+      },
+      "intrigue": {
+        "value": 4
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 2
+      },
+      "mind": {
+        "value": 5
+      },
+      "soul": {
+        "value": 3
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 0
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 0
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 0
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 0
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 0
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 1
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 0
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 0
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "fitting": {
+        "attribute": "intrigue",
+        "label": "Fitting",
+        "value": 0
+      },
+      "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 0
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 16,
+        "max": 16
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "prototypeToken": {
+    "actorLink": false,
+    "disposition": 1,
+    "name": "Bram Utterlyne",
+    "displayName": 30,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "icons/svg/mystery-man.svg",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "_id": "NxiF76xOMVVV73i8",
+  "items": [
+    {
+      "_id": "UM4K7f0ok0CdRc2G",
+      "name": "Savant",
+      "type": "class",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "system": {
+        "category": "calling",
+        "identifier": "calling-savant",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "savant",
+          "mind"
+        ],
+        "description": {
+          "value": "<p><em>\"It's not obscure. You just haven't read it.\"</em></p><p><strong>Savant</strong> is the Mind Calling — the trade that kept its bearers alive after the Shattering. Umbrella: scholar, engineer, medic, archivist, detective, translator. A profession is a flavor label on the Calling.</p><p><strong>Knack — Library-Brain:</strong> Lore and Investigation checks never fumble; identifies items of tier ≤ own tier on sight (at Tier III, including technomagical origin).</p><p><strong>Aptitude kit:</strong> signature aptitude <strong>Lore</strong> rank = tier; secondary <strong>Investigation</strong> rank = tier − 1.</p><p><strong>Services:</strong> a standard job costs the tier fee (T1 10 / T2 30 / T3 90 / T4 270 marks), paid in <strong>Economy or Soft Power (GM picks by job)</strong> marks. Cross-pool ×1.5 friction applies as usual.</p><p><strong>Tiers:</strong> Apprentice → Initiate → Master → Archon. Grant the matching tier features alongside this class item.</p><p><strong>Awakens into:</strong> Wyrdlens Adept or Cosmic Linguist. A Steward is a Calling that ignited into a Path — Surge is the mark of Stewardship, which is why no Calling banks or spends it.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "calling"
+        },
+        "fourththing": {
+          "calling": {
+            "key": "savant",
+            "faculty": "mind",
+            "signature": "lore",
+            "secondary": "investigation",
+            "pool": "Economy or Soft Power (GM picks by job)",
+            "awakens": "Wyrdlens Adept or Cosmic Linguist"
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237048,
+        "modifiedTime": 1787799237048,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!NxiF76xOMVVV73i8.UM4K7f0ok0CdRc2G"
+    },
+    {
+      "_id": "FCVd5RmLsg2uwWuC",
+      "name": "Savant — Apprentice (Tier I)",
+      "type": "feature",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/tiefling_cleric_25.webp",
+      "system": {
+        "category": "calling",
+        "source": "Callings",
+        "tags": [
+          "calling",
+          "savant",
+          "tier-1"
+        ],
+        "description": {
+          "value": "<p><strong>Savant — Apprentice</strong> (Tier I).</p><p><strong>Trade — Appraise / identify:</strong> What it is, what it's worth, whether it's what the seller claims. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — I've Read About This</strong> <em>(1/scene)</em>: Explain the situation; one ally gets +2 on their next relevant check.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 501000,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "flags": {
+        "fourththing": {
+          "calling": {
+            "key": "savant",
+            "tier": 1
+          }
+        }
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237048,
+        "modifiedTime": 1787799237048,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!NxiF76xOMVVV73i8.FCVd5RmLsg2uwWuC"
+    },
+    {
+      "name": "I Mapped This Dark (Echo Boon)",
+      "type": "feature",
+      "img": "icons/svg/cave.svg",
+      "system": {
+        "category": "echo",
+        "source": "Echo Rosters",
+        "tags": [
+          "echo",
+          "abyssal-cartographers",
+          "tier-1"
+        ],
+        "description": {
+          "value": "\n    <p><em>Echoes are the past made flesh — people out of a Steward's former\n    lives, walking beside them again. Bram Utterlyne is an echo of\n    Marginalia's time with the\n    <strong>Abyssal Cartographers</strong> crew. Being remembered\n    leaves a mark.</em></p>\n    <p><strong>Lantern-bearer</strong> — Owes Marginalia a debt neither of them names anymore: he held the light steady for six hours in the Choked Fathom while Marginalia redrew a passage from memory, and he&#x27;s fairly sure that&#x27;s the only reason either of them came up breathing.</p>\n    <p><strong>I Mapped This Dark — Apprentice (Echo Boon)</strong></p>\n    <p>Once per scene, the GM truthfully sketches the current site — exits, hazards, and one hidden thing.</p>\n    <p><strong>Echo's Mark:</strong> while their Steward can see them, the echo adds\n    +1 on any check made in direct support of the Steward.</p>\n    <p><em>They have been deeper than this, with worse light.</em></p>",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "echo": {
+            "family": "abyssal-cartographers",
+            "kind": "crew",
+            "tier": 1,
+            "crewEcho": true
+          }
+        }
+      },
+      "_id": "pL8koKeaR2LsTTam",
+      "effects": [],
+      "folder": null,
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237048,
+        "modifiedTime": 1787799237048,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!NxiF76xOMVVV73i8.pL8koKeaR2LsTTam"
+    },
+    {
+      "name": "Echo-Diver",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/EchoDiver4.png",
+      "system": {
+        "category": "ancestry",
+        "source": {
+          "revision": 2,
+          "rules": "2024",
+          "book": "",
+          "custom": "Bad Eden",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-canon-echo-diver=\"v1\" style=\"display:none\"></div>\n<p><em>\"The lions are gone. The wolves are gone. The kings are gone. We're still here. Think about what that means.\"</em></p>\n<p>Echo-Divers are the rats of the new world — and they say it with pride. A rat survives what a lion can't. A rat is already moving when the ceiling falls. A rat threads a collapsing vault without ever touching a trigger plate.</p>\n<p><strong>Creature Type.</strong> Humanoid (Echo-Diver). <strong>Size.</strong> Medium. <strong>Speed.</strong> 6 squares</p>\n<p><strong>Temporal Flinch (1/Soma Break).</strong> You experience the next two seconds as a constant, faint pre-echo. You are <strong>immune to the Surprised condition</strong> while conscious. As a reaction, when you or a creature within 2 squares of you would be hit by an attack you can see, you may move yourself or that creature 1 square — if this moves the target out of the attack's range or line, the attack misses.</p>\n<p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air a comparable Medium creature needs. Reroll the lowest die on Body checks against suffocation, starvation, dehydration, or extreme temperature (auto-fires). You can squeeze through gaps and hold stillness that shouldn't work, and you know it.</p>\n<p><strong>Vault Sight.</strong> Darkvision 12 squares Reroll the lowest die on Perception checks to notice unstable structure, active traps, trigger plates, load-bearing failures, or Spark / chronoflux residue (auto-fires).</p>\n<p><em>Your Echo-Diver heritage grants additional features through advancements (Temporal Afterimage, Strategic Hooks) at character creation.</em></p>\n<div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDiverTimeSense\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Echo-Diver: Time-Sense</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break (Temporal Flinch) + 3 always-on passives &nbsp;·&nbsp; <strong>Action:</strong> Picker (Temporal Flinch · Niche Survivor · Vault Sight · Cannot Be Surprised) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Click to open the 4-slot picker. Niche Survivor (Body reroll vs environment) and Vault Sight (Perception reroll vs traps/structure/Spark) auto-fire on matching rolls. Surprise immunity surfaces as a Defenses pill.</div>\n</div>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "EDSIZE0000000001",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium Echo-Diver.",
+            "value": {}
+          },
+          {
+            "_id": "EDECHO0000000001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.VGx9IeE9qI0Gz628",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Temporal Flinch",
+            "hint": "Gain the Echo-Diver: Temporal Flinch feature (time-sense core)."
+          },
+          {
+            "_id": "EDECHO0000000002",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.NB2DyMbtS6Vcrk39",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Niche Survivor",
+            "hint": "Gain the Echo-Diver: Niche Survivor feature (survive anywhere)."
+          },
+          {
+            "_id": "EDECHO0000000003",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.5zidorC3Q8mHh4aX",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Vault Sight",
+            "hint": "Gain the Echo-Diver: Vault Sight feature."
+          },
+          {
+            "_id": "EDECHO0000000004",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.q4MSD57LoXBm6GLE",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Temporal Afterimage",
+            "hint": "Gain the Echo-Diver: Temporal Afterimage feature."
+          },
+          {
+            "_id": "EDECHO0000000006",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.gRZGLCId7GtVZNMN",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Strategic Hooks (Echo-Diver)",
+            "hint": "Grants OP edges and Spark/encounter hooks used by Bad Eden faction and world systems."
+          }
+        ],
+        "identifier": "echo_diver",
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": 60,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": "Temporal Flinch; Vault Sight."
+        },
+        "type": {
+          "value": "humanoid",
+          "subtype": "Echo-Diver",
+          "custom": ""
+        }
+      },
+      "effects": [],
+      "folder": "0b5hc8Y3eu3rN4Kg",
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "ancestryKey": "echo_diver",
+          "normalizedFrom": "Echo-Diver",
+          "refactorNotes": "v2 refocus: time-sense as survival engine; 'rats of the new world' identity."
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "save",
+              "mode": "reroll-lowest",
+              "vs": "vs:suffocation",
+              "note": "on Constitution saves against suffocation, starvation, dehydration, and extre…"
+            },
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "on checks to notice unstable structure, active traps, trigger plates, load-be…"
+            },
+            {
+              "context": "save",
+              "mode": "reroll-lowest",
+              "vs": "vs:suffocation",
+              "note": "Constitution saves against suffocation, starvation, dehydration, and extreme …"
+            },
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "checks to notice unstable structure, active traps, trigger plates, load-beari…"
+            },
+            {
+              "context": "check",
+              "skill": "body",
+              "mode": "reroll-lowest",
+              "note": "vs suffocation, starvation, dehydration, or extreme temperature"
+            },
+            {
+              "context": "check",
+              "skill": "perception",
+              "mode": "reroll-lowest",
+              "note": "to notice unstable structure, active traps, trigger plates, load-bearing failures, or Spark / chronoflux residue"
+            }
+          ],
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "intrigue-op",
+              "amount": 2
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "economy-op",
+              "amount": 2
+            }
+          ],
+          "grants": {
+            "conditionImmunities": [
+              "surprise"
+            ]
+          },
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "grantedByAncestry": "Echo-Diver"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.nogYQMk7SGB41Ipj",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237048,
+        "modifiedTime": 1787799237048,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 0,
+      "_id": "mT1hNmbf2DQV1sHl",
+      "_key": "!actors.items!NxiF76xOMVVV73i8.mT1hNmbf2DQV1sHl"
+    },
+    {
+      "name": "Echo-Diver Heritage: Empyrean",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_weather_2.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Bad Eden Heritage (v1.1, RFI-native).</strong> Echo-Diver heritage: Empyrean.</p><p><em>“Something is about to happen. Move.”</em></p><p><strong>Echo-Diver (Empyrean).</strong> Your time-sense tilts forward. You feel weather before it arrives — not the storm outside, the storm of events. Empyrean Echo-Divers are the ones who always get out of the room five seconds before the bad thing, and can never quite explain how.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Echo-Diver).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Movement.</strong> 6 squares walking.</p></li><li><p><strong>Lineage Lean.</strong> Echo-Diver does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</p></li></ul><h3>Echo-Diver Core: Half-Second Inheritance</h3><p><em>Shared across all Echo-Diver heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><p><strong>Temporal Flinch.</strong> You cannot be surprised while conscious. Once per scene, when you or an ally within 2 squares would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 1 square If this moves the target out of the attack's range or line, the attack misses.</p></li><li><p><strong>Niche Survivor.</strong> You need roughly half the food, water, and air that a comparable Medium creature needs. You reroll the lowest die on Body checks against suffocation, starvation, dehydration, and extreme temperature.</p></li><li><p><strong>Vault Sight.</strong> You have low-light vision out to 12 squares You reroll the lowest die on Mind (Perception) checks to notice unstable structure, active traps, trigger plates, load-bearing failure, and temporal or Spark residue.</p></li><li><p><strong>Rat Inheritance.</strong> You can squeeze through spaces at least one foot wide without halving your movement, and you can hold stillness that shouldn't work.</p></li></ul><h3>Empyrean Traits</h3><ul><li><p><strong>Stratospheric Resistance.</strong> You have resistance to chemical damage with the lightning flavor, kinetic damage with the thunder flavor, and psychic damage. The sky takes its swing at you constantly. It misses.</p></li><li><p><strong>Weathered.</strong> You reroll the lowest die on Mind (Perception) checks that rely on hearing or air currents. You always know which way the wind is blowing. Always.</p></li></ul><h3>Strategic Hooks (Foundry / Bad Eden)</h3><ul><li><p><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Soft Power OP</strong> at campaign start.</p></li><li><p><strong>Hex Synergy.</strong> In <em>Open Sky / Plateau / High-Altitude</em> hexes, your faction gains +1 initiative on all conflicts resolved in those hexes.</p></li><li><p><strong>Storm Warning.</strong> Once per Strategic Turn, when the GM reveals an incoming hazard or attack on your faction, you may force the GM to disclose one additional detail about it. You saw it coming.</p></li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #a8c4e0; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Temporal Flinch</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/scene  ·  <strong>Action:</strong> Reaction  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">When an attack would hit you or an ally within 2 squares, shift them 1 square If that breaks range/LoS, the attack misses.</span></p></div>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "e1de72736ee05d97",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.rSeuOb0ns3zbEGT6",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Empyrean Tier I",
+            "hint": "Gain your Empyrean Tier I feat."
+          }
+        ],
+        "identifier": "echo_diver_empyrean_heritage",
+        "requirements": "Echo-Diver",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "echo_diver",
+          "lineage": "Empyrean",
+          "version": "1.1.0",
+          "date": "2026-04-19",
+          "rfiNative": true,
+          "opEffects": {
+            "intrigue": 2,
+            "softpower": 1
+          }
+        },
+        "fourththing": {
+          "grants": {
+            "resistances": [
+              {
+                "type": "energy",
+                "flavor": "lightning"
+              },
+              {
+                "type": "kinetic",
+                "flavor": "thunder"
+              },
+              "psychic"
+            ]
+          },
+          "rerolls": [
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "vs": "vs:suffocation",
+              "note": "on Body checks against suffocation, starvation, dehydration, and extreme temp…"
+            },
+            {
+              "context": "check",
+              "skill": "perception",
+              "mode": "reroll-lowest",
+              "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg…"
+            },
+            {
+              "context": "check",
+              "attribute": "mind",
+              "mode": "reroll-lowest",
+              "note": "on Mind (Perception) checks to notice unstable structure, active traps, trigg…"
+            },
+            {
+              "context": "check",
+              "skill": "perception",
+              "mode": "reroll-lowest"
+            },
+            {
+              "context": "check",
+              "attribute": "mind",
+              "mode": "reroll-lowest"
+            },
+            {
+              "context": "check",
+              "attribute": "body",
+              "mode": "reroll-lowest",
+              "vs": "vs:suffocation",
+              "note": "Body checks against suffocation, starvation, dehydration, and extreme tempera…"
+            },
+            {
+              "context": "check",
+              "skill": "perception",
+              "mode": "reroll-lowest",
+              "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger …"
+            },
+            {
+              "context": "check",
+              "attribute": "mind",
+              "mode": "reroll-lowest",
+              "note": "Mind (Perception) checks to notice unstable structure, active traps, trigger …"
+            },
+            {
+              "context": "check",
+              "skill": "perception",
+              "mode": "reroll-lowest"
+            },
+            {
+              "context": "check",
+              "attribute": "mind",
+              "mode": "reroll-lowest"
+            }
+          ],
+          "resourceGrants": [
+            {
+              "cadence": "per-campaign-start",
+              "resource": "intrigue-op",
+              "amount": 2
+            },
+            {
+              "cadence": "per-campaign-start",
+              "resource": "soft-power-op",
+              "amount": 2
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-self-or-ally-hit",
+              "limit": {
+                "window": "soma-break",
+                "uses": 1
+              },
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Temporal Flinch. You cannot be surprised while conscious. Once per scene, when you or an ally within 10 feet would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 5 feet"
+                }
+              }
+            }
+          ],
+          "grantedByHeritage": "Empyrean"
+        }
+      },
+      "folder": "1kUSB35CSTCvrCJy",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-heritages-v1.1",
+          "uuid": "Item.Uryua7cj6XkhMzgl",
+          "coreVersion": "13.351",
+          "systemId": "fourththing",
+          "systemVersion": "0.6.0"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237048,
+        "modifiedTime": 1787799237048,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 0,
+      "_id": "WnuZSsgBlED258t5",
+      "_key": "!actors.items!NxiF76xOMVVV73i8.WnuZSsgBlED258t5"
+    },
+    {
+      "name": "Echo-Diver (Empyrean): Stormread",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Heritages v1.1 (RFI-native rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-canon-echo-diver=\"v1\" style=\"display:none\"></div><p><em>\"It's not that you're faster. It's that the moment is slower, on your side of it.\"</em></p><p><strong>Stormread Initiative (passive).</strong> Flat +2 bonus to initiative — auto-applied via system.derived.initiative.bonus.</p><p><strong>Stormread (1/Soma Break).</strong> Bonus action — deliver a warning to one willing ally within 6 squares who can hear and understand you. That ally may immediately use their reaction to move up to half their speed without provoking reaction strikes.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"echoDivEmpyreanStormread\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>Stormread</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> 1/Soma Break (active) + passive +2 init  ·  <strong>Action:</strong> Picker (Stormread · Stormread Initiative)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Active: bonus-action ally warning grants them a half-speed reaction-move w/o provoking. Passive: +2 initiative auto-applied.</span></p></div>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "echo_diver_empyrean_tier1",
+        "requirements": "Echo-Diver (Empyrean)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [
+            {
+              "period": "sr",
+              "type": "recoverAll",
+              "formula": ""
+            }
+          ],
+          "max": "1"
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "echo_diver",
+          "feature": "stormread",
+          "lineage": "Empyrean",
+          "tierLevel": 1,
+          "version": "1.1.0",
+          "date": "2026-04-19",
+          "rfiNative": true
+        },
+        "fourththing": {
+          "grants": {
+            "resistances": [
+              {
+                "type": "energy",
+                "flavor": "lightning"
+              },
+              {
+                "type": "kinetic",
+                "flavor": "thunder"
+              },
+              "psychic"
+            ]
+          },
+          "passives": {
+            "initiative": {
+              "bonus": 2
+            }
+          },
+          "principleSource": "ancestry",
+          "grantedByHeritage": "Empyrean"
+        },
+        "autoanimations": {
+          "id": "036cc64c-bd5d-4256-8f99-2907c4ca5c4f",
+          "label": "Echo-Diver (Empyrean): Stormread",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "templatefx",
+          "primary": {
+            "video": {
+              "dbSection": "templatefx",
+              "menuType": "ray",
+              "animation": "lightningbolt",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "n4KYOXhZ03HlMFqg",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-heritages-v1.1",
+          "uuid": "Item.rSeuOb0ns3zbEGT6",
+          "coreVersion": "13.351",
+          "systemId": "fourththing",
+          "systemVersion": "0.6.0"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237048,
+        "modifiedTime": 1787799237048,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "sort": 0,
+      "_id": "DPt0n91taN7u3Blc",
+      "_key": "!actors.items!NxiF76xOMVVV73i8.DPt0n91taN7u3Blc"
+    },
+    {
+      "name": "Bolt-Driver",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_heavy_crossbow.png",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "1d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "bolt",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 30,
+          "long": 120
+        },
+        "tags": [
+          "t1-baseline",
+          "crossbow",
+          "silent",
+          "slow-reload"
+        ],
+        "effect": "Silent on discharge. GM may call for a 1-action reload between shots.",
+        "flavor": "The kind of weapon that knows how to shut up.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "<p>Compact crossbow built around a salvaged spring-tension mechanism. Slow to reload, near-silent on release. The Courier's preferred long-touch tool when noise is a tax you can't afford to pay.</p><p><b>Standard Issue.</b> Silent. Slow to reload (1 action between shots, GM call). No signature.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Silent on discharge. GM may call for a 1-action reload between shots.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d8 Kinetic damage to <em>Integrity</em> <span style=\"opacity:.75\">(bolt)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 30 / 120</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->"
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "footprint": 1,
+              "reach": "5",
+              "frame": "weapon",
+              "signature": "Quiet enough to keep your secrets.",
+              "origin": "looted",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>Compact crossbow built around a salvaged spring-tension mechanism. Slow to reload, near-silent on release. The Courier's preferred long-touch tool when noise is a tax you can't afford to pay.</p><p><b>Standard Issue.</b> Silent. Slow to reload (1 action between shots, GM call). No signature.</p>",
+              "materialOf": [
+                "scrap-steel",
+                "spring-tension-arm"
+              ],
+              "price": {
+                "marks": 50,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI weapon stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "43f43748-c581-43b4-82ba-2ff90566f9a2",
+          "label": "Bolt-Driver",
+          "levels3d": {
+            "type": "explosion",
+            "data": {
+              "color01": "#FFFFFF",
+              "color02": "#FFFFFF",
+              "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+            },
+            "sound": {
+              "enable": false
+            },
+            "secondary": {
+              "enable": false,
+              "data": {
+                "color01": "#FFFFFF",
+                "color02": "#FFFFFF",
+                "spritePath": "modules/levels-3d-preview/assets/particles/dust.png"
+              }
+            }
+          },
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "bolt",
+              "variant": "cold",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isReturning": false,
+              "isWait": false,
+              "onlyX": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "isWait": true,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": false,
+              "opacity": 1,
+              "persistent": false,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "unbindAlpha": false,
+              "unbindVisibility": false,
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "bQhXd1gwJXtaVLGh",
+      "_id": "Xi3OL0kHLkqdY0pv",
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237048,
+        "modifiedTime": 1787799237048,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!NxiF76xOMVVV73i8.Xi3OL0kHLkqdY0pv"
+    },
+    {
+      "name": "Initiate's Robe",
+      "type": "armor",
+      "img": "art/bbttcc/GOTTGAIT/GOTTGAIT%20Token/initiates_robes.png",
+      "system": {
+        "guardBonus": 0,
+        "evasionBonus": 1,
+        "resolveBonus": 1,
+        "resistances": [],
+        "armorSkill": "fitting",
+        "equipped": false,
+        "tags": [
+          "t1-baseline",
+          "robe",
+          "cloth",
+          "caster"
+        ],
+        "category": "armor",
+        "source": "",
+        "description": {
+          "value": "<p>Undyed sept-cloth cut to a long working robe with a corded belt. Issued to first-circle initiates of any chapterhouse or tutor-cell — the kind of garment that gets traded between students faster than any of them keep notebooks. Comfortable to channel in. Forgettable to anyone watching for trouble.</p><p><strong>Standard Issue.</strong> Light enough to manifest in. Dignified enough to walk past a sept-warden.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<ul>\n  <li><strong>Armor:</strong> Cloth</li>\n  <li><strong>Defense:</strong> Evasion +1, Resolve +1</li>\n  <li><strong>Requires:</strong> Weave (trained)</li>\n  <li><strong>Tier:</strong> I</li>\n  <li><strong>Cost:</strong> 75 Nonlethal marks</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "footprint": 1,
+              "reach": "self",
+              "frame": "armor",
+              "signature": "Plain cloth. The hem remembers the floor of the room you left.",
+              "origin": "given",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>Undyed sept-cloth cut to a long working robe with a corded belt. Issued to first-circle initiates of any chapterhouse or tutor-cell — the kind of garment that gets traded between students faster than any of them keep notebooks. Comfortable to channel in. Forgettable to anyone watching for trouble.</p><p><b>Standard Issue.</b> Light enough to manifest in. Dignified enough to walk past a sept-warden.</p>",
+              "materialOf": [
+                "sept-cloth",
+                "corded-belt"
+              ],
+              "price": {
+                "marks": 75,
+                "currency": "nonlethal",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI armor stamp",
+                "bound": "free",
+                "saleBack": 30
+              }
+            }
+          }
+        }
+      },
+      "folder": "2yW6O57xUFtROfpB",
+      "_id": "PisyTCjtZoTckBNI",
+      "effects": [
+        {
+          "name": "⚙️ Defense Grant",
+          "transfer": false,
+          "disabled": false,
+          "flags": {
+            "fourththing": {
+              "defenseGrant": true
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "flags.fourththing.grant.evasion",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.resolve",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "sJwPXJLjGQRGUTtO",
+          "img": "icons/svg/aura.svg",
+          "type": "base",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "createdTime": 1787799237048,
+            "modifiedTime": 1787799237048,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!NxiF76xOMVVV73i8.PisyTCjtZoTckBNI.sJwPXJLjGQRGUTtO"
+        }
+      ],
+      "sort": 0,
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237048,
+        "modifiedTime": 1787799237048,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!NxiF76xOMVVV73i8.PisyTCjtZoTckBNI"
+    },
+    {
+      "name": "Stabilizer Patch",
+      "type": "gear",
+      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/bbttcc_items_stabilizer_patch.jpeg",
+      "system": {
+        "slot": "misc",
+        "tags": [],
+        "category": "gear",
+        "source": "",
+        "quantity": 1,
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "flags": {
+        "bbttcc": {
+          "tags": []
+        },
+        "rfi": {
+          "item": {
+            "tier": "I",
+            "footprint": 0,
+            "reach": "self",
+            "frame": "consumable",
+            "signature": "",
+            "origin": "looted",
+            "originator": null,
+            "bound": "free",
+            "upkeep": {
+              "mode": "passive",
+              "per": "none"
+            },
+            "misfire": {
+              "tierClamp": true,
+              "table": null
+            },
+            "signals": {}
+          }
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              },
+              "tier": "I",
+              "frame": "consumable",
+              "origin": "looted",
+              "bound": "free",
+              "reach": "self",
+              "footprint": 0,
+              "legacySystem": {
+                "description": {
+                  "value": "<p>Adhesive med patch. Bonus Action: remove 1 level of Stress from environmental travel once per Soma Break.</p>"
+                }
+              }
+            }
+          }
+        }
+      },
+      "effects": [],
+      "folder": "TNrB6kEiHS0KwwJT",
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237048,
+        "modifiedTime": 1787799237048,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "rzJQNVz5H3SHfP2i": 3
+      },
+      "_id": "BtdAAiRvn5NQPpel",
+      "sort": 1900000,
+      "_key": "!actors.items!NxiF76xOMVVV73i8.BtdAAiRvn5NQPpel"
+    }
+  ],
+  "effects": [],
+  "sort": 100000,
+  "ownership": {
+    "default": 0,
+    "rzJQNVz5H3SHfP2i": 3,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1787799237048,
+    "modifiedTime": 1787799237154,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!NxiF76xOMVVV73i8"
+}

@@ -1,0 +1,5279 @@
+{
+  "name": "Toblerone",
+  "type": "character",
+  "img": "art/bbttcc/asli-tokens/oldborn-tideborn.webp",
+  "prototypeToken": {
+    "texture": {
+      "src": "art/bbttcc/asli-tokens/oldborn-tideborn.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1.8,
+      "scaleY": 1.8,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "name": "Toblerone",
+    "displayName": 30,
+    "actorLink": true,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 0,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {
+      "wall-height": {
+        "tokenHeight": 0
+      },
+      "tokenflip": {
+        "tokenfaces": [
+          {
+            "actorId": "zu2mcj4USN0AwjFZ",
+            "img": "art/bbttcc/asli-tokens/oldborn-tideborn-2.webp",
+            "id": "JURT2KwuDaiKcqhp1h1y",
+            "scaleX": 1.8,
+            "scaleY": 1.8,
+            "width": 1,
+            "height": 1,
+            "model3d": "",
+            "subject": "",
+            "autoFlip": 0,
+            "transition": "flip",
+            "autoFlipMacro": null
+          }
+        ]
+      }
+    },
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 1,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1,
+      "alignment": ""
+    },
+    "attributes": {
+      "violence": {
+        "value": 5
+      },
+      "intrigue": {
+        "value": 3
+      },
+      "presence": {
+        "value": 2
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 4
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 1
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 1
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 1
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 0
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 1
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 1
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 0
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 1
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 0
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 0
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 0
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 0
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 1
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 1
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 1
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "fitting": {
+        "attribute": "intrigue",
+        "label": "Fitting",
+        "value": 1
+      },
+      "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 1
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 9,
+        "max": 16
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 5,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": "eIXghZ73hKSXmP3x",
+      "loyalty": 0,
+      "name": "Sweet Release"
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "_id": "zu2mcj4USN0AwjFZ",
+  "items": [
+    {
+      "name": "Oldenborn",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Earthbound_2.png",
+      "system": {
+        "category": "ancestry",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 2,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Oldenborn.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Earthbound, Lumenwrought, Stormborn Nomad, Rustland Scavenger</strong>.</p><p>This root grants the shared Oldenborn core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>“You are not an elf. You are the memory of a place that learned to walk again.”</em></p>\n<p><strong>Dream-Flesh.</strong> You do not sleep. When you rest, you drift into Yesod—symbolic memory-space—unless you choose otherwise. You are immune to magical sleep, and you can always tell when a dream, illusion, or constructed reality is present.</p>\n<p><strong>Old Memory, Old Paths.</strong> You reroll the lowest die on checks to interpret ruins, follow ley-lines, identify altered terrain, and sense metaphysical instability. You always know if a place feels <em>remembered</em>, <em>abandoned</em>, or <em>contested</em> (the GM answers vaguely).</p>\n<p><strong>Veil-Sight.</strong> You perceive the <em>presence</em> of spirits, ghosts, Spark echoes, and noospheric constructs. This grants awareness, not perfect sight.</p>\n<p><strong>You Are Remembered.</strong> When you first meet a community, the GM chooses (or rolls) whether you are met with reverence, fear, or familiarity. It’s never neutral.</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "8dfcdc1a6e9e4b08",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Medium.",
+            "value": {}
+          },
+          {
+            "_id": "95aae7269bab1119",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.TNlzDCiEgc27ZzOl",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Old Memory, Old Flesh",
+            "hint": "Gain the core Oldenborn ancestry traits."
+          }
+        ],
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": null,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": "Veil-Sight (awareness of spirits, Spark echoes, noospheric constructs)."
+        },
+        "type": {
+          "value": "humanoid",
+          "custom": "",
+          "subtype": "Oldenborn"
+        },
+        "identifier": "oldenborn"
+      },
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "family": "oldenborn",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "heritageList": [
+            "earthbound",
+            "lumenwrought",
+            "stormborn_nomad",
+            "rustland_scavenger"
+          ],
+          "refactorNotes": "v2 simplification: Sky-Threaded and Ember-Touched retired. Stormborn Nomad and Rustland Scavenger demoted from species to Oldenborn heritages."
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "on checks to interpret ruins, follow ley-lines, identify altered terrain, and…"
+            },
+            {
+              "context": "check",
+              "mode": "reroll-lowest",
+              "note": "checks to interpret ruins, follow ley-lines, identify altered terrain, and se…"
+            }
+          ],
+          "triggers": [
+            {
+              "event": "on-rest",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Dream-Flesh. You do not sleep. When you rest, you drift into Yesod"
+                }
+              }
+            }
+          ],
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.7709222f8ff32964"
+        }
+      },
+      "effects": [],
+      "folder": "5PPxNybRn7zD0k0G",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.7709222f8ff32964",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.7709222f8ff32964",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "m94HZuFs9Wi16QFq",
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.m94HZuFs9Wi16QFq"
+    },
+    {
+      "name": "Oldenborn (Lumenwrought): Glamourfield",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_rainbow.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“You were not beautiful. You were <strong>wanted</strong>.”</em></p>\n        <p><strong>Glamourfield (At Will, Minor).</strong> You can create subtle illusions affecting light, sound, scent, or emotional tone. It never overwhelms; it always influences.</p>\n        <p><strong>Dream Anchor.</strong> You have a +1 bonus to checks against metaphysical hazards (slippage, dream traps, Spark backlash).</p>",
+          "chat": ""
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "oldenborn-lumenwrought-glamourfield",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Oldenborn",
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "activities": {}
+      },
+      "flags": {
+        "bbttcc": {
+          "kind": "oldenborn",
+          "feature": "glamourfield",
+          "lineage": "Lumenwrought",
+          "tierLevel": 0,
+          "version": "1.0.0"
+        },
+        "fourththing": {
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.VCDspGrzcx0FkfEj"
+        }
+      },
+      "effects": [
+        {
+          "_id": "9b52887635e340da",
+          "name": "Lumenwrought: Dream Anchor (+1 saves)",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_4.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.bonuses.abilities.save",
+                "value": "+1",
+                "priority": 10,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Represents anchoring presence.",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "dnd5e": {
+              "riders": {
+                "statuses": []
+              }
+            }
+          },
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1787799236996,
+            "modifiedTime": 1787799236996
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!zu2mcj4USN0AwjFZ.BQKWKKdjEglM0VkZ.9b52887635e340da"
+        }
+      ],
+      "folder": "AZpEGZW4ZA1Kjb9K",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.VCDspGrzcx0FkfEj",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.0QQRNxNGttQFVSHj",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "BQKWKKdjEglM0VkZ",
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.BQKWKKdjEglM0VkZ"
+    },
+    {
+      "name": "Aurablade",
+      "type": "class",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Aurablade.png",
+      "system": {
+        "category": "path",
+        "identifier": "aurablade",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h1 data-start=\"725\" data-end=\"768\">⚔ AURABLADE — MECHANICAL CORE (PHASE 1.5)</h1><p data-start=\"770\" data-end=\"824\"><em data-start=\"770\" data-end=\"824\">Emotion is not flavor text.<br data-start=\"798\" data-end=\"801\" />Emotion is a resource.</em></p><hr data-start=\"826\" data-end=\"829\" /><h2 data-start=\"831\" data-end=\"864\">🔥 Burn — What It Is (Plainly)</h2><p data-start=\"866\" data-end=\"910\"><strong data-start=\"866\" data-end=\"874\">Burn</strong> represents emotional overextension:</p><ul data-start=\"911\" data-end=\"986\"><li data-start=\"911\" data-end=\"932\"><p data-start=\"913\" data-end=\"932\">Adrenaline overload</p></li><li data-start=\"933\" data-end=\"950\"><p data-start=\"935\" data-end=\"950\">Suppressed fear</p></li><li data-start=\"951\" data-end=\"967\"><p data-start=\"953\" data-end=\"967\">Moral fixation</p></li><li data-start=\"968\" data-end=\"986\"><p data-start=\"970\" data-end=\"986\">Spiritual strain</p></li></ul><p data-start=\"988\" data-end=\"1076\">Burn is <strong data-start=\"996\" data-end=\"1014\">not a die pool</strong>.<br data-start=\"1015\" data-end=\"1018\" />Burn is a <strong data-start=\"1028\" data-end=\"1043\">state track</strong> that unlocks power <strong data-start=\"1063\" data-end=\"1070\">and</strong> risk.</p><p data-start=\"1078\" data-end=\"1152\">You do not “spend” Burn.<br />You <strong data-start=\"1107\" data-end=\"1128\">enter Burn states</strong>, and the game responds.</p><hr data-start=\"1154\" data-end=\"1157\" /><h2 data-start=\"1159\" data-end=\"1202\">🔥 How You Gain Burn (Concrete Triggers)</h2><p data-start=\"1204\" data-end=\"1265\">You gain <strong data-start=\"1213\" data-end=\"1223\">1 Burn</strong> when <strong data-start=\"1229\" data-end=\"1240\">any one</strong> of the following occurs:</p><h3 data-start=\"1267\" data-end=\"1294\">Universal Burn Triggers</h3><ul data-start=\"1295\" data-end=\"1529\"><li data-start=\"1295\" data-end=\"1352\"><p data-start=\"1297\" data-end=\"1352\">You hit with an attack granted or enhanced by your Aura</p></li><li data-start=\"1353\" data-end=\"1401\"><p data-start=\"1355\" data-end=\"1401\">You force a defense check using an Aura feature</p></li><li data-start=\"1402\" data-end=\"1466\"><p data-start=\"1404\" data-end=\"1466\">You escalate without pause (GM-flagged high-risk continuation)</p></li><li data-start=\"1467\" data-end=\"1529\"><p data-start=\"1469\" data-end=\"1529\">You remain in the same Aura for too long without stabilizing</p></li></ul><p data-start=\"1531\" data-end=\"1634\">⚠️ <strong data-start=\"1534\" data-end=\"1544\">Limit:</strong><br data-start=\"1544\" data-end=\"1547\" />You can gain <strong data-start=\"1560\" data-end=\"1588\">at most 1 Burn per round</strong>, unless a subclass explicitly overrides this.</p><p data-start=\"1636\" data-end=\"1674\">Burn rewards <strong data-start=\"1649\" data-end=\"1663\">commitment</strong>, not spam.</p><hr data-start=\"1676\" data-end=\"1679\" /><h2 data-start=\"1681\" data-end=\"1715\">🔥 Burn States (Explicit Bands)</h2><p data-start=\"1717\" data-end=\"1755\">Burn is divided into <strong data-start=\"1738\" data-end=\"1754\">three states</strong>.</p><h3 data-start=\"1757\" data-end=\"1789\">🔹 Burn 0–1 — <strong data-start=\"1775\" data-end=\"1789\">Controlled</strong></h3><p data-start=\"1790\" data-end=\"1817\">You are emotionally steady.</p><ul data-start=\"1819\" data-end=\"1899\"><li data-start=\"1819\" data-end=\"1860\"><p data-start=\"1821\" data-end=\"1860\">You gain <strong data-start=\"1830\" data-end=\"1860\">only passive Aura benefits</strong></p></li><li data-start=\"1861\" data-end=\"1879\"><p data-start=\"1863\" data-end=\"1879\">No backlash risk</p></li><li data-start=\"1880\" data-end=\"1899\"><p data-start=\"1882\" data-end=\"1899\">No forced effects</p></li></ul><p data-start=\"1901\" data-end=\"1926\">This is the <em data-start=\"1913\" data-end=\"1919\">safe</em> state.</p><hr data-start=\"1928\" data-end=\"1931\" /><h3 data-start=\"1933\" data-end=\"1962\">🔸 Burn 2–3 — <strong data-start=\"1951\" data-end=\"1962\">Engaged</strong></h3><p data-start=\"1963\" data-end=\"1998\">Your emotion is active and visible.</p><p data-start=\"2000\" data-end=\"2014\">At this state:</p><ul data-start=\"2015\" data-end=\"2143\"><li data-start=\"2015\" data-end=\"2061\"><p data-start=\"2017\" data-end=\"2061\">Your Aura unlocks <strong data-start=\"2035\" data-end=\"2061\">standard combat riders</strong></p></li><li data-start=\"2062\" data-end=\"2107\"><p data-start=\"2064\" data-end=\"2107\">Your abilities gain <strong data-start=\"2084\" data-end=\"2107\">explicit 5E effects</strong></p></li><li data-start=\"2108\" data-end=\"2143\"><p data-start=\"2110\" data-end=\"2143\">You may choose to <strong data-start=\"2128\" data-end=\"2143\">push harder</strong></p></li></ul><p data-start=\"2145\" data-end=\"2181\">This is the <em data-start=\"2157\" data-end=\"2180\">intended combat state</em>.</p><hr data-start=\"2183\" data-end=\"2186\" /><h3 data-start=\"2188\" data-end=\"2219\">🔥 Burn 4+ — <strong data-start=\"2205\" data-end=\"2219\">Overheated</strong></h3><p data-start=\"2220\" data-end=\"2260\">You are exceeding safe emotional limits.</p><p data-start=\"2262\" data-end=\"2276\">At this state:</p><ul data-start=\"2277\" data-end=\"2426\"><li data-start=\"2277\" data-end=\"2305\"><p data-start=\"2279\" data-end=\"2305\">Aura effects <strong data-start=\"2292\" data-end=\"2305\">intensify</strong></p></li><li data-start=\"2306\" data-end=\"2426\"><p data-start=\"2308\" data-end=\"2328\">GM is authorized to:</p><ul data-start=\"2331\" data-end=\"2426\"><li data-start=\"2331\" data-end=\"2349\"><p data-start=\"2333\" data-end=\"2349\">Trigger backlash</p></li><li data-start=\"2352\" data-end=\"2370\"><p data-start=\"2354\" data-end=\"2370\">Apply collateral</p></li><li data-start=\"2373\" data-end=\"2426\"><p data-start=\"2375\" data-end=\"2426\">Force Aura collapse on a bad roll or narrative beat</p></li></ul></li></ul><p data-start=\"2428\" data-end=\"2455\">This is the <em data-start=\"2440\" data-end=\"2454\">danger state</em>.</p><hr data-start=\"2457\" data-end=\"2460\" /><h2 data-start=\"2462\" data-end=\"2509\">🔥 What Happens at Backlash (Clear, Bounded)</h2><p data-start=\"2511\" data-end=\"2570\">When backlash triggers (GM discretion or subclass feature):</p><p data-start=\"2572\" data-end=\"2622\">One of the following occurs (GM chooses or rolls):</p><ul data-start=\"2623\" data-end=\"2819\"><li data-start=\"2623\" data-end=\"2659\"><p data-start=\"2625\" data-end=\"2659\">You take psychic or sephirotic damage (radiant)</p></li><li data-start=\"2660\" data-end=\"2713\"><p data-start=\"2662\" data-end=\"2713\">You suffer roll 3d10 keep lowest 2 on your next attack or save</p></li><li data-start=\"2714\" data-end=\"2756\"><p data-start=\"2716\" data-end=\"2756\">Your Aura collapses (you drop to Burn 0)</p></li><li data-start=\"2757\" data-end=\"2819\"><p data-start=\"2759\" data-end=\"2819\">A narrative consequence occurs (fear, escalation, attention)</p></li></ul><p data-start=\"2821\" data-end=\"2895\">Aurablades are not punished randomly.<br data-start=\"2858\" data-end=\"2861\" />They are punished <strong data-start=\"2879\" data-end=\"2894\">predictably</strong>.</p><hr data-start=\"2897\" data-end=\"2900\" /><h1 data-start=\"2902\" data-end=\"2948\">💠 AURA STATES — EXPLICIT MECHANICAL EFFECTS</h1><p data-start=\"2950\" data-end=\"2967\">Each Aura grants:</p><ul data-start=\"2968\" data-end=\"3047\"><li data-start=\"2968\" data-end=\"2990\"><p data-start=\"2970\" data-end=\"2990\">A <strong data-start=\"2972\" data-end=\"2990\">passive effect</strong></p></li><li data-start=\"2991\" data-end=\"3017\"><p data-start=\"2993\" data-end=\"3017\"><strong data-start=\"2993\" data-end=\"3017\">Engaged Burn effects</strong></p></li><li data-start=\"3018\" data-end=\"3047\"><p data-start=\"3020\" data-end=\"3047\"><strong data-start=\"3020\" data-end=\"3047\">Overheated Burn effects</strong></p></li></ul><p data-start=\"3049\" data-end=\"3109\">These are <strong data-start=\"3059\" data-end=\"3073\">not manifestations</strong>.<br data-start=\"3074\" data-end=\"3077\" />They are <strong data-start=\"3086\" data-end=\"3108\">combat permissions</strong>.</p><hr data-start=\"3111\" data-end=\"3114\" /><h2 data-start=\"3116\" data-end=\"3147\">🔥 FURY — Escalation &amp; Force</h2><p data-start=\"3149\" data-end=\"3186\"><strong data-start=\"3149\" data-end=\"3159\">Theme:</strong> Press harder. Break lines.</p><h3 data-start=\"3188\" data-end=\"3211\">Passive (Always On)</h3><ul data-start=\"3212\" data-end=\"3264\"><li data-start=\"3212\" data-end=\"3264\"><p data-start=\"3214\" data-end=\"3264\">+1 bonus to damage rolls with melee weapon attacks</p></li></ul><hr data-start=\"3266\" data-end=\"3269\" /><h3 data-start=\"3271\" data-end=\"3293\">Burn 2–3 (Engaged)</h3><p data-start=\"3294\" data-end=\"3327\">When you hit with a melee attack:</p><ul data-start=\"3328\" data-end=\"3445\"><li data-start=\"3328\" data-end=\"3349\"><p data-start=\"3330\" data-end=\"3349\">Deal <strong data-start=\"3335\" data-end=\"3349\">+tier damage</strong></p></li><li data-start=\"3350\" data-end=\"3445\"><p data-start=\"3352\" data-end=\"3445\">You may <strong data-start=\"3360\" data-end=\"3384\">push the target 1 square</strong> or <strong data-start=\"3388\" data-end=\"3398\">cleave</strong> a second creature within reach (once per turn)</p></li></ul><p data-start=\"3447\" data-end=\"3460\">You may also:</p><ul data-start=\"3461\" data-end=\"3505\"><li data-start=\"3461\" data-end=\"3505\"><p data-start=\"3463\" data-end=\"3505\">Ignore roll 3d10 keep lowest 2 on one attack per turn</p></li></ul><hr data-start=\"3507\" data-end=\"3510\" /><h3 data-start=\"3512\" data-end=\"3536\">Burn 4+ (Overheated)</h3><p data-start=\"3537\" data-end=\"3550\">When you hit:</p><ul data-start=\"3551\" data-end=\"3683\"><li data-start=\"3551\" data-end=\"3615\"><p data-start=\"3553\" data-end=\"3615\">Target must succeed on a Violence check or be <strong data-start=\"3598\" data-end=\"3615\">knocked prone</strong></p></li><li data-start=\"3616\" data-end=\"3683\"><p data-start=\"3618\" data-end=\"3683\">Your attacks <strong data-start=\"3631\" data-end=\"3649\">deny reactions</strong> until the start of your next turn</p></li></ul><p data-start=\"3685\" data-end=\"3693\">⚠️ Risk:</p><ul data-start=\"3694\" data-end=\"3739\"><li data-start=\"3694\" data-end=\"3739\"><p data-start=\"3696\" data-end=\"3739\">On a missed attack, GM may trigger backlash</p></li></ul><p data-start=\"3741\" data-end=\"3775\">Fury trades control for dominance.</p><hr data-start=\"3777\" data-end=\"3780\" /><h2 data-start=\"3782\" data-end=\"3815\">🛡 RESOLVE — Defense &amp; Refusal</h2><p data-start=\"3817\" data-end=\"3863\"><strong data-start=\"3817\" data-end=\"3827\">Theme:</strong> Stand firm. Make removal expensive.</p><h3 data-start=\"3865\" data-end=\"3888\">Passive (Always On)</h3><ul data-start=\"3889\" data-end=\"3940\"><li data-start=\"3889\" data-end=\"3940\"><p data-start=\"3891\" data-end=\"3940\">+1 bonus to Guard while you have not moved this turn</p></li></ul><hr data-start=\"3942\" data-end=\"3945\" /><h3 data-start=\"3947\" data-end=\"3969\">Burn 2–3 (Engaged)</h3><p data-start=\"3970\" data-end=\"3978\">You may:</p><ul data-start=\"3979\" data-end=\"4090\"><li data-start=\"3979\" data-end=\"4053\"><p data-start=\"3981\" data-end=\"4053\">Gain <strong data-start=\"3986\" data-end=\"4000\">resistance</strong> to one damage type until the start of your next turn</p></li><li data-start=\"4054\" data-end=\"4090\"><p data-start=\"4056\" data-end=\"4090\">Ignore forced movement up to 2 squares</p></li></ul><p data-start=\"4092\" data-end=\"4105\">Additionally:</p><ul data-start=\"4106\" data-end=\"4164\"><li data-start=\"4106\" data-end=\"4164\"><p data-start=\"4108\" data-end=\"4164\">Opportunity attacks against you are made at disadvantage</p></li></ul><hr data-start=\"4166\" data-end=\"4169\" /><h3 data-start=\"4171\" data-end=\"4195\">Burn 4+ (Overheated)</h3><p data-start=\"4196\" data-end=\"4204\">You may:</p><ul data-start=\"4205\" data-end=\"4340\"><li data-start=\"4205\" data-end=\"4287\"><p data-start=\"4207\" data-end=\"4287\">Automatically succeed on one Violence, Body, or Intrigue check per round</p></li><li data-start=\"4288\" data-end=\"4340\"><p data-start=\"4290\" data-end=\"4340\">Lock your position: enemies cannot move you at all</p></li></ul><p data-start=\"4342\" data-end=\"4350\">⚠️ Risk:</p><ul data-start=\"4351\" data-end=\"4401\"><li data-start=\"4351\" data-end=\"4401\"><p data-start=\"4353\" data-end=\"4401\">When damage is fully negated, backlash may occur</p></li></ul><p data-start=\"4403\" data-end=\"4441\">Resolve dares the world to try harder.</p><hr data-start=\"4443\" data-end=\"4446\" /><h2 data-start=\"4448\" data-end=\"4484\">🤍 MERCY — Protection &amp; Restraint</h2><p data-start=\"4486\" data-end=\"4525\"><strong data-start=\"4486\" data-end=\"4496\">Theme:</strong> Prevent loss. Redirect harm.</p><h3 data-start=\"4527\" data-end=\"4550\">Passive (Always On)</h3><ul data-start=\"4551\" data-end=\"4612\"><li data-start=\"4551\" data-end=\"4612\"><p data-start=\"4553\" data-end=\"4612\">You may choose to deal <strong data-start=\"4576\" data-end=\"4596\">nonlethal damage</strong> without penalty</p></li></ul><hr data-start=\"4614\" data-end=\"4617\" /><h3 data-start=\"4619\" data-end=\"4641\">Burn 2–3 (Engaged)</h3><p data-start=\"4642\" data-end=\"4697\">Once per round, when an ally within 2 squares takes damage:</p><ul data-start=\"4698\" data-end=\"4762\"><li data-start=\"4698\" data-end=\"4728\"><p data-start=\"4700\" data-end=\"4728\">Reduce that damage by <strong data-start=\"4722\" data-end=\"4728\">tier</strong></p></li><li data-start=\"4729\" data-end=\"4762\"><p data-start=\"4731\" data-end=\"4762\">You may redirect it to yourself</p></li></ul><p data-start=\"4764\" data-end=\"4777\">You may also:</p><ul data-start=\"4778\" data-end=\"4824\"><li data-start=\"4778\" data-end=\"4824\"><p data-start=\"4780\" data-end=\"4824\">Automatically stabilize a creature you touch</p></li></ul><hr data-start=\"4826\" data-end=\"4829\" /><h3 data-start=\"4831\" data-end=\"4855\">Burn 4+ (Overheated)</h3><p data-start=\"4856\" data-end=\"4864\">You may:</p><ul data-start=\"4865\" data-end=\"4969\"><li data-start=\"4865\" data-end=\"4924\"><p data-start=\"4867\" data-end=\"4924\">Prevent an ally from dropping below 1 Integrity (once per round)</p></li><li data-start=\"4925\" data-end=\"4969\"><p data-start=\"4927\" data-end=\"4969\">Convert a failed last stand check into a success</p></li></ul><p data-start=\"4971\" data-end=\"4979\">⚠️ Risk:</p><ul data-start=\"4980\" data-end=\"5036\"><li data-start=\"4980\" data-end=\"5036\"><p data-start=\"4982\" data-end=\"5036\">Preventing death may trigger backlash or Aura collapse</p></li></ul><p data-start=\"5038\" data-end=\"5089\">Mercy delays consequences — it does not erase them.</p><hr data-start=\"5091\" data-end=\"5094\" /><h2 data-start=\"5096\" data-end=\"5132\">🕳 DREAD — Suppression &amp; Collapse</h2><p data-start=\"5134\" data-end=\"5171\"><strong data-start=\"5134\" data-end=\"5144\">Theme:</strong> Remove hope. End momentum.</p><h3 data-start=\"5173\" data-end=\"5196\">Passive (Always On)</h3><ul data-start=\"5197\" data-end=\"5279\"><li data-start=\"5197\" data-end=\"5279\"><p data-start=\"5199\" data-end=\"5279\">Enemies within 1 square suffer roll 3d10 keep lowest 2 on morale-based checks (GM adjudication)</p></li></ul><hr data-start=\"5281\" data-end=\"5284\" /><h3 data-start=\"5286\" data-end=\"5308\">Burn 2–3 (Engaged)</h3><p data-start=\"5309\" data-end=\"5316\">On hit:</p><ul data-start=\"5317\" data-end=\"5418\"><li data-start=\"5317\" data-end=\"5387\"><p data-start=\"5319\" data-end=\"5387\">Target must save or be <strong data-start=\"5342\" data-end=\"5356\">Shaken</strong> until the end of its next turn</p></li><li data-start=\"5388\" data-end=\"5418\"><p data-start=\"5390\" data-end=\"5418\">Target cannot take reactions</p></li></ul><p data-start=\"5420\" data-end=\"5433\">You may also:</p><ul data-start=\"5434\" data-end=\"5493\"><li data-start=\"5434\" data-end=\"5493\"><p data-start=\"5436\" data-end=\"5493\">Suppress one buff or inspiration effect (GM adjudication)</p></li></ul><hr data-start=\"5495\" data-end=\"5498\" /><h3 data-start=\"5500\" data-end=\"5524\">Burn 4+ (Overheated)</h3><p data-start=\"5525\" data-end=\"5538\">When you hit:</p><ul data-start=\"5539\" data-end=\"5687\"><li data-start=\"5539\" data-end=\"5619\"><p data-start=\"5541\" data-end=\"5619\">Target suffers <strong data-start=\"5556\" data-end=\"5585\">roll 3d10 keep lowest 2 on all saves</strong> until the start of your next turn</p></li><li data-start=\"5620\" data-end=\"5687\"><p data-start=\"5622\" data-end=\"5687\">Nearby enemies must save or hesitate (lose movement or reactions)</p></li></ul><p data-start=\"5689\" data-end=\"5697\">⚠️ Risk:</p><ul data-start=\"5698\" data-end=\"5746\"><li data-start=\"5698\" data-end=\"5746\"><p data-start=\"5700\" data-end=\"5746\">Collateral fear or narrative fallout is likely</p></li></ul><p data-start=\"5748\" data-end=\"5796\">Dread does not kill bodies.<br data-start=\"5775\" data-end=\"5778\" />It kills <em data-start=\"5787\" data-end=\"5795\">belief</em>.</p><hr data-start=\"5798\" data-end=\"5801\" /><h1 data-start=\"5803\" data-end=\"5837\">🔄 Changing Aura (Explicit Rule)</h1><p data-start=\"5839\" data-end=\"5864\">You may change your Aura:</p><ul data-start=\"5865\" data-end=\"5930\"><li data-start=\"5865\" data-end=\"5888\"><p data-start=\"5867\" data-end=\"5888\">As a <strong data-start=\"5872\" data-end=\"5888\">bonus action</strong></p></li><li data-start=\"5889\" data-end=\"5930\"><p data-start=\"5891\" data-end=\"5930\">Or as part of a rest or narrative reset</p></li></ul><p data-start=\"5932\" data-end=\"5946\">Changing Aura:</p><ul data-start=\"5947\" data-end=\"6044\"><li data-start=\"5947\" data-end=\"5986\"><p data-start=\"5949\" data-end=\"5986\">Does <strong data-start=\"5954\" data-end=\"5961\">not</strong> clear Burn automatically</p></li><li data-start=\"5987\" data-end=\"6044\"><p data-start=\"5989\" data-end=\"6044\">May reduce Burn by 1 if done defensively or narratively</p></li></ul><p data-start=\"6046\" data-end=\"6099\">Frequent swapping = control<br data-start=\"6073\" data-end=\"6076\" />Deep commitment = power</p><hr data-start=\"6101\" data-end=\"6104\" /><h1 data-start=\"6106\" data-end=\"6151\">🧠 How Players Should Think About Aurablade</h1><p data-start=\"6153\" data-end=\"6177\">Ask yourself every turn:</p><ul data-start=\"6179\" data-end=\"6280\"><li data-start=\"6179\" data-end=\"6212\"><p data-start=\"6181\" data-end=\"6212\">“Do I escalate — or stabilize?”</p></li><li data-start=\"6213\" data-end=\"6243\"><p data-start=\"6215\" data-end=\"6243\">“Can I afford another Burn?”</p></li><li data-start=\"6244\" data-end=\"6280\"><p data-start=\"6246\" data-end=\"6280\">“What happens if this goes wrong?”</p></li></ul><p data-start=\"6282\" data-end=\"6315\">Aurablades are <strong data-start=\"6297\" data-end=\"6314\">not forgiving</strong>.</p><p data-start=\"6317\" data-end=\"6337\">They are <strong data-start=\"6326\" data-end=\"6336\">honest</strong>.</p><hr /><p><strong>Bad Eden Resource Actions:</strong> This patched class JSON grants Features-tab resource display/action items at level 1 for the runtime resource-action engine.</p>",
+          "chat": ""
+        },
+        "startingEquipment": [],
+        "levels": 1,
+        "advancement": [
+          {
+            "_id": "6jC9kzVPDsnnY3IO",
+            "type": "HitPoints",
+            "configuration": {},
+            "value": {},
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "He0NO4aGFw5ESuXk",
+            "type": "Subclass",
+            "configuration": {},
+            "value": {
+              "document": null,
+              "uuid": null
+            },
+            "level": 3,
+            "title": "",
+            "hint": "",
+            "flags": {}
+          },
+          {
+            "_id": "F3lztRY7YoQTqhXH",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 4,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "VaBQIzrvUak6vnUn",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 8,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "ZtZeyVymIuhlsKbT",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 12,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "HcvRmEV3DJJFFoH2",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 16,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "l8EtNSfONAPTWl0j",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 19,
+            "title": "",
+            "flags": {},
+            "hint": ""
+          },
+          {
+            "_id": "DrO6a8jlxI1GdgMP",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "saves:wis",
+                "saves:cha"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "defense check Proficiencies",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          {
+            "_id": "0CcvUuOYW5tRvu3o",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [],
+              "choices": [
+                {
+                  "count": 2,
+                  "pool": [
+                    "skills:acr",
+                    "skills:ath",
+                    "skills:ins",
+                    "skills:prc",
+                    "skills:itm"
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Skill Proficiencies",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          {
+            "_id": "grgBYWJqWmJFVlIS",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "armor:lgt"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Armor Proficiencies",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          {
+            "_id": "a9qA6e7011jFgmhB",
+            "type": "Trait",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "weapon:sim",
+                "weapon:mar"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "level": 1,
+            "title": "Weapon Proficiencies",
+            "hint": "",
+            "classRestriction": "primary",
+            "flags": {}
+          },
+          {
+            "_id": "l6TwG6MjmlLftERT",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.wgygFL4kFQvY7Y7R",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.BhlrJv0osQl3kJId",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.DbgJfsKa735tgoaL",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.SnNMVlFK9hAUbO5U",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.0HJDPkWxEvKLPZQG",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 1,
+            "title": "Aurablade Core Features"
+          }
+        ],
+        "spellcasting": {
+          "progression": "half",
+          "ability": "cha",
+          "preparation": {
+            "formula": "@cha.mod + floor(@classes.aurablade.levels/2)"
+          }
+        },
+        "primaryAbility": {
+          "value": [
+            "cha"
+          ],
+          "all": false
+        },
+        "hd": {
+          "denomination": "d8",
+          "spent": 0,
+          "additional": ""
+        },
+        "properties": [],
+        "wealth": ""
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "primary": "cha",
+          "burn": {
+            "range": {
+              "min": 0,
+              "max": 1
+            },
+            "delta": 1,
+            "_taggedBy": "bbttcc-burn-batch-tagger",
+            "_ts": 1770856290932,
+            "_from": "Aurablade"
+          }
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.V7fpwepCDoqUdT1O"
+        }
+      },
+      "folder": "dOGgswNkCqoX08ys",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.V7fpwepCDoqUdT1O",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "i0AKJ85lNRUmMoac",
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.i0AKJ85lNRUmMoac"
+    },
+    {
+      "name": "Oldenborn Heritage: Lumenwrought",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Ember_Lumenwrought_3.png",
+      "system": {
+        "category": "heritage",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Oldenborn Heritage.</strong> The branch that lit up from inside. Festival-spirit, glamour-spirit, the ancestor that taught the people to call something beautiful before they had a word for sacred.</p><p><em>“The world remembered old names. You answered—and you were lit by the answering.”</em></p><p><strong>Lumenwrought.</strong> You are the place-soul that learned to wear a mask of light. Folks call you elf, sylph, faerie, depending on what scares them prettier than it scares them honestly. You are the first reason a candle is holy.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Fey).</p></li><li><p><strong>Size.</strong> Medium.</p></li><li><p><strong>Lineage Lean.</strong> Your lineage leans toward <strong>PRE (Presence)</strong>—expressed primarily through Tier powers.</p></li><li><p><strong>Glamourcast.</strong> You can shed dim light in a 1 square radius at will, and snuff it out the same way. Your light is the colour of one specific moment in your past—the GM and you decide which.</p></li></ul>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "oldnlumenad0001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.VCDspGrzcx0FkfEj",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Lumenwrought Tier I",
+            "hint": "Gain your Lumenwrought Tier I lineage power (Glamourfield)."
+          }
+        ],
+        "identifier": "oldenborn_lumenwrought_heritage",
+        "requirements": "Oldenborn",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "oldenborn",
+          "lineage": "Lumenwrought",
+          "version": "2.0.0",
+          "date": "2026-04-18"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.oldnlumenwrght01"
+        }
+      },
+      "folder": "8lnQFXfSvlVrEqA2",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.oldnlumenwrght01",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 150000,
+      "_id": "9tsO2JUCojo3pDaL",
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.9tsO2JUCojo3pDaL"
+    },
+    {
+      "name": "Aurablade: Burn State",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_3.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Burn</strong> is a state track, not a die pool. This is your display item for current Burn, current Aura, and current band on the Features tab.</p><p><strong>Bands:</strong> 0–1 Controlled, 2–3 Engaged, 4+ Overheated.</p>",
+          "chat": ""
+        },
+        "identifier": "aurablade_burn_state",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "aurablade_burn_state",
+          "resourceAction": false,
+          "resourceDisplay": true,
+          "engine": "stateTrack",
+          "classId": "aurablade",
+          "track": "burn"
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.BhlrJv0osQl3kJId"
+        }
+      },
+      "folder": "jzZQust69VtMPSOe",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.BhlrJv0osQl3kJId",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 300000,
+      "_id": "EnIWQtnvKQycqjEe",
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.EnIWQtnvKQycqjEe"
+    },
+    {
+      "name": "Aurablade Action",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p>Open the Aurablade action dialog. Available options depend on your current <strong>Aura</strong> and <strong>Burn</strong> band.</p><p>This item should present only currently legal options for Fury, Resolve, Mercy, or Dread.</p>",
+          "chat": ""
+        },
+        "identifier": "aurablade_action",
+        "advancement": {},
+        "activities": {
+          "primary": {
+            "type": "utility",
+            "name": "Aurablade Action",
+            "activation": {
+              "type": "action",
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "units": "inst",
+              "value": "",
+              "concentration": false,
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "units": "self",
+              "value": "",
+              "override": false
+            },
+            "target": {
+              "affects": {
+                "type": "self",
+                "choice": false
+              },
+              "template": {
+                "count": "",
+                "units": "ft",
+                "type": "",
+                "contiguous": false,
+                "stationary": false
+              },
+              "override": false,
+              "prompt": true
+            },
+            "uses": {
+              "max": "",
+              "spent": 0,
+              "recovery": []
+            },
+            "_id": "Q2IIN89y5X0UUjfT",
+            "img": null,
+            "sort": 0,
+            "flags": {},
+            "visibility": {
+              "level": {},
+              "requireAttunement": false,
+              "requireIdentification": false,
+              "requireMagic": false
+            },
+            "roll": {
+              "prompt": false,
+              "visible": false
+            }
+          }
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "aurablade_action",
+          "resourceAction": true,
+          "resourceDisplay": false,
+          "engine": "stateTrack",
+          "classId": "aurablade",
+          "track": "burn",
+          "actionKey": "aurablade_action",
+          "opensDialog": "aurablade_burn"
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.wgygFL4kFQvY7Y7R"
+        }
+      },
+      "folder": "jzZQust69VtMPSOe",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.wgygFL4kFQvY7Y7R",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 200000,
+      "_id": "0BzlNsL80omE3lyq",
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.0BzlNsL80omE3lyq"
+    },
+    {
+      "name": "Aurablade: Change Aura",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p>Open the <strong>Change Aura</strong> dialog and switch between Fury, Resolve, Mercy, and Dread.</p>",
+          "chat": ""
+        },
+        "identifier": "aurablade_change_aura",
+        "advancement": {},
+        "activities": {
+          "primary": {
+            "type": "utility",
+            "name": "Aurablade: Change Aura",
+            "activation": {
+              "type": "bonus",
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "units": "inst",
+              "value": "",
+              "concentration": false,
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "units": "self",
+              "value": "",
+              "override": false
+            },
+            "target": {
+              "affects": {
+                "type": "self",
+                "choice": false
+              },
+              "template": {
+                "count": "",
+                "units": "ft",
+                "type": "",
+                "contiguous": false,
+                "stationary": false
+              },
+              "override": false,
+              "prompt": true
+            },
+            "uses": {
+              "max": "",
+              "spent": 0,
+              "recovery": []
+            },
+            "_id": "B0tV8NOxwlpEz96x",
+            "img": null,
+            "sort": 0,
+            "flags": {},
+            "visibility": {
+              "level": {},
+              "requireAttunement": false,
+              "requireIdentification": false,
+              "requireMagic": false
+            },
+            "roll": {
+              "prompt": false,
+              "visible": false
+            }
+          }
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "aurablade_change_aura",
+          "resourceAction": true,
+          "resourceDisplay": false,
+          "engine": "stateTrack",
+          "classId": "aurablade",
+          "track": "burn",
+          "actionKey": "aurablade_change_aura",
+          "opensDialog": "aurablade_change_aura"
+        },
+        "autoanimations": {
+          "id": "f9c16a11-ed0e-46e7-817a-54fe06682164",
+          "label": "Aurablade: Change Aura",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "yellowwhite",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.DbgJfsKa735tgoaL"
+        }
+      },
+      "folder": "jzZQust69VtMPSOe",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.DbgJfsKa735tgoaL",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 400000,
+      "_id": "bp5FWUfuKLstqaCd",
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.bp5FWUfuKLstqaCd"
+    },
+    {
+      "name": "Aurablade: Core Features",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bellows_2.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>“Emotion sharpens faster than steel.”</em></p><p><strong>Aura States</strong> (Fury, Resolve, Mercy, Dread) shape a luminous blade. Spending power builds <strong>Burn</strong>; at high Burn you gain potency and risk backlash.</p>",
+          "chat": ""
+        },
+        "identifier": "aurablade_core_features",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "aurablade_core_features"
+        },
+        "autoanimations": {
+          "id": "7ccb09bf-9c2e-4fe5-8e06-91de239caa1b",
+          "label": "Aurablade: Core Features",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "divinesmite",
+              "variant": "source",
+              "color": "yellowwhite",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.SnNMVlFK9hAUbO5U"
+        }
+      },
+      "folder": "jzZQust69VtMPSOe",
+      "sort": 100000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.SnNMVlFK9hAUbO5U",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_id": "qaPFy8TDHKmqQaFv",
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.qaPFy8TDHKmqQaFv"
+    },
+    {
+      "name": "Aurablade: Stabilize Burn",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_escape.png.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p>Open the <strong>Stabilize Burn</strong> dialog and reduce, clear, or safely manage Burn according to class/subclass rules.</p>",
+          "chat": ""
+        },
+        "identifier": "aurablade_stabilize_burn",
+        "advancement": {},
+        "activities": {
+          "primary": {
+            "type": "utility",
+            "name": "Aurablade: Stabilize Burn",
+            "activation": {
+              "type": "bonus",
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "units": "inst",
+              "value": "",
+              "concentration": false,
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "units": "self",
+              "value": "",
+              "override": false
+            },
+            "target": {
+              "affects": {
+                "type": "self",
+                "choice": false
+              },
+              "template": {
+                "count": "",
+                "units": "ft",
+                "type": "",
+                "contiguous": false,
+                "stationary": false
+              },
+              "override": false,
+              "prompt": true
+            },
+            "uses": {
+              "max": "",
+              "spent": 0,
+              "recovery": []
+            },
+            "_id": "OdmQ847e0z2puskL",
+            "img": null,
+            "sort": 0,
+            "flags": {},
+            "visibility": {
+              "level": {},
+              "requireAttunement": false,
+              "requireIdentification": false,
+              "requireMagic": false
+            },
+            "roll": {
+              "prompt": false,
+              "visible": false
+            }
+          }
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "aurablade_stabilize_burn",
+          "resourceAction": true,
+          "resourceDisplay": false,
+          "engine": "stateTrack",
+          "classId": "aurablade",
+          "track": "burn",
+          "actionKey": "aurablade_stabilize_burn",
+          "opensDialog": "aurablade_stabilize_burn"
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.0HJDPkWxEvKLPZQG"
+        }
+      },
+      "folder": "jzZQust69VtMPSOe",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.0HJDPkWxEvKLPZQG",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 275000,
+      "_id": "tjuzNDtQie3j1ySy",
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.tjuzNDtQie3j1ySy"
+    },
+    {
+      "name": "Void Edge (Bad Eden)",
+      "type": "subclass",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_void_edge_1.png",
+      "system": {
+        "category": "doctrine",
+        "classIdentifier": "aurablade",
+        "source": {
+          "custom": "Bad Eden Originals — Sprint F",
+          "revision": 1,
+          "rules": "2026"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>Entropy has a shape. I cut along it.</em></p>\n<p><strong>Mode:</strong> Edge-walker · <strong>Drift:</strong> Sideways</p>\n<p>Void Edge Aurablades cut along the seams of decay. The doctrine suppresses what enemies rely on — buffs, advantage, morale — and propagates dread into the spaces between people. Played as the operative whose presence makes hope harder to organize.</p>\n<h3>Doctrine Features</h3>\n<ul>\n  <li><strong>Level 3 — Null Field.</strong> Your blade suppresses advantage. When you hit at Burn 1+, suppress one of the following until the end of the target's next turn: reroll-lowest on attacks, bonus damage, or morale/inspiration effects. At Burn 3+ the target also loses one reaction.</li>\n  <li><strong>Level 6 — Silence of Will.</strong> You break focus. Targets you hit roll 3d10 keep lowest 2 on Clarity hold checks and cannot benefit from rallying or command effects. At Burn 3+, failing a Clarity hold also causes Burn-like fatigue (GM narrative).</li>\n  <li><strong>Level 10 — Dread Cut.</strong> Fear propagates. When you hit at Burn 2+, the target saves or is Shaken; nearby enemies save or suffer hesitation (lose movement or reactions). At Burn 4+ fear spreads automatically to one additional creature.</li>\n  <li><strong>Level 14 — Emotional Erasure.</strong> Once per round when you hit, remove one beneficial emotional, morale, or inspiration effect from the target. Bypasses resistance tied to hope or courage. At Burn 4+ the effect cannot be reapplied for 1 round.</li>\n  <li><strong>Level 18 — Final Quiet (Capstone).</strong> Once per Soma Break, create a 6 squares zone for 1 minute: morale cannot rise, inspiration fails, hope/unity/courage buffs do not apply, enemies roll 3d10 keep lowest 2 on checks vs fear. Afterward your Burn drops to 0.</li>\n</ul>",
+          "chat": ""
+        },
+        "identifier": "bbttcc-aurablade-void-edge",
+        "advancement": [],
+        "spellcasting": {
+          "progression": "none",
+          "preparation": {}
+        }
+      },
+      "effects": [],
+      "folder": "640HHePTVNcMB98C",
+      "flags": {
+        "fourththing": {
+          "principleSource": "subclass"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.xg0RIGmaeS99TPNx"
+        }
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 300000,
+      "_stats": {
+        "systemId": "fourththing",
+        "coreVersion": "14.367",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.1",
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.xg0RIGmaeS99TPNx",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "Sg3zpUD94fD7Klgb",
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.Sg3zpUD94fD7Klgb"
+    },
+    {
+      "name": "Archetype: Judgment (Reckoner)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_judgement.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You are called. You will answer.”</em></p><p><strong>Archetype (Bad Eden): Judgment (Reckoner).</strong> You are final account, exposure, and the terrifying moment when evasion ends. You force consequences to arrive on time.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens revelation, decisive resolution, and moral or violent finality. This Archetype is associated with <strong>+1 Violence</strong> and <strong>+1 Faith</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {
+          "gVyCMxVu4ADevgyw": {
+            "_id": "gVyCMxVu4ADevgyw",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 3,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 1,
+            "title": "Archetype Ability Scores",
+            "hint": "Gain 3 ability score points (max +2 to any one score). See the Archetype text for recommended arrays.",
+            "flags": {}
+          }
+        },
+        "identifier": "archetype-judgment",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "1Q3rl5RJCkpByKSo",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "character-archetypes",
+          "bonuses": {
+            "faith": 1,
+            "violence": 1
+          },
+          "option": {
+            "category": "archetype",
+            "key": "judgment",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:judgment",
+              "bbttcc:expression:reckoner",
+              "bbttcc:base"
+            ]
+          }
+        },
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.aSZ5n8KZO9rexXY8",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "QlfwJWVuU5ajZe07",
+      "sort": 100000,
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.QlfwJWVuU5ajZe07"
+    },
+    {
+      "name": "Crew Type: Covert Ops Cell",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 2,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Crew Type (Bad Eden): Covert Ops Cell.</em></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Stealth and with the Tinkering aptitude.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "crew-covert-ops-cell",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "s5WL7k82FGQGsYdL",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "intrigue": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "covert-ops-cell",
+            "progressionType": "level",
+            "domains": [
+              "op",
+              "intel",
+              "infiltration"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:covert-ops-cell",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:domain:intel",
+              "bbttcc:domain:infiltration",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:intrigue:+8",
+              "bbttcc:theme:stealth",
+              "bbttcc:theme:subterfuge",
+              "bbttcc:theme:infiltration",
+              "bbttcc:theme:denial"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Item.Le37yVgfouPCBahg",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.Le37yVgfouPCBahg",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "Z1HqQmsXa5eNu1Me",
+      "sort": 100000,
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.Z1HqQmsXa5eNu1Me"
+    },
+    {
+      "name": "Alignment: Geburah",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "Judgment - Necessary force. +1 Violence, +1 Logistics OPs\n\nGeburah draws the line. It rewards discipline, enforcement, and decisive action against fortified problems, but always risks becoming cruelty if severity outruns wisdom.",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "alignment-geburah",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sword_1.png",
+      "effects": [],
+      "folder": "RAOWJYon3t34M5XY",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "violence": 1,
+            "logistics": 1
+          },
+          "option": {}
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.dlAJf2LhJ540QdTn",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.cKJbvIdeHnFrBJvq",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "1Mj6B7vEztLPrZNB",
+      "sort": 400000,
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.1Mj6B7vEztLPrZNB"
+    },
+    {
+      "name": "Occult Association: Shaman",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Occult Association (Bad Eden): Shaman.</em></p><p><strong>“You don’t fix the world. You listen to what it’s trying to become.”</strong></p><p>Shamans do not impose order. They enter into relationship.</p><p>To a Shaman, the Great Work is not about forcing alignment onto a dead world. It is about hearing the pulse that is still there and deciding whether to protect it, guide it, or stand aside long enough for it to speak clearly. Every Hex is alive in some way. Every leyline has mood. Every storm is making a decision. Every spirit remembers who treated the land like a partner and who treated it like inventory.</p><p>Where Kabbalists map structure and Alchemists force conversion, Shamans work by <strong>attunement</strong>. They negotiate with terrain, weather, spirits, and flow-states that existed before factions learned to count OP.</p><p><strong>How Shamans pursue the Great Work:</strong></p><ul><li>By listening to terrain, weather, and spirit pressure</li><li>By stabilizing living systems instead of extracting from them</li><li>By redirecting corruption rather than merely containing it</li><li>By treating Hexes as relationships, not assets</li></ul><p><strong>Resonance:</strong> <strong>Netzach / Living Flow</strong> — endurance, ecology, instinctive continuity, and the intelligence of systems nobody designed.</p><p><strong>Tell-tales:</strong> mud where there should not be mud, animals that stop running, weather that feels briefly conversational.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 specialty edge on relevant terrain, travel, weather, or wilderness-facing OP rolls</strong> (GM adjudicates the exact OP lane)</li></ul><p><strong>Cost Principle:</strong> attunement creates obligation. The more the land speaks to you, the less you can pretend not to hear it. Expect spirit attention, place-based duty, and backlash when your faction acts against the needs of a living Hex.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "identifier": "occult-association-shaman",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "shaman",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:shaman",
+              "bbttcc:base",
+              "bbttcc:domain:leylines",
+              "bbttcc:domain:terrain",
+              "bbttcc:domain:weather",
+              "bbttcc:domain:spirits",
+              "bbttcc:scope:hex",
+              "bbttcc:scope:faction",
+              "bbttcc:when:passive",
+              "bbttcc:effect:op_roll:wilderness-facing:+1",
+              "bbttcc:resonance:netzach",
+              "bbttcc:drift:communal-ecological",
+              "bbttcc:cost:obligation",
+              "bbttcc:cost:spirit-attention",
+              "bbttcc:theme:living-systems",
+              "bbttcc:theme:attunement"
+            ]
+          }
+        }
+      },
+      "effects": [],
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "folder": "uflkacBlUmYFCAbz",
+      "_stats": {
+        "compendiumSource": "Item.J2ZdE3vlyEO8rd4l",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.J2ZdE3vlyEO8rd4l",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "FQLd2lapd1TKEAWr",
+      "sort": 100000,
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.FQLd2lapd1TKEAWr"
+    },
+    {
+      "name": "Archetype: Judgment (Reckoner) (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_judgement.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden – Archetype: Judgment (Reckoner) (Tier 1)",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 (Level 1) — Judgment (Reckoner)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Faith and Intimidation.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "archetype-judgment-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Level 1+",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "name": "Archetype Tier 1 Proficiencies",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_akashik_record_1.png",
+          "_id": "cywuprjoGpBtHCeU",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.faith.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.intimidation.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1787799236996,
+            "modifiedTime": 1787799236996
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!zu2mcj4USN0AwjFZ.oxUqs4YcTO8wKhT9.cywuprjoGpBtHCeU"
+        }
+      ],
+      "folder": "1Q3rl5RJCkpByKSo",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "judgment",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:judgment",
+              "bbttcc:expression:reckoner",
+              "bbttcc:tier:1",
+              "bbttcc:faith_op_cap:+1",
+              "bbttcc:violence_op_cap:+1"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.xcudtl1l3syXmUpR",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "oxUqs4YcTO8wKhT9",
+      "sort": 200000,
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.oxUqs4YcTO8wKhT9"
+    },
+    {
+      "name": "Crew Type: Covert Ops Cell (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_3.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden – Crew Type: Covert Ops Cell (Tier 1)",
+          "revision": 2,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Covert Ops Cell</strong></p><p><strong>“If you saw it happen, it wasn’t us.”</strong></p><p>Covert Ops cells make wars quiet. They prefer locks to speeches, shadows to banners, and results to credit. They don’t start fights—they rearrange the board so the fight never happens.</p><p><em>You’re learning the shape of your shadow. Expect mistakes. Budget for them.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Stealth and with the Tinkering aptitude.</li><li><strong>Strategic:</strong> Your faction starts with +1 Intrigue OPs.</li></ul>",
+          "chat": ""
+        },
+        "identifier": "crew-covert-ops-cell-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "requirements": "Level 1+",
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        }
+      },
+      "effects": [
+        {
+          "_id": "cea1f8081551430c",
+          "name": "Covert Ops Cell T1 Skills",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_atom_1.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.stealth.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "dnd5e": {
+              "riders": {
+                "statuses": []
+              }
+            }
+          },
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1787799236996,
+            "modifiedTime": 1787799236996
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!zu2mcj4USN0AwjFZ.8EDlmI6XOwxRA9OL.cea1f8081551430c"
+        }
+      ],
+      "folder": "s5WL7k82FGQGsYdL",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "covert-ops-cell",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "op",
+              "intel",
+              "infiltration"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:covert-ops-cell",
+              "bbttcc:tier:1",
+              "bbttcc:domain:op",
+              "bbttcc:domain:intel",
+              "bbttcc:domain:infiltration",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:intrigue:+8",
+              "bbttcc:effect:intel:stealth_baseline:true",
+              "bbttcc:effect:infiltration:tools_access:thieves_tools",
+              "bbttcc:theme:stealth",
+              "bbttcc:theme:subterfuge",
+              "bbttcc:theme:infiltration",
+              "bbttcc:theme:denial"
+            ]
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Item.YHMatZ2Z3Kiaxxbz",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.YHMatZ2Z3Kiaxxbz",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "8EDlmI6XOwxRA9OL",
+      "sort": 0,
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.8EDlmI6XOwxRA9OL"
+    },
+    {
+      "name": "Occult Association: Shaman (Tier 1)",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Shaman</strong></p><p><strong>“It was talking before. You just couldn’t hear it yet.”</strong></p><p>At Tier 1, you become perceptible to the world and the world becomes perceptible to you.</p><p>You can feel when a place is hungry, when a storm is about to turn mean, and when a Hex is carrying more pressure than its surface suggests. You are not commanding Lore yet. You are learning its tone.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Lore</strong> and <strong>Athletics</strong></li><li>You can perform a brief attunement to sense whether a nearby area is spiritually calm, distressed, corrupted, or unusually resonant</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li><strong>Hex Attunement:</strong> upon entering a new Hex, you learn one of the following about it: dominant flow-state, unusual weather pressure, leyline disturbance, or corruption presence</li><li>Once per Strategic Turn, gain <strong>+1</strong> to one relevant travel, terrain, or wilderness-facing OP roll</li></ul><p><strong>Cost:</strong> once the world starts speaking to you, silence gets rare. Expect distraction, omen pressure, or spirit agitation when your faction ignores what a place is telling you.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"shamT1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Hex Attunement</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Strategic Turn &nbsp;·&nbsp; <strong>Action:</strong> Strategic &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">+1 to one travel/terrain/wilderness OP roll. (On-entry hex read is passive.)</div>\n</div>",
+          "chat": ""
+        },
+        "advancement": {},
+        "requirements": "Level 1+",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": "1"
+        },
+        "identifier": "occult-association-shaman-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "shaman",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:shaman",
+              "bbttcc:tier:1",
+              "bbttcc:domain:terrain",
+              "bbttcc:domain:weather",
+              "bbttcc:domain:spirits",
+              "bbttcc:scope:self",
+              "bbttcc:scope:hex",
+              "bbttcc:scope:faction",
+              "bbttcc:when:hex_entry",
+              "bbttcc:when:strategic_turn:once",
+              "bbttcc:effect:proficiency:nature",
+              "bbttcc:effect:proficiency:survival",
+              "bbttcc:effect:sense:hex_pressure",
+              "bbttcc:effect:op_roll:wilderness-facing:+2",
+              "bbttcc:resonance:netzach",
+              "bbttcc:drift:communal-ecological",
+              "bbttcc:cost:omen-pressure",
+              "bbttcc:cost:spirit-agitation",
+              "bbttcc:theme:first-attunement",
+              "bbttcc:theme:hex-listening"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        },
+        "autoanimations": {
+          "id": "448546fe-93b7-477e-97a8-e668b090142c",
+          "label": "Occult Association: Shaman (Tier 1)",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "intro",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "effects": [
+        {
+          "name": "Occult Tier1 Proficiencies",
+          "disabled": false,
+          "transfer": true,
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bellows_1.png",
+          "_id": "shamanTier1Profs",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.lore.value",
+                "type": "add",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.athletics.value",
+                "type": "add",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1787799236996,
+            "modifiedTime": 1787799236996
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!zu2mcj4USN0AwjFZ.TTkx8udOzGkw6TXa.shamanTier1Profs"
+        }
+      ],
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_tree_2.png",
+      "folder": "uflkacBlUmYFCAbz",
+      "_stats": {
+        "compendiumSource": "Item.9xPomIywcV4tmO86",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.9xPomIywcV4tmO86",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "TTkx8udOzGkw6TXa",
+      "sort": 0,
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.TTkx8udOzGkw6TXa"
+    },
+    {
+      "name": "Foam Finger (Structural)",
+      "type": "armor",
+      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/foam_finger_1.png",
+      "system": {
+        "guardBonus": 1,
+        "evasionBonus": 0,
+        "resolveBonus": 1,
+        "resistances": [
+          "kinetic"
+        ],
+        "armorSkill": "fitting",
+        "equipped": false,
+        "tags": [
+          "mal-voiced",
+          "shield",
+          "foam"
+        ],
+        "category": "armor",
+        "source": "",
+        "description": {
+          "value": "<p>A pre-Fall sports memorabilia foam finger. Faded blue. Slightly chewed at the base. Through some combination of polymer chemistry, nostalgia, and the structural ambitions of post-apocalyptic salvage, it is now load-bearing. Use it like a buckler. Wave it for morale. Both, on a good day.</p><p><strong>Structural Foam.</strong> Counts as a buckler — +1 Guard while equipped in the off-hand. Once per scene, when you would take damage from a non-magical projectile, the foam absorbs the hit completely. The finger is not visibly damaged. The finger is, however, a little slower to wave.</p>",
+          "chat": ""
+        },
+        "quantity": 1
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "footprint": 1,
+              "reach": "self",
+              "frame": "shield",
+              "signature": "WE'RE #1. The crowd has dispersed. The finger has not.",
+              "origin": "vendor",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>A pre-Fall sports memorabilia foam finger. Faded blue. Slightly chewed at the base. Through some combination of polymer chemistry, nostalgia, and the structural ambitions of post-apocalyptic salvage, it is now load-bearing. Use it like a buckler. Wave it for morale. Both, on a good day.</p><p><b>Structural Foam.</b> Counts as a buckler — +1 Guard while equipped in the off-hand. Once per scene, when you would take damage from a non-magical projectile, the foam absorbs the hit completely. The finger is not visibly damaged. The finger is, however, a little slower to wave.</p>",
+              "materialOf": [
+                "expanded-polyurethane",
+                "team-spirit",
+                "physics-violation"
+              ],
+              "price": {
+                "marks": 50,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI shield stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        }
+      },
+      "folder": "Wxh1A343inwTUeoo",
+      "effects": [
+        {
+          "name": "⚙️ Defense Grant",
+          "transfer": false,
+          "disabled": false,
+          "flags": {
+            "fourththing": {
+              "defenseGrant": true
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "flags.fourththing.grant.guard",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.resolve",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "AR5ZzN45HPfUGvQQ",
+          "img": "icons/svg/aura.svg",
+          "type": "base",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "createdTime": 1787799236996,
+            "modifiedTime": 1787799236996,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!zu2mcj4USN0AwjFZ.3ctRm3Y5OSIXU8xX.AR5ZzN45HPfUGvQQ"
+        }
+      ],
+      "sort": 625000,
+      "ownership": {
+        "default": 0,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "3ctRm3Y5OSIXU8xX",
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.3ctRm3Y5OSIXU8xX"
+    },
+    {
+      "name": "Pre-Shattering Concert T-Shirt (XL)",
+      "type": "armor",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/pre_shattering_concert_t.png",
+      "system": {
+        "guardBonus": 0,
+        "evasionBonus": 0,
+        "resolveBonus": 1,
+        "resistances": [],
+        "armorSkill": "fitting",
+        "equipped": false,
+        "tags": [
+          "mal-voiced",
+          "vestment",
+          "pre-fall"
+        ],
+        "category": "armor",
+        "source": "",
+        "description": {
+          "value": "<p>Faded black cotton, unreasonably soft from a thousand washes, sized XL regardless of who's wearing it. The graphic is a band logo and tour list, both indistinct. Cities and dates the world no longer keeps. Wearers consistently describe the same vague dream — a stadium, a lighter held aloft, a single sustained chord — and consistently fail to remember it past breakfast.</p><p><strong>Tour Memory.</strong> +1 to Resolve. While worn, you do not gain Stress from being homesick, lost, or out of your element. The shirt has been to bigger venues than this one. The shirt is unimpressed.</p>",
+          "chat": ""
+        },
+        "quantity": 1
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "footprint": 1,
+              "reach": "self",
+              "frame": "vestment",
+              "signature": "The band name is unreadable. Wearers report dreams they can't quite remember. Probably a cool tour.",
+              "origin": "vendor",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>Faded black cotton, unreasonably soft from a thousand washes, sized XL regardless of who's wearing it. The graphic is a band logo and tour list, both indistinct. Cities and dates the world no longer keeps. Wearers consistently describe the same vague dream — a stadium, a lighter held aloft, a single sustained chord — and consistently fail to remember it past breakfast.</p><p><b>Tour Memory.</b> +1 to Resolve. While worn, you do not gain Stress from being homesick, lost, or out of your element. The shirt has been to bigger venues than this one. The shirt is unimpressed.</p>",
+              "materialOf": [
+                "pre-fall-cotton",
+                "stadium-memory",
+                "indistinct-rebellion"
+              ],
+              "price": {
+                "marks": 50,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI vestment stamp",
+                "bound": "free",
+                "saleBack": 20
+              }
+            }
+          }
+        }
+      },
+      "folder": "Wxh1A343inwTUeoo",
+      "effects": [
+        {
+          "name": "⚙️ Defense Grant",
+          "transfer": false,
+          "disabled": false,
+          "flags": {
+            "fourththing": {
+              "defenseGrant": true
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "flags.fourththing.grant.resolve",
+                "value": 1,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "DtuX8b0Uuxg2z5yK",
+          "img": "icons/svg/aura.svg",
+          "type": "base",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "createdTime": 1787799236996,
+            "modifiedTime": 1787799236996,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!zu2mcj4USN0AwjFZ.qSkXKi8MpRoAqq1F.DtuX8b0Uuxg2z5yK"
+        }
+      ],
+      "sort": 603125,
+      "ownership": {
+        "default": 0,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "qSkXKi8MpRoAqq1F",
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.qSkXKi8MpRoAqq1F"
+    },
+    {
+      "name": "Scarf That Was a Cat (Probably)",
+      "type": "armor",
+      "img": "art/bbttcc/GOTTGAIT/Items%20and%20Gear/cat_scarf2.png",
+      "system": {
+        "guardBonus": 0,
+        "evasionBonus": 0,
+        "resolveBonus": 2,
+        "resistances": [
+          "psychic"
+        ],
+        "armorSkill": "bracing",
+        "equipped": false,
+        "tags": [
+          "mal-voiced",
+          "vestment",
+          "companion"
+        ],
+        "category": "armor",
+        "source": "",
+        "description": {
+          "value": "<p>An unreasonably long woolen scarf, two-tone gray, that occasionally shifts position on its own. Sometimes it tightens against the neck on a cold night. Sometimes it falls off your shoulder for no reason. Sometimes, very quietly, when you are alone in a room, it purrs. The previous owner left it to you. The previous owner was very specific that this was a kindness.</p><p><strong>Companion-Texture.</strong> +1 to Resolve while worn. Once per scene, when you would gain a Stress, you may pet the scarf instead. The Stress is averted. The scarf purrs faintly for a few seconds. Allies notice. Allies do not comment.</p>",
+          "chat": ""
+        },
+        "quantity": 1
+      },
+      "flags": {
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "I",
+              "footprint": 1,
+              "reach": "self",
+              "frame": "vestment",
+              "signature": "Long. Soft. Occasionally purrs. The previous owner swears it was a cat. You believe them.",
+              "origin": "vendor",
+              "originator": null,
+              "bound": "attuned",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {},
+              "lore": "<p>An unreasonably long woolen scarf, two-tone gray, that occasionally shifts position on its own. Sometimes it tightens against the neck on a cold night. Sometimes it falls off your shoulder for no reason. Sometimes, very quietly, when you are alone in a room, it purrs. The previous owner left it to you. The previous owner was very specific that this was a kindness.</p><p><b>Companion-Texture.</b> +1 to Resolve while worn. Once per scene, when you would gain a Stress, you may pet the scarf instead. The Stress is averted. The scarf purrs faintly for a few seconds. Allies notice. Allies do not comment.</p>",
+              "materialOf": [
+                "wool",
+                "memory",
+                "small-affection"
+              ],
+              "grants": {
+                "resistances": [
+                  "psychic"
+                ]
+              },
+              "price": {
+                "marks": 50,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI vestment stamp",
+                "bound": "attuned",
+                "saleBack": 20
+              }
+            }
+          }
+        }
+      },
+      "folder": "Wxh1A343inwTUeoo",
+      "effects": [
+        {
+          "name": "⚙️ Defense Grant",
+          "transfer": false,
+          "disabled": false,
+          "flags": {
+            "fourththing": {
+              "defenseGrant": true
+            }
+          },
+          "system": {
+            "changes": [
+              {
+                "key": "flags.fourththing.grant.resists",
+                "value": "psychic",
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              },
+              {
+                "key": "flags.fourththing.grant.resolve",
+                "value": 2,
+                "priority": 20,
+                "type": "add",
+                "phase": "initial"
+              }
+            ]
+          },
+          "_id": "PKER32L5s6sa7a4d",
+          "img": "icons/svg/aura.svg",
+          "type": "base",
+          "start": null,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "showIcon": 1,
+          "folder": null,
+          "sort": 0,
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "createdTime": 1787799236996,
+            "modifiedTime": 1787799236996,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!zu2mcj4USN0AwjFZ.fQBeJpmeruwJHoss.PKER32L5s6sa7a4d"
+        }
+      ],
+      "sort": 601563,
+      "ownership": {
+        "default": 0,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "fQBeJpmeruwJHoss",
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.fQBeJpmeruwJHoss"
+    },
+    {
+      "folder": "H6eMhWQrjwcwZcBi",
+      "name": "Frikkin' Laser Blade Saber",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_aurablade_2.png",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "1d10",
+          "attribute": "violence",
+          "type": "energy",
+          "damageFlavor": "light",
+          "track": "integrity",
+          "base": {
+            "types": [],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "number": 1,
+            "denomination": 10,
+            "bonus": "@mod"
+          },
+          "versatile": {
+            "types": [],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            }
+          }
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1,
+          "units": "ft",
+          "reach": null
+        },
+        "tags": [
+          "saber",
+          "energy-blade",
+          "light"
+        ],
+        "effect": "On a clean hit, the saber may sever a manifestation's anchor — at GM discretion, suppress one ongoing manifestation effect on the target until end of next turn.",
+        "flavor": "What?",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "activities": {
+          "RT1rWgZvMIWUr8HH": {
+            "_id": "RT1rWgZvMIWUr8HH",
+            "type": "attack",
+            "sort": 0,
+            "activation": {
+              "type": "action",
+              "override": false
+            },
+            "consumption": {
+              "scaling": {
+                "allowed": false
+              },
+              "spellSlot": true,
+              "targets": []
+            },
+            "description": {},
+            "duration": {
+              "units": "inst",
+              "concentration": false,
+              "override": false
+            },
+            "effects": [],
+            "flags": {},
+            "range": {
+              "units": "self",
+              "override": false
+            },
+            "target": {
+              "template": {
+                "contiguous": false,
+                "units": "ft"
+              },
+              "affects": {
+                "choice": false
+              },
+              "override": false,
+              "prompt": true
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": []
+            },
+            "visibility": {
+              "level": {},
+              "requireAttunement": false,
+              "requireIdentification": false,
+              "requireMagic": false
+            },
+            "attack": {
+              "critical": {},
+              "flat": false,
+              "type": {}
+            },
+            "damage": {
+              "critical": {},
+              "includeBase": true,
+              "parts": []
+            }
+          }
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "description": {
+          "value": "<p>A saber made of light. No big deal.</p><p></p><p>What?</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>On a clean hit, the saber may sever a manifestation's anchor — at GM discretion, suppress one ongoing manifestation effect on the target until end of next turn.</p>\n<ul>\n  <li><strong>Damage:</strong> 1d10 Thermal damage to <em>Integrity</em> <span style=\"opacity:.75\">(light)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Melee (Violence)</li>\n  <li><strong>Reach:</strong> Melee</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "chat": ""
+        },
+        "identifier": "weapon",
+        "source": {
+          "revision": 1,
+          "rules": "2024"
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "crew": {
+          "value": []
+        },
+        "ammunition": {},
+        "armor": {},
+        "properties": [
+          "fin",
+          "lgt"
+        ],
+        "proficient": null,
+        "type": {
+          "value": "martialM",
+          "baseItem": "longsword"
+        },
+        "mastery": ""
+      },
+      "effects": [],
+      "sort": 100000,
+      "ownership": {
+        "default": 0,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "flags": {
+        "rfi": {
+          "item": {
+            "tier": "II",
+            "footprint": 1,
+            "reach": "5",
+            "frame": "weapon",
+            "signature": "",
+            "origin": "looted",
+            "originator": null,
+            "bound": "free",
+            "upkeep": {
+              "mode": "passive",
+              "per": "scene"
+            },
+            "misfire": {
+              "tierClamp": true,
+              "table": null
+            },
+            "signals": {}
+          }
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "III",
+              "footprint": 1,
+              "reach": "5",
+              "frame": "weapon",
+              "signature": "A saber made of light. No big deal.",
+              "origin": "vendor",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {
+                "lightblade": true
+              },
+              "lore": "<p>One-handed blade of bound photons. Hums a single note when drawn; the colour shifts with the wielder's mood.</p><p>Cuts through metal slow and cuts through doubt fast.</p>",
+              "materialOf": [
+                "focused-crystal",
+                "rad-iron",
+                "heart-coil"
+              ],
+              "legacySystem": {
+                "category": "melee",
+                "intent": "violence",
+                "skill": "melee",
+                "damage": {
+                  "formula": "2d6",
+                  "attribute": "violence",
+                  "type": "kinetic",
+                  "damageFlavor": "",
+                  "track": "integrity",
+                  "base": {
+                    "types": [],
+                    "custom": {
+                      "enabled": false
+                    },
+                    "scaling": {
+                      "number": 1
+                    },
+                    "number": 1,
+                    "denomination": 10,
+                    "bonus": "@mod"
+                  },
+                  "versatile": {
+                    "types": [],
+                    "custom": {
+                      "enabled": false
+                    },
+                    "scaling": {
+                      "number": 1
+                    }
+                  }
+                },
+                "range": {
+                  "short": 1,
+                  "long": 1,
+                  "units": "ft",
+                  "reach": null
+                },
+                "tags": [],
+                "effect": "",
+                "flavor": "",
+                "manifestation": {
+                  "tier": 1,
+                  "family": "form",
+                  "concept": "",
+                  "form": "weapon",
+                  "function": "harm",
+                  "stability": "bound",
+                  "interactionModel": "weapon",
+                  "costType": "none",
+                  "costValue": 0,
+                  "costText": "",
+                  "duration": "scene",
+                  "durationText": "",
+                  "triggerText": "",
+                  "scale": "personal",
+                  "targetText": "",
+                  "rangeAreaText": "",
+                  "maintenanceCost": "",
+                  "riskText": "",
+                  "pathResonance": "",
+                  "fictionalPermission": "",
+                  "gmCalibration": "",
+                  "mechanicalHook": "",
+                  "signature": "",
+                  "thirdThing": "",
+                  "opCost": {
+                    "pool": "",
+                    "value": 0
+                  }
+                },
+                "activities": {
+                  "RT1rWgZvMIWUr8HH": {
+                    "_id": "RT1rWgZvMIWUr8HH",
+                    "type": "attack",
+                    "sort": 0,
+                    "activation": {
+                      "type": "action",
+                      "override": false
+                    },
+                    "consumption": {
+                      "scaling": {
+                        "allowed": false
+                      },
+                      "spellSlot": true,
+                      "targets": []
+                    },
+                    "description": {},
+                    "duration": {
+                      "units": "inst",
+                      "concentration": false,
+                      "override": false
+                    },
+                    "effects": [],
+                    "flags": {},
+                    "range": {
+                      "units": "self",
+                      "override": false
+                    },
+                    "target": {
+                      "template": {
+                        "contiguous": false,
+                        "units": "ft"
+                      },
+                      "affects": {
+                        "choice": false
+                      },
+                      "override": false,
+                      "prompt": true
+                    },
+                    "uses": {
+                      "spent": 0,
+                      "recovery": []
+                    },
+                    "visibility": {
+                      "level": {},
+                      "requireAttunement": false,
+                      "requireIdentification": false,
+                      "requireMagic": false
+                    },
+                    "attack": {
+                      "critical": {},
+                      "flat": false,
+                      "type": {}
+                    },
+                    "damage": {
+                      "critical": {},
+                      "includeBase": true,
+                      "parts": []
+                    }
+                  }
+                },
+                "uses": {
+                  "spent": 0,
+                  "recovery": [],
+                  "max": ""
+                },
+                "description": {
+                  "value": "<p>A saber made of light. No big deal.</p><p></p><p>What?</p>",
+                  "chat": ""
+                },
+                "identifier": "weapon",
+                "source": {
+                  "revision": 1,
+                  "rules": "2024"
+                },
+                "identified": true,
+                "unidentified": {
+                  "description": ""
+                },
+                "container": null,
+                "quantity": 1,
+                "weight": {
+                  "value": 0,
+                  "units": "lb"
+                },
+                "price": {
+                  "value": 0,
+                  "denomination": "gp"
+                },
+                "rarity": "uncommon",
+                "attunement": "",
+                "attuned": false,
+                "equipped": false,
+                "crew": {
+                  "value": []
+                },
+                "ammunition": {},
+                "armor": {},
+                "properties": [
+                  "fin",
+                  "lgt"
+                ],
+                "proficient": null,
+                "type": {
+                  "value": "martialM",
+                  "baseItem": "longsword"
+                },
+                "mastery": ""
+              },
+              "price": {
+                "marks": 450,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIII weapon stamp",
+                "bound": "free",
+                "saleBack": 180
+              }
+            }
+          }
+        },
+        "autoanimations": {
+          "id": "6c17b7eb-ad59-4239-9480-8302eb6a2821",
+          "label": "Frikkin' Laser Blade Saber",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "melee",
+          "primary": {
+            "video": {
+              "dbSection": "melee",
+              "menuType": "weapon",
+              "animation": "lasersword",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5,
+          "meleeSwitch": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "weapon",
+              "animation": "arrow",
+              "variant": "regular",
+              "color": "regular",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "detect": "automatic",
+              "range": 2,
+              "returning": false,
+              "switchType": "on"
+            }
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_id": "ib3rJLpmjrq7jrYY",
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.ib3rJLpmjrq7jrYY"
+    },
+    {
+      "folder": "H6eMhWQrjwcwZcBi",
+      "name": "Laser Rifle, Rad",
+      "type": "weapon",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_military_2.png",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "firearms",
+        "damage": {
+          "formula": "2d8",
+          "attribute": "violence",
+          "type": "energy",
+          "damageFlavor": "laser",
+          "track": "integrity",
+          "base": {
+            "types": [
+              "radiant"
+            ],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            },
+            "number": 2,
+            "denomination": 8,
+            "bonus": "@mod"
+          },
+          "versatile": {
+            "types": [],
+            "custom": {
+              "enabled": false
+            },
+            "scaling": {
+              "number": 1
+            }
+          }
+        },
+        "damageParts": [],
+        "range": {
+          "short": 60,
+          "long": 240,
+          "units": "ft",
+          "reach": null,
+          "value": 120
+        },
+        "tags": [
+          "rifle",
+          "energy",
+          "penetrating"
+        ],
+        "effect": "Penetrating Beam: ignores half cover; three-quarters cover counts as half.",
+        "flavor": "Carry-name: Dutch. Sarge. Arnold.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "activities": {
+          "e8U8RXncA4xgBlbn": {
+            "_id": "e8U8RXncA4xgBlbn",
+            "type": "attack",
+            "sort": 0,
+            "activation": {
+              "type": "action",
+              "override": false
+            },
+            "consumption": {
+              "scaling": {
+                "allowed": false
+              },
+              "spellSlot": true,
+              "targets": []
+            },
+            "description": {},
+            "duration": {
+              "units": "inst",
+              "concentration": false,
+              "override": false
+            },
+            "effects": [],
+            "flags": {},
+            "range": {
+              "units": "self",
+              "override": false
+            },
+            "target": {
+              "template": {
+                "contiguous": false,
+                "units": "ft"
+              },
+              "affects": {
+                "choice": false
+              },
+              "override": false,
+              "prompt": true
+            },
+            "uses": {
+              "spent": 0,
+              "recovery": []
+            },
+            "visibility": {
+              "level": {},
+              "requireAttunement": false,
+              "requireIdentification": false,
+              "requireMagic": false
+            },
+            "attack": {
+              "critical": {},
+              "flat": false,
+              "type": {}
+            },
+            "damage": {
+              "critical": {},
+              "includeBase": true,
+              "parts": []
+            }
+          }
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [
+            {
+              "period": "turnStart",
+              "type": "recoverAll"
+            }
+          ],
+          "max": "1"
+        },
+        "description": {
+          "value": "<p>The kinds of people who carry guns like this are called things like \"Dutch,\" or \"Sarge,\" or \"Arnold Schwarzenegger.\"</p><p></p><p>It shoots through buildings.</p>\n<!-- BBTTCC:MECHANICS:START -->\n<hr/>\n<p><strong>⚙️ Mechanical Effects</strong></p>\n<p>Penetrating Beam: ignores half cover; three-quarters cover counts as half.</p>\n<ul>\n  <li><strong>Damage:</strong> 2d8 Thermal damage to <em>Integrity</em> <span style=\"opacity:.75\">(laser)</span></li>\n  <li><strong>Faculty:</strong> Violence</li>\n  <li><strong>Attack:</strong> Firearms (Violence)</li>\n  <li><strong>Range:</strong> 60 / 240</li>\n  <li><strong>Duration:</strong> Scene</li>\n  <li><strong>Tier:</strong> T1</li>\n</ul>\n<!-- BBTTCC:MECHANICS:END -->",
+          "chat": ""
+        },
+        "identifier": "weapon",
+        "source": {
+          "revision": 1,
+          "rules": "2024"
+        },
+        "identified": true,
+        "unidentified": {
+          "description": ""
+        },
+        "container": null,
+        "quantity": 1,
+        "weight": {
+          "value": 0,
+          "units": "lb"
+        },
+        "price": {
+          "value": 0,
+          "denomination": "gp"
+        },
+        "rarity": "uncommon",
+        "attunement": "",
+        "attuned": false,
+        "equipped": false,
+        "crew": {
+          "value": []
+        },
+        "ammunition": {},
+        "armor": {},
+        "properties": [
+          "ada",
+          "fir",
+          "rel"
+        ],
+        "proficient": null,
+        "type": {
+          "value": "martialR",
+          "baseItem": "musket"
+        },
+        "mastery": ""
+      },
+      "effects": [],
+      "sort": 300000,
+      "ownership": {
+        "default": 0,
+        "B83uCa0IV4h5mTEp": 3
+      },
+      "flags": {
+        "rfi": {
+          "item": {
+            "tier": "II",
+            "footprint": 1,
+            "reach": "5",
+            "frame": "weapon",
+            "signature": "",
+            "origin": "looted",
+            "originator": null,
+            "bound": "free",
+            "upkeep": {
+              "mode": "passive",
+              "per": "scene"
+            },
+            "misfire": {
+              "tierClamp": true,
+              "table": null
+            },
+            "signals": {}
+          }
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "tier": "III",
+              "footprint": 1,
+              "reach": "5",
+              "frame": "weapon",
+              "signature": "Shoots through buildings.",
+              "origin": "vendor",
+              "originator": null,
+              "bound": "free",
+              "upkeep": {
+                "mode": "passive",
+                "per": "scene"
+              },
+              "misfire": {
+                "tierClamp": true,
+                "table": null
+              },
+              "signals": {
+                "penetrating": true
+              },
+              "lore": "<p>Long-barrel rifle. Heavy focusing array. The kind of weapon the kind of person carries when the kind of person needs to carry that kind of weapon.</p><p><b>Penetrating Beam.</b> On a clean hit, the beam ignores half cover and treats three-quarters cover as half cover.</p>",
+              "materialOf": [
+                "rad-iron",
+                "focusing-lens",
+                "heart-coil"
+              ],
+              "legacySystem": {
+                "category": "melee",
+                "intent": "violence",
+                "skill": "melee",
+                "damage": {
+                  "formula": "2d6",
+                  "attribute": "violence",
+                  "type": "kinetic",
+                  "damageFlavor": "",
+                  "track": "integrity",
+                  "base": {
+                    "types": [
+                      "radiant"
+                    ],
+                    "custom": {
+                      "enabled": false
+                    },
+                    "scaling": {
+                      "number": 1
+                    },
+                    "number": 2,
+                    "denomination": 8,
+                    "bonus": "@mod"
+                  },
+                  "versatile": {
+                    "types": [],
+                    "custom": {
+                      "enabled": false
+                    },
+                    "scaling": {
+                      "number": 1
+                    }
+                  }
+                },
+                "range": {
+                  "short": 1,
+                  "long": 240,
+                  "units": "ft",
+                  "reach": null,
+                  "value": 120
+                },
+                "tags": [],
+                "effect": "",
+                "flavor": "",
+                "manifestation": {
+                  "tier": 1,
+                  "family": "form",
+                  "concept": "",
+                  "form": "weapon",
+                  "function": "harm",
+                  "stability": "bound",
+                  "interactionModel": "weapon",
+                  "costType": "none",
+                  "costValue": 0,
+                  "costText": "",
+                  "duration": "scene",
+                  "durationText": "",
+                  "triggerText": "",
+                  "scale": "personal",
+                  "targetText": "",
+                  "rangeAreaText": "",
+                  "maintenanceCost": "",
+                  "riskText": "",
+                  "pathResonance": "",
+                  "fictionalPermission": "",
+                  "gmCalibration": "",
+                  "mechanicalHook": "",
+                  "signature": "",
+                  "thirdThing": "",
+                  "opCost": {
+                    "pool": "",
+                    "value": 0
+                  }
+                },
+                "activities": {
+                  "e8U8RXncA4xgBlbn": {
+                    "_id": "e8U8RXncA4xgBlbn",
+                    "type": "attack",
+                    "sort": 0,
+                    "activation": {
+                      "type": "action",
+                      "override": false
+                    },
+                    "consumption": {
+                      "scaling": {
+                        "allowed": false
+                      },
+                      "spellSlot": true,
+                      "targets": []
+                    },
+                    "description": {},
+                    "duration": {
+                      "units": "inst",
+                      "concentration": false,
+                      "override": false
+                    },
+                    "effects": [],
+                    "flags": {},
+                    "range": {
+                      "units": "self",
+                      "override": false
+                    },
+                    "target": {
+                      "template": {
+                        "contiguous": false,
+                        "units": "ft"
+                      },
+                      "affects": {
+                        "choice": false
+                      },
+                      "override": false,
+                      "prompt": true
+                    },
+                    "uses": {
+                      "spent": 0,
+                      "recovery": []
+                    },
+                    "visibility": {
+                      "level": {},
+                      "requireAttunement": false,
+                      "requireIdentification": false,
+                      "requireMagic": false
+                    },
+                    "attack": {
+                      "critical": {},
+                      "flat": false,
+                      "type": {}
+                    },
+                    "damage": {
+                      "critical": {},
+                      "includeBase": true,
+                      "parts": []
+                    }
+                  }
+                },
+                "uses": {
+                  "spent": 0,
+                  "recovery": [
+                    {
+                      "period": "turnStart",
+                      "type": "recoverAll"
+                    }
+                  ],
+                  "max": "1"
+                },
+                "description": {
+                  "value": "<p>The kinds of people who carry guns like this are called things like \"Dutch,\" or \"Sarge,\" or \"Arnold Schwarzenegger.\"</p><p></p><p>It shoots through buildings.</p>",
+                  "chat": ""
+                },
+                "identifier": "weapon",
+                "source": {
+                  "revision": 1,
+                  "rules": "2024"
+                },
+                "identified": true,
+                "unidentified": {
+                  "description": ""
+                },
+                "container": null,
+                "quantity": 1,
+                "weight": {
+                  "value": 0,
+                  "units": "lb"
+                },
+                "price": {
+                  "value": 0,
+                  "denomination": "gp"
+                },
+                "rarity": "uncommon",
+                "attunement": "",
+                "attuned": false,
+                "equipped": false,
+                "crew": {
+                  "value": []
+                },
+                "ammunition": {},
+                "armor": {},
+                "properties": [
+                  "ada",
+                  "fir",
+                  "rel"
+                ],
+                "proficient": null,
+                "type": {
+                  "value": "martialR",
+                  "baseItem": "musket"
+                },
+                "mastery": ""
+              },
+              "price": {
+                "marks": 450,
+                "currency": "violence",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TIII weapon stamp",
+                "bound": "free",
+                "saleBack": 180
+              }
+            }
+          },
+          "manifestSheetMode": {
+            "bytUGWIOqq9eT7Or": "display"
+          }
+        },
+        "autoanimations": {
+          "id": "8c73ca2a-c413-4779-a7a8-3c450dcf97bd",
+          "label": "Laser Rifle, Rad",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "range",
+          "primary": {
+            "video": {
+              "dbSection": "range",
+              "menuType": "spell",
+              "animation": "guidingbolt",
+              "variant": "01",
+              "color": "yellow",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799236996,
+        "modifiedTime": 1787799236996,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_id": "2Z8k3wvzYGEukp8Z",
+      "_key": "!actors.items!zu2mcj4USN0AwjFZ.2Z8k3wvzYGEukp8Z"
+    }
+  ],
+  "effects": [],
+  "folder": "C2ow2Hk1WhQ1T3bS",
+  "sort": -100000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "steward"
+    },
+    "bbttcc-factions": {
+      "factionId": "eIXghZ73hKSXmP3x"
+    },
+    "bbttcc-territory": {
+      "faction": "Sweet Release"
+    },
+    "bbttcc-character-options": {
+      "identity": {
+        "archetype": {
+          "key": "JMTncIu9OBfxha6h",
+          "id": "JMTncIu9OBfxha6h",
+          "pack": "bbttcc-character-options.character-archetypes",
+          "category": "character-archetypes",
+          "optionKey": "judgment",
+          "identifier": "archetype-judgment",
+          "name": "Archetype: Judgment (Reckoner)",
+          "currentTier": 1,
+          "displayName": "Judgment (Reckoner)"
+        },
+        "crew": {
+          "key": "bG4aAhYeDrO1OJqY",
+          "id": "bG4aAhYeDrO1OJqY",
+          "pack": "bbttcc-character-options.crew-types",
+          "category": "crew-types",
+          "optionKey": "covert-ops-cell",
+          "identifier": "crew-covert-ops-cell",
+          "name": "Crew Type: Covert Ops Cell",
+          "currentTier": 1,
+          "displayName": "Covert Ops Cell"
+        },
+        "sephirothicAlignment": {
+          "key": "iMPSWMqenjUBpnMd",
+          "id": "iMPSWMqenjUBpnMd",
+          "pack": "bbttcc-character-options.sephirothic-alignments",
+          "category": "sephirothic-alignments",
+          "optionKey": "alignment-geburah",
+          "identifier": "alignment-geburah",
+          "name": "Alignment: Geburah"
+        },
+        "occult": {
+          "key": "Tm6WRcdeIHMUga7F",
+          "id": "Tm6WRcdeIHMUga7F",
+          "pack": "bbttcc-character-options.occult-associations",
+          "category": "occult-associations",
+          "optionKey": "shaman",
+          "identifier": "occult-association-shaman",
+          "name": "Occult Association: Shaman",
+          "currentTier": 1,
+          "displayName": "Shaman"
+        }
+      },
+      "archetype": {
+        "pack": "bbttcc-character-options.character-archetypes",
+        "id": "JMTncIu9OBfxha6h",
+        "name": "Archetype: Judgment (Reckoner)",
+        "identifier": "archetype-judgment"
+      },
+      "crew": {
+        "pack": "bbttcc-character-options.crew-types",
+        "id": "bG4aAhYeDrO1OJqY",
+        "name": "Crew Type: Covert Ops Cell",
+        "identifier": "crew-covert-ops-cell"
+      },
+      "sephirot": {
+        "pack": "bbttcc-character-options.sephirothic-alignments",
+        "id": "iMPSWMqenjUBpnMd",
+        "name": "Alignment: Geburah",
+        "identifier": "alignment-geburah"
+      },
+      "occult": {
+        "pack": "bbttcc-character-options.occult-associations",
+        "id": "Tm6WRcdeIHMUga7F",
+        "name": "Occult Association: Shaman",
+        "identifier": "occult-association-shaman"
+      },
+      "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.7709222f8ff32964",
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.oldnlumenwrght01",
+      "classUuid": "Compendium.bbttcc-master-content.classes.Item.V7fpwepCDoqUdT1O",
+      "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.xg0RIGmaeS99TPNx",
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "nativeLinks": {
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.7709222f8ff32964",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.oldnlumenwrght01",
+        "classUuid": "Compendium.bbttcc-master-content.classes.Item.V7fpwepCDoqUdT1O",
+        "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.xg0RIGmaeS99TPNx",
+        "ancestryApplied": true,
+        "heritageApplied": true,
+        "classApplied": true,
+        "subclassApplied": true,
+        "ancestryName": "Oldenborn",
+        "heritageName": "Oldenborn Heritage: Lumenwrought",
+        "className": "Aurablade",
+        "subclassName": "Void Edge (Bad Eden)"
+      },
+      "calculatedOPs": {
+        "violence": 4,
+        "nonlethal": 0,
+        "intrigue": 2,
+        "economy": 0,
+        "softpower": 0,
+        "diplomacy": 0,
+        "logistics": 2,
+        "culture": 0,
+        "faith": 2
+      },
+      "echoRoster": {
+        "covert-ops-cell": {
+          "displayName": "Covert Ops Cell",
+          "members": [
+            {
+              "id": "sVJqLFtqlTdr",
+              "name": "Marisol Quint",
+              "role": "Forger",
+              "notes": "She still cuts your travel papers for free because the last set you forged for her kept a Sweet Release skimmer out of a Monodynamic cage.",
+              "portrait": "",
+              "defaultPresent": false,
+              "actorUuid": "Actor.My8h6T41DqmDjEha"
+            },
+            {
+              "id": "JlAe3uq8dz1w",
+              "name": "Ottway Reece",
+              "role": "Cut-out",
+              "notes": "Passes messages between you and three cells that would never speak to each other directly, and charges you nothing but a standing invitation to Sunday dinner you always mean to accept.",
+              "portrait": "",
+              "defaultPresent": false,
+              "actorUuid": "Actor.NzvEZPYvirJp8yRr"
+            },
+            {
+              "id": "aHKXWhN89XP7",
+              "name": "Beryl Achen",
+              "role": "Sniper",
+              "notes": "Took the shot meant for you outside the Glasswick relay and lost two fingers to the frost after; she never brings it up, but you always check her gloves.",
+              "portrait": "",
+              "defaultPresent": false,
+              "actorUuid": "Actor.opL76rnb3U21drkd"
+            }
+          ],
+          "updatedTs": 1787274865017
+        },
+        "shaman": {
+          "displayName": "Shaman",
+          "members": [
+            {
+              "id": "lMnOVaIf7HgV",
+              "name": "Ren Achak",
+              "role": "Drum-keeper",
+              "notes": "Kept the rhythm steady the night Toblerone's spirit-walk ran long and nearly didn't come back, and still won't say what she saw in the gap between beats.",
+              "portrait": "",
+              "defaultPresent": false,
+              "actorUuid": "Actor.d4JIO0wMOIg6LUx1"
+            },
+            {
+              "id": "wEq00zfZYoHr",
+              "name": "Ossy Farrow",
+              "role": "Mask-maker",
+              "notes": "Carved the bone mask Toblerone wore to bargain with something in the kudzu-choked hollow, and now refuses to make another, claiming the last one came back wrong.",
+              "portrait": "",
+              "defaultPresent": false,
+              "actorUuid": "Actor.aq8urOHJHftH7cJ4"
+            },
+            {
+              "id": "M6nUTku9Xc30",
+              "name": "Dell Marrow",
+              "role": "Beast-speaker",
+              "notes": "Owes Toblerone a debt neither will name aloud — a hawk let loose, a warning given late, a life saved by inches.",
+              "portrait": "",
+              "defaultPresent": false,
+              "actorUuid": "Actor.DLqQl75czmJyvJzI"
+            }
+          ],
+          "updatedTs": 1787274897110
+        }
+      }
+    },
+    "bbttcc-aae": {
+      "politicalPhilosophy": "libertarian"
+    },
+    "bbttcc-auto-link": {
+      "guidedCharacterCreation": {
+        "stage": "complete",
+        "name": "Toblerone",
+        "factionId": "",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.7709222f8ff32964",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.oldnlumenwrght01",
+        "classUuid": "Compendium.bbttcc-master-content.classes.Item.V7fpwepCDoqUdT1O",
+        "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.xg0RIGmaeS99TPNx",
+        "picks": {
+          "archetype": {
+            "pack": "bbttcc-character-options.character-archetypes",
+            "id": "JMTncIu9OBfxha6h"
+          },
+          "crew": {
+            "pack": "bbttcc-character-options.crew-types",
+            "id": "bG4aAhYeDrO1OJqY"
+          },
+          "sephirot": {
+            "pack": "bbttcc-character-options.sephirothic-alignments",
+            "id": "iMPSWMqenjUBpnMd"
+          },
+          "occult": {
+            "pack": "bbttcc-character-options.occult-associations",
+            "id": "Tm6WRcdeIHMUga7F"
+          },
+          "political": {
+            "id": "libertarian"
+          }
+        },
+        "baseStats": {
+          "violence": 5,
+          "intrigue": 3,
+          "presence": 2,
+          "body": 3,
+          "mind": 2,
+          "soul": 4,
+          "_playerPick": true
+        }
+      }
+    },
+    "bbttcc-sorting-engine": {
+      "pillarTally": {
+        "mercy": 0,
+        "severity": 0,
+        "neutral": 0
+      },
+      "lastDescent": {
+        "timestamp": 1787272763940,
+        "confirmedBuild": {
+          "archetype": {
+            "name": "Judgment",
+            "_overridden": true
+          },
+          "ancestry": {
+            "name": "Oldenborn",
+            "_overridden": true
+          },
+          "heritage": {
+            "name": "Oldenborn Heritage: Lumenwrought",
+            "_playerPick": true
+          },
+          "crew": {
+            "name": "Covert Ops Cell",
+            "_overridden": true
+          },
+          "path": {
+            "name": "Aurablade",
+            "_overridden": true
+          },
+          "doctrine": {
+            "name": "Void Edge",
+            "_overridden": true
+          },
+          "philosophy": {
+            "name": "Libertarian",
+            "_overridden": true
+          },
+          "occult": {
+            "name": "Shaman",
+            "_overridden": true
+          },
+          "alignment": {
+            "name": "Gevurah",
+            "_overridden": true
+          },
+          "faculties": {
+            "violence": 5,
+            "intrigue": 3,
+            "presence": 2,
+            "body": 3,
+            "mind": 2,
+            "soul": 4,
+            "_playerPick": true
+          }
+        },
+        "traitMap": {},
+        "classification": "—",
+        "mode": "manual"
+      }
+    },
+    "tokenflip": {
+      "unfuck": true
+    },
+    "bbttcc-onboarding": {
+      "progress": {
+        "currentStep": "raid_presence",
+        "steps": {
+          "proving_trials": {
+            "done": true,
+            "at": 1787596078886
+          }
+        },
+        "startedAt": 1787593645813,
+        "completedAt": null
+      },
+      "provingRelics": [
+        "reef",
+        "healing",
+        "lava",
+        "grove"
+      ]
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1787799236996,
+    "modifiedTime": 1787799236996,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!zu2mcj4USN0AwjFZ"
+}

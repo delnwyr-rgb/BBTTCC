@@ -1,0 +1,23 @@
+{
+  "name": "Port Kudzu",
+  "type": "Actor",
+  "folder": "doJSaIIRV0vyJY2X",
+  "_id": "1tCy5NZpiGXoF1hL",
+  "description": "",
+  "sorting": "a",
+  "sort": 400000,
+  "color": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1787799219068,
+    "modifiedTime": 1787799219068,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!folders!1tCy5NZpiGXoF1hL"
+}

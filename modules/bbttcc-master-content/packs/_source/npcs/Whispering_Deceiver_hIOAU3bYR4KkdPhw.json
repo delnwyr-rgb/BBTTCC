@@ -1,0 +1,627 @@
+{
+  "name": "Whispering Deceiver",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/whispering-deceiver.webp",
+  "system": {
+    "role": "Qliphothic Parasite (Satariel — Greater)",
+    "tier": 3,
+    "factionId": "",
+    "notes": "<p>A living, hateful secret: a truth so terrible it was violently repressed, and grew a mind of its own in the dark. Mostly transparent — a heat-haze glitch with spectral faces drifting through it — it haunts ruins and battlefields, drawn to betrayal. It does not fight. It makes your friends do that, wearing the face of whoever you trust most, and eats the despair that follows.</p><p><strong>Qliphah:</strong> Satariel, the Veils — the Hull of Binah. The greater art of concealment: a lie with your loved one's voice.</p><p><em>Mal's note: 'If an ally you buried walks up mid-fight with urgent news — receipts first, hugs later.'</em></p>",
+    "details": {
+      "level": 13,
+      "tier": 3,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 1
+      },
+      "intrigue": {
+        "value": 5
+      },
+      "presence": {
+        "value": 6
+      },
+      "body": {
+        "value": 2
+      },
+      "mind": {
+        "value": 4
+      },
+      "soul": {
+        "value": 5
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 55,
+        "max": 55
+      },
+      "stress": {
+        "value": 42,
+        "max": 42
+      },
+      "guard": {
+        "value": 13
+      },
+      "evasion": {
+        "value": 16
+      },
+      "resolve": {
+        "value": 17
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 3,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "kinetic"
+      ],
+      "immunities": [
+        "qliphothic"
+      ],
+      "vulnerabilities": [
+        "sephirotic"
+      ]
+    },
+    "conditionImmunities": [
+      "charmed",
+      "restrained"
+    ],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-13",
+      "qliphah-satariel",
+      "hull-of-binah",
+      "greater"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Whispering Deceiver",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/whispering-deceiver.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "_id": "noSunzz5YXXORAdW",
+      "name": "Unbodied",
+      "type": "feature",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Deceiver moves through creatures and objects as if they were difficult terrain. It takes 1d10 kinetic damage if it ends its turn inside something solid. Kinetic weapons pass through it like arguments through a true believer.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188147,
+        "modifiedTime": 1787799188147,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!hIOAU3bYR4KkdPhw.noSunzz5YXXORAdW"
+    },
+    {
+      "_id": "l5DpsI6VbmoMcsZR",
+      "name": "Fractured Will (2/scene)",
+      "type": "feature",
+      "img": "icons/svg/mage-shield.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>When the Deceiver fails a check, it may reveal that the failing self was another mask, and succeed instead. Twice per scene.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188147,
+        "modifiedTime": 1787799188147,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!hIOAU3bYR4KkdPhw.l5DpsI6VbmoMcsZR"
+    },
+    {
+      "_id": "si2adHVzxB8jnqNh",
+      "name": "Whispering Aura",
+      "type": "feature",
+      "img": "icons/svg/sound.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>Any creature that starts its turn within 6 squares hears faint, paranoid whispers in a voice it knows. It rolls twice-keep-worse on checks to read intentions or see through deception, and on checks to resist being Charmed or Shaken.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188147,
+        "modifiedTime": 1787799188147,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!hIOAU3bYR4KkdPhw.si2adHVzxB8jnqNh"
+    },
+    {
+      "_id": "HIKnhsHIR085ygW8",
+      "name": "Touch of Paranoia",
+      "type": "weapon",
+      "img": "icons/svg/terror.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "channel",
+        "damage": {
+          "formula": "3d8",
+          "attribute": "presence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [],
+        "effect": "On a hit: Resolve check vs DC 16 or the target is Charmed for one round — utterly convinced its closest ally is a traitor, and obliged to act on it. Repeat the check at the end of each of its turns to shake it.",
+        "flavor": "A hand reaching out, a vortex of dark energy in its palm.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188147,
+        "modifiedTime": 1787799188147,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!hIOAU3bYR4KkdPhw.HIKnhsHIR085ygW8"
+    },
+    {
+      "_id": "PqmP7aY2gldmp27S",
+      "name": "Form of the Trusted",
+      "type": "feat",
+      "img": "icons/svg/cowled.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Deceiver reshapes into someone the target trusts — living or dead. A suspicious observer may roll Mind (insight) vs DC 16 to catch the wrongness: the shadow it casts is not the shape it wears.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188147,
+        "modifiedTime": 1787799188147,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!hIOAU3bYR4KkdPhw.PqmP7aY2gldmp27S"
+    },
+    {
+      "_id": "XoYfGpCrumfnweZJ",
+      "name": "Twisted Words",
+      "type": "feat",
+      "img": "icons/svg/silenced.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>One creature within 12 squares that can hear it rolls vs Resolve (DC 16) or becomes Shaken with respect to one of its own allies (Deceiver's choice) until the end of its next turn — every word that ally says arrives pre-poisoned.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188147,
+        "modifiedTime": 1787799188147,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!hIOAU3bYR4KkdPhw.XoYfGpCrumfnweZJ"
+    },
+    {
+      "_id": "7PZJrCX3jaqPWizX",
+      "name": "Sow Discord",
+      "type": "feat",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>Up to three creatures within 12 squares roll vs Resolve (DC 16). Fail: for one round the creature treats every other creature as an enemy — jagged red lines of animosity the GM narrates. Repeat the check at the end of each of its turns.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 700000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188147,
+        "modifiedTime": 1787799188147,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!hIOAU3bYR4KkdPhw.7PZJrCX3jaqPWizX"
+    }
+  ],
+  "effects": [],
+  "folder": "Ps7zW26xgejTIfav",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "III",
+          "bracket": "medium",
+          "archetype": "whispering-deceiver",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "satariel",
+              "boss",
+              "incorporeal",
+              "manipulator"
+            ],
+            "role": "Qliphothic Parasite (Satariel — Greater)",
+            "lootTable": [
+              {
+                "name": "Condensed Whisper (Do Not Play Back)",
+                "qty": "1d3",
+                "weight": 4
+              },
+              {
+                "name": "Spectral Face-Print",
+                "qty": "1d4",
+                "weight": 5
+              },
+              {
+                "name": "The Repressed Truth (Sealed)",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "price": {
+            "marks": 900,
+            "bounty": 1200,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "intrigue",
+            "gmOverride": false,
+            "notes": "III medium Qliphothic Parasite (Satariel — Greater) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "satariel",
+            "hullOf": "binah",
+            "grade": "greater"
+          }
+        }
+      },
+      "kind": "npc"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "createdTime": 1787799188147,
+    "modifiedTime": 1787799188147,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_id": "hIOAU3bYR4KkdPhw",
+  "_key": "!actors!hIOAU3bYR4KkdPhw"
+}

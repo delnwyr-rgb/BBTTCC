@@ -1,0 +1,764 @@
+{
+  "name": "Archon of the Twin Crown",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/archon-of-the-twin-crown.webp",
+  "system": {
+    "role": "Qliphothic Lord (Thaumiel — Greater)",
+    "tier": 4,
+    "factionId": "",
+    "notes": "<p>A titanic, vaguely draconic aberration with two long necks, each ending in a crowned reptilian head. One head speaks only perfect, cosmic truths; the other only absolute, universe-shattering lies. The dissonance between them warps the Wastes around it — zones where cause and effect stop being on speaking terms.</p><p><strong>Qliphah:</strong> Thaumiel, the Split Crown — the Hull of Keter. This is what sits on the broken throne of unity.</p><p><em>Mal's note: 'Both heads are telling you the truth about which one is lying. Shoot the body.'</em></p>",
+    "details": {
+      "level": 18,
+      "tier": 4,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 6
+      },
+      "intrigue": {
+        "value": 3
+      },
+      "presence": {
+        "value": 6
+      },
+      "body": {
+        "value": 6
+      },
+      "mind": {
+        "value": 5
+      },
+      "soul": {
+        "value": 5
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 130,
+        "max": 130
+      },
+      "stress": {
+        "value": 50,
+        "max": 50
+      },
+      "guard": {
+        "value": 17
+      },
+      "evasion": {
+        "value": 13
+      },
+      "resolve": {
+        "value": 18
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 3,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "psychic",
+        "kinetic"
+      ],
+      "immunities": [
+        "qliphothic"
+      ],
+      "vulnerabilities": [
+        "sephirotic"
+      ]
+    },
+    "conditionImmunities": [
+      "charmed",
+      "compelled",
+      "blinded"
+    ],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-18",
+      "qliphah-thaumiel",
+      "hull-of-keter",
+      "greater"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Archon of the Twin Crown",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 3,
+    "height": 3,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/archon-of-the-twin-crown.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "_id": "iQ2v9za0IszW6xpN",
+      "name": "Fractured Will (3/scene)",
+      "type": "feature",
+      "img": "icons/svg/mage-shield.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>When the Archon fails a check, one of its two wills can refuse the outcome: it succeeds instead. Three times per scene — after that, the heads stop agreeing even about survival.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188139,
+        "modifiedTime": 1787799188139,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!IU1ykPyFaiFNFDRW.iQ2v9za0IszW6xpN"
+    },
+    {
+      "_id": "RcWlBBbIul446POF",
+      "name": "Warring Wills",
+      "type": "feature",
+      "img": "icons/svg/invisible.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>Immune to anything that would read its thoughts, detect its lies, or compel truth from it — there is no single mind in there to read. Any such attempt deals 2d6 psychic damage (Stress) to the one who tried.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188139,
+        "modifiedTime": 1787799188139,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!IU1ykPyFaiFNFDRW.RcWlBBbIul446POF"
+    },
+    {
+      "_id": "ywWwRrvDepjrp4lD",
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Archon makes two attacks: one with its Bite of Truth and one with its Bite of Lies.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188139,
+        "modifiedTime": 1787799188139,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!IU1ykPyFaiFNFDRW.ywWwRrvDepjrp4lD"
+    },
+    {
+      "_id": "uEFEX8Z5j7dF3Wos",
+      "name": "Bite of Truth",
+      "type": "weapon",
+      "img": "icons/svg/sun.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d10",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 2,
+          "long": 2
+        },
+        "tags": [],
+        "effect": "On a hit the target is force-fed one perfect, unbearable truth: Resolve check vs DC 18 or Staggered until the end of its next turn.",
+        "flavor": "The crowned head that cannot lie.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188139,
+        "modifiedTime": 1787799188139,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!IU1ykPyFaiFNFDRW.uEFEX8Z5j7dF3Wos"
+    },
+    {
+      "_id": "tBCsE0EQYeM0kaqa",
+      "name": "Bite of Lies",
+      "type": "weapon",
+      "img": "icons/svg/eye.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d10",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 2,
+          "long": 2
+        },
+        "tags": [],
+        "effect": "On a hit a devastating lie takes root: Resolve check vs DC 18 or Compelled until the end of its next turn — the Archon's player (the GM) narrates what the target now briefly believes.",
+        "flavor": "The crowned head that cannot stop lying.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188139,
+        "modifiedTime": 1787799188139,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!IU1ykPyFaiFNFDRW.tBCsE0EQYeM0kaqa"
+    },
+    {
+      "_id": "XGCd1geMne4mfGAd",
+      "name": "Decree of Duality",
+      "type": "weapon",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "warding",
+        "damage": {
+          "formula": "4d10",
+          "attribute": "presence",
+          "type": "qliphothic",
+          "damageFlavor": "",
+          "track": "stress"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 12,
+          "long": 12
+        },
+        "tags": [
+          "aoe",
+          "shape-cone",
+          "signature"
+        ],
+        "effect": "12-square cone of contradictory command. Each creature in the area rolls Mind vs DC 18. Fail: full damage to Stress and the target is Compelled — it spends its next action on a self-contradiction the GM narrates. Success: half damage only.",
+        "flavor": "Both heads speak at once.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188139,
+        "modifiedTime": 1787799188139,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!IU1ykPyFaiFNFDRW.XGCd1geMne4mfGAd"
+    },
+    {
+      "_id": "lknRzxNy4SD2W9WE",
+      "name": "Wing Buffet",
+      "type": "feat",
+      "img": "icons/svg/wing.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>Each creature within 3 squares rolls an Evasion check vs DC 17. Fail: 2d6 kinetic damage and knocked Prone. The Archon may then fly up to 6 squares without provoking.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 700000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188139,
+        "modifiedTime": 1787799188139,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!IU1ykPyFaiFNFDRW.lknRzxNy4SD2W9WE"
+    },
+    {
+      "_id": "fFmIiU8z60V3EbgN",
+      "name": "Syzygy of Ego",
+      "type": "feat",
+      "img": "icons/svg/target.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>Both heads focus on one creature within 24 squares. Resolve check vs DC 18 or the target is Compelled for the scene (repeat the check at the end of each of its turns): the Archon overwrites one standing intention with its own. The GM states the new intention out loud. It always sounds almost right.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 800000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188139,
+        "modifiedTime": 1787799188139,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!IU1ykPyFaiFNFDRW.fFmIiU8z60V3EbgN"
+    }
+  ],
+  "effects": [],
+  "folder": "Ps7zW26xgejTIfav",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "IV",
+          "bracket": "elite",
+          "archetype": "archon-of-the-twin-crown",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "thaumiel",
+              "boss",
+              "dragon",
+              "legendary"
+            ],
+            "role": "Qliphothic Lord (Thaumiel — Greater)",
+            "lootTable": [
+              {
+                "name": "Obsidian Crown Shard",
+                "qty": "1d2",
+                "weight": 3
+              },
+              {
+                "name": "Scale of Contradiction",
+                "qty": "2d6",
+                "weight": 6
+              },
+              {
+                "name": "Vertebra That Hums Two Notes",
+                "qty": "1d4",
+                "weight": 4
+              },
+              {
+                "name": "The Vesica (Both-and-Neither Lens)",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "price": {
+            "marks": 1800,
+            "bounty": 3000,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "softpower",
+            "gmOverride": false,
+            "notes": "IV elite Qliphothic Lord (Thaumiel — Greater) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "thaumiel",
+            "hullOf": "keter",
+            "grade": "greater"
+          }
+        }
+      },
+      "kind": "npc"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "createdTime": 1787799188139,
+    "modifiedTime": 1787799188139,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_id": "IU1ykPyFaiFNFDRW",
+  "_key": "!actors!IU1ykPyFaiFNFDRW"
+}

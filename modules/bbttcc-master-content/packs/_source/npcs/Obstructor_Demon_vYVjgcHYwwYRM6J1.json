@@ -1,0 +1,590 @@
+{
+  "name": "Obstructor Demon",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/obstructor-demon.webp",
+  "system": {
+    "role": "Qliphothic Juggernaut (Ghagiel — Greater)",
+    "tier": 3,
+    "factionId": "",
+    "notes": "<p>A walking bastion of anti-thought: a hulking biped of cracked grey lead with no face at all, drawn to libraries, laboratories, and anyone with a good idea. Its dense body drinks sound and light, and its presence is a field of psychic static in which complex workings simply unravel. Fighting it feels like your own intellect being ground down to gravel.</p><p><strong>Qliphah:</strong> Ghagiel, the Obstructions — the Hull of Chokmah. The full stop at the end of insight.</p><p><em>Mal's note: 'It has never had an idea. It has ended thousands. Nature's perfect critic.'</em></p>",
+    "details": {
+      "level": 13,
+      "tier": 3,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 5
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 6
+      },
+      "mind": {
+        "value": 2
+      },
+      "soul": {
+        "value": 5
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 90,
+        "max": 90
+      },
+      "stress": {
+        "value": 45,
+        "max": 45
+      },
+      "guard": {
+        "value": 15
+      },
+      "evasion": {
+        "value": 11
+      },
+      "resolve": {
+        "value": 15
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 2,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "kinetic",
+        "qliphothic"
+      ],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [
+      "charmed",
+      "compelled"
+    ],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-11",
+      "qliphah-ghagiel",
+      "hull-of-chokmah",
+      "greater"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "Obstructor Demon",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 2,
+    "height": 2,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/obstructor-demon.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "_id": "UO9zDpG3SuBgqbju",
+      "name": "Aura of Stagnation",
+      "type": "feature",
+      "img": "icons/svg/net.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The 3 squares around the demon are difficult terrain — thought itself moves slowly there. A creature that starts its turn in the aura has its speed halved until the start of its next turn, and rolls twice-keep-worse on checks to maintain a manifestation.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188143,
+        "modifiedTime": 1787799188143,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!vYVjgcHYwwYRM6J1.UO9zDpG3SuBgqbju"
+    },
+    {
+      "_id": "M0vBjBeZSBtK11xK",
+      "name": "Null Density",
+      "type": "feature",
+      "img": "icons/svg/mage-shield.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The demon rolls twice and keeps the better result on checks to resist manifestations. Manifesting while within its Aura of Stagnation costs the caster +1 Noise — the working has to be shouted over the static.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188143,
+        "modifiedTime": 1787799188143,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!vYVjgcHYwwYRM6J1.M0vBjBeZSBtK11xK"
+    },
+    {
+      "_id": "E2Qu4SOU1xpqELlU",
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The demon makes two Mind-Numbing Slam attacks.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188143,
+        "modifiedTime": 1787799188143,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!vYVjgcHYwwYRM6J1.E2Qu4SOU1xpqELlU"
+    },
+    {
+      "_id": "SuTzJkoM6sZuuEgB",
+      "name": "Mind-Numbing Slam",
+      "type": "weapon",
+      "img": "icons/svg/daze.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "2d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 2,
+          "long": 2
+        },
+        "tags": [],
+        "effect": "On a hit the target also takes 2d6 psychic damage to Stress, and rolls Body vs DC 16 or is Staggered until the end of its next turn — the blow lands on the brain, wherever it hits.",
+        "flavor": "A fist like a wrecking ball with an opinion about your IQ.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188143,
+        "modifiedTime": 1787799188143,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!vYVjgcHYwwYRM6J1.SuTzJkoM6sZuuEgB"
+    },
+    {
+      "_id": "5LO0OwHAIwof9MNn",
+      "name": "Wall of Nullity",
+      "type": "feat",
+      "img": "icons/svg/tower.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The demon raises a wall of dull grey psychic static on a surface within 12 squares — up to 6 squares long, 2 high. It is opaque, blocks line of sight, and cannot be damaged. A creature that touches it or ends its turn adjacent to it takes 2d10 psychic damage (Stress). It stands for a minute, or until the demon drops.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188143,
+        "modifiedTime": 1787799188143,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!vYVjgcHYwwYRM6J1.5LO0OwHAIwof9MNn"
+    },
+    {
+      "_id": "ZL9tTSQKrLhotqEV",
+      "name": "Spell Scramble",
+      "type": "feat",
+      "img": "icons/svg/silenced.svg",
+      "system": {
+        "category": "technique",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Reaction.</strong> When a manifestation targets the demon or includes it in an area, the caster rolls Soul vs DC 16. Fail: the working collapses into nothing and the caster gains +1 Noise. The demon does not gloat. It has no face to gloat with.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188143,
+        "modifiedTime": 1787799188143,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!vYVjgcHYwwYRM6J1.ZL9tTSQKrLhotqEV"
+    }
+  ],
+  "effects": [],
+  "folder": "Ps7zW26xgejTIfav",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "III",
+          "bracket": "heavy",
+          "archetype": "obstructor-demon",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "ghagiel",
+              "boss",
+              "juggernaut",
+              "anti-caster"
+            ],
+            "role": "Qliphothic Juggernaut (Ghagiel — Greater)",
+            "lootTable": [
+              {
+                "name": "Null-Lead Plate",
+                "qty": "2d4",
+                "weight": 6
+              },
+              {
+                "name": "Absorbed Marginalia (Legible Fragments)",
+                "qty": "1d6",
+                "weight": 4
+              },
+              {
+                "name": "Core of Perfect Silence",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "price": {
+            "marks": 900,
+            "bounty": 1100,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "violence",
+            "gmOverride": false,
+            "notes": "III heavy Qliphothic Juggernaut (Ghagiel — Greater) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "ghagiel",
+            "hullOf": "chokmah",
+            "grade": "greater"
+          }
+        }
+      },
+      "kind": "npc"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "createdTime": 1787799188143,
+    "modifiedTime": 1787799188143,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_id": "vYVjgcHYwwYRM6J1",
+  "_key": "!actors!vYVjgcHYwwYRM6J1"
+}

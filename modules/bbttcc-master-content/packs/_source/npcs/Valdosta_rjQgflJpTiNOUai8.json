@@ -1,0 +1,3022 @@
+{
+  "name": "Valdosta",
+  "type": "character",
+  "img": "art/bbttcc/asli-tokens/ryan.webp",
+  "prototypeToken": {
+    "texture": {
+      "src": "art/bbttcc/asli-tokens/ryan.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "name": "Valdosta",
+    "displayName": 30,
+    "actorLink": true,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "system": {
+    "biography": {
+      "concept": "",
+      "notes": ""
+    },
+    "details": {
+      "level": 1,
+      "xp": 0,
+      "statPoints": 0,
+      "skillPoints": 0,
+      "tier": 1,
+      "alignment": ""
+    },
+    "attributes": {
+      "violence": {
+        "value": 2
+      },
+      "intrigue": {
+        "value": 2
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 3
+      },
+      "mind": {
+        "value": 5
+      },
+      "soul": {
+        "value": 4
+      }
+    },
+    "skills": {
+      "brawl": {
+        "attribute": "violence",
+        "label": "Brawl",
+        "value": 1
+      },
+      "melee": {
+        "attribute": "violence",
+        "label": "Melee",
+        "value": 0
+      },
+      "firearms": {
+        "attribute": "violence",
+        "label": "Firearms",
+        "value": 0
+      },
+      "athletics": {
+        "attribute": "violence",
+        "label": "Athletics",
+        "value": 1
+      },
+      "stealth": {
+        "attribute": "intrigue",
+        "label": "Stealth",
+        "value": 0
+      },
+      "hacking": {
+        "attribute": "intrigue",
+        "label": "Hacking",
+        "value": 0
+      },
+      "tinkering": {
+        "attribute": "intrigue",
+        "label": "Tinkering",
+        "value": 0
+      },
+      "piloting": {
+        "attribute": "intrigue",
+        "label": "Piloting",
+        "value": 0
+      },
+      "streetwise": {
+        "attribute": "intrigue",
+        "label": "Streetwise",
+        "value": 0
+      },
+      "diplomacy": {
+        "attribute": "presence",
+        "label": "Diplomacy",
+        "value": 0
+      },
+      "intimidation": {
+        "attribute": "presence",
+        "label": "Intimidation",
+        "value": 0
+      },
+      "empathy": {
+        "attribute": "presence",
+        "label": "Empathy",
+        "value": 0
+      },
+      "performance": {
+        "attribute": "presence",
+        "label": "Performance",
+        "value": 0
+      },
+      "perception": {
+        "attribute": "mind",
+        "label": "Perception",
+        "value": 1
+      },
+      "investigation": {
+        "attribute": "mind",
+        "label": "Investigation",
+        "value": 1
+      },
+      "lore": {
+        "attribute": "mind",
+        "label": "Lore",
+        "value": 1
+      },
+      "occult": {
+        "attribute": "mind",
+        "label": "Occult",
+        "value": 1
+      },
+      "faith": {
+        "attribute": "soul",
+        "label": "Faith",
+        "value": 1
+      },
+      "meditation": {
+        "attribute": "soul",
+        "label": "Meditation",
+        "value": 0
+      },
+      "ritual": {
+        "attribute": "soul",
+        "label": "Ritual",
+        "value": 0
+      },
+      "insight": {
+        "attribute": "soul",
+        "label": "Insight",
+        "value": 1
+      },
+      "plating": {
+        "attribute": "body",
+        "label": "Plating",
+        "value": 0
+      },
+      "fitting": {
+        "attribute": "intrigue",
+        "label": "Fitting",
+        "value": 1
+      },
+      "bracing": {
+        "attribute": "soul",
+        "label": "Bracing",
+        "value": 0
+      },
+      "weave": {
+        "attribute": "intrigue",
+        "label": "Weave",
+        "value": 1
+      },
+      "warding": {
+        "attribute": "soul",
+        "label": "Warding",
+        "value": 0
+      }
+    },
+    "derived": {
+      "integrity": {
+        "value": 16,
+        "max": 16
+      },
+      "stress": {
+        "value": 16,
+        "max": 16
+      },
+      "guard": {
+        "value": 14
+      },
+      "evasion": {
+        "value": 14
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 10,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "tiferet"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 3
+      },
+      "stress": {
+        "current": 0,
+        "max": 5
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "ruinCharges": {
+        "current": 3,
+        "max": 3
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "lastStand": {
+      "active": false,
+      "successes": 0,
+      "failures": 0,
+      "ledger": []
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [],
+      "immunities": [],
+      "vulnerabilities": []
+    },
+    "conditionImmunities": [],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    },
+    "tikkun": {
+      "stage": "sleeper",
+      "sparks": {}
+    },
+    "faction": {
+      "id": "PBEPMRtPar0MUuSz",
+      "loyalty": 0,
+      "name": "u'M'pie"
+    },
+    "bloodDebt": {
+      "value": 0,
+      "ledger": []
+    },
+    "tags": []
+  },
+  "_id": "rjQgflJpTiNOUai8",
+  "items": [
+    {
+      "name": "Cryptidkin",
+      "type": "species",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Brennan.png",
+      "system": {
+        "category": "ancestry",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><p><strong>Cryptidkin.</strong> Normalized Bad Eden ancestry root.</p><p>Select one subspecies when building the character: <strong>Chupacabra, Jackalope, Furrykin</strong>.</p><p>This root grants the shared Cryptidkin core trait package. Subspecies layer flavor, size, and Tier powers on top.</p><p><em>“Every settlement has a story about you. None of them are accurate. All of them are useful.”</em></p><hr><p><em><strong>Cryptidkin Core Traits</strong></em></p><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (set by subspecies).</p></li><li><p><strong>Speed.</strong> 6 squares (subspecies may override).</p></li><li><p><strong>attributes.</strong> Your background determines your attribute increases; Cryptidkin does not grant fixed bonuses. Subspecies lean expressed through Tier powers.</p></li></ul><p><strong>Folklore Presence.</strong> When you first encounter an NPC group, the GM chooses (or rolls) whether you are met as <em>omen</em>, <em>trophy</em>, or <em>legend</em>. It is never neutral. People have heard of your kind. They are almost always wrong, and that is almost always useful.</p><p><strong>Wasteland Adapted.</strong> You reroll the lowest die on checks against disease and environmental poison. You ignore the first nonmagical environmental hazard you encounter each Strategic Turn (heat, cold, radiation taint, wind shear, fume pockets).</p><p><strong>Survivor’s Instinct.</strong> When you roll initiative, you can choose to know the position of the nearest exit, the nearest threat, or the nearest ally within 12 squares You cannot be surprised while conscious.</p><p><strong>Subspecies.</strong> Choose one Cryptidkin subspecies (Chupacabra, Jackalope, Furrykin). Your subspecies grants Tier powers as you level (Tier I at creation, then 5/11/17).</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "CKSIZE0000000001",
+            "type": "Size",
+            "configuration": {
+              "sizes": [
+                "sm",
+                "med"
+              ]
+            },
+            "level": 0,
+            "title": "",
+            "hint": "Small or Medium (set by subspecies).",
+            "value": {}
+          },
+          {
+            "_id": "CKCORE0000000001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.CKCORETRAITPLACE",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Folklore & Frame",
+            "hint": "Gain the core Cryptidkin ancestry traits."
+          }
+        ],
+        "movement": {
+          "walk": "30",
+          "units": null,
+          "hover": false,
+          "ignoredDifficultTerrain": []
+        },
+        "senses": {
+          "darkvision": 60,
+          "blindsight": null,
+          "tremorsense": null,
+          "truesight": null,
+          "units": null,
+          "special": "Folklore Presence; Survivor's Instinct."
+        },
+        "type": {
+          "value": "humanoid",
+          "custom": "",
+          "subtype": "Cryptidkin"
+        },
+        "identifier": "cryptidkin"
+      },
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "ancestry",
+          "family": "cryptidkin",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "absorbed": [
+            "jackalope",
+            "furrykin"
+          ]
+        },
+        "fourththing": {
+          "rfi": {
+            "item": {
+              "price": {
+                "marks": 30,
+                "currency": "economy",
+                "gmOverride": false,
+                "altCurrencies": {},
+                "split": null,
+                "rarityMult": 1,
+                "notes": "TI tool stamp",
+                "bound": "free",
+                "saleBack": 12
+              }
+            }
+          },
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.c9a7f1d26e3b4c81"
+        }
+      },
+      "effects": [],
+      "folder": "f95fcfa18822c4e3",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.c9a7f1d26e3b4c81",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.c9a7f1d26e3b4c81",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 1500000,
+      "_id": "z37eUrkcnizHiRL3",
+      "_key": "!actors.items!rjQgflJpTiNOUai8.z37eUrkcnizHiRL3"
+    },
+    {
+      "name": "Cryptidkin: Folklore & Frame",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_abyssal_cartographer.png",
+      "system": {
+        "category": "feature",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-canon-cryptidkin-folklore-frame=\"v1\" style=\"display:none\"></div><p><em>\"You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.\"</em></p><p><strong>Folklore Presence.</strong> 1/Soma Break, when you first meet a community, decide whether the rumors about you arrived first. If yes, reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering — the GM gets to colour it.</p><p><strong>Wasteland Adapted.</strong> Reroll the lowest die on defense checks against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh).</p><p><strong>Survivor's Instinct.</strong> 1/Soma Break, when you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "cryptidkin-folklore-frame",
+        "requirements": "Cryptidkin",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "cryptidkin",
+          "feature": "folklore_frame",
+          "family": "cryptidkin",
+          "tierLevel": 0,
+          "version": "2.0.0",
+          "date": "2026-04-18"
+        },
+        "fourththing": {
+          "triggers": [
+            {
+              "event": "on-would-drop-to-zero",
+              "effect": {
+                "kind": "chat-prompt",
+                "args": {
+                  "body": "Survivor’s Instinct. When you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress"
+                }
+              }
+            }
+          ],
+          "principleSource": "ancestry"
+        },
+        "autoanimations": {
+          "id": "1ef467b8-6eb3-4e41-b1cc-5c1e27f370ac",
+          "label": "Cryptidkin: Folklore & Frame",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "bless",
+              "variant": "loop",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.CKCORETRAITPLACE"
+        }
+      },
+      "folder": "f95fcfa18822c4e3",
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "exportSource": null,
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.CKCORETRAITPLACE",
+        "duplicateSource": null
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 0,
+      "_id": "I2RwTqmyupiwZSzz",
+      "_key": "!actors.items!rjQgflJpTiNOUai8.I2RwTqmyupiwZSzz"
+    },
+    {
+      "name": "Cryptidkin Heritage: Furrykin",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/RayCat.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Cryptidkin Subspecies.</strong> This heritage preserves the original UUID for <em>Furrykin</em> while converting it from a species-root with five sub-clades into a single flexible Cryptidkin subspecies.</p><p><em>“You are not an animal that learned to talk. You are a person the world made with fur because it needed you to survive.”</em></p><p><strong>Furrykin.</strong> You are anything fur-bearing the world decided to make people out of. Talking badger, cunning fox, stoic bear, watchful rabbit, the uncle-shaped thing the trappers call Bigfoot—all valid. Size and frame are flexible; the instinct is not.</p><h3>Traits</h3><ul><li><p><strong>Creature Type.</strong> Humanoid (Cryptidkin).</p></li><li><p><strong>Size.</strong> Small or Medium (choose at creation; Medium Furrykin can describe themselves as “large and shaggy” without mechanical change—Bigfoot-scale creatures still move and fight at Medium).</p></li><li><p><strong>Speed.</strong> 6 squares</p></li><li><p><strong>Subspecies Lean.</strong> No fixed stat lean. Your frame is your business—the Tier powers adapt to how you play it.</p></li></ul><h3>Core: Folklore & Frame</h3><p>At creation you gain <strong>Folklore & Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor’s Instinct).</p><h3>Wildframe & Instinct (Furrykin Extras)</h3><ul><li><p><strong>Wildframe.</strong> Your body is built for a world that bites back. You already reroll the lowest die on checks against disease and environmental poison (from Wasteland Adapted); as Furrykin, you also add your tier to any Body defense check to resist Stress.</p></li><li><p><strong>Keen Sense.</strong> Choose one: <em>Keen Smell</em>, <em>Keen Hearing</em>, or <em>Keen Sight</em>. You reroll the lowest die on Perception checks relying on that sense.</p></li><li><p><strong>Frame Choice.</strong> Choose one narrative frame at creation: <em>Predator</em> (bite or claws count as unarmed strikes that deal 1d6 instead of 1d4), <em>Forager</em> (trained in Athletics), or <em>Brute</em> (count as one size larger for carrying, shoving, and grappling).</p></li></ul><h3>Furrykin Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Tier powers previously split across Felid / Leporid / Mustelid / Ursid / Vulpin are unified; choose flavor at the table without mechanical separation.</p>",
+          "chat": ""
+        },
+        "advancement": [
+          {
+            "_id": "ckfurrykinadv001",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.ancestries.Item.RWAuuqy8LInVCgvJ",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 0,
+            "title": "Furrykin Tier I",
+            "hint": "Gain your Furrykin Tier I subspecies power (maps to legacy Wildframe & Instinct grant)."
+          }
+        ],
+        "identifier": "cryptidkin_furrykin_heritage",
+        "requirements": "Cryptidkin",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {}
+      },
+      "effects": [],
+      "flags": {
+        "dnd5e": {
+          "originType": "species"
+        },
+        "bbttcc": {
+          "kind": "heritage",
+          "family": "cryptidkin",
+          "lineage": "Furrykin",
+          "version": "2.0.0",
+          "date": "2026-04-18",
+          "normalizedFrom": "Furrykin [species + 5 clade heritages consolidated]",
+          "consolidatedFrom": [
+            "furrykin_felid",
+            "furrykin_leporid",
+            "furrykin_mustelid",
+            "furrykin_ursid",
+            "furrykin_vulpin"
+          ]
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.a2b5906bad32ad4c"
+        }
+      },
+      "folder": "ooP9ptENqJIkL9Hf",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.a2b5906bad32ad4c",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "bbttcc-ancestry-v2",
+          "uuid": "Item.a2b5906bad32ad4c",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_id": "ByKr2YPcHnkS3TqD",
+      "_key": "!actors.items!rjQgflJpTiNOUai8.ByKr2YPcHnkS3TqD"
+    },
+    {
+      "name": "Cryptidkin (Furrykin): Wildframe & Instinct",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_furrykin.png",
+      "system": {
+        "category": "feature",
+        "source": {
+          "custom": "Bad Eden",
+          "rules": "2024",
+          "revision": 2,
+          "book": "",
+          "license": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“Your body is built for a world that bites back. So is your patience.”</em></p>\n<p><strong>Wildframe.</strong> Add your tier to Body defense checks made to resist Stress.</p>\n<p><strong>Keen Sense.</strong> Choose one at character creation: <em>Keen Smell</em>, <em>Keen Hearing</em>, or <em>Keen Sight</em>. You reroll the lowest die on Soul (Perception) checks that rely on that sense.</p>\n<p><strong>Frame Choice.</strong> Choose one narrative frame at character creation; it is permanent.</p>\n<ul><li><strong>Predator.</strong> Your unarmed strikes (bite or claws) deal 1d6 instead of 1d4 and count as natural weapons.</li><li><strong>Forager.</strong> You gain a skill rank in the Athletics skill. If you already have it, you may choose another skill from the Cryptidkin list (GM adjudicates).</li><li><strong>Brute.</strong> You count as one size larger for the purposes of carrying capacity, push, drag, lift, shove, and grapple.</li></ul>",
+          "chat": ""
+        },
+        "advancement": {},
+        "identifier": "cryptidkin-furrykin-wildframe-instinct",
+        "requirements": "Cryptidkin (Furrykin)",
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "activities": {},
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "properties": []
+      },
+      "effects": [
+        {
+          "name": "Wildframe & Instinct: Athletics +1",
+          "img": "icons/creatures/abilities/paw-print-orange.webp",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.athletics.value",
+                "value": 1,
+                "type": "add",
+                "priority": 10,
+                "phase": "initial"
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "Passive: Wildframe &amp; Instinct: Athletics +1",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "fourththing": {
+              "passiveAuthored": true,
+              "sprint": "passive-ae-2026-04-28"
+            }
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "_id": "rpR5M3AUar8hNI41",
+          "showIcon": 1,
+          "folder": null,
+          "_stats": {
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "createdTime": 1787799237081,
+            "modifiedTime": 1787799237081,
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null
+          },
+          "_key": "!actors.items.effects!rjQgflJpTiNOUai8.iAcmA4Xs3L5MJ53C.rpR5M3AUar8hNI41"
+        }
+      ],
+      "flags": {
+        "dnd5e": {
+          "originType": "feat"
+        },
+        "bbttcc": {
+          "kind": "cryptidkin",
+          "feature": "wildframe_instinct",
+          "lineage": "Furrykin",
+          "tierLevel": 0,
+          "version": "2.0.0",
+          "date": "2026-04-18"
+        },
+        "fourththing": {
+          "rerolls": [
+            {
+              "context": "check",
+              "skill": "perception",
+              "mode": "reroll-lowest"
+            },
+            {
+              "context": "check",
+              "attribute": "soul",
+              "mode": "reroll-lowest"
+            }
+          ],
+          "vocabScrub": "2026-05-16",
+          "principleSource": "ancestry"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.ancestries.Item.RWAuuqy8LInVCgvJ"
+        }
+      },
+      "folder": "sdEPUmGLjvHEFLp6",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.ancestries.Item.RWAuuqy8LInVCgvJ",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 400000,
+      "_id": "iAcmA4Xs3L5MJ53C",
+      "_key": "!actors.items!rjQgflJpTiNOUai8.iAcmA4Xs3L5MJ53C"
+    },
+    {
+      "name": "Cosmic Linguist",
+      "type": "class",
+      "system": {
+        "category": "path",
+        "identifier": "cosmic_linguist",
+        "source": "",
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"Strike the clause. Insert your own. Reality reads from the top.\"</em></p>\n<p>The Cosmic Linguist edits reality like text — meaning first, matter second. One currency now: <strong>Surge</strong>. The editor always has the next word, so you bank <strong>+1 Surge at the start of your turn</strong> (the old Resonance, Strain, and Editorial Authority pools are folded into this single pool).</p>\n<h3>The Edit (spent via Surge)</h3>\n<ul>\n  <li><strong>Emphasis</strong> (1) — your next Strike or manifestation hits for +Tier d6 (the word, underlined).</li>\n  <li><strong>Stabilize</strong> (2) — you gain DR equal to Tier; your next cast resists counter / dispel (the sentence holds).</li>\n  <li><strong>Impose a Reading</strong> (3) — a foe's next attack and its saves are at disadvantage (only one correct interpretation: yours).</li>\n  <li><strong>Rewrite the Sentence</strong> (5) — a foe loses its reactions and rolls saves at disadvantage; allies near you bank a reroll.</li>\n</ul>\n<p><strong>The Sentence</strong> endures as your signature stance — while held, the manifestation's primary target is bound by name and rolls its checks against you at disadvantage.</p>",
+          "chat": ""
+        },
+        "hd": {
+          "additional": "",
+          "spent": 0
+        },
+        "advancement": [
+          {
+            "_id": "rOxiMPiQoOXcWVsP",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.l4s5F3CMg7bo0Lb2",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.wc0V0gK05SnEXBR9",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.BiSJL6Gl0tnBLAmW",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.iIcYhYyA4LhD1Ei2",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.9c0g33iP1wGPGedB",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.cLddE4bSelGil06x",
+                  "optional": false
+                },
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.0THo7r8y2sUg8JlZ",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": null
+            },
+            "value": {},
+            "level": 1,
+            "title": "Cosmic Linguist Core Features"
+          },
+          {
+            "_id": "5f28179b5fe01b69",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.431954640378b392",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": {
+                "ability": "",
+                "preparation": "",
+                "uses": {
+                  "max": "",
+                  "per": ""
+                }
+              }
+            },
+            "value": {},
+            "level": 1,
+            "title": "Cosmic Linguist Discipline (Init 1) — True-Name Touch",
+            "icon": "",
+            "classRestriction": "",
+            "hint": "",
+            "flags": {}
+          },
+          {
+            "_id": "0dfd0ceed783fc00",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.7a37d8358c144126",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": {
+                "ability": "",
+                "preparation": "",
+                "uses": {
+                  "max": "",
+                  "per": ""
+                }
+              }
+            },
+            "value": {},
+            "level": 6,
+            "title": "Cosmic Linguist Discipline (Init 6) — Translation",
+            "icon": "",
+            "classRestriction": "",
+            "hint": "",
+            "flags": {}
+          },
+          {
+            "_id": "9fbd2f150a62e292",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.a2702a2349d936dd",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": {
+                "ability": "",
+                "preparation": "",
+                "uses": {
+                  "max": "",
+                  "per": ""
+                }
+              }
+            },
+            "value": {},
+            "level": 11,
+            "title": "Cosmic Linguist Discipline (Init 11) — The Sentence",
+            "icon": "",
+            "classRestriction": "",
+            "hint": "",
+            "flags": {}
+          },
+          {
+            "_id": "2bee2f4389022b8d",
+            "type": "ItemGrant",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.bbttcc-master-content.classes.Item.8a7f6bcb78b3de87",
+                  "optional": false
+                }
+              ],
+              "optional": false,
+              "spell": {
+                "ability": "",
+                "preparation": "",
+                "uses": {
+                  "max": "",
+                  "per": ""
+                }
+              }
+            },
+            "value": {},
+            "level": 16,
+            "title": "Cosmic Linguist Discipline (Init 16) — Word That Was",
+            "icon": "",
+            "classRestriction": "",
+            "hint": "",
+            "flags": {}
+          }
+        ]
+      },
+      "flags": {
+        "bbttcc": {
+          "primary": "charisma",
+          "opBonus": {
+            "intrigue": 2,
+            "faith": 2
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16",
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.ZA4n59tvBCFj8G9N"
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Cosmic%20Linguist.png",
+      "effects": [],
+      "folder": "IyB4V2rPqsdbGukM",
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 100000,
+      "_stats": {
+        "systemId": "fourththing",
+        "coreVersion": "14.367",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.1",
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.ZA4n59tvBCFj8G9N",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "2I7IQa1uDsB7TokC",
+      "_key": "!actors.items!rjQgflJpTiNOUai8.2I7IQa1uDsB7TokC"
+    },
+    {
+      "name": "Cosmic Linguist: Core Features",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_1.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"Magic is grammar. Reality is a draft.\"</em></p><p>You are a prepared, academic manifestant who edits meaning directly. You do not delegate power; you channel it raw.</p><p><strong>Engine truth:</strong> your craft runs on <strong>Clarity</strong> (your casting pool, deeper than other paths), <strong>Noise</strong> (the lattice hears sloppy work), <strong>Surge</strong> (the editor's one currency — +1 at the start of your turn), and <strong>Blood Debt</strong> (reaching above your tier, discounted by your Discipline). <em>The cast dialog's cost line is the truth.</em></p><p><em>An earlier draft of this class spoke of Resonance, Strain, and correspondence alignment. Those pools were folded into Surge — the fiction survives; the bookkeeping does not.</em></p>",
+          "chat": ""
+        },
+        "identifier": "cosmic_linguist_core_features",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "cosmic_linguist_core_features"
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.l4s5F3CMg7bo0Lb2"
+        }
+      },
+      "folder": "r5DULAhp98iub0mt",
+      "sort": 100000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.l4s5F3CMg7bo0Lb2",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_id": "ttumSpdVaSLwZI6F",
+      "_key": "!actors.items!rjQgflJpTiNOUai8.ttumSpdVaSLwZI6F"
+    },
+    {
+      "name": "Cosmic Linguist: Resonance Channel",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_circuit_6.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden Originals (2026 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>The Edit — Surge spends, allocated in the cast dialog.</strong></p><ul><li><strong>Emphasis (1)</strong> — your next Strike or manifestation hits for +Tier d6 (the word, underlined).</li><li><strong>Stabilize (2)</strong> — you gain DR equal to Tier; your next cast resists counter/dispel (the sentence holds).</li><li><strong>Impose a Reading (3)</strong> — a foe's next attack and its saves are at disadvantage: in the dialog this raises your working's save DC and forces the target to roll 3d10 keep-lowest-2. Only one correct interpretation: yours.</li><li><strong>Rewrite the Sentence (5)</strong> — a foe loses its reactions and rolls saves at disadvantage; allies near you bank a reroll.</li></ul><p>These are the old Resonance channels spoken in the one currency: <strong>Surge</strong>. <strong>The Sentence</strong> (Initiation 11) endures as your signature stance on top of them.</p>",
+          "chat": ""
+        },
+        "identifier": "cosmic_linguist_resonance_channel_action",
+        "advancement": {},
+        "activities": {
+          "primary": {
+            "type": "utility",
+            "name": "Cosmic Linguist: Resonance Channel",
+            "activation": {
+              "type": "bonus",
+              "condition": "",
+              "override": false
+            },
+            "consumption": {
+              "targets": [],
+              "scaling": {
+                "allowed": false
+              },
+              "spellSlot": true
+            },
+            "description": {
+              "chatFlavor": ""
+            },
+            "duration": {
+              "units": "inst",
+              "value": "",
+              "concentration": false,
+              "override": false
+            },
+            "effects": [],
+            "range": {
+              "units": "self",
+              "value": "",
+              "override": false
+            },
+            "target": {
+              "affects": {
+                "type": "self",
+                "choice": false
+              },
+              "template": {
+                "count": "",
+                "units": "ft",
+                "type": "",
+                "contiguous": false,
+                "stationary": false
+              },
+              "override": false,
+              "prompt": true
+            },
+            "uses": {
+              "max": "",
+              "spent": 0,
+              "recovery": []
+            },
+            "_id": "XLQVKoy7hJ0RAdwv",
+            "img": null,
+            "sort": 0,
+            "flags": {},
+            "visibility": {
+              "level": {},
+              "requireAttunement": false,
+              "requireIdentification": false,
+              "requireMagic": false
+            },
+            "roll": {
+              "prompt": false,
+              "visible": false
+            }
+          }
+        },
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "cosmic_linguist_resonance_channel_action",
+          "resourceAction": true,
+          "resourceDisplay": false,
+          "engine": "dicePool",
+          "classId": "cosmic_linguist",
+          "pool": "resonance",
+          "track": "strain",
+          "cost": 1,
+          "actionKey": "cosmic_linguist_resonance_channel_action",
+          "opensDialog": "cosmic_resonance"
+        },
+        "dnd5e": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.9HYrLhpbKzGcH6ST",
+          "advancementOrigin": "J987fkECT4OLz0EV.RsrcActClL1P8a9s",
+          "advancementRoot": "J987fkECT4OLz0EV.RsrcActClL1P8a9s"
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.BiSJL6Gl0tnBLAmW"
+        }
+      },
+      "folder": "r5DULAhp98iub0mt",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.BiSJL6Gl0tnBLAmW",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 400000,
+      "_id": "QaOb5dHoABcQ7MQ1",
+      "_key": "!actors.items!rjQgflJpTiNOUai8.QaOb5dHoABcQ7MQ1"
+    },
+    {
+      "name": "Cosmic Linguist: Semantic Editor",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_scissors.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"I am not casting. I am editing.\"</em></p><p><strong>Roleplay register, not rules.</strong> Choose the voice of your edits — <strong>Additive, Subtractive, Transformative, Referential, or Performative</strong>. Narrate every manifestation in your mode: it shapes how the working looks, sounds, and is remembered — never what it costs.</p><p><em>The cast dialog's cost line is the truth. (An earlier draft priced modes in Strain; Strain is retired.)</em></p>",
+          "chat": ""
+        },
+        "identifier": "cosmic_linguist_semantic_editor",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "cosmic_linguist_semantic_editor"
+        },
+        "fourththing": {
+          "principleSource": "class"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.cLddE4bSelGil06x"
+        }
+      },
+      "folder": "r5DULAhp98iub0mt",
+      "sort": 125000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.cLddE4bSelGil06x",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_id": "9EKUskQ9nN1wTEJK",
+      "_key": "!actors.items!rjQgflJpTiNOUai8.9EKUskQ9nN1wTEJK"
+    },
+    {
+      "name": "Cosmic Linguist: Initiation 1 — True-Name Touch",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_cast_1.png",
+      "system": {
+        "category": "technique",
+        "source": "Bad Eden (2024 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Initiation 1 — True-Name Touch.</strong> The Surge Pool comes online (existing class resource — see your Doctrine for generation rule). When you spend Clarity to manifest, you may <em>name</em> the target as part of the action. For the rest of the scene, extending that manifestation's Reach to the named target costs 1 less Surge / Blood Debt (minimum 0).</p><p><span style=\"opacity: 0.7; font-size: 0.85em\">Discipline (passive): Reach discount −1 on Blood-Debt-reach. Skill rank +1 in two of: Occult, Lore, Insight, Lore.</span></p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"clInit1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\"><p><span style=\"letter-spacing: 0.04em; text-transform: uppercase; color: #d4b8e8; margin-bottom: 0.25rem; font-size: 0.78rem\">⟁ Per-Use Ability — <strong>True-Name Touch</strong></span> <span style=\"opacity: 0.92; line-height: 1.4; font-size: 0.86rem\"><strong>Recovery:</strong> At-will (per scene)  ·  <strong>Action:</strong> Bonus (with manifestation)  ·  <strong>Use:</strong> Click this feature on your sheet to invoke.</span> <span style=\"opacity: 0.85; margin-top: 0.3rem; font-size: 0.82rem\">Name a target as part of your manifestation. For the rest of the scene, extending that manifestation's Reach to the named target costs 1 less Surge (min 0).</span></p></div><p><em>Recosted 2026-08-23: this ability's earlier economy (Civic Charge / Strain / Resonance / Leverage / Administrative Pressure) is retired — everything now runs on Surge, Clarity, Noise, and the misfire ladder. The ability dialog's cost line is the truth; ledgers named here are narrative, GM-adjudicated, never a tracked pool.</em></p>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "max": "",
+          "recovery": []
+        },
+        "advancement": {},
+        "identifier": "cl_init1_true_name_touch",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "requirements": "Cosmic Linguist (1st level)",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "r5DULAhp98iub0mt",
+      "flags": {
+        "fourththing": {
+          "discipline": {
+            "passive": {
+              "reachDiscount": 1
+            }
+          },
+          "vocabScrub": "2026-05-16",
+          "principleSource": "class"
+        },
+        "bbttcc": {},
+        "dnd5e": {},
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.431954640378b392"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.431954640378b392",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 175000,
+      "_id": "iFhrud60fttSTJPj",
+      "_key": "!actors.items!rjQgflJpTiNOUai8.iFhrud60fttSTJPj"
+    },
+    {
+      "name": "Metaphor Apostle (Bad Eden)",
+      "type": "subclass",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icon_energy_connection.png",
+      "system": {
+        "category": "doctrine",
+        "classIdentifier": "cosmic_linguist",
+        "source": "Bad Eden Originals — Sprint F (2026 rules)",
+        "tags": [],
+        "description": {
+          "value": "<p><em>\"Say what counts as what now. Reality is listening.\"</em></p>\n<p><strong>Doctrine:</strong> Reality bends when likeness is declared and believed — your workings hinge on symbolic equivalence.</p>\n<p>The Metaphor Apostle rules by declaration. Your Surge spends rewrite what things are: an ally becomes a wall, a foe's armor becomes paper, and your whole line becomes giants.</p>\n<h3>Doctrine (spent via Surge)</h3>\n<ul>\n  <li><strong>Declared Likeness</strong> (1) — \"you are a wall\": an ally gains DR equal to Tier.</li>\n  <li><strong>Declared Frailty</strong> (2) — \"their armor is paper\": a foe's next attack and its saves are at disadvantage.</li>\n  <li><strong>Apotheosis</strong> (5) — \"you are all giants\": allies within 6 squares gain DR equal to Tier and a reroll.</li>\n</ul>",
+          "chat": ""
+        },
+        "identifier": "bbttcc-cosmic-linguist-linguist-metaphor-apostle",
+        "advancement": [],
+        "spellcasting": {
+          "progression": "none",
+          "preparation": {}
+        }
+      },
+      "effects": [],
+      "folder": "kW6Z4Tf29UMVg49o",
+      "flags": {
+        "fourththing": {
+          "principleSource": "subclass"
+        },
+        "core": {
+          "sourceId": "Compendium.bbttcc-master-content.classes.Item.vMEvg5bXWgJAI16c"
+        }
+      },
+      "ownership": {
+        "default": 0,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "sort": 600000,
+      "_stats": {
+        "systemId": "fourththing",
+        "coreVersion": "14.367",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "systemVersion": "0.6.1",
+        "compendiumSource": "Compendium.bbttcc-master-content.classes.Item.vMEvg5bXWgJAI16c",
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_id": "9TmjBffrwOAnYEoh",
+      "_key": "!actors.items!rjQgflJpTiNOUai8.9TmjBffrwOAnYEoh"
+    },
+    {
+      "name": "Archetype: The Fool (Catalyst)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_fool.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>“You move before the map exists.”</em></p><p><strong>Archetype (Bad Eden): The Fool (Catalyst).</strong> You are motion before certainty, risk before consensus, and the destabilizing force that turns unknown ground into lived reality.</p><h3>Archetype Effects</h3><ul><li><strong>Faction Edge.</strong> Your archetype strengthens exploration, scouting, improvisation, and risky openings. This Archetype is associated with <strong>+1 Intrigue</strong> and <strong>+1 Logistics</strong> in faction calculus.</li><li><strong>Tier Engine.</strong> See this Archetype’s Tier feats (Tier 1–4) for your full tactical and strategic toolkit.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {
+          "0DV5PJIqtaWkNIcP": {
+            "_id": "0DV5PJIqtaWkNIcP",
+            "type": "AbilityScoreImprovement",
+            "configuration": {
+              "points": 3,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {
+              "type": "asi"
+            },
+            "level": 1,
+            "title": "Archetype Ability Scores",
+            "hint": "Gain 3 ability score points (max +2 to any one score). See the Archetype text for recommended arrays.",
+            "flags": {}
+          }
+        },
+        "identifier": "archetype-fool",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "lthIAA49boUx7C1S",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "character-archetypes",
+          "bonuses": {
+            "logistics": 1,
+            "intrigue": 1
+          },
+          "option": {
+            "category": "archetype",
+            "key": "fool",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:fool",
+              "bbttcc:expression:catalyst",
+              "bbttcc:base"
+            ]
+          }
+        },
+        "dnd5e": {}
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.rRvWQUXGD9XDYa2n",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "ihclpn4V03HFUzBs",
+      "sort": 100000,
+      "_key": "!actors.items!rjQgflJpTiNOUai8.ihclpn4V03HFUzBs"
+    },
+    {
+      "name": "Crew Type: Storm Wardens",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 2,
+          "rules": "2024",
+          "custom": "Bad Eden"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Crew Type (Bad Eden): Storm Wardens.</em></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><ul><li><strong>Tactical Identity:</strong> You gain a skill rank in Lore and Faith.</li><li><strong>Strategic Identity:</strong> Your faction starts with +1 Faith OPs.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "crew-storm-wardens",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "folder": "UA0NkRXG1eSXe9EL",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew-types",
+          "bonuses": {
+            "faith": 1
+          },
+          "option": {
+            "category": "crew",
+            "key": "storm-wardens",
+            "progressionType": "level",
+            "domains": [
+              "op",
+              "hazard",
+              "weather"
+            ],
+            "scope": "faction",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:storm-wardens",
+              "bbttcc:progression:level",
+              "bbttcc:domain:op",
+              "bbttcc:domain:hazard",
+              "bbttcc:domain:weather",
+              "bbttcc:scope:faction",
+              "bbttcc:effect:op:faith:+8",
+              "bbttcc:theme:weather-control",
+              "bbttcc:theme:hazard-mitigation",
+              "bbttcc:theme:environmental-authority",
+              "bbttcc:theme:storm-discipline"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Item.NuER7siSAwq9YU9j",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.NuER7siSAwq9YU9j",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "IfPbizSOkz5OvofZ",
+      "sort": 100000,
+      "_key": "!actors.items!rjQgflJpTiNOUai8.IfPbizSOkz5OvofZ"
+    },
+    {
+      "name": "Alignment: Kether",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden",
+          "revision": 1,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "The Crown - Divine unity. +1 Soft Power, +1 Diplomacy OPs\n\nYou are called upward toward unity, legitimacy, and the better shape of the world. Kether rewards coalition-building, visionary leadership, and factions that hold together under pressure.",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "alignment-kether",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "sephirothic-alignments",
+          "bonuses": {
+            "diplomacy": 1,
+            "softpower": 1
+          },
+          "option": {}
+        }
+      },
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_crown-1.png",
+      "effects": [],
+      "folder": "RAOWJYon3t34M5XY",
+      "_stats": {
+        "compendiumSource": "Compendium.bbttcc-character-options.sephirothic-alignments.Item.ic3UDTws3eh7bIi9",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.icXFNIffu7YuIQoA",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 2,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "9MIrwYig40sQKErG",
+      "sort": 600000,
+      "_key": "!actors.items!rjQgflJpTiNOUai8.9MIrwYig40sQKErG"
+    },
+    {
+      "name": "Occult Association: Gnostic",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 2,
+          "rules": "2024"
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><em>Occult Association (Bad Eden): Gnostic.</em></p><p><strong>“I don’t believe. I remember.”</strong></p><p>Gnostics approach the Great Work as a recovery operation. The world is not merely broken. It is <em>obscured</em>.</p><p>Truth exists beneath propaganda, false heavens, corrupted consensus, and all the symbolic machinery that keeps frightened systems stable. Where others try to fix the world, the Gnostic strips it down. They interrogate assumptions, dismantle illusions, and treat certainty as a hostile force when it has not earned the right to exist.</p><p>To a Gnostic, the Great Work is not invention. It is <strong>remembrance</strong>. What is real was already real before the lie got organized.</p><p><strong>How Gnostics pursue the Great Work:</strong></p><ul><li>By exposing false narratives and corrupted consensus</li><li>By resisting manipulation, propaganda, and symbolic control</li><li>By recovering truths the world insists never existed</li><li>By making Stealth expensive to maintain</li></ul><p><strong>Resonance:</strong> <strong>Tiferet</strong> — truth, clarity, revelation, and the painful coherence that follows honest sight.</p><p><strong>Tell-tales:</strong> eyes that track patterns no one else admits are there, a habit of pausing just before the lie finishes speaking.</p><p><strong>Faction Effect (Passive):</strong></p><ul><li><strong>+1 to Soft Power OP rolls</strong></li></ul><p><strong>Cost Principle:</strong> truth is destabilizing. Expect alienation, exposed contradictions, social friction, and pressure from systems that depended on confusion to survive.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "identifier": "occult-association-gnostic",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult-associations",
+          "bonuses": {
+            "softpower": 1
+          },
+          "option": {
+            "category": "occult",
+            "key": "gnostic",
+            "progressionType": "level",
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:gnostic",
+              "bbttcc:base",
+              "bbttcc:domain:tikkun",
+              "bbttcc:domain:truth",
+              "bbttcc:domain:soft-power",
+              "bbttcc:scope:faction",
+              "bbttcc:when:passive",
+              "bbttcc:effect:op_roll:softpower:+3",
+              "bbttcc:resonance:tiferet",
+              "bbttcc:drift:anti-authority",
+              "bbttcc:cost:alienation",
+              "bbttcc:cost:friction",
+              "bbttcc:theme:remembrance",
+              "bbttcc:theme:truth-pressure"
+            ]
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "effects": [],
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+      "folder": "cAJvL0bsu1HkZCWz",
+      "_stats": {
+        "compendiumSource": "Item.SJqoAnjAtEVP09At",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.SJqoAnjAtEVP09At",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "EQS3COtIbyg4rg44",
+      "sort": 100000,
+      "_key": "!actors.items!rjQgflJpTiNOUai8.EQS3COtIbyg4rg44"
+    },
+    {
+      "name": "Archetype: The Fool (Catalyst) (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Archetypes/bbttcc_archetypes_the_fool.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 1,
+          "rules": "2024",
+          "custom": "Bad Eden – Archetype: The Fool (Catalyst) (Tier 1)",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 (Level 1) — The Fool (Catalyst)</strong></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Athletics and Athletics.</li><li><strong>Strategic:</strong> Your faction's passive OP bias now follows the base Archetype file.</li></ul>",
+          "chat": ""
+        },
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "identifier": "archetype-fool-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "Level 1+",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [
+        {
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "flags": {},
+          "name": "Archetype Tier 1 Proficiencies",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_android_2.png",
+          "_id": "JoH3gYGJrthivYzI",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.athletics.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.athletics.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1787799237081,
+            "modifiedTime": 1787799237081
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!rjQgflJpTiNOUai8.tL1sWgDKeKQozUJ2.JoH3gYGJrthivYzI"
+        }
+      ],
+      "folder": "lthIAA49boUx7C1S",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "archetype",
+          "bonuses": {},
+          "option": {
+            "category": "archetype",
+            "key": "fool",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:archetype",
+              "bbttcc:arcana:fool",
+              "bbttcc:expression:catalyst",
+              "bbttcc:tier:1",
+              "bbttcc:logistics_op_cap:+1",
+              "bbttcc:intrigue_op_cap:+1"
+            ]
+          }
+        },
+        "dnd5e": {},
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.rGh31TU4GcXzjI0m",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "tL1sWgDKeKQozUJ2",
+      "sort": 200000,
+      "_key": "!actors.items!rjQgflJpTiNOUai8.tL1sWgDKeKQozUJ2"
+    },
+    {
+      "name": "Crew Type: Storm Wardens (Tier 1)",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_button_icon_storm_warden.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden – Crew Type: Storm Wardens (Tier 1)",
+          "revision": 2,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<p><strong>Tier 1 — Storm Wardens</strong></p><p><strong>“Weather is only random if nobody is in charge.”</strong></p><p>Storm Wardens treat wind, flood, ashfall, and static like administrative problems. They know how to ride a storm front, ground a lightning field, and keep a faction moving when the world is trying to turn travel into a funeral.</p><p><em>You’ve learned the first law of bad weather: panic is usually deadlier than the rain.</em></p><ul><li><strong>Tactical:</strong> You gain a skill rank in Lore and Faith.</li><li><strong>Strategic:</strong> In hazardous weather or corrupted environmental conditions, your faction reduces travel and exposure penalties.</li></ul>",
+          "chat": ""
+        },
+        "identifier": "crew-storm-wardens-t1",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "advancement": {},
+        "crewed": false,
+        "enchant": {},
+        "requirements": "Level 1+",
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        },
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        }
+      },
+      "effects": [
+        {
+          "_id": "4c4c71f0b0be4694",
+          "name": "Storm Wardens T1 Skills",
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_battle_music_2.png",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.lore.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              },
+              {
+                "key": "system.skills.faith.value",
+                "type": "upgrade",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "disabled": false,
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "transfer": true,
+          "statuses": [],
+          "sort": 0,
+          "flags": {
+            "dnd5e": {
+              "riders": {
+                "statuses": []
+              }
+            }
+          },
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1787799237081,
+            "modifiedTime": 1787799237081
+          },
+          "start": {
+            "combat": null,
+            "round": 0,
+            "time": 0,
+            "turn": 0,
+            "combatant": null,
+            "initiative": null
+          },
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!rjQgflJpTiNOUai8.6imvCU9LabH6Cnnk.4c4c71f0b0be4694"
+        }
+      ],
+      "folder": "UA0NkRXG1eSXe9EL",
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "crew",
+          "bonuses": {},
+          "option": {
+            "category": "crew",
+            "key": "storm-wardens",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "domains": [
+              "travel",
+              "hazard",
+              "weather"
+            ],
+            "terrains": [
+              "swamp",
+              "mire",
+              "wasteland",
+              "desert"
+            ],
+            "scope": "hex",
+            "tags": [
+              "bbttcc:option:crew",
+              "bbttcc:crew:storm-wardens",
+              "bbttcc:tier:1",
+              "bbttcc:domain:travel",
+              "bbttcc:domain:hazard",
+              "bbttcc:domain:weather",
+              "bbttcc:terrain:swamp",
+              "bbttcc:terrain:mire",
+              "bbttcc:terrain:wasteland",
+              "bbttcc:terrain:desert",
+              "bbttcc:scope:hex",
+              "bbttcc:when:hazard:weather",
+              "bbttcc:when:hazard:environmental",
+              "bbttcc:when:origin_terrain:swamp",
+              "bbttcc:when:origin_terrain:mire",
+              "bbttcc:when:origin_terrain:wasteland",
+              "bbttcc:when:origin_terrain:desert",
+              "bbttcc:effect:travel:hazard_penalty:-1step",
+              "bbttcc:effect:hazard:exposure_reduction:+1step",
+              "bbttcc:theme:weather-control",
+              "bbttcc:theme:hazard-mitigation",
+              "bbttcc:theme:storm-discipline"
+            ]
+          }
+        },
+        "fourththing": {
+          "vocabScrub": "2026-05-16"
+        }
+      },
+      "_stats": {
+        "compendiumSource": "Item.jirlWvJhUI0C4gVU",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.jirlWvJhUI0C4gVU",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "6imvCU9LabH6Cnnk",
+      "sort": 0,
+      "_key": "!actors.items!rjQgflJpTiNOUai8.6imvCU9LabH6Cnnk"
+    },
+    {
+      "name": "Occult Association: Gnostic (Tier 1)",
+      "type": "feat",
+      "system": {
+        "category": "technique",
+        "source": {
+          "revision": 2,
+          "rules": "2024",
+          "book": ""
+        },
+        "tags": [],
+        "description": {
+          "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><strong>Tier 1 — Gnostic</strong></p><p><strong>“The lie is structural.”</strong></p><p>You can feel distortion now. Propaganda scrapes. Illusions itch. You may not yet know the truth, but you know when something is <em>false</em>.</p><p><strong>Tactical (Character Scale)</strong></p><ul><li>Gain a skill rank in <strong>Insight</strong></li><li>reroll the lowest die on checks against <strong>Illusion</strong> effects</li></ul><p><strong>Strategic (Faction Scale)</strong></p><ul><li>When your faction resists propaganda, misinformation, or psychological manipulation, gain <strong>+1 to the relevant Soft Power OP roll</strong></li></ul><p><strong>Cost:</strong> once you can feel falsehood structurally, ordinary social comfort gets harder. Expect friction when you refuse to participate in convenient lies.</p>",
+          "chat": ""
+        },
+        "advancement": {},
+        "requirements": "Level 1+",
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "identifier": "occult-association-gnostic-t1",
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": 1
+        },
+        "properties": [],
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "flags": {
+        "bbttcc-character-options": {
+          "category": "occult",
+          "bonuses": {},
+          "option": {
+            "category": "occult",
+            "key": "gnostic",
+            "progressionType": "level",
+            "tier": 1,
+            "levelMin": 1,
+            "levelMax": 1,
+            "tags": [
+              "bbttcc:option:occult",
+              "bbttcc:occult:gnostic",
+              "bbttcc:tier:1",
+              "bbttcc:domain:truth",
+              "bbttcc:domain:illusion",
+              "bbttcc:domain:propaganda",
+              "bbttcc:scope:self",
+              "bbttcc:scope:faction",
+              "bbttcc:when:resist:propaganda",
+              "bbttcc:when:resist:misinformation",
+              "bbttcc:when:resist:psychological-manipulation",
+              "bbttcc:effect:proficiency:insight",
+              "bbttcc:effect:advantage:saves:illusion",
+              "bbttcc:effect:op_roll:softpower:+3",
+              "bbttcc:resonance:tiferet",
+              "bbttcc:drift:anti-authority",
+              "bbttcc:cost:alienation",
+              "bbttcc:cost:social-friction",
+              "bbttcc:theme:structural-lie",
+              "bbttcc:theme:falsehood-detection"
+            ]
+          }
+        }
+      },
+      "effects": [
+        {
+          "name": "Occult Tier1 Proficiencies",
+          "disabled": false,
+          "transfer": true,
+          "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_binah.png",
+          "_id": "3MI7aYnvakMu0F2o",
+          "type": "base",
+          "system": {
+            "changes": [
+              {
+                "key": "system.skills.insight.value",
+                "type": "add",
+                "value": 1,
+                "phase": "initial",
+                "priority": 20
+              }
+            ]
+          },
+          "duration": {
+            "value": null,
+            "units": "seconds",
+            "expiry": null,
+            "expired": false
+          },
+          "description": "",
+          "origin": null,
+          "tint": "#ffffff",
+          "statuses": [],
+          "sort": 0,
+          "flags": {},
+          "_stats": {
+            "compendiumSource": null,
+            "duplicateSource": null,
+            "exportSource": null,
+            "coreVersion": "14.367",
+            "systemId": "fourththing",
+            "systemVersion": "0.6.1",
+            "lastModifiedBy": "bytUGWIOqq9eT7Or",
+            "createdTime": 1787799237081,
+            "modifiedTime": 1787799237081
+          },
+          "start": null,
+          "showIcon": 1,
+          "folder": null,
+          "_key": "!actors.items.effects!rjQgflJpTiNOUai8.Y7dFzidPYRbBa0nS.3MI7aYnvakMu0F2o"
+        }
+      ],
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_hand_3.png",
+      "folder": "cAJvL0bsu1HkZCWz",
+      "_stats": {
+        "compendiumSource": "Item.qOiOQ3sJVEH5psUH",
+        "duplicateSource": null,
+        "exportSource": {
+          "worldId": "the-gotgait-files",
+          "uuid": "Item.qOiOQ3sJVEH5psUH",
+          "coreVersion": "13.351",
+          "systemId": "dnd5e",
+          "systemVersion": "5.2.5"
+        },
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "ownership": {
+        "default": 0,
+        "vmUfDuSYUIe7V5uB": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_id": "Y7dFzidPYRbBa0nS",
+      "sort": 0,
+      "_key": "!actors.items!rjQgflJpTiNOUai8.Y7dFzidPYRbBa0nS"
+    },
+    {
+      "name": "Metaphor Apostle: Living Allegory",
+      "type": "feat",
+      "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quantum_3.png",
+      "system": {
+        "category": "technique",
+        "source": {
+          "custom": "Bad Eden Originals",
+          "rules": "2026",
+          "revision": 1
+        },
+        "tags": [],
+        "description": {
+          "value": "<p>You conjure a scene-long metaphor entity.</p><p><strong>Effect:</strong> Create an allegorical manifestation (Judge, Mirror, Choir, Hungry Crown). It provides control, distraction, and leverage without direct damage (GM adjudication).</p>",
+          "chat": ""
+        },
+        "identifier": "metaphor_living_allegory",
+        "advancement": {},
+        "activities": {},
+        "uses": {
+          "spent": 0,
+          "recovery": [],
+          "max": ""
+        },
+        "crewed": false,
+        "enchant": {},
+        "prerequisites": {
+          "items": [],
+          "repeatable": false,
+          "level": null
+        },
+        "properties": [],
+        "requirements": "",
+        "type": {
+          "value": "",
+          "subtype": ""
+        }
+      },
+      "effects": [],
+      "flags": {
+        "bbttcc": {
+          "identifier": "metaphor_living_allegory"
+        },
+        "autoanimations": {
+          "id": "fbe57add-ee6e-4b2e-9fc0-a374be308641",
+          "label": "Metaphor Apostle: Living Allegory",
+          "macro": {
+            "enable": false,
+            "playWhen": "0"
+          },
+          "menu": "ontoken",
+          "primary": {
+            "video": {
+              "dbSection": "static",
+              "menuType": "magicsign",
+              "animation": "enchantment",
+              "variant": "02",
+              "color": "purple",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "isWait": false,
+              "opacity": 1,
+              "playbackRate": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "secondary": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "soundOnly": {
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            }
+          },
+          "source": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "target": {
+            "enable": false,
+            "video": {
+              "dbSection": "static",
+              "menuType": "spell",
+              "animation": "curewounds",
+              "variant": "01",
+              "color": "blue",
+              "enableCustom": false,
+              "customPath": ""
+            },
+            "sound": {
+              "enable": false,
+              "delay": 0,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "startTime": 0,
+              "volume": 0.75
+            },
+            "options": {
+              "addTokenWidth": false,
+              "anchor": "0.5",
+              "contrast": 0,
+              "delay": 0,
+              "elevation": 1000,
+              "fadeIn": 250,
+              "fadeOut": 500,
+              "isMasked": false,
+              "isRadius": true,
+              "isWait": false,
+              "opacity": 1,
+              "repeat": 1,
+              "repeatDelay": 250,
+              "saturate": 0,
+              "size": 1.5,
+              "tint": false,
+              "tintColor": "#FFFFFF",
+              "zIndex": 1
+            }
+          },
+          "isEnabled": true,
+          "isCustomized": true,
+          "fromAmmo": false,
+          "version": 5
+        }
+      },
+      "folder": "kW6Z4Tf29UMVg49o",
+      "sort": 300000,
+      "ownership": {
+        "default": 0,
+        "DHBK2UGr58xKXzxK": 3,
+        "PEWWUtMPC7h7WMIt": 3,
+        "bytUGWIOqq9eT7Or": 3
+      },
+      "_stats": {
+        "compendiumSource": "Item.iz1NAsILsIDFxfaX",
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799237081,
+        "modifiedTime": 1787799237081,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or"
+      },
+      "_id": "jJqBD2PVUs7Jd0LL",
+      "_key": "!actors.items!rjQgflJpTiNOUai8.jJqBD2PVUs7Jd0LL"
+    }
+  ],
+  "effects": [],
+  "folder": "D3ZOghBDmU85yNQB",
+  "sort": 150000,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "kind": "steward"
+    },
+    "bbttcc-factions": {
+      "factionId": "PBEPMRtPar0MUuSz"
+    },
+    "bbttcc-territory": {
+      "faction": "u'M'pie"
+    },
+    "bbttcc-character-options": {
+      "identity": {
+        "archetype": {
+          "key": "oJOxhhmR9ahZxwZs",
+          "id": "oJOxhhmR9ahZxwZs",
+          "pack": "bbttcc-character-options.character-archetypes",
+          "category": "character-archetypes",
+          "optionKey": "fool",
+          "identifier": "archetype-fool",
+          "name": "Archetype: The Fool (Catalyst)",
+          "currentTier": 1,
+          "displayName": "The Fool (Catalyst)"
+        },
+        "crew": {
+          "key": "1YeZ2LpzbyIhUa8X",
+          "id": "1YeZ2LpzbyIhUa8X",
+          "pack": "bbttcc-character-options.crew-types",
+          "category": "crew-types",
+          "optionKey": "storm-wardens",
+          "identifier": "crew-storm-wardens",
+          "name": "Crew Type: Storm Wardens",
+          "currentTier": 1,
+          "displayName": "Storm Wardens"
+        },
+        "sephirothicAlignment": {
+          "key": "Yb7rLajuzX3HWtmx",
+          "id": "Yb7rLajuzX3HWtmx",
+          "pack": "bbttcc-character-options.sephirothic-alignments",
+          "category": "sephirothic-alignments",
+          "optionKey": "alignment-kether",
+          "identifier": "alignment-kether",
+          "name": "Alignment: Kether"
+        },
+        "occult": {
+          "key": "PElT2vqbF4yMqNsJ",
+          "id": "PElT2vqbF4yMqNsJ",
+          "pack": "bbttcc-character-options.occult-associations",
+          "category": "occult-associations",
+          "optionKey": "gnostic",
+          "identifier": "occult-association-gnostic",
+          "name": "Occult Association: Gnostic",
+          "currentTier": 1,
+          "displayName": "Gnostic"
+        }
+      },
+      "archetype": {
+        "pack": "bbttcc-character-options.character-archetypes",
+        "id": "oJOxhhmR9ahZxwZs",
+        "name": "Archetype: The Fool (Catalyst)",
+        "identifier": "archetype-fool"
+      },
+      "crew": {
+        "pack": "bbttcc-character-options.crew-types",
+        "id": "1YeZ2LpzbyIhUa8X",
+        "name": "Crew Type: Storm Wardens",
+        "identifier": "crew-storm-wardens"
+      },
+      "sephirot": {
+        "pack": "bbttcc-character-options.sephirothic-alignments",
+        "id": "Yb7rLajuzX3HWtmx",
+        "name": "Alignment: Kether",
+        "identifier": "alignment-kether"
+      },
+      "occult": {
+        "pack": "bbttcc-character-options.occult-associations",
+        "id": "PElT2vqbF4yMqNsJ",
+        "name": "Occult Association: Gnostic",
+        "identifier": "occult-association-gnostic"
+      },
+      "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.c9a7f1d26e3b4c81",
+      "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.a2b5906bad32ad4c",
+      "classUuid": "Compendium.bbttcc-master-content.classes.Item.ZA4n59tvBCFj8G9N",
+      "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.vMEvg5bXWgJAI16c",
+      "enlightenment": {
+        "level": "",
+        "display": ""
+      },
+      "nativeLinks": {
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.c9a7f1d26e3b4c81",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.a2b5906bad32ad4c",
+        "classUuid": "Compendium.bbttcc-master-content.classes.Item.ZA4n59tvBCFj8G9N",
+        "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.vMEvg5bXWgJAI16c",
+        "ancestryApplied": true,
+        "heritageApplied": true,
+        "classApplied": true,
+        "subclassApplied": true,
+        "ancestryName": "Cryptidkin",
+        "heritageName": "Cryptidkin Heritage: Furrykin",
+        "className": "Cosmic Linguist",
+        "subclassName": "Metaphor Apostle (Bad Eden)"
+      },
+      "calculatedOPs": {
+        "violence": 0,
+        "nonlethal": 0,
+        "intrigue": 4,
+        "economy": 0,
+        "softpower": 4,
+        "diplomacy": 2,
+        "logistics": 2,
+        "culture": 0,
+        "faith": 4
+      }
+    },
+    "bbttcc-aae": {
+      "politicalPhilosophy": "liberal"
+    },
+    "bbttcc-auto-link": {
+      "guidedCharacterCreation": {
+        "stage": "complete",
+        "name": "Valdosta",
+        "factionId": "",
+        "speciesUuid": "Compendium.bbttcc-master-content.ancestries.Item.c9a7f1d26e3b4c81",
+        "heritageUuid": "Compendium.bbttcc-master-content.ancestries.Item.a2b5906bad32ad4c",
+        "classUuid": "Compendium.bbttcc-master-content.classes.Item.ZA4n59tvBCFj8G9N",
+        "subclassUuid": "Compendium.bbttcc-master-content.classes.Item.vMEvg5bXWgJAI16c",
+        "picks": {
+          "archetype": {
+            "pack": "bbttcc-character-options.character-archetypes",
+            "id": "oJOxhhmR9ahZxwZs"
+          },
+          "crew": {
+            "pack": "bbttcc-character-options.crew-types",
+            "id": "1YeZ2LpzbyIhUa8X"
+          },
+          "sephirot": {
+            "pack": "bbttcc-character-options.sephirothic-alignments",
+            "id": "Yb7rLajuzX3HWtmx"
+          },
+          "occult": {
+            "pack": "bbttcc-character-options.occult-associations",
+            "id": "PElT2vqbF4yMqNsJ"
+          },
+          "political": {
+            "id": "liberal"
+          }
+        },
+        "baseStats": {
+          "violence": 2,
+          "intrigue": 2,
+          "presence": 3,
+          "body": 3,
+          "mind": 5,
+          "soul": 4,
+          "_playerPick": true
+        }
+      }
+    },
+    "bbttcc-sorting-engine": {
+      "pillarTally": {
+        "mercy": 0,
+        "severity": 0,
+        "neutral": 0
+      },
+      "lastDescent": {
+        "timestamp": 1787273170203,
+        "confirmedBuild": {
+          "archetype": {
+            "name": "The Fool",
+            "_overridden": true
+          },
+          "ancestry": {
+            "name": "Cryptidkin",
+            "_overridden": true
+          },
+          "heritage": {
+            "name": "Cryptidkin Heritage: Furrykin",
+            "_playerPick": true
+          },
+          "crew": {
+            "name": "Storm Wardens",
+            "_overridden": true
+          },
+          "path": {
+            "name": "Cosmic Linguist",
+            "_overridden": true
+          },
+          "doctrine": {
+            "name": "Metaphor Apostle",
+            "_overridden": true
+          },
+          "philosophy": {
+            "name": "Liberal",
+            "_overridden": true
+          },
+          "occult": {
+            "name": "Gnostic",
+            "_overridden": true
+          },
+          "alignment": {
+            "name": "Keter",
+            "_overridden": true
+          },
+          "faculties": {
+            "violence": 2,
+            "intrigue": 2,
+            "presence": 3,
+            "body": 3,
+            "mind": 5,
+            "soul": 4,
+            "_playerPick": true
+          }
+        },
+        "traitMap": {},
+        "classification": "—",
+        "mode": "manual"
+      }
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "createdTime": 1787799237081,
+    "modifiedTime": 1787799237081,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "_key": "!actors!rjQgflJpTiNOUai8"
+}

@@ -1,0 +1,650 @@
+{
+  "name": "The Gilded Tyrant",
+  "type": "npc",
+  "img": "art/bbttcc/qliphoth/the-gilded-tyrant.webp",
+  "system": {
+    "role": "Qliphothic Golem (Nahemoth — Greater)",
+    "tier": 3,
+    "factionId": "",
+    "notes": "<p>The apex of Nahemoth's influence: a hulking twelve-foot golem of dripping molten gold, priceless gems and ancient coins embedded in its mass, faint screaming faces swirling just beneath the surface. Formed in the heart of cursed hoards where kings and oligarchs died alone with their wealth, it is an amalgam of the treasure and the souls enslaved to acquire it. Pure inertia and possessiveness — it exists to guard its hoard, and it counts you as inventory the moment you look at it wanting.</p><p><strong>Qliphah:</strong> Nahemoth, the Whispering Ones — the Hull of Malkuth. Avarice with a body count, wearing the body count.</p><p><em>Mal's note: 'Yes, it is LITERALLY made of money. That thought is its first attack. Notice it worked on you.'</em></p>",
+    "details": {
+      "level": 13,
+      "tier": 3,
+      "statPoints": 0,
+      "skillPoints": 0
+    },
+    "faction": {
+      "id": null,
+      "loyalty": 0
+    },
+    "attributes": {
+      "violence": {
+        "value": 6
+      },
+      "intrigue": {
+        "value": 1
+      },
+      "presence": {
+        "value": 3
+      },
+      "body": {
+        "value": 6
+      },
+      "mind": {
+        "value": 1
+      },
+      "soul": {
+        "value": 3
+      }
+    },
+    "skills": {},
+    "derived": {
+      "integrity": {
+        "value": 95,
+        "max": 95
+      },
+      "stress": {
+        "value": 30,
+        "max": 30
+      },
+      "guard": {
+        "value": 16
+      },
+      "evasion": {
+        "value": 9
+      },
+      "resolve": {
+        "value": 14
+      }
+    },
+    "magic": {
+      "clarity": {
+        "value": 0,
+        "max": 5
+      },
+      "noise": {
+        "value": 0,
+        "max": 10
+      },
+      "sephirah": "qliphoth"
+    },
+    "resources": {
+      "frameDice": {
+        "current": 0,
+        "max": 0
+      },
+      "ruinCharges": {
+        "current": 0,
+        "max": 0
+      },
+      "pace": {
+        "current": 0,
+        "max": 0
+      },
+      "package": {
+        "type": "",
+        "id": "",
+        "carried": false
+      },
+      "burn": {
+        "current": 0,
+        "max": 8
+      },
+      "aura": {
+        "state": "none"
+      },
+      "accessDice": {
+        "current": 0,
+        "max": 3
+      },
+      "surge": {
+        "value": 0,
+        "max": 10,
+        "sceneResetAt": null
+      },
+      "dreamResonance": {
+        "active": false,
+        "insightUsed": false,
+        "hexSephirah": ""
+      },
+      "forgeCharge": {
+        "relicUsed": false,
+        "sparksRepaired": 0
+      }
+    },
+    "conditions": {
+      "staggered": false,
+      "scarred": false,
+      "calmed": false,
+      "blinded": false,
+      "prone": false,
+      "shaken": false,
+      "burning": false,
+      "restrained": false,
+      "charmed": false,
+      "compelled": false,
+      "dying": false,
+      "radiationIrradiated": false,
+      "radiationSickened": false,
+      "radiationPoisoned": false,
+      "radiationTerminal": false
+    },
+    "actions": {
+      "actionUsed": false,
+      "bonusUsed": false,
+      "reactionUsed": false,
+      "movementUsedFt": 0,
+      "movementBudgetFt": 30
+    },
+    "defenses": {
+      "resistances": [
+        "kinetic"
+      ],
+      "immunities": [
+        "poison",
+        "psychic",
+        "qliphothic"
+      ],
+      "vulnerabilities": [
+        "chemical"
+      ]
+    },
+    "conditionImmunities": [
+      "charmed",
+      "shaken",
+      "compelled",
+      "calmed"
+    ],
+    "tags": [
+      "qliphothic",
+      "5e-port",
+      "cr-10",
+      "qliphah-nahemoth",
+      "hull-of-malkuth",
+      "greater"
+    ],
+    "radiation": {
+      "rp": 0,
+      "thresholds": {
+        "minor": 25,
+        "major": 50,
+        "severe": 75
+      }
+    },
+    "darkness": {
+      "value": 0,
+      "taint": 0,
+      "fragments": []
+    }
+  },
+  "prototypeToken": {
+    "name": "The Gilded Tyrant",
+    "displayName": 30,
+    "actorLink": false,
+    "width": 2,
+    "height": 2,
+    "depth": 1,
+    "texture": {
+      "src": "art/bbttcc/qliphoth/the-gilded-tyrant.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": -1,
+    "displayBars": 30,
+    "bar1": {
+      "attribute": "derived.integrity"
+    },
+    "bar2": {
+      "attribute": "derived.stress"
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": true,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [
+    {
+      "_id": "nQ8okymLxI7mqxXP",
+      "name": "Aura of Covetousness",
+      "type": "feature",
+      "img": "icons/svg/chest.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>Any creature that starts its turn within 6 squares rolls vs Resolve (DC 16). Fail: seized by the need to possess a piece of the Tyrant — it must spend its movement approaching, and if it ends its turn adjacent it spends its action trying to pry off a chunk of gold, provoking as it does. Repeat the check at the end of each of its turns, richer in perspective.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188180,
+        "modifiedTime": 1787799188180,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!m1Wzc1wbRFO7kl7j.nQ8okymLxI7mqxXP"
+    },
+    {
+      "_id": "ajrz96gghdcIAVxf",
+      "name": "Immutable Form",
+      "type": "feature",
+      "img": "icons/svg/statue.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>Immune to anything that would alter its form. It has decided what it is worth, permanently.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188180,
+        "modifiedTime": 1787799188180,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!m1Wzc1wbRFO7kl7j.ajrz96gghdcIAVxf"
+    },
+    {
+      "_id": "ZypH8KwOPcWGTIrK",
+      "name": "Gilded Bulk",
+      "type": "feature",
+      "img": "icons/svg/mage-shield.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Tyrant rolls twice and keeps the better result on checks to resist manifestations.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188180,
+        "modifiedTime": 1787799188180,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!m1Wzc1wbRFO7kl7j.ZypH8KwOPcWGTIrK"
+    },
+    {
+      "_id": "a2Zede4WkG53QMXj",
+      "name": "Multiattack",
+      "type": "feature",
+      "img": "icons/svg/combat.svg",
+      "system": {
+        "category": "principle",
+        "source": "Qliphothic Bestiary",
+        "tags": [],
+        "description": {
+          "value": "<p>The Tyrant makes two Golden Touch attacks.</p>",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 400000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188180,
+        "modifiedTime": 1787799188180,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!m1Wzc1wbRFO7kl7j.a2Zede4WkG53QMXj"
+    },
+    {
+      "_id": "667D8qLJC0jI24yn",
+      "name": "Golden Touch",
+      "type": "weapon",
+      "img": "icons/svg/statue.svg",
+      "system": {
+        "category": "melee",
+        "intent": "violence",
+        "skill": "melee",
+        "damage": {
+          "formula": "3d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 1,
+          "long": 1
+        },
+        "tags": [],
+        "effect": "On a hit: Body check vs DC 16 or the gilding begins — the target is Restrained as gold creeps over it. It repeats the check at the end of its next turn: success ends it; failure means gilded solid — out of the fight, a beautiful statue, until cracked free by allies (careful work, Violence check vs DC 16, 1d4 rounds) or a restoration-grade working.",
+        "flavor": "A hand dripping liquid gold. The dripping is the mercy.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 500000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188180,
+        "modifiedTime": 1787799188180,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!m1Wzc1wbRFO7kl7j.667D8qLJC0jI24yn"
+    },
+    {
+      "_id": "DyeQU2DarDdvSBN8",
+      "name": "Hurl Treasure (Recharge 5–6)",
+      "type": "weapon",
+      "img": "icons/svg/explosion.svg",
+      "system": {
+        "category": "ranged",
+        "intent": "violence",
+        "skill": "ranged",
+        "damage": {
+          "formula": "3d8",
+          "attribute": "violence",
+          "type": "kinetic",
+          "damageFlavor": "",
+          "track": "integrity"
+        },
+        "damageParts": [],
+        "range": {
+          "short": 12,
+          "long": 12
+        },
+        "tags": [
+          "aoe"
+        ],
+        "effect": "The Tyrant rips a soul-infused chunk off its own body and hurls it at a point within 12 squares. Each creature within 2 squares of impact rolls an Evasion check vs DC 16. Fail: 3d8 kinetic AND 2d8 qliphothic to Stress — the chunk screams on the way in. Success: half of each.",
+        "flavor": "A golden goblet full of screaming souls, incoming.",
+        "manifestation": {
+          "tier": 1,
+          "family": "form",
+          "concept": "",
+          "form": "weapon",
+          "function": "harm",
+          "stability": "bound",
+          "interactionModel": "weapon",
+          "costType": "none",
+          "costValue": 0,
+          "costText": "",
+          "duration": "scene",
+          "durationText": "",
+          "triggerText": "",
+          "scale": "personal",
+          "targetText": "",
+          "rangeAreaText": "",
+          "rangeFt": 0,
+          "maintenanceCost": "",
+          "riskText": "",
+          "pathResonance": "",
+          "fictionalPermission": "",
+          "gmCalibration": "",
+          "mechanicalHook": "",
+          "signature": "",
+          "thirdThing": "",
+          "opCost": {
+            "pool": "",
+            "value": 0
+          }
+        },
+        "description": {
+          "value": "",
+          "chat": ""
+        }
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_stats": {
+        "coreVersion": "14.367",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.1",
+        "createdTime": 1787799188180,
+        "modifiedTime": 1787799188180,
+        "lastModifiedBy": "bytUGWIOqq9eT7Or",
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "_key": "!actors.items!m1Wzc1wbRFO7kl7j.DyeQU2DarDdvSBN8"
+    }
+  ],
+  "effects": [],
+  "folder": "Ps7zW26xgejTIfav",
+  "sort": 0,
+  "ownership": {
+    "default": 0,
+    "bytUGWIOqq9eT7Or": 3
+  },
+  "flags": {
+    "fourththing": {
+      "rfi": {
+        "actor": {
+          "tier": "III",
+          "bracket": "heavy",
+          "archetype": "the-gilded-tyrant",
+          "bestiary": {
+            "themes": [
+              "qliphothic",
+              "nahemoth",
+              "boss",
+              "golem",
+              "construct"
+            ],
+            "role": "Qliphothic Golem (Nahemoth — Greater)",
+            "lootTable": [
+              {
+                "name": "Molten Gold Slag (Souls Settled Out)",
+                "qty": "3d6",
+                "weight": 6
+              },
+              {
+                "name": "Embedded Gemstone, Pried Loose",
+                "qty": "1d6",
+                "weight": 4
+              },
+              {
+                "name": "Coin Predating the Disaster",
+                "qty": "2d6",
+                "weight": 5
+              },
+              {
+                "name": "A Face That Stopped Screaming",
+                "qty": "1",
+                "weight": 1
+              }
+            ]
+          },
+          "price": {
+            "marks": 900,
+            "bounty": 1200,
+            "hire": 0,
+            "ransom": 0,
+            "currency": "violence",
+            "gmOverride": false,
+            "notes": "III heavy Qliphothic Golem (Nahemoth — Greater) — qliphothic spawn: cannot be hired or ransomed"
+          },
+          "qliphah": {
+            "name": "nahemoth",
+            "hullOf": "malkuth",
+            "grade": "greater"
+          }
+        }
+      },
+      "kind": "npc"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.1",
+    "exportSource": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "createdTime": 1787799188180,
+    "modifiedTime": 1787799188180,
+    "lastModifiedBy": "bytUGWIOqq9eT7Or"
+  },
+  "_id": "m1Wzc1wbRFO7kl7j",
+  "_key": "!actors!m1Wzc1wbRFO7kl7j"
+}
