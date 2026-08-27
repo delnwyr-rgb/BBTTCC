@@ -8589,7 +8589,17 @@ function _ftFindStackTarget(actor, itemData) {
 async function ftStackOnto(target, itemData) {
   const curQty = Math.max(1, Number(target.system?.quantity) || 1);
   const addQty = Math.max(1, Number(itemData?.system?.quantity) || 1);
-  await target.update({ "system.quantity": curQty + addQty });
+  const update = { "system.quantity": curQty + addQty };
+  // rfi.item.charges is the MUTABLE current count, so a consumable stack needs
+  // the fresh-copy per-unit value remembered the first time a stack forms —
+  // runConsumeEffects refills from chargesMax when the open unit runs dry.
+  const unitCharges = Math.max(
+    Number(foundry.utils.getProperty(itemData, "flags.fourththing.rfi.item.charges") ?? 0) || 0,
+    Number(target.getFlag("fourththing", "rfi.item.charges") ?? 0) || 0
+  );
+  const haveMax = Number(target.getFlag("fourththing", "rfi.item.chargesMax") ?? 0) || 0;
+  if (!haveMax && unitCharges > 0) update["flags.fourththing.rfi.item.chargesMax"] = unitCharges;
+  await target.update(update);
   ui.notifications?.info(`Stacked ${itemData?.name ?? target.name} — now ×${curQty + addQty}.`);
   return [target];
 }
@@ -8599,6 +8609,37 @@ async function ftStackOrCreateItem(actor, itemData) {
   const target = _ftFindStackTarget(actor, itemData);
   if (target) return ftStackOnto(target, itemData);
   return actor.createEmbeddedDocuments("Item", [itemData]);
+}
+// Collapse duplicate gear rows that predate stack-on-add (e.g. market-bought
+// copies delivered before the vendor path stacked, 2026-08-27). Groups the
+// actor's gear by stack identity, sums quantities into the first row, deletes
+// the rest. GM/owner console: game.fourththing.stack.merge(actorOrId).
+async function ftMergeInventoryStacks(actorOrId) {
+  const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+  if (!actor) return { merged: 0, deleted: 0 };
+  const groups = new Map();
+  for (const it of actor.items) {
+    if (it.type !== "gear") continue;
+    if (RfiItems.is.isManifestation(it)) continue;
+    const key = _ftStackIdentity(it);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(it);
+  }
+  let merged = 0, deleted = 0;
+  for (const rows of groups.values()) {
+    if (rows.length < 2) continue;
+    const [keep, ...rest] = rows;
+    const total = rows.reduce((n, r) => n + Math.max(1, Number(r.system?.quantity) || 1), 0);
+    const update = { "system.quantity": total };
+    const unitCharges = Math.max(...rows.map(r => Number(r.getFlag("fourththing", "rfi.item.charges") ?? 0) || 0));
+    const haveMax = Number(keep.getFlag("fourththing", "rfi.item.chargesMax") ?? 0) || 0;
+    if (!haveMax && unitCharges > 0) update["flags.fourththing.rfi.item.chargesMax"] = unitCharges;
+    await keep.update(update);
+    await actor.deleteEmbeddedDocuments("Item", rest.map(r => r.id));
+    merged += 1; deleted += rest.length;
+  }
+  if (merged) ui.notifications?.info(`${actor.name}: merged ${merged} stack${merged === 1 ? "" : "s"} (${deleted} duplicate row${deleted === 1 ? "" : "s"} removed).`);
+  return { merged, deleted };
 }
 
 async function openManifestationStarterDialog(actor) {
@@ -10919,13 +10960,23 @@ async function runConsumeEffects(actor, item, consume, { targets = null } = {}) 
   }
 
   // Charge bookkeeping — decrement and delete-at-0. Once, on the user's item.
+  // A ×N stack (system.quantity > 1) peels one unit off instead of deleting
+  // the row: quantity drops by one and charges refill from the per-unit
+  // capacity stamped at stack time (chargesMax; single-use items default 1).
   let chargeNote = "";
   if (consume.decrement !== false) {
     const charges = Number(item.getFlag("fourththing", "rfi.item.charges") ?? 1);
     const nextCharges = Math.max(0, charges - 1);
     if (nextCharges <= 0) {
-      await item.delete();
-      chargeNote = " (consumed — last charge)";
+      const qty = Math.max(1, Number(item.system?.quantity) || 1);
+      if (qty > 1) {
+        const unitMax = Math.max(1, Number(item.getFlag("fourththing", "rfi.item.chargesMax") ?? 1) || 1);
+        await item.update({ "system.quantity": qty - 1, "flags.fourththing.rfi.item.charges": unitMax });
+        chargeNote = ` (consumed — ×${qty - 1} left in stack)`;
+      } else {
+        await item.delete();
+        chargeNote = " (consumed — last charge)";
+      }
     } else {
       await item.setFlag("fourththing", "rfi.item.charges", nextCharges);
       chargeNote = ` (${nextCharges} charge${nextCharges === 1 ? "" : "s"} remaining)`;
@@ -13254,6 +13305,21 @@ Hooks.once("init", function () {
     items:   RfiItems,
     craft:   RfiCrafting,
     harvest: RfiHarvest,
+    // Inventory stacking surface for cross-module callers (bbttcc-market
+    // delivery, seeders). orCreate = add item data to an actor, merging onto
+    // an identical gear ×N line when one exists; merge = collapse an actor's
+    // pre-existing duplicate gear rows (one-time cleanup for old deliveries).
+    stack: {
+      identity:   _ftStackIdentity,
+      findTarget: _ftFindStackTarget,
+      orCreate:   ftStackOrCreateItem,
+      merge:      ftMergeInventoryStacks
+    },
+    // Equip-proficiency probe (weapon/armor skill gate) — the same check the
+    // sheet's inventory warning uses. Returns { skillKey, rank, label,
+    // trained } or null for ungated items. Market uses it to warn a buyer
+    // before they spend marks on gear they can't yet use.
+    equipProficiency: _ftEquipProficiency,
     // Schema-migration framework — debug/repair surface for macros & console.
     //   game.fourththing.migrations.run()            → apply pending migrations
     //   game.fourththing.migrations.run({force:true})→ re-run all (idempotent)

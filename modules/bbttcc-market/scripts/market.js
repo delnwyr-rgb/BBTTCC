@@ -462,6 +462,7 @@ const MARKET_TIPS = {
   openDoc:   "Open item sheet — inspect the actual item (stats, description, tier) before you spend marks on it.",
   cost:      "Cost — the list price. RFI flag-priced items show their native pool in marks (e.g. 'Viol 50 marks'); 'Split' items pay each portion to its own pool; legacy entries show catalog Economy OP (1 OP = 10 marks). The Horizon chip shows the final scaled price your faction pays.",
   chip:      "Economic Horizon — your faction's tier sets its rarity horizon (Tier A→Uncommon, B→Rare, C→Very Rare). At or under the horizon, gear is Standard Issue (free; rigs/facilities/assets still pay base cost). Above it the price strains: ×1 / ×2 / ×4 at 1 / 2 / 3+ rarity steps over. Artifacts are never purchasable — discovery only.",
+  profChip:  "Untrained — the selected Buyer Character has rank 0 in the skill this weapon or armor is gated on. Armor worn at rank 0 grants NO defensive benefit; weapons are wielded untrained. You can still buy it (stockpiling, training ahead, gifting) — the chip is a warning, not a block.",
   buy:       "Buy — commits the purchase: confirmation first (flag-priced items let you pay from a non-native pool at ×1.5 friction), then the marks are spent from the Buyer Faction's OP bank and the goods are delivered — gear to the Buyer Character's inventory, rigs to the faction, facilities/assets/upgrades to the Delivery Hex, actor entries cloned into the world under the buying faction. Writes a war-log receipt and whispers the GM.",
   payFromPool: "Pay from — which OP pool covers the bill. The native pool pays list price; any other pool pays ×1.5 (cross-pool friction). Balances shown are the faction's current opBank, in marks.",
   splitPay:  "Split payment — this item's price is divided across multiple OP pools. Each portion is always paid from its native pool; there is no cross-pool override on split items.",
@@ -715,7 +716,13 @@ async function deliverGearToCharacter(characterId, itemUuid, qty = 1) {
     data.flags.fourththing.rfi.item.origin = "vendor";
   }
 
-  await actor.createEmbeddedDocuments("Item", [data]);
+  // Deliver through the system's stacking surface when available — identical
+  // gear (loot/consumables) merges onto an existing ×N inventory line instead
+  // of piling up duplicate rows (2026-08-27). Weapons, armor, and crafted
+  // manifestations still land as individual rows (the stacker scopes itself).
+  const stackApi = game.fourththing?.stack;
+  if (typeof stackApi?.orCreate === "function") await stackApi.orCreate(actor, data);
+  else await actor.createEmbeddedDocuments("Item", [data]);
   return true;
 }
 
@@ -1460,6 +1467,52 @@ try {
         "display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;line-height:16px;margin-right:8px;" +
         "border:1px solid rgba(148,163,184,.25);background:rgba(15,23,42,.45);color:#e5e7eb;white-space:nowrap;" +
         (spec.style || "");
+
+      const buyBtn = row.querySelector("button[data-action='buy']");
+      if (buyBtn && buyBtn.parentElement) buyBtn.parentElement.insertBefore(chip, buyBtn);
+      else row.appendChild(chip);
+    }
+  }
+} catch {}
+
+// --- Buyer proficiency notice (2026-08-27) ---
+// When a Buyer Character is selected, weapon/armor rows gated on a skill they
+// have at rank 0 get an "Untrained" chip — armor at rank 0 grants NO benefit
+// and weapons swing untrained, so surface that before marks are spent.
+// Uses the system's equipProficiency probe (same check as the sheet warning).
+try {
+  const ctxProf = this._loadCtx();
+  const buyer = ctxProf.characterId ? game.actors.get(ctxProf.characterId) : null;
+  const profFn = game.fourththing?.equipProficiency;
+  if (buyer && typeof profFn === "function") {
+    const catalogAllP0 = game.settings.get(MODULE_ID, "catalog") || [];
+    const catalogAllP = Array.isArray(catalogAllP0) ? catalogAllP0 : [];
+    for (const row of Array.from(root.querySelectorAll("[data-entry-id]"))) {
+      if (row.querySelector(".bbttcc-market-prof-chip")) continue;
+      const entryId = row.getAttribute("data-entry-id") || (row.dataset ? row.dataset.entryId : "");
+      const entry = catalogAllP.find(e => e && e.id === entryId);
+      if (!entry || String(entry.kind || "").toLowerCase() !== "gear") continue;
+      const uuid = String(entry.uuid || "").trim();
+      if (!uuid) continue;
+      let doc = this._docCache.get(uuid);
+      if (!doc) { try { doc = await fromUuid(uuid); if (doc) this._docCache.set(uuid, doc); } catch {} }
+      if (!doc || !["weapon", "armor"].includes(String(doc.type || "").toLowerCase())) continue;
+      const prof = profFn(buyer, doc);
+      if (!prof || prof.trained) continue;
+
+      const chip = document.createElement("span");
+      chip.className = "bbttcc-market-prof-chip";
+      chip.textContent = `⚠ Untrained: ${prof.label}`;
+      const why = doc.type === "armor"
+        ? "this armor grants no defensive benefit while worn"
+        : "this weapon is wielded untrained";
+      const detail = `${buyer.name} has ${prof.label} rank 0 — ${why}. Buying is allowed; raise ${prof.label} to rank 1+ to gain its benefit.`;
+      const chipHelp = game.bbttcc?.help?.tip?.("market", "profChip") || "";
+      if (chipHelp) chip.dataset.tooltip = `${chipHelp}<br><br>${esc(detail)}`;
+      else chip.title = detail;
+      chip.style.cssText =
+        "display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;line-height:16px;margin-right:8px;" +
+        "border:1px solid rgba(251,191,36,.45);background:rgba(120,53,15,.35);color:#fbbf24;white-space:nowrap;";
 
       const buyBtn = row.querySelector("button[data-action='buy']");
       if (buyBtn && buyBtn.parentElement) buyBtn.parentElement.insertBefore(chip, buyBtn);
