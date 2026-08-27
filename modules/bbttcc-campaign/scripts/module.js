@@ -3070,6 +3070,10 @@ async function executeBeat(campaign, beat, ctx = {}) {
       });
     } else if (scene.activate) {
       await scene.activate();
+      // Activation's implicit pull skips clients explicitly view()'d onto
+      // another scene (Weather Front stranded the player on the hex map,
+      // 2026-08-26) — pull the whole table to the beat's stage outright.
+      try { await game.bbttcc?.api?.worldMutation?.pullTableToScene?.(scene.id); } catch (_ePull) {}
     }
   };
 
@@ -3246,6 +3250,26 @@ async function executeBeat(campaign, beat, ctx = {}) {
   // CHANGE: allow dialogs for outcome_trigger and other non-encounter beats.
   let dialogRes = null;
 
+  // openTravel is a STAGE DIRECTION, not an outcome (2026-08-26): a ride
+  // beat's dialog says "plot the ride on the Travel Console", so the console
+  // must arrive WITH the dialog — not queued behind its resolution (the
+  // escape-hatch choice was accidentally the saddle-up button). Apply just
+  // that op early via a synthetic beat; the post-dialog tail is told to skip
+  // it so it never double-fires.
+  let openTravelApplied = false;
+  if (beat?.worldEffects?.openTravel) {
+    try {
+      const wmEarly = game.bbttcc?.api?.worldMutation;
+      if (wmEarly?.applyWorldEffects) {
+        await wmEarly.applyWorldEffects(
+          { id: beat.id, worldEffects: { openTravel: beat.worldEffects.openTravel } },
+          { source: "bbttcc-campaign", campaignId: campaign.id, campaignTitle: campaign.label, beatId: beat.id }
+        );
+        openTravelApplied = true;
+      }
+    } catch (eOT) { warn("early openTravel failed:", eOT); }
+  }
+
   // CHANGE: allow dialogs for outcome_trigger and other non-encounter beats.
   if (hasDialogContent && (type !== "encounter" || !hasEncounterKey) && !isCinematic) {
     dialogRes = await _runBeatDialog(campaign, beat, ctx);
@@ -3417,7 +3441,8 @@ async function executeBeat(campaign, beat, ctx = {}) {
         source: "bbttcc-campaign",
         campaignId: campaign.id,
         campaignTitle: campaign.label,
-        beatId: beat.id
+        beatId: beat.id,
+        skipOpenTravel: openTravelApplied
       });
     }
 

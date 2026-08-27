@@ -63,13 +63,29 @@
   report.push(`◈ ${hexRows.length} named territory hex(es) scanned`);
 
   /* ── 1. Ride beats ── */
+  // The console now arrives WITH the dialog (openTravel applies at beat
+  // entry, 2026-08-26), so the dialog gets a real resolve: Saddle up closes
+  // it and leaves you on the console; the escape hatch still walks back.
+  const rideChoices = () => ([
+    { label: "🐎 Saddle up — ride out", next: "", description: "Run the planned route on the Travel Console.", checkStat: "", checkDC: 0, failNext: "" },
+    { label: "Actually — back to the Crossroads", next: "ag_crossroads_first_rides", description: "", checkStat: "", checkDC: 0, failNext: "" }
+  ]);
   const mkRide = (t) => {
-    if (byId.get(t.rideId)) { report.push(`· ok beat (already) ${t.rideId}`); return; }
+    const ex = byId.get(t.rideId);
+    if (ex) {
+      if ((ex.choices || []).some(c => /saddle up/i.test(String(c?.label || "")))) {
+        report.push(`· ok beat (already) ${t.rideId}`);
+      } else {
+        ex.choices = rideChoices(); changes++;
+        report.push(`✚ ${t.rideId}: saddle-up resolve choice added`);
+      }
+      return;
+    }
     const nb = {
       id: t.rideId, label: t.label, type: "dialog", questId: AGQ,
       questStep: Number(cross.questStep || 0) + 1,
       description: t.desc,
-      choices: [{ label: "Actually — back to the Crossroads", next: "ag_crossroads_first_rides", description: "", checkStat: "", checkDC: 0, failNext: "" }],
+      choices: rideChoices(),
       inject: { repeatable: true, requires: [{ flag: "storyPhase", gte: 1 }] },
       worldEffects: { openTravel: { hexName: t.hexName } },
       playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true,

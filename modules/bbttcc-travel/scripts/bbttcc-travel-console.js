@@ -2670,6 +2670,58 @@ if (game.bbttcc?.runVisuals) {
 
       // Initial paint.
       try { renderAbilities(); } catch (_e) {}
+
+      // ── One-shot prefill from worldEffects.openTravel (ride beats) ─────────
+      // A ride beat names the destination; resolve it against this scene's
+      // hexes, find the start hex under the lead faction's token (or the
+      // selected token), and auto-plan the whole route. NBSP-safe both sides.
+      try {
+        const pf = this.prefill;
+        this.prefill = null;
+        // Rendered mid-scene-pull? A canvas still drawing yields ZERO hexes —
+        // the whole console is inert (empty dropdowns, dead Pick-on-Map). Re-
+        // arm the prefill and re-render once the canvas is actually ready.
+        if (pf?.toName && !hexes.length) {
+          this.prefill = pf;
+          Hooks.once("canvasReady", () => { try { this.render(true); } catch (_e) {} });
+          setPickStatus("Waiting for the map to finish loading…");
+        } else if (pf?.toName) {
+          const _pfNorm = (s) => String(s || "").replace(/[\s ]+/g, " ").trim().toLowerCase();
+          const toHex = hexes.find(h => _pfNorm(h.label) === _pfNorm(pf.toName)) || null;
+          let fromHex = null;
+          let facId = $fac?.value || "";
+          let tok = (facId ? canvas?.tokens?.placeables?.find(t => t?.actor?.id === facId) : null)
+                 || canvas?.tokens?.controlled?.[0] || null;
+          // The default faction may have no token here (the GM's owned list is
+          // alphabetical) — prefer whichever owned faction actually STANDS on
+          // this map, and switch the dropdown to it so the plan matches.
+          if (!tok) {
+            for (const f of factions) {
+              const t2 = canvas?.tokens?.placeables?.find(t => t?.actor?.id === f.id);
+              if (t2) {
+                tok = t2; facId = f.id;
+                if ($fac && $fac.value !== f.id) {
+                  $fac.value = f.id;
+                  $fac.dispatchEvent(new Event("change", { bubbles: true }));
+                }
+                break;
+              }
+            }
+          }
+          if (tok) {
+            const p = findHexAtPoint(tok.center);
+            if (p) fromHex = hexes.find(h => h.id === p.id) || null;
+          }
+          if (toHex && fromHex && fromHex.id !== toHex.id) {
+            autoPlanRoute(fromHex, toHex);
+          } else if (toHex) {
+            if ($rt) $rt.value = toHex.uuid;
+            setPickStatus(`Destination: ${toHex.label}. No ${facId ? "faction token found on the map" : "token selected"} to start from — Pick on Map or choose a From hex, then Add Leg.`);
+          } else {
+            setPickStatus(`Couldn't find a hex named "${pf.toName}" on this scene.`);
+          }
+        }
+      } catch (e) { console.warn(TAG, "openTravel prefill failed:", e); }
     }
 
     async close(opts) {

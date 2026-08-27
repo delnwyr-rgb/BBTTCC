@@ -2237,7 +2237,15 @@ const activeCampaignId = _getActiveCampaignId();
       const hist = [...byBeat.values()];
       histCount = hist.length;
       hist.sort((a, b) => b.ts - a.ts);
-      lastFiredId = hist[0]?.id ?? null;
+      // The hero's anchor is the freshest fired SPINE beat — ambient, travel
+      // and discovery beats (road encounters like the Acid Bog, 2026-08-26)
+      // fire through the travel tables mid-ride and must not steer the story's
+      // NEXT ("the bog is waiting for us to finish the quest"). The Recently-
+      // fired rail below still shows everything.
+      lastFiredId = (hist.find(h => {
+        const b = beatById[h.id];
+        return b && !isAmbientBeat(b) && !isDiscoveryBeat(b) && !isTravelBeat(b);
+      })?.id) ?? null;
       recentHtml = hist.slice(0, 10).map(h =>
         flyBtn(h.id, (beatById[h.id]?.label || h.id), h.turn != null ? `T${h.turn}` : "")
       ).join("") || `<div class="bbttcc-now-empty">nothing fired yet — the world is young</div>`;

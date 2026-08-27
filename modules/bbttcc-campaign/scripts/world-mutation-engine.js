@@ -1339,25 +1339,34 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     }
 
     // ── openTravel: hand the table to the travel engine (2026-08-24) ──
-    // worldEffects.openTravel = { hexName?, note? } — return to the world hub
-    // scene, open the Travel Console, name the destination. The ride itself
-    // (legs, encounters, weather) is the travel engine's business; arrival
-    // fires via campaign.hexOverrides[hexUuid].onEnterBeatId on hex_enter.
-    if (we.openTravel && typeof we.openTravel === "object") {
+    // worldEffects.openTravel = { hexName?, note? } — pull the table to the hex
+    // map, open the Travel Console on EVERY client, name the destination. The
+    // ride itself (legs, encounters, weather) is the travel engine's business;
+    // the PLAYER drives the console (encounter arbitration relays to the GM by
+    // design) and arrival fires via campaign.hexOverrides[hexUuid].onEnterBeatId.
+    // ctx.skipOpenTravel: executeBeat applies this op EARLY (a stage direction
+    // arrives with the dialog, not behind it) and tells the tail not to repeat.
+    if (we.openTravel && typeof we.openTravel === "object" && !ctx.skipOpenTravel) {
       try {
         const dest = String(we.openTravel.hexName || "").trim();
-        const hub = game.scenes?.find?.(s => s.getFlag?.("bbttcc-travel", "isWorldHub")) || null;
-        if (hub && canvas?.scene?.id !== hub.id) {
-          const back = get(game, "bbttcc.api.transition.back", null);
-          if (back) await back(hub.uuid, { label: "World Map" });
-          else await hub.view();
+        const note = String(we.openTravel.note || "").trim();
+        // Prefer the scene that CONTAINS the destination hex (the hex map, e.g.
+        // River Heart) — the Travel Console reads hexes off the viewed canvas,
+        // so the world-hub overview is a dead end for route planning. Fallback:
+        // the flagged world hub.
+        const target = _sceneWithHexNamed(dest)
+          || game.scenes?.find?.(s => s.getFlag?.("bbttcc-travel", "isWorldHub"))
+          || null;
+        // Activate, not just view: activation pulls every connected client to
+        // the map — the ride is a table moment, and this runs on the GM client
+        // which has the permission.
+        if (target && game.scenes?.active?.id !== target.id) {
+          try { await target.activate(); }
+          catch (e) { try { await target.view(); } catch (_e) {} }
         }
-        const console_ = get(game, "bbttcc.ui.travelConsole", null);
-        if (console_?.render) console_.render(true);
-        const note = String(we.openTravel.note || "").trim()
-          || (dest ? `🐎 Plot the ride to ${dest} — legs and encounters run through the Travel Console.`
-                   : "🐎 Plot the ride — legs and encounters run through the Travel Console.");
-        ui.notifications?.info?.(note);
+        const payload = { dest, note, sceneId: target?.id || "" };
+        try { game.socket?.emit?.("module.bbttcc-campaign", { type: "bbttccOpenTravel", payload }); } catch (_e) {}
+        await _openTravelOnThisClient(payload); // sockets don't echo to the sender
         changed = true;
         notes.push("openTravel" + (dest ? `:${dest}` : ""));
       } catch (e) {
@@ -1371,13 +1380,99 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     return { applied: changed, notes: notes };
   }
 
+  // ── openTravel client-side plumbing ────────────────────────────────────────
+  // Hex names carry NBSP (U+00A0) — collapse all whitespace before matching.
+  const _normHexName = (s) => String(s || "").replace(/[\s ]+/g, " ").trim().toLowerCase();
+
+  // The scene whose territory drawings contain a hex with this name — that's
+  // the map the Travel Console can actually plan on. Active scene wins ties.
+  function _sceneWithHexNamed(name) {
+    const want = _normHexName(name);
+    if (!want) return null;
+    const scenes = Array.from(game.scenes ?? [])
+      .sort((a, b) => (b.active ? 1 : 0) - (a.active ? 1 : 0));
+    for (const sc of scenes) {
+      for (const d of (sc.drawings ?? [])) {
+        const f = d?.flags?.["bbttcc-territory"];
+        if (!f) continue;
+        const label = f.name || d.text || "";
+        if (label && _normHexName(label) === want) return sc;
+      }
+    }
+    return null;
+  }
+
+  // Runs on EVERY client (GM locally, players via socket): land on the hex map
+  // and open the Travel Console, pre-aimed at the destination. The console's
+  // prefill resolves the start hex from the lead faction's token and auto-plans.
+  async function _openTravelOnThisClient({ dest = "", note = "", sceneId = "" } = {}) {
+    try {
+      const sc = sceneId ? game.scenes?.get?.(sceneId) : null;
+      // Activation usually pulls this client already; view() covers a client
+      // parked on a non-active scene so the console reads the RIGHT canvas.
+      if (sc && canvas?.scene?.id !== sc.id) { try { await sc.view(); } catch (_e) {} }
+      // The activation pull may still be DRAWING when this socket lands —
+      // canvas.scene already names the new scene but its drawings aren't
+      // instantiated, so the console would read zero hexes (empty dropdowns,
+      // dead Pick-on-Map — seen live 2026-08-26). Wait for canvasReady.
+      if (sc && canvas?.scene?.id === sc.id && !canvas.ready) {
+        await new Promise((res) => {
+          const t = setTimeout(res, 8000);
+          Hooks.once("canvasReady", () => { clearTimeout(t); res(); });
+        });
+      }
+      const tc = get(game, "bbttcc.ui.travelConsole", null);
+      if (tc?.render) {
+        tc.prefill = dest ? { toName: dest } : null;
+        tc.render(true);
+      }
+      ui.notifications?.info?.(note
+        || (dest ? `🐎 Plot the ride to ${dest} — legs and encounters run through the Travel Console.`
+                 : "🐎 Plot the ride — legs and encounters run through the Travel Console."));
+    } catch (e) { console.warn(TAG, "openTravelOnThisClient failed", e); }
+  }
+
+  // Explicit table pull (2026-08-26): Foundry's implicit activation-pull skips
+  // clients that were explicitly view()'d onto another scene (the Weather
+  // Front stranded the player on the hex map). This is our own reliable pull:
+  // every client views the scene, full stop.
+  async function _pullSceneOnThisClient({ sceneId = "" } = {}) {
+    try {
+      const sc = sceneId ? game.scenes?.get?.(sceneId) : null;
+      if (sc && canvas?.scene?.id !== sc.id) await sc.view();
+    } catch (e) { console.warn(TAG, "pullSceneOnThisClient failed", e); }
+  }
+
+  function pullTableToScene(sceneId) {
+    const payload = { sceneId: String(sceneId || "") };
+    if (!payload.sceneId) return;
+    try { game.socket?.emit?.("module.bbttcc-campaign", { type: "bbttccPullScene", payload }); } catch (_e) {}
+    return _pullSceneOnThisClient(payload); // sockets don't echo to the sender
+  }
+
+  function _installOpenTravelSocket() {
+    try {
+      if (globalThis.__bbttccOpenTravelSocketBound) return;
+      const sock = game?.socket;
+      if (!sock?.on) return;
+      globalThis.__bbttccOpenTravelSocketBound = true;
+      sock.on("module.bbttcc-campaign", (msg) => {
+        if (!msg) return;
+        if (msg.type === "bbttccOpenTravel") return _openTravelOnThisClient(msg.payload || {});
+        if (msg.type === "bbttccPullScene") return _pullSceneOnThisClient(msg.payload || {});
+      });
+    } catch (_e) {}
+  }
+
   function installWorldMutationAPI() {
     try {
       ensureNS();
       ensureFactionAPI();
       game.bbttcc.api.worldMutation.applyWorldEffects = applyWorldEffects;
+      game.bbttcc.api.worldMutation.pullTableToScene = pullTableToScene;
       installOpScheduleAPI();
       installOpScheduleTickHook();
+      _installOpenTravelSocket();
       try { game.bbttcc.api.opSchedules?.repairAll?.().catch(()=>{}); } catch(_e) {}
       console.log(TAG, "World Mutation API ready:", Object.keys(game.bbttcc.api.worldMutation));
     } catch (e) {
