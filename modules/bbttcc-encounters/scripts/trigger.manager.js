@@ -433,7 +433,9 @@
             : { x: Number(tdoc?.x || 0) + w / 2, y: Number(tdoc?.y || 0) + h / 2 };
           const hexUuid = tdoc?.uuid || to?.uuid || ctx?.hexUuid || null;
           txn.requestDive({
-            hexUuid, focus, audience: "view",
+            // "activate": a road encounter is a TABLE moment — the storm takes
+            // everybody (owner ruling 2026-08-26; was "view" = GM-solo preview).
+            hexUuid, focus, audience: "activate",
             label: enc?.label || encKey || undefined,
             originUuid: canvas?.scene?.uuid || null
           });

@@ -512,8 +512,26 @@
         if (title.includes("encounter") || title.includes("outcome") || title.includes("scenario")) return true;
         if (cls.includes("encounter") || cls.includes("outcome") || cls.includes("scenario")) return true;
       }
+      // Campaign beat dialogs are titled by their BEAT LABEL ("Weather Front"),
+      // so the title heuristic above never sees them — detect by content class
+      // instead (GM dialog + read-only player mirror both carry it). Seen live
+      // 2026-08-26: arrival fired mid-storm because the dialog was "invisible".
+      if (document.querySelector(".bbttcc-campaign-dialog, .bbttcc-player-facing-dialog")) return true;
     } catch (_e) {}
     return false;
+  }
+
+  // Wait for an encounter's dialog to APPEAR (best effort). The arbitration
+  // gap — GM deciding Launch / Decline / Reroll — has nothing open anywhere,
+  // and an idle check started inside it sails straight through.
+  async function waitForModal({ timeoutMs = 15000 } = {}) {
+    const started = Date.now();
+    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+    while ((Date.now() - started) <= timeoutMs) {
+      if (hasBBTTCCModalOpen() || isCombatActive()) return { ok: true };
+      await sleep(250);
+    }
+    return { ok: false, why: "timeout" };
   }
 
   async function waitForIdle({ homeSceneUuid, timeoutMs = 45000 } = {}) {
@@ -618,7 +636,10 @@
           ? { x: center.x, y: center.y }
           : { x: Number((tdoc && tdoc.x) || 0) + w / 2, y: Number((tdoc && tdoc.y) || 0) + h / 2 };
         txn.requestDive({
-          hexUuid, focus, audience: "view",
+          // "activate": arrival is a TABLE moment — the whole table walks into
+          // town together (owner ruling 2026-08-26; was "view", which left the
+          // GM standing in the weather while the player reached the Cookline).
+          hexUuid, focus, audience: "activate",
           label: (terrFlags && terrFlags.name) || undefined,
           originUuid: (canvas && canvas.scene) ? canvas.scene.uuid : null
         });
@@ -665,7 +686,13 @@
     log("Hex enter: deferring until idle…", { homeSceneUuid, encounter: (result && result.encounter && (result.encounter.key || true)) });
 
     setTimeout(async () => {
-      const idle = await waitForIdle({ homeSceneUuid, timeoutMs: 45000 });
+      // 1) Let the encounter's dialog actually OPEN (covers the GM's
+      //    arbitration think-time; a declined encounter simply times this out).
+      // 2) Then wait for it to resolve — dialog closed, combat over, party
+      //    back on the map. 5 min cap: worst case the arrival is late, never
+      //    mid-storm.
+      await waitForModal({ timeoutMs: 15000 });
+      const idle = await waitForIdle({ homeSceneUuid, timeoutMs: 300000 });
       if (!idle.ok) warn("Hex enter: idle wait failed (best effort)", idle);
       try { await runHexEnterBeatNow(result, opts); } catch (e) { warn("Hex enter failed:", e); }
     }, 250);

@@ -174,8 +174,14 @@
       //    bg is ready under the flash. Cap so a slow/huge asset can't hang the dive.
       await Promise.race([preloading, wait(1200)]);
       // 5) land. activate() pulls the whole table; view() is per-user/non-destructive.
-      if (audience === "activate" && game.user.isGM) {
-        await scene.activate();
+      if (audience === "activate") {
+        // GM activates (Foundry's own pull); a non-GM diver can't activate but
+        // CAN broadcast our campaign-socket pull — every client just views.
+        // Both paths also emit the explicit pull: activation alone has left
+        // explicitly-view()'d clients behind (Weather Front, 2026-08-26).
+        if (game.user.isGM) await scene.activate();
+        else await scene.view();
+        try { await game.bbttcc?.api?.worldMutation?.pullTableToScene?.(scene.id); } catch (_ePull) {}
         _lastDive = null;
       } else {
         await scene.view();
