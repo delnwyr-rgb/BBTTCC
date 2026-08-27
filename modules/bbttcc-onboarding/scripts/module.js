@@ -164,7 +164,8 @@ function findTutorialScene(key) {
 // water. Two scenes + transition.dive rather than the Levels module, per the
 // owner's standing no-Levels ruling; the trials beat resolves it by this key
 // and degrades gracefully (hands the relic over on the surface) if unwired.
-const TUTORIAL_SCENE_KEYS = ["incarnation", "meatsuit-range", "driving-course", "sandbox-hex", "hostile-hex", "reef"];
+const TUTORIAL_SCENE_KEYS = ["incarnation", "meatsuit-range", "driving-course", "sandbox-hex", "hostile-hex", "reef",
+                             "court-review", "court-parley"];
 
 /**
  * Point a tutorial key at a Scene (GM only), clearing the key off whatever held it —
@@ -201,6 +202,17 @@ async function wireScene(key, sceneOrId) {
       await raw.update({ ownership: { ...(raw.ownership ?? {}), default: OBSERVER } });
       log(`wireScene: raised "${raw.name}" to default OBSERVER so players can enter it.`);
     } catch (e) { warn("wireScene: ownership raise failed — players may not be able to enter", raw.name, e); }
+  }
+
+  // Court scenes host the Courtly engine, which only engages when the VIEWED
+  // scene carries the tableau flag (raid-console _isCourtlyKey). Stamp it at
+  // wire time so a rebuilt court comes back ready. Dotted setFlag key merges,
+  // so an existing tableau tune (stage bounds, token size) is never clobbered.
+  if (key.startsWith("court-") && raw.flags?.["bbttcc-raid"]?.tableau?.enabled !== true) {
+    try {
+      await raw.setFlag("bbttcc-raid", "tableau.enabled", true);
+      log(`wireScene: tableau-enabled "${raw.name}" — the courtly engine engages here.`);
+    } catch (e) { warn("wireScene: tableau enable failed on", raw.name, e); }
   }
 
   log(`wired "${key}" → ${raw.name} (${raw.id}).`);

@@ -121,6 +121,12 @@ const meatsuit = {
     const scene = await _requireScene(ctx, "meatsuit-range", "Proving Range");
     if (scene) { await _enterScene(scene, "Proving Range", ctx.lane); await _pause(800); } // let the dive settle before spawning
 
+    // The Proving Ground is a SHARED stage across four beats and many replays —
+    // reap whatever scaffolding a previous (or crashed) run left standing
+    // before we dress the set again (owner 2026-08-27: two stale "The Deep"
+    // markers and old sigils haunting a fresh run's combat sim).
+    try { if (scene) await _stage()?.sweepScene?.(scene); } catch (_) {}
+
     // Contain the steward + dummy to the range (never the live map).
     const stage = _stage();
     if (stage && scene) {
@@ -1042,12 +1048,17 @@ const SIM_WAVES = [
     // damage-type lesson, delivered by the foes rather than by a lecture.
     brief: "Three hollow things on the field. Qliphothic — nobody's home, nothing to save. Put them down.",
     coach: "Read them before you shoot: they're RESISTANT to kinetic and VULNERABLE to sephirotic. Your rifle will feel blunt; anything with light in it will not. This is what the manifestation you just authored is FOR — mix your damage types, that's the whole trick.",
+    // fromPack: real pre-gens from the Qliphothic Bestiary (master-content
+    // npcs compendium, owner drop 2026-08-26) — authored abilities + art. The
+    // resist/vuln pairs still ride along as a mergeDefenses UNION so the
+    // damage-type lesson survives any authored profile; if the pack or the
+    // name is missing, the spawn falls back to the bespoke hollow below.
     foes: [
-      { name: "Hollow Thing",   foeClass: "qliphothic", body: 4, xFrac: 0.46, yFrac: 0.58,
+      { name: "Hollow Thing",   fromPack: "Ghagielite Blinder",   foeClass: "qliphothic", body: 4, xFrac: 0.46, yFrac: 0.58,
         resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
-      { name: "Hollow Thing",   foeClass: "qliphothic", body: 4, xFrac: 0.40, yFrac: 0.46,
+      { name: "Hollow Thing",   fromPack: "Nahemoth Husk",        foeClass: "qliphothic", body: 4, xFrac: 0.40, yFrac: 0.46,
         resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
-      { name: "Gantry Hollow",  foeClass: "qliphothic", body: 3, xFrac: 0.52, yFrac: 0.40, elevation: 20, perch: true,
+      { name: "Gantry Hollow",  fromPack: "Satariel Veil-Spinner", foeClass: "qliphothic", body: 3, xFrac: 0.52, yFrac: 0.40, elevation: 20, perch: true,
         resistances: ["kinetic"], vulnerabilities: ["sephirotic"] }
     ]
   },
@@ -1098,6 +1109,10 @@ const combatSim = {
     const scene = await _requireScene(ctx, "meatsuit-range", "Proving Ground");
     ctx._sim.scene = scene;
     if (scene) { await _enterScene(scene, "Proving Ground", ctx.lane); await _pause(800); }
+
+    // Shared stage: clear prior runs' leftovers (sigils, dead foes, shards)
+    // before the first wave dresses the field.
+    try { if (scene) await _stage()?.sweepScene?.(scene); } catch (_) {}
 
     // Everything below writes to actors the player must own — repair the grant
     // before the first shot rather than after the first permission wall.
@@ -1203,7 +1218,18 @@ const combatSim = {
           }
         } else {
           for (const f of (wave.foes || [])) {
-            const sp = await stage.spawnFoe?.(sim.scene, {
+            // Prefer the authored pre-gen when the wave names one; fall back to
+            // the bespoke stat-line spawn if the compendium can't provide it.
+            let sp = null;
+            if (f.fromPack) {
+              sp = await stage.spawnFromPack?.(sim.scene, {
+                actorName: f.fromPack, elevation: f.elevation ?? 0,
+                mergeDefenses: { resistances: f.resistances ?? [], vulnerabilities: f.vulnerabilities ?? [] },
+                conditions: f.conditions ?? [],
+                ..._scenePoint(sim.scene, f.xFrac, f.yFrac, ctx.lane)
+              });
+            }
+            if (!sp?.actor) sp = await stage.spawnFoe?.(sim.scene, {
               name: f.name, foeClass: f.foeClass, body: f.body, size: f.size ?? 1,
               elevation: f.elevation ?? 0,
               resistances: f.resistances ?? [], vulnerabilities: f.vulnerabilities ?? [],
@@ -1477,6 +1503,7 @@ function _pgDiveLevel(scene) {
 const PG_REEF_ENTRY = { xFrac: 0.28, yFrac: 0.27 };
 const PG_REEF_RELIC = { xFrac: 0.53, yFrac: 0.57 };
 const PG_ARENA      = { xFrac: 0.735, yFrac: 0.80 };
+const PG_CIRCLE_RADIUS_FRAC = 0.175;   // painted ring radius, as a fraction of scene width
 const PG_PICKUP_SQUARES = 1.5;   // how close counts as "reached"
 
 /** Centre of a token document in canvas pixels. */
@@ -1502,6 +1529,54 @@ function _pgRelics(steward) {
   const held = steward?.getFlag?.(MODULE_ID, "provingRelics");
   return Array.isArray(held) ? held : [];
 }
+// The relics as REAL inventory — the trials pay in items, not just a flag set
+// (owner playtest 2026-08-22: "Still Draught foreshadowed as usable, nothing in
+// inventory"). The Draught is genuinely drinkable: an RFI consumable whose
+// consume spec heals 2d6 Integrity once, then the bottle deletes itself — the
+// system's own sheet Use action drives the whole thing. The rest are keepsakes.
+const PG_RELIC_ITEMS = {
+  lava: {
+    name: "Cinder Key", img: "icons/svg/fire.svg",
+    desc: "<p>A key of fused slag, still warm no matter how long it sits in a pocket. It anchored the Proving Ground's lava sigil, and it remembers being load-bearing.</p><p><i>What it opens has not been built yet.</i></p>"
+  },
+  healing: {
+    name: "Still Draught", img: "icons/svg/heal.svg",
+    desc: "<p>A stoppered measure of the pale pond, bottled mid-kindness. One swallow closes wounds — <b>2d6 Integrity</b>, once.</p><p><i>The bottle refuses to be refilled.</i></p>",
+    consume: { effects: [{ kind: "track", track: "integrity", op: "add", formula: "2d6" }], decrement: true }
+  },
+  grove: {
+    name: "Verdant Mark", img: "icons/svg/oak.svg",
+    desc: "<p>A ring of living green that grew wrong on purpose. It is warm, faintly moving, and pretends not to notice being watched.</p><p><i>Whatever is growing in there has been waiting a long time.</i></p>"
+  },
+  reef: {
+    name: "Reef Shard", img: "icons/svg/water.svg",
+    desc: "<p>A splinter of magenta coral from the reef below the Proving Ground, cold enough to ache through cloth.</p><p><i>Held to the ear it does not sound like the sea. It sounds like the tide going out.</i></p>"
+  }
+};
+
+/** Mint the relic as a real gear Item on the Steward. Idempotent by relicKey
+ *  flag; the player OWNS their steward (ensureOwned), so this runs client-side.
+ *  Never fatal — the flag set stays the showdown's source of truth. */
+async function _pgMintRelicItem(steward, key) {
+  const spec = PG_RELIC_ITEMS[key];
+  if (!spec || !steward?.createEmbeddedDocuments) return null;
+  try {
+    const has = steward.items?.find?.(i => i.getFlag?.(MODULE_ID, "relicKey") === key);
+    if (has) return has;
+    const data = {
+      name: spec.name, type: "gear", img: spec.img,
+      system: { quantity: 1, category: "relic", tags: ["relic", "proving-ground"],
+                source: "The Proving Ground — Trials", description: { value: spec.desc, chat: "" } },
+      flags: { [MODULE_ID]: { spawned: true, relicKey: key } }
+    };
+    if (spec.consume) {
+      data.flags.fourththing = { rfi: { item: { frame: "consumable", charges: 1, consume: spec.consume } } };
+    }
+    const [it] = await steward.createEmbeddedDocuments("Item", [data]);
+    return it ?? null;
+  } catch (e) { console.warn(TAG, "relic item mint failed:", key, e); return null; }
+}
+
 async function _pgTakeRelic(steward, key) {
   const held = new Set(_pgRelics(steward));
   if (held.has(key)) return [...held];
@@ -1509,6 +1584,7 @@ async function _pgTakeRelic(steward, key) {
   const next = [...held];
   try { await steward.setFlag(MODULE_ID, "provingRelics", next); }
   catch (e) { console.warn(TAG, "relic flag write failed", e); }
+  await _pgMintRelicItem(steward, key);
   return next;
 }
 
@@ -1542,6 +1618,12 @@ const provingTrials = {
       if (again === "replay") {
         try { await ctx.steward.unsetFlag(MODULE_ID, "provingRelics"); }
         catch (e) { console.warn(TAG, "relic reset failed", e); }
+        // A clean slate means clean pockets: reap the minted relic items too
+        // (a drunk Still Draught is already gone — the filter just skips it).
+        try {
+          const relicItems = ctx.steward.items?.filter?.(i => i.getFlag?.(MODULE_ID, "relicKey")) ?? [];
+          if (relicItems.length) await ctx.steward.deleteEmbeddedDocuments("Item", relicItems.map(i => i.id));
+        } catch (e) { console.warn(TAG, "relic item reset failed", e); }
         await ctx.speak("Wiping the ledger. The floor grows its teeth back— *bzzt* —four sigils, four relics, same rules.");
       } else {
         ctx._pg.alreadyComplete = true;
@@ -1568,6 +1650,10 @@ const provingTrials = {
     const scene = await _requireScene(ctx, "meatsuit-range", "Proving Ground");
     ctx._pg.scene = scene;
     if (scene) { await _enterScene(scene, "Proving Ground", ctx.lane); await _pause(800); }
+
+    // Shared stage: reap stale scaffolding before the sigils go down — a
+    // leftover "The Deep" marker from an old run would double the dive.
+    try { if (scene) await _stage()?.sweepScene?.(scene); } catch (_) {}
 
     const stage = _stage();
     if (scene && stage) {
@@ -1639,6 +1725,10 @@ const provingTrials = {
       const COUNT = ["One", "Two", "Three", "Four"];
       const tally = n >= PG_TRIALS.length ? `${COUNT[n - 1] ?? n}. That's the set.` : `${COUNT[n - 1] ?? n}.`;
       await ctx.speak?.(`${t.taken} ${tally}`);
+      if (t.key === "healing") {
+        await _pause(500);
+        await ctx.speak?.("And it's in your PACK now, One — a real bottle. One swallow, 2d6 Integrity, whenever the moment comes. I told you you'd want it later.");
+      }
       try { await stage.cleanup?.([marker].filter(Boolean)); } catch (_) {}
 
       if (held.length >= PG_TRIALS.length) {
@@ -1929,6 +2019,10 @@ const finalShowdown = {
     const scene = await _requireScene(ctx, "meatsuit-range", "Proving Ground");
     ctx._fs.scene = scene;
 
+    // Shared stage: the circle deserves a clean floor — reap anything a prior
+    // run (or the trials, if they crashed mid-beat) left standing.
+    try { if (scene) await _stage()?.sweepScene?.(scene); } catch (_) {}
+
     if (held.length < PG_TRIALS.length) {
       // Sealed. The owner's ruling: all four or the circle stays inert.
       await ctx.speak(`The great circle won't take you — ${held.length} of ${PG_TRIALS.length} anchors. It isn't being coy, One, it's being LOAD-BEARING. Go back for the rest.`);
@@ -1962,10 +2056,15 @@ const finalShowdown = {
 
     const stage = _stage();
     if (scene && stage) {
-      const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, PG_ARENA.xFrac - 0.08, PG_ARENA.yFrac + 0.06, ctx.lane));
+      // INSIDE the circle, both of them — move:true, because "step in and it
+      // closes behind you" was silently a no-op for tokens already standing
+      // elsewhere on the map from the trials (owner playtest 2026-08-22).
+      const st = await stage.ensureTokenOnScene(ctx.steward, scene,
+        { ..._scenePoint(scene, PG_ARENA.xFrac - 0.06, PG_ARENA.yFrac + 0.04, ctx.lane), move: true });
       if (st?.created) ctx._spawned.push({ token: st.doc });
       if (ctx.rig) {
-        const rt = await stage.ensureTokenOnScene(ctx.rig, scene, _scenePoint(scene, PG_ARENA.xFrac - 0.13, PG_ARENA.yFrac + 0.09, ctx.lane));
+        const rt = await stage.ensureTokenOnScene(ctx.rig, scene,
+          { ..._scenePoint(scene, PG_ARENA.xFrac - 0.11, PG_ARENA.yFrac + 0.08, ctx.lane), move: true });
         if (rt?.created) ctx._spawned.push({ token: rt.doc });
       }
       for (const f of approach.foes) {
@@ -1979,6 +2078,27 @@ const finalShowdown = {
         ctx._spawned.push(sp);
         ctx._fs.foes.set(sp.actor.id, { actorId: sp.actor.id, name: sp.actor.name, boss: (f.body ?? 0) >= 8, down: false });
       }
+
+      // The promise kept: the circle CLOSES. A ring of movement-blocking,
+      // sight-transparent wall segments on the painted circle — the parley
+      // breaks it, and the beat's exit unseals no matter how this ends.
+      const d = scene.dimensions ?? {};
+      const centre = _scenePoint(scene, PG_ARENA.xFrac, PG_ARENA.yFrac, ctx.lane);
+      const radius = Math.round((d.sceneWidth ?? scene.width ?? 4400) * PG_CIRCLE_RADIUS_FRAC);
+      const sealed = await stage.sealCircle?.(scene, { cx: centre.x, cy: centre.y, radius });
+      if (sealed?.ok) {
+        ctx._fs.sealedScene = scene;
+        await ctx.speak("And there it is — the circle just closed behind you. Told you it would. Nothing gets out— *bzzt* —which cuts both ways.");
+        await _pause(700);
+      }
+
+      // Hand the GM a loaded tracker: combat staged with the steward and
+      // every spawned foe, whispered handoff. GM rolls initiative and begins.
+      try {
+        await stage.beginShowdownCombat?.(scene,
+          [ctx.steward?.id, ...ctx._fs.foes.keys()].filter(Boolean),
+          { playerName: ctx.steward?.name || "" });
+      } catch (e) { console.warn(TAG, "showdown combat staging failed", e); }
     }
 
     await ctx.speak(approach.coach);
@@ -2006,15 +2126,36 @@ const finalShowdown = {
     const parley = async () => {
       if (fs.parleyed) return;
       fs.parleyed = true;
+      // The seal lets go for the messenger — the circle opening FROM THE OTHER
+      // SIDE is the tell that whatever's out there wants in to talk, not fight.
+      if (fs.sealedScene) {
+        try { await stage.unsealCircle?.(fs.sealedScene); } catch (_) {}
+        fs.sealedScene = null;
+        await ctx.speak("— the circle just OPENED. Not from your side. *bzzt* Hold. Hold—");
+        await _pause(800);
+      }
       await ctx.speak("— wait. Something's coming in on a channel that shouldn't exist. It's not attacking. It's TALKING.");
       await _pause(1000);
 
-      const scene = fs.scene;
+      // A wired parley COURT upgrades the exchange: the world folds a formal
+      // room around the surrender, and the tableau flag routes the presence
+      // raid through the Courtly engine. Unwired → the parley happens right
+      // there at the great circle, exactly as before.
+      const court = ctx.scene("court-parley");
+      if (court) {
+        await ctx.speak("The channel reaches out and FOLDS — *bzzt* — a room that wasn't in the world model a second ago. A court. Whatever's talking wants this done formally.");
+        await _enterScene(court, "The Parley", ctx.lane);
+        const st = await stage.ensureTokenOnScene?.(ctx.steward, court, _scenePoint(court, 0.42, 0.74, ctx.lane));
+        if (st?.created) ctx._spawned.push({ token: st.doc });
+        await _pause(700);
+      }
+      const stageScene = court || fs.scene;
       let messenger = null;
-      if (scene && stage) {
-        messenger = await stage.spawnFoe?.(scene, {
+      if (stageScene && stage) {
+        messenger = await stage.spawnFoe?.(stageScene, {
           name: "A Messenger, Sent In Haste", foeClass: "sentient", body: 2,
-          ..._scenePoint(scene, PG_ARENA.xFrac + 0.10, PG_ARENA.yFrac - 0.09, ctx.lane)
+          ...(court ? _scenePoint(court, 0.58, 0.56, ctx.lane)
+                    : _scenePoint(stageScene, PG_ARENA.xFrac + 0.10, PG_ARENA.yFrac - 0.09, ctx.lane))
         });
         if (messenger) ctx._spawned.push(messenger);
       }
@@ -2052,7 +2193,8 @@ const finalShowdown = {
             difficulty: "standard", targetType: "hex", targetUuid: "", targetName: "The Pull",
             defenderId: "", rounds: [], logWar: false, includeDefender: false
           });
-          await stage.openRaidConsoleForGM?.(fid, { playerName: ctx.steward?.name || "", activityKey: "presence" });
+          await stage.openRaidConsoleForGM?.(fid, { playerName: ctx.steward?.name || "", activityKey: "presence",
+                                                   sceneId: court?.id ?? "" });
         }
       } catch (e) { console.warn(TAG, "parley handoff failed", e); }
     };
@@ -2116,6 +2258,9 @@ const finalShowdown = {
 
   exit: async (ctx) => {
     const fs = ctx._fs || {};
+    // Belt and braces: however the beat ended (kill, skip, crash), no wall
+    // ring survives it — a sealed arena outliving its fight strands the token.
+    try { if (fs.sealedScene) { await _stage()?.unsealCircle?.(fs.sealedScene); fs.sealedScene = null; } } catch (_) {}
     if (fs.parleyed) {
       await ctx.speak("However that ended — it ended with words on the table. Remember that you had the option. Most things in Bad Eden won't offer it twice.");
     } else {
@@ -2218,15 +2363,37 @@ const travel = {
 // opens already pointed at the hostile hold + the right raid type; the player runs the
 // rounds. Advance is a player-driven "Conclude" prompt (un-trappable), coloured by the
 // real `bbttcc:raid:roundCommit` hook as they commit rounds.
-function makeRaidBeat({ id, title, activityKey, intro, instruct, after }) {
+function makeRaidBeat({ id, title, activityKey, intro, instruct, after, courtKey = "", delegation = [] }) {
   return {
     id, title, scope: "shared",
 
     enter: async (ctx) => {
       const f = ctx.faction;
       const fin = ctx._finale || (ctx._finale = await _finaleTargets(ctx));
-      const scene = fin.scene || ctx.scene("hostile-hex");
+      // A wired COURT upgrades this raid's stage: the player holds court on the
+      // tableau scene, and "presence" + the scene's tableau flag routes the raid
+      // through the Courtly engine instead of plain opposed rolls. Unwired →
+      // exactly the old behavior on the hostile hex.
+      const court = courtKey ? ctx.scene(courtKey) : null;
+      const scene = court || fin.scene || ctx.scene("hostile-hex");
       if (scene) { await _enterScene(scene, title, ctx.lane); await _pause(500); }
+      if (court) {
+        // The Steward's token on the tableau auto-enrols as a courtier.
+        const st = await _stage()?.ensureTokenOnScene?.(ctx.steward, court, _scenePoint(court, 0.40, 0.74, ctx.lane));
+        if (st?.created) (ctx._spawned = ctx._spawned || []).push({ token: st.doc });
+        // The opposing delegation: named faces with authored dispositions
+        // (courtFavor toward THIS faction) and, where authored, an armed
+        // extractable secret. Idempotent — replays reuse the standing court.
+        for (const d of delegation) {
+          const sp = await _stage()?.spawnCourtier?.(court, {
+            name: d.name, img: d.img || "", favor: d.favor || 0,
+            favorFactionId: ctx.faction?.id || "",
+            persona: d.persona || "", secretLine: d.secretLine || "",
+            ..._scenePoint(court, d.xFrac, d.yFrac, ctx.lane)
+          });
+          if (sp && !sp.reused) (ctx._spawned = ctx._spawned || []).push(sp);
+        }
+      }
 
       if (!f) { await ctx.speak("No faction on file to raid under— *bzzt* —I can't open a war console without one. Lead a faction, then replay the finale."); return; }
 
@@ -2245,6 +2412,13 @@ function makeRaidBeat({ id, title, activityKey, intro, instruct, after }) {
 
       await ctx.speak(intro);
       await _pause(400);
+      if (court && delegation.length) {
+        for (const d of delegation) {
+          if (!d.line) continue;
+          await ctx.speak(d.line);
+          await _pause(700);
+        }
+      }
       try { await globalThis.game?.bbttcc?.api?.raid?.openConsole?.({ factionId: f.id }); }
       catch (e) { console.warn(TAG, `openConsole (${activityKey}) failed`, e); }
 
@@ -2253,7 +2427,8 @@ function makeRaidBeat({ id, title, activityKey, intro, instruct, after }) {
       // console already pointed at this faction so the round can actually run.
       const gmRes = await _stage()?.openRaidConsoleForGM?.(f.id, {
         playerName: ctx.steward?.name || ctx.user?.name || "",
-        activityKey
+        activityKey,
+        sceneId: court?.id ?? ""            // courtly raids need the GM viewing the tableau
       });
       if (!globalThis.game?.user?.isGM) {
         if (gmRes?.ok) await ctx.speak("Your GM's console just lit up on your banner — they run the rounds, you feed them. Stage your OP and pick your maneuvers; they'll roll it.");
@@ -2305,8 +2480,32 @@ const raidPresence = makeRaidBeat({
   id: "raid_presence",
   title: "Raid — Presence",
   activityKey: "presence",
+  courtKey: "court-review",   // wired court scene → the Courtly engine engages
+  // The Rust Syndicate's delegation: one face per courtly lesson. Grudge is
+  // the principal (the mind to change / Call-the-Question target), Boltcutter
+  // is the wall charm bounces off (Expose/Intimidate — and the suspicion
+  // lesson when pressed wrong), Verge is the swayable ledger-keeper with an
+  // ARMED extractable secret (courtiers are loot, not scenery).
+  delegation: [
+    {
+      name: "Foreman Ozzie Grudge", xFrac: 0.55, yFrac: 0.50, favor: 0,
+      persona: "Foreman of the Rust Syndicate Hold and principal of its delegation. Pragmatic, proud, keeps score in salvage quotas and favors owed. Movable by patient, material argument — never by charm alone. Voice: short declaratives; taps the table once, softly, when a point actually lands.",
+      line: "Three faces across the tableau. Centre: FOREMAN OZZIE GRUDGE. The Hold is his, and so is the decision — he's the mind you're bending, One."
+    },
+    {
+      name: "Auntie Boltcutter", xFrac: 0.42, yFrac: 0.47, favor: -2,
+      persona: "The Syndicate's enforcer-matriarch. Despises courtly talk, counts the exits, arrived certain this parley is a trick. Warms only to demonstrated strength or a genuinely uncovered truth — flattery raises her hackles and the room's suspicion with them. Voice: dry, cutting, economical.",
+      line: "His left hand: AUNTIE BOLTCUTTER. She decided you were a trick before you sat down. Charm will bounce — find a crack in her, or make one, and mind the room's SUSPICION while you try."
+    },
+    {
+      name: "Tallyman Verge", xFrac: 0.68, yFrac: 0.53, favor: 1,
+      persona: "Quartermaster and keeper of the Hold's ledgers. Nervous, precise, loyal to the supply lines above the banner. Folds readily to a good trade; the state of the books weighs on him visibly.",
+      secretLine: "The Hold's Ledger Doesn't Balance :: oppRollMinus2 :: someone shows genuine interest in the Hold's supply troubles, or offers a trade that would cover a shortfall :: The winter stores are a fiction — Verge has papered over a thirty-crate shortfall for two seasons, and if the Foreman learns the ledger's true state mid-parley, the Hold's bargaining position collapses.",
+      line: "And his right: TALLYMAN VERGE, holding the ledgers like a shield. He wants a deal more than he wants a winner — and men who keep the books KNOW things. Courtiers aren't scenery, One. Work the court."
+    }
+  ],
   intro: "Last approach: the velvet one. PRESENCE — courtly intrigue. You don't break the hold, you out-talk it; bend influence until they fold to your face. Console's re-aimed; hold court.",
-  instruct: `<p>The <b>Presence</b> raid — courtly influence against the same hold.</p><p><b>You:</b> stage OP and choose how you press. <b>Your GM:</b> resolves each round.</p><p>When you've felt how soft power lands, conclude.</p>`,
+  instruct: `<p>The <b>Presence</b> raid — courtly influence against the same hold.</p><p><b>You:</b> stage OP and choose how you press. <b>Your GM:</b> resolves each round.</p><p>Watch the <b>courtiers</b>: favor moves them, pressing wrong raises suspicion — and one of them knows something worth extracting.</p><p>When you've felt how soft power lands, conclude.</p>`,
   after: "And that's the whole grammar of taking ground — fist, knife, and word."
 });
 

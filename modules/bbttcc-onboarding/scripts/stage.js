@@ -339,6 +339,186 @@ function _registerOps() {
     return { actorId: actor.id, tokenId, sceneId };
   });
 
+  // A PRE-GEN from the master-content NPC compendium — full authored statblock,
+  // real abilities, real art — cloned into the world as tutorial scaffolding
+  // (flagged for teardown like every other spawn). `mergeDefenses` UNIONS a
+  // teaching profile onto the authored block (e.g. resist kinetic / vuln
+  // sephirotic for the sim's damage-type lesson) without erasing what the
+  // bestiary author gave the creature.
+  reg("spawnFromPack", async ({ sceneId, actorName = "", packId = "bbttcc-master-content.npcs",
+                                x = 1000, y = 1000, elevation = 0, size = 0, displayName = "",
+                                mergeDefenses = null, conditions = [], ownerUserId = "" }) => {
+    const scene = game.scenes?.get?.(String(sceneId || ""));
+    const pack = game.packs?.get?.(String(packId));
+    if (!scene || !pack || !actorName) return null;
+    try {
+      const idx = pack.index.find(e => e.name === actorName);
+      const src = idx ? await pack.getDocument(idx._id) : null;
+      if (!src) { console.warn(TAG, `spawnFromPack: "${actorName}" not found in ${packId}`); return null; }
+      const folder = await _folder();
+      const data = src.toObject();
+      delete data._id;
+      if (displayName) data.name = displayName;
+      data.folder = folder?.id ?? null;
+      data.ownership = { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER };   // damage applies client-side
+      data.flags = Object.assign({}, data.flags,
+        { [MODULE_ID]: { spawned: true, kind: "foe", fromPack: `${packId}:${actorName}`, ownerUserId } });
+      if (mergeDefenses) {
+        const cur = foundry.utils.getProperty(data, "system.defenses") ?? {};
+        const uni = (a, b) => [...new Set([...(a ?? []), ...(b ?? [])])];
+        foundry.utils.setProperty(data, "system.defenses", {
+          resistances:     uni(cur.resistances,     mergeDefenses.resistances),
+          immunities:      uni(cur.immunities,      mergeDefenses.immunities),
+          vulnerabilities: uni(cur.vulnerabilities, mergeDefenses.vulnerabilities)
+        });
+      }
+      const actor = await Actor.create(data);
+      if (!actor) return null;
+      // Fill the tracks AFTER create — max is derived (same two-step spawnFoe uses).
+      let integrityMax = 0;
+      try {
+        const sys = actor.system?.system ?? actor.system;
+        integrityMax = Number(sys?.derived?.integrity?.max) || 0;
+        await actor.update({
+          "system.derived.integrity.value": integrityMax,
+          "system.derived.stress.value": Number(sys?.derived?.stress?.max) || 0
+        });
+      } catch (e) { console.warn(TAG, "pack foe track fill failed", e); }
+      for (const key of (Array.isArray(conditions) ? conditions : [])) {
+        try { await game.fourththing?.toggleCondition?.(actor, String(key)); }
+        catch (e) { console.warn(TAG, `spawnFromPack: condition "${key}" failed`, e); }
+      }
+      let tokenId = null;
+      try {
+        const td = (await actor.getTokenDocument({ x, y })).toObject();
+        if (Number(elevation)) td.elevation = Number(elevation);
+        if (Number(size)) { td.width = Number(size); td.height = Number(size); }
+        td.disposition = CONST.TOKEN_DISPOSITIONS.HOSTILE;
+        td.flags = Object.assign({}, td.flags, { [MODULE_ID]: { spawned: true, ownerUserId } });
+        const [c] = await scene.createEmbeddedDocuments("Token", [td]);
+        tokenId = c.id;
+      } catch (e) { console.warn(TAG, "pack foe token place failed", e); }
+      return { actorId: actor.id, tokenId, sceneId: scene.id, integrityMax, name: actor.name };
+    } catch (e) { console.warn(TAG, "spawnFromPack failed", e); return null; }
+  });
+
+  // The great circle SEALS: a ring of movement-blocking, sight-transparent
+  // walls laid on the painted circle, every segment flagged for surgical
+  // removal. Idempotent — re-sealing replaces any previous ring. The parley
+  // (or the beat's exit) unseals; nothing else on the scene is touched.
+  reg("sealCircle", async ({ sceneId, cx = 0, cy = 0, radius = 700, segments = 24, ownerUserId = "" }) => {
+    const scene = game.scenes?.get?.(String(sceneId || ""));
+    if (!scene) return { ok: false };
+    try {
+      const old = scene.walls?.filter?.(w => w.flags?.[MODULE_ID]?.kind === "circleWall") ?? [];
+      if (old.length) await scene.deleteEmbeddedDocuments("Wall", old.map(w => w.id));
+      const MOVE = CONST.WALL_MOVEMENT_TYPES?.NORMAL ?? 20;
+      const NONE = CONST.WALL_SENSE_TYPES?.NONE ?? 0;
+      const walls = [];
+      for (let i = 0; i < segments; i++) {
+        const a1 = (i / segments) * 2 * Math.PI, a2 = ((i + 1) / segments) * 2 * Math.PI;
+        walls.push({
+          c: [Math.round(cx + radius * Math.cos(a1)), Math.round(cy + radius * Math.sin(a1)),
+              Math.round(cx + radius * Math.cos(a2)), Math.round(cy + radius * Math.sin(a2))],
+          move: MOVE, sight: NONE, light: NONE, sound: NONE, dir: 0, door: 0, ds: 0,
+          flags: { [MODULE_ID]: { spawned: true, kind: "circleWall", ownerUserId } }
+        });
+      }
+      const created = await scene.createEmbeddedDocuments("Wall", walls);
+      return { ok: true, count: created.length };
+    } catch (e) { console.warn(TAG, "sealCircle failed", e); return { ok: false }; }
+  });
+
+  reg("unsealCircle", async ({ sceneId }) => {
+    const scene = game.scenes?.get?.(String(sceneId || ""));
+    if (!scene) return { ok: false, removed: 0 };
+    try {
+      const ring = scene.walls?.filter?.(w => w.flags?.[MODULE_ID]?.kind === "circleWall") ?? [];
+      if (ring.length) await scene.deleteEmbeddedDocuments("Wall", ring.map(w => w.id));
+      return { ok: true, removed: ring.length };
+    } catch (e) { console.warn(TAG, "unsealCircle failed", e); return { ok: false, removed: 0 }; }
+  });
+
+  // Combat staging handoff: load the tracker (combat + combatants for the
+  // steward and every spawned foe) and whisper the GM why. The GM still rolls
+  // initiative and presses Begin — nothing fights itself.
+  reg("beginShowdownCombat", async ({ sceneId, actorIds = [], playerName = "" }) => {
+    const scene = game.scenes?.get?.(String(sceneId || ""));
+    if (!scene) return { ok: false };
+    try {
+      const ids = new Set((actorIds || []).map(String));
+      const tokens = scene.tokens?.filter?.(t => ids.has(String(t.actorId))) ?? [];
+      if (!tokens.length) return { ok: false };
+      let combat = game.combats?.find?.(c => c.scene?.id === scene.id && !c.started) || null;
+      if (!combat) combat = await Combat.create({ scene: scene.id });
+      const have = new Set(combat.combatants.map(c => c.tokenId));
+      const add = tokens.filter(t => !have.has(t.id)).map(t => ({ tokenId: t.id, sceneId: scene.id, actorId: t.actorId }));
+      if (add.length) await combat.createEmbeddedDocuments("Combatant", add);
+      try { await combat.activate?.(); } catch (_) {}
+      await ChatMessage.create({
+        whisper: game.users.filter(u => u.isGM).map(u => u.id),
+        speaker: { alias: "◇ OPERATOR" },
+        content: `<p><b>The circle is live — you're the table.</b> ${playerName || "The student"} has stepped into the` +
+                 ` great circle and the hostiles are spawned.</p>` +
+                 `<p>I've loaded the tracker (${tokens.length} combatants). Roll initiative and press <b>Begin Combat</b> —` +
+                 ` you run the foes. When the big one starts losing, a <b>messenger</b> will interrupt with a parley.</p>`
+      });
+      return { ok: true, combatants: tokens.length };
+    } catch (e) { console.warn(TAG, "beginShowdownCombat failed", e); return { ok: false }; }
+  });
+
+  // A courtly delegation NPC: a tableau-flagged token with pre-seeded court
+  // favor toward THIS run's attacking faction and (optionally) a Mal-voice
+  // persona carrying an armed extractable secret — so the courtly HUD's
+  // roster, the favor economy, and the secrets probe all light up without any
+  // hand setup. Idempotent per scene+name: replays reuse the standing court.
+  reg("spawnCourtier", async ({ sceneId, x = 1000, y = 1000, name = "Courtier", img = "", size = 1,
+                                favor = 0, favorFactionId = "", persona = "", secretLine = "", ownerUserId = "" }) => {
+    const scene = game.scenes?.get?.(String(sceneId || ""));
+    if (!scene) return null;
+    const existing = scene.tokens?.find?.(t =>
+      t.actor?.flags?.[MODULE_ID]?.kind === "courtier" && t.actor?.name === name);
+    if (existing) {
+      // Re-seed the authored disposition for THIS run's faction — a fresh
+      // replay faction starts from the design, not a previous run's residue.
+      if (existing.actor && favorFactionId) {
+        try { await existing.actor.setFlag("bbttcc-raid", `courtFavor.${favorFactionId}`, Number(favor) || 0); }
+        catch (e) { console.warn(TAG, "courtier favor re-seed failed", e); }
+      }
+      return { actorId: existing.actor?.id ?? null, tokenId: existing.id, sceneId: scene.id, reused: true };
+    }
+    const folder = await _folder();
+    const flags = { [MODULE_ID]: { spawned: true, kind: "courtier", ownerUserId } };
+    if (favorFactionId && Number(favor)) flags["bbttcc-raid"] = { courtFavor: { [favorFactionId]: Number(favor) } };
+    if (persona || secretLine) {
+      flags["bbttcc-mal-voice"] = { persona: Object.assign({},
+        persona ? { notes: persona } : {}, secretLine ? { secretsRaw: secretLine } : {}) };
+    }
+    const actor = await Actor.create({
+      name, type: "npc", folder: folder?.id, img: img || "icons/svg/mystery-man.svg",
+      ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
+      prototypeToken: Object.assign(
+        { actorLink: false, disposition: CONST.TOKEN_DISPOSITIONS.NEUTRAL, name, width: size, height: size },
+        img ? { texture: { src: img } } : {}
+      ),
+      flags
+    });
+    if (!actor) return null;
+    let tokenId = null;
+    try {
+      const td = (await actor.getTokenDocument({ x, y })).toObject();
+      // Belt-and-braces: the tableau auto-enrol hook covers live drops, but
+      // the courtly HUD roster reads tableauActor directly — stamp it in the
+      // create data so the courtier exists no matter which client spawned it.
+      td.flags = Object.assign({}, td.flags,
+        { [MODULE_ID]: { spawned: true, ownerUserId } },
+        { "bbttcc-raid": { tableauActor: true } });
+      const [c] = await scene.createEmbeddedDocuments("Token", [td]);
+      tokenId = c.id;
+    } catch (e) { console.warn(TAG, "courtier token place failed", e); }
+    return { actorId: actor.id, tokenId, sceneId: scene.id };
+  });
+
   // Reaching into a sigil costs something. Routed through the system's own
   // damage pipeline so resistances, the Noise/radiation penalties and every
   // on-damage-taken trigger all behave exactly as they would in a real fight.
@@ -390,12 +570,21 @@ function _registerOps() {
     } catch (e) { console.warn(TAG, "grantSecret failed", e); return { ok: false }; }
   });
 
-  reg("ensureToken", async ({ actorId, sceneId, x = 1000, y = 1000, ownerUserId = "" }) => {
+  reg("ensureToken", async ({ actorId, sceneId, x = 1000, y = 1000, move = false, ownerUserId = "" }) => {
     const actor = game.actors?.get?.(actorId);
     const scene = game.scenes?.get?.(sceneId);
     if (!actor || !scene) return { tokenId: null, created: false, sceneId };
     const existing = scene.tokens?.find(t => t.actorId === actor.id);
-    if (existing) return { tokenId: existing.id, created: false, sceneId };
+    if (existing) {
+      // move:true = the beat means "AT this spot", not just "on this scene" —
+      // the showdown's "step into the circle" was silently a no-op for a token
+      // that already stood elsewhere on the map (owner playtest 2026-08-22).
+      if (move) {
+        try { await existing.update({ x: Number(x) || 0, y: Number(y) || 0 }); }
+        catch (e) { console.warn(TAG, "ensureToken move failed", e); }
+      }
+      return { tokenId: existing.id, created: false, moved: !!move, sceneId };
+    }
     const td = (await actor.getTokenDocument({ x, y })).toObject();
     // Tagged so a concurrent player's teardown can't reap this token.
     td.flags = Object.assign({}, td.flags, { [MODULE_ID]: { spawned: true, ownerUserId } });
@@ -756,11 +945,21 @@ function _registerOps() {
   // controls all live behind {{#if isGM}}. A player can stage OP into their
   // commitments but cannot open or resolve a round. So the tutorial hands the GM
   // the console already pointed at the student's faction, and whispers why.
-  reg("openRaidConsoleForGM", async ({ factionId, playerName = "", activityKey = "" }) => {
+  reg("openRaidConsoleForGM", async ({ factionId, playerName = "", activityKey = "", sceneId = "" }) => {
     const raid = globalThis.game?.bbttcc?.api?.raid;
     const faction = game.actors?.get?.(String(factionId || ""));
     if (!raid?.openConsole || !faction) return { ok: false };
     try {
+      // A courtly raid needs the GM VIEWING the tableau scene — the console's
+      // _isCourtlyKey gate reads canvas.scene, so pull the GM onto the court
+      // before opening and tell them to stay there while rounds run.
+      let court = null;
+      if (sceneId) {
+        court = game.scenes?.get?.(String(sceneId)) ?? null;
+        if (court && canvas?.scene?.id !== court.id) {
+          try { await court.view(); } catch (e) { console.warn(TAG, "GM court view failed", e); }
+        }
+      }
       await raid.openConsole({ factionId: faction.id });
       await ChatMessage.create({
         whisper: game.users.filter(u => u.isGM).map(u => u.id),
@@ -768,7 +967,9 @@ function _registerOps() {
         content: `<p><b>Onboarding raid — you're the table.</b> ${playerName || "A student"} has reached the` +
                  ` <b>${activityKey || "raid"}</b> stage against the Rust Syndicate, attacking as <b>${faction.name}</b>.</p>` +
                  `<p>Their console is staging-only; round setup and commits are GM-side. I've opened yours on their faction —` +
-                 ` run a round or two, then they'll conclude the beat themselves.</p>`
+                 ` run a round or two, then they'll conclude the beat themselves.</p>` +
+                 (court ? `<p><b>Stay on "${court.name}" while you run it</b> — the Courtly engine only engages while` +
+                          ` the tableau scene is the one you're viewing.</p>` : "")
       });
       return { ok: true };
     } catch (e) { console.warn(TAG, "openRaidConsoleForGM failed", e); return { ok: false }; }
@@ -812,6 +1013,47 @@ function _registerOps() {
     return { ok: true, scoped: othersLive };
   });
 
+  // STALE-SCAFFOLDING SWEEP: the Proving Ground hosts four different beats
+  // (meatsuit, combat_sim, proving_trials, final_showdown) plus replays, and a
+  // crashed or interrupted run leaks its props — sigil markers, dead foes,
+  // dive shards — onto the shared stage (owner's fresh 2026-08-27 run opened
+  // on TWO "The Deep" markers from prior sessions). Called at the entry of
+  // every Proving-Ground beat. Reaps tokens whose ACTOR is spawned-flagged
+  // (markers, foes, obstacles, dummies — never a real Steward's or rig's
+  // token) plus those actors, honoring teardownFinale's ownership rules:
+  // own props always, untagged/legacy only when no other run is live.
+  // Courtiers are exempt — the standing court persists by design.
+  reg("sweepSceneScaffolding", async ({ sceneId = "", ownerUserId = "", keepActorIds = [] } = {}) => {
+    const scene = game.scenes?.get?.(String(sceneId || ""));
+    if (!scene) return { ok: false, tokens: 0, actors: 0 };
+    const othersLive = Object.keys(_readRuns()).filter(u => u !== ownerUserId).length > 0;
+    const keep = new Set((keepActorIds || []).map(String));
+    const mine = (owner) => (owner && ownerUserId) ? owner === ownerUserId : !othersLive;
+    const toks = (scene.tokens?.contents ?? Array.from(scene.tokens ?? [])).filter(t => {
+      const a = t.actor;
+      if (!a?.getFlag?.(MODULE_ID, "spawned")) return false;             // real actors' tokens stay
+      if (a.getFlag?.(MODULE_ID, "kind") === "courtier") return false;   // standing court persists
+      if (keep.has(String(t.actorId))) return false;                     // current run's props stay
+      const owner = a.getFlag?.(MODULE_ID, "ownerUserId") || t.getFlag?.(MODULE_ID, "ownerUserId") || "";
+      return mine(owner);
+    });
+    const actorIds = [...new Set(toks.map(t => t.actorId).filter(Boolean))];
+    let nT = 0, nA = 0;
+    if (toks.length) {
+      try { await scene.deleteEmbeddedDocuments("Token", toks.map(t => t.id)); nT = toks.length; }
+      catch (e) { console.warn(TAG, "sweep token delete failed", e); }
+    }
+    for (const id of actorIds) {
+      try {
+        const a = game.actors?.get?.(id);
+        // Hostile factions are finale infrastructure with their own teardown.
+        if (a?.getFlag?.(MODULE_ID, "spawned") && a.getFlag?.(MODULE_ID, "kind") !== "hostileFaction") { await a.delete(); nA++; }
+      } catch (_) {}
+    }
+    if (nT || nA) console.log(TAG, `sweepSceneScaffolding: reaped ${nT} stale token(s) / ${nA} actor(s) on "${scene.name}".`);
+    return { ok: true, tokens: nT, actors: nA };
+  });
+
   reg("cleanup", async ({ tokens = [], actorIds = [] }) => {
     for (const t of tokens) {
       try { const sc = game.scenes?.get?.(t.sceneId); if (sc && t.tokenId) await sc.deleteEmbeddedDocuments("Token", [t.tokenId]); } catch (_) {}
@@ -822,7 +1064,7 @@ function _registerOps() {
     return { ok: true };
   });
 
-  console.log(TAG, "GM ops registered: spawnDummy, spawnObstacle, spawnFoe, raiseDarkness, foeSurrender, shoveOffPerch, spawnMarker, hurt, mend, grantSecret, setElevation, ensureToken, mintRig, ensureSandboxHex, claimHex, unclaimHex, disembark, spawnHostileFaction, ensureHex, setRaidSession, clearRaidSession, teardownFinale, cleanup.");
+  console.log(TAG, "GM ops registered: spawnDummy, spawnObstacle, spawnFoe, raiseDarkness, foeSurrender, shoveOffPerch, spawnMarker, spawnCourtier, hurt, mend, grantSecret, setElevation, ensureToken, mintRig, ensureSandboxHex, claimHex, unclaimHex, disembark, spawnHostileFaction, ensureHex, setRaidSession, clearRaidSession, teardownFinale, cleanup.");
 }
 
 /* ─── Public helpers (called by beats; resolve ids -> Documents) ────────────── */
@@ -853,11 +1095,11 @@ async function runList(exceptUserId = "") {
 }
 
 /** Ensure `actor` has a token on `scene`. Returns { doc, created }. */
-async function ensureTokenOnScene(actor, scene, { x = 1000, y = 1000 } = {}) {
+async function ensureTokenOnScene(actor, scene, { x = 1000, y = 1000, move = false } = {}) {
   if (!actor || !scene) return { doc: null, created: false };
-  const res = await _runAsGM("ensureToken", { actorId: actor.id, sceneId: scene.id, x, y, ..._ownedBy() });
+  const res = await _runAsGM("ensureToken", { actorId: actor.id, sceneId: scene.id, x, y, move, ..._ownedBy() });
   const doc = res?.tokenId ? await _ns()?.relay?.resolveToken?.(res.sceneId, res.tokenId) : null;
-  return { doc: doc || null, created: !!res?.created };
+  return { doc: doc || null, created: !!res?.created, moved: !!res?.moved };
 }
 
 /** Spawn a disposable training dummy + token on `scene`. Returns { actor, token } or null. */
@@ -900,6 +1142,55 @@ async function spawnMarker(scene, opts = {}) {
   const actor = await _ns()?.relay?.resolveActor?.(res.actorId);
   const token = res.tokenId ? await _ns()?.relay?.resolveToken?.(res.sceneId, res.tokenId) : null;
   return { actor: actor || null, token: token || null };
+}
+
+/** Sweep STALE onboarding scaffolding off a scene (prior/crashed runs'
+ *  markers, foes, dummies). Own props always; legacy only when alone. */
+async function sweepScene(scene, { keepActorIds = [] } = {}) {
+  if (!scene?.id) return { ok: false, tokens: 0, actors: 0 };
+  return (await _runAsGM("sweepSceneScaffolding", { sceneId: scene.id, keepActorIds, ..._ownedBy() }))
+    ?? { ok: false, tokens: 0, actors: 0 };
+}
+
+/** Clone a pre-gen NPC out of the master-content compendium onto a scene.
+ *  opts: {actorName, packId?, x, y, elevation, size, displayName,
+ *         mergeDefenses:{resistances,immunities,vulnerabilities}, conditions}. */
+async function spawnFromPack(scene, opts = {}) {
+  if (!scene?.id) return null;
+  const res = await _runAsGM("spawnFromPack", { sceneId: scene.id, ...opts, ..._ownedBy() });
+  if (!res?.actorId) return null;
+  const actor = await _ns()?.relay?.resolveActor?.(res.actorId);
+  const token = res.tokenId ? await _ns()?.relay?.resolveToken?.(res.sceneId, res.tokenId) : null;
+  return { actor: actor || null, token: token || null, integrityMax: res.integrityMax ?? 0 };
+}
+
+/** Seal the great circle: a ring of movement-blocking walls at (cx,cy). */
+async function sealCircle(scene, { cx = 0, cy = 0, radius = 700, segments = 24 } = {}) {
+  if (!scene?.id) return { ok: false };
+  return (await _runAsGM("sealCircle", { sceneId: scene.id, cx, cy, radius, segments, ..._ownedBy() })) ?? { ok: false };
+}
+
+/** Remove the sealed circle's wall ring (parley, beat exit). */
+async function unsealCircle(scene) {
+  if (!scene?.id) return { ok: false, removed: 0 };
+  return (await _runAsGM("unsealCircle", { sceneId: scene.id })) ?? { ok: false, removed: 0 };
+}
+
+/** Load the GM's combat tracker with the showdown participants + whisper why. */
+async function beginShowdownCombat(scene, actorIds = [], { playerName = "" } = {}) {
+  if (!scene?.id || !actorIds?.length) return { ok: false };
+  return (await _runAsGM("beginShowdownCombat", { sceneId: scene.id, actorIds, playerName })) ?? { ok: false };
+}
+
+/** Spawn (or reuse) a courtly delegation NPC on a tableau scene.
+ *  opts: {x,y,name,img,favor,favorFactionId,persona,secretLine}. */
+async function spawnCourtier(scene, opts = {}) {
+  if (!scene?.id) return null;
+  const res = await _runAsGM("spawnCourtier", { sceneId: scene.id, ...opts, ..._ownedBy() });
+  if (!res?.actorId) return null;
+  const actor = await _ns()?.relay?.resolveActor?.(res.actorId);
+  const token = res.tokenId ? await _ns()?.relay?.resolveToken?.(res.sceneId, res.tokenId) : null;
+  return { actor: actor || null, token: token || null, reused: !!res.reused };
 }
 
 /** Move an actor's token(s) to an elevation AND (v14) a scene level — elevation
@@ -1009,9 +1300,9 @@ async function setRaidSession(factionId, session) {
 }
 
 /** Open the GM's raid console on this faction + whisper them why (raids are GM-run). */
-async function openRaidConsoleForGM(factionId, { playerName = "", activityKey = "" } = {}) {
+async function openRaidConsoleForGM(factionId, { playerName = "", activityKey = "", sceneId = "" } = {}) {
   if (!factionId) return { ok: false };
-  return (await _runAsGM("openRaidConsoleForGM", { factionId, playerName, activityKey })) ?? { ok: false };
+  return (await _runAsGM("openRaidConsoleForGM", { factionId, playerName, activityKey, sceneId })) ?? { ok: false };
 }
 
 /** Clear the raid session pointer off the player's real faction. */
@@ -1046,7 +1337,8 @@ Hooks.once("ready", () => {
   if (ns) ns.stage = {
     ensureTokenOnScene, spawnDummy, spawnObstacle, mintRig, grantOp, ensureOwned, disembark,
     spawnFoe, raiseDarkness, foeSurrender, shoveOffPerch,
-    spawnMarker, hurt, mend, grantSecret, setElevation,
+    spawnMarker, spawnCourtier, spawnFromPack, hurt, mend, grantSecret, setElevation,
+    sealCircle, unsealCircle, beginShowdownCombat, sweepScene,
     ensureSandboxHex, claimHex, unclaimHex, spawnHostileFaction, ensureHex,
     setRaidSession, clearRaidSession, openRaidConsoleForGM, teardownFinale, cleanup, folder: _folder,
     setRunContext, runContext, runBegin, runEnd, runPing, runList, laneFrac: _laneFrac

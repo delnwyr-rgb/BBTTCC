@@ -18,7 +18,9 @@
     { key: "meatsuit-range", label: "Proving Ground",     beat: "meatsuit — ability test + Straw Adversary" },
     { key: "driving-course", label: "Test Track",         beat: "driving — rig + 4 wrecks" },
     { key: "sandbox-hex",    label: "Sandbox Hold",       beat: "stewardship — Tutelary Hold" },
-    { key: "hostile-hex",    label: "Hostile Frontier",   beat: "travel + triple raid finale" }
+    { key: "hostile-hex",    label: "Hostile Frontier",   beat: "travel + triple raid finale" },
+    { key: "court-review",   label: "Court — Raid Review", beat: "raid_presence — courtly raid (tableau)" },
+    { key: "court-parley",   label: "Court — The Parley",  beat: "final_showdown — The Pull's parley (tableau)" }
   ];
 
   if (!game.user.isGM) { ui.notifications.warn("Wire Onboarding Scenes: GM only."); return; }
