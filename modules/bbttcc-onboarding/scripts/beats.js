@@ -84,6 +84,8 @@ const incarnation = {
 
     const scene = await _requireScene(ctx, "incarnation", "Incarnation");
     if (scene) await _enterScene(scene, "Incarnate", ctx.lane);
+    // Shared stage across replays — clear prior runs' leftovers.
+    try { if (scene) await _stage()?.sweepScene?.(scene); } catch (_) {}
 
     ctx.riff({ beat: "incarnation", line: "Welcome the reincarnated One into the homemade game and prep them to take a body.", intent: "Ominous, glitchy, a little funny. One short aside." });
   },
@@ -226,6 +228,10 @@ const driving = {
     const scene = await _requireScene(ctx, "driving-course", "Test Track");
     if (scene) { await _enterScene(scene, "Test Track", ctx.lane); await _pause(800); }
 
+    // Shared stage: reap prior tenants (old wrecks ×2, previous stewards and
+    // their rigs — tokens only, never the actors) before dressing the track.
+    try { if (scene) await _stage()?.sweepScene?.(scene); } catch (_) {}
+
     const stage = _stage();
     if (scene && stage) {
       // Place the Steward FIRST — the meatsuit beat removed the range token on cleanup,
@@ -367,6 +373,9 @@ const stewardshipClaim = {
 
     const scene = await _requireScene(ctx, "sandbox-hex", "Sandbox Hold");
     if (scene) { await _enterScene(scene, "Sandbox Hold", ctx.lane); await _pause(800); }
+
+    // Shared stage across replays — clear prior runs' leftovers.
+    try { if (scene) await _stage()?.sweepScene?.(scene); } catch (_) {}
 
     const stage = _stage();
     if (scene && stage?.ensureSandboxHex) ctx._sandboxHex = await stage.ensureSandboxHex(scene, "Tutelary Hold");
@@ -1081,9 +1090,44 @@ const SIM_WAVES = [
     // beat gates on. Nothing crews it, so there is no sentient question here.
     brief: "Last one's dug in at the far end. A gun-truck — qliphothic-run, no driver worth the name.",
     coach: "This is a VEHICLE. Fight it with yours: select your Steward, right-click, 🚚 board your rig, and bring the guns. On foot you'll be outranged and outweighed.",
-    rig: { name: "Qliphothic Gun-Truck", xFrac: 0.36, yFrac: 0.56, size: 2, integrity: 14, bracket: "medium" }
+    // Armed for real (2026-08-27, owner's first wave-3 test found a bare
+    // shell): Twin Autocannons to shoot back with, Reinforced Plating for
+    // armor, and the hauler-wreck art instead of a hazard triangle. The GM
+    // fires the guns — same pilot-bar path as the player's own rig.
+    rig: { name: "Qliphothic Gun-Truck", img: OBSTACLE_ART("obstacle-wreck-hauler.webp"),
+           xFrac: 0.36, yFrac: 0.56, size: 2, integrity: 14, bracket: "medium",
+           loadout: { weapons: ["Twin Autocannons"], systems: ["Reinforced Plating"] } }
   }
 ];
+
+/** Spawn one foe, preferring an authored PRE-GEN from the master-content npcs
+ *  compendium when the def names one (`fromPack`), falling back to the bespoke
+ *  stat-line spawn if the pack or name is missing. `keepName: true` clones the
+ *  statblock but keeps the def's fiction name (the showdown's "Null Process" /
+ *  "The Pull" are canon; the sim's bestiary names are the flavor). The def's
+ *  resist/vuln pairs ride along as a mergeDefenses UNION either way, so any
+ *  taught damage grammar survives the authored profile. */
+async function _spawnFoeSmart(stage, scene, f, lane) {
+  let sp = null;
+  if (f.fromPack) {
+    sp = await stage.spawnFromPack?.(scene, {
+      actorName: f.fromPack,
+      displayName: f.keepName ? f.name : "",
+      elevation: f.elevation ?? 0, size: f.size ?? 0,
+      mergeDefenses: { resistances: f.resistances ?? [], vulnerabilities: f.vulnerabilities ?? [] },
+      conditions: f.conditions ?? [],
+      ..._scenePoint(scene, f.xFrac, f.yFrac, lane)
+    });
+  }
+  if (!sp?.actor) sp = await stage.spawnFoe?.(scene, {
+    name: f.name, foeClass: f.foeClass, body: f.body, size: f.size ?? 1,
+    elevation: f.elevation ?? 0,
+    resistances: f.resistances ?? [], vulnerabilities: f.vulnerabilities ?? [],
+    conditions: f.conditions ?? [],
+    ..._scenePoint(scene, f.xFrac, f.yFrac, lane)
+  });
+  return sp;
+}
 
 const combatSim = {
   id: "combat_sim",
@@ -1096,7 +1140,7 @@ const combatSim = {
       scene: null,
       waveIdx: -1,
       records: new Map(),          // actorId → foe record for the CURRENT wave
-      tally: { husksDown: 0, saved: 0, killed: 0, rigsWrecked: 0, darkness: 0 },
+      tally: { husksDown: 0, saved: 0, killed: 0, talked: 0, rigsWrecked: 0, darkness: 0 },
       advancing: false,
       finished: false
     };
@@ -1206,6 +1250,7 @@ const combatSim = {
         if (wave.rig) {
           const sp = await stage.spawnObstacle?.(sim.scene, {
             name: wave.rig.name, size: wave.rig.size, integrity: wave.rig.integrity, bracket: wave.rig.bracket,
+            img: wave.rig.img ?? "", loadout: wave.rig.loadout ?? null,
             ..._scenePoint(sim.scene, wave.rig.xFrac, wave.rig.yFrac, ctx.lane)
           });
           if (sp?.actor) {
@@ -1218,23 +1263,7 @@ const combatSim = {
           }
         } else {
           for (const f of (wave.foes || [])) {
-            // Prefer the authored pre-gen when the wave names one; fall back to
-            // the bespoke stat-line spawn if the compendium can't provide it.
-            let sp = null;
-            if (f.fromPack) {
-              sp = await stage.spawnFromPack?.(sim.scene, {
-                actorName: f.fromPack, elevation: f.elevation ?? 0,
-                mergeDefenses: { resistances: f.resistances ?? [], vulnerabilities: f.vulnerabilities ?? [] },
-                conditions: f.conditions ?? [],
-                ..._scenePoint(sim.scene, f.xFrac, f.yFrac, ctx.lane)
-              });
-            }
-            if (!sp?.actor) sp = await stage.spawnFoe?.(sim.scene, {
-              name: f.name, foeClass: f.foeClass, body: f.body, size: f.size ?? 1,
-              elevation: f.elevation ?? 0,
-              resistances: f.resistances ?? [], vulnerabilities: f.vulnerabilities ?? [],
-              ..._scenePoint(sim.scene, f.xFrac, f.yFrac, ctx.lane)
-            });
+            const sp = await _spawnFoeSmart(stage, sim.scene, f, ctx.lane);
             if (!sp?.actor) continue;
             ctx._spawned.push(sp);
             const max = Number(sp.integrityMax) || Number(integrityOf(sp.actor, false)) || 0;
@@ -1256,11 +1285,56 @@ const combatSim = {
 
         await _pause(500);
         await ctx.speak(wave.coach);
+        closeStandDown();            // stale offer from the last wave, if any
+        offerStandDown();            // no-ops unless this wave has sentients
       } catch (e) {
         console.warn(TAG, "combat sim wave advance failed", e);
       } finally {
         sim.advancing = false;
       }
+    };
+
+    // ── TALKED DOWN (owner ruling 2026-08-22, built after the Bit & Coll
+    // parley 2026-08-27): sentient foes can be persuaded at the table — the
+    // GM voices them (Mal or otherwise), and when they genuinely agree to
+    // stand down, this button is the HANDSHAKE that scores it. Confirm-gated
+    // like the skip hatch (a dismissed window must never auto-peace a wave),
+    // re-arms quietly, and only offers while sentient foes are unresolved.
+    const SD_TITLE = "◇ OPERATOR — Stand-Down";
+    let sdTimer = null, sdDisposed = false;
+    const closeStandDown = () => globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(SD_TITLE);
+    const sentientsPending = () => [...sim.records.values()].filter(r => !r.resolved && r.foeClass === "sentient");
+    const offerStandDown = () => {
+      if (sdDisposed || sim.finished) return;
+      if (!sentientsPending().length) return;
+      ctx.prompt({
+        title: SD_TITLE,
+        content:
+          `<p><b>Talking instead of shooting?</b> Sentient foes can be TALKED DOWN — persuade them at the table and the wave passes without a shot fired.</p>` +
+          `<p><i>This button is the handshake, not the negotiation: press it once they've actually agreed to let you pass.</i></p>`,
+        label: "🕊 They stood down"
+      }).then(async (r) => {
+        if (sdDisposed || sim.finished) return;
+        const pending = sentientsPending();
+        if (r === "ok" && pending.length) {
+          const sure = await ctx.choose?.({
+            title: SD_TITLE,
+            content:
+              `<p><b>Confirm the peace:</b> did the table actually talk it out with ${pending.map(p => p.name).join(" and ")}?</p>` +
+              `<p>A stand-down scores as the cleanest outcome the sim knows — don't spend it on a shortcut.</p>`,
+            options: [
+              { action: "yes", label: "🕊 Yes — words worked" },
+              { action: "no",  label: "Back to the fight" }
+            ],
+            fallback: "no"
+          }) ?? "no";
+          if (sure === "yes" && !sdDisposed && !sim.finished) {
+            for (const rec of sentientsPending()) await resolveFoe(rec, "talked");
+            return;                    // resolveFoe's wave-clear check rolls on
+          }
+        }
+        sdTimer = setTimeout(offerStandDown, 15000);
+      });
     };
 
     /** Retire one foe and, when the wave is clear, roll on. */
@@ -1282,6 +1356,15 @@ const combatSim = {
         } else {
           await ctx.speak?.(`${rec.name} is dead. That one was a person.`);
         }
+      } else if (how === "talked") {
+        // The best outcome the sim knows: nobody bled, and it took more nerve
+        // than shooting. They LEAVE the field — walk-off, not corpse.
+        sim.tally.talked += 1;
+        try {
+          const sp = (ctx._spawned || []).find(s => s?.actor?.id === rec.actorId);
+          if (sp) await stage.cleanup?.([sp]);
+        } catch (_) {}
+        await ctx.speak?.(`${rec.name} lowers the gun and walks. Nobody bled, nothing's owed. That one goes in the report with a star on it.`);
       } else if (how === "gone") {
         console.log(TAG, `combat sim: "${rec.name}" left the board unresolved — not scored.`);
       } else if (rec.isRig) {
@@ -1376,18 +1459,24 @@ const combatSim = {
     }).then(() => finish());
 
     return () => {
+      sdDisposed = true;
+      if (sdTimer) clearTimeout(sdTimer);
       Hooks.off("updateActor", onUpd);
       Hooks.off("bbttcc:rig:destroyed", onRigDestroyed);
       Hooks.off("deleteToken", onDelTok);
+      closeStandDown();
       closeFallback();
     };
   },
 
   exit: async (ctx) => {
-    const t = ctx._sim?.tally || { husksDown: 0, saved: 0, killed: 0, rigsWrecked: 0, darkness: 0 };
-    await ctx.speak(`Simulation closed. ${t.husksDown} hollow put down, ${t.rigsWrecked} vehicle${t.rigsWrecked === 1 ? "" : "s"} wrecked, ${t.saved} spared, ${t.killed} killed.`);
+    const t = ctx._sim?.tally || { husksDown: 0, saved: 0, killed: 0, talked: 0, rigsWrecked: 0, darkness: 0 };
+    const talkedBit = t.talked > 0 ? `, ${t.talked} talked down` : "";
+    await ctx.speak(`Simulation closed. ${t.husksDown} hollow put down, ${t.rigsWrecked} vehicle${t.rigsWrecked === 1 ? "" : "s"} wrecked, ${t.saved} spared, ${t.killed} killed${talkedBit}.`);
     await _pause(800);
-    if (t.killed > 0 && t.saved > 0) {
+    if (t.talked > 0 && t.killed === 0) {
+      await ctx.speak("And some of them you TALKED past. No blood, no Darkness, nothing owed — the outcome most Stewards never even look for. Top marks, One. The Bad Eden will not always answer to words, but you'll know the ones that do.");
+    } else if (t.killed > 0 && t.saved > 0) {
       await ctx.speak(`You saved some and you didn't save others. That's the honest answer most Stewards give, and Darkness sits at ${t.darkness > 0 ? `+${t.darkness}` : "unchanged"} because of it. Carry it and keep going.`);
     } else if (t.killed > 0) {
       await ctx.speak("Clean, fast, and nobody walked away. It works. It always works. Ask yourself in ten turns whether it was still worth what it cost.");
@@ -1982,12 +2071,17 @@ const PG_APPROACHES = {
     activityKey: "violence",
     brief: "Front door, then. No subtlety, no second guessing — you walk in loud and let them come to you.",
     coach: "Everything in the circle knows you're here and gets to act. More of them, and they're awake. Lead with the guns and let the rig take the hits.",
-    // Loud means MORE of them, all alert.
+    // Loud means MORE of them, all alert. TEETH (owner ask 2026-08-27, post
+    // full-run): the fiction names stay canon (keepName), but the statblocks
+    // underneath are authored bestiary creatures — Null Process wears the
+    // Obstructor Demon (Null Density / Aura of Stagnation / Wall of Nullity),
+    // The Pull wears the Avatar of the Veil (Reality Rearranges / Veil-
+    // Severance / Thinning Aura — it IS the thing pulling at the world model).
     foes: [
-      { name: "Null Process", foeClass: "qliphothic", body: 4, xFrac: 0.63, yFrac: 0.73, resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
-      { name: "Null Process", foeClass: "qliphothic", body: 4, xFrac: 0.73, yFrac: 0.74, resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
-      { name: "Null Process", foeClass: "qliphothic", body: 4, xFrac: 0.60, yFrac: 0.86, resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
-      { name: "The Pull",     foeClass: "qliphothic", body: 8, size: 2, xFrac: 0.68, yFrac: 0.85, resistances: ["kinetic", "qliphothic"], vulnerabilities: ["sephirotic"] }
+      { name: "Null Process", fromPack: "Obstructor Demon", keepName: true, foeClass: "qliphothic", body: 4, xFrac: 0.63, yFrac: 0.73, resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
+      { name: "Null Process", fromPack: "Obstructor Demon", keepName: true, foeClass: "qliphothic", body: 4, xFrac: 0.73, yFrac: 0.74, resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
+      { name: "Null Process", fromPack: "Obstructor Demon", keepName: true, foeClass: "qliphothic", body: 4, xFrac: 0.60, yFrac: 0.86, resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
+      { name: "The Pull",     fromPack: "Avatar of the Veil", keepName: true, foeClass: "qliphothic", body: 8, size: 2, xFrac: 0.68, yFrac: 0.85, resistances: ["kinetic", "qliphothic"], vulnerabilities: ["sephirotic"] }
     ]
   },
   intrigue: {
@@ -1997,8 +2091,8 @@ const PG_APPROACHES = {
     coach: "Fewer of them, and they start SURPRISED — they cannot act on the first round. That round is a gift; spend it on the big one, not the small ones.",
     // Quiet means fewer, and the system's own surprise rule buys the free round.
     foes: [
-      { name: "Null Process", foeClass: "qliphothic", body: 4, xFrac: 0.63, yFrac: 0.73, resistances: ["kinetic"], vulnerabilities: ["sephirotic"], conditions: ["surprise"] },
-      { name: "The Pull",     foeClass: "qliphothic", body: 8, size: 2, xFrac: 0.68, yFrac: 0.85, resistances: ["kinetic", "qliphothic"], vulnerabilities: ["sephirotic"], conditions: ["surprise"] }
+      { name: "Null Process", fromPack: "Obstructor Demon", keepName: true, foeClass: "qliphothic", body: 4, xFrac: 0.63, yFrac: 0.73, resistances: ["kinetic"], vulnerabilities: ["sephirotic"], conditions: ["surprise"] },
+      { name: "The Pull",     fromPack: "Avatar of the Veil", keepName: true, foeClass: "qliphothic", body: 8, size: 2, xFrac: 0.68, yFrac: 0.85, resistances: ["kinetic", "qliphothic"], vulnerabilities: ["sephirotic"], conditions: ["surprise"] }
     ]
   }
 };
@@ -2068,12 +2162,7 @@ const finalShowdown = {
         if (rt?.created) ctx._spawned.push({ token: rt.doc });
       }
       for (const f of approach.foes) {
-        const sp = await stage.spawnFoe?.(scene, {
-          name: f.name, foeClass: f.foeClass, body: f.body, size: f.size ?? 1,
-          resistances: f.resistances ?? [], vulnerabilities: f.vulnerabilities ?? [],
-          conditions: f.conditions ?? [],
-          ..._scenePoint(scene, f.xFrac, f.yFrac, ctx.lane)
-        });
+        const sp = await _spawnFoeSmart(stage, scene, f, ctx.lane);
         if (!sp?.actor) continue;
         ctx._spawned.push(sp);
         ctx._fs.foes.set(sp.actor.id, { actorId: sp.actor.id, name: sp.actor.name, boss: (f.body ?? 0) >= 8, down: false });
@@ -2321,6 +2410,9 @@ const travel = {
 
     const scene = await _requireScene(ctx, "hostile-hex", "Hostile Frontier");
     if (scene) { await _enterScene(scene, "Hostile Frontier", ctx.lane); await _pause(800); }
+
+    // Shared stage across replays — clear prior runs' leftovers.
+    try { if (scene) await _stage()?.sweepScene?.(scene); } catch (_) {}
 
     ctx._finale = await _finaleTargets(ctx);
 

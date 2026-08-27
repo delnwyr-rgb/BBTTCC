@@ -695,7 +695,7 @@ function _registerOps() {
 
   // Destructible tutorial scenery (Test Track wrecks). default-OWNER so any player's
   // damage application lands; flagged spawned so teardown can only ever delete these.
-  reg("spawnObstacle", async ({ sceneId, x = 1000, y = 1000, name = "Rusted Wreck", img = "", size = 2, integrity = 12, bracket = "light", ownerUserId = "" }) => {
+  reg("spawnObstacle", async ({ sceneId, x = 1000, y = 1000, name = "Rusted Wreck", img = "", size = 2, integrity = 12, bracket = "light", loadout = null, ownerUserId = "" }) => {
     const folder = await _folder();
     // RIG-typed (2026-08-17): these are derelict vehicles, so they should BE rigs —
     // npc-typed wrecks got the steward sheet (faculties, Clarity, manifestations)
@@ -718,6 +718,26 @@ function _registerOps() {
       flags: { [MODULE_ID]: { spawned: true, kind: "obstacle", ownerUserId } }
     });
     if (!actor) return null;
+    // Optional ARMAMENT (2026-08-27): the sim's gun-truck is fictionally an
+    // armed vehicle the GM shoots back with, but a bare obstacle spawned with
+    // no weapons or plating (owner's first wave-3 test). Seed named items from
+    // the same master-content catalog the rigBuilder chassis loadouts use —
+    // any name that misses the compendium is skipped, never fatal.
+    if (loadout && (loadout.weapons?.length || loadout.systems?.length)) {
+      try {
+        const pack = game.packs?.get?.("bbttcc-master-content.items");
+        const idx = pack ? await pack.getIndex() : null;
+        const toCreate = [];
+        for (const nm of [...(loadout.weapons ?? []), ...(loadout.systems ?? [])]) {
+          const hit = idx?.find?.(e => e.name === nm);
+          if (!hit) { console.warn(TAG, `obstacle loadout item not in compendium: ${nm}`); continue; }
+          const doc = await pack.getDocument(hit._id);
+          const data = doc?.toObject?.();
+          if (data) { delete data._id; toCreate.push(data); }
+        }
+        if (toCreate.length) await actor.createEmbeddedDocuments("Item", toCreate);
+      } catch (e) { console.warn(TAG, "obstacle loadout seed failed", e); }
+    }
     let tokenId = null;
     const scene = game.scenes?.get?.(sceneId);
     if (scene) {
@@ -1026,21 +1046,44 @@ function _registerOps() {
   reg("sweepSceneScaffolding", async ({ sceneId = "", ownerUserId = "", keepActorIds = [] } = {}) => {
     const scene = game.scenes?.get?.(String(sceneId || ""));
     if (!scene) return { ok: false, tokens: 0, actors: 0 };
-    const othersLive = Object.keys(_readRuns()).filter(u => u !== ownerUserId).length > 0;
+    const runs = _readRuns();
+    const othersLive = Object.keys(runs).filter(u => u !== ownerUserId).length > 0;
     const keep = new Set((keepActorIds || []).map(String));
-    const mine = (owner) => (owner && ownerUserId) ? owner === ownerUserId : !othersLive;
-    const toks = (scene.tokens?.contents ?? Array.from(scene.tokens ?? [])).filter(t => {
+    // Sweepable = mine, OR tagged to a user with NO live run (a previous
+    // tenant — owner 2026-08-27: Marginalia still standing on the Test Track
+    // days after her run), OR untagged legacy when nobody else is mid-run.
+    const sweepable = (owner) => {
+      if (owner && ownerUserId && owner === ownerUserId) return true;
+      if (owner) return !runs[owner];
+      return !othersLive;
+    };
+    const tokDel = [];
+    const actorIds = new Set();
+    for (const t of (scene.tokens?.contents ?? Array.from(scene.tokens ?? []))) {
+      if (keep.has(String(t.actorId))) continue;                          // current run's props stay
       const a = t.actor;
-      if (!a?.getFlag?.(MODULE_ID, "spawned")) return false;             // real actors' tokens stay
-      if (a.getFlag?.(MODULE_ID, "kind") === "courtier") return false;   // standing court persists
-      if (keep.has(String(t.actorId))) return false;                     // current run's props stay
-      const owner = a.getFlag?.(MODULE_ID, "ownerUserId") || t.getFlag?.(MODULE_ID, "ownerUserId") || "";
-      return mine(owner);
-    });
-    const actorIds = [...new Set(toks.map(t => t.actorId).filter(Boolean))];
+      const actorSpawned = a?.getFlag?.(MODULE_ID, "spawned") === true;
+      const tokenSpawned = t.getFlag?.(MODULE_ID, "spawned") === true;
+      const owner = a?.getFlag?.(MODULE_ID, "ownerUserId") || t.getFlag?.(MODULE_ID, "ownerUserId") || "";
+      if (actorSpawned) {
+        // Scaffolding prop (marker/foe/obstacle/dummy): token AND actor go.
+        if (a.getFlag?.(MODULE_ID, "kind") === "courtier") continue;      // standing court persists
+        if (!sweepable(owner)) continue;
+        tokDel.push(t.id);
+        if (t.actorId) actorIds.add(t.actorId);
+      } else if (tokenSpawned) {
+        // A REAL actor's token the tutorial placed (steward/rig): the TOKEN
+        // goes — a previous tenant's stays gone, our own gets re-placed by
+        // the beat right after this sweep (every sweeping beat re-ensures its
+        // tokens; re-creating also refreshes a stale token NAME after a rig
+        // rename). The actor itself is never touched.
+        if (!sweepable(owner)) continue;
+        tokDel.push(t.id);
+      }
+    }
     let nT = 0, nA = 0;
-    if (toks.length) {
-      try { await scene.deleteEmbeddedDocuments("Token", toks.map(t => t.id)); nT = toks.length; }
+    if (tokDel.length) {
+      try { await scene.deleteEmbeddedDocuments("Token", tokDel); nT = tokDel.length; }
       catch (e) { console.warn(TAG, "sweep token delete failed", e); }
     }
     for (const id of actorIds) {
