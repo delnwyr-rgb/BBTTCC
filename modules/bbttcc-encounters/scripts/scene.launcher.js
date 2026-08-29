@@ -1683,6 +1683,18 @@ try {
   warn("Error spawning campaign actors for scenario", scenario?.key, e);
 }
 
+// Participating-faction PCs (2026-08-27): every main battlemap step drops the
+// party of the lead + joining factions (hostiles are pre-positioned on
+// authored scenes). No-op without faction ctx (e.g. manual testFire), and
+// PCs already on the scene are skipped inside spawnFactionPCs.
+try {
+  if (spawner && typeof spawner.spawnFactionPCs === "function" && (step.role === "main" || !step.role)) {
+    await spawner.spawnFactionPCs(scene, ctx, { spawnedBy: `pc_party:${scenario.key}` });
+  }
+} catch (e) {
+  warn("Error spawning participating-faction PCs", scenario?.key, e);
+}
+
 // Core scenarios may provide a spawnerKey for bespoke placement logic.
 if (
   spawner &&

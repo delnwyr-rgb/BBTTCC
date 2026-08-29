@@ -221,23 +221,35 @@
   // if a dialog stays open for legitimately long encounters.
   // ---------------------------------------------------------------------------
 
-  async function waitForBeatChainIdle(timeoutMs = 90000) {
+  async function waitForBeatChainIdle(timeoutMs = 90000, matchTitles = []) {
     const sleep = (ms) => new Promise(r => setTimeout(r, ms));
     // Brief grace period so a chained beat can begin opening its dialog
     // before we observe "idle." Without this we can race a chain start
     // and trigger the return between beat 1 and beat 2.
     await sleep(700);
+    const needles = (Array.isArray(matchTitles) ? matchTitles : [])
+      .map(t => String(t || "").trim().toLowerCase()).filter(Boolean);
     const start = Date.now();
     while ((Date.now() - start) < timeoutMs) {
+      // 2026-08-28: the old `cls.includes("dialog")` catch-all counted ANY
+      // open dialog as "encounter still running" — a leftover ride/saddle-up
+      // dialog held the road hostage forever (Acid Bog dead-air, owner
+      // report). Now only windows belonging to THIS encounter block: titles
+      // matching the family (beat label / id stem) or the classic
+      // encounter/outcome/scenario keywords.
       const wins = Object.values(ui.windows || {});
       const dialogOpen = wins.some(w => {
-        const cls = String(w?.constructor?.name || "").toLowerCase();
-        if (cls.includes("dialog")) return true;
         const title = String((w && (w.title || w.options?.title)) || "").toLowerCase();
-        // Catch Bad Eden scenario / outcome modals too
-        return title.includes("encounter") || title.includes("outcome") || title.includes("scenario");
+        if (needles.some(n => title.includes(n))) return true;
+        const cls = String(w?.constructor?.name || "").toLowerCase();
+        return title.includes("encounter") || title.includes("outcome") || title.includes("scenario") ||
+               cls.includes("encounter") || cls.includes("outcome") || cls.includes("scenario");
       });
-      if (!dialogOpen) return true;
+      // An ACTIVE COMBAT also holds the scene — a steel-door fight has no
+      // dialogs open mid-battle, and returning then would yank the table off
+      // the battlemap between initiative and the verdict.
+      const combatOn = !!(game.combats?.contents || []).some(c => c?.started);
+      if (!dialogOpen && !combatOn) return true;
       await sleep(300);
     }
     return false;
@@ -265,21 +277,74 @@
         log("auto-return: no target scene resolved; skipping");
         return;
       }
-      if (canvas?.scene?.id === target.id) {
-        log("auto-return: already on target scene; skipping", target.name);
-        return;
-      }
 
-      const idleOk = await waitForBeatChainIdle(90000);
+      // 2026-08-28: long window (15 min) — a steel-door fight legitimately
+      // holds the scene for a while; the combat check above keeps us honest.
+      // Match only THIS encounter's windows: the beat label, the table-pick
+      // label, and the id stem ("enc_acid_bog" → "acid bog" catches the whole
+      // family's dialog titles, retry re-offers included).
+      const enc0 = ctx?.encounter || {};
+      const matchTitles = [
+        enc0.label, enc0.result?.label,
+        String(enc0.beatId || "").replace(/^enc_/, "").replace(/_/g, " ")
+      ];
+      const idleOk = await waitForBeatChainIdle(900000, matchTitles);
       if (!idleOk) {
         log("auto-return: idle wait timed out; deferring return so the GM can finish manually");
         return;
       }
-      // Recheck — user may have manually navigated during the wait.
-      if (canvas?.scene?.id === target.id) return;
 
-      await target.activate();
-      log("auto-return: switched back to travel scene", target.name);
+      // 2026-08-28: even when the chain never left the travel map (macro
+      // hazards with no battlemap — the Radiation Pocket ride died here: the
+      // old early-exit returned BEFORE the nudge, so a finished chain read as
+      // dead), the ride-on nudge below must still land. Only the ACTIVATION
+      // is conditional.
+      if (canvas?.scene?.id !== target.id) {
+        await target.activate();
+        // Activation's implicit pull skips clients explicitly view()'d elsewhere
+        // (the Weather Front trap, 2026-08-26) — pull the whole table home.
+        try { await game.bbttcc?.api?.worldMutation?.pullTableToScene?.(target.id); } catch (_ePull) {}
+        log("auto-return: switched back to travel scene", target.name);
+      } else {
+        log("auto-return: already on travel scene — nudge only", target.name);
+      }
+
+      // The ride is paused, not dead — say so where everyone can see it.
+      // UNLESS an arrival beat is pending for this leg's destination (final
+      // leg): api.travel's deferred hex-enter sets _pendingHexEnter while it
+      // waits, its arrival dive will speak for itself, and "Execute Route"
+      // would be a lie.
+      try {
+        const pend = game.bbttcc?._pendingHexEnter;
+        const arrivalPending = !!(pend && (Date.now() - Number(pend.ts || 0)) < 50 * 60 * 1000);
+        if (arrivalPending) {
+          log("auto-return: arrival beat pending — suppressing the ride-on nudge", pend);
+        } else {
+          const enc = ctx?.encounter || {};
+          const encLabel = enc.label || enc.result?.label || enc.key || "The encounter";
+          await ChatMessage.create({
+            content: `<div style="border-left:3px solid #7a8f6b;padding:.3em .6em;">` +
+              `<b>🐎 Back on the road.</b> ${foundry.utils.escapeHTML(String(encLabel))} is settled — ` +
+              `the remaining legs are waiting in the Travel Console. <i>Execute Route</i> to ride on.</div>`,
+            speaker: { alias: "Mal" }
+          });
+        }
+      } catch (_eMsg) {}
+
+      // Handshake (2026-08-28): announce settlement so api.travel's deferred
+      // arrival fires promptly on the signal instead of divining idleness from
+      // open windows (which a leftover unrelated dialog blocks forever).
+      // Broadcast too: on PLAYER-DRIVEN rides the arrival timer runs on the
+      // driving player's client, and this stamp is made on the GM's — ride the
+      // bbttcc-campaign socket channel (encounters has no socket flag; its
+      // handler dispatches per-type, so a foreign type passes through safely).
+      try {
+        const ts = Date.now();
+        game.bbttcc = game.bbttcc || {};
+        game.bbttcc._encounterChainSettledTs = ts;
+        Hooks.callAll("bbttcc:encounterChainSettled", ctx);
+        try { game.socket?.emit?.("module.bbttcc-campaign", { t: "bbttccEncounterChainSettled", ts }); } catch (_eSock) {}
+      } catch (_eSig) {}
     } catch (e) {
       warn("auto-return: failed (non-blocking)", e);
     }
@@ -445,10 +510,13 @@
 
       const res = await launchViaCampaignBeat(campaignApi, campaignId, beatId, ctx);
       if (res?.ok) {
-        // Legacy model auto-returned to the travel scene after the beat. With the
-        // cinematic dive the GM stays on the encounter scene and returns via the
-        // back / pull-table buttons, so skip the auto-return when we dived.
-        if (!dived) await returnToTravelSceneAfterBeat(ctx);
+        // 2026-08-28: the dived path used to skip auto-return entirely ("GM
+        // owns navigation") — in practice the table hit Continue on the last
+        // outcome beat and the ride never resumed (owner report: shooed a T2
+        // predator, then stranded). BOTH paths now return once the encounter
+        // is actually over: no beat dialogs open AND no active combat (the
+        // idle waiter holds through steel-door fights until the verdict).
+        await returnToTravelSceneAfterBeat(ctx);
         return;
       }
       warn("afterTravel: campaign.runBeat failed; falling back (best effort)", res);
@@ -482,6 +550,20 @@
   });
 
   Hooks.once("ready", () => {
-    log("Trigger manager ready (listening for bbttcc:afterTravel)");
+    // Receive the settled handshake on every client (player-driven rides run
+    // their arrival timer on the driving player's seat).
+    try {
+      game.socket?.on?.("module.bbttcc-campaign", (msg) => {
+        if (msg?.t !== "bbttccEncounterChainSettled") return;
+        try {
+          game.bbttcc = game.bbttcc || {};
+          game.bbttcc._encounterChainSettledTs = Math.max(
+            Number(game.bbttcc._encounterChainSettledTs || 0),
+            Number(msg.ts) || Date.now()
+          );
+        } catch (_e) {}
+      });
+    } catch (_eOn) {}
+    log("Trigger manager ready (listening for bbttcc:afterTravel + chainSettled relay)");
   });
 })();

@@ -683,18 +683,67 @@
       return;
     }
 
-    log("Hex enter: deferring until idle…", { homeSceneUuid, encounter: (result && result.encounter && (result.encounter.key || true)) });
+    // Pending-arrival marker (2026-08-28): the encounter auto-return in
+    // bbttcc-encounters reads this to suppress its "Execute Route to ride on"
+    // nudge when an arrival beat is about to fire for this leg's destination —
+    // the arrival speaks for itself. Set ONLY when an arrival beat actually
+    // resolves for the hex (ordinary mid-route hexes keep the nudge).
+    let pendingSet = false;
+    try {
+      const ctx0 = (result && result.context) || {};
+      const to0 = ctx0.to || null;
+      const hexUuid0 = (to0 && to0.document && to0.document.uuid) || (to0 && to0.uuid) || null;
+      const campaignId0 = await getActiveCampaignIdStarred();
+      const campaign0 = campaignId0 ? getCampaignById(campaignId0) : null;
+      const beatId0 = (campaign0 && hexUuid0)
+        ? (readCampaignOverrideOnEnterBeatId(campaign0, hexUuid0) || readHexOnEnterBeatIdFromDrawing(to0) || null)
+        : null;
+      if (beatId0) {
+        game.bbttcc = game.bbttcc || {};
+        game.bbttcc._pendingHexEnter = { hexUuid: hexUuid0, beatId: beatId0, ts: Date.now() };
+        pendingSet = true;
+      }
+    } catch (_ePend) {}
 
+    log("Hex enter: deferring until idle…", { homeSceneUuid, encounter: (result && result.encounter && (result.encounter.key || true)), arrivalBeatPending: pendingSet });
+
+    const deferT0 = Date.now();
     setTimeout(async () => {
       // 1) Let the encounter's dialog actually OPEN (covers the GM's
       //    arbitration think-time; a declined encounter simply times this out).
-      // 2) Then wait for it to resolve — dialog closed, combat over, party
-      //    back on the map. 5 min cap: worst case the arrival is late, never
-      //    mid-storm.
+      // 2) Then wait for the chain to settle. 2026-08-28 handshake: the
+      //    encounter auto-return (bbttcc-encounters) stamps
+      //    game.bbttcc._encounterChainSettledTs when the chain is truly done —
+      //    that signal fires the arrival PROMPTLY, immune to leftover
+      //    unrelated dialogs (a lingering saddle-up dialog used to hold the
+      //    broad modal check hostage — Acid Bog dead-air, owner report).
+      //    Fallback: the old broad idle check, 15-min window. Past the cap the
+      //    last-resort fire blocks ONLY on actual combat (never a window),
+      //    hard stop 45 min.
       await waitForModal({ timeoutMs: 15000 });
-      const idle = await waitForIdle({ homeSceneUuid, timeoutMs: 300000 });
-      if (!idle.ok) warn("Hex enter: idle wait failed (best effort)", idle);
+      const waitSettledOrIdle = async (timeoutMs) => {
+        const started = Date.now();
+        while ((Date.now() - started) <= timeoutMs) {
+          const onHome = !homeSceneUuid || (canvas && canvas.scene && canvas.scene.uuid === homeSceneUuid);
+          const settled = Number((game.bbttcc && game.bbttcc._encounterChainSettledTs) || 0) > deferT0;
+          if (settled && onHome && !isCombatActive()) return { ok: true, via: "settled" };
+          if (onHome && !hasBBTTCCModalOpen() && !isCombatActive()) return { ok: true, via: "idle" };
+          await new Promise(r => setTimeout(r, 250));
+        }
+        return { ok: false, why: "timeout" };
+      };
+      const idle = await waitSettledOrIdle(900000);
+      if (!idle.ok) {
+        const hardStop = Date.now() + 2700000;
+        while (Date.now() < hardStop && isCombatActive()) {
+          await new Promise(r => setTimeout(r, 10000));
+        }
+        warn("Hex enter: extended idle wait ended (best effort)", idle);
+      } else {
+        log("Hex enter: chain resolved →", idle.via);
+      }
       try { await runHexEnterBeatNow(result, opts); } catch (e) { warn("Hex enter failed:", e); }
+      finally { if (pendingSet) { try { delete game.bbttcc._pendingHexEnter; } catch (_e) {} } }
     }, 250);
   }
 

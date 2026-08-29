@@ -2260,7 +2260,14 @@
               // set; we skip the local emit so we don't double-fire scene activation.
               if (!enc?.gmHandledLaunch) {
                 await emitAfterTravelWithEncounter(
-                  { ...r, factionId, actor: game.actors.get(factionId) || null, source: "travel-console" },
+                  {
+                    ...r, factionId, actor: game.actors.get(factionId) || null,
+                    // Participating factions (lead + passengers) — downstream
+                    // encounter scenes drop each faction's PC tokens from this.
+                    joiningFactionIds: joiningFactionIds.slice(),
+                    participantFactionIds: [factionId, ...joiningFactionIds].filter(Boolean),
+                    source: "travel-console"
+                  },
                   encNorm, L.fromUuid, L.toUuid, token
                 );
               } else {

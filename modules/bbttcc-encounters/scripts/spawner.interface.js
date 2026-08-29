@@ -238,6 +238,102 @@
   }
 
   // ---------------------------------------------------------------------------
+  // Participating-faction PC drop (2026-08-27)
+  // Any PC (type "character") who belongs to the lead faction or a joining
+  // faction gets a token on the encounter battlemap. Hostiles are expected to
+  // be pre-positioned on authored scenes. PCs land in a row at bottom-center
+  // of the scene rect; the GM slides them into position.
+  // ---------------------------------------------------------------------------
+
+  function _pcBelongsToFaction(char, faction) {
+    // Mirrors bbttcc-factions _characterBelongsToFaction (flag id → system id →
+    // flag name → system name), kept local so the encounters module has no
+    // hard dependency on the factions module's internals.
+    try {
+      const byId = char.getFlag?.("bbttcc-factions", "factionId");
+      if (byId) return byId === faction.id;
+      const sys = char?.system?.system ?? char?.system ?? {};
+      const sysFid = sys?.faction?.id;
+      if (sysFid) return String(sysFid) === String(faction.id);
+      const byName = char.getFlag?.("bbttcc-factions", "factionName");
+      if (byName) return String(byName).trim() === String(faction.name).trim();
+      const sysFname = sys?.faction?.name;
+      if (sysFname) return String(sysFname).trim() === String(faction.name).trim();
+    } catch (_e) {}
+    return false;
+  }
+
+  function _participantFactionIds(ctx = {}) {
+    const ids = [];
+    const push = (v) => { const s = String(v || "").trim(); if (s && !ids.includes(s)) ids.push(s); };
+    if (Array.isArray(ctx.participantFactionIds)) ctx.participantFactionIds.forEach(push);
+    push(ctx.factionId);
+    if (ctx.actor?.id) push(ctx.actor.id);
+    if (Array.isArray(ctx.joiningFactionIds)) ctx.joiningFactionIds.forEach(push);
+    return ids;
+  }
+
+  async function spawnFactionPCs(scene, ctx = {}, opts = {}) {
+    if (!scene || !game.user?.isGM) return [];
+
+    const factionIds = _participantFactionIds(ctx);
+    if (!factionIds.length) {
+      log("spawnFactionPCs: no participating factions in ctx; skipping PC drop.");
+      return [];
+    }
+
+    const factions = factionIds.map(id => game.actors?.get?.(id)).filter(Boolean);
+    if (!factions.length) return [];
+
+    // PCs = character-type actors belonging to any participating faction.
+    const pcs = [];
+    for (const a of (game.actors?.contents || [])) {
+      if (a?.type !== "character") continue;
+      if (!factions.some(f => _pcBelongsToFaction(a, f))) continue;
+      if (!pcs.includes(a)) pcs.push(a);
+    }
+    if (!pcs.length) {
+      log("spawnFactionPCs: participating factions have no character-type members.", factionIds);
+      return [];
+    }
+
+    // Skip PCs that already have a token on this scene (pre-placed or from an
+    // earlier fight on the same battlemap).
+    const present = new Set();
+    for (const doc of iterTokenDocs(scene)) {
+      if (doc?.actorId) present.add(doc.actorId);
+    }
+    const toPlace = pcs.filter(a => !present.has(a.id));
+    if (!toPlace.length) {
+      log("spawnFactionPCs: all participating PCs already on scene; nothing to drop.");
+      return [];
+    }
+
+    // Row at bottom-center of the SCENE RECT (padding-aware via scene.dimensions).
+    const dims = scene.dimensions || {};
+    const grid = scene.grid?.size || 100;
+    const sx = Number(dims.sceneX ?? 0);
+    const sy = Number(dims.sceneY ?? 0);
+    const sw = Number(dims.sceneWidth  ?? scene.width  ?? 4000);
+    const sh = Number(dims.sceneHeight ?? scene.height ?? 3000);
+    const cx = sx + sw / 2;
+    const rowY = Math.floor((sy + sh - 3 * grid) / grid) * grid;
+
+    const spawnedBy = opts.spawnedBy || "pc_party";
+    const specs = toPlace.map((a, idx) => ({
+      actor: a.id,
+      role: "pc",
+      spawnedBy,
+      disposition: CONST.TOKEN_DISPOSITIONS.FRIENDLY,
+      x: Math.floor((cx + (idx - (toPlace.length - 1) / 2) * (1.5 * grid)) / grid) * grid,
+      y: rowY
+    }));
+
+    log("spawnFactionPCs: dropping party", { factionIds, pcs: toPlace.map(a => a.name) });
+    return spawnTokens(scene, specs);
+  }
+
+  // ---------------------------------------------------------------------------
   // Concrete spawner: Bandit Ambush
   // ---------------------------------------------------------------------------
 
@@ -277,34 +373,48 @@
       return;
     }
 
+    // PCs: roster-driven from participating factions (2026-08-27 — the old
+    // hardcoded PC_IDS list is retired to a testFire-only fallback below).
+    const placedPCs = await spawnFactionPCs(scene, ctx, { spawnedBy: spawnedKey });
+
     const width  = scene.width  || 4000;
     const height = scene.height || 3000;
     const grid   = scene.grid?.size || 100;
-
     const centerX = width / 2;
 
-    const pcY     = height - (3 * grid);
-    const banditY = 2 * grid;
+    if (!placedPCs.length && !_participantFactionIds(ctx).length) {
+      // No faction ctx (manual testFire) — legacy fallback so test fires still
+      // show a party. Dead actor ids resolve to warn+skip harmlessly.
+      const pcY = height - (3 * grid);
+      const pcSpecs = PC_IDS.map((id, idx) => ({
+        actor: id,
+        role: "pc",
+        spawnedBy: spawnedKey,
+        disposition: CONST.TOKEN_DISPOSITIONS.FRIENDLY,
+        x: centerX + (idx - (PC_IDS.length - 1) / 2) * (1.5 * grid),
+        y: pcY
+      }));
+      await spawnTokens(scene, pcSpecs);
+    }
 
-    const pcSpecs = PC_IDS.map((id, idx) => ({
-      actor: id,
-      role: "pc",
-      spawnedBy: spawnedKey,
-      disposition: CONST.TOKEN_DISPOSITIONS.FRIENDLY,
-      x: centerX + (idx - (PC_IDS.length - 1) / 2) * (1.5 * grid),
-      y: pcY
-    }));
-
-    const banditSpecs = BANDIT_IDS.map((id, idx) => ({
-      actor: id,
-      role: "npc",
-      spawnedBy: spawnedKey,
-      disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE,
-      x: centerX + (idx - (BANDIT_IDS.length - 1) / 2) * (1.5 * grid),
-      y: banditY
-    }));
-
-    await spawnTokens(scene, [...pcSpecs, ...banditSpecs]);
+    // Bandits: only when the scene has no pre-positioned hostiles (authored
+    // battlemaps carry their own bad guys).
+    const hasHostiles = iterTokenDocs(scene).some(t =>
+      Number(t?.disposition) === CONST.TOKEN_DISPOSITIONS.HOSTILE);
+    if (!hasHostiles) {
+      const banditY = 2 * grid;
+      const banditSpecs = BANDIT_IDS.map((id, idx) => ({
+        actor: id,
+        role: "npc",
+        spawnedBy: spawnedKey,
+        disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE,
+        x: centerX + (idx - (BANDIT_IDS.length - 1) / 2) * (1.5 * grid),
+        y: banditY
+      }));
+      await spawnTokens(scene, banditSpecs);
+    } else {
+      log("Bandit Ambush: hostiles pre-positioned on scene; not spawning bandits.");
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -341,7 +451,8 @@
         SPAWNERS,
         spawnAtCenter,
         spawnActors,
-        spawnTokens
+        spawnTokens,
+        spawnFactionPCs
       }
     };
 
