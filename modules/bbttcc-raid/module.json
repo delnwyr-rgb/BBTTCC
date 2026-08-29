@@ -60,7 +60,6 @@
     "scripts/raid-console.tooltip.enhancer.js",
     "scripts/raid-post2turn.enhancer.js",
     "scripts/planner-standard-activities.enhancer.js",
-    "scripts/raid-contested-takeover.enhancer.js",
     "scripts/queue-drawings.consumer.enhancer.js",
     "scripts/effects-fortify.enhancer.js",
     "scripts/effects-minor-repair.enhancer.js",

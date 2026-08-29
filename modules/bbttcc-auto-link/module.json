@@ -14,7 +14,6 @@
   ],
   "esmodules": [
     "scripts/module.js",
-    "scripts/sidepanel.js",
     "scripts/character-wizard.js",
     "scripts/npc-builder.js",
     "scripts/monster-builder.js",

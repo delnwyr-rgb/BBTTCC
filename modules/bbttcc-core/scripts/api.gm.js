@@ -274,6 +274,24 @@
     var changed = applyToObject(state, flat, "world");
 
     return setWorldState(state).then(function () {
+      // 2026-08-28 (atlas #14 ruling): bbttcc-world.worldState is CANONICAL.
+      // Mirror turn/darkness writes into api.world so the two spines can never
+      // disagree; this store stays for audit continuity + legacy readers.
+      try {
+        var w = game.bbttcc && game.bbttcc.api && game.bbttcc.api.world;
+        if (w && typeof w.applyGMEdit === "function" && changed.length) {
+          var mirror = {};
+          changed.forEach(function (c) {
+            if (c.path === "turn.number") mirror.turn = c.next;
+            if (c.path === "world.darkness") mirror.darkness = c.next;
+          });
+          if (Object.keys(mirror).length) {
+            w.applyGMEdit(mirror, { note: "mirror: api.gm.setWorld" + (note ? " — " + note : "") });
+          }
+        }
+      } catch (eMirror) {
+        console.warn(TAG, "canonical world-state mirror failed:", eMirror);
+      }
       var rec = {
         at: nowISO(),
         by: (game.user && game.user.id) || null,

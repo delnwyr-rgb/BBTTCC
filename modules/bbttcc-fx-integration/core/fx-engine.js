@@ -1,4 +1,4 @@
-const MOD = "bbttcc-fx";
+const MOD = "bbttcc-fx-integration"; // must match module.json id (atlas 🔴 #7)
 
 function setting(key, fallback) {
   try {

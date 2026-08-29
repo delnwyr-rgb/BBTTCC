@@ -10,6 +10,9 @@
 !/.github/
 !/README.md
 !/LICENSE
+# The capability atlas documents the versioned code — it travels with it.
+# (CLAUDE.md stays local-only on purpose: it carries deploy topology.)
+!/CAPABILITIES.md
 
 # Allowlist the fourththing system
 !/systems/

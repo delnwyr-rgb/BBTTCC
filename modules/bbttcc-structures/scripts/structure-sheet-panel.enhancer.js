@@ -2,8 +2,10 @@
  * bbttcc-structures · structure-sheet-panel.enhancer.js · Phase A
  * ─────────────────────────────────────────────────────────────────────────────
  * Renders the Structure panel on Rig and Boss actor sheets. Read-only for
- * Phase A — shows state, plates, threshold, BOM grid, resists, and stubbed
- * action buttons (Harden / Repair / Reclamation) that surface in later phases.
+ * Shows state, plates, threshold, BOM grid, resists, and live action buttons:
+ * Harden / Repair (recipes engine + faction stockpile) and Reclamation (the
+ * Phase C Ruin-to-Renewal flow). Header updated 2026-08-28 — the old "stubbed"
+ * note was stale and masked a dead faction-type filter.
  *
  * When an actor doesn't have a BOM stamped yet, shows a "Stamp Test BOM"
  * affordance that opens the paper-test macro picker.
@@ -475,8 +477,11 @@ async function _openHardenDialog(actor, onDone) {
     return ui.notifications?.error?.("Recipes API or Stockpile API not loaded.");
   }
 
+  // Factions are type:"npc" + the isFaction flag (see actor-kind.js) — the old
+  // type==="character" check matched nothing, so Harden/Repair always reported
+  // "No faction actors found" (atlas #16, fixed 2026-08-28).
   const factions = (game.actors?.contents ?? []).filter(a =>
-    a.type === "character" && a.getFlag("bbttcc-factions", "isFaction"));
+    a.getFlag("bbttcc-factions", "isFaction") === true);
   if (!factions.length) return ui.notifications?.warn?.("No faction actors found.");
 
   // Default to actor's affiliated faction if any
@@ -591,8 +596,11 @@ async function _openRepairDialog(actor, onDone) {
     return ui.notifications?.info?.("Nothing to repair — BOM is at full qty.");
   }
 
+  // Factions are type:"npc" + the isFaction flag (see actor-kind.js) — the old
+  // type==="character" check matched nothing, so Harden/Repair always reported
+  // "No faction actors found" (atlas #16, fixed 2026-08-28).
   const factions = (game.actors?.contents ?? []).filter(a =>
-    a.type === "character" && a.getFlag("bbttcc-factions", "isFaction"));
+    a.getFlag("bbttcc-factions", "isFaction") === true);
   if (!factions.length) return ui.notifications?.warn?.("No faction actors found.");
 
   const sys = actor.system?.system ?? actor.system;

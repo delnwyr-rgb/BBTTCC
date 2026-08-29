@@ -48,7 +48,7 @@
       "flags": {
         "fourththing": {
           "deck": "rfi-v1.0",
-          "description": "Nine starter manifestations from the RFI deck — teach players how to think in Manifestation before they build their own."
+          "description": "Nine starter manifestations from the RFI deck \u2014 teach players how to think in Manifestation before they build their own."
         }
       }
     },
@@ -81,6 +81,7 @@
     "class",
     "subclass",
     "race",
+    "species",
     "spark"
   ],
   "grid": {

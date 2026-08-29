@@ -180,22 +180,84 @@ function decorateSheet(app, html) {
     // P2: Presence chip (+ GM party line) — empty string until the Steward is Converged.
     const presenceRows = buildPresenceRows(actor);
 
+    // P3 Acts of Repair (surfaced 2026-08-28, atlas dormant #20): Align Hex is
+    // GM-only (hex Drawings are GM-owned); Integrate Spark opens tikkun's proven
+    // Deposit Ledger — the Presence credit flows through the deposit hook.
+    const repairBtns = converged ? `
+      <div class="bbttcc-epic-repair-row" style="display:flex; gap:6px; margin-top:6px;">
+        ${game.user?.isGM ? `<button type="button" class="bbttcc-epic-align-hex" style="flex:1;" title="Act of Repair — claim, purify and advance integration on a hex (pays Presence forward)">⚒ Align Hex</button>` : ""}
+        ${game.bbttcc?.api?.tikkun?.openDepositLedger ? `<button type="button" class="bbttcc-epic-integrate-spark" style="flex:1;" title="Act of Repair — deposit an integrated Spark with your faction (opens the Tikkun deposit ledger)">✨ Integrate Spark</button>` : ""}
+      </div>` : "";
+
     const panel = $(`
       <section id="bbttcc-epic-ascension" class="bbttcc-epic-ascension">
         <div class="bbttcc-epic-head"><strong>Ascension</strong><small>The Gate · Bad Eden</small></div>
         ${statusLine}
         <div class="bbttcc-epic-axes">${rows}</div>
         ${presenceRows ? `<div class="bbttcc-epic-presence-wrap">${presenceRows}</div>` : ""}
+        ${repairBtns}
       </section>
     `);
     target.prepend(panel);
     if (presenceRows) wirePresenceButtons(panel, actor);
+    if (repairBtns) {
+      panel.find(".bbttcc-epic-align-hex").on("click", () => openAlignHexDialog(actor));
+      panel.find(".bbttcc-epic-integrate-spark").on("click", () => {
+        const fid = actor.getFlag?.("bbttcc-factions", "factionId");
+        if (!fid) return ui.notifications?.warn?.(`${actor.name} has no faction — nowhere to deposit.`);
+        try { game.bbttcc.api.tikkun.openDepositLedger(fid); }
+        catch (e) { warn("openDepositLedger failed", e); }
+      });
+    }
   } catch (_e) { /* never break a sheet render */ }
 }
 
 function titleCase(s) {
   s = String(s || "");
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : "—";
+}
+
+// ── Align Hex picker (GM) — hexes on the viewed scene, unaligned first ──────────
+async function openAlignHexDialog(steward) {
+  try {
+    if (!game.user?.isGM) return;
+    const TER = "bbttcc-territory";
+    const hexes = (canvas?.scene?.drawings?.contents ?? [])
+      .filter(d => d.flags?.[TER] && (d.flags[TER].name || d.flags[TER].terrain || d.flags[TER].status))
+      .map(d => {
+        const tf = d.flags[TER];
+        // hex names can carry NBSP (U+00A0) — collapse whitespace before display
+        const name = String(tf.name || d.text || d.id).replace(/\s+/g, " ").trim();
+        const purified = Array.isArray(tf.conditions) && tf.conditions.includes("Purified");
+        const prog = Number(tf.integration?.progress) || 0;
+        return { uuid: d.uuid, name, purified, prog };
+      })
+      .sort((a, b) => (a.purified - b.purified) || a.name.localeCompare(b.name));
+    if (!hexes.length) return ui.notifications?.warn?.("No hexes on the viewed scene.");
+
+    const opts = hexes.map(h =>
+      `<option value="${h.uuid}">${foundry.utils.escapeHTML(h.name)}${h.purified ? " ✓" : ""} · int ${h.prog}/6</option>`
+    ).join("");
+
+    new Dialog({
+      title: `Act of Repair — Align Hex (${steward.name})`,
+      content: `<p>Claim, purify, and advance integration on a hex for ${foundry.utils.escapeHTML(steward.name)}'s faction. Repair raises Presence.</p>
+        <div class="form-group"><select name="hex" style="width:100%">${opts}</select></div>`,
+      buttons: {
+        align: {
+          icon: '<i class="fas fa-hammer"></i>', label: "Align",
+          callback: async (dlg) => {
+            const uuid = dlg.find('select[name="hex"]').val();
+            if (!uuid) return;
+            const wh = await game.fourththing?.epic?.repair?.alignHex?.(steward, uuid);
+            if (wh) ui.notifications?.info?.(`Hex aligned. World Health: ${wh.pct}% (${wh.aligned}/${wh.total}).`);
+          }
+        },
+        cancel: { label: "Cancel" }
+      },
+      default: "align"
+    }).render(true);
+  } catch (e) { warn("openAlignHexDialog failed", e); }
 }
 
 // ─── Hooks + API ─────────────────────────────────────────────────────────────────

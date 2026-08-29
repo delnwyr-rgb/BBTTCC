@@ -293,6 +293,95 @@ for (const h of ["createItem","updateItem","deleteItem"]) {
   });
 }
 
+/* ─────────────────── Enlightened OP Regen Bonus (opRegenBonus 0.10) ───────────────────
+ * Implemented 2026-08-28 (atlas dormant #21). A faction with at least one roster
+ * character at level "enlightened" gains +10% of whatever OP regen actually landed
+ * this Apply turn. Modeled on territory-unitybonus's advanceOPRegen wrapper, but
+ * measured by snapshot-delta so it is 10% of the REAL regen (caps still enforced
+ * by op.commit). darknessSpikes stays deferred with the personal-Darkness arc. */
+const OP_REGEN_BONUS_PCT = 0.10; // mirrors EFFECTS.enlightened flag "bbttcc.enlightenment.opRegenBonus"
+
+function _factionHasEnlightenedMember(faction) {
+  try {
+    for (const a of game.actors?.contents ?? []) {
+      if (a.type !== "character") continue;
+      const fid = a.getFlag?.("bbttcc-factions", "factionId") ?? a.system?.faction?.id;
+      if (String(fid || "") !== String(faction.id)) continue;
+      if (a.getFlag?.(MOD, "enlightenment")?.level === "enlightened") return true;
+    }
+  } catch (_e) {}
+  return false;
+}
+
+function _snapOpBanks(factions) {
+  const snap = {};
+  for (const f of factions) {
+    snap[f.id] = foundry.utils.duplicate(f.flags?.["bbttcc-factions"]?.opBank ?? {});
+  }
+  return snap;
+}
+
+function _installOpRegenBonus() {
+  const terr = game.bbttcc?.api?.territory;
+  const turn = game.bbttcc?.api?.turn;
+  const host = (typeof terr?.advanceOPRegen === "function") ? terr
+             : (typeof turn?.advanceOPRegen === "function") ? turn : null;
+  if (!host) return false;
+  if (host.advanceOPRegen.__bbttccEnlightenRegenWrapped) return true;
+
+  const orig = host.advanceOPRegen;
+  const wrapped = async function wrappedEnlightenRegen(opts = {}) {
+    const apply = !!opts.apply;
+    let eligible = [];
+    let before = {};
+    try {
+      if (apply) {
+        eligible = (game.actors?.contents ?? []).filter(a =>
+          a.getFlag?.("bbttcc-factions", "isFaction") === true && _factionHasEnlightenedMember(a));
+        if (opts.factionId) eligible = eligible.filter(a => a.id === String(opts.factionId));
+        before = _snapOpBanks(eligible);
+      }
+    } catch (_e) {}
+
+    const res = await orig(opts);
+
+    try {
+      if (apply && eligible.length) {
+        const op = game.bbttcc?.api?.op;
+        for (const F of eligible) {
+          const after = F.flags?.["bbttcc-factions"]?.opBank ?? {};
+          const bonus = {};
+          for (const [k, v] of Object.entries(after)) {
+            const gain = Number(v || 0) - Number(before[F.id]?.[k] || 0);
+            if (gain > 0) {
+              const b = Math.floor(gain * OP_REGEN_BONUS_PCT);
+              if (b > 0) bonus[k] = b;
+            }
+          }
+          if (!Object.keys(bonus).length) continue;
+          if (typeof op?.commit === "function") {
+            await op.commit(F.id, bonus, { context: "enlightenment-opRegenBonus" });
+          }
+          log(`OP regen bonus (+10%, enlightened member) → ${F.name}:`, bonus);
+        }
+      }
+    } catch (e) { warn("opRegenBonus wrapper failed:", e); }
+
+    return res;
+  };
+  wrapped.__bbttccEnlightenRegenWrapped = true;
+  host.advanceOPRegen = wrapped;
+  log("Enlightened OP regen bonus installed (advanceOPRegen wrapper, +10%).");
+  return true;
+}
+
+Hooks.once("ready", () => {
+  // Territory installs its API on ready too — retry briefly so load order can't lose us.
+  let tries = 0;
+  const tick = () => { if (!_installOpRegenBonus() && ++tries < 20) setTimeout(tick, 500); };
+  tick();
+});
+
 /* ─────────────────────── Illuminated Aura (auraClarity) ───────────────────────
  * Wisdom / Understanding / Enlightened emit a clarity aura: friendly tokens within
  * range gain advantage on Perception & Insight. Maintained as a managed AE that

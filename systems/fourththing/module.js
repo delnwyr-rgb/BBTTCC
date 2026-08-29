@@ -74,7 +74,8 @@ import {
   SKILL_POINT_LEVELS,
   deriveItemUnlockLevel,
   legendaryUsed,
-  markLegendaryUsed
+  markLegendaryUsed,
+  resetLegendaryOnSceneChange
 } from "./ft-progression.js";
 
 import {
@@ -10019,8 +10020,10 @@ FT.CONDITIONS = {
   // ── Radiation Sickness ladder ──────────────────────────────────────────────
   // Auto-managed by bbttcc-radiation (radiation-effects.js) to mirror the actor's
   // current RP tier. The numeric bite (roll penalty / Integrity cap / action tax /
-  // per-turn tick) is read from game.bbttcc.api.radiation.tierFor() at the roll,
-  // prepareDerivedData, and turn-start sites. Never toggle these by hand — set RP.
+  // per-turn tick) is read from FT.RADIATION_BITE below — the single source of
+  // truth, kept synchronous for prepareDerivedData. bbttcc-radiation's display
+  // ladder (TIERS) syncs itself FROM this table at ready. Never toggle these by
+  // hand — set RP.
   radiationIrradiated: { label: "Irradiated", color: "#7ec850", img: "icons/svg/radiation.svg", desc: "Radiation 25+. −1 to all rolls." },
   radiationSickened:   { label: "Sickened",   color: "#b6d038", img: "icons/svg/biohazard.svg", desc: "Radiation 50+. −2 to all rolls; max Integrity −5. Mutations set in." },
   radiationPoisoned:   { label: "Poisoned",   color: "#d99a1c", img: "icons/svg/poison.svg", desc: "Radiation 75+. −3 to all rolls; max Integrity −10; lose your Reaction each turn; 1d4 Integrity at the start of your turn." },
@@ -13456,7 +13459,8 @@ Hooks.once("init", function () {
       applySkillGrantsFromFeatures,
       extractSkillGrantsFromFeature,
       promoteStampedAptitudeAEs,
-      levelUp
+      levelUp,
+      resetLegendaryOnSceneChange
     },
     _classAutomation: {
       dispatchFeatureAction,

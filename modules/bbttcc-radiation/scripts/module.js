@@ -4,28 +4,10 @@
 
 console.log("🏁 Bad Eden Radiation | Module loading…");
 
-// --- Tracker & Zone UI placeholders (can be fleshed out later) -------------
-class RadiationTracker extends FormApplication {
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      id: "bbttcc-radiation-tracker",
-      title: "Radiation Tracker",
-      width: 500,
-      resizable: true
-    });
-  }
-}
-
-class RadiationZoneConfig extends FormApplication {
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      id: "bbttcc-radiation-zone-config",
-      title: "Radiation Zone Configuration",
-      width: 600,
-      resizable: true
-    });
-  }
-}
+// RadiationTracker / RadiationZoneConfig FormApplication shells removed
+// 2026-08-28 (atlas cleanup) — they had no template, no getData, no listeners,
+// and openRadiationTracker rendered an empty window. The real surfaces are the
+// sheet tab (below) and the zone overlay (bbttcc-radiation-zone.enhancer.js).
 
 // --- Main Module Logic ------------------------------------------------------
 class BBTTCCRadiationModule {
@@ -35,37 +17,14 @@ class BBTTCCRadiationModule {
   // init-phase setup
   static initialize() {
     console.log(`[${this.MODULE_ID}] | Initializing.`);
-    this.registerSettings();
-    this.exposeAPI();
+    // registerSettings + exposeAPI removed 2026-08-28: enableAutomaticTracking
+    // was read nowhere, and exposeAPI's `mod.api = {...}` overwrite could clobber
+    // RadiationAPI (api.radiation.js merges into mod.api instead).
   }
 
   // ready-phase setup (needs game + sheets)
   static ready() {
     this.registerActorSheetHooks();
-  }
-
-  static registerSettings() {
-    game.settings.register(this.MODULE_ID, "enableAutomaticTracking", {
-      name: "Enable Automatic Radiation Tracking",
-      scope: "world",
-      config: true,
-      type: Boolean,
-      default: true
-    });
-    console.log(`[${this.MODULE_ID}] | Settings registered.`);
-  }
-
-  static exposeAPI() {
-    const api = {
-      openRadiationTracker: (token) => new RadiationTracker(token).render(true)
-    };
-    const mod = game.modules.get(this.MODULE_ID);
-    if (mod) {
-      mod.api = api;
-      console.log(`[${this.MODULE_ID}] | API exposed.`, api);
-    } else {
-      console.warn(`[${this.MODULE_ID}] | Module not found when exposing API.`);
-    }
   }
 
   // -------------------------------------------------------------------------

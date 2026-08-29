@@ -1,5 +1,8 @@
 export function installFXSettings() {
-  const MOD = "bbttcc-fx";
+  // MUST match the module id in module.json — was "bbttcc-fx" (a package that
+  // doesn't exist), which made every settings read throw and fall back to the
+  // hardcoded defaults (atlas 🔴 #7, fixed 2026-08-28).
+  const MOD = "bbttcc-fx-integration";
   const reg = (key, data) => {
     if (!game.settings.settings.has(`${MOD}.${key}`)) {
       game.settings.register(MOD, key, data);

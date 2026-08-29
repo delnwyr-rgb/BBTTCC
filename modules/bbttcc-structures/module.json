@@ -1,7 +1,7 @@
 {
   "id": "bbttcc-structures",
   "title": "Bad Eden: Structures",
-  "description": "Material-BOM-driven Structure damage track for Rigs, Facilities, and standalone fortifications. Phase A: schema + derivation + sheet panel (no damage path yet).",
+  "description": "Material-BOM hardness model for Rigs, Facilities and fortifications: BOM-derived Plates/Threshold/resists, chip-queue damage path with state transitions and collapse, build/harden/repair/reclamation recipes drawing on faction stockpiles.",
   "version": "0.1.0",
   "compatibility": {
     "minimum": "13",
@@ -36,7 +36,6 @@
     "styles/structure-panel.css"
   ],
   "languages": [],
-  "socket": true,
   "packs": [],
   "url": "",
   "manifest": "",

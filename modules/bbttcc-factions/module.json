@@ -52,6 +52,9 @@
     "scripts/faction-pressure.enhancer.js",
     "scripts/faction-tier-assets-ui.enhancer.js",
     "scripts/faction-tier-victorygate.enhancer.js",
+    "scripts/faction-tier-stability.enhancer.js",
+    "scripts/faction-tier-advancement-api.enhancer.js",
+    "scripts/faction-tier-advance-button.enhancer.js",
     "scripts/turn-extensions.enhancer.js"
   ],
   "styles": [

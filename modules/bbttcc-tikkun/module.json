@@ -1,6 +1,6 @@
 {
   "id": "bbttcc-tikkun",
-  "title": "Bad Eden: Tikkun — The Great Work",
+  "title": "Bad Eden: Tikkun \u2014 The Great Work",
   "description": "The Sparks of Light system for spiritual victory conditions.",
   "version": "13.1.16",
   "authors": [
@@ -28,7 +28,6 @@
     ]
   },
   "esmodules": [
-    "scripts/module.js",
     "scripts/api.tikkun.js",
     "scripts/tikkun-hotfix.js",
     "scripts/tikkun-sparks.enhancer.js",
@@ -52,7 +51,7 @@
       "private": false,
       "flags": {
         "bbttcc-tikkun": {
-          "purpose": "Authored sparks for the Great Work — 10 sephirot × 3 kinds (conceptual / vestigial / animate). Phase A of B3 Tikkun revisit (project_tikkun_revisit_plan_2026_05_09.md)."
+          "purpose": "Authored sparks for the Great Work \u2014 10 sephirot \u00d7 3 kinds (conceptual / vestigial / animate). Phase A of B3 Tikkun revisit (project_tikkun_revisit_plan_2026_05_09.md)."
         }
       }
     }

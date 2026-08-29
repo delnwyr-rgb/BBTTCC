@@ -8,7 +8,9 @@
 import "../apps/campaign-tag-picker.js";
 import "../scripts/casualties-engine.js";
 import "../apps/player-beat-mirror-app.js";
-import "./bbttcc-rolls-api.js";
+// bbttcc-rolls-api.js removed 2026-08-28 (atlas cleanup) — game.bbttcc.api.rolls
+// had zero consumers; the beat Choice/Check UI resolves bonuses via its own
+// _rollChoiceCheck / _computeFactionOpRollBonusMap stack.
 
 const MOD_ID  = "bbttcc-campaign";
 const TAG     = "[bbttcc-campaign]";
@@ -2140,6 +2142,20 @@ async function _rollChoiceCheck(choice, ctx={}) {
   return { kind:"basic", stat, dc, total:roll.total, ok:roll.total>=dc, roll };
 }
 
+// Failed-check re-offer (2026-08-27, owner ruling from the Acid Bog run): a
+// failed path check routes to its failure beat, then the path menu comes BACK
+// so the party can try another way. OP-gated attempts still pay their 1 OP per
+// try, so retries are economically priced; closing the dialog is the GM's
+// "the failure stands" exit. Fire-and-forget: the failure beat's own dialog
+// has already resolved (runBeat awaits it) by the time this schedules.
+function _scheduleRetryOffer(campaign, beat, ctx) {
+  try {
+    setTimeout(() => {
+      try { _runBeatDialog(campaign, beat, { ...(ctx || {}), retryOffer: true }); } catch (_e) {}
+    }, 400);
+  } catch (_e2) {}
+}
+
 async function _runBeatDialog(campaign, beat, ctx={}) {
   try { if (ctx && ctx.allowDesperation == null) ctx.allowDesperation = true; } catch (_eAD) {}
 
@@ -2378,6 +2394,7 @@ ${
 
                   const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
                   if (nextId) await runBeat(campaign.id, nextId);
+                  if (!ok) _scheduleRetryOffer(campaign, beat, ctx);
 
                   finish({
                     acted: true,
@@ -2417,6 +2434,7 @@ ${
 
                   const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
                   if (nextId) await runBeat(campaign.id, nextId);
+                  if (!ok) _scheduleRetryOffer(campaign, beat, ctx);
 
                   finish({
                     acted: true,
@@ -2482,6 +2500,7 @@ ${
                   : (ch.failNext || beat.outcomes?.failure || "");
 
                 if (nextId) await runBeat(campaign.id, nextId);
+                if (!res.ok) _scheduleRetryOffer(campaign, beat, ctx);
 
                 finish({
                   acted: true,
@@ -3227,6 +3246,24 @@ async function executeBeat(campaign, beat, ctx = {}) {
         }
 
         await _diveScene(scene);  // non-cinematic beat scene — dives if a request is pending
+
+        // Participating-faction PC drop (2026-08-27): a travel-encounter beat
+        // that lands the table on its own battlemap places the party too
+        // (hostiles are pre-positioned on authored scenes). This covers
+        // dialog-type encounter beats like Acid Bog, which never touch the
+        // Encounter Engine scenario launcher. Gated on the trigger manager's
+        // travel stash so ordinary story/walk-in scenes don't get party
+        // tokens dumped on them.
+        try {
+          const spawner = game.bbttcc?.api?.encounters?._spawner;
+          const stash = game.bbttcc?.api?.campaign?._lastEncounterCtx;
+          if (scene && game.user?.isGM && typeof spawner?.spawnFactionPCs === "function" &&
+              stash?.encounter?.beatId === beat.id) {
+            await spawner.spawnFactionPCs(scene, stash, { spawnedBy: `pc_party:${beat.id}` });
+          }
+        } catch (eSpawnPC) {
+          warn("Participating-faction PC drop failed (non-blocking):", eSpawnPC);
+        }
       } catch (e) {
         err("Scene activation failed:", e);
         ui.notifications?.error?.("Error activating scene for campaign beat; see console.");
@@ -3271,7 +3308,12 @@ async function executeBeat(campaign, beat, ctx = {}) {
   }
 
   // CHANGE: allow dialogs for outcome_trigger and other non-encounter beats.
-  if (hasDialogContent && (type !== "encounter" || !hasEncounterKey) && !isCinematic) {
+  // Words-doors (2026-08-27): an encounter beat that CARRIES CHOICES shows its
+  // menu too — the old gate silently swallowed authored choices on encounter-
+  // type beats (whorl's checked choices never fired). Description-only
+  // encounter beats stay suppressed (their scenario briefing covers it).
+  const _hasChoices = Array.isArray(beat.choices) && beat.choices.length > 0;
+  if (hasDialogContent && (type !== "encounter" || !hasEncounterKey || _hasChoices) && !isCinematic) {
     dialogRes = await _runBeatDialog(campaign, beat, ctx);
     // After dialog resolves, we still apply world effects below (keeps pipeline).
   }
@@ -3359,6 +3401,24 @@ async function executeBeat(campaign, beat, ctx = {}) {
     }
 
     case "encounter": {
+      // Words-doors (2026-08-27): when the beat's dialog already handled the
+      // moment, don't relaunch the scenario on top of it.
+      //  · Own-scene beats: the scene activated (and PCs dropped) above, and
+      //    the menu resolved — a scenario launch would replay the briefing
+      //    and re-prompt the GM for a scene that's already on the table.
+      //  · Sceneless beats: skip ONLY when a choice ROUTED successfully (the
+      //    party talked/checked its way past); a failed check, a fight pick,
+      //    or a closed menu still launches the battle scenario.
+      try {
+        const _ownSceneRef = String(beat.sceneUuid || beat.sceneId || beat.scene?.uuid || "").trim();
+        const _dlgRouted  = !!(dialogRes && dialogRes.acted && dialogRes.routed);
+        const _dlgCheckOk = !(dialogRes && dialogRes.check && dialogRes.check.ok === false);
+        if ((_ownSceneRef && dialogRes) || (_dlgRouted && _dlgCheckOk)) {
+          log("encounter: beat dialog handled the moment; skipping scenario launch", { beatId: beat.id, ownScene: !!_ownSceneRef, routed: _dlgRouted, checkOk: _dlgCheckOk });
+          break;
+        }
+      } catch (_eDoor) {}
+
       const inferredFromId = (String(beat.id || "").startsWith("enc_")) ? String(beat.id).slice(4) : null;
       const encounterKey = beat.encounter?.key || beat.encounterKey || beat.mechanics?.encounterKey || inferredFromId || null;
       const scenarioKey  = beat.mechanics?.scenarioKey || beat.scenarioKey || null;
@@ -3370,6 +3430,16 @@ async function executeBeat(campaign, beat, ctx = {}) {
 
       let launchKey = scenarioKey || null;
       try {
+        // A beat that brings its OWN battlemap (sceneId) fires its own registered
+        // campaign scenario — authored briefing, authored scene, beat-driven
+        // outcome flow — never the legacy core mapping that happens to share its
+        // encounter key. (Bandit Ambush 2026-08-27: the core map was shadowing
+        // the beat's battlemap and the mercy-ledger outcome chain.)
+        if (!launchKey && encounterKey && typeof encounters.getScenario === "function") {
+          const ownSceneRaw = String(beat.sceneUuid || beat.sceneId || beat.scene?.uuid || "").trim();
+          const own = ownSceneRaw ? encounters.getScenario(encounterKey) : null;
+          if (own && own.beatId === beat.id) launchKey = encounterKey;
+        }
         if (!launchKey && encounterKey && typeof encounters.getScenarioKeyForEncounter === "function") {
           launchKey = encounters.getScenarioKeyForEncounter(encounterKey);
         }
@@ -3383,7 +3453,28 @@ async function executeBeat(campaign, beat, ctx = {}) {
         break;
       }
 
+      // Travel handoff: the trigger manager runs beats via runBeat(campaignId,
+      // beatId) with no ctx and stashes the rich travel ctx (lead faction actor,
+      // joining factions, hexes, token) on _lastEncounterCtx. Fold it in when it
+      // belongs to THIS beat so the scene launcher can drop participating-
+      // faction PC tokens onto the battlemap.
+      // NOTE: only the participant fields are folded in — NOT the hex refs
+      // (ctx.to/from), which would arm the launcher's auto-return and yank the
+      // table back to the travel map before the fight.
+      let travelCtx = null;
+      try {
+        const stash = game.bbttcc?.api?.campaign?._lastEncounterCtx;
+        if (stash?.encounter?.beatId === beat.id) travelCtx = stash;
+      } catch (_eStash) {}
+      const participants = travelCtx ? {
+        actor: travelCtx.actor ?? null,
+        factionId: travelCtx.factionId ?? null,
+        joiningFactionIds: Array.isArray(travelCtx.joiningFactionIds) ? travelCtx.joiningFactionIds.slice() : [],
+        participantFactionIds: Array.isArray(travelCtx.participantFactionIds) ? travelCtx.participantFactionIds.slice() : []
+      } : {};
+
       const launchCtx = {
+        ...participants,
         ...ctx,
         source: "bbttcc-campaign",
         campaignId: campaign.id,
@@ -3957,6 +4048,10 @@ function _onAfterTravelLedger(tctx) {
 // the new month (it starts pre-spent), reset entries, re-sync budget setting.
 async function _onAdvanceTurnEndLedger(tctx) {
   if (!tctx || tctx.apply !== true) return;
+  // GM gate FIRST — the calendar-door block below writes a world setting and
+  // whispers; running it on player clients meant a rejected settings write
+  // every applied turn (atlas 🔴 #11, fixed 2026-08-28).
+  if (!game.user?.isGM) return;
 
   // Phase Charter calendar doors: the clock keeps its own promises. If the
   // world turn has reached a hard-door threshold and the phase lags, advance
@@ -4543,6 +4638,12 @@ async function _beatGateReport(beat, campaign, ctx = {}) {
   }
 }
 
+// ⚠ DEPRECATED as an automatic path (atlas #10 ruling, 2026-08-28): the LIVE
+// injector is bbttcc-travel's CampaignBeatInjector (hex-travel.js), which now
+// carries autoDebt, inject.requires gating, foreshadow scoring, and the GM
+// debt prompt. This function remains supported as a MANUAL GM console tool
+// (game.bbttcc.api.campaign.injector.fire) — its trigger hooks below have no
+// emitter and never fire on their own.
 async function injectorFire(ctx = {}) {
   const {
     campaignId = null,
@@ -4747,7 +4848,7 @@ function installInjectorHooks() {
   Hooks.on("bbttcc:travel_threshold", handler);
   Hooks.on("bbttcc.travel_threshold", handler);
 
-  log("Injector hooks installed (trigger.travel_threshold / bbttcc:travel_threshold / bbttcc.travel_threshold).");
+  log("Injector hooks installed (DEPRECATED listeners — no emitter exists; the live injector is bbttcc-travel's. injector.fire stays available as a manual GM tool).");
 }
 
 // ═══ STORY DIRECTOR (Phase 3) — chain registry + World-Turn tick + level cadence ═══

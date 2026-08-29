@@ -19,11 +19,12 @@ const TAG = "[mal-voice]";
 const log  = (...a) => console.log(TAG, ...a);
 const warn = (...a) => console.warn(TAG, ...a);
 
+// Only the Anthropic provider is implemented (providers/anthropic.js). The
+// openai / ollama / custom-endpoint options used to be offered here but always
+// returned PROVIDER_NOT_INSTALLED — trimmed 2026-08-28 (atlas cleanup). Add a
+// provider file first, then restore its choice.
 const PROVIDER_CHOICES = {
-  "anthropic":       "Anthropic (Claude)",
-  "openai":          "OpenAI (GPT)",
-  "ollama":          "Ollama (local)",
-  "custom-endpoint": "Custom endpoint"
+  "anthropic": "Anthropic (Claude)"
 };
 
 const POLICY_CHOICES = {
@@ -61,14 +62,8 @@ Hooks.once("init", () => {
     default: ""
   });
 
-  game.settings.register(MODULE_ID, "customEndpoint", {
-    name:    "Custom endpoint URL",
-    hint:    "Only used when provider = Custom endpoint. Full URL including path.",
-    scope:   "world",
-    config:  true,
-    type:    String,
-    default: ""
-  });
+  // "customEndpoint" setting removed 2026-08-28 — it was only meaningful for the
+  // never-implemented custom-endpoint provider and nothing read it.
 
   game.settings.register(MODULE_ID, "monthlyBudgetUSD", {
     name:    "Monthly budget (USD)",
@@ -135,7 +130,7 @@ function _install() {
         provider:  () => game.settings.get(MODULE_ID, "apiProvider"),
         apiKey:    () => game.settings.get(MODULE_ID, "apiKey"),
         model:     () => game.settings.get(MODULE_ID, "model"),
-        endpoint:  () => game.settings.get(MODULE_ID, "customEndpoint"),
+        endpoint:  () => "", // custom-endpoint provider removed 2026-08-28; kept so mal.settings shape is stable
         budget:    () => game.settings.get(MODULE_ID, "monthlyBudgetUSD"),
         policy:    () => game.settings.get(MODULE_ID, "defaultPolicy"),
         debug:     () => !!game.settings.get(MODULE_ID, "debug")

@@ -1461,6 +1461,80 @@ function _beatTags(beat) {
   return [];
 }
 
+// ── Ported from bbttcc-campaign's injectorFire (atlas #10 ruling, 2026-08-28):
+// THIS injector is canonical. autoDebt tag synthesis, the Story Director
+// `inject.requires` gate, foreshadow scoring, and the GM debt prompt now run
+// here on the live travel_threshold path. bbttcc-campaign's
+// api.campaign.injector.fire remains a manual GM console tool only.
+const DEBT_PREFIX = "[HV_DEBT:";
+const AUTODEBT_WINDOW = 50;
+const AUTODEBT_THRESHOLD = 2;
+
+function _countDebtMarkers(ctx) {
+  try {
+    const fac = ctx?.factionId ? game.actors?.get(ctx.factionId) : null;
+    const wl = fac?.flags?.["bbttcc-factions"]?.warLogs || [];
+    let n = 0;
+    for (const e of wl.slice(-AUTODEBT_WINDOW)) {
+      if (String(e?.summary || "").includes(DEBT_PREFIX)) n++;
+    }
+    return n;
+  } catch { return 0; }
+}
+
+function _augmentTagsWithDebt(ctxTags, ctx) {
+  const n = _countDebtMarkers(ctx);
+  if (n > 0) {
+    ctxTags.push(`debt:${n}`);
+    if (n >= AUTODEBT_THRESHOLD) ctxTags.push("debt");
+  }
+  return ctxTags;
+}
+
+function _isDebtishBeat(beat) {
+  const set = new Set(_beatTags(beat));
+  return set.has("inject.debt_pressure") || set.has("theme.auditor") ||
+         set.has("thread.E") || set.has("auditor") || set.has("debt");
+}
+
+function _chainsInMotion(campaign) {
+  try {
+    const dstate = game.bbttcc?.api?.campaign?.director?.state?.() || {};
+    const fired = dstate.firedStoryBeats || {};
+    const chains = new Set();
+    for (const b of (campaign?.beats || [])) {
+      const chain = b?.storyChain ?? b?.inject?.storyChain;
+      if (chain && fired[b.id]) chains.add(String(chain));
+    }
+    return chains;
+  } catch { return new Set(); }
+}
+
+async function _requiresMet(beat, campaign, ctx) {
+  try {
+    const gates = game.bbttcc?.api?.campaign?.gates;
+    if (typeof gates?.requiresMet !== "function") return true; // fail-open, matches campaign's own semantics
+    return await gates.requiresMet(beat, campaign, ctx);
+  } catch { return true; }
+}
+
+async function _gmConfirmDebtBeat(beat) {
+  return new Promise((resolve) => {
+    new Dialog({
+      title: "Bad Eden: Debt Pressure Beat",
+      content: `<p><strong>${foundry.utils.escapeHTML(beat?.label || beat?.id || "")}</strong></p>
+        <p>This beat is debt-driven (the vault is calling in favors / consequences).</p>
+        <p><em>Run it now?</em></p>`,
+      buttons: {
+        run:     { icon: '<i class="fas fa-play"></i>', label: "Run",     callback: () => resolve(true) },
+        decline: { icon: '<i class="fas fa-ban"></i>',  label: "Decline", callback: () => resolve(false) }
+      },
+      default: "run",
+      close: () => resolve(false)
+    }).render(true);
+  });
+}
+
 function _matchBeat(triggerType, ctxTags, beat) {
   const tags = _beatTags(beat);
   if (!tags.length) return null;
@@ -1715,20 +1789,51 @@ const CampaignBeatInjector = {
 
     if (_cooldownBlocked(state, nowTurn, 1, triggerType)) return { ok: false, triggerType, why: "global cooldown" };
 
-    const ctxTags = _ctxToTags(triggerType, ctx);
+    const ctxTags = _augmentTagsWithDebt(_ctxToTags(triggerType, ctx), ctx);
+    const inMotion = _chainsInMotion(campaign);
     const matches = [];
     for (const beat of beats) {
       const m = _matchBeat(triggerType, ctxTags, beat);
       if (!m) continue;
       const rule = _blockedByBeatRules(state, beat, ctx, nowTurn);
       if (rule.blocked) continue;
+      if (!(await _requiresMet(beat, campaign, ctx))) continue;   // Story Director gate (inject.requires)
+      // Foreshadow bonus: this vignette plants a clue for a chain in motion.
+      for (const t of _beatTags(beat)) {
+        if (t.startsWith("foreshadow.") && inMotion.has(t.slice("foreshadow.".length))) { m.score += 15; break; }
+      }
       matches.push({ ...m, _beat: beat });
     }
 
     if (!matches.length) return { ok: true, triggerType, ctxTags, candidates: [], winner: null };
 
     matches.sort((a,b) => (b.score - a.score) || (b.tagCount - a.tagCount));
-    const winner = matches[0];
+
+    // Debt-ish beats need a GM's blessing. A decline persists per
+    // campaign:hex:beat and falls through to the next candidate; on non-GM
+    // clients debt beats are simply skipped.
+    state.declinedDebt ??= {};
+    let winner = null;
+    for (const cand of matches) {
+      if (ctx?.hexUuid && _isDebtishBeat(cand._beat)) {
+        if (!game.user?.isGM) continue;
+        const dk = `${campaignId}:HEX:${ctx.hexUuid}:${cand._beat.id}`;
+        if (state.declinedDebt[dk]) continue;
+        const okDebt = await _gmConfirmDebtBeat(cand._beat);
+        if (!okDebt) {
+          state.declinedDebt[dk] = { turn: nowTurn, ts: Date.now() };
+          await _setInjectorState(state);
+          continue;
+        }
+      }
+      winner = cand;
+      break;
+    }
+    if (!winner) {
+      return { ok: true, triggerType, ctxTags,
+        candidates: matches.map(m => ({ beatId: m.beatId, score: m.score })),
+        winner: null, why: "gm_declined_or_debt_skipped" };
+    }
     const beat = winner._beat;
 
     const execRes = await _executeBeat(campaignId, beat.id, triggerType, ctx, { beatId: beat.id, score: winner.score, tagCount: winner.tagCount, tags: winner.tags });

@@ -28,6 +28,28 @@
   ];
   const TIER_KEYS = TIERS.map(t => t.key).filter(Boolean);
 
+  // Drift-proofing (2026-08-28): the mechanical numbers' single source of truth
+  // is the system's FT.RADIATION_BITE (kept synchronous there for
+  // prepareDerivedData). When the fourththing system is active, overwrite our
+  // mechanical fields from it at ready so the two ladders can never diverge.
+  // Labels and the Clean rung stay local (the system table has neither).
+  Hooks.once("ready", () => {
+    try {
+      const bite = game.fourththing?.constants?.RADIATION_BITE;
+      if (!Array.isArray(bite)) return;
+      for (const b of bite) {
+        const t = TIERS.find((t) => t.key === b.key);
+        if (!t) continue;
+        Object.assign(t, {
+          min: b.min, rollPenalty: b.rollPenalty, integrityCap: b.integrityCap,
+          loseReaction: b.loseReaction, loseAction: b.loseAction, tick: b.tick
+        });
+      }
+    } catch (e) {
+      console.warn("bbttcc-radiation | RADIATION_BITE sync skipped:", e);
+    }
+  });
+
   function _asActor(aOrId) {
     if (!aOrId) return null;
     if (aOrId instanceof Actor) return aOrId;

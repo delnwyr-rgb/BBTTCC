@@ -652,67 +652,10 @@ const AAE_API = {
   writeFactionDriftState,
   applyPoliticalImpact,
 
-  // Existing Moral Profile API
-  async generateMoralProfile(factionActor) {
-    if (!factionActor) throw new Error(`[${MODULE_ID}] generateMoralProfile requires an Actor`);
-
-    const axes = emptyAxes();
-    const strat = baselineStrategy();
-
-    const items = Array.from(factionActor.items ?? []);
-    for (const it of items) {
-      const name = String(it.name || "");
-      const matches = getItemKeysForMappings(name);
-
-      for (const { category, itemName } of matches) {
-        const axisDelta = AXIS_DELTAS[category]?.[itemName];
-        const stratDelta = STRATEGY_DELTAS[category]?.[itemName];
-        if (axisDelta) addAxes(axes, axisDelta);
-        if (stratDelta) addStrategy(strat, stratDelta);
-      }
-    }
-
-    for (const k of Object.keys(axes)) axes[k] = clampAxis(axes[k]);
-    for (const k of Object.keys(strat)) strat[k] = clamp01(strat[k]);
-
-    const { primaryVirtue, missingVirtue } = deriveVirtues(axes);
-    const happinessDefinition = makeHappinessDefinition(axes);
-    const sufferingDefinition = makeSufferingDefinition(axes);
-
-    const temptationVectors = [];
-    if (primaryVirtue === "Freedom") temptationVectors.push("Frame any compromise or structure as a return to oppression.");
-    if (primaryVirtue === "Discipline/Severity") temptationVectors.push("Offer fast, harsh solutions and call mercy 'weakness'.");
-    if (primaryVirtue === "Mercy") temptationVectors.push("Exploit their compassion with bad-faith actors and martyr traps.");
-
-    const profile = {
-      factionId: factionActor.id,
-      values: axes,
-      strategy: strat,
-      happinessDefinition,
-      sufferingDefinition,
-      primaryVirtue,
-      missingVirtue,
-      temptationVectors
-    };
-
-    await factionActor.setFlag(MODULE_ID, "moralProfile", profile);
-    return profile;
-  },
-
-  getMoralProfile(factionActor) {
-    if (!factionActor) return null;
-    return factionActor.getFlag(MODULE_ID, "moralProfile") || null;
-  },
-
-  suggestPreferredOps(factionActor) {
-    const profile = this.getMoralProfile(factionActor);
-    if (!profile) return [];
-
-    const strat = profile.strategy;
-    const entries = Object.entries(strat);
-    entries.sort((a, b) => b[1] - a[1]);
-    return entries.slice(0, 3).map(([type, weight]) => ({ type, weight }));
-  }
+  // Moral Profile POC removed 2026-08-28 (atlas cleanup): generateMoralProfile /
+  // getMoralProfile / suggestPreferredOps had zero callers anywhere in the repo.
+  // The political-philosophy + drift layer above is the live ideology model.
+  // Any old flags.bbttcc-aae.moralProfile data on actors is inert and harmless.
 };
 
 // ---------------------------------------------------------------------------
