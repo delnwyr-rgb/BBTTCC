@@ -136,7 +136,12 @@
   let _busy = false;
   async function dive(targetSceneUuid, opts = {}) {
     const { focus, flashColor = "#bfe3ff", hexUuid = null, audience = "view", label,
-            originUuid = canvas?.scene?.uuid || null, portalLeadMs = 850 } = opts;
+            originUuid = canvas?.scene?.uuid || null, portalLeadMs = 850,
+            // landAt (opt-in): {x, y, scale?} on the DESTINATION scene — where the
+            // camera settles after landing. Without it Foundry restores whatever
+            // view this client last had on that scene (or its stored initial),
+            // which can be an off-map corner (onboarding, owner 2026-08-29).
+            landAt = null } = opts;
     if (_busy) return false;
     let scene;
     try { scene = await fromUuid(targetSceneUuid); } catch (e) { scene = null; }
@@ -189,6 +194,15 @@
         _lastDive = { targetId: scene.id, originUuid, label: label || scene.name };
       }
       await wait(120);
+      // 6) settle the camera on the requested landing point (diver's client only —
+      //    pan is local). Guarded: only if we actually stand on the target scene.
+      if (landAt && canvas?.scene?.id === scene.id && canvas?.animatePan) {
+        try {
+          const pan = { x: landAt.x, y: landAt.y, duration: 320 };
+          if (Number.isFinite(landAt.scale)) pan.scale = landAt.scale;
+          await canvas.animatePan(pan);
+        } catch (_eLand) { /* cosmetic — never fail the dive over a pan */ }
+      }
       flash(flashColor);
       return true;
     } catch (err) {

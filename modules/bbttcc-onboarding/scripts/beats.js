@@ -59,16 +59,38 @@ function _scenePoint(scene, fx, fy, lane = 0) {
   return { x: Math.round((scene?.width ?? 2000) * fx), y: Math.round((scene?.height ?? 1400) * y) };
 }
 
+/** Centered-and-fitted landing view for a scene: middle of the IMAGE (lane-
+ *  shifted), zoomed so the art fills most of the window. Without this the
+ *  camera lands wherever this client last left it on that scene — possibly an
+ *  off-map corner (owner 2026-08-29, combat sim opened on empty bottom-right). */
+function _sceneLanding(scene, lane = 0) {
+  const at = _scenePoint(scene, 0.5, 0.5, lane);
+  const d = scene?.dimensions;
+  if (d?.sceneWidth && globalThis.innerWidth) {
+    const fit = Math.min(globalThis.innerWidth / d.sceneWidth, globalThis.innerHeight / d.sceneHeight) * 0.9;
+    const min = CONFIG?.Canvas?.minZoom ?? 0.1, max = CONFIG?.Canvas?.maxZoom ?? 3;
+    at.scale = Math.min(max, Math.max(min, fit));
+  }
+  return at;
+}
+
 /** Dive into a tutorial Scene (GM-solo/non-destructive), falling back to a plain view. */
 async function _enterScene(scene, label, lane = 0) {
   if (!scene) return;
   const tx = _tx();
+  const landAt = _sceneLanding(scene, lane);
   try {
-    if (tx?.dive) await tx.dive(scene.uuid, { focus: _scenePoint(scene, 0.5, 0.5, lane), audience: "view", label });
-    else await scene.view?.();
+    if (tx?.dive) await tx.dive(scene.uuid, { focus: _scenePoint(scene, 0.5, 0.5, lane), audience: "view", label, landAt });
+    else {
+      await scene.view?.();
+      try { if (canvas?.scene?.id === scene.id) await canvas.animatePan({ ...landAt, duration: 320 }); } catch (_) {}
+    }
   } catch (e) {
     console.warn(TAG, `dive into "${label}" failed; viewing instead`, e);
-    try { await scene.view?.(); } catch (_) {}
+    try {
+      await scene.view?.();
+      if (canvas?.scene?.id === scene.id) await canvas.animatePan({ ...landAt, duration: 320 });
+    } catch (_) {}
   }
 }
 
@@ -108,8 +130,13 @@ const incarnation = {
 };
 
 /* ───────────────────────── MEATSUIT ───────────────────────── */
-// Test the REAL Steward: open the real sheet, fire any real ability. A disposable dummy
-// gives them a target. Detected via the existing `fourththing:itemAnimated` hook.
+// Explore the REAL Steward: open the real sheet, click through the abilities,
+// move on when ready (owner redesign 2026-08-29 — the old "fire one ability"
+// gate was weird: first-timers have no gear, a Violence check explicitly
+// doesn't count, and the scene changed the instant they clicked so they never
+// saw what the click did). The gate is now the player's own "seen enough"
+// button; ability-use hooks just earn an Operator nod; exit SOMA BREAKS the
+// Steward so everything spent exploring comes back — the sim picks up the tab.
 const meatsuit = {
   id: "meatsuit",
   title: "Test the Meatsuit",
@@ -145,46 +172,52 @@ const meatsuit = {
     }
     await _pause(500);
     try { ctx.steward?.sheet?.render(true, { focus: true }); } catch (_) {}
-    await ctx.speak("Pick one ABILITY and fire it — a real power off your sheet's ability list or the HUD tray, not an aptitude check like Violence. Doesn't matter which; I just need to see the meat answer the mind. Target the straw adversary for a flourish.");
-    ctx.riff({ beat: "meatsuit", line: "Player is about to test their real abilities for the first time.", intent: "Encourage them to swing. Dry, glitchy, one line." });
+    await ctx.speak("Those are your ABILITIES — the entries with a play button, Principles tab and the rest. Click through them. See what each one does. Nothing out here counts: spend freely, swing at the straw fellow if the mood takes you. When you've seen enough, hit my button and we roll on.");
+    ctx.riff({ beat: "meatsuit", line: "Player is browsing their real abilities for the first time, no pressure, nothing counts.", intent: "Invite them to poke everything. Dry, glitchy, one line." });
   },
 
   detect: (ctx, done) => {
-    const FALLBACK_TITLE = "◇ OPERATOR — Proof of Life";
-    const onAnim = (data = {}) => {
-      const a = data.actor || data.sourceToken?.actor;
-      if (a?.id === ctx.steward?.id) done();
+    const GATE_TITLE = "◇ OPERATOR — Kick the Tires";
+    // Ability-use hooks no longer gate the beat — they just earn a nod the
+    // first time the meat answers the mind (any of the three proof-of-life
+    // channels: animated item, manifestation cast, routed principle click).
+    let nodded = false;
+    const nod = (a) => {
+      if (nodded || a?.id !== ctx.steward?.id) return;
+      nodded = true;
+      ctx.speak("*bzzt* There it is — the meat answers the mind. Keep poking, One; out here it's all reversible.");
     };
-    // A manifestation IS an ability, and a cast that never animates used to
-    // leave this gate waiting (2026-08-17: the system now emits a real cast
-    // event, so take it as proof of life too).
-    const onCast = (actor) => { if (actor?.id === ctx.steward?.id) done(); };
-    // Routed principle clicks (True-Name Touch and the rest of the per-use
-    // family) post a chat card but never animate and aren't manifestations —
-    // the dispatcher's proof-of-life emission covers them (2026-08-20).
-    const onFeature = (actor) => { if (actor?.id === ctx.steward?.id) done(); };
+    const onAnim = (data = {}) => nod(data.actor || data.sourceToken?.actor);
+    const onCast = (actor) => nod(actor);
+    const onFeature = (actor) => nod(actor);
     Hooks.on("fourththing:itemAnimated", onAnim);
     Hooks.on("fourththing.manifestationCast", onCast);
     Hooks.on("fourththing.featureDispatched", onFeature);
-    // Untrappable fallback (owner playtest 2026-08-11: this was the only beat
-    // without one — a player whose ability never animates was stuck forever).
+    // The player's own pace IS the gate (owner redesign 2026-08-29).
     ctx.prompt({
-      title: FALLBACK_TITLE,
+      title: GATE_TITLE,
       content:
-        `<p>Fire one <b>ability</b> — an actual power from your sheet's ability list (or the HUD tray), <i>not</i> an aptitude check like Violence.</p>` +
-        `<p><i>Nothing sparking — empty list, gremlins, stage fright? Use the button and I'll wave you through.</i></p>`,
-      label: "Wave me through"
+        `<p>Browse your <b>abilities</b> — anything on the sheet with a play button. Click them, read them, fire them; <i>nothing here counts</i> and everything you spend comes back when we move on.</p>` +
+        `<p><i>Take your time. The straw fellow isn't going anywhere. Well — it is, but not until you press this.</i></p>`,
+      label: "Seen enough — move on"
     }).then(() => done());
     return () => {
       Hooks.off("fourththing:itemAnimated", onAnim);
       Hooks.off("fourththing.manifestationCast", onCast);
       Hooks.off("fourththing.featureDispatched", onFeature);
-      globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(FALLBACK_TITLE);
+      globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(GATE_TITLE);
     };
   },
 
   exit: async (ctx) => {
-    await ctx.speak("There it is — reflexes intact, soul bolted in. The straw adversary sends its regards— *bzzt* —dismissing it now.");
+    // Give back everything the exploration spent — Clarity, per-use gates, the
+    // lot — via the system's own rest, so the next beat starts on a full tank.
+    // confirmed:true skips the repeat-press GM confirm: the Operator IS the
+    // fiction justifying it (sim reset), and the beat must never wedge on a
+    // dialog the player can't see coming.
+    try { await globalThis.game?.fourththing?.actions?.somaBreak?.(ctx.steward, { confirmed: true }); }
+    catch (e) { console.warn(TAG, "meatsuit exit soma break failed", e); }
+    await ctx.speak("Reflexes intact, soul bolted in. SOMA BREAK — everything you just spent is restored; the sim picks up the tab. The straw adversary sends its regards— *bzzt* —dismissing it now.");
     try { await _stage()?.cleanup?.(ctx._spawned || []); } catch (_) {}
     ctx._spawned = [];
   }
