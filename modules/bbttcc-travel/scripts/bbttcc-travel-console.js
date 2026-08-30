@@ -1094,6 +1094,7 @@
                 <button type="button" data-action="rp-reverse" class="bbttcc-travel-button">⤵ Reverse Route</button>
                 <button type="button" data-action="rp-dive" class="bbttcc-travel-button" data-tooltip="Dive the selected faction into the underwater scene linked to the hex it's standing on (needs a depth-rated submersible).">🌊 Dive Here</button>
                 <button type="button" data-action="rp-ascend" class="bbttcc-travel-button" data-tooltip="Ascend the selected faction into the aerial scene linked to the hex it's standing on (needs a flyer; orbit needs a space craft).">✈️ Ascend Here</button>
+                <button type="button" data-action="rp-resume" class="bbttcc-travel-button" style="display:none;" data-tooltip="Restore this faction's persisted ride (survives reloads) into the planner.">↻ Resume ride</button>
                 <button type="button" data-action="rp-exec" class="bbttcc-travel-button primary">▶ Execute Route</button>
               </div>
 
@@ -1842,6 +1843,20 @@
           row.addEventListener("mouseenter", () => { if (toId) setHoverHex(toId); });
           row.addEventListener("mouseleave", () => { setHoverHex(null); });
         });
+
+        // Phase 2 RideSession (2026-08-29): a persisted ride for this faction
+        // with legs remaining offers Resume — the plan survives reloads now.
+        try {
+          const rb = content.querySelector('[data-action="rp-resume"]');
+          if (rb) {
+            const sess = game.bbttcc?.api?.travel?.rideSession?.get?.($fac.value);
+            const n = sess?.legs?.length || 0;
+            if (n > 0 && !legs.length) {
+              rb.style.display = "";
+              rb.textContent = `↻ Resume ride — ${n} leg${n === 1 ? "" : "s"} remain`;
+            } else rb.style.display = "none";
+          }
+        } catch (_eRB) {}
       }
 
       content.querySelector('[data-action="rp-add"]').onclick = async () => {
@@ -1967,11 +1982,37 @@
       _bindVertical("rp-dive",   "dive",   "Diving",   "Dive: stand the faction's token on a hex with depth links (or select that hex), then Dive Here.");
       _bindVertical("rp-ascend", "ascend", "Ascending", "Ascend: stand the faction's token on a hex with altitude links (or select that hex), then Ascend Here.");
 
+      // Phase 2 RideSession: restore the persisted plan into the planner.
+      const $resumeBtn = content.querySelector('[data-action="rp-resume"]');
+      if ($resumeBtn) $resumeBtn.onclick = () => {
+        try {
+          const sess = game.bbttcc?.api?.travel?.rideSession?.get?.($fac.value);
+          if (!sess?.legs?.length) { ui.notifications?.info?.("No persisted ride for this faction."); render(); return; }
+          legs.length = 0;
+          legs.push(...sess.legs.map(L => ({ ...L })));
+          render();
+          $rout.textContent = `Ride restored — ${legs.length} leg(s)${sess.encounter?.label ? ` (paused at ${sess.encounter.label})` : ""}. Execute Route to ride on.`;
+        } catch (e) { console.warn(TAG, "resume failed", e); }
+      };
+
       content.querySelector('[data-action="rp-exec"]').onclick = async () => {
         try {
           const factionId = $fac.value;
           if (!factionId) { $rout.textContent = "Pick a faction first."; return; }
           if (!legs.length) { $rout.textContent = "Add at least one leg."; return; }
+
+          // Phase 2 RideSession (2026-08-29): persist the plan before riding —
+          // a reload mid-ride no longer loses the route. Seat-safe via gmExec.
+          const rideApi = game.bbttcc?.api?.travel?.rideSession;
+          const rideSession = {
+            id: `ride:${factionId}:${Date.now()}`,
+            factionId,
+            joiningFactionIds: joiningFactionIds.slice(),
+            legs: legs.map(L => ({ fromUuid: L.fromUuid, toUuid: L.toUuid, fromId: L.fromId, toId: L.toId, gate: L.gate ?? null })),
+            executed: 0, stage: "riding", encounter: null,
+            createdTs: Date.now(), updatedTs: Date.now()
+          };
+          try { await rideApi?.save?.(factionId, rideSession); } catch (_eRS) {}
 
           // ── Movement-domain pre-flight (water / air / space HARD GATE) ──────
           // Refuse to execute a route the faction can't physically make BEFORE we
@@ -2142,7 +2183,7 @@
               console.warn(TAG, "Travel Arc roll failed for leg", i + 1, arcErr);
             }
 
-            const r = await game.bbttcc.api.travel.travelHex({ factionId, hexFrom: L.fromUuid, hexTo: L.toUuid, tokenId, sceneId, source: "travel-console", terrainKey: (destHex?.terrainKey || null), timePoints: Number(destHex?.travelUnits || 1), costMult: gmOverrides.costMult, costAdd: gmOverrides.costAdd, dcMod: gmOverrides.encDcMod, encounterPolicy: gmOverrides.encounterPolicy });
+            const r = await game.bbttcc.api.travel.travelHex({ factionId, hexFrom: L.fromUuid, hexTo: L.toUuid, tokenId, sceneId, source: "travel-console", terrainKey: (destHex?.terrainKey || null), timePoints: Number(destHex?.travelUnits || 1), costMult: gmOverrides.costMult, costAdd: gmOverrides.costAdd, dcMod: gmOverrides.encDcMod, encounterPolicy: gmOverrides.encounterPolicy, finalLeg: (i === legs.length - 1) });
 
             out.push(`${i + 1}) ${r?.summary || (r?.ok ? "Travel OK" : "Travel failed")}`);
             if (!r?.ok) break;
@@ -2248,6 +2289,20 @@
               legs.length = 0; legs.push(...remaining);
               render();
 
+              // RideSession: persist the paused state — remaining legs survive
+              // reloads; a final-leg pause (no remaining) clears the session
+              // (the arrival owns what happens next).
+              try {
+                await rideApi?.save?.(factionId, remaining.length ? {
+                  ...rideSession,
+                  legs: remaining.map(L => ({ fromUuid: L.fromUuid, toUuid: L.toUuid, fromId: L.fromId, toId: L.toId, gate: L.gate ?? null })),
+                  executed: 0,
+                  stage: "encounter",
+                  encounter: { beatId: enc?.beatId || null, key: enc?.key || null, label: enc?.label || null },
+                  updatedTs: Date.now()
+                } : null);
+              } catch (_eRS2) {}
+
               let msg = out.join("\n");
               const encLabel = enc?.label || enc?.key || `Encounter (Tier ${Number(r?.terrainTier ?? 1) || 1})`;
               msg += `\n\nRoute paused after ${encLabel} at ${destLabel}.\nRemaining legs kept in the planner — edit them or click Execute Route again to resume.`;
@@ -2294,6 +2349,9 @@ if (game.bbttcc?.runVisuals) {
             const allLegMeta = legs.map(L => ({ gate: L?.gate ?? null }));
             await game.bbttcc.runVisuals(game.bbttcc.ui.travelConsole, { uuids: allUuids, legMeta: allLegMeta, factionId, tokenId, sceneId, token, passengerCount: joiningFactionIds.length });
           }
+
+          // RideSession: route completed — retire the session.
+          try { await rideApi?.save?.(factionId, null); } catch (_eRS3) {}
 
           legs.length = 0;
           render();

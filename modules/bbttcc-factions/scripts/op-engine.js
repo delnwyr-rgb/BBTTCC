@@ -256,6 +256,24 @@ async function preview(factionId, deltas, context) {
  * Set context.allowOvercap=true to bypass the cap refusal (GM tooling).
  */
 async function commit(factionId, deltas, context) {
+  // Phase 1 seat routing (2026-08-29): bank writes are GM work. A player seat
+  // relays through the gmExec primitive to the primary GM — this is what makes
+  // player-driven rides PAY (lead + passenger debits used to fail on actor
+  // permissions and the ride rode free). Every op.commit caller in the game —
+  // travel legs, passenger cuts, dialog spends, maneuvers — becomes seat-safe
+  // through this one gate.
+  if (!game.user?.isGM) {
+    const gx = game.bbttcc?.api?.gmExec;
+    if (gx && typeof gx.call === "function") {
+      try {
+        return await gx.call("op.commit", { factionId, deltas, context });
+      } catch (e) {
+        warn("op.commit relay failed", e);
+        return { ok: false, committed: false, error: String(e?.message || e), factionId };
+      }
+    }
+    // gmExec absent (stale client): fall through to the old direct attempt.
+  }
   const faction = await _getFactionActor(factionId);
   if (!faction) {
     return { ok: false, error: "Faction not found", factionId, context, committed: false };
@@ -432,6 +450,16 @@ function _attach() {
 
 Hooks.once("ready", async () => {
   _attach();
+  // Phase 1 (2026-08-29): GM-side handler for seat-routed commits. The
+  // handler re-enters commit() on a GM seat (isGM short-circuits the relay),
+  // and stamps the requesting player into the context for provenance.
+  try {
+    game.bbttcc?.api?.gmExec?.register?.("op.commit", async (p, meta) => {
+      const context = { ...((p && p.context) || {}) };
+      if (meta && !meta.local && meta.fromUserName) context.viaSeat = meta.fromUserName;
+      return await commit(p?.factionId, (p && p.deltas) || {}, context);
+    });
+  } catch (eReg) { warn("gmExec op.commit registration failed", eReg); }
   // Run migration after API is wired so any side-effects of migration can use it.
   try { await _runMarksMigration(); } catch (_e) {}
 });

@@ -1662,6 +1662,31 @@ async function _resolveFaction(id) {
   return game.actors?.get?.(id) || null;
 }
 
+// Owner ruling 2026-08-30: an OP check "belongs" to the SELECTED steward — it
+// rolls and pays from THAT steward's faction (the roster dropdown now spans
+// the whole campaign coalition, so the primary faction is no longer a safe
+// default). Resolve a roster actor to their faction actor; null if unknown.
+async function _factionForRosterActor(rosterActorId) {
+  try {
+    if (!rosterActorId) return null;
+    const a = game.actors?.get?.(rosterActorId);
+    if (!a) return null;
+    const fid = a.getFlag?.("bbttcc-factions", "factionId");
+    if (fid) {
+      const f = await _resolveFaction(fid);
+      if (f) return f;
+    }
+    const fname = String(a.getFlag?.("bbttcc-factions", "factionName") || "").trim();
+    if (fname) {
+      const f = (game.actors?.contents || []).find(x =>
+        x?.flags?.["bbttcc-factions"]?.isFaction === true &&
+        String(x.name).trim() === fname);
+      if (f) return f;
+    }
+  } catch (_e) {}
+  return null;
+}
+
 function _characterBelongsToFactionForCampaign(char, faction) {
   try {
     if (!char || !faction) return false;
@@ -2142,18 +2167,30 @@ async function _rollChoiceCheck(choice, ctx={}) {
   return { kind:"basic", stat, dc, total:roll.total, ok:roll.total>=dc, roll };
 }
 
-// Failed-check re-offer (2026-08-27, owner ruling from the Acid Bog run): a
-// failed path check routes to its failure beat, then the path menu comes BACK
-// so the party can try another way. OP-gated attempts still pay their 1 OP per
-// try, so retries are economically priced; closing the dialog is the GM's
-// "the failure stands" exit. Fire-and-forget: the failure beat's own dialog
-// has already resolved (runBeat awaits it) by the time this schedules.
-function _scheduleRetryOffer(campaign, beat, ctx) {
+// Settlement Refactor (2026-08-28): the chain's identity travels through every
+// choice hop — slim on purpose (never to/from hex refs, which would arm scene
+// auto-returns downstream). `await runBeat(...)` returning is the chain's
+// completion event; this keeps it true at every depth.
+function _chainCtxFrom(ctx) {
+  if (!ctx) return {};
+  const out = {};
+  if (ctx.__chain) out.__chain = ctx.__chain;
+  for (const k of ["factionId", "actor", "joiningFactionIds", "participantFactionIds", "rosterActorId"]) {
+    if (ctx[k] !== undefined) out[k] = ctx[k];
+  }
+  return out;
+}
+
+// Failed-check re-offer (2026-08-27 ruling; awaited IN-chain since the
+// Settlement Refactor): a failed path check routes to its failure beat, then
+// the path menu comes BACK so the party can try another way. OP-gated attempts
+// still pay their 1 OP per try; closing the dialog is the GM's "the failure
+// stands" exit. Awaiting it here means the outer runBeat does not return until
+// every retry has resolved — chain completion stays a plain fact.
+async function _offerRetryInChain(campaign, beat, ctx) {
   try {
-    setTimeout(() => {
-      try { _runBeatDialog(campaign, beat, { ...(ctx || {}), retryOffer: true }); } catch (_e) {}
-    }, 400);
-  } catch (_e2) {}
+    await _runBeatDialog(campaign, beat, { ..._chainCtxFrom(ctx), retryOffer: true });
+  } catch (_e) {}
 }
 
 async function _runBeatDialog(campaign, beat, ctx={}) {
@@ -2200,13 +2237,35 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
     ctx.factionId || beat.factionId || campaign.factionId || null;
 
   let roster = [];
-  if (factionId) {
-    try {
+  let coalitionFactions = [];
+  try {
+    // Owner ruling 2026-08-30: the individual-check dropdown lists ALL
+    // participating stewards — the stewards of every faction in the campaign
+    // coalition (campaign.factionIds + primary) — not just the primary
+    // faction's roster. Crew/association members are excluded (canonical
+    // actorKind "steward" only; falls back to type check if the API is absent).
+    const kindOf = game.bbttcc?.api?.actorKind;
+    const isSteward = (a) => {
+      try { return typeof kindOf === "function" ? kindOf(a) === "steward" : a?.type === "character"; }
+      catch (_e) { return a?.type === "character"; }
+    };
+    coalitionFactions = await _resolveCampaignFactions(campaign, ctx);
+    const seenIds = new Set();
+    for (const fac of coalitionFactions) {
+      const actors = await _getFactionRoster(fac);
+      for (const a of actors) {
+        if (!a?.id || seenIds.has(a.id) || !isSteward(a)) continue;
+        seenIds.add(a.id);
+        roster.push({ id: a.id, name: a.name });
+      }
+    }
+    // Campaign-less fallback: the old single-faction roster path.
+    if (!roster.length && factionId) {
       const fac = await _resolveFaction(factionId);
       const actors = await _getFactionRoster(fac);
-      roster = actors.map(a => ({ id: a.id, name: a.name }));
-    } catch (_eR) {}
-  }
+      roster = actors.filter(isSteward).map(a => ({ id: a.id, name: a.name }));
+    }
+  } catch (_eR) {}
 
   const rosterHtml = roster.length ? `
     <div class="bbttcc-field" style="margin:8px 0;">
@@ -2214,7 +2273,7 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
       <select name="bbttccRosterActor" data-id="rosterActorId" style="width:100%;">
         ${roster.map(r=>`<option value="${_escapeHtml(r.id)}" ${ctx && ctx.rosterActorId && String(ctx.rosterActorId)===String(r.id) ? "selected" : ""}>${_escapeHtml(r.name)}</option>`).join("")}
       </select>
-      <div style="opacity:.75;font-size:12px;">Ignored for OP checks</div>
+      <div style="opacity:.75;font-size:12px;">OP checks auto-roll &amp; pay from the selected steward's faction &middot; aptitude checks: the table rolls, GM passes/fails</div>
     </div>
   ` : "";
 
@@ -2230,11 +2289,30 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
       if (faction) {
         opBankAll = _readOpBankAll(faction);
         opRollBonusAll = await _computeFactionOpRollBonusMap(faction);
-        opChipsHtml = _buildOpChipsHtml(opBankAll, null);
-        opRollBonusHtml = _buildOpRollBonusChipsHtml(opRollBonusAll, null);
       }
     } catch (_eB) {}
   }
+  // Summary chips cover the WHOLE coalition (2026-08-30) — one labeled block
+  // per participating faction, since the OP check pays from whichever faction
+  // the selected steward belongs to. Per-choice chips still show the primary.
+  try {
+    const chipFactions = coalitionFactions.length ? coalitionFactions : (faction ? [faction] : []);
+    const poolBlocks = [];
+    const bonusBlocks = [];
+    for (const f of chipFactions) {
+      const bank = (f === faction) ? opBankAll : _readOpBankAll(f);
+      const bonus = (f === faction) ? opRollBonusAll : await _computeFactionOpRollBonusMap(f);
+      const pc = _buildOpChipsHtml(bank, null);
+      const bc = _buildOpRollBonusChipsHtml(bonus, null);
+      const nameTag = chipFactions.length > 1
+        ? `<div style="opacity:.8;font-size:11px;margin-top:4px;font-weight:700;">${_escapeHtml(f.name)}</div>`
+        : "";
+      if (pc) poolBlocks.push(nameTag + pc);
+      if (bc) bonusBlocks.push(nameTag + bc);
+    }
+    opChipsHtml = poolBlocks.join("");
+    opRollBonusHtml = bonusBlocks.join("");
+  } catch (_eB2) {}
 
 
   const bodyHtml = `
@@ -2339,6 +2417,16 @@ ${
       resolve(payload);
     };
 
+    // THE CLOSE RACE (found live 2026-08-29, geometry serpent ride): clicking
+    // a Dialog button closes the window IMMEDIATELY while the async callback
+    // is still awaiting its nested beat chain — and the close handler used to
+    // resolve this promise with {acted:false} right then, so `await runBeat`
+    // returned the moment a button was clicked and the rest of the chain ran
+    // DETACHED (settlement declared early → the Lyrenn arrival fired over an
+    // unresolved serpent). A clicked button suppresses the close-resolve; the
+    // callback's own finish() — after its whole awaited chain — resolves us.
+    let buttonTaken = false;
+
     const buttons = {};
 
     // Build one button per choice
@@ -2350,6 +2438,7 @@ ${
         buttons[`c${i}`] = {
           label,
           callback: async (html) => {
+            buttonTaken = true;
             try {
               const sel = html && html[0] ? html[0].querySelector('select[name="bbttccRosterActor"]') : null;
               const rosterActorId = sel ? (sel.value || null) : null;
@@ -2393,8 +2482,8 @@ ${
                   const ok = await _gmAdjudicate(label, '<div style="font-weight:700;">' + _escapeHtml(label) + '</div>' + promptLine + metaLine);
 
                   const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
-                  if (nextId) await runBeat(campaign.id, nextId);
-                  if (!ok) _scheduleRetryOffer(campaign, beat, ctx);
+                  if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
+                  if (!ok) await _offerRetryInChain(campaign, beat, ctx);
 
                   finish({
                     acted: true,
@@ -2407,13 +2496,15 @@ ${
                 }
 
 
-                // Default behavior for non-OP checks: GM adjudication (player resolves rolls via MidiQOL/manual/etc).
-                // To force auto-rolling, author choice.checkMode = "auto".
-                const mode = String(ch.checkMode || "").trim().toLowerCase();
+                // Owner ruling 2026-08-30 (enforced): ALL non-OP checks are
+                // table-adjudicated — the table decides who rolls and applies
+                // bonuses/buffs, then the GM clicks pass/fail. Only op.* checks
+                // auto-roll. Authored checkMode:"auto" on aptitude checks is
+                // deliberately IGNORED (it used to force auto-rolling).
                 const statTxt0 = String(ch.checkStat || "").trim().toLowerCase();
                 const isOp = statTxt0.indexOf("op.") === 0;
 
-                if (!isOp && mode !== "auto") {
+                if (!isOp) {
                   const dcTxt = (ch.checkDC != null && String(ch.checkDC).trim() !== "") ? String(_num(ch.checkDC != null ? ch.checkDC : 0, 0)) : "";
                   const statTxt = String((ch && ch.checkStat) || "").trim() || "check";
                   const prompt = String((ch && (ch.checkPrompt || ch.prompt)) || "").trim();
@@ -2433,8 +2524,8 @@ ${
                   const ok = await _gmAdjudicate(label, '<div style="font-weight:700;">' + _escapeHtml(label) + '</div>' + promptLine + metaLine);
 
                   const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
-                  if (nextId) await runBeat(campaign.id, nextId);
-                  if (!ok) _scheduleRetryOffer(campaign, beat, ctx);
+                  if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
+                  if (!ok) await _offerRetryInChain(campaign, beat, ctx);
 
                   finish({
                     acted: true,
@@ -2447,24 +2538,40 @@ ${
                 }
 
 // Auto-resolved roll (OP / actor if roster selected)
-                
+
+                // Owner ruling 2026-08-30: the OP check rolls and PAYS from the
+                // SELECTED steward's faction (dropdown spans the coalition);
+                // primary faction is only the fallback.
+                const opFaction = isOp
+                  ? ((await _factionForRosterActor(rosterActorId)) || faction)
+                  : faction;
+
                 // OP gating (requires 1 OP to attempt)
                 if (isOp) {
                   try {
                     const allowDesperation = !!(ctx && ctx.allowDesperation);
                     const opKey = String(statTxt0.split(".")[1] || "").trim().toLowerCase();
-                    if (faction && opKey) {
-                      const gate = _evalOpGateForKey(faction, opKey, allowDesperation);
+                    if (opFaction && opKey) {
+                      const gate = _evalOpGateForKey(opFaction, opKey, allowDesperation);
                       if (!gate.ok) {
-                        try { ui.notifications?.warn?.("This action requires 1 " + _opKeyLabel(opKey) + " OP."); } catch (_eN) {}
-                        return false; // keep dialog open
+                        try { ui.notifications?.warn?.("This action requires 1 " + _opKeyLabel(opKey) + " OP (" + opFaction.name + ")."); } catch (_eN) {}
+                        // The dialog has already closed on click (V1) — a bare
+                        // return would hang the promise now that buttonTaken
+                        // suppresses the close-resolve. Re-offer the menu.
+                        await _offerRetryInChain(campaign, beat, ctx);
+                        finish({ acted: false, gated: "op" });
+                        return;
                       }
                       if (gate.mode === "desperation") {
                         const ok = await _confirmDesperation(opKey);
-                        if (!ok) return false; // keep dialog open
+                        if (!ok) {
+                          await _offerRetryInChain(campaign, beat, ctx);
+                          finish({ acted: false, gated: "desperation" });
+                          return;
+                        }
                       }
                       // Spend 1 OP on attempt (optional; safe if op.commit exists)
-                      await _spendOneOpForAttempt(faction, opKey, "Campaign OP check: " + (beat.label || beat.id || ""));
+                      await _spendOneOpForAttempt(opFaction, opKey, "Campaign OP check: " + (beat.label || beat.id || ""));
                     }
                   } catch (_eG) {}
                 }
@@ -2474,16 +2581,23 @@ ${
                   const pool2 = _readOpBank(faction, supportOpKey);
                   if (pool2 < supportSpend) {
                     ui.notifications?.warn?.("Not enough " + _opKeyLabel(supportOpKey) + " OP for backing.");
-                    return false;
+                    await _offerRetryInChain(campaign, beat, ctx);
+                    finish({ acted: false, gated: "backing" });
+                    return;
                   }
                   const okSpend2 = await _spendFactionOpSupport(faction, supportOpKey, supportSpend, "Faction backing: " + (beat.label || beat.id || ""));
                   if (!okSpend2) {
                     ui.notifications?.warn?.("Could not spend faction OP for backing (see console).");
-                    return false;
+                    await _offerRetryInChain(campaign, beat, ctx);
+                    finish({ acted: false, gated: "backing" });
+                    return;
                   }
                 }
 
-                const res = await _rollChoiceCheck(ch, { factionId, rosterActorId, supportOpKey, supportSpend });
+                const res = await _rollChoiceCheck(ch, {
+                  factionId: (isOp && opFaction) ? opFaction.id : factionId,
+                  rosterActorId, supportOpKey, supportSpend
+                });
 
                 if (res.kind === "op") {
                   ui.notifications?.info?.(
@@ -2499,8 +2613,8 @@ ${
                   ? (ch.next || "")
                   : (ch.failNext || beat.outcomes?.failure || "");
 
-                if (nextId) await runBeat(campaign.id, nextId);
-                if (!res.ok) _scheduleRetryOffer(campaign, beat, ctx);
+                if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
+                if (!res.ok) await _offerRetryInChain(campaign, beat, ctx);
 
                 finish({
                   acted: true,
@@ -2514,7 +2628,7 @@ ${
 
 // No check: route to next
               const nextId = ch.next || "";
-              if (nextId) await runBeat(campaign.id, nextId);
+              if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
 
               finish({
                 acted: true,
@@ -2535,7 +2649,7 @@ ${
       // No choices: just an OK button
       buttons.ok = {
         label: "OK",
-        callback: () => finish({ acted: true, routed: false, choiceIndex: null, choice: null, check: null })
+        callback: () => { buttonTaken = true; finish({ acted: true, routed: false, choiceIndex: null, choice: null, check: null }); }
       };
     }
 
@@ -2544,7 +2658,9 @@ ${
       content: bodyHtml,
       buttons,
       default: Object.keys(buttons)[0] || "ok",
-      close: () => finish({ acted: false, closed: true })
+      // Escape / header-X with no button = a real dismissal, resolve now.
+      // A clicked button's callback owns the resolve (see buttonTaken above).
+      close: () => { if (!buttonTaken) finish({ acted: false, closed: true }); }
     });
 
     dlg.render(true);
@@ -3065,9 +3181,18 @@ async function executeBeat(campaign, beat, ctx = {}) {
     if (game.user?.isGM && beat?.id) {
       await _mutateDirectorState(async (st) => {
         st.firedStoryBeats = st.firedStoryBeats || {};
-        if (!st.firedStoryBeats[beat.id]) {
-          st.firedStoryBeats[beat.id] = { turn: Number(campaign?.turn) || 0, ts: Date.now() };
-        }
+        // 2026-08-29 owner ruling "Arrival Steers the Story": ts refreshes on
+        // EVERY fire (was first-fire-only). The hero anchor's freshest-fired
+        // fallback should follow the table's present, not build-session
+        // archaeology — re-arriving at Khezek Tor kept its stale ts and lost
+        // the anchor to older Crossroads beats. firstTs preserves the
+        // original for history.
+        const prev = st.firedStoryBeats[beat.id];
+        st.firedStoryBeats[beat.id] = {
+          turn: Number(campaign?.turn) || 0,
+          ts: Date.now(),
+          ...(prev?.firstTs ? { firstTs: prev.firstTs } : (prev?.ts ? { firstTs: prev.ts } : {}))
+        };
       });
     }
   } catch (e) { warn("fired-history record failed:", e); }
@@ -5430,10 +5555,10 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
   if (_choiceHasCheck(ch)) {
     const statTxt0 = String(ch.checkStat || "").trim().toLowerCase();
     const isOp = statTxt0.indexOf("op.") === 0;
-    const mode = String(ch.checkMode || "").trim().toLowerCase();
 
-    // GM adjudication (explicit "gm" stat, or any non-OP check not marked auto)
-    if (_isGMAdjudicatedChoice(ch) || (!isOp && mode !== "auto")) {
+    // GM adjudication — owner ruling 2026-08-30: EVERY non-OP check goes to
+    // the table (GM clicks pass/fail); checkMode:"auto" no longer overrides.
+    if (_isGMAdjudicatedChoice(ch) || !isOp) {
       const prompt = String((ch && (ch.checkPrompt || ch.prompt)) || "").trim();
       const dcTxt = (ch.checkDC != null && String(ch.checkDC).trim() !== "") ? String(_num(ch.checkDC, 0)) : "";
       const prettyStat = _choiceCheckLabel(String(ch.checkStat || "").trim() || "gm");
@@ -5449,23 +5574,27 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
           : '');
       const ok = await _gmAdjudicate(label, body);
       const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
-      if (nextId) await runBeat(campaign.id, nextId);
+      if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
       return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch,
                check: { stat: String(ch.checkStat || "gm").trim().toLowerCase(), dc: _num(ch.checkDC, 0), ok: !!ok, kind: "gm" } };
     }
 
-    // OP gating (1 OP to attempt) — mirror of the dialog handler
+    // OP gating (1 OP to attempt) — mirror of the dialog handler.
+    // 2026-08-30: pays from the SELECTED steward's faction, primary fallback.
+    const opFaction = isOp
+      ? ((await _factionForRosterActor(rosterActorId)) || faction)
+      : faction;
     if (isOp) {
       try {
         const opKey = String(statTxt0.split(".")[1] || "").trim().toLowerCase();
-        if (faction && opKey) {
-          const gate = _evalOpGateForKey(faction, opKey, ctx.allowDesperation !== false);
-          if (!gate.ok) return { acted: false, error: "This action requires 1 " + _opKeyLabel(opKey) + " OP and the faction cannot pay." };
+        if (opFaction && opKey) {
+          const gate = _evalOpGateForKey(opFaction, opKey, ctx.allowDesperation !== false);
+          if (!gate.ok) return { acted: false, error: "This action requires 1 " + _opKeyLabel(opKey) + " OP and " + opFaction.name + " cannot pay." };
           if (gate.mode === "desperation") {
             const okD = await _confirmDesperation(opKey);
             if (!okD) return { acted: false, error: "Desperation spend declined by the GM." };
           }
-          await _spendOneOpForAttempt(faction, opKey, "Campaign OP check: " + (beat.label || beat.id || ""));
+          await _spendOneOpForAttempt(opFaction, opKey, "Campaign OP check: " + (beat.label || beat.id || ""));
         }
       } catch (_eG) {}
     }
@@ -5476,19 +5605,22 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
       if (!okSpend2) return { acted: false, error: "Could not spend faction OP for backing." };
     }
 
-    const res = await _rollChoiceCheck(ch, { factionId, rosterActorId, supportOpKey, supportSpend });
+    const res = await _rollChoiceCheck(ch, {
+      factionId: (isOp && opFaction) ? opFaction.id : factionId,
+      rosterActorId, supportOpKey, supportSpend
+    });
     try {
       ui.notifications?.info?.(`${label}: ${res.total}${res.kind === "op" ? ` (1d20 + ${res.bonus})` : ""} vs DC ${res.dc}  ->  ${res.ok ? "SUCCESS" : "FAIL"}`);
     } catch (_eN) {}
     const nextId = res.ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
-    if (nextId) await runBeat(campaign.id, nextId);
+    if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
     return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch,
              check: { stat: res.stat, dc: res.dc, total: res.total, ok: res.ok, kind: res.kind, bonus: (res.bonus != null ? res.bonus : null) } };
   }
 
   // No check: route to next
   const nextId = ch.next || "";
-  if (nextId) await runBeat(campaign.id, nextId);
+  if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
   return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch };
 }
 
@@ -7721,6 +7853,29 @@ Hooks.once("ready", () => {
       try { _showPlayerFacingDialogLocal(payload || {}); } catch (_eS3) {}
       try { _broadcastPlayerFacingDialog("show", payload || {}); } catch (_eB3) {}
     };
+    // Re-broadcast the mirror for the beat dialog currently open on THIS GM
+    // client (2026-08-29). The mirror is a SINGLETON on player seats — any
+    // later beat's show/close replaces or closes it — so an overlapping chain
+    // (or a courier miss) can eat a mirror the players still need. One call
+    // puts it back.
+    game.bbttcc.api.campaign.remirrorBeatDialog = () => {
+      try {
+        const beat = __bbttccCurrentBeatDialogBeat;
+        if (!beat) { ui.notifications?.warn?.("No beat dialog is open on this client — nothing to re-mirror."); return false; }
+        _broadcastPlayerFacingDialog("show", {
+          title: beat.label || beat.id || "Beat",
+          desc: String(beat.description || "").trim(),
+          choices: (Array.isArray(beat.choices) ? beat.choices : []).map((ch, i) => ({
+            label: (ch && ch.label) || ("Choice " + (i + 1)),
+            description: String((ch && ch.description) || "").trim(),
+            checkLabel: _choiceHasCheck(ch) ? _choiceCheckLabel(ch.checkStat) : "",
+            checkDC: _choiceHasCheck(ch) ? _num(ch.checkDC, 0) : 0
+          }))
+        });
+        ui.notifications?.info?.(`Mirror re-broadcast: "${beat.label || beat.id}".`);
+        return true;
+      } catch (e) { warn("remirrorBeatDialog failed:", e); return false; }
+    };
   } catch (_eAPI) {}
 
   log("Campaign API installed on game.bbttcc.api.campaign.", game.bbttcc.api.campaign);
@@ -7745,4 +7900,63 @@ Hooks.once("ready", () => {
       });
     }
   } catch (_e1) {}
+
+  // ── Beat lint (Phase 4 of the engine roadmap, 2026-08-29) ─────────────────
+  // The audit is a habit now, not a tool: on GM login, sweep the active
+  // campaign for the three structural defect classes the dead-end week taught
+  // us (broken next/failNext links · no-exit all-checked menus · hub-reachable
+  // zero-choice venue beats) and toast ONLY if something is wrong. Full detail
+  // stays in audit-beat-links / fix-venue-routing-v4.
+  if (game.user?.isGM) setTimeout(() => {
+    try {
+      const campaignId = getActiveCampaignId();
+      const camp = campaignId ? _normalizeCampaign(campaignId, getAllCampaigns()[campaignId]) : null;
+      if (!camp) return;
+      const beats = Array.isArray(camp.beats) ? camp.beats : [];
+      const byId = new Map(beats.map(b => [b.id, b]));
+      let broken = 0, noExit = 0, orphanVenues = 0;
+      for (const b of beats) {
+        const chs = Array.isArray(b.choices) ? b.choices : [];
+        let checked = 0;
+        for (const c of chs) {
+          for (const v of [c?.next, c?.failNext]) {
+            const id = String(v || "").trim();
+            if (id && !byId.has(id)) broken++;
+          }
+          if (String(c?.checkStat || "").trim()) checked++;
+        }
+        if (chs.length && checked === chs.length) noExit++;
+      }
+      // zero-choice beats reachable from the settlement hubs
+      const HUBS = ["allesh_gilliam_town_walk", "khezek_tor_main_scene", "lyrenn_opening_scene", "lyrenn_main_scene", "fixit_intro_scene"].filter(id => byId.has(id));
+      const BOUNDARY = new Set([...HUBS, "ag_crossroads_first_rides", "ag_days_end", "ag_title_card"]);
+      const seen = new Set();
+      for (const H of HUBS) {
+        const q = ((byId.get(H).choices) || []).map(c => c?.next).filter(Boolean).filter(id => !BOUNDARY.has(id));
+        while (q.length) {
+          const id = q.shift();
+          if (!id || seen.has(id) || BOUNDARY.has(id)) continue;
+          seen.add(id);
+          const b = byId.get(id);
+          if (!b) continue;
+          const isCin = String(b.type || "") === "cinematic" || !!(b.cinematic && b.cinematic.enabled);
+          const labeled = (b.choices || []).filter(c => String(c?.label || "").trim());
+          if (!labeled.length && !isCin) orphanVenues++;
+          for (const c of labeled) for (const t of [c?.next, c?.failNext]) {
+            if (t && !seen.has(t) && !BOUNDARY.has(t)) q.push(t);
+          }
+        }
+      }
+      if (broken || noExit || orphanVenues) {
+        const bits = [];
+        if (broken) bits.push(`${broken} broken link(s)`);
+        if (noExit) bits.push(`${noExit} no-exit menu(s)`);
+        if (orphanVenues) bits.push(`${orphanVenues} dead-end venue(s)`);
+        ui.notifications?.warn?.(`🧹 Beat lint: ${bits.join(" · ")} — run audit-beat-links / fix-venue-routing-v4 for detail.`);
+        warn("[beat-lint]", { broken, noExit, orphanVenues });
+      } else {
+        log(`[beat-lint] clean — ${beats.length} beats, 0 broken links, 0 no-exit menus, 0 dead-end venues.`);
+      }
+    } catch (eLint) { warn("[beat-lint] sweep failed:", eLint); }
+  }, 8000);
 });

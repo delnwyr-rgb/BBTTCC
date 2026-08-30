@@ -2344,11 +2344,17 @@ const activeCampaignId = _getActiveCampaignId();
             }
             const qRouted = beats
               .filter(b => String(b.questId || "").trim() === lq
-                // Fired is fired — and repeatable beats are PLACES (hubs,
-                // rounds), not steps: proposing a fired hub as NEXT loops
+                // Fired is fired — proposing a fired hub as NEXT loops
                 // forever (the "Cookline is the hub" lesson, 2026-08-24).
+                // firedSet alone carries that lesson: it includes fired
+                // repeatables. The old extra `!inject.repeatable` exclusion
+                // overshot — campaigns whose authoring stamps repeatable:true
+                // on EVERY beat (Thatward's Ho!, April boilerplate) lost their
+                // whole quest-order fallback and the hero dead-ended in
+                // "waiting" after any choiceless beat (found live 2026-08-30).
+                // An UNFIRED repeatable beat that is next in quest order is a
+                // legitimate step.
                 && !firedSet.has(String(b.id))
-                && !b?.inject?.repeatable
                 && !isAmbientBeat(b) && !isDiscoveryBeat(b)
                 && !choiceTargets.has(String(b.id))
                 && seqOf(b) > ls)

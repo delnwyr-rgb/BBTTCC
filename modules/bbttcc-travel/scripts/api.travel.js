@@ -460,6 +460,44 @@
   }
   Hooks.once("ready", setupEncounterArbitrationRelay);
 
+  // Cross-seat receivers (2026-08-29): the pending-arrival flag lands on
+  // every seat, and relayed hex-enter requests run on the PRIMARY GM only.
+  Hooks.once("ready", () => {
+    try {
+      game.socket?.on?.("module.bbttcc-campaign", async (msg) => {
+        try {
+          if (msg?.t === "bbttccPendingHexEnter") {
+            game.bbttcc = game.bbttcc || {};
+            if (msg.on) game.bbttcc._pendingHexEnter = { hexUuid: msg.hexUuid || null, beatId: msg.beatId || null, ts: Number(msg.ts) || Date.now() };
+            else { try { delete game.bbttcc._pendingHexEnter; } catch (_e) {} }
+            return;
+          }
+        } catch (e) { warn("cross-seat receiver failed:", e); }
+      });
+    } catch (_eOn) {}
+
+    // Phase 1 (2026-08-29): arrival relay lives on the gmExec primitive now
+    // (election, ack, and validation come with the primitive). Fire-and-forget:
+    // the beat chain can run for minutes; the ack is a receipt.
+    try {
+      game.bbttcc?.api?.gmExec?.register?.("travel.hexEnter", async (p, meta) => {
+        const doc = p?.hexUuid ? await fromUuid(p.hexUuid).catch(() => null) : null;
+        if (!doc) throw new Error("hex not resolved: " + (p?.hexUuid || "(none)"));
+        const result = {
+          context: { to: { document: doc }, factionId: p.factionId || null },
+          encounter: p.encounter || null,
+          hexUuid: p.hexUuid
+        };
+        runHexEnterBeatNow(result, { factionId: p.factionId || null })
+          .catch(e => warn("relayed hex enter failed:", e));
+        return { started: true, hexUuid: p.hexUuid, via: meta?.fromUserName || "gm" };
+      });
+      // RideSession writes from player seats (Phase 2).
+      game.bbttcc?.api?.gmExec?.register?.("travel.rideSession.save", async (p) =>
+        _rideWriteLocal(String(p?.factionId || ""), p?.session ?? null));
+    } catch (_eReg) {}
+  });
+
   // Cascade fallback: attempt the requested tier first, then step down tier by
   // tier if the table is missing / empty / has no eligible entries / is
   // mis-authored. Returns the successful pick plus a full escalation trail so
@@ -581,6 +619,36 @@
   }
 
   async function runHexEnterBeatNow(result, opts) {
+    // Two seats, one brain (2026-08-29): beats are GM-run. On player-driven
+    // rides this deferral lives on the DRIVER's client — running the arrival
+    // here rendered the beat dialog player-side (real, clickable), failed
+    // scene activation and setting writes on permissions, and left the GM
+    // blind. Relay the essentials to the primary GM seat instead.
+    if (!game.user?.isGM) {
+      // Phase 1 (2026-08-29): migrated from the bespoke socket branch onto the
+      // gmExec seat primitive. Handler kicks the beat fire-and-forget and acks
+      // a receipt (a beat chain can run for minutes — never hold the ack).
+      try {
+        const ctx0 = (result && result.context) || {};
+        const to0 = ctx0.to || null;
+        const hexUuid = (to0 && to0.document && to0.document.uuid) || (to0 && to0.uuid) || (result && result.hexUuid) || null;
+        const payload = {
+          hexUuid,
+          factionId: ctx0.factionId || (opts && opts.factionId) || null,
+          encounter: (result && result.encounter && result.encounter.triggered)
+            ? { triggered: true, key: result.encounter.key || null } : null
+        };
+        const gx = game.bbttcc?.api?.gmExec;
+        if (gx?.call) {
+          const receipt = await gx.call("travel.hexEnter", payload).catch(e => ({ ok: false, error: String(e?.message || e) }));
+          log("Hex enter: relayed via gmExec →", receipt);
+        } else {
+          warn("Hex enter: gmExec unavailable — arrival not relayed (stale client?)");
+        }
+      } catch (e) { warn("Hex enter relay failed:", e); }
+      return;
+    }
+
     const injector = game.bbttcc && game.bbttcc.api && game.bbttcc.api.campaigns ? game.bbttcc.api.campaigns.injector : null;
     if (!injector) { warn("Hex enter skipped: injector missing"); return; }
 
@@ -700,8 +768,14 @@
         : null;
       if (beatId0) {
         game.bbttcc = game.bbttcc || {};
-        game.bbttcc._pendingHexEnter = { hexUuid: hexUuid0, beatId: beatId0, ts: Date.now() };
+        const pend = { hexUuid: hexUuid0, beatId: beatId0, ts: Date.now() };
+        game.bbttcc._pendingHexEnter = pend;
         pendingSet = true;
+        // Relay: on player-driven rides this seat is the DRIVER's, but the
+        // GM's settle reads the flag to suppress the ride-on nudge — every
+        // seat gets the pending state (2026-08-29, wrong "Execute Route"
+        // nudge on a final leg).
+        try { game.socket?.emit?.("module.bbttcc-campaign", { t: "bbttccPendingHexEnter", on: true, ...pend }); } catch (_ePS) {}
       }
     } catch (_ePend) {}
 
@@ -720,30 +794,44 @@
       //    Fallback: the old broad idle check, 15-min window. Past the cap the
       //    last-resort fire blocks ONLY on actual combat (never a window),
       //    hard stop 45 min.
-      await waitForModal({ timeoutMs: 15000 });
-      const waitSettledOrIdle = async (timeoutMs) => {
+      // Settlement Refactor (2026-08-28): the encounter side DECLARES
+      // completion (settled stamp, socket-relayed to every seat). The arrival
+      // trusts that signal. One fallback lane remains: an encounter that never
+      // launches a beat (declined at arbitration, beatless) never settles —
+      // after 120s of genuine quiet (no Bad Eden modal, no combat) treat it as
+      // never-launched. Hard stop 45 min. No scene sniffing, no 15-min polls.
+      const waitForSettlement = async () => {
         const started = Date.now();
-        while ((Date.now() - started) <= timeoutMs) {
-          const onHome = !homeSceneUuid || (canvas && canvas.scene && canvas.scene.uuid === homeSceneUuid);
+        while (true) {
           const settled = Number((game.bbttcc && game.bbttcc._encounterChainSettledTs) || 0) > deferT0;
-          if (settled && onHome && !isCombatActive()) return { ok: true, via: "settled" };
-          if (onHome && !hasBBTTCCModalOpen() && !isCombatActive()) return { ok: true, via: "idle" };
-          await new Promise(r => setTimeout(r, 250));
+          if (settled) return { ok: true, via: "settled" };
+          const launched = Number((game.bbttcc && game.bbttcc._encounterChainLaunchedTs) || 0) > deferT0;
+          if (launched) {
+            // A LAUNCHED chain settles or times out — no inference lane at
+            // all (2026-08-29: the old quiet fallback raced a mid-chain
+            // dialog gap and dove the table to the destination mid-parley).
+            if ((Date.now() - started) > 2700000) return { ok: false, why: "hard-stop" };
+          } else {
+            // Never launched (declined at arbitration / beatless): fire after
+            // 120s of genuine quiet, or unconditionally at 5 min.
+            if ((Date.now() - started) > 120000 && !hasBBTTCCModalOpen() && !isCombatActive()) {
+              return { ok: true, via: "never-launched" };
+            }
+            if ((Date.now() - started) > 300000) return { ok: true, via: "never-launched-cap" };
+          }
+          await new Promise(r => setTimeout(r, 500));
         }
-        return { ok: false, why: "timeout" };
       };
-      const idle = await waitSettledOrIdle(900000);
-      if (!idle.ok) {
-        const hardStop = Date.now() + 2700000;
-        while (Date.now() < hardStop && isCombatActive()) {
-          await new Promise(r => setTimeout(r, 10000));
-        }
-        warn("Hex enter: extended idle wait ended (best effort)", idle);
-      } else {
-        log("Hex enter: chain resolved →", idle.via);
-      }
+      const idle = await waitForSettlement();
+      if (idle.ok) log("Hex enter: chain resolved →", idle.via);
+      else warn("Hex enter: settlement never arrived (firing best-effort)", idle);
       try { await runHexEnterBeatNow(result, opts); } catch (e) { warn("Hex enter failed:", e); }
-      finally { if (pendingSet) { try { delete game.bbttcc._pendingHexEnter; } catch (_e) {} } }
+      finally {
+        if (pendingSet) {
+          try { delete game.bbttcc._pendingHexEnter; } catch (_e) {}
+          try { game.socket?.emit?.("module.bbttcc-campaign", { t: "bbttccPendingHexEnter", on: false }); } catch (_ePC) {}
+        }
+      }
     }, 250);
   }
 
@@ -1029,10 +1117,71 @@
       warn("Encounter enrichment failed (non-blocking)", e);
     }
 
-    // Hex entry beat (terminal)
-    await maybeRunHexEnterBeatDeferred(result, opts);
+    // Hex entry beat (terminal). Multi-leg ruling (owner, 2026-08-29, first
+    // multi-leg ride): PASS-THROUGH ≠ ARRIVAL — an intermediate leg's
+    // destination hex does NOT fire its hex-enter beat (KT→Lyrenn was firing
+    // Allesh-Gilliam's Marshal Yarrow walk-in at the gates). Only the route's
+    // final leg arrives. Callers that don't say (legacy single-hex moves,
+    // direct API use) are treated as final.
+    if (opts && opts.finalLeg === false) {
+      log("Hex enter: intermediate leg — pass-through, arrival beat suppressed", { hexTo: opts.hexTo || null });
+    } else {
+      await maybeRunHexEnterBeatDeferred(result, opts);
+    }
     return result;
   }
+
+  // ---------------------------------------------------------------------------
+  // RideSession (Phase 2 of the engine roadmap, 2026-08-29)
+  // The ride is a first-class persisted object: the planned/remaining legs,
+  // participants, and stage live in a world setting instead of the open
+  // console window's closure (a reload mid-ride used to lose the route).
+  // Writes are seat-safe via the gmExec primitive.
+  // ---------------------------------------------------------------------------
+
+  const RIDE_NS = "bbttcc-travel";
+  const RIDE_KEY = "rideSessions";
+  let _rideSettingRegistered = false;
+  function _ensureRideSetting() {
+    if (_rideSettingRegistered) return;
+    try {
+      game.settings.register(RIDE_NS, RIDE_KEY, { scope: "world", config: false, type: Object, default: {} });
+      _rideSettingRegistered = true;
+    } catch (_e) { _rideSettingRegistered = true; }
+  }
+  function rideGet(factionId) {
+    _ensureRideSetting();
+    try {
+      const all = game.settings.get(RIDE_NS, RIDE_KEY) || {};
+      return all[String(factionId || "")] || null;
+    } catch (_e) { return null; }
+  }
+  function rideList() {
+    _ensureRideSetting();
+    try { return foundry.utils.deepClone(game.settings.get(RIDE_NS, RIDE_KEY) || {}); }
+    catch (_e) { return {}; }
+  }
+  async function _rideWriteLocal(factionId, session) {
+    _ensureRideSetting();
+    const fid = String(factionId || "");
+    if (!fid) return { ok: false, error: "factionId required" };
+    const all = foundry.utils.deepClone(game.settings.get(RIDE_NS, RIDE_KEY) || {});
+    if (session == null) delete all[fid];
+    else all[fid] = session;
+    await game.settings.set(RIDE_NS, RIDE_KEY, all);
+    return { ok: true };
+  }
+  async function rideSave(factionId, session) {
+    // World-setting writes are GM work — player seats relay via gmExec.
+    if (game.user?.isGM) return _rideWriteLocal(factionId, session);
+    const gx = game.bbttcc?.api?.gmExec;
+    if (gx && typeof gx.call === "function") {
+      try { return await gx.call("travel.rideSession.save", { factionId, session }); }
+      catch (e) { return { ok: false, error: String(e?.message || e) }; }
+    }
+    return { ok: false, error: "gmExec unavailable" };
+  }
+  Hooks.once("init", _ensureRideSetting);
 
   // ---------------------------------------------------------------------------
   // Publisher + drift guard
@@ -1055,6 +1204,14 @@
 
     api.travelHex = travelHex;
     api.travel.travelHex = travelHex;
+
+    // RideSession (Phase 2): the ride as a persisted, seat-safe object.
+    api.travel.rideSession = {
+      get: rideGet,
+      list: rideList,
+      save: rideSave,
+      clear: (factionId) => rideSave(factionId, null)
+    };
 
     log("Installed canonical travel wrapper.", {
       hasCore: (api.travel && typeof api.travel.__coreTravel === "function"),

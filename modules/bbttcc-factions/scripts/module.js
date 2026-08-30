@@ -2317,6 +2317,27 @@ async function _openRigConsole({ actor, rigId }) {
 
 
 class BBTTCCFactionSheet extends ActorSheet {
+  /** Phase 3 one-authority (2026-08-29): a faction IS a world-level entity —
+   * an unlinked map token's synthetic copy has ghost banks (frozen at token
+   * creation) and its writes (staging, GM edits) land on the copy, not the
+   * faction. There is never a legitimate token-copy faction view: opening one
+   * redirects to the world actor's sheet. (The earlier _bankActor display shim
+   * remains as a harmless belt-and-suspenders for any path that still lands
+   * here.) */
+  async _render(force, options) {
+    try {
+      if (this.actor?.isToken) {
+        const world = this.actor.token?.baseActor || game.actors?.get?.(this.actor.token?.actorId) || null;
+        if (world) {
+          ui.notifications?.info?.(`Faction banks live on the world actor — opening ${world.name}'s real sheet.`);
+          world.sheet?.render(true);
+          return;
+        }
+      }
+    } catch (_e) {}
+    return super._render(force, options);
+  }
+
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       id: "bbttcc-faction-sheet",
@@ -2584,10 +2605,19 @@ const politicalPressure = {
   lastImpacts
 };
 
-    const turnBank  = this.actor.getFlag(MODULE_ID, "turnBank")  || _zeros();
-    const stockpile = this.actor.getFlag(MODULE_ID, "stockpile") || _zeros();
-    const opBank    = this.actor.getFlag(MODULE_ID, "opBank")    || _zerosOP();
-    const buildUnits = Math.max(0, Math.floor(Number(this.actor.getFlag(MODULE_ID, "buildUnits") ?? 0) || 0));
+    // 2026-08-28: faction banks are WORLD-actor state — the op engine debits
+    // the world actor by id, while an UNLINKED map token's synthetic copy
+    // shows every bank frozen at token creation (owner read ECON 5 on the
+    // token sheet while the real bank held 1 OP; travel then refused the leg
+    // "he could afford"). When this sheet is a token copy, read the banks
+    // from the world actor.
+    const _bankActor =
+      (this.actor.isToken && (this.actor.token?.baseActor || game.actors.get(this.actor.token?.actorId))) ||
+      this.actor;
+    const turnBank  = _bankActor.getFlag(MODULE_ID, "turnBank")  || _zeros();
+    const stockpile = _bankActor.getFlag(MODULE_ID, "stockpile") || _zeros();
+    const opBank    = _bankActor.getFlag(MODULE_ID, "opBank")    || _zerosOP();
+    const buildUnits = Math.max(0, Math.floor(Number(_bankActor.getFlag(MODULE_ID, "buildUnits") ?? 0) || 0));
 
     // Canonical faction track values used by the template + GM manual edit panel.
     const morale   = Math.max(0, Number(this.actor.getFlag(MODULE_ID, "morale") ?? 0) || 0);

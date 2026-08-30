@@ -486,6 +486,13 @@
         for (const [k] of [...FLAGS_BOOL]) { try { await game.settings.set(NS, k, false); } catch (_e) {} }
         try { await game.settings.set(NS, "ledgerEntries", []); } catch (_e) {}
         try { await game.settings.set(NS, "lastTurnAnnounced", 0); } catch (_e) {}
+        // 2026-08-29 refactor stores (Settlement/gmExec/RideSession era):
+        // story phase back to the prologue, Phase-2 ride sessions cleared,
+        // and the TRAVEL injector's oncePerHex history (bbttcc-core, distinct
+        // from campaign injectState!) wiped so arrivals/walk-ins refire.
+        try { await game.settings.set(NS, "storyPhase", 0); } catch (_e) {}
+        try { await game.settings.set("bbttcc-travel", "rideSessions", {}); } catch (_e) {}
+        try { await game.settings.set("bbttcc-core", "campaignInjectorState", { version: 1, lastInjectedAt: 0, lastInjectedTurn: 0, beatHistory: {} }); } catch (_e) {}
         // 📰 The Turn Press — un-print every turn edition, so the world's
         // NPCs stop knowing things that no longer happened. The authored
         // Opening edition and hand-written pages survive by design.
@@ -503,7 +510,7 @@
           const persona = clone(a.getFlag(MAL, "persona") || {});
           if (Object.keys(persona.secretsUsed || {}).length) { persona.secretsUsed = {}; await replaceFlag(a, MAL, "persona", persona); }
         }
-        say(`🧨 FULL RESET complete — ${firedIds.length} beats re-armed, quest log emptied, turn → 1, ${npcRows.length} NPC(s) wiped, ${pressCleared} press edition(s) un-printed. Close and reopen the console to see fresh state.`);
+        say(`🧨 FULL RESET complete — ${firedIds.length} beats re-armed, quest log emptied, turn → 1, story phase → 0, ride sessions + travel injector history cleared, ${npcRows.length} NPC(s) wiped, ${pressCleared} press edition(s) un-printed. Close and reopen the console to see fresh state.`);
         ui.notifications.info("🧨 World reset to Turn 1. Reopen the console for fresh state.");
       }));
     }

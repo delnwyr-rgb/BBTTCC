@@ -238,11 +238,15 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Participating-faction PC drop (2026-08-27)
-  // Any PC (type "character") who belongs to the lead faction or a joining
-  // faction gets a token on the encounter battlemap. Hostiles are expected to
-  // be pre-positioned on authored scenes. PCs land in a row at bottom-center
-  // of the scene rect; the GM slides them into position.
+  // Participating-steward drop (2026-08-27, re-ruled 2026-08-30)
+  // Owner ruling: encounter scenes place STEWARD tokens only — never
+  // crew/association members — and place ALL participating stewards.
+  // "Participating" = stewards belonging to the factions on the ACTIVE
+  // CAMPAIGN's roster (campaign.factionIds + primary factionId); encounter ctx
+  // faction ids are folded in as a fallback for campaign-less/manual fires.
+  // Hostiles are expected to be pre-positioned on authored scenes. Stewards
+  // land in a row at bottom-center of the scene rect; the GM slides them into
+  // position.
   // ---------------------------------------------------------------------------
 
   function _pcBelongsToFaction(char, faction) {
@@ -273,27 +277,74 @@
     return ids;
   }
 
+  // Factions participating in the CAMPAIGN — the Campaign Builder roster of the
+  // active campaign. factionIds holds UUIDs ("Actor.xyz"); the primary
+  // factionId is folded in for older campaigns authored before the roster.
+  function _campaignFactionRefs() {
+    try {
+      const capi = game.bbttcc?.api?.campaign;
+      if (typeof capi?.getActiveCampaignId !== "function" || typeof capi?.getCampaign !== "function") return [];
+      const cid = capi.getActiveCampaignId();
+      const camp = cid ? capi.getCampaign(cid) : null;
+      if (!camp) return [];
+      const refs = [];
+      if (Array.isArray(camp.factionIds)) refs.push(...camp.factionIds);
+      if (camp.factionId) refs.push(camp.factionId);
+      return refs.map(r => String(r || "").trim()).filter(Boolean);
+    } catch (_e) {
+      return [];
+    }
+  }
+
+  function _gatherParticipantFactionRefs(ctx = {}) {
+    const refs = [];
+    const push = (v) => { const s = String(v || "").trim(); if (s && !refs.includes(s)) refs.push(s); };
+    _campaignFactionRefs().forEach(push);
+    _participantFactionIds(ctx).forEach(push);
+    return refs;
+  }
+
+  // Steward = a real PC (canonical actorKind "steward"), never a
+  // crew/association member. Echo-minted crew can be type:"character" too, but
+  // they carry the builders' entityKind stamp, which actorKind resolves to
+  // "npc" — so the canonical resolver is the filter.
+  function _isSteward(a) {
+    try {
+      const kindOf = game.bbttcc?.api?.actorKind;
+      if (typeof kindOf === "function") return kindOf(a) === "steward";
+    } catch (_e) { /* fall through */ }
+    // Fallback (actorKind API absent): character-type without a builder stamp.
+    if (a?.type !== "character") return false;
+    return !String(a?.flags?.["bbttcc-auto-link"]?.entityKind ?? "").trim();
+  }
+
   async function spawnFactionPCs(scene, ctx = {}, opts = {}) {
     if (!scene || !game.user?.isGM) return [];
 
-    const factionIds = _participantFactionIds(ctx);
-    if (!factionIds.length) {
-      log("spawnFactionPCs: no participating factions in ctx; skipping PC drop.");
+    const factionRefs = _gatherParticipantFactionRefs(ctx);
+    if (!factionRefs.length) {
+      log("spawnFactionPCs: no participating factions (campaign roster or ctx); skipping steward drop.");
       return [];
     }
 
-    const factions = factionIds.map(id => game.actors?.get?.(id)).filter(Boolean);
+    const factions = [];
+    const seenFactions = new Set();
+    for (const ref of factionRefs) {
+      const f = await resolveActor(ref);
+      if (f?.id && !seenFactions.has(f.id)) { seenFactions.add(f.id); factions.push(f); }
+    }
     if (!factions.length) return [];
 
-    // PCs = character-type actors belonging to any participating faction.
+    // Stewards ONLY — every steward belonging to any participating faction
+    // takes the field; crew/association members never get tokens here.
     const pcs = [];
     for (const a of (game.actors?.contents || [])) {
-      if (a?.type !== "character") continue;
+      if (!_isSteward(a)) continue;
       if (!factions.some(f => _pcBelongsToFaction(a, f))) continue;
       if (!pcs.includes(a)) pcs.push(a);
     }
     if (!pcs.length) {
-      log("spawnFactionPCs: participating factions have no character-type members.", factionIds);
+      log("spawnFactionPCs: participating factions have no stewards.", factionRefs);
       return [];
     }
 
@@ -329,7 +380,7 @@
       y: rowY
     }));
 
-    log("spawnFactionPCs: dropping party", { factionIds, pcs: toPlace.map(a => a.name) });
+    log("spawnFactionPCs: dropping stewards", { factionRefs, stewards: toPlace.map(a => a.name) });
     return spawnTokens(scene, specs);
   }
 
@@ -382,7 +433,7 @@
     const grid   = scene.grid?.size || 100;
     const centerX = width / 2;
 
-    if (!placedPCs.length && !_participantFactionIds(ctx).length) {
+    if (!placedPCs.length && !_gatherParticipantFactionRefs(ctx).length) {
       // No faction ctx (manual testFire) — legacy fallback so test fires still
       // show a party. Dead actor ids resolve to warn+skip harmlessly.
       const pcY = height - (3 * grid);

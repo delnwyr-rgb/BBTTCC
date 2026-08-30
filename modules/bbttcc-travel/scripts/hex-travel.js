@@ -549,6 +549,16 @@ const TERRAIN_TABLE = {
     }
 
     const res = await op.commit(factionId, deltas, reason);
+    // 2026-08-28: op.commit REFUSES on underflow (committed:false) — honoring
+    // that here is the travel gate. The old unconditional ok:true let a leg
+    // "succeed" unpaid: encounter rolled, war log written, then a messy
+    // rollback (owner hit it: 1 econ OP in bank, 2 econ leg, apex predator
+    // spawned anyway).
+    const committed = !!(res && (res.committed !== undefined ? res.committed : res.ok));
+    if (!committed) {
+      console.warn(TAG, "OP spend REFUSED — leg must abort before any travel resolution", { factionId, deltas, reason, res });
+      return { ok: false, refused: true, via: "op.commit", deltas, res };
+    }
     console.log(TAG, "OP spend committed via op.commit(factionId,deltas,reason)", { factionId, deltas, reason, res });
     return { ok: true, via: "op.commit", deltas, res };
   }
@@ -1114,7 +1124,23 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     const b = to.center;
     drawTrail(a, b, getFactionColor(actor));
 
-    await spendOP({ factionId, cost: ctx.cost });
+    const spend = await spendOP({ factionId, cost: ctx.cost });
+    if (spend && spend.ok === false) {
+      // Insufficient OP: the leg never happens — no travel roll, no encounter,
+      // no movement, no war log. Nothing was debited (op.commit refused).
+      const uf = spend.res?.underflow || {};
+      const short = Object.entries(uf).map(([k, u]) => {
+        const need = Math.abs(Number(u?.delta || 0)) / 10;
+        const have = Math.max(0, Number(u?.before || 0)) / 10;
+        return `${labelOP(k)} (need ${need}, have ${have} OP)`;
+      }).join(", ");
+      popupText(b, `❌ Can't afford the leg${short ? ` — ${short}` : ""}`);
+      return {
+        ok: false, aborted: true, reason: "insufficient_op",
+        underflow: uf,
+        summary: `Leg aborted — not enough OP${short ? ` (${short})` : ""}`
+      };
+    }
 
     const mid = { x: (a.x + b.x)/2, y: (a.y + b.y)/2 };
     const costTxt = Object.entries(ctx.cost).map(([k,v]) => (v>0?`-${v} ${labelOP(k)}`:null)).filter(Boolean).join(", ");

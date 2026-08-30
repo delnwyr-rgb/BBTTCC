@@ -13,6 +13,7 @@
     }
   ],
   "esmodules": [
+    "scripts/gm-exec.js",
     "scripts/bbttcc-help.js",
     "scripts/window-defaults.enhancer.js",
     "scripts/module.js",
@@ -28,5 +29,6 @@
     "styles/select-centering.css",
     "styles/readability.css"
   ],
-  "packs": []
+  "packs": [],
+  "socket": true
 }
