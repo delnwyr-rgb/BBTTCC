@@ -2699,21 +2699,39 @@ const graduation = {
 
     await ctx.speak("Connection handed off. You're live. Good luck, One — you'll need it. *bzzt* —Operator out.");
 
-    // Campaign handoff (2026-08-23): graduation hands BACK to the Offices of
-    // Fates and Destinies at Teaching Slide 1 — the orientation film. Player
-    // clients can post a GM-whispered card, so no socket is needed; the GM
-    // clicks once when the whole class is out.
+    // Campaign handoff (2026-08-23; SCOPED 2026-08-29): only a run that began
+    // from the campaign's own "Report for training" card (user flag
+    // campaignClass, stamped by the Begin button) touches the campaign. A solo
+    // run — testing, a refresher, a curious new player — graduates silently
+    // and leaves the campaign and its beats entirely alone. The film button
+    // itself only appears when the LAST enrolled student walks out; earlier
+    // graduates just tick a progress card.
     try {
       const resumeId = String(globalThis.game?.settings?.get?.(MODULE_ID, "campaignResumeBeatId") || "").trim();
-      if (resumeId) {
+      const enrolled = !!globalThis.game?.user?.getFlag?.(MODULE_ID, "campaignClass");
+      if (resumeId && enrolled) {
+        try { await globalThis.game.user.unsetFlag(MODULE_ID, "campaignClass"); } catch (_) {}
+        const stillOut = (globalThis.game?.users?.contents ?? [])
+          .filter(u => u.id !== globalThis.game.user.id && u.getFlag?.(MODULE_ID, "campaignClass"))
+          .map(u => u.name);
         const gmIds = ChatMessage.getWhisperRecipients("GM").map(u => u.id);
-        await ChatMessage.create({
-          whisper: gmIds,
-          content: `<div class="bbttcc-onb-handoff">` +
-            `<h3>🎬 ${ctx.steward?.name || ctx.user?.name || "A Steward"} graduated</h3>` +
-            `<p>When the whole class is out, roll the orientation film (Teaching Slide 1).</p>` +
-            `<button type="button" class="bbttcc-onb-resume">🎬 Roll the orientation film</button></div>`
-        });
+        const who = ctx.steward?.name || ctx.user?.name || "A Steward";
+        if (stillOut.length) {
+          await ChatMessage.create({
+            whisper: gmIds,
+            content: `<div class="bbttcc-onb-handoff">` +
+              `<h3>🎓 ${who} graduated</h3>` +
+              `<p>Still in training: <b>${stillOut.join(", ")}</b>. The orientation film unlocks when the whole class is out — or run the beat early from the Campaign Builder if the table can't wait.</p></div>`
+          });
+        } else {
+          await ChatMessage.create({
+            whisper: gmIds,
+            content: `<div class="bbttcc-onb-handoff">` +
+              `<h3>🎬 The class is out — ${who} graduated last</h3>` +
+              `<p>Roll the orientation film (Teaching Slide 1) when the table's ready.</p>` +
+              `<button type="button" class="bbttcc-onb-resume">🎬 Roll the orientation film</button></div>`
+          });
+        }
       }
     } catch (e) { console.warn(TAG, "graduation → campaign handoff card failed", e); }
   }

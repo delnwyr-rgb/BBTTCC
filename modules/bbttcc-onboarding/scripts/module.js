@@ -71,6 +71,12 @@ Hooks.once("ready", () => {
       const wakeId = String(game.settings.get(MODULE_ID, "campaignWakeBeatId") || "").trim();
       const beatId = String(data?.beat?.id ?? data?.beatId ?? "");
       if (!wakeId || beatId !== wakeId) return;
+      // Fresh class per wake: enrollment (user flag campaignClass, stamped by
+      // the Begin button) is what makes a graduation touch the campaign at
+      // all — clear stale enrollments from earlier classes before inviting.
+      for (const u of (game.users?.contents ?? [])) {
+        if (u.getFlag?.(MODULE_ID, "campaignClass")) u.unsetFlag(MODULE_ID, "campaignClass").catch(() => {});
+      }
       ChatMessage.create({
         content: `<div class="bbttcc-onb-handoff">` +
           `<h3>🎓 Report for training</h3>` +
@@ -86,8 +92,12 @@ Hooks.once("ready", () => {
   const _bindOnbChatButtons = (_msg, html) => {
     const root = html?.[0] ?? html;
     root?.querySelectorAll?.(".bbttcc-onb-begin")?.forEach(btn => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", async () => {
         btn.disabled = true;
+        // Enroll in the class: THIS is what marks the run as campaign
+        // session-0 rather than a solo refresher — graduation only hands
+        // back to the campaign for enrolled users (2026-08-29).
+        try { await game.user?.setFlag?.(MODULE_ID, "campaignClass", true); } catch (_) {}
         game.bbttcc?.onboarding?.start?.({ fromStart: true })
           ?.catch?.(e => { warn("onboarding start failed", e); btn.disabled = false; });
       });
