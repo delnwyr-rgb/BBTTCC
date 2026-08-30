@@ -23447,7 +23447,10 @@ async function ftBoardRig(steward, rig, role = null, { initiatorUserId = game.us
         } catch (e) { console.warn("[fourththing] board: rig vision enable failed", e); }
       }
       const updates = stewardTokens.map(t => {
-        const u = { _id: t.id, hidden: true };
+        // "displace" (teleport, no walls, no visualization) — same reasoning
+        // as the rig-move crew sync: a hidden passenger jumps into the cab,
+        // it never walks there through the movement/animation pipeline.
+        const u = { _id: t.id, hidden: true, action: "displace" };
         if (rigTokenDoc) {
           u.x = rigTokenDoc.x;
           u.y = rigTokenDoc.y;
@@ -23468,7 +23471,7 @@ async function ftBoardRig(steward, rig, role = null, { initiatorUserId = game.us
         }
         return u;
       });
-      try { await scene.updateEmbeddedDocuments("Token", updates); }
+      try { await scene.updateEmbeddedDocuments("Token", updates, { animate: false }); }
       catch (e) { console.warn("[fourththing] board: steward token sync failed", e); }
     }
   }
@@ -25670,14 +25673,19 @@ Hooks.on("updateToken", async (tokenDoc, change) => {
       if (t.id === tokenDoc.id) continue;
       const byBoardFlag = t.actor?.flags?.fourththing?.boardedRig?.rigId === actor.id;
       if (!stewardIds.has(t.actorId) && !byBoardFlag) continue;
-      const u = { _id: t.id };
+      // Hidden passengers JUMP, they don't walk: action "displace" (teleport,
+      // no walls, no visualization, no cost) keeps the crew token out of the
+      // v13+ movement/animation pipeline, which otherwise stalls this update
+      // behind the rig's own in-flight drag animation (owner playtest
+      // 2026-08-29 — crew lagged one move behind on dragged rig moves).
+      const u = { _id: t.id, action: "displace" };
       if ("x" in change) u.x = tokenDoc.x;
       if ("y" in change) u.y = tokenDoc.y;
       if ("elevation" in change && tokenDoc.elevation != null) u.elevation = tokenDoc.elevation;
       updates.push(u);
     }
     if (updates.length) {
-      await scene.updateEmbeddedDocuments("Token", updates);
+      await scene.updateEmbeddedDocuments("Token", updates, { animate: false });
     } else if (stewardIds.size) {
       // Crew is aboard but no token followed — somebody's vision is stranded.
       // Say so instead of shrugging: this is the breadcrumb for the next debug.

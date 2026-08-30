@@ -135,7 +135,9 @@ const meatsuit = {
       // Placement tuned to the owner's Proving Ground art (2026-08-17): the old
       // 0.40/0.50 spot put the Steward in the river west of the bridge. Both marks
       // now sit on the dry bank on the near side, Steward just short of the dummy.
-      const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, 0.60, 0.62, ctx.lane));
+      // Spawn BESIDE the Straw Adversary (0.62, 0.52), not at the arena doors —
+      // (0.60, 0.62) sat the hero right against them on the v2 art (owner 2026-08-29).
+      const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, 0.585, 0.52, ctx.lane));
       if (st.created) ctx._spawned.push({ token: st.doc });
       const dummy = await stage.spawnDummy(scene, { ..._scenePoint(scene, 0.62, 0.52, ctx.lane), name: "Straw Adversary" });
       if (dummy) ctx._spawned.push(dummy);
@@ -194,6 +196,8 @@ const meatsuit = {
 // untrappable Conclude prompt as the escape hatch. Steering still gets its nod via the
 // hexesMoved listener — it just no longer ends the beat on its own.
 const OBSTACLE_ART = (f) => `modules/${MODULE_ID}/art/${f}`;
+// The GOTTGAIT button-icon set lives in Data (present local + both live).
+const BUTTON_ICON = (f) => `art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/${f}`;
 // Integrity is deliberately LOW. Ram feeds half the damage dealt back into the
 // rammer, and a starter Hexmobile is personal-bracket (ram = 1d6 + Piloting), so
 // tough wrecks would scrap the player's own rig before the gauntlet ended. These
@@ -1625,20 +1629,20 @@ function _pgRelics(steward) {
 // system's own sheet Use action drives the whole thing. The rest are keepsakes.
 const PG_RELIC_ITEMS = {
   lava: {
-    name: "Cinder Key", img: "icons/svg/fire.svg",
+    name: "Cinder Key", img: BUTTON_ICON("BBTTCC_button_icon_volcano.png"),
     desc: "<p>A key of fused slag, still warm no matter how long it sits in a pocket. It anchored the Proving Ground's lava sigil, and it remembers being load-bearing.</p><p><i>What it opens has not been built yet.</i></p>"
   },
   healing: {
-    name: "Still Draught", img: "icons/svg/heal.svg",
+    name: "Still Draught", img: BUTTON_ICON("BBTTCC_button_icon_bottle_5.png"),
     desc: "<p>A stoppered measure of the pale pond, bottled mid-kindness. One swallow closes wounds — <b>2d6 Integrity</b>, once.</p><p><i>The bottle refuses to be refilled.</i></p>",
     consume: { effects: [{ kind: "track", track: "integrity", op: "add", formula: "2d6" }], decrement: true }
   },
   grove: {
-    name: "Verdant Mark", img: "icons/svg/oak.svg",
+    name: "Verdant Mark", img: BUTTON_ICON("BBTTCC_button_icon_bite_animal_2.png"),
     desc: "<p>A ring of living green that grew wrong on purpose. It is warm, faintly moving, and pretends not to notice being watched.</p><p><i>Whatever is growing in there has been waiting a long time.</i></p>"
   },
   reef: {
-    name: "Reef Shard", img: "icons/svg/water.svg",
+    name: "Reef Shard", img: BUTTON_ICON("BBTTCC_button_icon_wave_3.png"),
     desc: "<p>A splinter of magenta coral from the reef below the Proving Ground, cold enough to ache through cloth.</p><p><i>Held to the ear it does not sound like the sea. It sounds like the tide going out.</i></p>"
   }
 };
@@ -2048,12 +2052,14 @@ const provingTrials = {
 const PG_PARLEY_SECRETS = [
   {
     name: "\"We're Screwed\"",
+    img: BUTTON_ICON("BBTTCC_button_icon_fear_1.png"),
     effectKey: "oppRollMinus2",
     text: "<p>An unencrypted panic burst, sent to everyone at once and clearly not meant for you. Whatever is on the other end has done the arithmetic and does not like it.</p>"
         + "<p><em>Play in a Courtly scenario: the opposition rolls at −2. They know you have read it.</em></p>"
   },
   {
     name: "\"Please Totally Don't Murder Us, We Give Up For Reals\"",
+    img: BUTTON_ICON("bbttcc_icons_peace_hand_1.png"),
     effectKey: "favorPlus2+influenceDmg2",
     text: "<p>A formal capitulation, composed at speed by something with no idea how a formal capitulation is composed. It is signed. Repeatedly.</p>"
         + "<p><em>Play in a Courtly scenario: +2 Favor and 2 Influence damage. A surrender entered into the record is worth more than a surrender shouted.</em></p>"

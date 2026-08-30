@@ -629,6 +629,18 @@ function _registerOps() {
         try { await existing.update({ ownership: { ...(existing.ownership ?? {}), [userId]: OWNER } }); }
         catch (e) { console.warn(TAG, "mintRig: re-grant OWNER on existing rig failed", e); }
       }
+      // Pre-flight service (owner playtest 2026-08-29): the engine deliberately
+      // never clears rig heat — only vent-heat reduces — so a replay hands the
+      // student a rig still cooking from its last session's free-fire, at worst
+      // wearing the Overheated weapon-lock from spawn. Tutorial rigs start
+      // cold; the live-world heat doctrine is untouched.
+      try {
+        if ((Number(existing.flags?.fourththing?.combat?.heat) || 0) > 0) {
+          await existing.update({ "flags.fourththing.combat.heat": 0 });
+        }
+        const oh = (existing.effects ?? []).find(e => e.getFlag?.("fourththing", "rigState") === "overheat");
+        if (oh) await existing.deleteEmbeddedDocuments("ActiveEffect", [oh.id]);
+      } catch (e) { console.warn(TAG, "mintRig: pre-flight heat vent failed", e); }
       return { rigId: existing.id, existed: true };
     }
 
