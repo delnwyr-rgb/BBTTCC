@@ -485,6 +485,18 @@ function _registerOps() {
         try { await existing.actor.setFlag("bbttcc-raid", `courtFavor.${favorFactionId}`, Number(favor) || 0); }
         catch (e) { console.warn(TAG, "courtier favor re-seed failed", e); }
       }
+      // Authored art that arrived after the court was first raised: dress a
+      // courtier still wearing the placeholder, but never clobber art a GM
+      // set by hand on the standing court.
+      if (existing.actor && img) {
+        try {
+          const bare = (s) => !s || s === "icons/svg/mystery-man.svg";
+          const patch = {};
+          if (bare(existing.actor.img)) Object.assign(patch, { img, "prototypeToken.texture.src": img });
+          if (Object.keys(patch).length) await existing.actor.update(patch);
+          if (bare(existing.texture?.src)) await existing.update({ "texture.src": img });
+        } catch (e) { console.warn(TAG, "courtier art refresh failed", e); }
+      }
       return { actorId: existing.actor?.id ?? null, tokenId: existing.id, sceneId: scene.id, reused: true };
     }
     const folder = await _folder();

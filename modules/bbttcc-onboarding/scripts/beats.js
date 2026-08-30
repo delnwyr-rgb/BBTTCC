@@ -1079,8 +1079,8 @@ const SIM_WAVES = [
     brief: "Second wave's different. Two scavengers — Sentient. Living people, scared and armed.",
     coach: "Watch their INTEGRITY as you work. Take them low and they fold — that's a save, and it costs you nothing. Put them at zero and that's a kill: allowed, nobody will stop you, and it goes on your Darkness. Your call, One. It always is.",
     foes: [
-      { name: "Scavenger — Bit",  foeClass: "sentient", body: 5, xFrac: 0.44, yFrac: 0.62 },
-      { name: "Scavenger — Coll", foeClass: "sentient", body: 5, xFrac: 0.38, yFrac: 0.52 }
+      { name: "Scavenger — Bit",  img: OBSTACLE_ART("scavenger-bit.webp"),  foeClass: "sentient", body: 5, xFrac: 0.44, yFrac: 0.62 },
+      { name: "Scavenger — Coll", img: OBSTACLE_ART("scavenger-coll.webp"), foeClass: "sentient", body: 5, xFrac: 0.38, yFrac: 0.52 }
     ]
   },
   {
@@ -1120,7 +1120,7 @@ async function _spawnFoeSmart(stage, scene, f, lane) {
     });
   }
   if (!sp?.actor) sp = await stage.spawnFoe?.(scene, {
-    name: f.name, foeClass: f.foeClass, body: f.body, size: f.size ?? 1,
+    name: f.name, img: f.img || "", foeClass: f.foeClass, body: f.body, size: f.size ?? 1,
     elevation: f.elevation ?? 0,
     resistances: f.resistances ?? [], vulnerabilities: f.vulnerabilities ?? [],
     conditions: f.conditions ?? [],
@@ -2242,7 +2242,7 @@ const finalShowdown = {
       let messenger = null;
       if (stageScene && stage) {
         messenger = await stage.spawnFoe?.(stageScene, {
-          name: "A Messenger, Sent In Haste", foeClass: "sentient", body: 2,
+          name: "A Messenger, Sent In Haste", img: OBSTACLE_ART("courtier-messenger.webp"), foeClass: "sentient", body: 2,
           ...(court ? _scenePoint(court, 0.58, 0.56, ctx.lane)
                     : _scenePoint(stageScene, PG_ARENA.xFrac + 0.10, PG_ARENA.yFrac - 0.09, ctx.lane))
         });
@@ -2580,17 +2580,17 @@ const raidPresence = makeRaidBeat({
   // ARMED extractable secret (courtiers are loot, not scenery).
   delegation: [
     {
-      name: "Foreman Ozzie Grudge", xFrac: 0.55, yFrac: 0.50, favor: 0,
+      name: "Foreman Ozzie Grudge", img: OBSTACLE_ART("courtier-ozzie-grudge.webp"), xFrac: 0.55, yFrac: 0.50, favor: 0,
       persona: "Foreman of the Rust Syndicate Hold and principal of its delegation. Pragmatic, proud, keeps score in salvage quotas and favors owed. Movable by patient, material argument — never by charm alone. Voice: short declaratives; taps the table once, softly, when a point actually lands.",
       line: "Three faces across the tableau. Centre: FOREMAN OZZIE GRUDGE. The Hold is his, and so is the decision — he's the mind you're bending, One."
     },
     {
-      name: "Auntie Boltcutter", xFrac: 0.42, yFrac: 0.47, favor: -2,
+      name: "Auntie Boltcutter", img: OBSTACLE_ART("courtier-auntie-boltcutter.webp"), xFrac: 0.42, yFrac: 0.47, favor: -2,
       persona: "The Syndicate's enforcer-matriarch. Despises courtly talk, counts the exits, arrived certain this parley is a trick. Warms only to demonstrated strength or a genuinely uncovered truth — flattery raises her hackles and the room's suspicion with them. Voice: dry, cutting, economical.",
       line: "His left hand: AUNTIE BOLTCUTTER. She decided you were a trick before you sat down. Charm will bounce — find a crack in her, or make one, and mind the room's SUSPICION while you try."
     },
     {
-      name: "Tallyman Verge", xFrac: 0.68, yFrac: 0.53, favor: 1,
+      name: "Tallyman Verge", img: OBSTACLE_ART("courtier-tallyman-verge.webp"), xFrac: 0.68, yFrac: 0.53, favor: 1,
       persona: "Quartermaster and keeper of the Hold's ledgers. Nervous, precise, loyal to the supply lines above the banner. Folds readily to a good trade; the state of the books weighs on him visibly.",
       secretLine: "The Hold's Ledger Doesn't Balance :: oppRollMinus2 :: someone shows genuine interest in the Hold's supply troubles, or offers a trade that would cover a shortfall :: The winter stores are a fiction — Verge has papered over a thirty-crate shortfall for two seasons, and if the Foreman learns the ledger's true state mid-parley, the Hold's bargaining position collapses.",
       line: "And his right: TALLYMAN VERGE, holding the ledgers like a shield. He wants a deal more than he wants a winner — and men who keep the books KNOW things. Courtiers aren't scenery, One. Work the court."
