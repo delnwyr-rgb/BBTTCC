@@ -135,11 +135,12 @@ const meatsuit = {
       // Placement tuned to the owner's Proving Ground art (2026-08-17): the old
       // 0.40/0.50 spot put the Steward in the river west of the bridge. Both marks
       // now sit on the dry bank on the near side, Steward just short of the dummy.
-      // Spawn BESIDE the Straw Adversary (0.62, 0.52), not at the arena doors —
-      // (0.60, 0.62) sat the hero right against them on the v2 art (owner 2026-08-29).
-      const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, 0.585, 0.52, ctx.lane));
+      // Owner-placed defaults, read off the live scene 2026-08-29: hero and
+      // Straw Adversary side by side on the grass NW of the sealed arena —
+      // the doors stay locked; the circle is earned later, not walked into.
+      const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, 0.432, 0.513, ctx.lane));
       if (st.created) ctx._spawned.push({ token: st.doc });
-      const dummy = await stage.spawnDummy(scene, { ..._scenePoint(scene, 0.62, 0.52, ctx.lane), name: "Straw Adversary" });
+      const dummy = await stage.spawnDummy(scene, { ..._scenePoint(scene, 0.455, 0.513, ctx.lane), name: "Straw Adversary" });
       if (dummy) ctx._spawned.push(dummy);
     }
     await _pause(500);

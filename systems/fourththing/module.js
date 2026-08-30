@@ -25649,6 +25649,7 @@ Hooks.once("ready", () => _ftRenderCrewHud());
 // from wherever their PC was standing when they boarded. GM-only — only
 // the GM has permission to update other clients' tokens. Triggered by
 // any positional update to a rig-actor token.
+const _ftCrewFollowPending = new Map();
 Hooks.on("updateToken", async (tokenDoc, change) => {
   try {
     if (!game.user?.isGM) return;
@@ -25659,6 +25660,33 @@ Hooks.on("updateToken", async (tokenDoc, change) => {
 
     const scene = tokenDoc.parent;
     if (!scene) return;
+
+    // 2026-08-29 — teleport AT THE END of the rig's move, not during it. A
+    // crew update issued mid-workflow (this hook fires inside the rig's own
+    // update) raced the v13+ movement system and got eaten on dragged moves —
+    // crew lagged one move behind. Core's documented pattern: await the
+    // rendered placeable's movementAnimationPromise, then act. If another
+    // positional update lands while we wait, the pending entry coalesces it
+    // into one final snap. Unrendered scene (GM elsewhere) = no animation =
+    // snap immediately.
+    const pendKey = `${scene.id}:${tokenDoc.id}`;
+    const pending = _ftCrewFollowPending.get(pendKey);
+    if (pending) { pending.again = true; return; }
+    const state = { again: true };
+    _ftCrewFollowPending.set(pendKey, state);
+    try {
+      while (state.again) {
+        state.again = false;
+        const anim = tokenDoc.object?.movementAnimationPromise;
+        if (anim) { try { await anim; } catch (_) { /* stopped mid-move — land where it stands */ } }
+        await _ftSnapCrewToRig(tokenDoc, actor, scene);
+      }
+    } finally { _ftCrewFollowPending.delete(pendKey); }
+  } catch (e) { console.warn("[fourththing] rig-move steward sync failed", e); }
+});
+
+async function _ftSnapCrewToRig(tokenDoc, actor, scene) {
+  try {
 
     // Crew resolution is DUAL-SOURCE (2026-08-27): the rig's crew.slots AND
     // each steward's own boardedRig flag. The two are known to drift
@@ -25675,13 +25703,10 @@ Hooks.on("updateToken", async (tokenDoc, change) => {
       if (!stewardIds.has(t.actorId) && !byBoardFlag) continue;
       // Hidden passengers JUMP, they don't walk: action "displace" (teleport,
       // no walls, no visualization, no cost) keeps the crew token out of the
-      // v13+ movement/animation pipeline, which otherwise stalls this update
-      // behind the rig's own in-flight drag animation (owner playtest
-      // 2026-08-29 — crew lagged one move behind on dragged rig moves).
-      const u = { _id: t.id, action: "displace" };
-      if ("x" in change) u.x = tokenDoc.x;
-      if ("y" in change) u.y = tokenDoc.y;
-      if ("elevation" in change && tokenDoc.elevation != null) u.elevation = tokenDoc.elevation;
+      // movement/animation pipeline. Coordinates are the rig's CURRENT
+      // (post-move) position — this runs after the animation settles.
+      const u = { _id: t.id, action: "displace", x: tokenDoc.x, y: tokenDoc.y };
+      if (tokenDoc.elevation != null) u.elevation = tokenDoc.elevation;
       updates.push(u);
     }
     if (updates.length) {
@@ -25691,8 +25716,8 @@ Hooks.on("updateToken", async (tokenDoc, change) => {
       // Say so instead of shrugging: this is the breadcrumb for the next debug.
       console.warn(`[fourththing] rig-move sync: "${actor.name}" moved with ${stewardIds.size} crew slot(s) filled but no crew token was found to follow on scene "${scene.name}".`);
     }
-  } catch (e) { console.warn("[fourththing] rig-move steward sync failed", e); }
-});
+  } catch (e) { console.warn("[fourththing] crew snap failed", e); }
+}
 
 // 2026-05-19 — Per-round combat-flag clear, shared between the steward
 // sheet's New Turn button, the raid-console round-commit hook, and the
