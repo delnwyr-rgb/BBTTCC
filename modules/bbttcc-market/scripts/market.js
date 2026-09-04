@@ -130,8 +130,16 @@ async function resolveItemFlagPrice(entry) {
       return null;
     }
     if (!price || !Number.isFinite(Number(price.marks))) return null;
+    // Bestiary creatures (2026-09-04 rubric): `marks`/`bounty` is what a faction
+    // EARNS for resolving the creature; `hire` is what it PAYS to field it. The
+    // market sells the hire. A boss (hire === null) is not for hire — priceless.
+    let marks = Number(price.marks);
+    if (doc.documentName === "Actor" && doc.flags?.fourththing?.rfi?.actor?.lineage) {
+      marks = (price.hire === null || price.hire === undefined) ? -1 : Number(price.hire);
+      if (!Number.isFinite(marks)) marks = -1;
+    }
     return {
-      marks:      Number(price.marks),
+      marks,
       currency:   String(price.currency || "auto"),
       split:      (price.split && typeof price.split === "object") ? price.split : null,
       gmOverride: !!price.gmOverride,
