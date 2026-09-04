@@ -104,6 +104,12 @@
     const existing = sparkInfo(doc);
     if (!existing) return { ok: false, error: "no spark seated here" };
     if (existing.state === "integrated") return { ok: true, key: existing.key, already: true };
+    // Descent A2 — a corrupted spark cannot be integrated; repair it first
+    // (transformation, not disposal — spec Law 3).
+    if (existing.state === "corrupted") {
+      ui.notifications?.warn(`${existing.key} is corrupted — repair it first (api.tikkun.hex.repair).`);
+      return { ok: false, error: "corrupted — repair first" };
+    }
     // Integration is an Act of Repair — it shares the faction's Reach budget
     // (Descent Engine A1, spec §2.1). Soft-gated: no epic module, no gate.
     const fid0 = doc.flags?.[TER]?.factionId || doc.flags?.[TER]?.ownerId || null;
@@ -123,6 +129,34 @@
       factionId, actorId
     });
     log(`integrated ${existing.key} at`, doc.uuid);
+    return { ok: true, key: existing.key };
+  }
+
+  // ── Descent A2 — the Gaze can corrupt a DORMANT seated spark ──────────────
+  // Integrated temples are immune (spec §2.3); corruption blocks integration
+  // until repaired. Repair restores dormant — nothing is destroyed (Law 3).
+  async function corrupt(hexUuid) {
+    if (!game.user?.isGM) throw new Error("GM only");
+    const doc = await resolveHex(hexUuid);
+    const existing = sparkInfo(doc);
+    if (!existing) return { ok: false, error: "no spark seated here" };
+    if (existing.state === "integrated") return { ok: false, error: "temples hold — integrated sparks cannot be corrupted" };
+    if (existing.state === "corrupted") return { ok: true, key: existing.key, already: true };
+    await doc.update({ [`flags.${TER}.spark`]: { key: existing.key, state: "corrupted", at: Date.now() } });
+    Hooks.callAll("bbttcc:spark:hexCorrupted", { hexUuid: doc.uuid, key: existing.key, sephirah: existing.sephirah, kind: existing.kind });
+    log(`corrupted ${existing.key} at`, doc.uuid);
+    return { ok: true, key: existing.key };
+  }
+
+  async function repair(hexUuid) {
+    if (!game.user?.isGM) throw new Error("GM only");
+    const doc = await resolveHex(hexUuid);
+    const existing = sparkInfo(doc);
+    if (!existing) return { ok: false, error: "no spark seated here" };
+    if (existing.state !== "corrupted") return { ok: true, key: existing.key, already: true };
+    await doc.update({ [`flags.${TER}.spark`]: { key: existing.key, state: "dormant", at: Date.now() } });
+    Hooks.callAll("bbttcc:spark:hexRepaired", { hexUuid: doc.uuid, key: existing.key, sephirah: existing.sephirah, kind: existing.kind });
+    log(`repaired ${existing.key} at`, doc.uuid);
     return { ok: true, key: existing.key };
   }
 
@@ -199,8 +233,8 @@
       game.bbttcc ??= { api: {} };
       game.bbttcc.api ??= {};
       game.bbttcc.api.tikkun ??= {};
-      game.bbttcc.api.tikkun.hex = { seat, unseat, integrate, at, all, SEPHIRAH_CHANNEL };
-      log("hex-spark API ready → game.bbttcc.api.tikkun.hex.{seat, unseat, integrate, at, all}");
+      game.bbttcc.api.tikkun.hex = { seat, unseat, integrate, corrupt, repair, at, all, SEPHIRAH_CHANNEL };
+      log("hex-spark API ready → game.bbttcc.api.tikkun.hex.{seat, unseat, integrate, corrupt, repair, at, all}");
     } catch (e) { warn("API wiring failed", e); }
   });
 })();

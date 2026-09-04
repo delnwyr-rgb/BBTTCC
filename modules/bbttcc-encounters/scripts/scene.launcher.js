@@ -7,6 +7,22 @@
 
   const clone = (o)=> (o && typeof o === "object") ? foundry.utils.deepClone(o) : o;
 
+  // Descent A2 — travel-encounter spark faucet CAP (2026-09-01 audit: the
+  // largest uncapped spark source in the game, minting ad-hoc keys outside
+  // the 30-spark pack). One grant per spark key per actor, ever — an echo
+  // revisited is a memory, not a mint. Reads the same keyed map gatherSpark
+  // writes (flags["bbttcc-tikkun"].sparks), so the cap needs no new state.
+  function gatherSparkOnce(tApi, actor, spec) {
+    try {
+      const held = actor?.flags?.["bbttcc-tikkun"]?.sparks ?? {};
+      if (spec?.key && held[spec.key]) {
+        log(`spark faucet cap: ${spec.key} already held by ${actor?.name} — no re-mint.`);
+        return null;
+      }
+    } catch (_e) {}
+    return tApi.gatherSpark(actor.id, spec);
+  }
+
   async function activateScene(scene) {
     if (!scene) return;
     try { await scene.activate(); } catch (e) { warn("Failed to activate scene", scene, e); }
@@ -211,7 +227,7 @@ async function showTextStep(step, ctx) {
           try {
             const tApi = game.bbttcc?.api?.tikkun;
             if (tApi?.gatherSpark && actor?.id) {
-              tApi.gatherSpark(actor.id, {
+              gatherSparkOnce(tApi, actor, {
                 key:        "spark_splintered_hod",
                 name:       "Spark of Splintered Hod",
                 kind:       "conceptual",
@@ -282,7 +298,7 @@ async function showTextStep(step, ctx) {
           try {
             const tApi = game.bbttcc?.api?.tikkun;
             if (tApi?.gatherSpark && actor?.id) {
-              tApi.gatherSpark(actor.id, {
+              gatherSparkOnce(tApi, actor, {
                 key:        "spark_minor_fallout",
                 name:       "Spark of Minor Fallout",
                 kind:       "conceptual",
@@ -332,7 +348,7 @@ async function showTextStep(step, ctx) {
           try {
             const tApi = game.bbttcc?.api?.tikkun;
             if (tApi?.gatherSpark && actor?.id) {
-              tApi.gatherSpark(actor.id, {
+              gatherSparkOnce(tApi, actor, {
                 key:        "spark_qliphotic_vault",
                 name:       "Spark of the Qliphotic Vault",
                 kind:       "conceptual",
@@ -408,7 +424,7 @@ async function showTextStep(step, ctx) {
         case "harmonic_resonance": {
           try {
             if (tApi?.gatherSpark && actor?.id) {
-              tApi.gatherSpark(actor.id, {
+              gatherSparkOnce(tApi, actor, {
                 key:        "spark_shattered_chorus",
                 name:       "Spark of the Shattered Chorus",
                 kind:       "conceptual",
@@ -441,7 +457,7 @@ async function showTextStep(step, ctx) {
         case "splintered_reflection": {
           try {
             if (tApi?.gatherSpark && actor?.id) {
-              tApi.gatherSpark(actor.id, {
+              gatherSparkOnce(tApi, actor, {
                 key:        "spark_shattered_chorus",
                 name:       "Spark of the Shattered Chorus",
                 kind:       "conceptual",

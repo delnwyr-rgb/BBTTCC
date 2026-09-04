@@ -48,6 +48,16 @@
   t("fourththing.darknessChanged has the band-sync listener", (Hooks.events["fourththing.darknessChanged"]?.length ?? 0) >= 1);
   t("fourththing.fragmentGained observable", Array.isArray(Hooks.events["fourththing.fragmentGained"]) || true);
 
+  // A2 — the Gaze's hands
+  const hexApi = game.bbttcc?.api?.tikkun?.hex;
+  t("hex.corrupt exposed", typeof hexApi?.corrupt === "function");
+  t("hex.repair exposed", typeof hexApi?.repair === "function");
+  let hpOk = true;
+  try { game.settings.get("bbttcc-epic", "hunterPending"); } catch (_e) { hpOk = false; }
+  t("hunterPending setting registered", hpOk);
+  t("adversary.force exposed (GM test lever)", typeof adv?.force === "function");
+  t("afterTravel listeners ≥ 2 (darkness + hunter)", (Hooks.events["bbttcc:afterTravel"]?.length ?? 0) >= 2);
+
   console.log(`%c=== Descent self-test: ${bad.length ? "PROBLEMS" : "ALL CLEAR"} ===`, "font-weight:bold");
   ok.forEach(n => console.log("  ✓", n));
   bad.forEach(n => console.warn("  ✗", n));
