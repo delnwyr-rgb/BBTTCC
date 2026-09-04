@@ -3197,6 +3197,18 @@ async function executeBeat(campaign, beat, ctx = {}) {
     }
   } catch (e) { warn("fired-history record failed:", e); }
 
+  // Phase Charter closers apply AT ENTRY (2026-08-30) — same lesson as the
+  // fire-mark above: a closer whose choice routes into a long awaited chain
+  // (Joans' sendoff → Welcome Round hub → venue mint-returns → …) parks its
+  // tail until the whole chain settles, so storyPhase stayed behind while the
+  // entire town played out — and the invite scan, gated on the new phase,
+  // never posted the welcome invitations (found live 2026-08-30, Act 0→1).
+  // _storyPhaseAdvance is monotonic + idempotent, so the act opens the moment
+  // its closer FIRES; nested beat resolutions then see the advanced phase.
+  try {
+    await _applyPhaseAdvance(campaign, beat);
+  } catch (ePhaseEntry) { warn("Phase advance (entry) failed:", ePhaseEntry); }
+
   // Cinematic dive: a travel trigger (hex-entry beat / travel encounter) may have
   // stashed a one-shot dive request just before running this beat. If present, this
   // beat's scene launch becomes a GM-solo cinematic dive (zoom→flash→view, with a
@@ -3669,14 +3681,11 @@ async function executeBeat(campaign, beat, ctx = {}) {
       warn("Quest effects failed:", eQuestFx);
     }
 
-    // Phase Charter closers (worldEffects.phaseAdvance) — advance the act +
-    // raise leveling floors. Runs after quest effects so a closer can both
-    // complete its quest and open the next act in one beat.
-    try {
-      await _applyPhaseAdvance(campaign, beat);
-    } catch (ePhase) {
-      warn("Phase advance failed:", ePhase);
-    }
+    // Phase Charter closers (worldEffects.phaseAdvance) now apply AT ENTRY
+    // (top of executeBeat, beside the fire-mark) — a closer that routes into
+    // a long awaited chain parks this tail, and the act must not wait for the
+    // whole town to play out (2026-08-30). Advancing is monotonic, so the
+    // entry call is the single authority; nothing to re-apply here.
 
     // Tikkun Dividend rungs + anchor-hex Purified cascades (landmark closers).
     try {
