@@ -1295,6 +1295,23 @@ const characters = allCharacters().map(a => ({ id: a.id, name: a.name, selected:
       let docType = "";   // weapon / armor / gear / feature / power / ...
       let tier = "";      // "I" | "II" | "III" | "IV" | ""
       let isConsumable = false; // gear-doc whose frame/slot/tags say "consumable"
+      if (kind === "actor") {
+        // Creatures for hire (2026-09-04): show the token art, fall back to the
+        // portrait; tier from the bestiary flag. Cached like gear docs.
+        docUuid = String(e.uuid || "").trim();
+        if (docUuid) {
+          try {
+            const cached = this._docCache.get(docUuid);
+            const doc = cached || await fromUuid(docUuid);
+            if (doc && !cached) this._docCache.set(docUuid, doc);
+            img = String(doc?.prototypeToken?.texture?.src || doc?.img || "");
+            docName = String(doc?.name || "");
+            docType = String(doc?.type || "").toLowerCase();
+            tier = String(doc?.flags?.fourththing?.rfi?.actor?.tier || "").toUpperCase();
+          } catch (_e) { /* unresolved — row still renders */ }
+        }
+        if (!img && e.img) img = String(e.img);
+      }
       if (kind === "gear") {
         docUuid = String(e.uuid || "").trim();
         if (docUuid) {
