@@ -187,6 +187,57 @@ export function computeRigListPrice({ tier, bracket } = {}) {
 }
 
 
+// ─── Creature pricing (bestiary rubric, 2026-09-04) ──────────────────────────
+// Creatures are recurring threats, not capital assets, so they are priced
+// against the faction OP bucket cap band (50–130 marks) rather than the item
+// or rig curves. The retired boss rubric (tierBase × rigBracketMult × 0.6)
+// produced 150–20 250 marks — unpayable by any faction that can exist.
+//
+//   bounty = round5(CREATURE_TIER_BASE[tier] × CREATURE_BRACKET_MULT[bracket])
+//   hire   = round5(bounty × 1.5)      never offered for the "boss" bracket
+//   ransom = hire                       Mortal lineage only (caller decides)
+//
+// Bounty is CREDITED to the pool matching how the creature was resolved
+// (kill → violence, talk-down → nonlethal/diplomacy, capture → intrigue,
+// cleanse/banish → softpower/faith); `currency` here is only the lineage
+// default for that credit. See BESTIARY_AUDIT_2026_09_03.md §6.
+export const CREATURE_TIER_BASE   = { 1: 5, 2: 10, 3: 20, 4: 40 };
+export const CREATURE_BRACKET_MULT = { light: 1.0, medium: 1.5, heavy: 2.0, boss: 3.0, elite: 3.0 };
+export const CREATURE_HIRE_MULT   = 1.5;
+export const LINEAGE_DEFAULT_CURRENCY = {
+  wild: "violence", mortal: "violence", "hex-touched": "intrigue", "pre-fall": "intrigue",
+  sephirotic: "softpower", qliphothic: "softpower", dream: "nonlethal", revenant: "softpower"
+};
+
+export function creatureBracketMult(bracket) {
+  return CREATURE_BRACKET_MULT[String(bracket || "light").toLowerCase()] ?? CREATURE_BRACKET_MULT.light;
+}
+
+/**
+ * Creature bounty / hire / ransom in marks. Pure function.
+ * Returns { bounty, hire, ransom, currency }. `hire`/`ransom` are null for
+ * the boss bracket (Fractured Will things do not take pay).
+ */
+export function computeCreaturePricing({ tier, bracket = "light", lineage = "" } = {}) {
+  const base   = CREATURE_TIER_BASE[tierToInt(tier)] ?? CREATURE_TIER_BASE[1];
+  const b      = String(bracket || "light").toLowerCase();
+  const isBoss = (b === "boss" || b === "elite");
+  const bounty = roundToFive(base * creatureBracketMult(b));
+  const hire   = isBoss ? null : roundToFive(bounty * CREATURE_HIRE_MULT);
+  return {
+    bounty,
+    hire,
+    ransom: hire,
+    currency: LINEAGE_DEFAULT_CURRENCY[String(lineage || "").toLowerCase()] ?? "violence"
+  };
+}
+
+// Back-compat name: the seed macros and the monster builder called
+// computeBossPricing until it was removed in e26e10d. Same shape, new rubric.
+export function computeBossPricing(opts = {}) {
+  return computeCreaturePricing(opts);
+}
+
 /**
  * Facility list price in marks (rubric §8).
  *   max(rigBracketCost, monthlyYield × 30)
@@ -297,11 +348,13 @@ export const RfiPricing = {
   MARKS_PER_OP, TIER_BASE_MARKS, CATEGORY_MULT_BY_FRAME, OP_POOLS, OP_POOL_LABELS,
   NATIVE_POOL_BY_FRAME, TECH_MULT, BOUND_MULT, SALE_BACK_FRACTION, CROSS_POOL_FRICTION,
   TIER_FEE_MARKS, RIG_BRACKET_MULT,
+  CREATURE_TIER_BASE, CREATURE_BRACKET_MULT, CREATURE_HIRE_MULT, LINEAGE_DEFAULT_CURRENCY,
   // math
   tierBaseMarks, categoryMult, defaultCurrencyForFrame,
   computeListPrice, computeSaleBack, isOverride,
   tierFeeForTier, materialUnitPriceMarks,
   rigBracketMult, computeRigListPrice, computeFacilityListPrice,
+  creatureBracketMult, computeCreaturePricing, computeBossPricing,
   // defaults
   defaultPriceFor, emptyTechShape,
   // persistence

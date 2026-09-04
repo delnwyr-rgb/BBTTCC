@@ -2269,6 +2269,12 @@
   flex: 0 0 52px;
 }
 .ft-meta-pill .ft-meta-val { color: #d8e4ff; font-weight: 500; flex: 1; }
+
+/* Bestiary lineage strip — NPC sheet header (2026-09-04). */
+.ft-lineage-strip { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.35rem; }
+.ft-lineage-strip .ft-meta-pill { margin: 0; }
+.ft-lineage-strip .ft-lineage-pill { border-color: rgba(46, 170, 94, 0.7); }
+.ft-lineage-strip .ft-lineage-resolved { opacity: 0.75; }
 .ft-meta-pill.ft-id-class     { border-color: #4a90d9; }
 .ft-meta-pill.ft-id-ancestry  { border-color: #27ae60; }
 .ft-meta-pill.ft-id-faction   { border-color: #9b59b6; }

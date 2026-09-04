@@ -63,6 +63,42 @@
         <span class="ft-level-num">Initiation {{details.level}}</span>
         <span class="ft-tier-badge">Tier {{details.tier}}</span>
       </div>
+      {{#if lineageStrip}}
+      <div class="ft-lineage-strip">
+        <span class="ft-meta-pill ft-lineage-pill" data-tooltip="Bestiary lineage — what made this thing. Stamped by the Monster Builder or the lineage backfill; the lineage owns the creature's signature (damage type, resist/vuln, stress ratio, currency).">
+          <span class="ft-meta-label">Lineage</span>
+          <span class="ft-meta-val">{{lineageStrip.lineage}}{{#if lineageStrip.sub}} · {{lineageStrip.sub}}{{/if}}</span>
+        </span>
+        {{#if lineageStrip.title}}
+        <span class="ft-meta-pill" data-tooltip="Descriptive title (flags.fourththing.rfi.actor.title). The Role field above is mechanical.">
+          <span class="ft-meta-label">Title</span><span class="ft-meta-val">{{lineageStrip.title}}</span>
+        </span>
+        {{/if}}
+        {{#if lineageStrip.qliphah}}
+        <span class="ft-meta-pill" data-tooltip="Qliphah — the Shell this creature belongs to, and its grade.">
+          <span class="ft-meta-label">Qliphah</span><span class="ft-meta-val">{{lineageStrip.qliphah}}</span>
+        </span>
+        {{/if}}
+        <span class="ft-meta-pill" data-tooltip="Tier × bracket envelope (light / medium / heavy / boss) and mechanical role.">
+          <span class="ft-meta-label">Envelope</span><span class="ft-meta-val">{{lineageStrip.envelope}}</span>
+        </span>
+        {{#if lineageStrip.creatureType}}
+        <span class="ft-meta-pill" data-tooltip="Creature type the Manifestation Engine matches for '+Xd6 vs type' riders (flags.fourththing.creatureType).">
+          <span class="ft-meta-label">Type</span><span class="ft-meta-val">{{lineageStrip.creatureType}}</span>
+        </span>
+        {{/if}}
+        {{#if lineageStrip.bounty}}
+        <span class="ft-meta-pill" data-tooltip="{{lineageStrip.bountyTip}}">
+          <span class="ft-meta-label">Bounty</span><span class="ft-meta-val">{{lineageStrip.bounty}}</span>
+        </span>
+        {{/if}}
+        {{#if lineageStrip.resolved}}
+        <span class="ft-meta-pill ft-lineage-resolved" data-tooltip="This creature has already paid its bounty.">
+          <span class="ft-meta-label">Resolved</span><span class="ft-meta-val">{{lineageStrip.resolved}}</span>
+        </span>
+        {{/if}}
+      </div>
+      {{/if}}
     </div>
 
   </header>

@@ -1,6 +1,8 @@
 // Roll for Initiation — ft-progression.js  v0.2.0
 // Foundation progression pass: initiation, aptitude ranks, active effects
 
+import { isMonster } from "./actor-kind.js";
+
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 // Tier derived from level
@@ -86,11 +88,19 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
   const rawSys   = actor.system?.system ?? actor.system;
   const attrVal  = rawSys?.attributes?.[attribute]?.value ?? 2;
   const rank     = rawSys?.skills?.[skill]?.value ?? 0;
+  // Monsters have no aptitude requirements (owner ruling 2026-09-04): a wolf
+  // is never "untrained" with its own teeth. A bestiary creature with no stored
+  // rank rolls with Trained-tier mechanics (no fumble) and the label "Innate";
+  // the numeric bonus stays at the stored value so no stat block gets a buff.
+  let innate = false;
+  try { innate = !(Number(rank) > 0) && isMonster(actor); } catch (_e) {}
   // Clamp rank for table lookup so legacy over-cap source values (e.g. 9)
   // resolve to the Legendary tier instead of falling back to "Untrained".
   // The roll formula still uses the raw rank as the numeric bonus.
-  const rankClamped = Math.max(0, Math.min(5, Number(rank) || 0));
-  const rankData = SKILL_RANK_DATA[rankClamped] ?? SKILL_RANK_DATA[0];
+  const rankClamped = Math.max(innate ? 1 : 0, Math.min(5, Number(rank) || 0));
+  const rankData = innate
+    ? { ...(SKILL_RANK_DATA[1] ?? SKILL_RANK_DATA[0]), label: "Innate", bonus: 0 }
+    : (SKILL_RANK_DATA[rankClamped] ?? SKILL_RANK_DATA[0]);
 
   // Collect AE bonuses for skill AND attribute. Attribute walk added so Fury
   // Aura (system.attributes.violence.value +1) lifts violence-keyed Aptitudes —
@@ -119,7 +129,7 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
   const doubleTen    = baseTenCount >= 2;
 
   // Fumble (rank 0 only): every base die is a 1.
-  const isFumble = rank === 0 && baseDice.length > 0 && baseDice.every(v => v === 1);
+  const isFumble = !innate && rank === 0 && baseDice.length > 0 && baseDice.every(v => v === 1);
 
   // Apply rank mechanics to get the "adjusted" per-die value before explosion bonuses.
   // - floor_4 (rank 3): bump any sub-4 up to 4. Explosion triggers on the ORIGINAL die only.

@@ -56,6 +56,16 @@ export function actorKind(actor) {
   const ek = String(actor.flags?.[AUTOLINK]?.entityKind ?? "").toLowerCase();
   if (ENTITY_KIND_MAP[ek]) return ENTITY_KIND_MAP[ek];
 
+  // 2b. Bestiary creatures. The lineage backfill and the lineage-edition
+  //     Monster Builder stamp flags.fourththing.rfi.actor.lineage (the seed
+  //     macros stamped .bestiary); neither path sets entityKind, so without
+  //     this rule every compendium monster reads as a bare "npc" and keeps
+  //     its aptitude gating (2026-09-04).
+  try {
+    const rfiActor = actor.flags?.fourththing?.rfi?.actor;
+    if (rfiActor && (rfiActor.lineage || rfiActor.bestiary)) return "monster";
+  } catch (_e) { /* fall through */ }
+
   // 3. Fall back on the Foundry actor type.
   switch (actor.type) {
     case "rig":       return "rig";
@@ -63,6 +73,11 @@ export function actorKind(actor) {
     case "npc":       return "npc";      // a bare npc that isn't a faction or builder-monster
     default:          return actor.type || "unknown";
   }
+}
+
+/** True for bestiary creatures — the builder's monsters and lineage-flagged NPCs. */
+export function isMonster(actor) {
+  return actorKind(actor) === "monster";
 }
 
 /** All actors of a given canonical kind. */

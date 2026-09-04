@@ -10402,6 +10402,9 @@ function _ftArmorGateSkill(item) {
 // Surfaced as a sheet warning so the otherwise-silent failure (e.g. armor that
 // quietly contributes nothing while worn) is visible to the player.
 function _ftEquipProficiency(actor, item) {
+  // Monsters carry no aptitude requirements (owner ruling 2026-09-04) — no
+  // gating skill, so no "Not proficient" banner and no untrained penalty.
+  try { if (actorKind(actor) === "monster") return null; } catch (_e) {}
   const sysData = actor?.system?.system ?? actor?.system ?? {};
   const skills  = sysData?.skills ?? {};
   let skillKey = null;
@@ -10411,6 +10414,39 @@ function _ftEquipProficiency(actor, item) {
   const rank  = Number(skills?.[skillKey]?.value ?? 0) || 0;
   const label = skills?.[skillKey]?.label || ftCap(skillKey);
   return { skillKey, rank, label, trained: rank >= 1 };
+}
+
+// ─── Bestiary lineage strip (NPC sheet header) ───────────────────────────────
+// Reads the facts the lineage backfill / Monster Builder stamp on a creature
+// (flags.fourththing.rfi.actor.{lineage, subLineage, title, tier, bracket,
+// price, qliphah, resolved} + flags.fourththing.creatureType) into one row of
+// pills. Null for non-bestiary actors so the template can skip the block.
+function _ftLineageStrip(actor) {
+  try {
+    const a = actor?.flags?.fourththing?.rfi?.actor;
+    if (!a || !(a.lineage || a.bestiary)) return null;
+    const cap = (s) => String(s ?? "").split("-").map(w => w ? w.charAt(0).toUpperCase() + w.slice(1) : w).join("-");
+    const ct = actor.flags?.fourththing?.creatureType;
+    const creatureType = Array.isArray(ct) ? ct.join(" · ") : (ct || "");
+    const bounty = Number(a.price?.bounty ?? a.price?.marks);
+    const hire = Number(a.price?.hire);
+    const q = a.qliphah;
+    const r = a.resolved;
+    const rv = r ? { kill: "killed", talkdown: "talked down", parley: "parleyed", capture: "captured", cleanse: "cleansed", rite: "laid to rest" }[r.method] ?? r.method : "";
+    return {
+      lineage: cap(a.lineage || "bestiary"),
+      sub: a.subLineage ? cap(a.subLineage) : "",
+      title: a.title || "",
+      envelope: `T${a.tier ?? "?"} · ${a.bracket ?? "?"}${a.bestiary?.role ? ` · ${a.bestiary.role}` : ""}`,
+      creatureType,
+      qliphah: q ? `${q.name}${q.hullOf ? ` (hull of ${cap(q.hullOf)})` : ""} — ${cap(q.grade || "lesser")}` : "",
+      bounty: Number.isFinite(bounty) && bounty > 0 ? `${bounty}m (${(bounty / 10).toFixed(1)} OP)` : "",
+      bountyTip: Number.isFinite(bounty) && bounty > 0
+        ? `Bounty ${bounty} marks, credited to the OP pool matching how the creature is resolved (default ${a.price?.currency ?? "violence"}).${Number.isFinite(hire) && hire > 0 ? ` Hire ${hire} marks.` : " Not for hire."}`
+        : "",
+      resolved: r ? `${rv}${r.factionId ? ` by ${game.actors?.get(r.factionId)?.name ?? "a faction"}` : ""} · ${Number(r.credited ?? 0)}m` : ""
+    };
+  } catch (_e) { return null; }
 }
 
 // ─── Combat Actions (Phase 1: codified RFI action lexicon) ────────────────────
@@ -11228,6 +11264,11 @@ function ftComputeArmorBonus(actor, sys) {
     return result;
   }
 
+  // Monsters wear their hide/plating natively — full (Proficient) armor
+  // benefit regardless of stored aptitude ranks (owner ruling 2026-09-04).
+  let monsterWearer = false;
+  try { monsterWearer = actorKind(actor) === "monster"; } catch (_e) {}
+
   for (const item of actor.items) {
     if (item.type !== "armor") continue;
     const a = item.system ?? {};
@@ -11236,7 +11277,7 @@ function ftComputeArmorBonus(actor, sys) {
     // Weight tag is canonical (light→fitting, medium→bracing, heavy→plating);
     // armorSkill field is the fallback for armor without a weight tag.
     const skillKey = _ftArmorGateSkill(item);
-    const rank = sys?.skills?.[skillKey]?.value ?? 0;
+    const rank = monsterWearer ? Math.max(2, Number(sys?.skills?.[skillKey]?.value ?? 0) || 0) : (sys?.skills?.[skillKey]?.value ?? 0);
     const scale = FT.ARMOR_RANK_SCALE[rank] ?? FT.ARMOR_RANK_SCALE[0];
 
     // Bucket-A migration toward native AEs: GM-editable AE grant rows
@@ -21597,6 +21638,7 @@ Hooks.once("init", function () {
         gear,
         hasInventory: gear.length > 0,
         equipProfWarnings: gear.filter(r => r.notProficient),
+        lineageStrip: _ftLineageStrip(actor),
         conditionList,
         activeConditions,
         hasActiveConditions: activeConditions.length > 0,
