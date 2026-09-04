@@ -198,6 +198,12 @@
           if (!fid || !game.actors?.get(fid)) continue; // unowned temple: no collector
           const channel = SEPHIRAH_CHANNEL[info.sephirah];
           if (!channel) continue;
+          // G2 — a SUNDERED lamp is dark forever: its temples keep their
+          // alignment but pay no more (bbttcc-epic daath.deadLamp; guarded —
+          // no epic module, no dead lamps).
+          try {
+            if (game.settings.get("bbttcc-epic", "daath")?.deadLamp === info.sephirah) continue;
+          } catch (_e) {}
           const bag = perFaction.get(fid) ?? { deltas: {}, lines: [] };
           bag.deltas[channel] = (bag.deltas[channel] || 0) + op.opToMarks(YIELD_OP_PER_TURN);
           bag.lines.push(`${info.key} → +${YIELD_OP_PER_TURN} ${channel}`);

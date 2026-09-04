@@ -131,6 +131,28 @@ async function knock(actorOrId = null) {
     const state = daathState();
     if (state.risen) { ui.notifications?.info("The Dragon has already risen."); return state; }
 
+    // G2 — the road back from a ROUT runs through what broke you (Ruling 8):
+    // every fragment the rout logged must be FACED before the door answers
+    // another knock. The pilgrimage is the knock itself.
+    if (state.routPending?.fragments) {
+      const unmet = [];
+      for (const [aid, ids] of Object.entries(state.routPending.fragments)) {
+        const a = game.actors?.get(aid);
+        if (!a) continue;
+        const frags = (() => { try { return game.fourththing?.darkness?.fragments?.(a) ?? []; } catch (_e) { return []; } })();
+        const open = ids.filter(id => frags.some(f => f.id === id && !f.faced));
+        if (open.length) unmet.push(`${a.name} (${open.length})`);
+      }
+      if (unmet.length) {
+        ui.notifications?.warn(`The door remembers the rout. Un-faced rout fragments remain: ${unmet.join(", ")}. Face them, then knock again.`);
+        return state;
+      }
+      const cleared = { ...state };
+      delete cleared.routPending;
+      await game.settings.set(MOD, "daath", cleared);
+      await gmCard("🐉 The rout's debts are faced — the pilgrimage stands. The knock proceeds.");
+    }
+
     const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
 
     if (!state.opened) {
