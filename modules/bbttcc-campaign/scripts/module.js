@@ -4477,6 +4477,12 @@ async function _storyPhaseAdvance(target, { via = "beat" } = {}) {
         `</p></div>`
     });
   } catch (_e) {}
+  // A new act announces its own moments (2026-09-04, owner expectation): the
+  // speaker beats the phase just unlocked post their "wants a word" cards NOW,
+  // with the act banner — not after the first beat of the new act resolves.
+  // The scan is setting-gated (director.autoInvite), marks invited, and never
+  // re-announces played moments, so this is safe to fire eagerly.
+  try { _onBeatResolvedInviteScan({}); } catch (_eInv) {}
   return true;
 }
 
@@ -4674,7 +4680,15 @@ async function _beatRequiresMet(beat, campaign, ctx) {
       }
 
       // { flag: "<meter>", gte|lte|eq } — the original meter form
-      const val = _resolveGateValue(c.flag);
+      let val = _resolveGateValue(c.flag);
+      // Act-openers carry their own act (2026-09-04, live-caught: Joans
+      // "waiting at its gate" at phase 0): a beat whose worldEffects
+      // .phaseAdvance SETS phase N satisfies its own storyPhase >= N gate —
+      // the beat that opens the act cannot also wait for it.
+      if (String(c.flag) === "storyPhase" && val !== null) {
+        const own = Number(beat?.worldEffects?.phaseAdvance?.set);
+        if (Number.isFinite(own)) val = Math.max(Number(val), own);
+      }
       if (val === null) {
         warn(`[inject.requires] unknown gate source '${c.flag}' on beat '${beat?.id}' — treating as unmet.`);
         return false;
@@ -4748,7 +4762,12 @@ async function _beatGateReport(beat, campaign, ctx = {}) {
         continue;
       }
 
-      const val = _resolveGateValue(c.flag);
+      let val = _resolveGateValue(c.flag);
+      // Act-openers carry their own act — mirror of _beatRequiresMet.
+      if (String(c.flag) === "storyPhase" && val !== null) {
+        const own = Number(beat?.worldEffects?.phaseAdvance?.set);
+        if (Number.isFinite(own)) val = Math.max(Number(val), own);
+      }
       const op = c.gte != null ? `≥ ${c.gte}` : c.lte != null ? `≤ ${c.lte}` : c.eq != null ? `= ${c.eq}` : "?";
       const text = `${String(c.flag)} ${op}`;
       if (val === null) {
@@ -5020,6 +5039,8 @@ function _readDirectorState() {
     o.dialogueFired = (o.dialogueFired && typeof o.dialogueFired === "object") ? o.dialogueFired : {};
     o.invited = (o.invited && typeof o.invited === "object") ? o.invited : {};
     o.levelPrompts = (o.levelPrompts && typeof o.levelPrompts === "object") ? o.levelPrompts : {};
+    o.declinedStory = (o.declinedStory && typeof o.declinedStory === "object") ? o.declinedStory : {};
+    o.declinedChains = (o.declinedChains && typeof o.declinedChains === "object") ? o.declinedChains : {};
     o.lastStoryTurn = Number(o.lastStoryTurn) || 0;
     o.stewardLevelFloor = Number(o.stewardLevelFloor) || 0;
     o.factionTierFloor = Number(o.factionTierFloor) || 0;
@@ -5041,6 +5062,9 @@ async function _writeDirectorState(state) {
 // clobbered a dialogueFired mark, which could re-offer a consumed one-shot
 // dialogue moment. The mutator receives the fresh state and edits in place.
 let _directorStateQueue = Promise.resolve();
+// One GM prompt at a time — seam ticks stand down while a prompt is open
+// (2026-09-04; see directorTick).
+let _bbttccDirectorPromptOpen = false;
 function _mutateDirectorState(mutator) {
   const p = _directorStateQueue.then(async () => {
     const state = _readDirectorState();
@@ -5077,7 +5101,7 @@ async function _gmPromptStoryBeat(beat, turn, eligibleCount) {
       <p style="margin:4px 0"><b>${beat?.label || beat?.id}</b>${chain ? ` <span style="opacity:.7">(chain: ${chain})</span>` : ""}</p>
       ${_ledgerOfferPriceLine(beat)}
       ${eligibleCount > 1 ? `<p style="opacity:.7;font-size:.9em">${eligibleCount - 1} other story beat(s) also eligible — highest priority offered first.</p>` : ""}
-      <p style="opacity:.8;font-size:.9em">Fire it now? (Declining keeps it eligible for a later turn.)</p>
+      <p style="opacity:.8;font-size:.9em">Fire it now? (Declining rests this beat — and its whole chain — until the next world turn.)</p>
     `;
     new Dialog({
       title: "Bad Eden: Story Director",
@@ -5131,6 +5155,20 @@ async function directorTick(opts = {}) {
     for (const b of story) {
       if (opts.seam && ttOnly.has(_storyChainOf(b) || "")) continue;
       if (state.firedStoryBeats[b.id] && !b.inject?.repeatable) continue;
+      // Decline memory (2026-09-04, live-caught: "The Tent at the Edge of
+      // Town" offered 8× in one town walk). The prompt has always SAID
+      // "declining keeps it eligible for a later turn" — but nothing recorded
+      // the decline, and with a deterministic highest-priority pick plus seam
+      // pressure re-accruing (+3 per resolved beat), the same beat came back
+      // every few minutes. Now honoring the documented semantics: a beat the
+      // GM declined THIS TURN sits out until the next world turn — and so
+      // does its WHOLE CHAIN (same day, "the director is clearly insane":
+      // declining the Tent just dealt the next sarmoung_hum card instead).
+      if (state.declinedStory[b.id] === turn) continue;
+      {
+        const bchain = _storyChainOf(b);
+        if (bchain && state.declinedChains[bchain] === turn) continue;
+      }
       // Location-anchored discovery beats (2026-08-23): tagged `discovery`
       // or hex-targeted — they fire when the party ARRIVES (travel hex_enter
       // injector), never by director offer. Without this the director was
@@ -5160,6 +5198,12 @@ async function directorTick(opts = {}) {
       .map((b, i) => ({ b, i }))
       .sort((x, y) => (_storyPriorityRank(x.b) - _storyPriorityRank(y.b)) || (x.i - y.i))[0].b;
 
+    // ONE prompt at a time (2026-09-04, live-caught: a dozen stacked "Big
+    // Canvas" dialogs). The GM prompt awaits for as long as the GM ignores
+    // it, and every seam in the meantime spawned another tick and another
+    // prompt. While one is open, later ticks stand down.
+    if (!opts.silent && _bbttccDirectorPromptOpen) return { fired: null, reason: "prompt_open", turn };
+
     // A speaker beat never fires as narration from the tick — the director
     // INVITES instead (owner-locked handoff doctrine): GM veto → public
     // "wants a word" card → the moment plays out through dialogue.enact.
@@ -5167,9 +5211,17 @@ async function directorTick(opts = {}) {
     if (pickSid) {
       const speaker = game.actors?.get?.(pickSid);
       if (speaker) {
-        const okInvite = opts.silent ? true : await _gmPromptTalkInvite(pick, speaker, turn);
+        let okInvite;
+        _bbttccDirectorPromptOpen = true;
+        try { okInvite = opts.silent ? true : await _gmPromptTalkInvite(pick, speaker, turn); }
+        finally { _bbttccDirectorPromptOpen = false; }
         if (!okInvite) {
-          await _mutateDirectorState(s => { s.pressure = Math.floor(s.pressure / 2); });
+          await _mutateDirectorState(s => {
+            s.pressure = Math.floor(s.pressure / 2);
+            (s.declinedStory ||= {})[pick.id] = turn;   // sits out until next turn
+            const dc = _storyChainOf(pick);
+            if (dc) (s.declinedChains ||= {})[dc] = turn;  // …and so does its chain
+          });
           return { fired: null, reason: "gm_declined", offered: pick.id, turn };
         }
         await _mutateDirectorState(s => {
@@ -5184,11 +5236,19 @@ async function directorTick(opts = {}) {
       // Speaker actor missing (deleted?) — fall through to a normal fire.
     }
 
-    const ok = opts.silent ? true : await _gmPromptStoryBeat(pick, turn, candidates.length);
+    let ok;
+    _bbttccDirectorPromptOpen = true;
+    try { ok = opts.silent ? true : await _gmPromptStoryBeat(pick, turn, candidates.length); }
+    finally { _bbttccDirectorPromptOpen = false; }
     // State writes go through the serialized mutate queue — the GM prompt can
     // stay open a long time while seam listeners accrue pressure concurrently.
     if (!ok) {
-      await _mutateDirectorState(s => { s.pressure = Math.floor(s.pressure / 2); });   // back off, rebuild
+      await _mutateDirectorState(s => {
+        s.pressure = Math.floor(s.pressure / 2);          // back off, rebuild
+        (s.declinedStory ||= {})[pick.id] = turn;         // sits out until next turn
+        const dc = _storyChainOf(pick);
+        if (dc) (s.declinedChains ||= {})[dc] = turn;     // …and so does its chain
+      });
       return { fired: null, reason: "gm_declined", offered: pick.id, turn };
     }
 
@@ -5914,7 +5974,17 @@ async function _acceptTalkInvitation(message) {
   const beat = (campaign.beats || []).find(b => String(b?.id) === beatId) || null;
   const inviteText = String(beat?.inviteText || "").trim() || "wants a word.";
   const sid = String(beat?.sceneId || "").replace(/^Scene\./, "").trim();
-  const sceneName = sid ? String(game.scenes?.get?.(sid)?.name || "").trim() : "";
+  // Machine-named scenes (baked-file basenames like "long_market" or
+  // "khezek_tor_brace_pov") read raw in player-facing text (owner-flagged
+  // 2026-09-04). Humanize for DISPLAY only — strip pipeline suffixes,
+  // underscores → spaces, title case — the scene documents keep their names.
+  const _humanizePlace = (raw) => {
+    let s = String(raw || "").trim();
+    if (!s || !/_/.test(s)) return s;   // already human
+    s = s.replace(/(?:_(?:pov|battlemap|scene|map|intro|us|tr|v\d+))+$/i, "");
+    return s.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  };
+  const sceneName = _humanizePlace(sid ? String(game.scenes?.get?.(sid)?.name || "").trim() : "");
   // No linked scene: fall back to the town named in the beat label's prefix
   // ("Khezek Tor — Sable Nine, at a Polite Distance" → "Khezek Tor"). Split
   // on spaced em/en dashes only — hyphens live inside town names (Khezek-Tor).
@@ -6267,7 +6337,7 @@ async function _gmPromptTalkInvite(beat, speaker, turn) {
         <p><b>Story Director</b> — Turn ${turn}: a story moment is live, carried by <b>${foundry.utils.escapeHTML(speaker?.name || "an NPC")}</b>.</p>
         <p style="margin:4px 0"><b>${beat?.label || beat?.id}</b>${chain ? ` <span style="opacity:.7">(chain: ${chain})</span>` : ""}</p>
         ${_ledgerOfferPriceLine(beat)}
-        <p style="opacity:.8;font-size:.9em">Speaker beats play out in conversation, not narration. Post a public "${foundry.utils.escapeHTML(speaker?.name || "NPC")} wants a word" invitation? (Declining keeps the moment quietly available in dialogue.)</p>`,
+        <p style="opacity:.8;font-size:.9em">Speaker beats play out in conversation, not narration. Post a public "${foundry.utils.escapeHTML(speaker?.name || "NPC")} wants a word" invitation? (Declining rests this moment — and its chain — until the next world turn; it stays quietly available in dialogue.)</p>`,
       buttons: {
         invite:  { icon: '<i class="fas fa-comments"></i>', label: "Invite",  callback: () => resolve(true) },
         decline: { icon: '<i class="fas fa-clock"></i>',    label: "Not now", callback: () => resolve(false) }
@@ -6306,7 +6376,13 @@ function _onBeatResolvedInviteScan({ beat } = {}) {
         if (game.bbttcc?.mal?.npc?._apps?.has?.(sid)) continue;
         const offerable = (await _dialogueOfferableBeats(sid, {}))
           .map(r => r.beat)
-          .filter(b => b.id !== resolvedId && !state.invited[b.id]);
+          // Announcements are for NEW moments only (2026-09-04, live-caught:
+          // Pike/Etta "wants a word" cards arrived AFTER the table had already
+          // played their welcomes through the town-walk hub — repeatable
+          // beats stay offerable IN conversation forever, but a moment the
+          // table has already played never earns an invitation card).
+          .filter(b => b.id !== resolvedId && !state.invited[b.id]
+            && !state.firedStoryBeats[b.id] && !state.dialogueFired[b.id]);
         if (!offerable.length) continue;
         await _mutateDirectorState(s => {
           for (const b of offerable) s.invited[b.id] = { ts: Date.now(), via: "auto" };

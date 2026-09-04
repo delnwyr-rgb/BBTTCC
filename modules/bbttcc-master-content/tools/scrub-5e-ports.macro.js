@@ -21,7 +21,7 @@
  * DRY_RUN = true prints the plan; flip to false to write. Idempotent-ish:
  * re-running re-applies identical text. Pack unlocked / re-locked around writes.
  */
-const DRY_RUN = true;
+const DRY_RUN = false;
 const PACK_ID = "bbttcc-master-content.npcs";
 const ROOT_FOLDER = "Bad Eden Monsters";
 

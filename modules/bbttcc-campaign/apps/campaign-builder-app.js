@@ -2294,9 +2294,22 @@ const activeCampaignId = _getActiveCampaignId();
         const nextIds = lastFired
           ? [...new Set((lastFired.choices || []).flatMap(c => [c?.next, c?.failNext]).filter(Boolean).map(String))]
           : [];
-        const routed = nextIds
+        const routedAll = nextIds
           .map(id => beatById[id])
-          .filter(b => b && (!firedSet.has(String(b.id)) || b?.inject?.repeatable));
+          .filter(b => b && (!firedSet.has(String(b.id)) || b?.inject?.repeatable))
+          // dialogueOffer:false = "reached only by routing, never OFFERED" —
+          // and the hero is an offer surface (2026-09-04, live-caught: the
+          // unfired "Pulse of the Town" ANSWER beat was proposed as NEXT off
+          // a Pike anchor and read as an orphaned-but-blocking step).
+          .filter(b => b.dialogueOffer !== false);
+        // Fresh routes outrank revisits (2026-09-04, live-caught: the hero
+        // re-offered the completed Welcome Round as NEXT because a bounce-back
+        // choice routed to the fired-but-repeatable hub). A fired repeatable
+        // hub is a PLACE the table may return to, not the story's next step —
+        // unfired routes drive; a revisit only surfaces when the quest order
+        // below has nothing new either.
+        const routed = routedAll.filter(b => !firedSet.has(String(b.id)));
+        const revisits = routedAll.filter(b => firedSet.has(String(b.id)) && runtime.byId[String(b.id)]?.state === "ready");
         const candidates = routed.filter(b => runtime.byId[String(b.id)]?.state === "ready");
         // Gated routes are still THE ROAD (2026-08-24): a blocked next used to
         // vanish silently, dead-ending the hero on the last fired beat. Show
@@ -2335,15 +2348,44 @@ const activeCampaignId = _getActiveCampaignId();
             // quest-order NEXT offers it out of context (the "Seat at the
             // Cookline" lesson, 2026-08-24): the fallback exists for beats
             // with NO authored arrival, so only those qualify.
+            const seqById = new Map(beats.map(b => [String(b.id), seqOf(b)]));
+            const questById = new Map(beats.map(b => [String(b.id), String(b.questId || "").trim()]));
             const choiceTargets = new Set();
             for (const b of beats) for (const c of (b.choices || [])) {
               for (const t of [c?.next, c?.failNext]) {
                 const id = String(t || "").trim();
-                if (id) choiceTargets.add(id);
+                if (!id) continue;
+                // Arrival = a SAME-QUEST FORWARD route only (2026-09-04 v2,
+                // live-caught: the Fixit ride's cross-quest "back to the
+                // crossroads" bounce marked the Crossroads as arrived-at, so
+                // quest order skipped it and front-ran the Act-2 Title Card).
+                // Back-references and cross-quest bounces are ways OUT, not
+                // authored arrivals. Same-quest forward routes (hub → venues)
+                // still mark real destinations — the Cookline lesson holds.
+                const bq = String(b.questId || "").trim();
+                const sameQuest = !!bq && bq === questById.get(id);
+                const forward = (seqById.get(id) ?? Infinity) > seqOf(b);
+                if (sameQuest && forward) choiceTargets.add(id);
               }
             }
+            // Future-act steps are invisible to the quest-order hero
+            // (2026-09-04, live-caught: after the Green Ring cinematic the
+            // hero dangled the Act-2 Green Ring scene behind an override
+            // button — an attractive nuisance; overriding fired the Act-2
+            // Elsin echo convo a whole act early). A step gated storyPhase
+            // above the CURRENT act — and not an opener that brings that act
+            // itself — belongs to the future, not to NEXT.
+            const futureAct = (b) => {
+              const reqs = Array.isArray(b?.inject?.requires) ? b.inject.requires : [];
+              const own = Number(b?.worldEffects?.phaseAdvance?.set) || 0;
+              return reqs.some(r => r && String(r.flag) === "storyPhase"
+                && Number(r.gte) > Math.max(curPhase, own));
+            };
             const qRouted = beats
               .filter(b => String(b.questId || "").trim() === lq
+                && !futureAct(b)
+                // routing-only nodes are never offered (see routedAll above)
+                && b.dialogueOffer !== false
                 // Fired is fired — proposing a fired hub as NEXT loops
                 // forever (the "Cookline is the hub" lesson, 2026-08-24).
                 // firedSet alone carries that lesson: it includes fired
@@ -2374,9 +2416,25 @@ const activeCampaignId = _getActiveCampaignId();
             const whyQ = unmetQ.length
               ? unmetQ.slice(0, 2).map(r => r.text + (r.current !== undefined ? ` (now ${r.current})` : "")).join(" · ")
               : "its own conditions";
-            heroHtml = heroCard("⏳ NEXT — waiting at its gate (quest order)", qGated.label || qGated.id, questOf(qGated),
-              runBtn(qGated, "Run it anyway (override the gate)"),
-              `next in the quest's canonical order after “${esc(lastName)}” waits for: <b>${esc(whyQ)}</b> — usually that's the design doing its job`);
+            // Turn-gated NEXT is not a gate to override — it's the world turn
+            // asking to be run (2026-09-04, live-caught: the GM missed the
+            // one-shot "turn is locked" button, looped the town, and no
+            // surface pointed back at the Turn Driver). Name the doorway.
+            const turnOnly = unmetQ.length && unmetQ.every(r => /^turn\s*[≥≤=]/.test(String(r.text || "")));
+            if (turnOnly) {
+              heroHtml = heroCard("🔒 NEXT — on the other side of the turn", qGated.label || qGated.id, questOf(qGated),
+                "",
+                `the story resumes once the world moves: set every faction's plans, then run the <b>Turn Driver</b> (toolbar). Waits for: <b>${esc(whyQ)}</b>`);
+            } else {
+              heroHtml = heroCard("⏳ NEXT — waiting at its gate (quest order)", qGated.label || qGated.id, questOf(qGated),
+                runBtn(qGated, "Run it anyway (override the gate)"),
+                `next in the quest's canonical order after “${esc(lastName)}” waits for: <b>${esc(whyQ)}</b> — usually that's the design doing its job`);
+            }
+          } else if (revisits.length) {
+            const r0 = revisits[0];
+            heroHtml = heroCard("↺ THE DOOR'S STILL OPEN", r0.label || r0.id, questOf(r0),
+              runBtn(r0, "Return there"),
+              `nothing new is routed${lastName ? ` after “${esc(lastName)}”` : ""} — but the table can always go back.`);
           } else {
             heroHtml = heroCard("🧭 IN THE TABLE'S HANDS", "", "", "",
               `No single next beat${lastName ? ` after “${esc(lastName)}”` : ""} — the story is waiting on the players: a choice, a conversation invite, travel, or something they have to walk into. Watch chat, or browse below.`);

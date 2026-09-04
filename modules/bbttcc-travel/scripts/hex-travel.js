@@ -462,7 +462,17 @@ const TERRAIN_TABLE = {
     const idx = s.lastIndexOf(".Drawing.");
     if (idx !== -1) {
       const did = s.slice(idx + ".Drawing.".length);
-      return canvas?.drawings?.get(did) || null;
+      const onCanvas = canvas?.drawings?.get(did);
+      if (onCanvas) return onCanvas;
+      // Canvas miss (viewed scene isn't the hex map — mid-interlude resume):
+      // resolve the DOCUMENT by full uuid instead of failing hard. Terrain
+      // flags and uuid reads work off the document; visuals degrade
+      // gracefully (2026-09-04).
+      try {
+        const doc = fromUuidSync(s);
+        if (doc?.documentName === "Drawing") return doc.object || doc;
+      } catch (_e) {}
+      return null;
     }
 
     // Plain drawing id
@@ -768,6 +778,25 @@ const TERRAIN_TABLE = {
     if (!factionId || !hexFrom || !hexTo) throw new Error("travelHex: missing factionId/hexFrom/hexTo");
     const actor = game.actors.get(factionId);
     if (!isFactionActor(actor)) throw new Error("travelHex: actor is not a faction");
+
+    // Multi-leg resume (2026-09-04, live-caught: KT→AG Apex interlude, then
+    // AG→L "destination hex not found"): hex drawings resolve off the VIEWED
+    // canvas, and after an encounter interlude the canvas can still be the
+    // battlemap (or mid-teardown) when the next leg starts. If the leg's hex
+    // UUIDs name a scene we're not looking at, view it first and let the
+    // canvas finish drawing.
+    try {
+      const sidOf = (u) => { const m = String(u || "").match(/^Scene\.([^.]+)\.Drawing\./); return m ? m[1] : null; };
+      const sid = sidOf(hexTo) || sidOf(hexFrom);
+      if (sid && canvas?.scene?.id !== sid) {
+        const sc = game.scenes.get(sid);
+        if (sc) {
+          console.log("bbttcc-travel | travelHex: viewing travel scene before leg resume", { sid, was: canvas?.scene?.id });
+          await sc.view();
+          await new Promise(r => setTimeout(r, 100));
+        }
+      }
+    } catch (eView) { console.warn("bbttcc-travel | travelHex: pre-leg scene view failed", eView); }
 
     const from = await resolveDrawingRef(hexFrom);
     const to   = await resolveDrawingRef(hexTo);

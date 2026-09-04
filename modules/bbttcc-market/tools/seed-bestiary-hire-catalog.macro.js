@@ -15,7 +15,7 @@
  * DRY_RUN = true lists what would be added. Safe to re-run: existing entries
  * (same uuid under the vendor) are skipped, never duplicated.
  */
-const DRY_RUN = true;
+const DRY_RUN = false;
 const PACK_ID = "bbttcc-master-content.npcs";
 const ROOT_FOLDER = "Bad Eden Monsters";
 const MARKET = "bbttcc-market";

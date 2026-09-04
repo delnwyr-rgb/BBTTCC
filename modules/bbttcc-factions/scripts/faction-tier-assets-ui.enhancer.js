@@ -19,7 +19,9 @@
     try { return foundry.utils.getProperty(o, p) ?? d; } catch { return d; }
   };
 
-  const TIER_NAMES = ["Emergent", "Established", "Ascendant", "Dominant", "Mythic"];
+  // "Emerging" matches the Overview's VP status band wording (owner-flagged
+  // seam 2026-09-04 — one word for the newborn state everywhere).
+  const TIER_NAMES = ["Emerging", "Established", "Ascendant", "Dominant", "Mythic"];
 
   const CAP_BY_TIER = [
     { minor: 0,   major: 0, legendary: 0 }, // T0
