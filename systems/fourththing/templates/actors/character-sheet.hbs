@@ -426,11 +426,30 @@
             {{/if}}
           </div>
 
-          <div class="ft-dark">
+          {{!-- #5: Darkness — value + band chip + taint + fragment tally (Descent
+               Engine D1). Owner/GM sheet = "details private" (Ruling 7); writes
+               belong to game.fourththing.darkness — the input is a GM override. --}}
+          <div class="ft-dark{{#if darkness.deep}} ft-rad-sick{{/if}}">
             <label>Darkness</label>
             <input type="number" name="system.darkness.value" value="{{system.darkness.value}}" min="0" max="10"/>
             <span class="ft-out-of">/ 10</span>
+            <span class="ft-rad-tier" style="color:{{darkness.color}};border-color:{{darkness.color}}">🜃 {{darkness.bandLabel}}</span>
+            <span class="ft-rad-penalties" style="opacity:0.75">taint {{darkness.taint}}{{#if darkness.fragTotal}} · fragments {{darkness.fragFaced}}/{{darkness.fragTotal}} faced{{/if}}</span>
           </div>
+          {{#if darkness.fragTotal}}
+          {{!-- Descent D3 — the fragment ledger (owner/GM sheet = details
+               private, Ruling 7). Un-faced fragments are the Ego-Dragon's
+               ammunition; Face = the GM confirms the scene happened. --}}
+          <div class="ft-fragments" style="font-size:0.78rem;margin:0.2rem 0 0;display:flex;flex-direction:column;gap:2px">
+            {{#each darkness.frags}}
+            <div class="ft-fragment" style="display:flex;gap:6px;align-items:baseline;{{#if this.faced}}opacity:0.55{{/if}}">
+              <span style="min-width:7em">{{#if this.faced}}✦ faced{{else}}◈ open{{/if}} · {{this.qliphoth}}</span>
+              <span style="flex:1;opacity:0.8;font-style:italic">{{this.text}}</span>
+              {{#unless this.faced}}<button type="button" data-action="ftFaceFragment" data-fragment-id="{{this.id}}" style="font-size:0.72rem;padding:0 6px" data-tooltip="Face this fragment — GM confirms the scene (confession, restitution, the mercy door). Taint eases only this way.">Face</button>{{/unless}}
+            </div>
+            {{/each}}
+          </div>
+          {{/if}}
         </div>
       </div>
     </div>

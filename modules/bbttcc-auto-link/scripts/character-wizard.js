@@ -902,6 +902,14 @@ async function runGuidedCreatePipeline(payload, opts) {
         warn("auto-apply path features:", r.error);
       }
     }
+    // Starter manifestation kit — the path/doctrine basics (3 items for
+    // non-TCC combos, 8 for TCCs) authored in bbttcc-master-content.items.
+    // Optional-chained so a pre-kit system build degrades to a no-op.
+    if (prog?.grantStarterManifestations) {
+      const kit = await prog.grantStarterManifestations(actor);
+      if (kit?.imported?.length) log("starter manifestation kit granted: " + kit.imported.join(", "));
+      else if (kit?.error) warn("starter manifestation kit:", kit.error);
+    }
     const grantSkills = game.fourththing?.applySkillGrantsFromFeatures
                      ?? game.fourththing?._progression?.applySkillGrantsFromFeatures;
     if (typeof grantSkills === "function") {

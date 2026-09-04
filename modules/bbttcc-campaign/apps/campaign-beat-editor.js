@@ -3384,11 +3384,21 @@ _syncCoreFromForm() {
     } catch (_eOut) {}
 
     // --- Spark Link (tikkun-beat-listener reads beat.sparkLink on resolve) ---
+    // Links come in TWO forms: sparkUuid (authored via this editor's dropdown)
+    // and sparkKey (authored by seeder macros, e.g. groom-tikkun-dividend).
+    // The dropdown can neither display nor emit a key-form link, so an
+    // untouched select posts back empty — saving used to silently ZERO the
+    // beat's sparkKey link (both live campaign spark links, 2026-09-01 audit).
+    // Preserve the key when no explicit UUID pick replaces it and the action
+    // is still set; clearing the action still clears the whole link.
     const sparkLinkUuid   = String(fd.get("spark-link-uuid")   || "").trim();
     const sparkLinkAction = String(fd.get("spark-link-action") || "").trim();
     const sparkLinkMethod = String(fd.get("spark-link-method") || "").trim();
+    const priorSparkKey   = String(this.beat.sparkLink?.sparkKey || "").trim();
     if (sparkLinkUuid && sparkLinkAction) {
       this.beat.sparkLink = { sparkUuid: sparkLinkUuid, action: sparkLinkAction, methodTag: sparkLinkMethod || "" };
+    } else if (priorSparkKey && sparkLinkAction) {
+      this.beat.sparkLink = { sparkKey: priorSparkKey, action: sparkLinkAction, methodTag: sparkLinkMethod || "" };
     } else {
       this.beat.sparkLink = { sparkUuid: "", action: "", methodTag: "" };
     }

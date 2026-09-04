@@ -24,7 +24,8 @@
   "esmodules": [
     "scripts/epic-gate.js",
     "scripts/presence.js",
-    "scripts/repair.js"
+    "scripts/repair.js",
+    "scripts/adversary.js"
   ],
   "styles": [
     "styles/epic.css"

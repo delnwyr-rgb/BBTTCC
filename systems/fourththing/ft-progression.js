@@ -1097,6 +1097,50 @@ export async function applyPathFeatures(actor) {
   return { imported: created.map(c => c.name), skipped, error: null, subclassFolderName };
 }
 
+// ─── Starter manifestation kits ──────────────────────────────────────────────
+// Grants the path+doctrine starter manifestation kit: every item in the
+// master-content pack stamped `flags.fourththing.starterKit` whose `path`
+// matches the actor's class identifier and whose `doctrine` is empty (path
+// core) or matches the actor's subclass identifier. Kit sizes live in the
+// authored data, not here (non-TCC combos ship 2 core + 1 signature = 3,
+// TCC combos 5 core + 3 signatures = 8). Idempotent — dedupes by item name.
+const STARTER_KIT_PACK = "bbttcc-master-content.items";
+
+export async function grantStarterManifestations(actor) {
+  if (!actor) return { imported: [], skipped: [], error: "No actor" };
+  const classItem = actor.items.find(i => i.type === "class");
+  const pathId = String(classItem?.system?.identifier ?? "").trim();
+  if (!pathId) return { imported: [], skipped: [], error: "No class with an identifier on actor" };
+  const doctrineId = String(actor.items.find(i => i.type === "subclass")?.system?.identifier ?? "").trim();
+
+  const pack = game.packs.get(STARTER_KIT_PACK);
+  if (!pack) return { imported: [], skipped: [], error: `Pack ${STARTER_KIT_PACK} not found` };
+
+  const index = await pack.getIndex({ fields: ["name", "type", "flags.fourththing.starterKit"] });
+  const wanted = index.filter(e => {
+    const kit = foundry.utils.getProperty(e, "flags.fourththing.starterKit")
+             ?? e["flags.fourththing.starterKit"] ?? null;
+    if (!kit || kit.path !== pathId) return false;
+    return !kit.doctrine || kit.doctrine === doctrineId;
+  });
+  if (!wanted.length) return { imported: [], skipped: [], error: null };
+
+  const ownedNames = new Set((actor.items ?? []).map(i => i.name));
+  const toImport = wanted.filter(e => !ownedNames.has(e.name));
+  const skipped  = wanted.filter(e =>  ownedNames.has(e.name)).map(e => e.name);
+  if (!toImport.length) return { imported: [], skipped, error: null };
+
+  const docs = await Promise.all(toImport.map(e => pack.getDocument(e._id)));
+  const data = docs.filter(Boolean).map(d => {
+    const obj = d.toObject();
+    delete obj._id;
+    delete obj.folder;
+    return obj;
+  });
+  const created = await actor.createEmbeddedDocuments("Item", data);
+  return { imported: created.map(c => c.name), skipped, error: null };
+}
+
 // ─── Level up ─────────────────────────────────────────────────────────────────
 
 // Signature manifestations (system.manifestation.isSignature === true) auto-level

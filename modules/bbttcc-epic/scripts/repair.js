@@ -31,10 +31,22 @@ function isHexDoc(d) {
   return tf?.isHex === true || tf?.kind === "territory-hex";
 }
 
-// ── Hex iteration (no registry — filter Drawings across all scenes) ────────────────
+// ── Hex iteration (canonical board scenes when marked; every scene otherwise) ──────
+// P3.1 (2026-09-01, owner ruling): the FIVE region scenes are the canonical
+// board (141 hexes). Counting every scene inflated worldHealth.total to 336
+// (duplicate Starting-Map copies + GOTTGAIT/arena/onboarding maps), leaving
+// the 100% Malkuth seam unreachable. Scenes are marked with
+// flags.bbttcc-epic.boardScene = true by tools/mark-canonical-board.macro.js.
+// Fallback: a world with no marked scene keeps the old count-everything
+// behavior so nothing breaks before the marking macro runs.
+function boardScenes() {
+  const all = game.scenes?.contents ?? [];
+  const marked = all.filter(sc => sc.getFlag?.(MOD, "boardScene") === true);
+  return marked.length ? marked : all;
+}
 function iterHexes() {
   const out = [];
-  for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) if (isHexDoc(d)) out.push(d);
+  for (const sc of boardScenes()) for (const d of sc.drawings ?? []) if (isHexDoc(d)) out.push(d);
   return out;
 }
 
@@ -70,6 +82,10 @@ function tikkunBonus() {
 // The Tikkun Dividend raises the max — redemption earned in arc 1 keeps paying.
 function isHexAligned(d, protagonists) {
   const tf = d?.flags?.[TER] ?? {};
+  // A seated-and-INTEGRATED Spark of Light is a standing temple: the hex holds
+  // itself aligned regardless of banner or darkness (owner ruling 2026-09-01;
+  // seat/integrate via bbttcc-tikkun's game.bbttcc.api.tikkun.hex).
+  if (tf.spark?.state === "integrated") return true;
   const fid = tf.factionId || tf.ownerId || "";
   if (!fid || !protagonists.has(fid)) return false;
   const purified = Array.isArray(tf.conditions) && tf.conditions.includes("Purified");
@@ -139,6 +155,38 @@ export function reach(ref) {
   return { band: bandInfo.key, label: bandInfo.label, perTurn: REACH_BY_BAND[bandInfo.key] ?? 1 };
 }
 
+// ── Reach — ENFORCED (Descent Engine A1, spec §2.1) ────────────────────────────────
+// The "informational in P3" era ends here (owner rulings 2026-09-02). Budget =
+// REACH_BY_BAND[presence band] Acts of Repair per faction per Apply turn;
+// alignHex and tikkun-hex integrations share the same budget. Counter lives at
+// faction flags[bbttcc-epic].reachSpent, reset by the turn driver on Apply.
+export function reachBudget(factionId) {
+  const f = game.actors?.get(factionId) ?? null;
+  const r = reach(f ?? undefined);
+  const spent = Number(f?.getFlag?.(MOD, "reachSpent") ?? 0) || 0;
+  return { budget: r.perTurn, spent, band: r.band, bandLabel: r.label, ok: spent < r.perTurn };
+}
+export async function tryDebitReach(factionId) {
+  const b = reachBudget(factionId);
+  if (!b.ok) return b;
+  const f = game.actors?.get(factionId);
+  if (f) await f.setFlag(MOD, "reachSpent", b.spent + 1);
+  return { ...b, ok: true, spent: b.spent + 1 };
+}
+
+// ── Presence economics (Descent Engine A1) ─────────────────────────────────────────
+// Effective Presence from an Act of Repair:
+//  · masked stewards earn HALF, round up (Ruling 5 — dodge the Gaze or feed
+//    the Work at full strength, not both)
+//  · Shadowed+ personal Darkness dims the gain (FT.DARKNESS_BITE
+//    presenceGainPenalty, spec §1.2), floor 0
+function effectiveRepairPresence(steward, base) {
+  let gain = Number(base) || 0;
+  try { if (game.fourththing?.epic?.presence?.isMasked?.(steward)) gain = Math.ceil(gain / 2); } catch (_e) {}
+  try { gain -= Number(game.fourththing?.darknessBite?.(steward)?.presenceGainPenalty || 0); } catch (_e) {}
+  return Math.max(0, gain);
+}
+
 // ── Act of Repair: align a hex ─────────────────────────────────────────────────────
 export async function alignHex(steward, hexUuid, _opts = {}) {
   if (!ftActive()) return null;
@@ -147,6 +195,14 @@ export async function alignHex(steward, hexUuid, _opts = {}) {
   if (!doc || !isHexDoc(doc)) { warn(`not a hex: ${hexUuid}`); return null; }
   const fid = steward?.getFlag?.(FCT, "factionId");
   if (!fid) { warn(`${steward?.name ?? "actor"} has no faction — cannot align`); return null; }
+
+  // Reach gate (Descent A1): out of budget → the world refuses more repair
+  // this turn. The chip already shows the band; this makes it true.
+  const rb = reachBudget(fid);
+  if (!rb.ok) {
+    ui.notifications?.warn(`Reach exhausted: ${rb.spent}/${rb.budget} Acts of Repair this turn (Presence band ${rb.bandLabel}).`);
+    return null;
+  }
 
   const tf = doc.flags?.[TER] ?? {};
   const conditions = Array.isArray(tf.conditions) ? [...tf.conditions] : [];
@@ -180,8 +236,10 @@ export async function alignHex(steward, hexUuid, _opts = {}) {
   await onWorldHealthRecomputed();
 
   // THE COUPLING — repair raises Presence (no-op if steward isn't Converged).
-  try { await game.fourththing?.epic?.presence?.adjust?.(steward, REPAIR_PRESENCE_HEX, "align-hex"); }
+  // A1: gain filtered through masking (half) + Shadowed dimming (−1).
+  try { await game.fourththing?.epic?.presence?.adjust?.(steward, effectiveRepairPresence(steward, REPAIR_PRESENCE_HEX), "align-hex"); }
   catch (e) { warn("presence coupling failed", e); }
+  try { await tryDebitReach(fid); } catch (e) { warn("reach debit failed", e); }
 
   return worldHealth();
 }
@@ -200,7 +258,7 @@ function creditSparkRepair(info, reason) {
   try {
     const actorId = info?.actorId ?? info?.actor?.id ?? info?.steward?.id ?? null;
     const steward = actorId ? game.actors?.get(actorId) : null;
-    if (steward) game.fourththing?.epic?.presence?.adjust?.(steward, REPAIR_PRESENCE_SPARK, reason);
+    if (steward) game.fourththing?.epic?.presence?.adjust?.(steward, effectiveRepairPresence(steward, REPAIR_PRESENCE_SPARK), reason);
     scheduleWorldHealthRefresh();
   } catch (e) { warn("spark coupling failed", e); }
 }
@@ -245,7 +303,18 @@ Hooks.on("init", () => {
 });
 
 Hooks.on("bbttcc:territory:hexUpdated", () => scheduleWorldHealthRefresh());
-Hooks.on("bbttcc:advanceTurn:end",      () => scheduleWorldHealthRefresh());
+Hooks.on("bbttcc:advanceTurn:end", async (payload) => {
+  scheduleWorldHealthRefresh();
+  // Reach budgets reset on Apply turns (Descent A1; gate BOTH apply and isGM
+  // per the house turn-contract rule).
+  try {
+    if (!payload?.apply || !game.user?.isGM) return;
+    for (const a of game.actors?.contents ?? []) {
+      if (!a.getFlag?.(MOD, "reachSpent")) continue;
+      await a.unsetFlag(MOD, "reachSpent");
+    }
+  } catch (e) { warn("reach reset failed", e); }
+});
 Hooks.on("updateDrawing", (doc) => { if (isHexDoc(doc)) scheduleWorldHealthRefresh(); });
 Hooks.on("updateActor", (actor, changes) => {
   try {
@@ -256,6 +325,14 @@ Hooks.on("updateActor", (actor, changes) => {
 });
 Hooks.on("bbttcc:spark:deposited", (info) => creditSparkRepair(info, "integrate-spark"));
 Hooks.on("bbttcc:spark:repaired",  (info) => creditSparkRepair(info, "repair-spark"));
+// Spark integrated INTO a hex (tikkun-hex enhancer): the alignment predicate
+// just changed under us — recompute world-health, and credit the same +2
+// Presence an off-board spark integration earns.
+Hooks.on("bbttcc:spark:hexIntegrated", (info) => {
+  creditSparkRepair(info, "integrate-spark");
+  scheduleWorldHealthRefresh();
+});
+Hooks.on("bbttcc:spark:hexSeated", () => scheduleWorldHealthRefresh());
 Hooks.on("renderBBTTCC_CampaignOverview", (app, element) => injectOverviewChip(app, element));
 
 Hooks.on("ready", async () => {
@@ -266,6 +343,7 @@ Hooks.on("ready", async () => {
     game.fourththing.epic.worldHealth = worldHealth;
     game.fourththing.epic.repair = Object.assign(game.fourththing.epic.repair || {}, {
       alignHex, integrateSpark, reach, worldHealth,
+      reachBudget, tryDebitReach,
     });
     // Initial compute + seam check (single reconciler = active GM).
     const gm = game.users?.activeGM;

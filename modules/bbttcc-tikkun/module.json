@@ -35,7 +35,8 @@
     "scripts/tikkun-ritual.enhancer.js",
     "scripts/tikkun-ritual-console.js",
     "scripts/tikkun-beat-listener.enhancer.js",
-    "scripts/tikkun-repair.enhancer.js"
+    "scripts/tikkun-repair.enhancer.js",
+    "scripts/tikkun-hex.enhancer.js"
   ],
   "styles": [
     "styles/tikkun-styles.css",

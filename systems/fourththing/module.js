@@ -53,6 +53,7 @@ import {
   extractSkillGrantsFromFeature,
   promoteStampedAptitudeAEs,
   applyPathFeatures,
+  grantStarterManifestations,
   syncAuraEffects,
   syncAurabladeEffects,
   skillRollWithRank,
@@ -7387,8 +7388,12 @@ async function castManifestation(actor, item, {
 
   // Discipline misfire shift folds into modeMisfireBias (negative=better).
   const disciplineBandShift = Number(getMisfireBandShift(actor)) || 0;
+  // Descent D2 — the Umbral boon (DESCENT_ENGINE_SPEC §1.2): at Umbral+
+  // personal Darkness, Chaos-mode misfires soften one band. The discount is
+  // paid for in Darkness (+1 per Chaos cast, charged after the roll below).
+  const umbralChaosSoften = (mode === "chaos" && _ftDarknessBite(actor).gathersFragments) ? -1 : 0;
   // noiseMisfireShift is declared above the cost note (TDZ fix 2026-08-20).
-  const totalMisfireBias = cfg.misfireBias + disciplineBandShift + noiseMisfireShift;
+  const totalMisfireBias = cfg.misfireBias + disciplineBandShift + noiseMisfireShift + umbralChaosSoften;
 
   // Surface discipline shifts in the cost note so the GM/player sees the deltas.
   // The Reach discount only applies to Blood-Debt reach casts — on any other
@@ -7409,6 +7414,12 @@ async function castManifestation(actor, item, {
     target, restraintReduction,
     useOverlay, rollMode
   });
+
+  // Descent D2 — the Umbral Chaos discount is paid for: +1 Darkness per cast
+  // (spec §1.3; gain() adds the darknessSpikes surcharge itself).
+  if (umbralChaosSoften) {
+    try { await game.fourththing.darkness?.gain?.(actor, 1, "chaos-cast"); } catch (_e) {}
+  }
 
   ftPlayAutoAnimation(actor, item, { hit: result?.success !== false });
 
@@ -10027,7 +10038,16 @@ FT.CONDITIONS = {
   radiationIrradiated: { label: "Irradiated", color: "#7ec850", img: "icons/svg/radiation.svg", desc: "Radiation 25+. −1 to all rolls." },
   radiationSickened:   { label: "Sickened",   color: "#b6d038", img: "icons/svg/biohazard.svg", desc: "Radiation 50+. −2 to all rolls; max Integrity −5. Mutations set in." },
   radiationPoisoned:   { label: "Poisoned",   color: "#d99a1c", img: "icons/svg/poison.svg", desc: "Radiation 75+. −3 to all rolls; max Integrity −10; lose your Reaction each turn; 1d4 Integrity at the start of your turn." },
-  radiationTerminal:   { label: "Terminal",   color: "#c0392b", img: "icons/svg/skull.svg", desc: "Radiation 100+. −4 to all rolls; max Integrity −20; lose your Action each turn; 1d6 Integrity at the start of your turn." }
+  radiationTerminal:   { label: "Terminal",   color: "#c0392b", img: "icons/svg/skull.svg", desc: "Radiation 100+. −4 to all rolls; max Integrity −20; lose your Action each turn; 1d6 Integrity at the start of your turn." },
+
+  // Personal Darkness bands (Descent Engine D1, DESCENT_ENGINE_SPEC §1.2 —
+  // owner-ruled 2026-09-02). Display ladder only; the mechanical bite is
+  // FT.DARKNESS_BITE below (single source of truth). Every band costs AND
+  // grants — the dark is a stage, not a fail-state.
+  darknessShadowed:  { label: "Shadowed",  color: "#8a7bb8", img: "icons/svg/blind.svg",  desc: "Darkness 3+. Presence gains from repairs −1. You perceive dark doors and dormant sparks in dark hexes; +1 vs Qliphothic fear/charm." },
+  darknessUmbral:    { label: "Umbral",    color: "#6a4fa3", img: "icons/svg/eye.svg",    desc: "Darkness 5+. Max Clarity −2; lawful factions react poorly. Qliphothic resistance; you may gather fragments; Chaos-mode misfire softened one step." },
+  darknessNadir:     { label: "Nadir",     color: "#472a78", img: "icons/svg/terror.svg", desc: "Darkness 8+. −2 on Soul-defense rolls; Mal turns unreliable about you; allies' auras do not reach you. +2 Intent inside dark hexes; Greater Qliphoth parley becomes possible." },
+  darknessThreshold: { label: "Threshold", color: "#1b0f33", img: "icons/svg/skull.svg",  desc: "Darkness 10. Each scene: Soul save DC 15 or act on your worst un-faced fragment. You may knock at Daath." }
 };
 
 // ── Radiation Sickness — mechanical bite ────────────────────────────────────
@@ -10045,6 +10065,34 @@ FT.RADIATION_BITE = [
   { min: 50,  key: "radiationSickened",   rollPenalty: 2, integrityCap: 5,  loseReaction: false, loseAction: false, tick: null  },
   { min: 25,  key: "radiationIrradiated", rollPenalty: 1, integrityCap: 0,  loseReaction: false, loseAction: false, tick: null  }
 ];
+// ── Personal Darkness — mechanical bite (Descent Engine D1) ─────────────────
+// Single source of truth for what personal Darkness DOES (DESCENT_ENGINE_SPEC
+// §1.2, bands owner-ruled 2026-09-02). Read off system.darkness.{value,taint}
+// so the lookup is synchronous inside prepareDerivedData (radiation pattern).
+// Consumed so far: clarityMaxPenalty (clarity derivation, D1) and
+// presenceGainPenalty (bbttcc-epic repair credits, A1). soulSavePenalty wires
+// into resolveManifestationSave in D2 (with the misfire hook); boon fields
+// are data for the adversary/content engines.
+FT.DARKNESS_BITE = [
+  { min: 10, key: "darknessThreshold", clarityMaxPenalty: 2, soulSavePenalty: 2, presenceGainPenalty: 1, intentBonusDarkHex: 2, seesDarkDoors: true, gathersFragments: true, compulsion: { save: "soul", dc: 15 }, mayKnock: true },
+  { min: 8,  key: "darknessNadir",     clarityMaxPenalty: 2, soulSavePenalty: 2, presenceGainPenalty: 1, intentBonusDarkHex: 2, seesDarkDoors: true, gathersFragments: true, compulsion: null, mayKnock: false },
+  { min: 5,  key: "darknessUmbral",    clarityMaxPenalty: 2, soulSavePenalty: 0, presenceGainPenalty: 1, intentBonusDarkHex: 0, seesDarkDoors: true, gathersFragments: true, compulsion: null, mayKnock: false },
+  { min: 3,  key: "darknessShadowed",  clarityMaxPenalty: 0, soulSavePenalty: 0, presenceGainPenalty: 1, intentBonusDarkHex: 0, seesDarkDoors: true, gathersFragments: false, compulsion: null, mayKnock: false }
+];
+function _ftDarknessBite(actor) {
+  const none = { value: 0, taint: 0, band: "clear", key: null, clarityMaxPenalty: 0, soulSavePenalty: 0, presenceGainPenalty: 0, intentBonusDarkHex: 0, seesDarkDoors: false, gathersFragments: false, compulsion: null, mayKnock: false };
+  // Steward-level mechanic — characters/NPCs only; factions live on their own
+  // (institutional) Darkness meter, rigs/bosses have no soul to blacken.
+  if (!actor || (actor.type !== "character" && actor.type !== "npc")) return none;
+  if (actor.getFlag?.("bbttcc-factions", "isFaction") === true) return none;
+  const rawSys = actor.system?.system ?? actor.system;
+  const value = Math.max(0, Math.min(10, Number(rawSys?.darkness?.value || 0)));
+  const taint = Math.max(0, Math.min(10, Number(rawSys?.darkness?.taint || 0)));
+  const row = FT.DARKNESS_BITE.find(r => value >= r.min);
+  if (!row) return { ...none, value, taint };
+  return { ...row, value, taint, band: row.key.replace("darkness", "").toLowerCase() };
+}
+
 function _ftRadiationBite(actor) {
   const none = { rp: 0, key: null, rollPenalty: 0, integrityCap: 0, loseReaction: false, loseAction: false, tick: null };
   // Radiation is a Steward-level mechanic — only characters/NPCs carry RP.
@@ -13456,6 +13504,7 @@ Hooks.once("init", function () {
       tierForLevel,
       deriveItemUnlockLevel,
       applyPathFeatures,
+      grantStarterManifestations,
       applySkillGrantsFromFeatures,
       extractSkillGrantsFromFeature,
       promoteStampedAptitudeAEs,
@@ -14194,6 +14243,9 @@ Hooks.once("init", function () {
       const biased = Math.max(1, Math.min(10, mRoll.total + (Number(modeMisfireBias) || 0)));
       const useTier = Number.isFinite(misfireTier) ? misfireTier : (sys?.details?.tier ?? 1);
       misfireData = ftResolveMisfire(biased, useTier);
+      // Descent D2 — the misfire finally has a voice (spec §1.3). Emitted on
+      // the casting client; the darkness listener below gates on ownership.
+      try { Hooks.callAll("fourththing.misfire", { actorId: actor?.id ?? null, tier: misfireData?.tier ?? useTier, band: misfireData?.name ?? null, d10: biased, source: "cast" }); } catch (_e) {}
     }
 
     const restraintNote = (pulled || bonus)
@@ -14407,9 +14459,13 @@ Hooks.once("init", function () {
     // the caster's manifestation saves while held, not a single named target.
     const _clSentence = !!actor?.flags?.fourththing?.modes?.clSentence;
     const effOverride = (rollOverride === "3d10kl2" || _abDisSaves || _clSentence) ? "3d10kl2" : rollOverride;
+    // Descent D2 — Nadir+ personal Darkness bites Soul-defense rolls
+    // (FT.DARKNESS_BITE.soulSavePenalty, spec §1.2). Target side: the roller.
+    const _dkSavePen = saveAttr === "soul" ? (Number(_ftDarknessBite(target)?.soulSavePenalty) || 0) : 0;
+    const totalBonusEff = totalBonus - _dkSavePen;
     let formula      = effOverride === "3d10kl2"
-      ? `3d10kl2 + ${totalBonus}`
-      : `${_ftXd10(target)} + ${totalBonus}`;
+      ? `3d10kl2 + ${totalBonusEff}`
+      : `${_ftXd10(target)} + ${totalBonusEff}`;
     // 3d10kl2 path doesn't explode, so wrath/cinder modifiers are skipped.
     if (effOverride !== "3d10kl2") {
       formula = _ftApplySurgeRollMods(formula, _saveSurge);
@@ -14637,6 +14693,9 @@ Hooks.once("init", function () {
     const totalShift = (Number(modeMisfireBias) || 0) + disciplineShift;
     const biased = Math.max(1, Math.min(10, roll.total + totalShift));
     const result = ftResolveMisfire(biased, useTier);
+    // Descent D2 — manual misfire rolls announce themselves too, but tagged
+    // source:"manual" so GM tooling never blackens anyone.
+    try { Hooks.callAll("fourththing.misfire", { actorId: actor?.id ?? null, tier: result?.tier ?? useTier, band: result?.name ?? null, d10: biased, source: "manual" }); } catch (_e) {}
 
     const shiftBits = [];
     if (Number(modeMisfireBias)) shiftBits.push(`mode ${modeMisfireBias > 0 ? "+" : ""}${modeMisfireBias}`);
@@ -15172,6 +15231,29 @@ Hooks.once("init", function () {
   // trigger plumbing instead of duplicating it. baseDmg is the un-scaled
   // damage value; perTargetMultiplier scales for AoE save outcomes (1.0 /
   // 0.5 / 0). Returns a short description for chat-card summaries.
+  // Descent D2 — qliphothic damage blackens (spec §1.3): ≥6 qliphothic damage
+  // taken in ONE scene → Darkness +1, once per scene. Accumulator at
+  // flags.fourththing.qliDark {sceneId, amount, done}; a scene change resets
+  // it implicitly. Fire-and-forget from the damage chokepoint — never blocks
+  // or breaks the apply. Amount is the pre-resist estimate (close enough for
+  // a 6-point tripwire; exactness isn't worth threading the resist math out).
+  async function _ftAccumulateQliDarkness(actor, amount) {
+    try {
+      if (!actor || !(amount > 0)) return;
+      if (actor.type !== "character" && actor.type !== "npc") return;
+      if (actor.getFlag?.("bbttcc-factions", "isFaction") === true) return;
+      if (!actor.isOwner) return; // only the applying client's writable targets
+      const sceneId = canvas?.scene?.id ?? game.scenes?.current?.id ?? "none";
+      let acc = foundry.utils.deepClone(actor.getFlag("fourththing", "qliDark") ?? {});
+      if (acc.sceneId !== sceneId) acc = { sceneId, amount: 0, done: false };
+      if (acc.done) return;
+      acc.amount = (Number(acc.amount) || 0) + amount;
+      if (acc.amount >= 6) acc.done = true;
+      await actor.setFlag("fourththing", "qliDark", acc);
+      if (acc.done) await game.fourththing.darkness?.gain?.(actor, 1, "qliphothic-damage");
+    } catch (_e) {}
+  }
+
   game.fourththing.rolls._applyDamageToActor = async function (actor, baseDmg, {
     op = "damage", track = "integrity", damageType = "", damageFlavor = "",
     perTargetMultiplier = 1, ignoreResists = false, nonlethal = false,
@@ -15185,6 +15267,12 @@ Hooks.once("init", function () {
     if (String(damageType).toLowerCase() === "energy") {
       const _a = _ftAliasEnergyDamage(damageType, damageFlavor);
       damageType = _a.type; damageFlavor = _a.flavor;
+    }
+
+    // Descent D2 — qliphothic damage feeds the darkness accumulator (helper
+    // above; fire-and-forget, cannot break the apply path).
+    if (op === "damage" && String(damageType).toLowerCase() === "qliphothic") {
+      _ftAccumulateQliDarkness(actor, Math.max(0, Math.round((Number(baseDmg) || 0) * (Number(perTargetMultiplier) || 1))));
     }
 
     // ── Environmental damage interactions (underwater / vacuum) ───────────────
@@ -15825,6 +15913,10 @@ Hooks.once("init", function () {
     // can't afford is dropped before the Soma Break refills the pool.
     await ftChargeUpkeep(actor, { cadence: "soma" });
 
+    // Descent D2 — the trance drains the torrent: Darkness washes down to the
+    // taint floor (spec §1.3; what stuck, stuck — only face() heals taint).
+    try { await game.fourththing.darkness?.wash?.(actor, 99, "soma-break"); } catch (_e) {}
+
     const updates = {
       "system.magic.clarity.value":            sys.magic?.clarity?.max            ?? 5,
       // Refill to the live max. The literal fallbacks used to be `?? 3` which
@@ -16138,6 +16230,183 @@ Hooks.once("init", function () {
   // Exposed so the separate ft-progression.js roll path (and any external caller)
   // can read the radiation bite without importing this module.
   game.fourththing.radiationBite = _ftRadiationBite;
+
+  // ── Descent Engine D1 — personal Darkness API (DESCENT_ENGINE_SPEC §1.1) ──
+  // The ONLY sanctioned write path for system.darkness. Every mutation emits
+  // fourththing.darknessChanged with explicit before/after (the "detectors lie
+  // at floor 0" trap is designed out). value can never rest below taint;
+  // overflow past 10 scars taint +1; taint heals ONLY via face().
+  game.fourththing.darknessBite = _ftDarknessBite;
+  const _ftDarkSpikes = (actor) => actor?.getFlag?.("bbttcc", "enlightenment")?.darknessSpikes === true;
+  game.fourththing.darkness = {
+    bite: _ftDarknessBite,
+    get(actor)  { const b = _ftDarknessBite(actor); return { value: b.value, taint: b.taint, band: b.band }; },
+    band(actor) { return _ftDarknessBite(actor).band; },
+    fragments(actor) {
+      const rawSys = actor?.system?.system ?? actor?.system;
+      return Array.isArray(rawSys?.darkness?.fragments) ? rawSys.darkness.fragments : [];
+    },
+    async gain(actor, n = 1, source = "unspecified") {
+      if (!actor) return null;
+      const bite = _ftDarknessBite(actor);
+      let amount = Math.max(0, Math.floor(Number(n) || 0));
+      if (!amount) return bite;
+      if (_ftDarkSpikes(actor)) amount += 1;   // the qliphothic ladder descends faster (§1.3)
+      const before = bite.value;
+      let after = before + amount;
+      let taint = bite.taint;
+      if (after > 10) { taint = Math.min(10, taint + 1); after = 10; }  // overflow scars
+      await actor.update({ "system.darkness.value": after, "system.darkness.taint": taint });
+      Hooks.callAll("fourththing.darknessChanged", { actorId: actor.id, before, after, taint, source });
+      return _ftDarknessBite(actor);
+    },
+    async wash(actor, n = 1, source = "unspecified") {
+      if (!actor) return null;
+      const bite = _ftDarknessBite(actor);
+      const before = bite.value;
+      const after = Math.max(bite.taint, before - Math.max(0, Math.floor(Number(n) || 0)));
+      if (after === before) return bite;
+      await actor.update({ "system.darkness.value": after });
+      Hooks.callAll("fourththing.darknessChanged", { actorId: actor.id, before, after, taint: bite.taint, source });
+      return _ftDarknessBite(actor);
+    },
+    async setTaint(actor, n, source = "gm") {
+      if (!actor) return null;
+      const bite = _ftDarknessBite(actor);
+      const taint = Math.max(0, Math.min(10, Math.floor(Number(n) || 0)));
+      const value = Math.max(bite.value, taint);  // value can never rest below taint
+      await actor.update({ "system.darkness.taint": taint, "system.darkness.value": value });
+      Hooks.callAll("fourththing.darknessChanged", { actorId: actor.id, before: bite.value, after: value, taint, source });
+      return _ftDarknessBite(actor);
+    },
+    async addFragment(actor, { qliphoth = "unknown", source = "gm", text = "" } = {}) {
+      if (!actor) return null;
+      const list = [...this.fragments(actor)];
+      const frag = { id: foundry.utils.randomID(), qliphoth, source, text: String(text || ""), at: Date.now(), faced: false };
+      list.push(frag);
+      await actor.update({ "system.darkness.fragments": list });
+      Hooks.callAll("fourththing.fragmentGained", { actorId: actor.id, fragment: frag });
+      return frag;
+    },
+    // Facing a fragment is a deliberate SCENE (confession, restitution, the
+    // mercy door) — the GM confirms it happened, then calls this. Taint −1
+    // (−2 for darknessSpikes stewards: the qliphothic path harvests more).
+    async face(actor, fragmentId) {
+      if (!actor) return null;
+      const list = this.fragments(actor).map(f => ({ ...f }));
+      const frag = list.find(f => f.id === fragmentId);
+      if (!frag || frag.faced) return frag ?? null;
+      frag.faced = true;
+      const bite = _ftDarknessBite(actor);
+      const taint = Math.max(0, bite.taint - (_ftDarkSpikes(actor) ? 2 : 1));
+      await actor.update({ "system.darkness.fragments": list, "system.darkness.taint": taint });
+      Hooks.callAll("fourththing.fragmentFaced", { actorId: actor.id, fragment: frag, taint });
+      return frag;
+    }
+  };
+
+  // ── Descent D2 — automatic darkness sources (spec §1.3) ───────────────────
+  // Hooks are client-local: each listener runs on the client that emitted the
+  // event and gates on actor ownership, so writes always come from a seat
+  // that can make them.
+
+  // T2+ manifestation misfires blacken (+1). Manual GM misfire rolls don't.
+  Hooks.on("fourththing.misfire", async ({ actorId, tier, source }) => {
+    try {
+      if (source !== "cast") return;
+      if (Number(tier) < 2) return;
+      const actor = game.actors?.get(actorId);
+      if (!actor?.isOwner) return;
+      await game.fourththing.darkness?.gain?.(actor, 1, "misfire");
+    } catch (_e) {}
+  });
+
+  // Travel into a dark hex (per-hex darkness ≥ 5 on the owning faction):
+  // +1 to the traveling steward, once per hex per world turn. Runs on the
+  // seat that executed the leg (usually the GM console); unwritable stewards
+  // are skipped rather than relayed — the pilgrim pays, the cargo doesn't.
+  Hooks.on("bbttcc:afterTravel", async (ctx) => {
+    try {
+      if (!ctx?.success) return;
+      const steward = ctx.actor;
+      if (!steward?.isOwner) return;
+      if (steward.type !== "character" && steward.type !== "npc") return;
+      // Resolve the destination hex Drawing from ctx.to (doc, uuid, or name).
+      let hex = null;
+      const to = ctx.to;
+      if (to?.flags?.["bbttcc-territory"]) hex = to;
+      else if (typeof to === "string" && to.includes("Drawing")) { try { hex = await fromUuid(to); } catch (_e) {} }
+      if (!hex && to != null) {
+        const norm = (s) => String(s || "").replace(/ /g, " ").replace(/^[\s✦]+/, "").replace(/\s+/g, " ").trim().toLowerCase();
+        const wanted = norm(typeof to === "string" ? to : (to?.name ?? to?.text ?? ""));
+        if (wanted) {
+          outer: for (const sc of game.scenes?.contents ?? []) {
+            for (const d of sc.drawings ?? []) {
+              const tf = d.flags?.["bbttcc-territory"];
+              if (!(tf?.isHex === true || tf?.kind === "territory-hex")) continue;
+              if (norm(d.text || tf?.name || "") === wanted) { hex = d; break outer; }
+            }
+          }
+        }
+      }
+      if (!hex) return;
+      const tf = hex.flags?.["bbttcc-territory"] ?? {};
+      const fid = tf.factionId || tf.ownerId || "";
+      const faction = fid ? game.actors?.get(fid) : null;
+      const hexDark = Number(faction?.getFlag?.("bbttcc-factions", "darkness")?.[hex.id] ?? 0) || 0;
+      if (hexDark < 5) return;
+      // Once per hex per world turn (canonical spine: bbttcc-world).
+      const turn = Number(game.bbttcc?.api?.world?.getState?.()?.turn?.number ?? 0) || 0;
+      const seen = foundry.utils.deepClone(steward.getFlag("fourththing", "darkHexLog") ?? {});
+      if (seen[hex.id] === turn) return;
+      seen[hex.id] = turn;
+      await steward.setFlag("fourththing", "darkHexLog", seen);
+      await game.fourththing.darkness?.gain?.(steward, 1, "dark-hex-travel");
+    } catch (_e) {}
+  });
+
+  // Authored descents — beat tags `darkness:+N` and `fragment:<qliphoth>`
+  // applied to the resolving steward on bbttcc:beat:resolved (executeBeat
+  // runs GM-side; the isGM gate keeps stray clients quiet).
+  Hooks.on("bbttcc:beat:resolved", async ({ beat, ctx }) => {
+    try {
+      if (!game.user?.isGM) return;
+      const tags = Array.isArray(beat?.tags) ? beat.tags.map(t => String(t).trim().toLowerCase()) : [];
+      if (!tags.length) return;
+      const actorId = ctx?.actorId ?? ctx?.actor?.id ?? null;
+      const steward = actorId ? game.actors?.get(actorId) : null;
+      if (!steward) return;
+      for (const tag of tags) {
+        const dm = /^darkness:\+?(\d+)$/.exec(tag);
+        if (dm) { await game.fourththing.darkness?.gain?.(steward, Number(dm[1]), `beat:${beat?.id ?? "?"}`); continue; }
+        const fm = /^fragment:([a-z0-9_-]+)$/.exec(tag);
+        if (fm) await game.fourththing.darkness?.addFragment?.(steward, { qliphoth: fm[1], source: `beat:${beat?.id ?? "?"}`, text: String(beat?.label ?? beat?.name ?? "") });
+      }
+    } catch (_e) {}
+  });
+
+  // ── Descent D3 — public band icon (Ruling 7: band public, details private) ─
+  // Mirrors the current band as a single marker ActiveEffect so the token
+  // wears the shadow where the whole table can see it. Runs on the mutating
+  // client (hooks are client-local), which by construction owns the actor.
+  Hooks.on("fourththing.darknessChanged", async ({ actorId }) => {
+    try {
+      const actor = game.actors?.get(actorId);
+      if (!actor?.isOwner) return;
+      const bite = _ftDarknessBite(actor);
+      const marks = (actor.effects?.contents ?? []).filter(e => e.flags?.fourththing?.darknessBand);
+      const stale = marks.filter(e => e.flags.fourththing.darknessBand !== bite.key);
+      if (stale.length) await actor.deleteEmbeddedDocuments("ActiveEffect", stale.map(e => e.id));
+      if (bite.key && !marks.some(e => e.flags.fourththing.darknessBand === bite.key)) {
+        const cond = FT.CONDITIONS[bite.key];
+        await actor.createEmbeddedDocuments("ActiveEffect", [{
+          name: `Darkness — ${cond?.label ?? bite.band}`,
+          img: cond?.img ?? "icons/svg/blind.svg",
+          flags: { fourththing: { darknessBand: bite.key } }
+        }]);
+      }
+    } catch (_e) {}
+  });
   game.fourththing.noiseBite     = _ftNoiseBite;
 
   game.fourththing.toggleCondition = async function (actor, condKey) {
@@ -17187,7 +17456,10 @@ Hooks.once("init", function () {
       const storedMax   = Number(sys.magic.clarity.max) || 0;
       const disciplineBonus = getClarityMaxBonus(this);
       const tccBonus    = isTCC(this) ? 5 : 0;
-      sys.magic.clarity.max = Math.max(clarityBase, storedMax) + disciplineBonus + tccBonus;
+      // Descent Engine D1: Umbral+ personal Darkness dims the vessel (−2 max
+      // Clarity, FT.DARKNESS_BITE). Floor at 1 — the light never fully dies.
+      const darknessClarityPenalty = _ftDarknessBite(this).clarityMaxPenalty;
+      sys.magic.clarity.max = Math.max(1, Math.max(clarityBase, storedMax) + disciplineBonus + tccBonus - darknessClarityPenalty);
       sys.magic.clarity.tierBase = clarityBase;
     }
   }
@@ -18261,6 +18533,7 @@ Hooks.once("init", function () {
         ftSpendSkillPoints: FourthThingCharacterSheet._onFtSpendSkillPoints,
         ftGrantSkillRanks:  FourthThingCharacterSheet._onFtGrantSkillRanks,
         ftApplyPathFeatures:FourthThingCharacterSheet._onFtApplyPathFeatures,
+        ftFaceFragment:     FourthThingCharacterSheet._onFtFaceFragment,
         ftToggleEditMode:   FourthThingCharacterSheet._onFtToggleEditMode,
         ftAddEffect:        FourthThingCharacterSheet._onFtAddEffect,
         ftToggleEffect:     FourthThingCharacterSheet._onFtToggleEffect,
@@ -18857,6 +19130,25 @@ Hooks.once("init", function () {
             color:     cond?.color ?? "#7ec850",
             penalties: bits,
             sick:      !!bite.key
+          };
+        })(),
+        darkness:      (() => {
+          // Descent Engine D1 — band chip + taint + fragment tally beside the
+          // Darkness input. Sheet renders for owner+GM only, satisfying Ruling
+          // 7's "details private" (the public band icon lands with D2's token
+          // status sync).
+          const bite = _ftDarknessBite(actor);
+          const cond = bite.key ? FT.CONDITIONS[bite.key] : null;
+          const raw  = actor.system?.system ?? actor.system;
+          const frags = Array.isArray(raw?.darkness?.fragments) ? raw.darkness.fragments : [];
+          return {
+            value: bite.value, taint: bite.taint,
+            bandLabel: cond?.label ?? "Clear",
+            color: cond?.color ?? "#9aa5b1",
+            deep: !!bite.key,
+            fragTotal: frags.length,
+            fragFaced: frags.filter(f => f?.faced).length,
+            frags: frags.map(f => ({ id: f.id, qliphoth: f.qliphoth, text: f.text, faced: !!f.faced }))
           };
         })(),
         conditions:    conditionList,
@@ -20233,9 +20525,40 @@ Hooks.once("init", function () {
       }
     }
 
+    // Descent D3 — face a fragment. The GM confirms the scene happened
+    // (confession, restitution, the mercy door), then presses this; players
+    // get a nudge instead of a write (facing is earned in fiction, not
+    // clicked). game.fourththing.darkness.face() is the only taint heal.
+    static async _onFtFaceFragment(event, target) {
+      const fragId = target?.dataset?.fragmentId;
+      if (!fragId) return;
+      if (!game.user.isGM) {
+        ui.notifications?.info("Facing a fragment is a scene — play it, then your GM confirms it here.");
+        return;
+      }
+      const frag = await game.fourththing.darkness?.face?.(this.actor, fragId);
+      if (frag) {
+        ui.notifications?.info(`${this.actor.name} has faced the fragment (${frag.qliphoth}). Taint eases.`);
+        this.render();
+      }
+    }
+
     // Sprint F: Apply Path Features — import class core + chosen subclass features
     static async _onFtApplyPathFeatures(event, target) {
       const result = await applyPathFeatures(this.actor);
+      // Starter manifestation kit rides the same button so existing stewards
+      // can claim theirs (the creation wizard grants it for new characters).
+      // Runs before the error return: a narrative-stub class with no feature
+      // folders can still have an authored kit.
+      try {
+        const kit = await grantStarterManifestations(this.actor);
+        if (kit.imported.length) {
+          ui.notifications.info(`${this.actor.name}: starter manifestation kit — ${kit.imported.join(", ")}.`);
+          this.render();
+        }
+      } catch (e) {
+        console.error("Roll for Initiation | starter kit grant failed:", e);
+      }
       if (result.error) {
         ui.notifications.warn(`${this.actor.name}: ${result.error}`);
         return;
