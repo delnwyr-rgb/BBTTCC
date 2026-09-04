@@ -58,6 +58,20 @@
   t("adversary.force exposed (GM test lever)", typeof adv?.force === "function");
   t("afterTravel listeners ≥ 2 (darkness + hunter)", (Hooks.events["bbttcc:afterTravel"]?.length ?? 0) >= 2);
 
+  // G1 — the Threshold
+  const daath = game.fourththing?.epic?.daath;
+  t("daath API present", !!daath);
+  for (const k of ["status", "knock", "bindScene", "check"]) t(`daath.${k}`, typeof daath?.[k] === "function");
+  let dsOk = true;
+  try { game.settings.get("bbttcc-epic", "daath"); game.settings.get("bbttcc-epic", "daathSceneId"); } catch (_e) { dsOk = false; }
+  t("daath settings registered", dsOk);
+  t("hexIntegrated listeners ≥ 2 (epic credit + lamp watch)", (Hooks.events["bbttcc:spark:hexIntegrated"]?.length ?? 0) >= 2);
+  if (daath) {
+    const st = daath.status();
+    t("daath.status shape", Number.isFinite(st?.lampsCount) && Array.isArray(st?.lampsNow) && typeof st?.opened === "boolean");
+    console.log("[descent-selftest] Threshold:", `${st.lampsCount}/10 lamps`, st.opened ? "· DAATH OPEN" : "", st.risen ? "· DRAGON RISEN" : "", st.sceneBound ? `· scene: ${st.sceneBound}` : "· no Daath scene bound");
+  }
+
   console.log(`%c=== Descent self-test: ${bad.length ? "PROBLEMS" : "ALL CLEAR"} ===`, "font-weight:bold");
   ok.forEach(n => console.log("  ✓", n));
   bad.forEach(n => console.warn("  ✗", n));

@@ -61,6 +61,22 @@ const OMENS = [
   "The night is exactly as dark as last night. That is what's wrong with it."
 ];
 
+// G1 — once Daath stands open, the Gaze's omens grow teeth of their own.
+const DRAGON_OMENS = [
+  "In everyone's dream tonight, a door. Nobody describes the same door. It is the same door.",
+  "A child draws the party from memory and adds, unprompted, a long shape underneath.",
+  "The lamps do not flicker. Something is being very careful not to breathe on them.",
+  "Between one heartbeat and the next, every mirror in the settlement is a half-second slow.",
+  "Someone counts the party twice and gets one more, both times."
+];
+function omenPool() {
+  try {
+    const daath = game.settings.get(MOD, "daath");
+    if (daath?.opened) return [...OMENS, ...DRAGON_OMENS, ...DRAGON_OMENS]; // dragon lines weighted
+  } catch (_e) {}
+  return OMENS;
+}
+
 function isHexDoc(d) {
   const tf = d?.flags?.[TER];
   return tf?.isHex === true || tf?.kind === "territory-hex";
@@ -133,7 +149,7 @@ function bpMath(detail) {
 
 // ── Events (each falls back down the ladder when it lacks a target) ─────────
 async function eventOmen(tier, detail) {
-  await dreadCard(tier.label, `<em>${pick(OMENS)}</em>`);
+  await dreadCard(tier.label, `<em>${pick(omenPool())}</em>`);
   await gmCard(`👁 ${bpMath(detail)} → <b>${tier.label}</b> omen.`);
   Hooks.callAll("bbttcc:adversary:event", { type: "omen", tier: tier.key, bp: detail.bp });
 }

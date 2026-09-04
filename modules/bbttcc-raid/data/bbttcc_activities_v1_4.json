@@ -709,7 +709,7 @@
           "softPower": 10
         },
         "effects": {
-          "text": "Merge five purified Sparks into Final Ritual."
+          "text": "Merge three purified Sparks into Final Ritual."
         },
         "minFactionTier": 3
       }
