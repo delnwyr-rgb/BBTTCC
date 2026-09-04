@@ -82,6 +82,20 @@
   t("ritual setting registered", rsOk);
   t("mercy ledger readable", (() => { try { game.settings.get("bbttcc-campaign", "banditMercy"); return true; } catch (_e) { return false; } })());
 
+  // G3 — the Reformation (the ending has ears)
+  const ref = game.fourththing?.epic?.reformation;
+  t("reformation API present", !!ref);
+  for (const k of ["status", "fire", "reset"]) t(`reformation.${k}`, typeof ref?.[k] === "function");
+  t("malkuthAligned FINALLY has a listener", (Hooks.events["bbttcc:epic:malkuthAligned"]?.length ?? 0) >= 1);
+  t("ritual:answered has the reformation listener", (Hooks.events["bbttcc:ritual:answered"]?.length ?? 0) >= 1);
+  let rfOk = true;
+  try { game.settings.get("bbttcc-epic", "reformation"); game.settings.get("bbttcc-epic", "ascentUnlocked"); } catch (_e) { rfOk = false; }
+  t("reformation settings registered", rfOk);
+  if (ref) {
+    const st = ref.status();
+    console.log("[descent-selftest] Reformation:", st.done ? `DONE (${st.outcome})` : `pending — dragon: ${st.dragon ?? "…"}, board: ${st.board}`, st.ascent ? "· ASCENT OPEN" : "");
+  }
+
   console.log(`%c=== Descent self-test: ${bad.length ? "PROBLEMS" : "ALL CLEAR"} ===`, "font-weight:bold");
   ok.forEach(n => console.log("  ✓", n));
   bad.forEach(n => console.warn("  ✗", n));

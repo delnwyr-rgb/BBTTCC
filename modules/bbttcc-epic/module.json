@@ -27,7 +27,8 @@
     "scripts/repair.js",
     "scripts/adversary.js",
     "scripts/daath.js",
-    "scripts/ritual.js"
+    "scripts/ritual.js",
+    "scripts/reformation.js"
   ],
   "styles": [
     "styles/epic.css"
