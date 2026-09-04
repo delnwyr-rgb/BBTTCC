@@ -184,6 +184,18 @@
       if (!ok2) return false;
     }
 
+    // Act gating (2026-09-03, owner ruling "Act 1 opening roads"):
+    // conditions.phaseGte / phaseLte read the campaign act ladder (storyPhase)
+    // — entries outside the band are invisible to the roll. This is how the
+    // full terrain tables reopen BY THEMSELVES when the act advances, with no
+    // table swapping.
+    if (cond.phaseGte != null || cond.phaseLte != null) {
+      let phase = 0;
+      try { phase = Number(game.settings.get("bbttcc-campaign", "storyPhase")) || 0; } catch (_e) {}
+      if (cond.phaseGte != null && !(phase >= Number(cond.phaseGte))) return false;
+      if (cond.phaseLte != null && !(phase <= Number(cond.phaseLte))) return false;
+    }
+
     return true;
   }
 
@@ -240,7 +252,17 @@
     const entries = Array.isArray(table.entries) ? table.entries : [];
     if (!entries.length) return { ok: false, reason: "no_entries", tableId };
 
-    const eligible = entries.filter(ent => ent && passesTravelConditions(ent, terrainKey));
+    let eligible = entries.filter(ent => ent && passesTravelConditions(ent, terrainKey));
+    if (!eligible.length) return { ok: false, reason: "no_eligible", tableId };
+
+    // Single-fire entries (2026-09-03, owner ruling): an entry with once:true
+    // goes invisible after its beat has FIRED (director fire-marks land at
+    // executeBeat entry). A DECLINED encounter never marks, so a declined
+    // convoy can still roll up again later — that's the intended semantics.
+    try {
+      const fired = game.settings.get("bbttcc-campaign", "directorState")?.firedStoryBeats || {};
+      eligible = eligible.filter(ent => !(ent && ent.once && fired[String(ent.beatId || "")]));
+    } catch (_e) {}
     if (!eligible.length) return { ok: false, reason: "no_eligible", tableId };
 
     const pick = weightedPick(eligible);
