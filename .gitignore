@@ -13,6 +13,8 @@
 # The capability atlas documents the versioned code — it travels with it.
 # (CLAUDE.md stays local-only on purpose: it carries deploy topology.)
 !/CAPABILITIES.md
+# Act 2 pre-flight lint report — documents the versioned lint/walker tools.
+!/ACT2_LINT_2026_09_05.md
 
 # Allowlist the fourththing system
 !/systems/
