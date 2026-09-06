@@ -356,7 +356,7 @@ async function _onRenewal(actor) {
           // Attribute value lookup — fourththing stores attrs at system.attributes.<key>.value
           const rawSys = actor.system?.system ?? actor.system;
           const attrVal = Number(rawSys?.attributes?.[attrKey]?.value) || 0;
-          const roll = new Roll(`1d20 + ${attrVal}`);
+          const roll = new Roll(`${(game.fourththing?.rolls?.checkFormula?.() || "2d10x10")} + ${attrVal}`);   // canon die: 2d10, tens explode
           await roll.evaluate();
           const total = Number(roll.total) || 0;
           const success = total >= 15;

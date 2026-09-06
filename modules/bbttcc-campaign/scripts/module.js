@@ -1790,6 +1790,8 @@ function _opKeyLabel(key) {
 
 // Marks helpers — bank values are stored in marks (1 OP = 10 marks).
 const _OP_TO_MARKS = 10;
+// Canon check die (2d10, tens explode) — from the system when loaded, literal otherwise.
+function _ftCanonDie() { try { return game.fourththing?.rolls?.checkFormula?.() || "2d10x10"; } catch (_e) { return "2d10x10"; } }
 function _marksToOpDisplay(marks) {
   const n = _num(marks, 0);
   const op = n / _OP_TO_MARKS;
@@ -2100,7 +2102,7 @@ async function _rollChoiceCheck(choice, ctx={}) {
     const factionId = ctx.factionId || ctx.factionUuid || ctx.actorId || null;
     const faction = await _resolveFaction(factionId);
     if (!faction) {
-      const roll = await _evalRoll(new Roll("1d20"));
+      const roll = await _evalRoll(new Roll(_ftCanonDie()));
       return { kind:"op", stat, dc, total:roll.total, ok:roll.total>=dc, roll };
     }
     // OP-check roll bonus: faction bank contributes whole OPs only (marks/10 floor).
@@ -2110,9 +2112,23 @@ async function _rollChoiceCheck(choice, ctx={}) {
     const roster = await _getFactionRoster(faction);
     const rosterSum = roster.reduce((s,a)=>s+_readActorOp(a,key),0);
     const bonus = baseOp + rosterSum;
-    const roll = await _evalRoll(new Roll("1d20 + @b", { b: bonus }));
+    const roll = await _evalRoll(new Roll(`${_ftCanonDie()} + @b`, { b: bonus }));
     const total = roll.total ?? 0;
-    return { kind:"op", stat, opKey:key, dc, bonus, breakdown:{ base: baseOp, baseMarks, roster:rosterSum }, total, ok:total>=dc, roll };
+    // RFI strategic layer (mirrors the faction sheet's OP roll): every exploded d10
+    // banks +1 Momentum on the paying faction — owner ruling 2026-09-06, "give them
+    // as many opportunities to accrue Momentum as we can". Double-ten = Decisive Moment.
+    let explosions = 0, doubleTen = false;
+    try {
+      const term = roll.dice?.[0]; const results = Array.isArray(term?.results) ? term.results : [];
+      const n = Number(term?.number) || 2;
+      explosions = Math.max(0, results.filter(r => r.exploded).length);
+      doubleTen = results.slice(0, n).filter(r => r.active !== false && r.result === 10).length >= 2;
+      if (explosions > 0 && faction?.setFlag) {
+        const cur = Number(faction.getFlag("bbttcc-factions", "momentum") ?? 0) || 0;
+        await faction.setFlag("bbttcc-factions", "momentum", cur + explosions);
+      }
+    } catch (_eMom) {}
+    return { kind:"op", stat, opKey:key, dc, bonus, breakdown:{ base: baseOp, baseMarks, roster:rosterSum }, total, ok:total>=dc, roll, explosions, momentumBanked: explosions, doubleTen };
   }
 
   let actor = null;
@@ -2163,7 +2179,7 @@ async function _rollChoiceCheck(choice, ctx={}) {
     } catch {}
   }
 
-  const roll = await _evalRoll(new Roll("1d20"));
+  const roll = await _evalRoll(new Roll(_ftCanonDie()));
   return { kind:"basic", stat, dc, total:roll.total, ok:roll.total>=dc, roll };
 }
 
@@ -2601,7 +2617,7 @@ ${
 
                 if (res.kind === "op") {
                   ui.notifications?.info?.(
-                    `${label}: ${res.total} (1d20 + ${res.bonus}) vs DC ${res.dc}  ->  ${res.ok ? "SUCCESS" : "FAIL"}`
+                    `${label}: ${res.total} (${_ftCanonDie()} + ${res.bonus}) vs DC ${res.dc}  ->  ${res.ok ? "SUCCESS" : "FAIL"}${res.momentumBanked ? ` · +${res.momentumBanked} Momentum` : ""}${res.doubleTen ? " · ✦ Decisive Moment" : ""}`
                   );
                 } else {
                   ui.notifications?.info?.(
@@ -5679,7 +5695,7 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
       rosterActorId, supportOpKey, supportSpend
     });
     try {
-      ui.notifications?.info?.(`${label}: ${res.total}${res.kind === "op" ? ` (1d20 + ${res.bonus})` : ""} vs DC ${res.dc}  ->  ${res.ok ? "SUCCESS" : "FAIL"}`);
+      ui.notifications?.info?.(`${label}: ${res.total}${res.kind === "op" ? ` (${_ftCanonDie()} + ${res.bonus})` : ""} vs DC ${res.dc}${res.momentumBanked ? ` · +${res.momentumBanked} Momentum` : ""}${res.doubleTen ? " · ✦ Decisive Moment" : ""}  ->  ${res.ok ? "SUCCESS" : "FAIL"}`);
     } catch (_eN) {}
     const nextId = res.ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
     if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));

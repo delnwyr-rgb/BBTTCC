@@ -65,10 +65,15 @@
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
   const api = game.bbttcc?.api?.campaign;
   if (!api?.runBeat || !api?.setActiveCampaignId) return ui.notifications.error("Campaign API missing — deploy + F5 first.");
+  // Re-entry guard: two concurrent walks would snapshot each other's sandbox and restore it as "live".
+  if (window.__bbttccWalkRunning) return ui.notifications.error("A headless walk is already running on this client — set window.__bbttccWalkStop = true and wait for its summary card before starting another.");
+  const liveCidGuard = api.getActiveCampaignId();
+  if (/^walk_.*_tmp$/.test(String(liveCidGuard || ""))) return ui.notifications.error(`Active campaign is a walker throwaway ('${liveCidGuard}') — a previous run did not clean up. Run the cleanup snippet from ACT2_LINT_2026_09_05.md first.`);
+  window.__bbttccWalkRunning = true;
   const activeUsers = game.users.filter(u => u.active && !u.isGM);
   if (activeUsers.length) {
     const go = await Dialog.confirm({ title: "Headless walker", content: `<p><b>${activeUsers.length} player client(s) connected.</b> The walk broadcasts player-facing dialogs and floods chat. Continue anyway?</p>` });
-    if (!go) return;
+    if (!go) { window.__bbttccWalkRunning = false; return; }
   }
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
   const s = (v) => String(v ?? "").trim();
@@ -82,7 +87,7 @@
   const wasString = typeof rawCamps === "string";
   const camps = wasString ? JSON.parse(rawCamps) : foundry.utils.deepClone(rawCamps);
   const live = camps?.[liveCid];
-  if (!live) return ui.notifications.error("No active campaign to walk.");
+  if (!live) { window.__bbttccWalkRunning = false; return ui.notifications.error("No active campaign to walk."); }
   const liveBeats = Array.isArray(live.beats) ? live.beats : Object.values(live.beats || {});
   const byId = new Map(liveBeats.map(b => [b.id, b]));
   const TEST_ID = `walk_${liveCid}_tmp`;
@@ -102,7 +107,7 @@
   }
   scope = scope.filter(b => only(b.id));
   if (CFG.LIMIT > 0) scope = scope.slice(0, CFG.LIMIT);
-  if (!scope.length) return ui.notifications.warn("Walker: nothing in scope.");
+  if (!scope.length) { window.__bbttccWalkRunning = false; return ui.notifications.warn("Walker: nothing in scope."); }
   console.log(TAG, `scope: ${scope.length} beats (act ${CFG.ACT}${CFG.INCLUDE_UNGATED_NEIGHBORS ? " + ungated neighbors" : ""})`);
 
   // ── Snapshots ────────────────────────────────────────────────────────────────
@@ -330,10 +335,14 @@
           if (rr.error) f2.push(rr.error);
           // beat:resolved fires innermost-first: [ ...deeper hops, routed, source ]
           const iB = rr.seq.lastIndexOf(b.id);
-          if (iB === -1) f2.push(rr.seq.length ? `source never resolved; saw ${rr.seq.join("→")} (entry redirect?)` : "beat never resolved");
+          if (iB === -1) { const rd = Object.entries({ gullywasher_cultural_summit_success: "gullywasher_cultural_summit_failure" }).find(([k, v]) => k === b.id && rr.seq[0] === v); if (rd) n2.push(`source rerouted on entry → ${rr.seq.join("→")} (designed engine gate)`); else f2.push(rr.seq.length ? `source never resolved; saw ${rr.seq.join("→")} (entry redirect?)` : "beat never resolved"); }
           const got = iB > 0 ? rr.seq[iB - 1] : "";
+          if (iB === -1) { push({ kind: "transition", beat: b.id, act: phaseOf(b), choice: i, label: s(ch.label), verdict: hasCheck ? verdict : null, check: s(ch.checkStat) || null, dc: ch.checkDC ?? null, expected: expected || null, got: null, ok: !f2.length, fails: f2, notes: n2, seq: rr.seq }); continue; }
           const deeper = iB > 1 ? rr.seq.slice(0, iB - 1) : [];
-          if (expected && got !== expected) f2.push(`routed to '${got || "(nothing)"}', expected '${expected}'${!cloneById.has(expected) ? " (target does not exist)" : ""}`);
+          // engine entry redirects (module.js _beatEntryRedirect): the target itself reroutes on entry
+          const ENGINE_REDIRECTS = { gullywasher_cultural_summit_success: "gullywasher_cultural_summit_failure" };   // Forgotten Cause gate: feudCauseRecovered on the REAL faction (never set in the sandbox)
+          if (expected && got !== expected && ENGINE_REDIRECTS[expected] === got) n2.push(`routed to '${expected}', which the engine rerouted on entry → '${got}' (designed gate; sandbox lacks the real flag)`);
+          else if (expected && got !== expected) f2.push(`routed to '${got || "(nothing)"}', expected '${expected}'${!cloneById.has(expected) ? " (target does not exist)" : ""}`);
           if (!expected && got) n2.push(`no authored next, but the engine fired → ${got} (engine follow-up: rung/redirect)`);
           if (deeper.length) n2.push(`chain continued past the hop: ${deeper.join("→")}`);
           if (isOp && OP_KEYS.includes(opKey)) {
@@ -361,6 +370,7 @@
     try { await tempFaction.delete(); await tempSteward.delete(); for (const a of foreign.values()) await a.delete(); } catch (e) { console.error(TAG, "temp actor cleanup failed", e); }
     for (const [id, mem] of snapMemories) { const a = game.actors.get(id); if (!a) continue; try { if (mem === undefined) await a.unsetFlag("bbttcc-mal-voice", "memories"); else await a.update({ "flags.bbttcc-mal-voice.memories": mem }); } catch (e) { console.error(TAG, "memory restore failed", id, e); } }
     if (!CFG.KEEP_CHAT) { try { const ids = [...createdChat].filter(id => game.messages.has(id)); for (let i = 0; i < ids.length; i += 100) await ChatMessage.deleteDocuments(ids.slice(i, i + 100)); } catch (e) { console.error(TAG, "chat cleanup failed", e); } }
+    window.__bbttccWalkRunning = false;
   }
 
   // ── Report ───────────────────────────────────────────────────────────────────

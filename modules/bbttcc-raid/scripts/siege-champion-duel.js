@@ -56,11 +56,12 @@
     if (mode === "attacker" || mode === "defender") {
       winnerSide = mode;
     } else {
-      // Roll it: 1d20 each, reroll ties.
+      // Roll it: canon die (2d10, tens explode) each, reroll ties.
       let a, d, guard = 0;
       do {
-        a = (await new Roll("1d20").evaluate()).total;
-        d = (await new Roll("1d20").evaluate()).total;
+        const _die = (game.fourththing?.rolls?.checkFormula?.() || "2d10x10");
+        a = (await new Roll(_die).evaluate()).total;
+        d = (await new Roll(_die).evaluate()).total;
       } while (a === d && guard++ < 5);
       winnerSide = a >= d ? "attacker" : "defender";
       margin = Math.abs(a - d);
@@ -144,7 +145,7 @@
         <label>Defender champion<br><select name="def" style="width:100%;">${opts2(def)}</select></label>
         <fieldset style="border:1px solid #555;border-radius:4px;padding:.3rem .5rem;">
           <legend>Resolution</legend>
-          <label style="display:block;"><input type="radio" name="mode" value="roll" checked> Roll it (1d20 each; margin ≥ 10 is lethal)</label>
+          <label style="display:block;"><input type="radio" name="mode" value="roll" checked> Roll it (2d10 each, tens explode; margin ≥ 10 is lethal)</label>
           <label style="display:block;"><input type="radio" name="mode" value="attacker"> Attacker wins (declared)</label>
           <label style="display:block;"><input type="radio" name="mode" value="defender"> Defender wins (declared)</label>
         </fieldset>

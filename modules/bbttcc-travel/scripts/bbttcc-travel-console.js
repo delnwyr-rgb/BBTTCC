@@ -1673,7 +1673,7 @@
         const modeHeaderHtml = `<div class="rp-mit-header" style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.76rem;">
           <span style="opacity:0.7">Mitigation mode:</span>
           <button type="button" class="rp-mode-toggle" data-faction="${enc(factionId)}" data-mode="${enc(mitMode)}" style="padding:2px 9px;border-radius:4px;cursor:pointer;border:1px solid #88aaff;background:#1a2438;color:#cfe0ff;">${mitMode === "advantage" ? "🎲 Advantage" : "▽ Reduce"}</button>
-          <span style="opacity:0.5;font-size:0.7rem">${mitMode === "advantage" ? "roll 2d20 keep-high; complication stays" : "blunt the complication one step"} · 1 use/ability/turn</span>
+          <span style="opacity:0.5;font-size:0.7rem">${mitMode === "advantage" ? "roll 3d10 keep-high-2; complication stays" : "blunt the complication one step"} · 1 use/ability/turn</span>
         </div>`;
         $box.innerHTML = modeHeaderHtml + html.join("") + maskSummary;
       }

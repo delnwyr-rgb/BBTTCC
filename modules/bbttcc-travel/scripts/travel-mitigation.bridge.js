@@ -188,7 +188,7 @@
       // but rolls 2d20 keep-high on the travel check (set ctx.travelAdvantage; travelHex honors it).
       let weatherDc = arch ? opDelta : 0, terrainStep = 0;
       if (mode === "advantage" && (appliedWeather.length || appliedTerrain.length)) {
-        ctx.travelAdvantage = true;                                       // penalty stays; 2d20kh in travelHex
+        ctx.travelAdvantage = true;                                       // penalty stays; 3d10kh2 in travelHex
       } else {
         if (arch && opDelta > 0) weatherDc = Math.max(0, opDelta - appliedWeather.length);
         terrainStep = Math.min(appliedTerrain.length, Math.max(0, tier - 1));

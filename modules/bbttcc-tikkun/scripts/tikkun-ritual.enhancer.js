@@ -272,7 +272,7 @@
         });
 
         const dc = computeRoundDC(spec, state.darknessNow);
-        const roll = await (new Roll("1d20 + @b", { b: bonus })).evaluate();
+        const roll = await (new Roll(`${(game.fourththing?.rolls?.checkFormula?.() || "2d10x10")} + @b`, { b: bonus })).evaluate();   // canon die: 2d10, tens explode
         const total = roll.total ?? 0;
         const margin = total - dc;
 

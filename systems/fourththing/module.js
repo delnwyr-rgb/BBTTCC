@@ -13913,7 +13913,33 @@ Hooks.once("init", function () {
   //   restraintReduction  — pre-declared "pull the punch" amount (clamped to actor tier);
   //                          subtracted from the rolled total and banked vs. target.
   //   kind                — telemetry tag (default "tactical").
-  game.fourththing.rolls.attributeTest = async function (actor, {
+  // ── Public canon-die helpers for modules (2026-09-06) ──────────────────────
+// Bad Eden has ONE check die: 2d10, tens explode and chain (see the 2026-05-29
+// roll-mode block). Modules had been falling back to 1d20 for actor-less
+// checks (campaign OP checks, siege duels, the Tikkun ritual, Ruin-to-Renewal)
+// — these give them the same die without an actor. No Surge is banked here
+// (banking is an actor concern); the dice facts are returned so callers can
+// still speak canon (double-ten, explosions).
+game.fourththing.rolls.checkFormula = function ({ mode = "normal", explode = true } = {}) {
+  const m = _ftResolveRollMode({ user: mode });
+  if (m === "advantage")    return explode ? "3d10x10kh2" : "3d10kh2";
+  if (m === "disadvantage") return "3d10kl2";
+  return explode ? "2d10x10" : "2d10";
+};
+game.fourththing.rolls.flatCheck = async function ({ bonus = 0, dc = null, mode = "normal", explode = true, label = "" } = {}) {
+  const b = Number(bonus) || 0;
+  const formula = game.fourththing.rolls.checkFormula({ mode, explode }) + (b ? " + @b" : "");
+  const roll = await new Roll(formula, { b }).evaluate();
+  const term = roll.dice?.[0];
+  const results = Array.isArray(term?.results) ? term.results : [];
+  const base = results.slice(0, Number(term?.number) || 2).filter(r => r.active !== false).map(r => r.result);
+  const explosions = results.filter(r => r.exploded).length;
+  const doubleTen = base.filter(v => v === 10).length >= 2;
+  const total = roll.total ?? 0;
+  return { roll, formula, label, bonus: b, total, baseDice: base, explosions, doubleTen, dc, ok: dc == null ? null : total >= Number(dc) };
+};
+
+game.fourththing.rolls.attributeTest = async function (actor, {
     attribute, skill = null, label = "",
     dc = null, target = null, applyOvershoot = false, restraintReduction = 0, kind = "tactical"
   } = {}) {

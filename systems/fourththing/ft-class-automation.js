@@ -4825,7 +4825,7 @@ export const CHAR_OPT_ABILITIES = {
   "occult-association-tarot-mage-t3": {
     type: "soma-break",
     label: "Tarot Mage — Foretelling Roll (Tier 3, Tactical)",
-    body: "Tactical: When you finish a Soma Break, roll a d20 and record the number. Once per Soma Break, replace any attack roll, save, or ability check (yours or a creature you can see) with this foretelling roll, declared before the roll."
+    body: "Tactical: When you finish a Soma Break, roll 2d10 and record the number. Once per Soma Break, replace any attack roll, save, or ability check (yours or a creature you can see) with this foretelling roll, declared before the roll."
   },
   "occult-association-tarot-mage-t4": {
     type: "scenario",

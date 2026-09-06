@@ -38,7 +38,7 @@
   const _nm = (id) => game.actors?.get?.(id)?.name || id || "—";
   const _currentTurn = () => { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch { return 0; } };
   const _esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
-  const _roll = async () => (await new Roll("1d20").evaluate()).total;
+  const _roll = async () => (await new Roll((game.fourththing?.rolls?.checkFormula?.() || "2d10x10")).evaluate()).total;   // canon die: 2d10, tens explode
 
   function _relayHook(hook, payload){
     Hooks.callAll(hook, payload);
@@ -78,7 +78,7 @@
       }
     }
 
-    // 2. The three rolls (1d20 each; Sinon adds +5 to all, or auto-succeeds one).
+    // 2. The three rolls (2d10 each, tens explode; Sinon adds +5 to all, or auto-succeeds one).
     const defs = [
       { key: "sneak",    label: "Sneak past the watch",  cat: "Intrigue",  dc: sneakDC },
       { key: "sabotage", label: "Sabotage the defences", cat: sabotageCat, dc: sabotageDC },
@@ -191,7 +191,7 @@
       <div style="display:flex;flex-direction:column;gap:.5rem;font-size:0.9rem;">
         <div style="color:${VIOLET};">Siege: <b>${_esc(entry.hexName || "—")}</b> — the gambit at the gate.</div>
         <fieldset style="border:1px solid #555;border-radius:4px;padding:.3rem .5rem;">
-          <legend>The three rolls (1d20 vs DC)</legend>
+          <legend>The three rolls (2d10 vs DC, tens explode)</legend>
           <label style="display:flex;justify-content:space-between;align-items:center;">Sneak — Intrigue vs Suspicion <input type="number" name="sneakDC" value="${sneakDC}" style="width:55px;"></label>
           <label style="display:flex;justify-content:space-between;align-items:center;margin-top:.2rem;">Sabotage —
             <span><select name="sabotageCat" style="width:90px;"><option value="Faith">Faith</option><option value="Diplomacy">Diplomacy</option></select>

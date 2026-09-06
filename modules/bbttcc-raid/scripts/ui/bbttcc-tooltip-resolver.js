@@ -18,7 +18,7 @@
   // ---------------------------------------------------------------------------
   const FALLBACK_TEXT = {
     // Maneuvers (in-round)
-    suppressive_fire:          "Force enemy reroll lowest d20 this round.",
+    suppressive_fire:          "Force enemy reroll lowest die this round.",
     smoke_and_mirrors:         "Reduce Alarm Level by 1.",
     rally_the_line:            "+1 to next attack/defense for allies.",
     patch_the_breach:          "Restore 1 Structure Point.",

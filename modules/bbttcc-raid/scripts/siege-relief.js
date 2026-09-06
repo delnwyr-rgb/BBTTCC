@@ -158,7 +158,7 @@
         <div>Relief force sent by <b>${_esc(reliever)}</b> meets the besieging army in the open field.</div>
         <fieldset style="border:1px solid #555;border-radius:4px;padding:.3rem .5rem;">
           <legend>Field battle</legend>
-          <label style="display:block;"><input type="radio" name="mode" value="roll" checked> Roll it (besiegers 1d20 vs relief 1d20; besiegers hold ties)</label>
+          <label style="display:block;"><input type="radio" name="mode" value="roll" checked> Roll it (besiegers 2d10 vs relief 2d10, tens explode; besiegers hold ties)</label>
           <label style="display:block;"><input type="radio" name="mode" value="attacker"> Besiegers hold the field (declared)</label>
           <label style="display:block;"><input type="radio" name="mode" value="relief"> Relief breaks through (declared) — siege collapses</label>
         </fieldset>
@@ -181,8 +181,9 @@
             } else if (mode === "relief") {
               outcome = "attacker_lost";
             } else {
-              const a = (await new Roll("1d20").evaluate()).total;
-              const d = (await new Roll("1d20").evaluate()).total;
+              const _die = (game.fourththing?.rolls?.checkFormula?.() || "2d10x10");
+              const a = (await new Roll(_die).evaluate()).total;
+              const d = (await new Roll(_die).evaluate()).total;
               rolls = { attacker: a, relief: d };
               outcome = a >= d ? "attacker_won" : "attacker_lost"; // besiegers hold ties
             }

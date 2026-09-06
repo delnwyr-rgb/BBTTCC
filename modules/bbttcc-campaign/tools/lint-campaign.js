@@ -480,7 +480,7 @@ for (const b of beats) {
       const nk = ok.toLowerCase().replace(/[_\s]/g, "");
       if (!OP_KEYS.includes(nk === "nonlethal" || nk === "softpower" ? nk : ok)) F("E02", "ERROR", b.id, `factionEffects[${i}].opDeltas key '${ok}' is not an OP channel`);
       if (!isNum(ov)) F("E02", "WARN", b.id, `factionEffects[${i}].opDeltas.${ok} = ${JSON.stringify(ov)} not numeric`);
-      else if (Number(ov) !== 0 && Math.abs(Number(ov)) < 10) F("E02", "WARN", b.id, `factionEffects[${i}].opDeltas.${ok} = ${ov} is applied as MARKS by op.commit (1 OP = 10 marks) — that is ${(Number(ov)/10).toFixed(1)} OP; author in tens if OP was meant`);
+      // 2026-09-06 owner ruling: MARKS are the unit everywhere — small opDeltas are intended (Momentum economy).
     }
     const anyDelta = ["moraleDelta","loyaltyDelta","unityDelta","darknessDelta","vpDelta"].some(k => Number(row[k]) !== 0 && isNum(row[k])) || Object.values(row.opDeltas || {}).some(v => Number(v) !== 0 && isNum(v)) || row.deferred || row.recurring;
     if (!anyDelta) F("E02", "INFO", b.id, `factionEffects[${i}] is all zeros (editor default noise)`);
