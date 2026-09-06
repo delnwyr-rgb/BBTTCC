@@ -2573,7 +2573,7 @@ if (game.bbttcc?.runVisuals) {
           const terrInfo = dict[normTerrKey(h.terrainKey || "")] || {};
           return s + _sumOPCost(terrInfo.cost || {});
         }, 0);
-        setPickStatus(`Route planned: ${legs.length} leg${legs.length === 1 ? "" : "s"} (${startHex.label} → ${endHex.label}, ~${totalCost} OP).`);
+        setPickStatus(`Route planned: ${legs.length} leg${legs.length === 1 ? "" : "s"} (${startHex.label} → ${endHex.label}, ~${totalCost} marks).`);
         ui.notifications?.info?.(`Travel route planned: ${legs.length} leg(s).`);
       };
 

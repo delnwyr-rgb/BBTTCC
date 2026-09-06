@@ -513,7 +513,7 @@
     if (!Number(state.bufferStartingTotal) || total > Number(state.bufferStartingTotal)) state.bufferStartingTotal = total;
     await setSiegeState(uuid, state);
     try { game.bbttcc?.api?.siege?.refreshHud?.(); } catch (_e) {}
-    ui.notifications?.info?.(`Siege Buffer topped up — ${total} OP.`);
+    ui.notifications?.info?.(`Siege Buffer topped up — ${total} marks.`);
     return { ok: true, total, hexUuid: uuid };
   }
 

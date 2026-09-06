@@ -180,7 +180,7 @@
       shaved = sh.shaved;
       state._suggestConvene = true;
       wallId = (state.layers || [])[state.currentLayerIdx ?? 0]?.structureActorId || null;
-      S.appendNarrativeBeat(state, { turn, kind: "storm_assault", title: "Final assault ordered", description: `Next Breach Scene's maneuver budget is doubled. Buffer −${shaved} OP regardless of outcome.` });
+      S.appendNarrativeBeat(state, { turn, kind: "storm_assault", title: "Final assault ordered", description: `Next Breach Scene's maneuver budget is doubled. Buffer −${shaved} marks regardless of outcome.` });
     });
     if (!r.ok) return r;
 
@@ -317,10 +317,10 @@
       : Object.values(def.cost || {}).reduce((a, b) => a + (Number(b) || 0), 0);
     if (costTotal > 0) {
       const have = S.bufferTotal(st.buffer);
-      if (have < costTotal) return { ok: false, reason: `not enough Buffer to fire ${def.label} now (need ${costTotal/10} OP, have ${have/10})` };
+      if (have < costTotal) return { ok: false, reason: `not enough Buffer to fire ${def.label} now (need ${costTotal} marks, have ${have} marks)` };
       const dup = foundry.utils.duplicate(st);
       S.shaveBuffer(dup.buffer, costTotal);
-      S.appendNarrativeBeat(dup, { turn: _turn(), kind: "clash_maneuver", title: `${def.label} — in the moment`, description: `Fired during the clash (tactical tempo) by ${game.actors.get(actingFactionId)?.name || "the besiegers"}. Buffer −${costTotal/10} OP.` });
+      S.appendNarrativeBeat(dup, { turn: _turn(), kind: "clash_maneuver", title: `${def.label} — in the moment`, description: `Fired during the clash (tactical tempo) by ${game.actors.get(actingFactionId)?.name || "the besiegers"}. Buffer −${costTotal} marks.` });
       await S.setSiegeState(uuid, dup);
     }
 
@@ -330,7 +330,7 @@
     catch (err) { console.error(TAG, `fireManeuver ${key} failed`, err); return { ok: false, reason: err.message }; }
 
     try { game.bbttcc?.api?.siege?.refreshHud?.(); } catch (_e) {}
-    if (r?.ok !== false) ui.notifications?.info?.(`${def.label} (in the moment)${costTotal ? ` — Buffer −${costTotal/10} OP` : ""}: ${r?.summary || "done"}.`);
+    if (r?.ok !== false) ui.notifications?.info?.(`${def.label} (in the moment)${costTotal ? ` — Buffer −${costTotal} marks` : ""}: ${r?.summary || "done"}.`);
     else ui.notifications?.warn?.(`${def.label}: ${r?.reason || "failed"}.`);
     return Object.assign({ ok: r?.ok !== false, key, cost: costTotal }, r || {});
   }

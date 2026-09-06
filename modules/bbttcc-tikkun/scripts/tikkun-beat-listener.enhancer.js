@@ -255,7 +255,7 @@ console.log("[bbttcc-tikkun/beat-listener] LOADED");
         ? `<p style="margin:0.3rem 0 0;font-size:0.82rem;font-style:italic;border-left:2px solid #c03030;padding-left:0.5rem">${flavor}</p>`
         : "";
       const repairHint  = corrupted
-        ? `<p style="margin:0.4rem 0 0;font-size:0.74rem;opacity:0.65">Repair (Phase D): ${sparkItem?.system?.repair?.materialAmount ?? 1}× ${sparkItem?.system?.repair?.materialKey ?? "—"} + ${sparkItem?.system?.repair?.opCost?.amount ?? 0} ${sparkItem?.system?.repair?.opCost?.pool ?? "—"} OP, ritual DC ${sparkItem?.system?.repair?.ritualDC ?? 15}.</p>`
+        ? `<p style="margin:0.4rem 0 0;font-size:0.74rem;opacity:0.65">Repair (Phase D): ${sparkItem?.system?.repair?.materialAmount ?? 1}× ${sparkItem?.system?.repair?.materialKey ?? "—"} + ${sparkItem?.system?.repair?.opCost?.amount ?? 0} ${sparkItem?.system?.repair?.opCost?.pool ?? "—"} marks, ritual DC ${sparkItem?.system?.repair?.ritualDC ?? 15}.</p>`
         : "";
       ChatMessage.create({
         speaker: ChatMessage.getSpeaker?.({ actor }) ?? {},

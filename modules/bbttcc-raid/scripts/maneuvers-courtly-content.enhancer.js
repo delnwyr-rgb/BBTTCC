@@ -128,7 +128,7 @@
       key: "courtly_call_question", label: "Call the Question", tier: 3, costBand: "medium",
       cost: { softpower: 20 },
       effectsText: "Force next exchange to resolve with 0 spend both sides.",
-      description: "<p>You demand a vote, a ruling, a single yes-or-no. The court must oblige. <b>Next round's spending is capped at 0 OP for both sides</b> — pure rolls, pure stakes.</p>",
+      description: "<p>You demand a vote, a ruling, a single yes-or-no. The court must oblige. <b>Next round's spending is capped at 0 marks for both sides</b> — pure rolls, pure stakes.</p>",
       effects: [
         { type: "lockSpend", rounds: 1, maxSpend: 0 }
       ]

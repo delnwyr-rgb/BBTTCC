@@ -497,7 +497,7 @@
         if (state.spendLock?.roundsRemaining > 0) {
           const cap = Number(state.spendLock.maxSpend ?? 0);
           if (atkSpendInt > cap || defSpendInt > cap) {
-            await sendChat([`Spending lock active: capped at ${cap * 10} marks per side this round.`], { title: `${label}: Spending Lock` });
+            await sendChat([`Spending lock active: capped at ${cap * 10} marks per side this round.`]   /* rule unit: cap is per 10 marks */, { title: `${label}: Spending Lock` });
           }
           atkSpendInt = Math.min(atkSpendInt, cap); atkSpendM = atkSpendInt * 10;
           defSpendInt = Math.min(defSpendInt, cap); defSpendM = defSpendInt * 10;
@@ -1220,7 +1220,7 @@
                 await discardSecret(resolveSide(eff.side), eff.filter || {}); break;
               case "lockSpend":
                 lockSpend(eff.rounds || 1, eff.maxSpend ?? 0);
-                await sendChat([`Spending capped to ${eff.maxSpend ?? 0} OP per side for ${eff.rounds || 1} round(s) (Call the Question).`], { title: `${label}: Spending Lock` });
+                await sendChat([`Spending capped to ${(eff.maxSpend ?? 0) * 10} marks per side for ${eff.rounds || 1} round(s) (Call the Question).`], /* rule unit: maxSpend is per 10 marks */ { title: `${label}: Spending Lock` });
                 break;
               case "armLastWord":
                 await armLastWord(resolveSide(eff.side), eff.source || "The Last Word"); break;

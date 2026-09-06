@@ -1992,13 +1992,13 @@ async function _spendOneOpForAttempt(faction, opKey, reason) {
   }
 }
 
-async function _spendFactionOpSupport(faction, opKey, amount, reason) {
+async function _spendFactionOpSupport(faction, opKey, marks, reason) {
   try {
-    amount = _num(amount, 0);
-    if (!faction || !opKey || amount <= 0) return false;
+    marks = _num(marks, 0);
+    if (!faction || !opKey || marks <= 0) return false;
 
     // amount is MARKS (owner ruling 2026-09-06) — no conversion.
-    const amountMarks = Math.round(Math.abs(amount));
+    const amountMarks = Math.round(Math.abs(marks));
 
     const api = game && game.bbttcc && game.bbttcc.api ? game.bbttcc.api : null;
     const op = api && api.op ? api.op : null;

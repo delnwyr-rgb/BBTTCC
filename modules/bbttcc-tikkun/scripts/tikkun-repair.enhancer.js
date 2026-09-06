@@ -147,7 +147,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     if (!factionActor || !pool || !amount) return;
     const bank = _opBank(factionActor);
     const cur = Number(bank[pool]) || 0;
-    if (cur < amount) throw new Error(`Insufficient ${pool} OP: have ${cur}, need ${amount}.`);
+    if (cur < amount) throw new Error(`Insufficient ${pool} marks: have ${cur}, need ${amount}.`);
     bank[pool] = cur - amount;
     await factionActor.update({ "flags.bbttcc-factions.opBank": bank });
   }
@@ -352,7 +352,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
           <span class="ft-fp" title="ritual">+${ritRank}</span>
           <span class="ft-fp" title="soul">+${soulAttr}</span>
           ${extraOp ? `<span class="ft-fp" title="extra OP">+${extraOp}</span>` : ""}
-          <span class="ft-fp" title="${opPool} OP cost">+${opNeed}</span>
+          <span class="ft-fp" title="${opPool} marks cost">+${opNeed}</span>
         </div>
         <div class="ft-roll-result"><span class="ft-total">${total}</span> <span style="opacity:0.7;font-size:0.78rem">vs DC ${dc}</span></div>
         ${outcomeLine}

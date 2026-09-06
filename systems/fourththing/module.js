@@ -252,7 +252,7 @@ const FT = {
         1: "The caster rolls Resolve vs DC 12 or is Staggered.",
         2: "Near allies roll Resolve vs DC 14 or are Staggered.",
         3: "Everyone in the site rolls Resolve vs DC 16 or is Staggered.",
-        4: "Faction tremor: −1 OP of the manifestation's intent type this strategic turn."
+        4: "Faction tremor: −10 marks of the manifestation's intent type this strategic turn."
       }
     },
     "10": {
@@ -11463,7 +11463,7 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
   </div>`) : "";
 
   const opCostNote = (manTier === 4 && opCost?.value > 0)
-    ? `<div class="ft-prev-align-note"><b>Faction cost:</b> ${opCost.value} ${ftCap(opCost.pool || "op")} OP</div>`
+    ? `<div class="ft-prev-align-note"><b>Faction cost:</b> ${opCost.value} ${ftCap(opCost.pool || "op")} marks</div>`
     : (manTier === 4 ? `<div class="ft-prev-align-note" style="color:#ff8a8a">T4 manifestation has no declared <code>opCost</code>. GM will adjudicate faction cost.</div>` : "");
 
   // Cosmic Linguist — Resonance Channel section. Only renders when the
@@ -16949,7 +16949,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
     const sys  = actor.system?.system ?? actor.system;
     const tier = Number(sys?.details?.tier ?? 1);
-    const cost = Number(costOverride ?? (tier * 5));
+    const cost = Number(costOverride ?? (tier * 50));   // MARKS: 5 OP per tier = 50 marks (owner ruling 2026-09-06; was committed raw as 5/tier)
 
     // Re-probe right before commit — faction OP may have shifted since the
     // threshold card was posted.
@@ -16959,7 +16959,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       return { ok: false, reason: "no-faction" };
     }
     if (!probe.canCover) {
-      ui.notifications?.warn(`${actor.name}: ${probe.faction.name} only has ${probe.available} ${category} OP (needs ${cost}).`);
+      ui.notifications?.warn(`${actor.name}: ${probe.faction.name} only has ${probe.available} ${category} marks (needs ${cost}).`);
       return { ok: false, reason: "insufficient-op", probe };
     }
 
@@ -17004,7 +17004,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         content: `<div class="fourththing-roll">
           <div class="ft-roll-header"><span class="ft-roll-name" style="color:#4a90d9">⚖ Blood Debt Redeemed — ${actor.name}</span></div>
           <p style="margin:0.2rem 0;font-size:0.82rem;opacity:0.9">
-            <b>${probe.faction.name}</b> covers the debt: <b>${cost} ${category} OP</b> spent from the bank.
+            <b>${probe.faction.name}</b> covers the debt: <b>${cost} ${category} marks</b> spent from the bank.
           </p>
           <p style="margin:0.2rem 0;font-size:0.82rem">
             The steward returns at <b>1 Integrity</b>, ${stressCost} Stress expended, <b>Scarred</b> until the scene ends.
@@ -17159,7 +17159,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       ? `<button class="ft-redeem-btn" data-actor-id="${actor.id}" data-cost="${cost}" data-category="violence"
                  style="margin-right:0.3rem;padding:0.35rem 0.6rem;background:rgba(74,144,217,0.12);
                         border:1px solid rgba(74,144,217,0.5);border-radius:4px;color:#4a90d9;cursor:pointer;
-                        font-weight:600;font-size:0.82rem">⚖ Redeem (${cost} ${probe.faction?.name ?? ""} OP)</button>`
+                        font-weight:600;font-size:0.82rem">⚖ Redeem (${cost} ${probe.faction?.name ?? ""} marks)</button>`
       : "";
     const reincarnateBtn = `<button class="ft-reincarnate-btn" data-actor-id="${actor.id}"
                  style="padding:0.35rem 0.6rem;background:rgba(255,138,138,0.14);
@@ -17171,7 +17171,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       speaker:  ChatMessage.getSpeaker({ actor }),
       content:  `<div class="fourththing-roll ft-redemption-card" data-actor-id="${actor.id}">
         <div class="ft-roll-header"><span class="ft-roll-name" style="color:#ff7373">⚖ Blood Debt called — ${actor.name}</span></div>
-        <p style="margin:0.2rem 0;font-size:0.82rem">Ledger +${tier} (total: <b>${total}</b>). Redemption cost: <b>${cost} OP</b> (violence).</p>
+        <p style="margin:0.2rem 0;font-size:0.82rem">Ledger +${tier} (total: <b>${total}</b>). Redemption cost: <b>${cost} marks</b> (violence).</p>
         <p style="margin:0.2rem 0;font-size:0.82rem">${statusLine}</p>
         <div style="margin-top:0.4rem">${redeemBtn}${reincarnateBtn}</div>
         <p class="ft-redemption-outcome" style="margin:0.3rem 0 0;font-size:0.72rem;opacity:0.55;font-style:italic">Awaiting GM resolution.</p>
@@ -23387,7 +23387,7 @@ Hooks.on(_chatHook, (message, html) => {
       const costOverride = Number(btn.dataset.cost) || null;
       const category     = btn.dataset.category ?? "violence";
       const result = await game.fourththing.deathMech.redeem(actor, { category, costOverride });
-      if (result?.ok) disableCard(btn, `Resolved: Redeemed (−${result.cost} ${result.category} OP from ${result.faction?.name ?? "faction"}).`, "#4a90d9");
+      if (result?.ok) disableCard(btn, `Resolved: Redeemed (−${result.cost} ${result.category} marks from ${result.faction?.name ?? "faction"}).`, "#4a90d9");
       else            disableCard(btn, `Redemption failed: ${result?.reason ?? "unknown"} — falling back to GM discretion.`, "#ff8a8a");
     });
   });

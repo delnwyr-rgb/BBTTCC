@@ -129,7 +129,7 @@ const BEATS_HELP = {
   choiceLabel: "Choice Label — the button text in the beat dialog (GM view and the player mirror).",
   choiceNext: "Next Beat — runs this beat on pick (or on a passed check). It executes immediately and completely before the current beat's own effects apply.",
   choiceDesc: "Choice Description — optional text listed under the buttons; good for stakes, costs, and what the table is really deciding.",
-  choiceCheckStat: "Check Stat — gate for this choice. GM Adjudication = pass/fail modal, no dice. op.* = faction roll: 1d20 + (bank + roster) OP vs DC — costs 1 OP to attempt and supports faction-backing spends. Abilities / saves / skills roll on the selected roster actor; if no roster actor is selected the GM adjudicates instead.",
+  choiceCheckStat: "Check Stat — gate for this choice. GM Adjudication = pass/fail modal, no dice. op.* = faction roll: 2d10x10 + (bank÷10 + roster) vs DC — costs 10 marks to attempt and supports faction-backing spends. Abilities / saves / skills roll on the selected roster actor; if no roster actor is selected the GM adjudicates instead.",
   choiceCheckDC: "DC — the check total must meet or beat this number. Ignored when no Check Stat is set.",
   choiceFailNext: "Failure Beat — where a failed check routes. Blank = fall back to this beat's Failure Outcome (the Outcomes section below); if that is also blank, a failure routes nowhere and the dialog simply closes.",
   addChoice: "Add Choice — appends a row. In-progress edits in existing rows are preserved.",

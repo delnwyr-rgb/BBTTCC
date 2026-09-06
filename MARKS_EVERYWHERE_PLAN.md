@@ -29,10 +29,13 @@ registry), market `econCost`, agent-api `normalizeCost`, tikkun ritual spends. B
    conversion, tikkun `spend*` fields ×10, campaign `_OP_TO_MARKS` spend becomes `10` marks
    explicitly named. Migration macro (DRY_RUN) for any live-world copies of catalog data.
    ~half a day + a raid gauntlet run (`raid-gauntlet-runner`) to prove costs still gate.
-4. **Sweep + lint** — repo grep for `OP_TO_MARKS|/ 10|* 10` must return only the op-engine
+4. **Sweep + lint — ✅ DONE 2026-09-06 (deployed both; system restarted). `tools/lint-units.js` (`bin/ft-lint-units`) sweeps every js/hbs for U1 second ratio literal · U2 literal fallback · U3 ÷10/×10 beside an OP/marks term (tag deliberate rule-unit derivations with "per 10 marks" / "rule unit") · U4 retired names · U5 rendered OP quantities; exit 1 on any hit — **reads 0 hits.** Done in the sweep: op-engine `formatMarksAsOP`/`formatMarksAsOPNumber`/`opToMarks` RETIRED (no callers); encounters `scene.launcher.js` now works in marks natively (68 scenario deltas ×10, boundary conversions removed); blood-debt redemption cost is 50 marks/tier (was committed raw as 5 — the "5 OP" design intent under-charged 10×); Harmony Marshal / Unity Conductor / Circuitborn dialogs, 35 class-feature rule bodies ("N Pool OP" → marks), tremor text, T4 opCost label, bridge tooltips + default text, lore primer, beat-editor hint (also fixed its stale "1d20"), travel route total, chase gambit label, tikkun repair strings, every siege buffer/drain/relief/threat/trojan/tick readout, agent-API advice cost text, courtly spending-lock messages. `lint-campaign.js`: fractional opDeltas → ERROR; `supportSpend` not a multiple of 10 → WARN (C08). Campaign backing param renamed `marks`; op-engine `commit` JSDoc states MARKS.
+   Original scope: — repo grep for `OP_TO_MARKS|/ 10|* 10` must return only the op-engine
    constant itself; parameter names carry the unit (`marks`), never `amount`; `lint-campaign.js`
    rule: any `op*` quantity field that is not an integer → ERROR. Retire the constant when nothing
    reads it.
+
+## Status: COMPLETE (all four phases, 2026-09-06). Run `bin/ft-lint-units` before every commit that touches OP code.
 
 ## Do-not-touch (different unit on purpose)
 Momentum (dice, integer), Surge (dice), Victory Points, build units, materials, darkness. Only the

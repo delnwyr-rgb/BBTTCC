@@ -142,7 +142,7 @@
         turn,
         kind: "interdiction",
         title: `Supply line interdicted at ${hexName}`,
-        description: `${actor?.name || "A faction"} severs the road. Buffer −${shave.shaved} OP; harassment +1 this turn. The route stays cut until restored.`,
+        description: `${actor?.name || "A faction"} severs the road. Buffer −${shave.shaved} marks; harassment +1 this turn. The route stays cut until restored.`,
         payload: { byFactionId: factionId, hexUuid: targetUuid, shaved: shave.shaved }
       });
       await S.setSiegeState(entry.hexUuid, state);
@@ -150,7 +150,7 @@
     }
 
     await _pushWarLog(actor,
-      `Interdict Supply Line at ${hexName}: ${sieges.length} siege(s) harassed, Buffer −${totalShaved} OP total. Supply Line strip queued (severs the path until Counter-Interdicted).`,
+      `Interdict Supply Line at ${hexName}: ${sieges.length} siege(s) harassed, Buffer −${totalShaved} marks total. Supply Line strip queued (severs the path until Counter-Interdicted).`,
       { activityKey: "interdict_supply_line", hexUuid: targetUuid, siegeCount: sieges.length });
 
     return { ok: true, sieges: sieges.length, shaved: totalShaved };
@@ -299,7 +299,7 @@
         turn,
         kind: "sortie",
         title: `Sortie strikes the supply line at ${hexName}`,
-        description: `${actor?.name || "The garrison"} sallies out: Supply Line cut, Buffer −${shave.shaved} OP. Defender losses ${die}${escorted ? " +2 (escorted hex)" : ""} = ${casualties} holding(s). (Roster write-back deferred to Phase E.)`,
+        description: `${actor?.name || "The garrison"} sallies out: Supply Line cut, Buffer −${shave.shaved} marks. Defender losses ${die}${escorted ? " +2 (escorted hex)" : ""} = ${casualties} holding(s). (Roster write-back deferred to Phase E.)`,
         payload: { byFactionId: factionId, hexUuid: targetUuid, shaved: shave.shaved, casualties, escorted }
       });
       await S.setSiegeState(entry.hexUuid, state);
@@ -307,7 +307,7 @@
     }
 
     await _pushWarLog(actor,
-      `Sortie at ${hexName}: ${sieges.length} enemy siege(s) hit — Buffer −${totalShaved} OP, Supply Line severed. Own losses: ${totalCasualties} holding(s).`,
+      `Sortie at ${hexName}: ${sieges.length} enemy siege(s) hit — Buffer −${totalShaved} marks, Supply Line severed. Own losses: ${totalCasualties} holding(s).`,
       { activityKey: "sortie", hexUuid: targetUuid, siegeCount: sieges.length, casualties: totalCasualties });
 
     return { ok: true, sieges: sieges.length, shaved: totalShaved, casualties: totalCasualties };

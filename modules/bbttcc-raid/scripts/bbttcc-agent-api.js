@@ -2433,7 +2433,7 @@
       if (reasons.length) bits.push(reasons.join(", "));
     } else if (category === "raid") {
       const cost = sumOP(candidate.cost || candidate.projectedCost || candidate.expectedCost || {});
-      if (cost > 0) bits.push(`cost ${cost} OP`);
+      if (cost > 0) bits.push(`cost ${cost} marks`);
       if (risk) bits.push(`risk ${risk}`);
       if (candidate.expectedSuccessBand) bits.push(`expected success ${candidate.expectedSuccessBand}`);
       if (candidate.matchMode) bits.push(`match ${candidate.matchMode}`);
@@ -2512,7 +2512,7 @@
       const target = candidate?.targetName ? ` Target is ${candidate.targetName}.` : "";
       const success = candidate?.expectedSuccessBand ? ` Expected success is ${candidate.expectedSuccessBand}.` : "";
       const cost = sumOP(candidate?.cost || candidate?.projectedCost || candidate?.expectedCost || {});
-      const costTxt = cost > 0 ? ` It wants ${cost} OP.` : "";
+      const costTxt = cost > 0 ? ` It wants ${cost} marks.` : "";
       return `${label}. ${conf} ${basis} Risk is ${risk}.${success}${costTxt}${target}`;
     }
     return `${label}. ${conf} ${basis} Risk is ${risk}.`;

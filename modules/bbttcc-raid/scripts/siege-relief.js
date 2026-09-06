@@ -102,7 +102,7 @@
         turn,
         kind: "relief_repulsed",
         title: `Relief from ${_nm(reliever)} is thrown back`,
-        description: `The besieging army holds the open field. Buffer −${bufferShaved} OP; defender −1 morale (applied in Phase F).`,
+        description: `The besieging army holds the open field. Buffer −${bufferShaved} marks; defender −1 morale (applied in Phase F).`,
         payload: { waveId: w.waveId, callingFactionId: reliever, bufferShaved, rolls }
       });
       await api.setState(hexUuid, fresh);
@@ -138,7 +138,7 @@
       content: `<div class="bbttcc-siege-relief" style="border:1px solid ${won ? "#d9a441" : "#88bbff"};border-radius:6px;padding:.5rem .7rem;">
         <h3 style="margin:0 0 .25rem;color:${won ? "#d9a441" : "#88bbff"};">🛡 Relief Force — ${_esc(entry.hexName || "Siege")}</h3>
         <div>${won
-          ? `Relief from <b>${_esc(_nm(reliever))}</b> is <b style="color:#d9a441;">REPULSED</b>. Buffer −${bufferShaved} OP; defender −1 morale.`
+          ? `Relief from <b>${_esc(_nm(reliever))}</b> is <b style="color:#d9a441;">REPULSED</b>. Buffer −${bufferShaved} marks; defender −1 morale.`
           : `Relief from <b>${_esc(_nm(reliever))}</b> <b style="color:#88bbff;">BREAKS THE SIEGE</b>. The besiegers withdraw (<i>lost_relieved</i>).`}</div>
         ${rollLine}
       </div>`

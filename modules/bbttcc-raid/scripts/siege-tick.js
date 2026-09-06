@@ -223,8 +223,8 @@
     S.appendNarrativeBeat(state, {
       turn,
       kind: "tick_drain",
-      title: `Tick ${turn}: −${drainCalc.totalDrain} OP from Buffer`,
-      description: `Drain breakdown: base ${drainCalc.breakdown.base} × terrain ${drainCalc.breakdown.terrain} × championDeficit ${drainCalc.breakdown.championDeficit} × naval ${drainCalc.breakdown.navalDiscount} + distance ${drainCalc.breakdown.distance} + harassment ${drainCalc.breakdown.harassment}, ×grace ${drainCalc.breakdown.graceMult}. Buffer now ${totalRemaining} OP total.`,
+      title: `Tick ${turn}: −${drainCalc.totalDrain} marks from Buffer`,
+      description: `Drain breakdown: base ${drainCalc.breakdown.base} × terrain ${drainCalc.breakdown.terrain} × championDeficit ${drainCalc.breakdown.championDeficit} × naval ${drainCalc.breakdown.navalDiscount} + distance ${drainCalc.breakdown.distance} + harassment ${drainCalc.breakdown.harassment}, ×grace ${drainCalc.breakdown.graceMult}. Buffer now ${totalRemaining} marks total.`,
       payload: { drain: drainCalc.totalDrain, deducted: drainResult.deducted, remaining: totalRemaining }
     });
 

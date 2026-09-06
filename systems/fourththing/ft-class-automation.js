@@ -1431,7 +1431,7 @@ export async function openBreakerRuin(actor) {
         <select name="action">
           <option value="none">— Just update charges —</option>
           <option value="entry">Catastrophic Entry (ignore structure resistance / sunder foe armor)</option>
-          <option value="siege">Siege Cost Reduction (−1 Violence OP this Siege)</option>
+          <option value="siege">Siege Cost Reduction (−10 Violence marks this Siege)</option>
           <option value="shockwave">Shockwave Footing (resist knockback, push adjacent)</option>
           <option value="renewal">Ruin to Renewal (purify fortification, Faith/Economy DC 15)</option>
         </select>
@@ -1496,7 +1496,7 @@ export async function openBreakerRuin(actor) {
           if (isSpend) {
             const labels = {
               entry:     "Catastrophic Entry — structure resistance ignored",
-              siege:     "Siege Cost Reduced — −1 Violence OP this Siege",
+              siege:     "Siege Cost Reduced — −10 Violence marks this Siege",
               shockwave: "Shockwave Footing — knockback resisted; adjacent pushed",
               renewal:   "Ruin to Renewal — attempting purification (Faith/Economy DC 15)"
             };
@@ -2116,9 +2116,9 @@ async function _RETIRED_OldSoulSmithForgeBlock(actor) {
 // ─── Harmony Marshal dialogs ─────────────────────────────────────────────────
 // Canon (Phase 1.5):
 //   T1 Harmony Initiate   — Diplomacy +1, Insight +1, Soft Power +10% gen (narrative)
-//   T2 Attrition Easer    — 1/strategic turn: spend 1 Soft Power OP → -1 Attrition faction-wide
+//   T2 Attrition Easer    — 1/strategic turn: spend 10 Soft Power marks → -1 Attrition faction-wide
 //   T3 Loyalty Steward    — on resolved hex/faction conflict: chosen hex Loyalty +1
-//   T4 Unity Conductor    — faction passive: +2 Soft Power OP per strategic turn
+//   T4 Unity Conductor    — faction passive: +20 Soft Power marks per strategic turn
 // (No personal resource pool by canon — strategic-layer specialist.)
 
 function _hmCharTier(actor) {
@@ -2205,17 +2205,17 @@ export async function openHarmonyMarshalAttritionEaser(actor) {
   new Dialog({
     title: "Harmony Marshal · Attrition Easer (T2)",
     content: `<div class="ft-cast-dialog">
-      <p style="font-size:0.78rem;margin:0 0 0.4rem">Once per strategic turn, spend <b>1 Soft Power OP</b> to remove <b>1 Attrition point</b> faction-wide — reconciliation campaigns, rest cycles, "we actually talked about it" debriefs.</p>
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Once per strategic turn, spend <b>10 Soft Power marks</b> to remove <b>1 Attrition point</b> faction-wide — reconciliation campaigns, rest cycles, "we actually talked about it" debriefs.</p>
       <div class="ft-preview-stats" style="margin-bottom:0.5rem">
         <span class="ft-prev-stat"><span class="ft-prev-label">Faction</span>
           <span class="ft-prev-val">${_ftEscape(faction?.name ?? "(unbound)")}</span></span>
-        <span class="ft-prev-stat"><span class="ft-prev-label">Soft Power OP</span>
-          <span class="ft-prev-val" style="color:${canAfford ? '#a0d8b8' : '#eb5757'}">${currentSP}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Soft Power (marks)</span>
+          <span class="ft-prev-val" style="color:${canAfford ? '#a0d8b8' : '#eb5757'}">${Number(bank.softpower) || 0}</span></span>
         <span class="ft-prev-stat"><span class="ft-prev-label">This turn</span>
           <span class="ft-prev-val" style="color:${used ? '#888' : '#e8c84a'}">${used ? "USED" : "AVAILABLE"}</span></span>
       </div>
       ${!faction ? `<p style="color:#eb5757;font-size:0.74rem">⚠ No faction bound — bind via the faction dropdown on the sheet first.</p>` : ""}
-      ${!canAfford && faction ? `<p style="color:#eb5757;font-size:0.74rem">⚠ Faction has no Soft Power OP to spend.</p>` : ""}
+      ${!canAfford && faction ? `<p style="color:#eb5757;font-size:0.74rem">⚠ Faction has fewer than 10 Soft Power marks.</p>` : ""}
     </div>`,
     buttons: {
       ...(faction && canAfford && !used ? {
@@ -2224,12 +2224,12 @@ export async function openHarmonyMarshalAttritionEaser(actor) {
           callback: async () => {
             const res = await opApi.commit(faction.id, { softpower: -marksPerOP }, { context: "harmony-marshal-attrition-easer" });
             if (!res?.committed) {
-              return ui.notifications?.warn(`${actor.name}: could not spend Soft Power OP (${res?.error || "insufficient / cap"}).`);
+              return ui.notifications?.warn(`${actor.name}: could not spend Soft Power marks (${res?.error || "insufficient / cap"}).`);
             }
             await actor.update({ "flags.fourththing.harmonyMarshal.attritionEaserUsedThisTurn": true });
             ChatMessage.create({
               speaker: ChatMessage.getSpeaker({ actor }),
-              content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">⚖ Attrition Easer — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem"><b>${_ftEscape(faction.name)}</b>: −1 Soft Power OP (now ${currentSP - 1}), <b>−1 Attrition</b> faction-wide. GM applies the Attrition reduction to the faction sheet.</p><p style="margin:0.2rem 0 0;font-size:0.72rem;opacity:0.55">Used this strategic turn — refresh at next turn.</p></div>`
+              content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">⚖ Attrition Easer — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem"><b>${_ftEscape(faction.name)}</b>: −10 Soft Power marks (now ${currentSP - 1}), <b>−1 Attrition</b> faction-wide. GM applies the Attrition reduction to the faction sheet.</p><p style="margin:0.2rem 0 0;font-size:0.72rem;opacity:0.55">Used this strategic turn — refresh at next turn.</p></div>`
             });
           }
         }
@@ -2312,7 +2312,7 @@ export async function openHarmonyMarshalUnityConductor(actor) {
   new Dialog({
     title: "Harmony Marshal · Unity Conductor (T4)",
     content: `<div class="ft-cast-dialog">
-      <p style="font-size:0.78rem;margin:0 0 0.4rem">Passive: your faction gains an additional <b>+2 Soft Power OP per strategic turn</b>, as long as you are alive, active, and in communication with Command.</p>
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Passive: your faction gains an additional <b>+20 Soft Power marks per strategic turn</b>, as long as you are alive, active, and in communication with Command.</p>
       <p style="font-size:0.78rem;margin:0 0 0.4rem">Faction bound: <b>${_ftEscape(faction?.name ?? "(unbound)")}</b></p>
       <p style="font-size:0.7rem;opacity:0.55;margin:0.4rem 0 0">Reminder chat card fires automatically on <code>bbttcc:advanceTurn:end</code> so the GM doesn't forget the grant.</p>
     </div>`,
@@ -2323,20 +2323,20 @@ export async function openHarmonyMarshalUnityConductor(actor) {
           callback: async () => {
             const opApi = game.bbttcc?.api?.op;
             if (!opApi?.commit) {
-              return ui.notifications?.warn(`${actor.name}: OP engine not available — cannot grant Soft Power OP.`);
+              return ui.notifications?.warn(`${actor.name}: OP engine not available — cannot grant Soft Power marks.`);
             }
             const marksPerOP = opApi?.OP_TO_MARKS ?? MARKS_PER_OP;
             // allowOvercap: this is a bonus grant, not a normal earn — don't let
             // the cap refuse the canon +2.
             const res = await opApi.commit(faction.id, { softpower: +(2 * marksPerOP) }, { context: "harmony-marshal-unity-conductor", allowOvercap: true });
             if (!res?.committed) {
-              return ui.notifications?.warn(`${actor.name}: could not grant Soft Power OP (${res?.error || "API error"}).`);
+              return ui.notifications?.warn(`${actor.name}: could not grant Soft Power marks (${res?.error || "API error"}).`);
             }
             const bankNow = faction.getFlag?.("bbttcc-factions", "opBank") || {};
             const nowSP = Math.floor((Number(bankNow.softpower) || 0) / marksPerOP);
             ChatMessage.create({
               speaker: ChatMessage.getSpeaker({ actor }),
-              content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">⚖ Unity Conductor — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem"><b>${_ftEscape(faction.name)}</b>: +2 Soft Power OP applied (now ${nowSP}).</p></div>`
+              content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">⚖ Unity Conductor — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem"><b>${_ftEscape(faction.name)}</b>: +20 Soft Power marks applied (now ${Number(bankNow.softpower) || 0}).</p></div>`
             });
           }
         }
@@ -2849,7 +2849,7 @@ export async function openShadowCourierSpendPace(actor) {
   let routeBody  = "";
   if (/wayfarer-tongue/.test(subId)) {
     routeLabel = "Wayfarer Tongue";
-    routeBody  = "+1 Intrigue OP added to a faction you're carrying for this scene.";
+    routeBody  = "+10 Intrigue marks added to a faction you're carrying for this scene.";
   } else if (/black-stair/.test(subId)) {
     routeLabel = "Black Stair";
     routeBody  = "Take a shortcut — skip one hex of intervening terrain on a delivery this scene.";
@@ -2894,7 +2894,7 @@ export async function openShadowCourierSpendPace(actor) {
           // ── Mechanical apply (2026-05-23 Tier-2 spend-menu wiring) ───────────
           // move → real movement budget bump (Dash precedent); reroll → arm a
           // one-shot reroll-lowest read by collectRerolls; Wayfarer route →
-          // commit +1 Intrigue OP to the Courier's faction. dodge + Black Stair /
+          // commit +10 Intrigue marks to the Courier's faction. dodge + Black Stair /
           // Last Mile routes stay narrative-by-design (no reaction-strike engine /
           // strategic-hex action surface).
           let mechNote = "";
@@ -2913,10 +2913,10 @@ export async function openShadowCourierSpendPace(actor) {
             if (faction && opApi?.commit) {
               const res = await opApi.commit(faction.id, { intrigue: marksPerOP }, { context: "shadow-courier-wayfarer-tongue" });
               mechNote = res?.committed
-                ? `+1 Intrigue OP committed to <b>${_ftEscape(faction.name)}</b>.`
-                : `+1 Intrigue OP — commit failed (${res?.error || "cap / API"}); GM applies manually.`;
+                ? `+10 Intrigue marks committed to <b>${_ftEscape(faction.name)}</b>.`
+                : `+10 Intrigue marks — commit failed (${res?.error || "cap / API"}); GM applies manually.`;
             } else {
-              mechNote = "+1 Intrigue OP — no bound faction; GM applies to the carried faction.";
+              mechNote = "+10 Intrigue marks — no bound faction; GM applies to the carried faction.";
             }
           }
 
@@ -3615,14 +3615,14 @@ export async function openPassiveClassInfo(actor, item) {
       <span class="ft-prev-stat"><span class="ft-prev-label">Soft Power</span><span class="ft-prev-val">+10% generation</span></span>
       <span class="ft-prev-stat"><span class="ft-prev-label">Presence</span><span class="ft-prev-val">${presence}</span></span>
     </div>
-    <p style="font-size:0.75rem;opacity:0.6;margin:0.4rem 0">Tier 2: Spend 1 Soft Power → remove 1 Attrition point faction-wide.</p>`;
+    <p style="font-size:0.75rem;opacity:0.6;margin:0.4rem 0">Tier 2: Spend 10 Soft Power marks → remove 1 Attrition point faction-wide.</p>`;
   } else if (lowerName.includes("phantom") || lowerName.includes("courier")) {
     const intrigue = attrs.intrigue?.value ?? 2;
     bonusSummary = `<div class="ft-preview-stats">
       <span class="ft-prev-stat"><span class="ft-prev-label">Intrigue</span><span class="ft-prev-val">${intrigue}</span></span>
       <span class="ft-prev-stat"><span class="ft-prev-label">Terrain</span><span class="ft-prev-val">Ignore 1st hazard/turn</span></span>
     </div>
-    <p style="font-size:0.75rem;opacity:0.6;margin:0.4rem 0">Tier 2: Complete Infiltration scenario → refund 1 Intrigue OP.</p>`;
+    <p style="font-size:0.75rem;opacity:0.6;margin:0.4rem 0">Tier 2: Complete Infiltration scenario → refund 10 Intrigue marks.</p>`;
   } else if (lowerName.includes("wyrdlens") || lowerName.includes("adept")) {
     const mind = attrs.mind?.value ?? 2;
     bonusSummary = `<div class="ft-preview-stats">
@@ -4504,7 +4504,7 @@ export async function openCircuitbornAttentionResonance(actor) {
         <label>OP category (if regaining OP)</label>
         <select name="bucket">${bucketOpts}</select>
       </div>
-      <p style="font-size:0.7rem;opacity:0.6;margin:0.4rem 0 0">Faction: <b>${_ftEscape(faction?.name ?? "(unbound)")}</b>. OP regain commits +1 OP to the chosen category on your faction.</p>
+      <p style="font-size:0.7rem;opacity:0.6;margin:0.4rem 0 0">Faction: <b>${_ftEscape(faction?.name ?? "(unbound)")}</b>. OP regain commits +10 marks to the chosen category on your faction.</p>
     </div>`,
     buttons: {
       use: {
@@ -4522,10 +4522,10 @@ export async function openCircuitbornAttentionResonance(actor) {
             if (faction && opApi?.commit) {
               const res = await opApi.commit(faction.id, { [bucket]: marksPerOP }, { context: "circuitborn-attention-resonance" });
               note = res?.committed
-                ? `+1 ${_ftEscape(bucket)} OP regained for <b>${_ftEscape(faction.name)}</b>.`
-                : `+1 ${_ftEscape(bucket)} OP — commit failed (${res?.error || "cap / API"}); GM applies.`;
+                ? `+10 ${_ftEscape(bucket)} marks regained for <b>${_ftEscape(faction.name)}</b>.`
+                : `+10 ${_ftEscape(bucket)} marks — commit failed (${res?.error || "cap / API"}); GM applies.`;
             } else {
-              note = `+1 ${_ftEscape(bucket)} OP — no bound faction; GM applies.`;
+              note = `+10 ${_ftEscape(bucket)} marks — no bound faction; GM applies.`;
             }
           }
           await actor.setFlag("fourththing", "disciplineUsed.circuitbornAttentionResonance", true);
@@ -4786,7 +4786,7 @@ export const CHAR_OPT_ABILITIES = {
   "occult-association-kabbalist-t1": {
     type: "soma-break",
     label: "Kabbalist — Sense the Leak (Tier 1)",
-    body: "Tactical: Once per Soma Break, cast Detect Evil and Good (flavored as sephirothic flow / qliphothic pressure). Hex Read on entry is passive; +3 Soft Power OP rolls is passive."
+    body: "Tactical: Once per Soma Break, cast Detect Evil and Good (flavored as sephirothic flow / qliphothic pressure). Hex Read on entry is passive; +30 Soft Power marks rolls is passive."
   },
   "occult-association-kabbalist-t3": {
     type: "scenario",
@@ -4831,7 +4831,7 @@ export const CHAR_OPT_ABILITIES = {
   "occult-association-tarot-mage-t4": {
     type: "scenario",
     label: "Tarot Mage — Force the Reroll (Tier 4)",
-    body: "Strategic: During Enemy Faction Turns (Phase 3), spend 5 Intrigue OP to force the GM to reroll one NPC faction's strategic action outcome and take the new result. Use sparingly — backlash, omen debt, hostile synchronicity guaranteed."
+    body: "Strategic: During Enemy Faction Turns (Phase 3), spend 50 Intrigue marks to force the GM to reroll one NPC faction's strategic action outcome and take the new result. Use sparingly — backlash, omen debt, hostile synchronicity guaranteed."
   },
   "occult-association-alchemist-t1": {
     type: "strategic-turn",
@@ -4841,12 +4841,12 @@ export const CHAR_OPT_ABILITIES = {
   "occult-association-alchemist-t2": {
     type: "strategic-turn",
     label: "Alchemist — Propaganda Distillate (Tier 2)",
-    body: "Strategic: Once per Strategic Turn, convert 3 Economy OP → 3 Soft Power OP, OR 3 Soft Power OP → 3 Economy OP. Does not count as OP generation. Leaves narrative residue."
+    body: "Strategic: Once per Strategic Turn, convert 30 Economy marks → 30 Soft Power marks, OR 30 Soft Power marks → 30 Economy marks. Does not count as OP generation. Leaves narrative residue."
   },
   "occult-association-alchemist-t4": {
     type: "strategic-turn",
     label: "Alchemist — Elixir of Fortitude (Tier 4)",
-    body: "Strategic: Once per Strategic Turn, spend 5 Economy OP. Choose one OP category (Violence/Non-Lethal/Intrigue/Soft Power/Diplomacy): that category gains +3 OP for the duration of one Scenario. Unspent bonus OP is lost when scenario ends."
+    body: "Strategic: Once per Strategic Turn, spend 50 Economy marks. Choose one OP category (Violence/Non-Lethal/Intrigue/Soft Power/Diplomacy): that category gains +30 marks for the duration of one Scenario. Unspent bonus marks are lost when scenario ends."
   },
   "occult-association-goetic-summoner-t3": {
     type: "strategic-turn",
@@ -4856,7 +4856,7 @@ export const CHAR_OPT_ABILITIES = {
   "occult-association-goetic-summoner-t4": {
     type: "scenario",
     label: "Goetic Summoner — Major Binding (Tier 4)",
-    body: "Strategic: After your faction defeats a major Qliphothic entity in a Scenario, attempt to bind it: spend 10 Intrigue OP and make a GM-adjudicated Strategic Roll. Success: bound asset granting +5 to Violence or Intrigue OP rolls while bound. Failure: entity escapes with a grudge."
+    body: "Strategic: After your faction defeats a major Qliphothic entity in a Scenario, attempt to bind it: spend 100 Intrigue marks and make a GM-adjudicated Strategic Roll. Success: bound asset granting +5 to Violence or Intrigue OP rolls while bound. Failure: entity escapes with a grudge."
   },
   "occult-association-prophet-oracle-t1": {
     type: "soma-break",
@@ -5407,7 +5407,7 @@ export const CHAR_OPT_ABILITIES = {
   "bbttcc-soul-smith-smith-bound-light": {
     type: "soma-break", level: 14,
     label: "Forge of Bound Light — Pattern of Mercy (L14)",
-    body: "1/Soma Break after a successful Parley: convert 1 Economy → 1 Soft Power OP."
+    body: "1/Soma Break after a successful Parley: convert 10 Economy marks → 10 Soft Power marks."
   },
   "bbttcc-soul-smith-smith-spark-reclaimer": {
     type: "soma-break", level: 14,
@@ -5420,7 +5420,7 @@ export const CHAR_OPT_ABILITIES = {
       { key: "standardOfWill", type: "scene",     level: 3,  label: "Standard of Will (L3)",
         body: "Action: raise a standard. Allies within 15 ft gain +1 vs. fear. At scene end → +1 Unity/VP. (1/scene.)" },
       { key: "victoryForge",   type: "soma-break", level: 14, label: "Victory Forge (L14)",
-        body: "1/Soma Break after a peaceful objective: convert 1 Intrigue → 1 Diplomacy OR 1 Soft Power OP." }
+        body: "1/Soma Break after a peaceful objective: convert 10 Intrigue marks → 10 Diplomacy OR 10 Soft Power marks." }
     ]
   },
 
@@ -5431,14 +5431,14 @@ export const CHAR_OPT_ABILITIES = {
       { key: "somnolentPeace", type: "scene",     level: 3,  label: "Somnolent Peace (L3)",
         body: "1/scene, turn a lethal blow into unconsciousness at 1 HP." },
       { key: "daybreak",       type: "soma-break", level: 14, label: "Daybreak (L14)",
-        body: "1/Soma Break, after a no-fatalities victory you led: Darkness −1 and +1 Diplomacy OP." }
+        body: "1/Soma Break, after a no-fatalities victory you led: Darkness −1 and +10 Diplomacy marks." }
     ]
   },
   "bbttcc-dreamwalker-sapphire-gate": {
     label: "Trance of the Sapphire Gate",
     abilities: [
-      { key: "lucidStep",          type: "info",      level: 3,  label: "Lucid Step (L3) — Spend 1 Soft Power OP",
-        body: "Spend 1 Soft Power OP to learn if the next Spark lead is Conceptual, Vestigial, or Animate. No daily cap; OP-cost only." },
+      { key: "lucidStep",          type: "info",      level: 3,  label: "Lucid Step (L3) — Spend 10 Soft Power marks",
+        body: "Spend 10 Soft Power marks to learn if the next Spark lead is Conceptual, Vestigial, or Animate. No daily cap; OP-cost only." },
       { key: "sapphireConduction", type: "soma-break", level: 14, label: "Sapphire Conduction (L14)",
         body: "1/Soma Break, after a Spark step succeeds: Darkness −1." }
     ]
@@ -5446,8 +5446,8 @@ export const CHAR_OPT_ABILITIES = {
   "bbttcc-dreamwalker-thousand-faces": {
     label: "Trance of the Thousand Faces",
     abilities: [
-      { key: "personaCache",  type: "info",        level: 3,  label: "Persona Cache (L3) — Spend 1 Soft Power OP",
-        body: "Maintain PB personas. In Courtly Intrigue, spend 1 Soft Power OP to switch personas and gain Advantage on your next Deception or Persuasion check. No daily cap; OP-cost only." },
+      { key: "personaCache",  type: "info",        level: 3,  label: "Persona Cache (L3) — Spend 10 Soft Power marks",
+        body: "Maintain PB personas. In Courtly Intrigue, spend 10 Soft Power marks to switch personas and gain Advantage on your next Deception or Persuasion check. No daily cap; OP-cost only." },
       { key: "borrowedVoice", type: "soma-break",  level: 10, label: "Borrowed Voice (L10)",
         body: "1/Soma Break, mimic a voice you've heard for up to 1 minute." }
     ]
@@ -5462,7 +5462,7 @@ export const CHAR_OPT_ABILITIES = {
       { key: "anticipationL1",      type: "soma-break",   level: 1,  label: "The Anticipation (L1)",         clarityCost: 1,
         body: "1/Soma Break — at the start of each combat or significant scene, spend 1 Clarity to gain a Foreseen Action: narrate a specific event about to occur. Advantage / +5 [TBD:balance] on your first reaction to it. May grant the Foreseen Action to an ally instead." },
       { key: "forceEnemyReroll",    type: "strategic-turn", level: 3, label: "Force Enemy Reroll (L3)",
-        body: "Strategic: Once per Strategic Turn, spend 1 Intrigue OP to force an enemy strategic reroll." },
+        body: "Strategic: Once per Strategic Turn, spend 10 Intrigue marks to force an enemy strategic reroll." },
       { key: "slowedInstantL5",     type: "clarity-only", level: 5,  label: "The Slowed Instant (L5)",       clarityCost: 1,
         body: "Reaction (intent: 1/round) — when an ally within 30 ft is targeted by an attack, effect, or hostile action, spend 1 Clarity to briefly slow the moment: the ally may take a bonus reaction (dodge, parry, counter, reposition) before the action resolves." },
       { key: "readTheFieldL9",      type: "clarity-only", level: 9,  label: "Read The Field (L9)",           clarityCost: 2,
@@ -5477,7 +5477,7 @@ export const CHAR_OPT_ABILITIES = {
       { key: "softReadingL1",     type: "clarity-only", level: 1,  label: "The Soft Reading (L1)",         clarityCost: 1,
         body: "Trigger — when you perceive hostile intent in a creature, spend 1 Clarity to learn what they want (motivation) instead of just what they will do. GM reveals the underlying motive. You may use this knowledge to attempt diplomatic / de-escalation actions with advantage and a Presence-check bonus [TBD:balance]." },
       { key: "mercyRefraction",   type: "scene",        level: 3,  label: "Mercy Refraction (L3)",
-        body: "1/scene, convert a lethal hit you witness into non-lethal. If it forces surrender, +1 Diplomacy OP." },
+        body: "1/scene, convert a lethal hit you witness into non-lethal. If it forces surrender, +10 Diplomacy marks." },
       { key: "preventedBlowL5",   type: "clarity-only", level: 5,  label: "The Prevented Blow (L5)",       clarityCost: 2,
         body: "Reaction — when an ally would take damage from a deliberate attack, spend 2 Clarity to insert a preemptive action (shove, distraction, prevention). The attack's damage is halved / reduced [TBD:balance]; the attacker suffers no retaliation penalty." },
       { key: "redirectedHarmL9",  type: "clarity-only", level: 9,  label: "The Redirected Harm (L9)",      clarityCost: 3,
@@ -5493,8 +5493,8 @@ export const CHAR_OPT_ABILITIES = {
     abilities: [
       { key: "readingEyeL1",      type: "clarity-only", level: 1,  label: "The Reading Eye (L1)",                          clarityCost: 1,
         body: "After focusing on a creature, object, location, or ongoing situation for 1 minute, spend 1 Clarity to perceive one concealed truth: a recent lie, hidden motive, secret identity, disguise, false document, or active Stealth. GM picks one if multiple apply." },
-      { key: "truthRefraction",   type: "info",         level: 3,  label: "Truth Refraction (L3) — Spend 1 Intrigue OP",
-        body: "Spend 1 Intrigue OP to treat one Spark Identification roll ≤9 as a 10 this Turn. No daily cap; OP-cost only." },
+      { key: "truthRefraction",   type: "info",         level: 3,  label: "Truth Refraction (L3) — Spend 10 Intrigue marks",
+        body: "Spend 10 Intrigue marks to treat one Spark Identification roll ≤9 as a 10 this Turn. No daily cap; OP-cost only." },
       { key: "unconcealedWordL5", type: "clarity-only", level: 5,  label: "The Unconcealed Word (L5)",                     clarityCost: 1,
         body: "Reaction — when a creature in your presence lies aloud, spend 1 Clarity to perceive the truth they are lying about. You know it; you do not automatically speak it. Other creatures do not perceive your use of this ability." },
       { key: "forcedClarityL9",   type: "scene",        level: 9,  label: "The Forced Clarity (L9)",                       clarityCost: 3,
@@ -5510,8 +5510,8 @@ export const CHAR_OPT_ABILITIES = {
   "bbttcc-harmony-marshal-marshal-accord": {
     label: "Mandate of Accord",
     abilities: [
-      { key: "accordEngine",  type: "info",      level: 3,  label: "Accord Engine (L3) — Spend 1 Diplomacy OP",
-        body: "During Parley, spend 1 Diplomacy OP to treat an opposing roll of 9 or lower as a 10 if the outcome moves toward peace. No daily cap; OP-cost only." },
+      { key: "accordEngine",  type: "info",      level: 3,  label: "Accord Engine (L3) — Spend 10 Diplomacy marks",
+        body: "During Parley, spend 10 Diplomacy marks to treat an opposing roll of 9 or lower as a 10 if the outcome moves toward peace. No daily cap; OP-cost only." },
       { key: "unityCadence",  type: "scene",     level: 6,  label: "Unity Cadence (L6)",
         body: "1/scene, end a scene you lead with zero fatalities → +1 Unity/VP." },
       { key: "resonantTruce", type: "soma-break", level: 10, label: "Resonant Truce (L10)",
@@ -5526,7 +5526,7 @@ export const CHAR_OPT_ABILITIES = {
   "bbttcc-harmony-marshal-marshal-resolve": {
     type: "scene", level: 14,
     label: "Mandate of Resolve — Steel & Velvet (L14)",
-    body: "1/scene, after averting a rout into stalemate: gain +1 Soft Power OP and +1 Diplomacy OP."
+    body: "1/scene, after averting a rout into stalemate: gain +10 Soft Power marks and +10 Diplomacy marks."
   },
 
   // (Phantom Courier and Breaker subclass items don't exist in the live
@@ -6924,10 +6924,10 @@ export async function openDreamwalkerMirrorRead(actor) {
   return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), rolls: [roll], content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#c9b8ff">🪞 Mirror Read → ${_ftEscape(target.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">Insight (Soul) read: <b>${roll.total}</b> — contested by ${_ftEscape(target.name)}'s Stealth/Presence. On a win, the GM reveals one tag: a <b>primary fear</b>, <b>loyalty</b>, or <b>desire</b>.</p></div>` });
 }
 
-// Persona Cache (Thousand) — at-will bonus action (1 Soft Power OP): slip into a cached persona.
+// Persona Cache (Thousand) — at-will bonus action (10 Soft Power marks): slip into a cached persona.
 export async function openDreamwalkerPersonaCache(actor) {
   try { const b = actor.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "persona-cache" }); await actor.setFlag("fourththing", "aidBanked", b); } catch (e) {}
-  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#c9b8ff">🎭 Persona Cache</span></div><p style="margin:0.2rem 0;font-size:0.8rem">You slip into a cached persona (spend 1 Soft Power OP) — advantage (reroll-lowest) banked on your next Stealth or Diplomacy check.</p></div>` });
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#c9b8ff">🎭 Persona Cache</span></div><p style="margin:0.2rem 0;font-size:0.8rem">You slip into a cached persona (spend 10 Soft Power marks) — advantage (reroll-lowest) banked on your next Stealth or Diplomacy check.</p></div>` });
 }
 
 // Thousandfold Echo (Thousand) — 1/Soma-Break bonus action: 1-minute persona-flux self buff.

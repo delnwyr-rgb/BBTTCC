@@ -405,6 +405,8 @@ for (const b of beats) {
       F("C05", "WARN", b.id, `choice[${i}] "${ch.label}" has failNext but no checkStat — failNext can never be taken`);
     }
     if (!s(ch.next) && !s(ch.failNext)) F("C05", "INFO", b.id, `choice[${i}] "${ch.label}" routes nowhere (terminal choice)`);
+    const ss = ch.supportSpend ?? ch.support?.spend;
+    if (ss != null && ss !== "" && (!Number.isInteger(Number(ss)) || Number(ss) % 10 !== 0)) F("C08", "WARN", b.id, `choice[${i}] "${ch.label}" supportSpend ${JSON.stringify(ss)} — backing is MARKS in steps of 10 (+2 per 10)`);
   }
 }
 
@@ -480,7 +482,8 @@ for (const b of beats) {
       const nk = ok.toLowerCase().replace(/[_\s]/g, "");
       if (!OP_KEYS.includes(nk === "nonlethal" || nk === "softpower" ? nk : ok)) F("E02", "ERROR", b.id, `factionEffects[${i}].opDeltas key '${ok}' is not an OP channel`);
       if (!isNum(ov)) F("E02", "WARN", b.id, `factionEffects[${i}].opDeltas.${ok} = ${JSON.stringify(ov)} not numeric`);
-      // 2026-09-06 owner ruling: MARKS are the unit everywhere — small opDeltas are intended (Momentum economy).
+      else if (!Number.isInteger(Number(ov))) F("E02", "ERROR", b.id, `factionEffects[${i}].opDeltas.${ok} = ${ov} is fractional — quantities are whole MARKS (owner ruling 2026-09-06)`);
+      // marks are the unit everywhere — small integer opDeltas are intended (Momentum economy).
     }
     const anyDelta = ["moraleDelta","loyaltyDelta","unityDelta","darknessDelta","vpDelta"].some(k => Number(row[k]) !== 0 && isNum(row[k])) || Object.values(row.opDeltas || {}).some(v => Number(v) !== 0 && isNum(v)) || row.deferred || row.recurring;
     if (!anyDelta) F("E02", "INFO", b.id, `factionEffects[${i}] is all zeros (editor default noise)`);

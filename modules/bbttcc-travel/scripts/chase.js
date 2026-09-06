@@ -65,7 +65,7 @@
     potshot: { label: "🧨 Potshot",  bucket: "violence", hint: "Win the leg → the loser's rig takes an extra 1d6+tier." },
     feint:   { label: "🕳️ Feint",    bucket: "intrigue", hint: "Opponent −2 Pace this leg." }
   };
-  const GAMBIT_COST_MARKS = 10; // 1 OP
+  const GAMBIT_COST_MARKS = 10; // one standard OP check's worth
 
   /* ---------------------------------------------------------------- utils */
   const api = () => game.bbttcc?.api;
@@ -491,7 +491,7 @@
   function gambitBoxes(sideKey, side) {
     return Object.entries(GAMBITS).map(([key, g]) => {
       const used = !!side.gambitsUsed[key];
-      const funded = side.factionId ? ` (1 OP ${g.bucket})` : "";
+      const funded = side.factionId ? ` (${GAMBIT_COST_MARKS} ${g.bucket} marks)` : "";
       return `<label style="display:block;font-size:0.8rem;${used ? "opacity:0.4;" : ""}" title="${esc(g.hint)}">
         <input type="checkbox" data-gambit="${sideKey}:${key}" ${used ? "disabled" : ""}/> ${g.label}${funded}
       </label>`;

@@ -48,7 +48,7 @@
   const CAP_MULT    = { stable: 1, stretched: 1,    overextended: 0.85, strained: 0.70, critical: 0.50 };
   const COST_MULT   = { stable: 1, stretched: 1.25, overextended: 1.5,  strained: 2,    critical: Infinity };
   const MORALE_MULT = { stable: 1, stretched: 1,    overextended: 0.95, strained: 0.90, critical: 0.80 };
-  const MARKS_PER_TROOP = 1;   // 10 troops = 10 marks
+  const MARKS_PER_TROOP = 1;   // one troop costs one mark
 
   // ── Faction reads ─────────────────────────────────────────────────────────────
   function _tier(f) {

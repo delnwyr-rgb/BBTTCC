@@ -56,14 +56,8 @@ function _safeNum(v, fb = 0) {
 const MARKS_UNIT = "marks";
 function formatMarks(marks) { return `${Math.round(_safeNum(marks, 0))} ${MARKS_UNIT}`; }
 function formatMarksNumber(marks) { return String(Math.round(_safeNum(marks, 0))); }
-// Legacy names → marks (they used to divide by 10 and print OP).
-function formatMarksAsOP(marks) { return formatMarks(marks); }
-function formatMarksAsOPNumber(marks) { return formatMarksNumber(marks); }
-// Convenience: whole-OP integer → marks. For one-shot legacy callers that still
-// want to express "spend 2 OP" without manually multiplying.
-function opToMarks(op) {
-  return Math.round(_safeNum(op, 0) * _marksPerOp());
-}
+// (formatMarksAsOP / formatMarksAsOPNumber / opToMarks were RETIRED in phase 4 —
+// no callers remain; every surface speaks marks through fmt / fmtNum.)
 
 function _sumBank(bank) {
   let t = 0;
@@ -265,6 +259,7 @@ async function preview(factionId, deltas, context) {
  *
  * Set context.allowOvercap=true to bypass the cap refusal (GM tooling).
  */
+/** Commit OP-bank deltas. @param {Object<string,number>} deltas — MARKS per channel (negative spends). */
 async function commit(factionId, deltas, context) {
   // Phase 1 seat routing (2026-08-29): bank writes are GM work. A player seat
   // relays through the gmExec primitive to the primary GM — this is what makes
@@ -451,12 +446,9 @@ function _attach() {
     apiRoot.MARKS_UNIT = MARKS_UNIT;
     apiRoot.fmt = formatMarks;                 // marks → "N marks"
     apiRoot.fmtNum = formatMarksNumber;        // marks → "N"
-    apiRoot.formatMarksAsOP = formatMarksAsOP;             // legacy name, renders marks
-    apiRoot.formatMarksAsOPNumber = formatMarksAsOPNumber; // legacy name, renders marks
-    apiRoot.opToMarks = opToMarks;
     apiRoot.runMarksMigration = _runMarksMigration;
 
-    log(`OP Engine API ready (marks unit, 1 OP = ${_marksPerOp()} marks) → game.bbttcc.api.op.{preview, commit, KEYS, OP_TO_MARKS, marksPerOp, fmt, fmtNum, opToMarks}`);
+    log(`OP Engine API ready (marks unit, 1 OP = ${_marksPerOp()} marks) → game.bbttcc.api.op.{preview, commit, KEYS, OP_TO_MARKS, marksPerOp, fmt, fmtNum} — every quantity is MARKS`);
   } catch (e) {
     warn("OP Engine wiring failed", e);
   }

@@ -139,7 +139,7 @@
       S.appendNarrativeBeat(state, {
         turn, kind: "trojan_failed",
         title: "The ruse is discovered",
-        description: `Trojan Horse FAILS (${failed}). Forces halved (−${halved} OP), Buffer −${bufferShaved}, attacker −2 morale (applied in Phase F).`,
+        description: `Trojan Horse FAILS (${failed}). Forces halved (−${halved} marks), Buffer −${bufferShaved} marks, attacker −2 morale (applied in Phase F).`,
         payload: { results, sinon: !!sinonName, bufferShaved, halved }
       });
       await api.setState(hexUuid, state);

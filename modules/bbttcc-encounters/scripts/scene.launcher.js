@@ -101,14 +101,10 @@ async function showTextStep(step, ctx) {
     const requests  = clone(hexFlags.requests || {});
     const resources = clone(hexFlags.resources || {});
 
-    // bank is stored in MARKS (1 OP = 10 marks); this file's logic was authored
-    // pre-marks in OP units. Convert to OP at read; convert back at save.
-    const _OP_TO_MARKS = (game?.bbttcc?.api?.op?.OP_TO_MARKS ?? game.fourththing?.constants?.MARKS_PER_OP);
-    const _bankMarksRaw = clone(fFlags.opBank || {});
-    const opBank = {};
-    for (const _k of Object.keys(_bankMarksRaw)) {
-      opBank[_k] = (Number(_bankMarksRaw[_k]) || 0) / _OP_TO_MARKS;
-    }
+    // Working bank in MARKS — the one unit (owner ruling 2026-09-06). Every scenario
+    // delta below is authored in marks (was OP ×10 before phase 4 of the marks refactor).
+    const opBank = clone(fFlags.opBank || {});
+    for (const _k of Object.keys(opBank)) opBank[_k] = Number(opBank[_k]) || 0;
     const tracks    = clone(fFlags.tracks || {});
 
     const hasMod    = (m) => modifiers.includes(m);
@@ -133,14 +129,14 @@ async function showTextStep(step, ctx) {
         case "pass_blocked_total": {
           if (!hasMod("Blocked Pass"))      addMod("Blocked Pass");
           if (!hasMod("Difficult Terrain")) addMod("Difficult Terrain");
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 2);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 20);
           touchedHex = touchedOp = true;
           break;
         }
         case "pass_blocked_clearable": {
           if (!hasMod("Difficult Terrain")) addMod("Difficult Terrain");
           requests.clearRockslide = true;
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedHex = touchedOp = true;
           break;
         }
@@ -154,7 +150,7 @@ async function showTextStep(step, ctx) {
           if (!hasMod("Ruins"))             addMod("Ruins");
           hexFlags.type = "wasteland";
           resources.knowledge = Math.max(0, n(resources.knowledge) + 1);
-          opBank.logistics    = Math.max(0, n(opBank.logistics) - 1);
+          opBank.logistics    = Math.max(0, n(opBank.logistics) - 10);
           hexFlags.resources  = resources;
           touchedHex = touchedOp = true;
           break;
@@ -171,32 +167,32 @@ async function showTextStep(step, ctx) {
           removeMod("Supply Line Vulnerable");
           removeMod("Hostile Population");
 
-          opBank.violence  = Math.max(0, n(opBank.violence)  - 1);
-          opBank.economy   = Math.max(0, n(opBank.economy)   + 1);
-          opBank.softpower = Math.max(0, n(opBank.softpower) + 1);
+          opBank.violence  = Math.max(0, n(opBank.violence)  - 10);
+          opBank.economy   = Math.max(0, n(opBank.economy)   + 10);
+          opBank.softpower = Math.max(0, n(opBank.softpower) + 10);
           touchedHex = touchedOp = true;
           break;
         }
         case "costly_victory": {
           if (!hasMod("Patrolled")) addMod("Patrolled");
-          opBank.violence  = Math.max(0, n(opBank.violence)  - 2);
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.violence  = Math.max(0, n(opBank.violence)  - 20);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedHex = touchedOp = true;
           break;
         }
         case "forced_retreat": {
           if (!hasMod("Hostile Population"))     addMod("Hostile Population");
           if (!hasMod("Supply Line Vulnerable")) addMod("Supply Line Vulnerable");
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
-          opBank.economy   = Math.max(0, n(opBank.economy)   - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
+          opBank.economy   = Math.max(0, n(opBank.economy)   - 10);
           touchedHex = touchedOp = true;
           break;
         }
         case "negotiated_passage": {
           if (!hasMod("Trade Hub")) addMod("Trade Hub");
-          opBank.economy   = Math.max(0, n(opBank.economy)   - 1);
-          opBank.diplomacy = Math.max(0, n(opBank.diplomacy) + 1);
-          opBank.softpower = Math.max(0, n(opBank.softpower) + 1);
+          opBank.economy   = Math.max(0, n(opBank.economy)   - 10);
+          opBank.diplomacy = Math.max(0, n(opBank.diplomacy) + 10);
+          opBank.softpower = Math.max(0, n(opBank.softpower) + 10);
           touchedHex = touchedOp = true;
           break;
         }
@@ -249,7 +245,7 @@ async function showTextStep(step, ctx) {
     else if (scenarioKey === "travel_minor_radiation_t2") {
       switch (outcomeKey) {
         case "skirt_the_edge": {
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
           break;
         }
@@ -278,7 +274,7 @@ async function showTextStep(step, ctx) {
           tracks.darkness = n(tracks.darkness) + 1;
           touchedTracks = true;
 
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
           break;
         }
@@ -331,8 +327,8 @@ async function showTextStep(step, ctx) {
         case "depths_bite_back": {
           const hazardLabel = "Hazardous Vault Depths";
           if (!hasMod(hazardLabel)) addMod(hazardLabel);
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
-          opBank.violence  = Math.max(0, n(opBank.violence)  - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
+          opBank.violence  = Math.max(0, n(opBank.violence)  - 10);
           touchedHex = touchedOp = true;
           break;
         }
@@ -389,15 +385,15 @@ async function showTextStep(step, ctx) {
     else if (scenarioKey === "travel_acid_bog_t2") {
       switch (outcomeKey) {
         case "careful_crossing": {
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           if (!hasMod("Damaged Equipment")) addMod("Damaged Equipment");
           requests.repairGear = true;
           touchedHex = touchedOp = true;
           break;
         }
         case "bog_claims_tithe": {
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
-          opBank.economy   = Math.max(0, n(opBank.economy)   - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
+          opBank.economy   = Math.max(0, n(opBank.economy)   - 10);
           if (!hasMod("Equipment Loss"))     addMod("Equipment Loss");
           if (!hasMod("Hazardous Crossing")) addMod("Hazardous Crossing");
           touchedHex = touchedOp = true;
@@ -492,8 +488,8 @@ async function showTextStep(step, ctx) {
           tracks.darkness = Math.max(0, n(tracks.darkness) - 1);
           touchedTracks = true;
 
-          opBank.diplomacy = n(opBank.diplomacy) + 1;
-          opBank.softpower = n(opBank.softpower) + 1;
+          opBank.diplomacy = n(opBank.diplomacy) + 10;
+          opBank.softpower = n(opBank.softpower) + 10;
           touchedOp = true;
           break;
         }
@@ -543,7 +539,7 @@ async function showTextStep(step, ctx) {
           tracks.unity  = n(tracks.unity)  + 1;
           touchedTracks = true;
 
-          opBank.diplomacy = Math.max(0, n(opBank.diplomacy) - 1);
+          opBank.diplomacy = Math.max(0, n(opBank.diplomacy) - 10);
           touchedOp = true;
 
           if (!hasMod("Tense Frontier")) addMod("Tense Frontier");
@@ -556,8 +552,8 @@ async function showTextStep(step, ctx) {
           tracks.darkness = n(tracks.darkness) + 1;
           touchedTracks = true;
 
-          opBank.violence  = Math.max(0, n(opBank.violence)  - 1);
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.violence  = Math.max(0, n(opBank.violence)  - 10);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
 
           if (!hasMod("Hot Border")) addMod("Hot Border");
@@ -571,8 +567,8 @@ async function showTextStep(step, ctx) {
           tracks.darkness = n(tracks.darkness) + 2;
           touchedTracks = true;
 
-          opBank.violence  = Math.max(0, n(opBank.violence)  - 2);
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.violence  = Math.max(0, n(opBank.violence)  - 20);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
 
           if (!hasMod("Battlefield")) addMod("Battlefield");
@@ -589,7 +585,7 @@ async function showTextStep(step, ctx) {
           tracks.unity  = n(tracks.unity)  + 1;
           touchedTracks = true;
 
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
 
           if (!hasMod("Strategic Setback")) addMod("Strategic Setback");
@@ -611,8 +607,8 @@ async function showTextStep(step, ctx) {
           if (!hasMod(label1)) addMod(label1);
           if (!hasMod(label2)) addMod(label2);
 
-          opBank.logistics = n(opBank.logistics) + 2;
-          opBank.economy   = n(opBank.economy)   + 1;
+          opBank.logistics = n(opBank.logistics) + 20;
+          opBank.economy   = n(opBank.economy)   + 10;
           touchedOp = true;
 
           tracks.morale = n(tracks.morale) + 1;
@@ -626,7 +622,7 @@ async function showTextStep(step, ctx) {
           const label = "Sabotaged Rail Lines";
           if (!hasMod(label)) addMod(label);
 
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
 
           tracks.darkness = n(tracks.darkness) + 1;
@@ -639,8 +635,8 @@ async function showTextStep(step, ctx) {
           const label = "Failed Rail Operation";
           if (!hasMod(label)) addMod(label);
 
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
-          opBank.softpower = Math.max(0, n(opBank.softpower) - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
+          opBank.softpower = Math.max(0, n(opBank.softpower) - 10);
           touchedOp = true;
 
           tracks.morale = n(tracks.morale) - 1;
@@ -655,7 +651,7 @@ async function showTextStep(step, ctx) {
           if (!hasMod(label1)) addMod(label1);
           removeMod("Seized Rail Yard");
 
-          opBank.logistics = n(opBank.logistics) + 1;
+          opBank.logistics = n(opBank.logistics) + 10;
           touchedOp = true;
 
           tracks.morale   = n(tracks.morale)   + 1;
@@ -674,7 +670,7 @@ async function showTextStep(step, ctx) {
     else if (scenarioKey === "travel_weather_front_t3") {
       switch (outcomeKey) {
         case "ride_it_out": {
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
 
           const label = "Weather-Scoured Route";
@@ -685,7 +681,7 @@ async function showTextStep(step, ctx) {
         }
 
         case "reroute_around_storm": {
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 2);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 20);
           touchedOp = true;
 
           const label = "Storm Detour Known";
@@ -696,8 +692,8 @@ async function showTextStep(step, ctx) {
         }
 
         case "catastrophic_front": {
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
-          opBank.economy   = Math.max(0, n(opBank.economy)   - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
+          opBank.economy   = Math.max(0, n(opBank.economy)   - 10);
           touchedOp = true;
 
           tracks.morale   = n(tracks.morale)   - 1;
@@ -722,7 +718,7 @@ async function showTextStep(step, ctx) {
     else if (scenarioKey === "travel_supply_shortage_t2") {
       switch (outcomeKey) {
         case "reprioritized_cargo": {
-          opBank.economy = Math.max(0, n(opBank.economy) - 1);
+          opBank.economy = Math.max(0, n(opBank.economy) - 10);
           touchedOp = true;
           break;
         }
@@ -734,8 +730,8 @@ async function showTextStep(step, ctx) {
         }
 
         case "cannibalize_assets": {
-          opBank.economy   = Math.max(0, n(opBank.economy)   - 1);
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.economy   = Math.max(0, n(opBank.economy)   - 10);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
 
           const label = "Asset-Stripped Convoy";
@@ -753,7 +749,7 @@ async function showTextStep(step, ctx) {
     else if (scenarioKey === "travel_wilderness_push_t3") {
       switch (outcomeKey) {
         case "push_to_limit": {
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
 
           resources.knowledge = n(resources.knowledge) + 1;
@@ -767,7 +763,7 @@ async function showTextStep(step, ctx) {
         }
 
         case "controlled_withdrawal": {
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
 
           tracks.morale = n(tracks.morale) - 1;
@@ -785,7 +781,7 @@ async function showTextStep(step, ctx) {
           tracks.darkness = n(tracks.darkness) + 1;
           touchedTracks = true;
 
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
           break;
         }
@@ -798,7 +794,7 @@ async function showTextStep(step, ctx) {
     else if (scenarioKey === "travel_mutant_wildlife_t2") {
       switch (outcomeKey) {
         case "clean_hunt": {
-          opBank.violence = Math.max(0, n(opBank.violence) - 1);
+          opBank.violence = Math.max(0, n(opBank.violence) - 10);
           touchedOp = true;
 
           tracks.morale = n(tracks.morale) + 1;
@@ -812,8 +808,8 @@ async function showTextStep(step, ctx) {
         }
 
         case "messy_clash": {
-          opBank.violence  = Math.max(0, n(opBank.violence)  - 1);
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.violence  = Math.max(0, n(opBank.violence)  - 10);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
 
           tracks.morale = n(tracks.morale) - 1;
@@ -827,7 +823,7 @@ async function showTextStep(step, ctx) {
         }
 
         case "predators_hold_ground": {
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
 
           const label = "Predator Territory";
@@ -845,7 +841,7 @@ async function showTextStep(step, ctx) {
     else if (scenarioKey === "travel_mutant_wildlife_t3") {
       switch (outcomeKey) {
         case "apex_brought_down": {
-          opBank.violence = Math.max(0, n(opBank.violence) - 2);
+          opBank.violence = Math.max(0, n(opBank.violence) - 20);
           touchedOp = true;
 
           tracks.morale = n(tracks.morale) + 1;
@@ -859,8 +855,8 @@ async function showTextStep(step, ctx) {
         }
 
         case "costly_repulse": {
-          opBank.violence  = Math.max(0, n(opBank.violence)  - 2);
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.violence  = Math.max(0, n(opBank.violence)  - 20);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
 
           tracks.morale   = n(tracks.morale)   - 1;
@@ -875,9 +871,9 @@ async function showTextStep(step, ctx) {
         }
 
         case "apex_claims_tithe": {
-          opBank.violence  = Math.max(0, n(opBank.violence)  - 1);
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
-          opBank.economy   = Math.max(0, n(opBank.economy)   - 1);
+          opBank.violence  = Math.max(0, n(opBank.violence)  - 10);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
+          opBank.economy   = Math.max(0, n(opBank.economy)   - 10);
           touchedOp = true;
 
           tracks.morale   = n(tracks.morale)   - 1;
@@ -943,7 +939,7 @@ async function showTextStep(step, ctx) {
           if (!hasMod(label)) addMod(label);
           hexFlags.modifiers = modifiers;
 
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
           touchedHex = true;
           break;
@@ -954,7 +950,7 @@ async function showTextStep(step, ctx) {
           if (!hasMod(label)) addMod(label);
           hexFlags.modifiers = modifiers;
 
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 2);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 20);
           touchedOp = true;
 
           tracks.darkness = n(tracks.darkness) + 1;
@@ -1091,8 +1087,8 @@ async function showTextStep(step, ctx) {
           hexFlags.modifiers = modifiers;
           touchedHex = true;
 
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
-          opBank.economy   = Math.max(0, n(opBank.economy)   - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
+          opBank.economy   = Math.max(0, n(opBank.economy)   - 10);
           touchedOp = true;
 
           tracks.morale   = n(tracks.morale)   - 1;
@@ -1216,8 +1212,8 @@ async function showTextStep(step, ctx) {
     else if (scenarioKey === "travel_desenitarius_maarg_t4") {
       switch (outcomeKey) {
         case "dragon_driven_off": {
-          opBank.violence  = Math.max(0, n(opBank.violence)  - 3);
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 2);
+          opBank.violence  = Math.max(0, n(opBank.violence)  - 30);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 20);
           touchedOp = true;
 
           tracks.morale   = n(tracks.morale)   + 1;
@@ -1232,9 +1228,9 @@ async function showTextStep(step, ctx) {
         }
 
         case "dragon_devours_route": {
-          opBank.violence  = Math.max(0, n(opBank.violence)  - 3);
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 3);
-          opBank.economy   = Math.max(0, n(opBank.economy)   - 3);
+          opBank.violence  = Math.max(0, n(opBank.violence)  - 30);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 30);
+          opBank.economy   = Math.max(0, n(opBank.economy)   - 30);
           touchedOp = true;
 
           tracks.morale   = n(tracks.morale)   - 2;
@@ -1256,8 +1252,8 @@ async function showTextStep(step, ctx) {
         }
 
         case "dragon_bound_in_myth": {
-          opBank.violence  = Math.max(0, n(opBank.violence)  - 1);
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.violence  = Math.max(0, n(opBank.violence)  - 10);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
 
           tracks.unity    = n(tracks.unity)    + 2;
@@ -1294,7 +1290,7 @@ async function showTextStep(step, ctx) {
           if (!hasMod(label)) addMod(label);
           hexFlags.modifiers = modifiers;
 
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 10);
           touchedOp = true;
 
           tracks.darkness = n(tracks.darkness) + 1;
@@ -1309,8 +1305,8 @@ async function showTextStep(step, ctx) {
           hexFlags.modifiers = modifiers;
 
           hexFlags.type = "wasteland";
-          opBank.logistics = Math.max(0, n(opBank.logistics) - 2);
-          opBank.economy   = Math.max(0, n(opBank.economy)   - 1);
+          opBank.logistics = Math.max(0, n(opBank.logistics) - 20);
+          opBank.economy   = Math.max(0, n(opBank.economy)   - 10);
           touchedOp = true;
 
           tracks.darkness = n(tracks.darkness) + 2;
@@ -1347,11 +1343,9 @@ async function showTextStep(step, ctx) {
     }
 
     if (touchedOp) {
-      // Convert OP-unit working bank back to MARKS for storage.
+      // Working bank is already MARKS — store rounded.
       const _bankMarksOut = {};
-      for (const _k of Object.keys(opBank)) {
-        _bankMarksOut[_k] = Math.round((Number(opBank[_k]) || 0) * _OP_TO_MARKS);
-      }
+      for (const _k of Object.keys(opBank)) _bankMarksOut[_k] = Math.round(Number(opBank[_k]) || 0);
       actorUpdates["flags.bbttcc-factions.opBank"] = _bankMarksOut;
     }
     if (touchedTracks) {

@@ -301,7 +301,7 @@
       turn: state.startedTurn,
       kind: "siege_declared",
       title: `Siege declared on ${hexDoc?.flags?.[MOD_T]?.name || hexDoc?.id || "hex"}`,
-      description: `${attackerFactionActor.name} commits ${bufferStartingTotal} OP to siege. Size: ${state.sizeProfile}. Depot: ${depotHexUuid}. Bulwark discount: ${bulwark.applied ? "applied (×0.75)" : "none"}.`,
+      description: `${attackerFactionActor.name} commits ${bufferStartingTotal} marks to siege. Size: ${state.sizeProfile}. Depot: ${depotHexUuid}. Bulwark discount: ${bulwark.applied ? "applied (×0.75)" : "none"}.`,
       payload: { bulwarkDiscount: bulwark.applied }
     });
 
@@ -339,7 +339,7 @@
 
     // War log
     await _pushWarLog(attackerFactionActor,
-      `Begin Siege: ${state.siegeId} on target. Buffer ${bufferStartingTotal} OP committed. Size=${state.sizeProfile}. ${layers.length} layer(s). ${bulwark.applied ? "Bulwark discount applied. " : ""}(Phase B will tick.)`,
+      `Begin Siege: ${state.siegeId} on target. Buffer ${bufferStartingTotal} marks committed. Size=${state.sizeProfile}. ${layers.length} layer(s). ${bulwark.applied ? "Bulwark discount applied. " : ""}(Phase B will tick.)`,
       { activityKey: "begin_siege", siegeId: state.siegeId, hexUuid, depotHexUuid }
     );
 

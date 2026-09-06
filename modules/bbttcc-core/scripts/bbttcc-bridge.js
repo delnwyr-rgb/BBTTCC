@@ -581,22 +581,22 @@ async function _clearBridgeDebtAndLocks(actor){
     open:        "Bad Eden Bridge — move power between a Steward and their faction: sacrifice body/mind for faction OP, or spend faction OP to back a personal roll.",
     faction:     "Faction — the OP bank on the far side of the bridge. Sacrifices deposit here; Backing spends from here. Locked to your bound faction when opened from a sheet.",
     actor:       "Steward — the body paying the price (Manifestation) or receiving the boost (Backing). The list follows the selected faction's roster when one exists.",
-    mOpKey:      "OP Type — which of the nine OP tracks the faction receives. Bank math: 1 OP = 10 marks.",
-    mOpQty:      "OP Qty — how many OP to generate. Every OP yielded accrues 1 Blood Debt on the steward (the narrative IOU the world collects on).",
-    sacrifice:   "Sacrifice — what the steward burns: Integrity (tier-priced meat), Stress (2/OP mind), Aptitude ranks (3 OP per rank, restored at the next Soma Break), or a Manifestation tier lockout (4 OP per tier, clears at Soma Break/scene end).",
-    sacIntegrity:"Integrity cost per OP scales with faction tier — T0–1: 10 · T2: 7 · T3+: 5. Debited from the Integrity track; you must have the full cost on hand.",
-    stressPerOp: "Stress / OP — Stress track points burned per OP (default 2). The track floors at 0 and you need the full cost available.",
+    mOpKey:      "OP Type — which of the nine OP channels the faction receives. Banks hold MARKS; a standard OP check costs 10.",
+    mOpQty:      "Marks — how many marks to generate (steps of 10). Every 10 marks yielded accrues 1 Blood Debt on the steward (the narrative IOU the world collects on).",
+    sacrifice:   "Sacrifice — what the steward burns per 10 marks: Integrity (tier-priced meat), Stress (2 per 10 marks of mind), Aptitude ranks (30 marks per rank, restored at the next Soma Break), or a Manifestation tier-lock (40 marks per tier locked).",
+    sacIntegrity:"Integrity cost per 10 marks scales with faction tier — T0–1: 10 · T2: 7 · T3+: 5. Debited from the Integrity track; you must have the full cost on hand.",
+    stressPerOp: "Stress per 10 marks — Stress track points burned per 10 marks generated (default 2). The track floors at 0 and you need the full cost available.",
     aptKey:      "Aptitude key — the skill whose ranks burn (e.g. athletics, stealth, occult). The burn is flag-tracked and restores automatically at the next Soma Break.",
-    opPerRank:   "OP / Rank — OP yielded per rank burned (default 3). Ranks burned = ceiling(OP Qty ÷ this).",
-    opPerLock:   "OP / Tier-lock — OP yielded per manifestation tier locked (default 4). Lockouts stack, gate casting, and clear at Soma Break.",
+    opPerRank:   "Marks / Rank — marks yielded per aptitude rank burned (default 30). Ranks burned = ceiling(marks ÷ this).",
+    opPerLock:   "Marks / Tier-lock — marks yielded per manifestation tier locked (default 40). Lockouts stack, gate casting, and clear at Soma Break.",
     mNote:       "Note — stamped on the Blood Debt ledger entry and the GM receipt whisper.",
-    manifestBtn: "Deposits the OP marks FIRST (a full bank refuses and nothing burns), then debits the resource, records a Blood Debt lock on the steward, and whispers a receipt to the GM.",
+    manifestBtn: "Deposits the marks FIRST (a full bank refuses and nothing burns), then debits the resource, records a Blood Debt lock on the steward, and whispers a receipt to the GM.",
     bOpKey:      "OP Type — which faction OP track pays for the backing.",
-    bSpend:      "Spend — OP drawn from the faction bank (1 OP = 10 marks). Refused if the bank is short.",
+    bSpend:      "Spend (marks) — marks drawn from the faction bank, in steps of 10. Refused if the bank is short.",
     bRollKind:   "Roll — Aptitude fires the steward's full rank-aware skill check (rerolls, floors, surge); Faculty fires a bare attribute test.",
     bRollKey:    "Key — which aptitude or faculty to roll. The list follows the selected steward and shows current values.",
-    bMode:       "Mode — Flat adds +2 per OP to the roll total; Bonus Dice rolls extra dice (default 1d6 per OP) and adds them.",
-    bDice:       "Dice / OP — the die granted per OP in dice mode (default 1d6).",
+    bMode:       "Mode — Flat adds +2 per 10 marks to the roll total; Bonus Dice rolls extra dice (default 1d6 per 10 marks) and adds them.",
+    bDice:       "Dice per 10 marks — the die granted per 10 marks spent in dice mode (default 1d6).",
     backingBtn:  "Spends the OP (verified against the bank), fires the steward's real roll, and posts base + backing = total to chat."
   };
   function tipAttr(key){
@@ -697,7 +697,7 @@ async function _clearBridgeDebtAndLocks(actor){
       '     <div style="display:flex; gap:8px; align-items:flex-end;">'+
       '       <div style="width:140px;"'+tipAttr("stressPerOp")+'><label>Stress per 10 marks</label><input name="m_stressPerOp" type="number" min="1" step="1" value="2" style="width:100%;"/></div>'+
       '     </div>'+
-      '     <div class="bbttcc-muted">Default: 2 Stress = 1 OP. The steward\'s Stress track depletes by this amount.</div>'+
+      '     <div class="bbttcc-muted">Default: 2 Stress = 10 marks. The steward\'s Stress track depletes by this amount.</div>'+
       '   </div>'+
 
       '   <div data-sac-panel="aptitude" style="margin-top:8px; display:none;">'+
@@ -705,14 +705,14 @@ async function _clearBridgeDebtAndLocks(actor){
       '       <div style="flex:1;"'+tipAttr("aptKey")+'><label>Aptitude key</label><input name="m_aptKey" type="text" value="" placeholder="e.g. athletics, stealth, occult" style="width:100%;"/></div>'+
       '       <div style="width:140px;"'+tipAttr("opPerRank")+'><label>OP / Rank</label><input name="m_opPerRank" type="number" min="1" step="1" value="3" style="width:100%;"/></div>'+
       '     </div>'+
-      '     <div class="bbttcc-muted">Default: 1 rank burned = 3 OP. Burned ranks restore at the next Soma Break (flag-tracked).</div>'+
+      '     <div class="bbttcc-muted">Default: 1 rank burned = 30 marks. Burned ranks restore at the next Soma Break (flag-tracked).</div>'+
       '   </div>'+
 
       '   <div data-sac-panel="manifestation" style="margin-top:8px; display:none;">'+
       '     <div style="display:flex; gap:8px; align-items:flex-end;">'+
       '       <div style="width:140px;"'+tipAttr("opPerLock")+'><label>OP / Tier-lock</label><input name="m_opPerLock" type="number" min="1" step="1" value="4" style="width:100%;"/></div>'+
       '     </div>'+
-      '     <div class="bbttcc-muted">Default: 1 manifestation tier locked (this scene) = 4 OP. Lockout flag clears at scene end / Soma Break.</div>'+
+      '     <div class="bbttcc-muted">Default: 1 manifestation tier locked (this scene) = 40 marks. Lockout flag clears at scene end / Soma Break.</div>'+
       '   </div>'+
 
       '   <div style="margin-top:10px;">'+
