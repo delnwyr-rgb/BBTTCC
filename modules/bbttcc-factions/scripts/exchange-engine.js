@@ -278,7 +278,7 @@ async function _writeWarLogs(A, B, summary) {
 function _summarize(resource) {
   const parts = [];
   for (const [k, v] of Object.entries(resource.marks || {})) {
-    if (v > 0) parts.push(`${(v/10).toFixed(1).replace(/\.0$/,"")} ${k.charAt(0).toUpperCase()+k.slice(1)} OP`);
+    if (v > 0) parts.push(`${Math.round(v)} ${k.charAt(0).toUpperCase()+k.slice(1)} marks`);
   }
   if (resource.buildUnits > 0) parts.push(`${resource.buildUnits} BU`);
   for (const [matKey, qty] of Object.entries(resource.materials || {})) {

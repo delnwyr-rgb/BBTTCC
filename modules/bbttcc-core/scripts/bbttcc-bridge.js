@@ -8,6 +8,9 @@
 
   function warn() { try { console.warn("[bbttcc-bridge]", ...arguments); } catch (_) {} }
   function num(x, d){ var n=Number(x); return isFinite(n)?n:(d!=null?d:0); }
+  // OP↔marks ratio from the one authority (never a literal here). Bridge costs (Integrity/Stress per OP,
+  // +2 per OP backing) are RULE units = per 10 marks; the dialog takes MARKS (owner ruling 2026-09-06).
+  function _mpo(){ return game.bbttcc?.api?.op?.OP_TO_MARKS ?? game.fourththing?.constants?.MARKS_PER_OP ?? game.fourththing?.pricing?.MARKS_PER_OP; }
   function opLabel(key){ key=String(key||"").trim().toLowerCase(); return key?key.charAt(0).toUpperCase()+key.slice(1):"OP"; }
 
   function _gp(obj, path){
@@ -434,8 +437,8 @@ async function _clearBridgeDebtAndLocks(actor){
     // ── Phase 2: deposit marks first. Engine canon (Phase A 2026-05-09):
     // 1 OP = 10 marks. The commit result was previously IGNORED, so a refused
     // deposit (bank at cap) still burned the steward's resources — fixed 2026-07-06.
-    var deltas = {}; deltas[opKey] = +(opAmount * 10);
-    var commitRes = await opCommit(faction.id, deltas, "Manifestation ("+sacType+"): "+pc.name+" → +"+opAmount+" "+opLabel(opKey)+" OP");
+    var deltas = {}; deltas[opKey] = +(opAmount * _mpo());
+    var commitRes = await opCommit(faction.id, deltas, "Manifestation ("+sacType+"): "+pc.name+" → +"+(opAmount * _mpo())+" "+opLabel(opKey)+" marks");
     if (!commitRes || commitRes.committed === false || commitRes.ok === false) {
       throw new Error("Faction OP deposit refused"+((commitRes && commitRes.error) ? ": "+commitRes.error : " (bank at cap?)")+" — nothing was sacrificed.");
     }
@@ -446,7 +449,7 @@ async function _clearBridgeDebtAndLocks(actor){
       await doDebit();
     } catch (eDebit) {
       try {
-        var refund = {}; refund[opKey] = -(opAmount * 10);
+        var refund = {}; refund[opKey] = -(opAmount * _mpo());
         await opCommit(faction.id, refund, "Refund: failed sacrifice debit for "+pc.name);
       } catch (_eRefund) { warn("refund after failed debit ALSO failed — manual GM fix needed", _eRefund); }
       throw eDebit;
@@ -465,7 +468,7 @@ async function _clearBridgeDebtAndLocks(actor){
     try{
       var gmIds = (game.users||[]).filter(function(u){ return u && u.isGM; }).map(function(u){ return u.id; });
       if(gmIds.length){
-        var line = '<div><b>Manifestation</b>: '+pc.name+' → <b>+'+opAmount+' '+opLabel(opKey)+' OP</b> for '+faction.name+'</div>';
+        var line = '<div><b>Manifestation</b>: '+pc.name+' → <b>+'+(opAmount * _mpo())+' '+opLabel(opKey)+' marks</b> for '+faction.name+'</div>';
         line += '<div class="bbttcc-muted">Sacrifice: <b>'+sacType+'</b> • Blood Debt +<b>'+bloodDebtDelta+'</b></div>';
         if(note) line += '<div class="bbttcc-muted">Note: '+foundry.utils.escapeHTML(note)+'</div>';
         await ChatMessage.create({ whisper: gmIds, speaker:{alias:"Bad Eden Bridge"}, content: line });
@@ -510,11 +513,11 @@ async function _clearBridgeDebtAndLocks(actor){
     // Bank values are MARKS (1 OP = 10 marks). User input "spend" is OP units.
     var bank = readFactionOpBank(faction);
     var poolMarks = num(bank[opKey], 0);
-    var spendMarks = Math.round(spend * 10);
-    if (poolMarks < spendMarks) throw new Error("Not enough "+opLabel(opKey)+" OP (need "+spend+", have "+(poolMarks/10)+")");
+    var spendMarks = Math.round(spend * _mpo());
+    if (poolMarks < spendMarks) throw new Error("Not enough "+opLabel(opKey)+" marks (need "+spendMarks+", have "+poolMarks+")");
 
     var deltas={}; deltas[opKey] = -Math.abs(spendMarks);
-    var commitRes = await opCommit(faction.id, deltas, "Backing: spent "+spend+" "+opLabel(opKey)+" OP for "+actor.name);
+    var commitRes = await opCommit(faction.id, deltas, "Backing: spent "+spendMarks+" "+opLabel(opKey)+" marks for "+actor.name);
     if (!commitRes || commitRes.committed === false || commitRes.ok === false) {
       throw new Error("Faction OP spend refused"+((commitRes && commitRes.error) ? ": "+commitRes.error : "")+" — no roll fired.");
     }
@@ -555,7 +558,7 @@ async function _clearBridgeDebtAndLocks(actor){
       var br = await (new Roll(expr)).evaluate();
       finalTotal = baseTotal + num(br.total,0);
       await ChatMessage.create({ content:
-        '<div class="bbttcc-muted"><b>Faction Backing</b>: '+faction.name+' spent <b>'+spend+' '+opLabel(opKey)+' OP</b> for '+actor.name+'.</div>'+
+        '<div class="bbttcc-muted"><b>Faction Backing</b>: '+faction.name+' spent <b>'+spendMarks+' '+opLabel(opKey)+' marks</b> for '+actor.name+'.</div>'+
         '<div>'+baseDesc+': <b>'+baseTotal+'</b> +<b>'+expr+'</b> = <b>'+finalTotal+'</b></div>'+
         '<div class="bbttcc-muted">Bonus dice total: <b>'+br.total+'</b></div>'
       });
@@ -565,7 +568,7 @@ async function _clearBridgeDebtAndLocks(actor){
     var bonus = flatPerOp * spend;
     finalTotal = baseTotal + bonus;
     await ChatMessage.create({ content:
-      '<div class="bbttcc-muted"><b>Faction Backing</b>: '+faction.name+' spent <b>'+spend+' '+opLabel(opKey)+' OP</b> for '+actor.name+'.</div>'+
+      '<div class="bbttcc-muted"><b>Faction Backing</b>: '+faction.name+' spent <b>'+spendMarks+' '+opLabel(opKey)+' marks</b> for '+actor.name+'.</div>'+
       '<div>'+baseDesc+': <b>'+baseTotal+'</b> +<b>'+bonus+'</b> = <b>'+finalTotal+'</b></div>'
     });
     return { ok:true, baseTotal:baseTotal, finalTotal:finalTotal, mode:mode, flatBonus:bonus, spend:spend, opKey:opKey, roll:baseRoll };
@@ -671,7 +674,7 @@ async function _clearBridgeDebtAndLocks(actor){
 
       '   <div style="display:flex; gap:8px; align-items:flex-end;">'+
       '    <div style="flex:1;"'+tipAttr("mOpKey")+'><label>OP Type</label><select name="m_opKey" style="width:100%;">'+opOptions+'</select></div>'+
-      '    <div style="width:120px;"'+tipAttr("mOpQty")+'><label>OP Qty</label><input name="m_amount" type="number" min="1" step="1" value="1" style="width:100%;"/></div>'+
+      '    <div style="width:120px;"'+tipAttr("mOpQty")+'><label>Marks</label><input name="m_amount" type="number" min="10" step="10" value="10" style="width:100%;"/></div>'+
       '   </div>'+
 
       '   <div style="display:flex; gap:8px; align-items:flex-end; margin-top:8px;">'+
@@ -692,7 +695,7 @@ async function _clearBridgeDebtAndLocks(actor){
 
       '   <div data-sac-panel="stress" style="margin-top:8px; display:none;">'+
       '     <div style="display:flex; gap:8px; align-items:flex-end;">'+
-      '       <div style="width:140px;"'+tipAttr("stressPerOp")+'><label>Stress / OP</label><input name="m_stressPerOp" type="number" min="1" step="1" value="2" style="width:100%;"/></div>'+
+      '       <div style="width:140px;"'+tipAttr("stressPerOp")+'><label>Stress per 10 marks</label><input name="m_stressPerOp" type="number" min="1" step="1" value="2" style="width:100%;"/></div>'+
       '     </div>'+
       '     <div class="bbttcc-muted">Default: 2 Stress = 1 OP. The steward\'s Stress track depletes by this amount.</div>'+
       '   </div>'+
@@ -722,7 +725,7 @@ async function _clearBridgeDebtAndLocks(actor){
       '   <div style="font-weight:800; letter-spacing:.08em; text-transform:uppercase; font-size:11px; margin-bottom:8px;">Backing</div>'+
       '   <div style="display:flex; gap:8px; align-items:flex-end;">'+
       '    <div style="flex:1;"'+tipAttr("bOpKey")+'><label>OP Type</label><select name="b_opKey" style="width:100%;">'+opOptions+'</select></div>'+
-      '    <div style="width:120px;"'+tipAttr("bSpend")+'><label>Spend</label><input name="b_spend" type="number" min="1" step="1" value="1" style="width:100%;"/></div>'+
+      '    <div style="width:120px;"'+tipAttr("bSpend")+'><label>Spend (marks)</label><input name="b_spend" type="number" min="10" step="10" value="10" style="width:100%;"/></div>'+
       '   </div>'+
       '   <div style="display:flex; gap:8px; align-items:flex-end; margin-top:8px;">'+
       '    <div style="flex:1;"'+tipAttr("bRollKind")+'><label>Roll</label><select name="b_kind" style="width:100%;">'+
@@ -732,9 +735,9 @@ async function _clearBridgeDebtAndLocks(actor){
       '   </div>'+
       '   <div style="display:flex; gap:8px; align-items:flex-end; margin-top:8px;">'+
       '    <div style="flex:1;"'+tipAttr("bMode")+'><label>Mode</label><select name="b_mode" style="width:100%;">'+
-      '      <option value="flat">Flat Bonus (+2 / OP)</option><option value="dice">Bonus Dice (+1d6 / OP)</option>'+
+      '      <option value="flat">Flat Bonus (+2 per 10 marks)</option><option value="dice">Bonus Dice (+1d6 per 10 marks)</option>'+
       '    </select></div>'+
-      '    <div style="width:140px;"'+tipAttr("bDice")+'><label>Dice / OP</label><input name="b_dice" type="text" value="1d6" style="width:100%;"/></div>'+
+      '    <div style="width:140px;"'+tipAttr("bDice")+'><label>Dice per 10 marks</label><input name="b_dice" type="text" value="1d6" style="width:100%;"/></div>'+
       '   </div>'+
       '   <div style="margin-top:10px;">'+
       '    <button type="button" class="bbttcc-sacrifice-btn" data-action="backing"'+tipAttr("backingBtn")+' style="border-color: rgba(56,189,248,0.55); background: rgba(56,189,248,0.10); color:#d6f3ff;">Spend OP & Roll</button>'+
@@ -830,7 +833,7 @@ async function _clearBridgeDebtAndLocks(actor){
             var factionId = root.find("select[name='factionId']").val();
             var actorId  = root.find("select[name='actorId']").val();
             var opKey    = root.find("select[name='m_opKey']").val();
-            var amount   = num(root.find("input[name='m_amount']").val(), 1);
+            var amount   = num(root.find("input[name='m_amount']").val(), 10) / _mpo();   // dialog is MARKS; engine rule units are per 10 marks
             var sacType  = String(root.find("select[name='m_sacType']").val() || "integrity");
             var note     = String(root.find("input[name='m_note']").val() || "");
 
@@ -865,7 +868,7 @@ async function _clearBridgeDebtAndLocks(actor){
             var factionId = root.find("select[name='factionId']").val();
             var actorId  = root.find("select[name='actorId']").val();
             var opKey    = root.find("select[name='b_opKey']").val();
-            var spend    = num(root.find("input[name='b_spend']").val(), 1);
+            var spend    = num(root.find("input[name='b_spend']").val(), 10) / _mpo();   // dialog is MARKS
             var kind     = String(root.find("select[name='b_kind']").val() || "skill");
             var key      = String(root.find("input[name='b_key']").val() || "").trim().toLowerCase();
             var mode     = String(root.find("select[name='b_mode']").val() || "flat");

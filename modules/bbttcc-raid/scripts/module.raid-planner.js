@@ -57,17 +57,12 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     return out;
   }
 
-  // Cost values arrive in MARKS (B4 marks-economy substrate, 1 OP = 10 marks).
-  // Render as fractional OP using the canonical formatter so authors see
-  // "Economy 4 OP" instead of raw "Economy 40". Whole-OP values render as
-  // integers ("4 OP"), fractional as one-decimal ("0.5 OP").
+  // Cost values are MARKS — the one unit (owner ruling 2026-09-06). Render whole marks.
   function _formatMarks(marks){
     const m = Number(marks) || 0;
-    const fmt = game?.bbttcc?.api?.op?.formatMarksAsOPNumber;
+    const fmt = game?.bbttcc?.api?.op?.fmtNum;
     if (typeof fmt === "function") return fmt(m);
-    // Fallback if op API isn't installed yet — show fractional OP directly.
-    const op = m / 10;
-    return Number.isInteger(op) ? String(op) : op.toFixed(1);
+    return String(Math.round(m));
   }
 
   function _costLine(cost){
@@ -818,10 +813,8 @@ Hooks.once("init",()=>{
       if (!v) continue;
       const icon  = OP_ICONS[key]  || "";
       const label = OP_LABELS[key] || prettifyKey(key);
-      // Costs are stored in MARKS (1 OP = 10 marks); show OP to match the OP Bank.
-      const op = v / 10;
-      const opStr = Number.isInteger(op) ? String(op) : op.toFixed(1);
-      parts.push(`${icon} ${label} ${opStr}`);
+      // Costs are marks — the one unit (2026-09-06).
+      parts.push(`${icon} ${label} ${Math.round(v)} marks`);
     }
     return parts.join("   ");
   }

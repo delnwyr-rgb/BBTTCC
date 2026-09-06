@@ -242,18 +242,18 @@
           deltas[b] = -need; sum += need;
         }
         if (shortBucket) {
-          const msg = `Begin Siege rejected — ${attackerFactionActor.name} can't marshal the buffer alone: ${shortBucket.bucket} needs ${shortBucket.need / 10} OP, bank has ${shortBucket.have / 10}. (Supporters add their OP AFTER declaration, via Join Siege.)`;
+          const msg = `Begin Siege rejected — ${attackerFactionActor.name} can't marshal the buffer alone: ${shortBucket.bucket} needs ${shortBucket.need} marks, bank has ${shortBucket.have} marks. (Supporters add their OP AFTER declaration, via Join Siege.)`;
           await _pushWarLog(attackerFactionActor, msg, { activityKey: "begin_siege", hexUuid });
           return { ok: false, reason: msg };
         }
         if (sum > 0) {
           const res = await opApi.commit(attackerId, deltas, { source: "siege", label: "Begin Siege — buffer commit (lead opens)", allowOvercap: true });
           if (!res || res.committed === false || res.ok === false) {
-            const msg = `Begin Siege rejected — ${attackerFactionActor.name} could not commit the opening buffer (${sum / 10} OP).`;
+            const msg = `Begin Siege rejected — ${attackerFactionActor.name} could not commit the opening buffer (${sum} marks).`;
             await _pushWarLog(attackerFactionActor, msg, { activityKey: "begin_siege", hexUuid });
             return { ok: false, reason: msg };
           }
-          await _pushWarLog(attackerFactionActor, `Buffer marshalled: ${attackerFactionActor.name} ${sum / 10} OP (lead opens; supporters self-commit on Join)${bulwark.applied ? " (Bulwark ×0.75)" : ""}.`, { activityKey: "begin_siege", hexUuid });
+          await _pushWarLog(attackerFactionActor, `Buffer marshalled: ${attackerFactionActor.name} ${sum} marks (lead opens; supporters self-commit on Join)${bulwark.applied ? " (Bulwark ×0.75)" : ""}.`, { activityKey: "begin_siege", hexUuid });
         }
       } else {
         console.warn("[bbttcc/siege-throughput] OP API unavailable — buffer committed WITHOUT debiting the bank (faucet).");

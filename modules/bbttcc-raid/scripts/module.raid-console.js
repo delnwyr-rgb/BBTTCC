@@ -94,9 +94,9 @@ function _bbttccFxPanelForRound(app, idx){
     const c = _normCost(cost);
     const parts = [];
     for (const k of Object.keys(c)){
-      // Costs are stored in marks; the tooltip says OP, so convert. _rcOP is
-      // defined below in module scope — this IIFE only runs on click.
-      parts.push(_prettyKey(k) + " " + _rcOP(c[k]) + " OP");
+      // Costs are in marks — the one unit (2026-09-06). _rcOP is defined below
+      // in module scope — this IIFE only runs on click.
+      parts.push(_prettyKey(k) + " " + _rcOP(c[k]) + " marks");
     }
     return parts.length ? parts.join(" • ") : "";
   }
@@ -361,20 +361,21 @@ function _bbttccFxPanelForRound(app, idx){
 // printed the raw stored number under an "OP" label, so a 5 OP bank read as
 // "50" beside a 2 OP maneuver billed as "20" (owner report 2026-08-17).
 // DISPLAY ONLY — nothing downstream changes unit, so the raid math is untouched.
-const MARKS_PER_OP = 10;
+// OP↔marks ratio from the one authority (rfi-pricing → api.op / fourththing.constants). Never a literal here.
+function _mpo() { return game.bbttcc?.api?.op?.OP_TO_MARKS ?? game.fourththing?.constants?.MARKS_PER_OP ?? game.fourththing?.pricing?.MARKS_PER_OP; }
 
 // Marks-migration normalization (2026-08-22, live-confirmed): staged amounts
 // are STORED in marks, but the roll/DC bonus is ceil(staged OP / 2). Halving
 // raw marks handed +25 to a 5-OP stage — 10× the intended weight — on BOTH
 // the attacker bonus and the defender DC.
 function stagedOpBonus(marks) {
-  return Math.ceil((Number(marks || 0) / MARKS_PER_OP) / 2);
+  return Math.ceil((Number(marks || 0) / _mpo()) / 2);
 }
+// Marks are the unit everywhere (owner ruling 2026-09-06) — renders whole marks.
 function _rcOP(marks) {
-  const fmt = globalThis.game?.bbttcc?.api?.op?.formatMarksAsOPNumber;
+  const fmt = globalThis.game?.bbttcc?.api?.op?.fmtNum;
   if (typeof fmt === "function") { try { return fmt(marks); } catch (_e) {} }
-  const op = (Number(marks) || 0) / MARKS_PER_OP;
-  return Number.isInteger(op) ? String(op) : op.toFixed(1);
+  return String(Math.round(Number(marks) || 0));
 }
 
 Hooks.once("init", () => {
@@ -929,7 +930,7 @@ function _rcHasOpForActivity(attacker, activityKey){
   // Banks are MARKS. The documented gate is "1 OP of the primary key", but the
   // threshold was still written as 1 — i.e. one tenth of an OP — so a faction
   // with pocket change passed a check that reads "requires 1 OP".
-  return { ok: (v>=MARKS_PER_OP), key: k, pool: v };
+  return { ok: (v>=_mpo()), key: k, pool: v };
 }
 function _rcApplyGateToAddRoundButton(app){
   try {
@@ -952,13 +953,13 @@ function _rcApplyGateToAddRoundButton(app){
     if (!g.ok) {
       btn.prop("disabled", true);
       btn.addClass("bbttcc-roll-blocked");
-      btn.attr("title", "Action Unavailable\nRequires 1 " + _rcOpLabel(g.key) + " OP.\nThe attacker has " + _rcOP(g.pool) + " in this pool.");
+      btn.attr("title", "Action Unavailable\nRequires " + _mpo() + " " + _rcOpLabel(g.key) + " marks.\nThe attacker has " + _rcOP(g.pool) + " marks in this pool.");
       return;
     }
 
     btn.prop("disabled", false);
     btn.removeClass("bbttcc-roll-blocked");
-    btn.attr("title", "Add Round\nRequires 1 " + _rcOpLabel(g.key) + " OP to authorize the attempt.");
+    btn.attr("title", "Add Round\nRequires " + _mpo() + " " + _rcOpLabel(g.key) + " marks to authorize the attempt.");
   } catch (e) { warn("raid add-round gate UI failed", e); }
 } 
 
@@ -3317,7 +3318,7 @@ _renderScenarioHUD(host, round){
 
                 chip.innerHTML = `
                   <button type="button" data-manage-act="stage" data-who="support" data-faction-id="${sf.id}" data-key="${k}" data-delta="-10">−</button>
-                  <span><b>${k}</b>: ${_rcOP(staged)} / ${_rcOP(bank)} OP</span>
+                  <span><b>${k}</b>: ${_rcOP(staged)} / ${_rcOP(bank)} marks</span>
                   <button type="button" data-manage-act="stage" data-who="support" data-faction-id="${sf.id}" data-key="${k}" data-delta="10">+</button>
                 `;
 
@@ -4156,7 +4157,7 @@ r.view = {
       // Raid OP gate: require 1 OP of the activity primary key to DECLARE a round.
       const gate = _rcHasOpForActivity(attacker, this.vm.activityKey);
       if (!gate.ok) {
-        ui.notifications?.warn?.("This raid round requires 1 " + _rcOpLabel(gate.key) + " OP. Attacker has " + _rcOP(gate.pool) + ".");
+        ui.notifications?.warn?.("This raid round requires " + _mpo() + " " + _rcOpLabel(gate.key) + " marks. Attacker has " + _rcOP(gate.pool) + ".");
         try { _rcApplyGateToAddRoundButton(this); } catch (_eG3) {}
         return;
       }
@@ -4895,11 +4896,11 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
               content: `
                 <form>
                   <p class="hint">Initial commitment sets starting Influence HP. You can leave these at 0 for a quick test.</p>
-                  <div class="form-group"><label>Attacker: Diplomacy OP commit</label><input type="number" name="atkDip" value="0" min="0" step="1"/></div>
-                  <div class="form-group"><label>Attacker: Soft Power OP commit</label><input type="number" name="atkSoft" value="0" min="0" step="1"/></div>
+                  <div class="form-group"><label>Attacker: Diplomacy marks commit</label><input type="number" name="atkDip" value="0" min="0" step="10"/></div>
+                  <div class="form-group"><label>Attacker: Soft Power marks commit</label><input type="number" name="atkSoft" value="0" min="0" step="10"/></div>
                   <hr/>
-                  <div class="form-group"><label>Defender: Diplomacy OP commit</label><input type="number" name="defDip" value="0" min="0" step="1"/></div>
-                  <div class="form-group"><label>Defender: Soft Power OP commit</label><input type="number" name="defSoft" value="0" min="0" step="1"/></div>
+                  <div class="form-group"><label>Defender: Diplomacy marks commit</label><input type="number" name="defDip" value="0" min="0" step="10"/></div>
+                  <div class="form-group"><label>Defender: Soft Power marks commit</label><input type="number" name="defSoft" value="0" min="0" step="10"/></div>
                   <div class="form-group"><label>Label</label><input type="text" name="label" value="Courtly Intrigue"/></div>
                 </form>`,
               buttons: {
@@ -4963,11 +4964,11 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
             content: `
               <form class="bbttcc-raid-dialog-form">
                 <div class="form-group"><label>Attacker Action</label><select name="atkAction">${actions}</select></div>
-                <div class="form-group"><label>Attacker Spend (OP)</label><input type="number" name="atkSpend" value="2" min="0" step="1"/></div>
+                <div class="form-group"><label>Attacker Spend (marks)</label><input type="number" name="atkSpend" value="20" min="0" step="10"/></div>
                 <div class="form-group"><label>Attacker Skill Bonus</label><input type="number" name="atkSkill" value="0" step="1"/></div>
                 <hr/>
                 <div class="form-group"><label>Defender Action</label><select name="defAction">${actions}</select></div>
-                <div class="form-group"><label>Defender Spend (OP)</label><input type="number" name="defSpend" value="2" min="0" step="1"/></div>
+                <div class="form-group"><label>Defender Spend (marks)</label><input type="number" name="defSpend" value="20" min="0" step="10"/></div>
                 <div class="form-group"><label>Defender Skill Bonus</label><input type="number" name="defSkill" value="0" step="1"/></div>
                 <div class="form-group"><label>Note (optional)</label><input type="text" name="note" value=""/></div>
               </form>`,
@@ -5144,15 +5145,15 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
             title: "Infiltration (Alarm) — Round",
             content: `
               <form>
-                <div class="form-group"><label>Attacker Spend (Intrigue OP)</label><input type="number" name="atk" value="2" min="0" step="1"/></div>
-                <div class="form-group"><label>Defender Spend (Nonlethal OP)</label><input type="number" name="def" value="2" min="0" step="1"/></div>
+                <div class="form-group"><label>Attacker Spend (Intrigue marks)</label><input type="number" name="atk" value="20" min="0" step="10"/></div>
+                <div class="form-group"><label>Defender Spend (Nonlethal marks)</label><input type="number" name="def" value="20" min="0" step="10"/></div>
                 <div class="form-group"><label>Flashback (optional)</label>
                   <div class="form-fields">
                     <input type="checkbox" name="flash" style="margin-right:.5rem;"/>
                     <span class="hint">Spend Intrigue OP to reduce Alarm by 1 (once per round).</span>
                   </div>
                 </div>
-                <div class="form-group"><label>Flashback Cost (Intrigue OP)</label><input type="number" name="flashCost" value="2" min="0" step="1"/></div>
+                <div class="form-group"><label>Flashback Cost (Intrigue marks)</label><input type="number" name="flashCost" value="20" min="0" step="10"/></div>
                 <div class="form-group"><label>Note (optional)</label><input type="text" name="note" value=""/></div>
               </form>`,
             buttons: {

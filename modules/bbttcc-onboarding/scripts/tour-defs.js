@@ -304,7 +304,7 @@ const factionGmTour = {
           await new Promise(r => setTimeout(r, 500));
         }
       },
-      text: "Direct writes to the canonical flags: OP bank per track (in OP units), Morale/Loyalty/Darkness, VP and Unity.\nStage values, add an audit note, then Apply commits everything at once — and logs a gm_adjustment entry in the War Logs. Clear discards. Copy ID grabs the faction's actor id for macros."
+      text: "Direct writes to the canonical flags: OP bank per track (in marks), Morale/Loyalty/Darkness, VP and Unity.\nStage values, add an audit note, then Apply commits everything at once — and logs a gm_adjustment entry in the War Logs. Clear discards. Copy ID grabs the faction's actor id for macros."
     },
     {
       id: "politics", title: "Political override & drift nudges",

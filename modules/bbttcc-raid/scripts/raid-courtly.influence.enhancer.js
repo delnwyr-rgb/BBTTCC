@@ -134,13 +134,15 @@
     await actor.update({ [`flags.${MODF}`]: flags });
   }
 
-  // Dialog spends are labeled OP; the opBank stores MARKS (1 OP = 10 marks).
-  // Read the payable OP so every spend can be clamped to the bank — a 0-OP
+  // Spends arrive in MARKS (owner ruling 2026-09-06); influence math counts per 10 marks.
+  // Payable marks (whole tens) so every spend is clamped to the bank — a broke
   // faction can no longer buy bonuses on credit (2026-08-22 playtest finding).
   function bankOpOf(actor, key) {
     const b = actor?.flags?.[MODF]?.opBank || {};
-    return Math.max(0, Math.floor((Number(b[String(key || "").toLowerCase()]) || 0) / 10));
+    return Math.floor(Math.max(0, Number(b[String(key || "").toLowerCase()]) || 0) / 10) * 10;
   }
+  // Inputs are MARKS (owner ruling 2026-09-06); mechanics count "per 10 marks". Round spends down to whole tens.
+  const _m10 = (v) => Math.floor(Math.max(0, Number(v) || 0) / 10) * 10;
 
   async function sendChat(lines, {title="Courtly Intrigue"}={}) {
     if (!lines.length) return;
@@ -335,15 +337,17 @@
       // Spend initial commitment OPs & compute starting Influence HP
       // Spends are OP; banks store marks. Clamp to what each side can pay,
       // debit at marks scale (×10).
-      atkInitDip   = Math.min(Math.max(0, Math.floor(Number(atkInitDip||0))),  bankOpOf(A, "diplomacy"));
-      atkInitSoft  = Math.min(Math.max(0, Math.floor(Number(atkInitSoft||0))), bankOpOf(A, "softpower"));
-      defInitDip   = Math.min(Math.max(0, Math.floor(Number(defInitDip||0))),  bankOpOf(D, "diplomacy"));
-      defInitSoft  = Math.min(Math.max(0, Math.floor(Number(defInitSoft||0))), bankOpOf(D, "softpower"));
+      const atkInitDipM = Math.min(_m10(atkInitDip), bankOpOf(A, "diplomacy"));   // marks
+      const atkInitSoftM = Math.min(_m10(atkInitSoft), bankOpOf(A, "softpower"));   // marks
+      const defInitDipM = Math.min(_m10(defInitDip), bankOpOf(D, "diplomacy"));   // marks
+      const defInitSoftM = Math.min(_m10(defInitSoft), bankOpOf(D, "softpower"));   // marks
 
-      if (atkInitDip)  await adjustOpBank(A, "diplomacy", -atkInitDip * 10, label);
-      if (atkInitSoft) await adjustOpBank(A, "softpower", -atkInitSoft * 10, label);
-      if (defInitDip)  await adjustOpBank(D, "diplomacy", -defInitDip * 10, label);
-      if (defInitSoft) await adjustOpBank(D, "softpower", -defInitSoft * 10, label);
+      if (atkInitDipM) await adjustOpBank(A, "diplomacy", -atkInitDipM, label);
+      if (atkInitSoftM) await adjustOpBank(A, "softpower", -atkInitSoftM, label);
+      if (defInitDipM) await adjustOpBank(D, "diplomacy", -defInitDipM, label);
+      if (defInitSoftM) await adjustOpBank(D, "softpower", -defInitSoftM, label);
+      // influence math counts per 10 marks
+      atkInitDip = atkInitDipM / 10; atkInitSoft = atkInitSoftM / 10; defInitDip = defInitDipM / 10; defInitSoft = defInitSoftM / 10;
 
       let initInfluenceA = computeInfluenceHP({ baseCommitDip: atkInitDip, baseCommitSoft: atkInitSoft });
       let initInfluenceD = computeInfluenceHP({ baseCommitDip: defInitDip, baseCommitSoft: defInitSoft });
@@ -484,24 +488,26 @@
         const atkKey = actionToOpKey(atkAct);
         const defKey = actionToOpKey(defAct);
 
-        let atkSpendInt = Math.min(Math.max(0, Math.floor(Number(atkSpend||0))), atkKey ? bankOpOf(A, atkKey) : 0);
-        let defSpendInt = Math.min(Math.max(0, Math.floor(Number(defSpend||0))), defKey ? bankOpOf(D, defKey) : 0);
+        let atkSpendM = Math.min(_m10(atkSpend), atkKey ? bankOpOf(A, atkKey) : 0);   // marks
+        let defSpendM = Math.min(_m10(defSpend), defKey ? bankOpOf(D, defKey) : 0);
+        let atkSpendInt = atkSpendM / 10;   // effect units: per 10 marks
+        let defSpendInt = defSpendM / 10;
 
         // Phase D — Call the Question: cap spending for `roundsRemaining` round(s).
         if (state.spendLock?.roundsRemaining > 0) {
           const cap = Number(state.spendLock.maxSpend ?? 0);
           if (atkSpendInt > cap || defSpendInt > cap) {
-            await sendChat([`Spending lock active: capped at ${cap} OP per side this round.`], { title: `${label}: Spending Lock` });
+            await sendChat([`Spending lock active: capped at ${cap * 10} marks per side this round.`], { title: `${label}: Spending Lock` });
           }
-          atkSpendInt = Math.min(atkSpendInt, cap);
-          defSpendInt = Math.min(defSpendInt, cap);
+          atkSpendInt = Math.min(atkSpendInt, cap); atkSpendM = atkSpendInt * 10;
+          defSpendInt = Math.min(defSpendInt, cap); defSpendM = defSpendInt * 10;
           state.spendLock.roundsRemaining -= 1;
           if (state.spendLock.roundsRemaining <= 0) delete state.spendLock;
         }
 
         // Spend OP from relevant pools
-        if (atkKey && atkSpendInt) await adjustOpBank(A, atkKey, -atkSpendInt * 10, label);
-        if (defKey && defSpendInt) await adjustOpBank(D, defKey, -defSpendInt * 10, label);
+        if (atkKey && atkSpendM) await adjustOpBank(A, atkKey, -atkSpendM, label);
+        if (defKey && defSpendM) await adjustOpBank(D, defKey, -defSpendM, label);
 
         // Compute bonuses
         let atkBonus = Number(atkSkillBonus || 0);

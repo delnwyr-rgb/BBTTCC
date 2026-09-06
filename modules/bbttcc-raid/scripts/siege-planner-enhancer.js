@@ -310,19 +310,19 @@
     const commitTotal = document.createElement("span");
     commitTotal.style.cssText = "margin-left:auto;opacity:0.85;font-weight:600;";
     const _commitMarks = () => ["violence", "logistics", "economy"].reduce((a, k) => a + (Number(cfg.bufferCommit[k]) || 0), 0);
-    const _updateCommitTotal = () => { commitTotal.textContent = `Σ ${_commitMarks() / 10} OP`; };
+    const _updateCommitTotal = () => { commitTotal.textContent = `Σ ${_commitMarks()} marks`; };
     for (const bk of ["violence", "logistics", "economy"]) {
-      const haveOP = bankMarks(bk) / 10;
+      const haveOP = bankMarks(bk);   // marks
       const wrap = document.createElement("label");
       wrap.style.cssText = "display:flex;align-items:center;gap:3px;";
       const cl = document.createElement("span");
       cl.textContent = bk.charAt(0).toUpperCase() + bk.slice(1, 3);   // Vio / Log / Eco
       cl.style.cssText = "opacity:0.75;";
       const inp = document.createElement("input");
-      inp.type = "number"; inp.min = "0"; inp.step = "1";
-      inp.value = String((Number(cfg.bufferCommit[bk]) || 0) / 10);   // marks → OP for display
+      inp.type = "number"; inp.min = "0"; inp.step = "10";
+      inp.value = String(Number(cfg.bufferCommit[bk]) || 0);   // marks
       inp.style.cssText = "width:3.4rem;text-align:right;font-size:0.72rem;";
-      inp.title = `${bk} OP to commit (bank has ${haveOP} OP)`;
+      inp.title = `${bk} marks to commit (bank has ${haveOP} marks)`;
       const bankTag = document.createElement("span");
       bankTag.textContent = `/${haveOP}`;
       const _refresh = () => {
@@ -330,7 +330,7 @@
         bankTag.style.cssText = `font-size:0.66rem;${over ? "color:#fca5a5;opacity:0.9;" : "opacity:0.5;"}`;
       };
       inp.addEventListener("change", () => {
-        cfg.bufferCommit[bk] = Math.max(0, Math.round((Number(inp.value) || 0) * 10));   // OP → marks
+        cfg.bufferCommit[bk] = Math.max(0, Math.round(Number(inp.value) || 0));   // marks
         _updateCommitTotal(); _refresh();
       });
       _refresh();

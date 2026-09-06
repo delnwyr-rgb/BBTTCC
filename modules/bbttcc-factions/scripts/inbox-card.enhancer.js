@@ -35,8 +35,8 @@
   function _summarize(r) {
     const parts = [];
     for (const [k, v] of Object.entries(r?.marks || {})) {
-      const op = (Number(v) || 0) / 10;
-      if (op > 0) parts.push(`${Number.isInteger(op) ? op : op.toFixed(1)} ${k.charAt(0).toUpperCase() + k.slice(1)} OP`);
+      const m = Math.round(Number(v) || 0);
+      if (m > 0) parts.push(`${m} ${k.charAt(0).toUpperCase() + k.slice(1)} marks`);
     }
     if (Number(r?.buildUnits) > 0) parts.push(`${Math.floor(r.buildUnits)} BU`);
     for (const [matKey, qty] of Object.entries(r?.materials || {})) {
@@ -193,11 +193,11 @@
       </div>
     `).join("");
     const opRows = OP_KEYS.map(k => {
-      const op = (Number(m[k] || 0)) / 10;
+      const mk = Math.round(Number(m[k] || 0));   // marks are the unit (2026-09-06)
       return `
         <div class="bbttcc-counter-row">
-          <label>${_esc(OP_LABELS[k])} (OP)</label>
-          <input type="number" name="${prefix}.marks.${k}" min="0" step="0.1" value="${Number.isInteger(op) ? op : op.toFixed(1)}">
+          <label>${_esc(OP_LABELS[k])} (marks)</label>
+          <input type="number" name="${prefix}.marks.${k}" min="0" step="1" value="${mk}">
         </div>
       `;
     }).join("");
@@ -219,7 +219,7 @@
     for (const k of OP_KEYS) {
       const el = root.querySelector(`[name="${prefix}.marks.${k}"]`);
       const opVal = Number(el?.value || 0) || 0;
-      const m = Math.max(0, Math.round(opVal * 10));
+      const m = Math.max(0, Math.round(opVal));   // input is marks
       if (m > 0) marks[k] = m;
     }
     const bu = Math.max(0, Math.floor(Number(root.querySelector(`[name="${prefix}.bu"]`)?.value || 0) || 0));

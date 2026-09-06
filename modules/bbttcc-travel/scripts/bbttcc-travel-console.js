@@ -24,12 +24,8 @@
     }[k] || k;
   }
 
-  // Costs are in MARKS (1 OP = 10 marks). Display as fractional OP.
-  function _marksToOp(m) {
-    const n = Number(m) || 0;
-    const op = n / 10;
-    return Number.isInteger(op) ? String(op) : op.toFixed(1);
-  }
+  // Costs are in MARKS — the one unit (owner ruling 2026-09-06). Whole marks.
+  function _marksToOp(m) { return String(Math.round(Number(m) || 0)); }
   function opToStr(cost) {
     const keys = Object.keys(cost || {});
     if (!keys.length) return "";
@@ -272,7 +268,7 @@
     lines.push(headline);
 
     // Travel + radiation deltas
-    const travelDelta = _signed(arch.travel?.opDelta, " OP");
+    const travelDelta = _signed(arch.travel?.opDelta, " marks");
     const radDelta = _signed(arch.radiation?.rpDelta, " RP");
     const onlyIfRadiated = !!arch.radiation?.onlyIfRadiated;
     const mechBits = [];
@@ -1440,10 +1436,9 @@
           const parts = [];
           for (const [k, marks] of Object.entries(totals)) {
             if (marks <= 0) continue;
-            const op = marks / 10;
             const have = Number(bank?.[k] ?? 0);
             if (have < marks) {
-              shortfalls.push(`${opLabel(k)}: need ${op}, have ${(have/10).toFixed(1)}`);
+              shortfalls.push(`${opLabel(k)}: need ${Math.round(marks)}, have ${Math.round(have)} marks`);
               anyUnaffordable = true;
             }
             parts.push(`${(Number.isInteger(op) ? op : op.toFixed(1))} ${opLabel(k)}`);
@@ -1783,7 +1778,7 @@
         const totalMiles   = milesPerUnit ? (totalUnits * milesPerUnit) : null;
 
         const baseLabel = legs.length
-          ? `Legs: ${legs.length} • Units: ${totalUnits}${totalMiles!=null ? ` • Miles: ${totalMiles} ${milesUnits}` : ""} • Est. OP: ${opToStr(totalOP) || "—"}`
+          ? `Legs: ${legs.length} • Units: ${totalUnits}${totalMiles!=null ? ` • Miles: ${totalMiles} ${milesUnits}` : ""} • Est. cost (marks): ${opToStr(totalOP) || "—"}`
           : "No legs";
 
         $est.textContent = baseLabel;

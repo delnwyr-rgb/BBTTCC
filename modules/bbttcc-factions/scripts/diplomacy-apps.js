@@ -22,7 +22,7 @@ function _esc(s){ return foundry.utils.escapeHTML(String(s ?? "")); }
 function _isFaction(a){ try { return a?.getFlag?.(MOD_ID, "isFaction") === true; } catch { return false; } }
 function _bank(a){ return a?.getFlag?.(MOD_ID, "opBank") ?? {}; }
 function _bu(a){ return Math.max(0, Math.floor(Number(a?.getFlag?.(MOD_ID, "buildUnits") ?? 0) || 0)); }
-function _marksToOp(m){ const op = (Number(m)||0)/10; return Number.isInteger(op) ? String(op) : op.toFixed(1); }
+function _marksToOp(m){ return String(Math.round(Number(m)||0)); /* marks are the unit (2026-09-06) */ }
 function _stockpile(a){
   try { return game?.bbttcc?.api?.factions?.stockpile?.list?.(a) || []; }
   catch { return []; }
@@ -31,7 +31,7 @@ function _stockpile(a){
 function _readOpInput(root, prefix, bucket){
   const el = root.querySelector(`[name="${prefix}.marks.${bucket}"]`);
   // Inputs are in OP units (fractional OK); convert to MARKS at boundary.
-  return Math.max(0, Math.round((Number(el?.value || 0) || 0) * 10));
+  return Math.max(0, Math.round(Number(el?.value || 0) || 0));   // input is in marks (2026-09-06)
 }
 function _readBUInput(root, prefix){
   const el = root.querySelector(`[name="${prefix}.bu"]`);
@@ -64,8 +64,8 @@ function _columnHTML(prefix, label, actor){
   const rows = OP_KEYS.map(k => `
     <div style="display:grid; grid-template-columns: 5.5rem 4rem 1fr; align-items:center; gap:.4rem;">
       <label style="font-size:.78rem; opacity:.85;">${_esc(OP_LABELS[k])}</label>
-      <input type="number" min="0" step="0.1" name="${prefix}.marks.${k}" value="0" style="width:100%;">
-      <span style="font-size:.72rem; opacity:.65; white-space:nowrap;">have ${_marksToOp(bank?.[k] ?? 0)} OP</span>
+      <input type="number" min="0" step="1" name="${prefix}.marks.${k}" value="0" style="width:100%;">
+      <span style="font-size:.72rem; opacity:.65; white-space:nowrap;">have ${Math.round(Number(bank?.[k] ?? 0) || 0)} marks</span>
     </div>
   `).join("");
 
@@ -300,9 +300,8 @@ class BBTTCC_TradeApp extends foundry.applications.api.ApplicationV2 {
     try {
       const writeMarks = (prefix, marks) => {
         for (const [k, v] of Object.entries(marks || {})) {
-          const op = (Number(v) || 0) / 10;
           const el = root.querySelector(`[name="${prefix}.marks.${k}"]`);
-          if (el) el.value = String(op);
+          if (el) el.value = String(Math.round(Number(v) || 0));   // marks
         }
       };
       const writeBU = (prefix, bu) => {

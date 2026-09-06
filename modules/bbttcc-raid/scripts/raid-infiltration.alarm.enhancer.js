@@ -88,12 +88,14 @@
     return "lockdown";
   }
 
-  // Dialog spends are labeled OP; the opBank stores MARKS (1 OP = 10 marks).
-  // Payable OP for clamping spends to the bank.
+  // Spends arrive in MARKS (owner ruling 2026-09-06); the roll bonus counts per 10 marks.
+  // Payable marks (whole tens) for clamping spends to the bank.
   function _bankOpOf(actor, key) {
     const b = actor?.flags?.[MODF]?.opBank || {};
-    return Math.max(0, Math.floor((Number(b[String(key || "").toLowerCase()]) || 0) / 10));
+    return Math.floor(Math.max(0, Number(b[String(key || "").toLowerCase()]) || 0) / 10) * 10;
   }
+  // Inputs are MARKS (owner ruling 2026-09-06); mechanics count "per 10 marks". Round spends down to whole tens.
+  const _m10 = (v) => Math.floor(Math.max(0, Number(v) || 0) / 10) * 10;
 
   async function adjustOpBank(actor, key, delta) {
     if (!actor || !key || !delta) return;
@@ -292,12 +294,14 @@
         // Spends are OP; the opBank stores MARKS (1 OP = 10 marks). Clamp to
         // what each side can actually pay — a bankless defender can no longer
         // buy free defense — and debit at marks scale (2026-08-22 findings).
-        const atkSpend = Math.min(Math.max(0, Math.floor(Number(spendIntrigue||0))), _bankOpOf(A, "intrigue"));
-        const defSpend = Math.min(Math.max(0, Math.floor(Number(spendNonlethal||0))), _bankOpOf(D, "nonlethal"));
+        const atkSpendM = Math.min(_m10(spendIntrigue), _bankOpOf(A, "intrigue"));   // marks
+        const defSpendM = Math.min(_m10(spendNonlethal), _bankOpOf(D, "nonlethal"));
+        const atkSpend = atkSpendM / 10;   // effect units: per 10 marks
+        const defSpend = defSpendM / 10;
 
         // Spend OPs (negative delta, marks scale)
-        if (atkSpend) await adjustOpBank(A, "intrigue", -atkSpend * 10);
-        if (defSpend) await adjustOpBank(D, "nonlethal", -defSpend * 10);
+        if (atkSpendM) await adjustOpBank(A, "intrigue", -atkSpendM);
+        if (defSpendM) await adjustOpBank(D, "nonlethal", -defSpendM);
 
         // S3a.5: Steward chip declarations bias the attacker roll.
         const stewBonus = Math.max(0, Math.floor(Number(stewardBonus || 0)));
@@ -377,7 +381,7 @@
         const atkDiceSum = atkRoll?.dice?.[0]?.results?.reduce((s, r) => s + Number(r.result || 0), 0) ?? (atkTotal - atkBonus);
         const defDiceSum = defRoll?.dice?.[0]?.results?.reduce((s, r) => s + Number(r.result || 0), 0) ?? (defTotal - defBonus);
         const atkParts = [`${atkDiceSum} <small style="opacity:.7;">(2d10)</small>`];
-        if (atkSpendBonus > 0) atkParts.push(`+ ${atkSpendBonus} <small style="opacity:.7;">(Intrigue OP × ${atkSpend})</small>`);
+        if (atkSpendBonus > 0) atkParts.push(`+ ${atkSpendBonus} <small style="opacity:.7;">(Intrigue ×${atkSpend} per 10 marks)</small>`);
         if (stewBonus     > 0) atkParts.push(`+ ${stewBonus} <small style="opacity:.7;">(stewards × ${stewBonus})</small>`);
         if (atkCoalition  > 0) atkParts.push(`+ ${atkCoalition} <small style="opacity:.7;">(coalition Intrigue OP)</small>`);
 
@@ -435,10 +439,11 @@
           return { ...state, note: "alarm already at 0" };
         }
 
-        const spend = Math.min(Math.max(0, Math.floor(Number(costIntrigue||0))), _bankOpOf(A, "intrigue"));
-        if (spend <= 0) return { ...state, note: "cannot pay flashback cost" };
+        const spendM = Math.min(_m10(costIntrigue), _bankOpOf(A, "intrigue"));   // marks
+        const spend = spendM / 10;
+        if (spendM <= 0) return { ...state, note: "cannot pay flashback cost" };
 
-        await adjustOpBank(A, "intrigue", -spend * 10);
+        await adjustOpBank(A, "intrigue", -spendM);
         const before = state.alarm;
         state.alarm = Math.max(0, state.alarm - 1);
         state._flashbackUsedThisRound = true;

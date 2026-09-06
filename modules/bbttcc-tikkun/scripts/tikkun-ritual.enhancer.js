@@ -193,10 +193,12 @@
     const f = Math.max(0, Number(spendFaith||0));
     const c = Math.max(0, Number(spendCulture||0));
     const d = Math.max(0, Number(spendDiplomacy||0));
+    // Spends are MARKS (they are clamped against and debited from the bank in marks);
+    // the design weight was "per 2 OP" = per 20 marks (owner ruling 2026-09-06).
     const base =
-      spec.weightFaith    * Math.ceil(f / 2) +
-      spec.weightCulture  * Math.ceil(c / 2) +
-      spec.weightDiplomacy* Math.ceil(d / 2);
+      spec.weightFaith    * Math.ceil(f / 20) +
+      spec.weightCulture  * Math.ceil(c / 20) +
+      spec.weightDiplomacy* Math.ceil(d / 20);
     return base + Number(skillBonus||0);
   }
 

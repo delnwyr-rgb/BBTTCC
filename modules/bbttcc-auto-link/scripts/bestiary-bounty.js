@@ -43,7 +43,7 @@ export const METHODS = {
 };
 
 const _esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const _opFmt = (marks) => `${marks} marks (${(marks / 10).toFixed(1)} OP)`;
+const _opFmt = (marks) => `${marks} marks`;
 
 export function isBestiary(actor) {
   const a = actor?.flags?.fourththing?.rfi?.actor;

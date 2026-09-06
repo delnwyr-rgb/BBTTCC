@@ -119,7 +119,7 @@
     const marksDelta = {};
     for (const [k, v] of Object.entries(opDelta || {})) {
       const n = Number(v) || 0;
-      if (n) marksDelta[k] = n * 10;
+      if (n) marksDelta[k] = n;   // authored in MARKS since 2026-09-06 (was OP ×10)
     }
     const bonuses = foundry.utils.duplicate(A.getFlag(MODF,"bonuses")||{});
     bonuses.scheduled = Array.isArray(bonuses.scheduled) ? bonuses.scheduled : [];
@@ -153,7 +153,7 @@
       // SIM-BADEDEN tuning 2026-06-05: at +1 Economy vs a 1-OP activity cost,
       // Harvest was zero-sum (a pure time-shift). As the canonical T1 income
       // action it now yields +2 Economy → net +1 OP per turn worked. OWNER DIAL.
-      await scheduleFactionOP(A, { economy: 2 }, 1);
+      await scheduleFactionOP(A, { economy: 20 }, 1);
       await pushWarLog(A,"Harvest Season: +2 Economy next turn.");
     },
 
@@ -223,7 +223,7 @@
     // ===== Canon T1: Pilgrimage Route =====
     async pilgrimage_route(ctx){
       const A = game.actors.get(ctx.factionId);
-      await scheduleFactionOP(A, { faith: 1 }, 1);
+      await scheduleFactionOP(A, { faith: 10 }, 1);
       if (ctx.targetUuid) await adjustHexTrack(ctx.targetUuid,"loyalty",+1);
       await pushWarLog(A,"Pilgrimage Route: +1 Faith next turn; +1 Loyalty to target hex.");
     },
@@ -295,7 +295,7 @@
       const A = game.actors.get(ctx.factionId);
       if (!A) return;
 
-      await scheduleFactionOP(A, { economy: 1 }, 1);
+      await scheduleFactionOP(A, { economy: 10 }, 1);
       if (ctx.targetUuid) await adjustHexTrack(ctx.targetUuid, "loyalty", -1);
 
       await pushWarLog(A, `Resource Expropriation: +1 Economy next turn${ctx.targetUuid ? "; Loyalty -1 to target hex." : "."}`);
@@ -333,7 +333,7 @@
       const A = game.actors.get(ctx.factionId);
       if (!A) return;
 
-      await scheduleFactionOP(A, { economy: 1, intrigue: 1 }, 1);
+      await scheduleFactionOP(A, { economy: 10, intrigue: 10 }, 1);
       const r = await adjustFactionTrack(A, "darkness", +1);
 
       await pushWarLog(A, `Smuggling Network: +1 Economy and +1 Intrigue next turn; Darkness ${r.before} → ${r.after}.`);
@@ -343,7 +343,7 @@
       const A = game.actors.get(ctx.factionId);
       if (!A) return;
 
-      await scheduleFactionOP(A, { logistics: 2, economy: 1 }, 1);
+      await scheduleFactionOP(A, { logistics: 20, economy: 10 }, 1);
       await pushWarLog(A, "Siege Logistics Overhaul: +2 Logistics and +1 Economy next turn.");
     },
 
@@ -351,7 +351,7 @@
       const A = game.actors.get(ctx.factionId);
       if (!A) return;
 
-      await scheduleFactionOP(A, { economy: 2, logistics: 1 }, 1);
+      await scheduleFactionOP(A, { economy: 20, logistics: 10 }, 1);
       if (ctx.targetUuid) await adjustHexTrack(ctx.targetUuid, "loyalty", -1);
 
       await pushWarLog(A, `Industrial Revolution: +2 Economy and +1 Logistics next turn${ctx.targetUuid ? "; Loyalty -1 to target hex (disruption)." : "."}`);
@@ -475,7 +475,7 @@
       const A = game.actors.get(ctx.factionId);
       if (!A) return;
 
-      await scheduleFactionOP(A, { economy: 1, faith: 1 }, 1);
+      await scheduleFactionOP(A, { economy: 10, faith: 10 }, 1);
       const d = await adjustFactionTrack(A, "darkness", +1);
 
       await pushWarLog(A, `Dark Harvest: +1 Economy and +1 Faith next turn; Darkness ${d.before} → ${d.after}. (STUB: pending GM/WME resolution)`);
@@ -575,7 +575,7 @@
       if (!A) return;
 
       await setNextTurnFlag(A, { sanctumExpansion: incNextTurn(A, "sanctumExpansion", 1) });
-      await scheduleFactionOP(A, { faith: 1 }, 1);
+      await scheduleFactionOP(A, { faith: 10 }, 1);
 
       await pushWarLog(A, "Sanctum Expansion: nextTurn.sanctumExpansion=1; +1 Faith next turn. (STUB: pending GM/WME resolution)");
     },

@@ -103,7 +103,7 @@ async function showTextStep(step, ctx) {
 
     // bank is stored in MARKS (1 OP = 10 marks); this file's logic was authored
     // pre-marks in OP units. Convert to OP at read; convert back at save.
-    const _OP_TO_MARKS = (game?.bbttcc?.api?.op?.OP_TO_MARKS ?? 10);
+    const _OP_TO_MARKS = (game?.bbttcc?.api?.op?.OP_TO_MARKS ?? game.fourththing?.constants?.MARKS_PER_OP);
     const _bankMarksRaw = clone(fFlags.opBank || {});
     const opBank = {};
     for (const _k of Object.keys(_bankMarksRaw)) {

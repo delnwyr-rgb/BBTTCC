@@ -2217,8 +2217,8 @@ class BBTTCCRigConsole extends foundry.applications.api.HandlebarsApplicationMix
           key: key || foundry.utils.randomID(8),
           label: label || key,
           kind: "travel",
-          // form input is in OP units; storage is marks (1 OP = 10 marks).
-          op: { economy: Math.round(econ * 10) },
+          // form input is MARKS (owner ruling 2026-09-06); storage is marks.
+          op: { economy: Math.round(econ) },
           hazardChance: hz,
           encounterTierBias: { down: td },
           travelDefense: def,
@@ -2657,10 +2657,8 @@ const politicalPressure = {
       for (const k of OP_KEYS_9) {
         const v = Number(c[k] ?? 0) || 0;
         if (v > 0) {
-          // Costs are stored in MARKS (1 OP = 10 marks); show OP to match the OP Bank.
-          const op = v / 10;
-          const opStr = Number.isInteger(op) ? String(op) : op.toFixed(1);
-          parts.push(`${opStr} ${k}`);
+          // Costs are in marks — and marks are the unit everywhere (2026-09-06).
+          parts.push(`${Math.round(v)} ${k}`);
         }
       }
       return parts.length ? parts.join(" • ") : "—";
@@ -2705,12 +2703,8 @@ const politicalPressure = {
         };
       });
 
-    // Header totals (bank-only). Both sides are summed in MARKS then shown in OP,
-    // so the header speaks the same unit as every other OP readout on the sheet.
-    const _marksToOP = (m) => {
-      const n = (Number(m) || 0) / 10;
-      return Number.isInteger(n) ? n : Number(n.toFixed(1));
-    };
+    // Header totals (bank-only), in MARKS — the one unit (owner ruling 2026-09-06).
+    const _marksToOP = (m) => Math.round(Number(m) || 0);
     const bankTotal     = _marksToOP(OP_KEYS.reduce((s, k) => s + clamp0(opBank?.[k]), 0));
     const bankPotential = _marksToOP(OP_KEYS.reduce((s, k) => s + clamp0(opCaps?.[k]), 0));
 
@@ -3564,16 +3558,12 @@ try {
 
       if (act !== "apply") return;
 
-      // Gather OP bank edits. Inputs are now in OP (fractional, step 0.1); convert to marks (×10) for storage.
+      // Gather OP bank edits. Inputs are MARKS (owner ruling 2026-09-06) — stored as typed.
       const OP_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
-      const OP_TO_MARKS = (game?.bbttcc?.api?.op?.OP_TO_MARKS ?? 10);
       const newOpBankRaw = {};
       for (const k of OP_KEYS) {
         const el = fieldset.querySelector(`[data-gm-op="${k}"]`);
-        const unit = el?.getAttribute?.("data-gm-op-unit") || "marks";
-        const raw = readNum(el);
-        const inMarks = (unit === "op") ? Math.round(raw * OP_TO_MARKS) : Math.round(raw);
-        newOpBankRaw[k] = Math.max(0, inMarks);
+        newOpBankRaw[k] = Math.max(0, Math.round(readNum(el)));
       }
 
       // Enforce OP caps (tier-gated). GM edit is NOT allowed to create over-cap bank state.
@@ -4045,8 +4035,8 @@ Hooks.once("init", () => {
         faith:      "Faith — devotion, conviction, sephirotic alignment. Manifestation-friendly, resists Darkness, but cuts narrowly along belief lines."
       };
       const BBTTCC_FACTION_TIPS = {
-        totalOPs:   "Total OPs — sum of all 9 OP-category banks vs. your max. Informational; per-category caps aren't enforced.",
-        maxOPs:     "Max OPs — the overall budget for this faction. Edit to reflect campaign-level scale; no auto-deduction across categories.",
+        totalOPs:   "OP Bank total — sum of all 9 channel banks, in marks, vs. the summed caps. Informational; per-category caps aren't enforced.",
+        maxOPs:     "Bank capacity — the summed per-channel caps, in marks. Edit to reflect campaign-level scale; no auto-deduction across categories.",
         vp:         "Victory Points — progress toward this faction's victory condition. 0–25 ladder; 25 triggers a campaign resolution beat.",
         unity:      "Unity — internal cohesion (0–100%). High Unity protects against Pressure drift and morale collapse; low Unity invites schism.",
         morale:     "Morale — current fight in the faction (0–100%). Drops on losses/scarcity, recovers on wins/celebrations. Modifies OP rolls.",
@@ -4057,7 +4047,7 @@ Hooks.once("init", () => {
         center:     "Political Center — the philosophy plurality currently dominant in this faction. Drives narrative tone and which factions you naturally align/clash with.",
         state:      "Political State — Stable / Strained / Fractured / Rupturing. Escalates as Drift accumulates; Rupturing factions can split or flip.",
         drift:      "Drift — net pressure score (−100..+100). Built from soft-power campaigns, atrocity events, succession crises. Crosses thresholds to advance State.",
-        opbank:     "OP Bank totals — current balance per category. Roster contributions are tracked separately and add to the Roll, not the bank. Bank persists across turns.",
+        opbank:     "OP Bank — current balance per channel, in marks (the one unit). Roster contributions are tracked separately and add to the Roll, not the bank. Bank persists across turns.",
         buildunits: "Build Units (BU) — engineering throughput, distinct from OP. Generated end-of-turn from owned-hex Materials pips (every 2 pips → 1 BU). Spent in Hex Config on Fortify / Repair / Build Asset (faster, no-OP path)."
       };
       if (!Handlebars.helpers.bbttcc_opTip) {
@@ -4066,31 +4056,21 @@ Hooks.once("init", () => {
       if (!Handlebars.helpers.bbttcc_factionTip) {
         Handlebars.registerHelper("bbttcc_factionTip", k => BBTTCC_FACTION_TIPS[k] ?? "");
       }
-      // Marks → "X.Y" (no unit) for compact OP-bank cells. 1 OP = 10 marks.
+      // Marks are THE unit (owner ruling 2026-09-06). Cells show whole marks.
       if (!Handlebars.helpers.bbttcc_marks) {
         Handlebars.registerHelper("bbttcc_marks", v => {
-          const fmt = game?.bbttcc?.api?.op?.formatMarksAsOPNumber;
+          const fmt = game?.bbttcc?.api?.op?.fmtNum;
           if (typeof fmt === "function") return fmt(v);
-          const n = Number(v) || 0;
-          const op = n / 10;
-          return Number.isInteger(op) ? String(op) : op.toFixed(1);
+          return String(Math.round(Number(v) || 0));
         });
       }
-      // Marks → "N marks (X.Y OP)" for tooltips.
+      // Marks → "N marks" for tooltips.
       if (!Handlebars.helpers.bbttcc_marksTip) {
-        Handlebars.registerHelper("bbttcc_marksTip", v => {
-          const n = Number(v) || 0;
-          const op = n / 10;
-          const opStr = Number.isInteger(op) ? String(op) : op.toFixed(1);
-          return `${n} marks (${opStr} OP)`;
-        });
+        Handlebars.registerHelper("bbttcc_marksTip", v => `${Math.round(Number(v) || 0)} marks`);
       }
-      // Marks → fractional OP for number inputs (GM Edit panel uses step 0.1).
+      // Marks → whole marks for the GM Edit number inputs (step 1). Name kept for the template.
       if (!Handlebars.helpers.bbttcc_marksToOpInput) {
-        Handlebars.registerHelper("bbttcc_marksToOpInput", v => {
-          const n = Number(v) || 0;
-          return (n / 10).toFixed(1).replace(/\.0$/, "");
-        });
+        Handlebars.registerHelper("bbttcc_marksToOpInput", v => String(Math.round(Number(v) || 0)));
       }
     }
   } catch (e) {

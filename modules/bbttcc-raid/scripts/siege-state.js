@@ -599,7 +599,7 @@
       for (const [b, m] of Object.entries(marks)) deltas[b] = -m;
       const res = await opApi.commit(factionId, deltas, { source: "siege", label: "Join Siege — supporter buffer commit", allowOvercap: true });
       if (!res || res.committed === false || res.ok === false) {
-        return { ok: false, reason: `${fac.name} can't marshal that commitment (${total / 10} OP) — bank is short` };
+        return { ok: false, reason: `${fac.name} can't marshal that commitment (${total} marks) — bank is short` };
       }
     } else {
       console.warn(TAG, "OP API unavailable — supporter joined WITHOUT debiting its bank (faucet).");
@@ -622,7 +622,7 @@
     appendNarrativeBeat(state, {
       turn, kind: "supporter_joined",
       title: `${fac.name} marches to the siege`,
-      description: `${fac.name} commits ${total / 10} OP of its own to the shared buffer (now ${bufferTotal(state.buffer) / 10} OP).`,
+      description: `${fac.name} commits ${total} marks of its own to the shared buffer (now ${bufferTotal(state.buffer)} marks).`,
       payload: { factionId, marks, total }
     });
     await setSiegeState(hexUuid, state);
@@ -631,7 +631,7 @@
     Hooks.callAll("bbttcc:siege:supporterJoined", payload);
     try { game.socket?.emit?.(`module.${MOD_R}`, { t: "siegeHook", hook: "bbttcc:siege:supporterJoined", payload }); } catch (_e) {}
     try { game.bbttcc?.api?.siege?.refreshHud?.(); } catch (_e) {}
-    ui.notifications?.info?.(`${fac.name} joins the siege — +${total / 10} OP to the buffer.`);
+    ui.notifications?.info?.(`${fac.name} joins the siege — +${total} marks to the buffer.`);
     return { ok: true, factionId, total, buffer: state.buffer };
   }
 

@@ -4,6 +4,7 @@
 // Covers all 9 classes:
 //   Active pools:  Titanbound (Frame Dice + Stress), Aurablade (Burn + Aura), Shadowjack (Access Dice)
 
+import { MARKS_PER_OP } from "./rfi-pricing.js";   // the one OP↔marks authority
 import {
   setMode,
   toggleMode,
@@ -2196,7 +2197,7 @@ export async function openHarmonyMarshalAttritionEaser(actor) {
   // underflow are honored — NOT the phantom system.opPools.softpower field
   // (which nothing in bbttcc-factions ever read).
   const opApi = game.bbttcc?.api?.op;
-  const marksPerOP = opApi?.OP_TO_MARKS || 10;
+  const marksPerOP = opApi?.OP_TO_MARKS ?? MARKS_PER_OP;
   const bank = faction?.getFlag?.("bbttcc-factions", "opBank") || {};
   const currentSP = Math.floor((Number(bank.softpower) || 0) / marksPerOP);
   const canAfford = currentSP >= 1 && !!opApi?.commit;
@@ -2324,7 +2325,7 @@ export async function openHarmonyMarshalUnityConductor(actor) {
             if (!opApi?.commit) {
               return ui.notifications?.warn(`${actor.name}: OP engine not available — cannot grant Soft Power OP.`);
             }
-            const marksPerOP = opApi.OP_TO_MARKS || 10;
+            const marksPerOP = opApi?.OP_TO_MARKS ?? MARKS_PER_OP;
             // allowOvercap: this is a bonus grant, not a normal earn — don't let
             // the cap refuse the canon +2.
             const res = await opApi.commit(faction.id, { softpower: +(2 * marksPerOP) }, { context: "harmony-marshal-unity-conductor", allowOvercap: true });
@@ -2908,7 +2909,7 @@ export async function openShadowCourierSpendPace(actor) {
           } else if (mode === "route" && /wayfarer-tongue/.test(subId)) {
             const faction = _hmGetFaction(actor);
             const opApi   = game.bbttcc?.api?.op;
-            const marksPerOP = opApi?.OP_TO_MARKS || 10;
+            const marksPerOP = opApi?.OP_TO_MARKS ?? MARKS_PER_OP;
             if (faction && opApi?.commit) {
               const res = await opApi.commit(faction.id, { intrigue: marksPerOP }, { context: "shadow-courier-wayfarer-tongue" });
               mechNote = res?.committed
@@ -4517,7 +4518,7 @@ export async function openCircuitbornAttentionResonance(actor) {
             note = `Regained <b>${tier}</b> HP (tier).`;
           } else {
             const bucket = html.find("[name='bucket']").val();
-            const marksPerOP = opApi?.OP_TO_MARKS || 10;
+            const marksPerOP = opApi?.OP_TO_MARKS ?? MARKS_PER_OP;
             if (faction && opApi?.commit) {
               const res = await opApi.commit(faction.id, { [bucket]: marksPerOP }, { context: "circuitborn-attention-resonance" });
               note = res?.committed

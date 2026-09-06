@@ -1159,9 +1159,9 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
       // no movement, no war log. Nothing was debited (op.commit refused).
       const uf = spend.res?.underflow || {};
       const short = Object.entries(uf).map(([k, u]) => {
-        const need = Math.abs(Number(u?.delta || 0)) / 10;
-        const have = Math.max(0, Number(u?.before || 0)) / 10;
-        return `${labelOP(k)} (need ${need}, have ${have} OP)`;
+        const need = Math.abs(Number(u?.delta || 0));
+        const have = Math.max(0, Number(u?.before || 0));
+        return `${labelOP(k)} (need ${need}, have ${have} marks)`;
       }).join(", ");
       popupText(b, `❌ Can't afford the leg${short ? ` — ${short}` : ""}`);
       return {

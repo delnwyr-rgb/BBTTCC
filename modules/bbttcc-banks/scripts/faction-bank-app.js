@@ -19,12 +19,11 @@ const BUCKET_LABELS = {
 
 function _esc(s) { return foundry.utils.escapeHTML(String(s ?? "")); }
 
-// marks → OP number (1 OP = 10 marks), via the OP engine when present.
+// marks are the unit everywhere (owner ruling 2026-09-06) — whole marks, via the engine when present.
 function _op(marks) {
-  const fmt = game?.bbttcc?.api?.op?.formatMarksAsOPNumber;
+  const fmt = game?.bbttcc?.api?.op?.fmtNum;
   if (fmt) return fmt(marks);
-  const n = Number(marks) || 0;
-  return Number.isInteger(n / 10) ? String(n / 10) : (n / 10).toFixed(1);
+  return String(Math.round(Number(marks) || 0));
 }
 
 function _isFaction(a) { return !!game?.bbttcc?.api?.banks?.isFactionActor?.(a); }
@@ -61,7 +60,7 @@ class FactionBankApp extends ApplicationV2 {
       return `<span class="bbttcc-treasury-chip${near ? " is-full" : ""}"
         data-tooltip="${_esc(BUCKET_LABELS[b] || b)} — ${m} / ${cap || "∞"} marks">
         <span class="lbl">${_esc(BUCKET_LABELS[b] || b)}</span>
-        <span class="val">${_op(m)}${cap > 0 ? ` / ${_op(cap)}` : ""} OP</span>
+        <span class="val">${_op(m)}${cap > 0 ? ` / ${_op(cap)}` : ""} marks</span>
       </span>`;
     }).filter(Boolean).join("");
     return chips || `<span class="bbttcc-bank-empty">Treasury empty.</span>`;

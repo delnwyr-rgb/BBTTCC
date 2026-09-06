@@ -11,7 +11,20 @@ const MOD_ID = "bbttcc-factions";
 const TAG    = "[bbttcc-op]";
 
 // Marks per OP. 1 OP = 10 marks. Granular spends operate at mark resolution.
-const OP_TO_MARKS = 10;
+// OP↔marks ratio — read from the system (systems/fourththing/rfi-pricing.js
+// MARKS_PER_OP is THE authority, published on game.fourththing.constants /
+// .pricing at the system's init). Read lazily: module top-level code runs before
+// any init hook. The fallback below is the ONLY mirror in the codebase and is
+// reached only on a host without the fourththing system (dnd5e parity build);
+// it warns once so it can never hide silently.
+const MARKS_PER_OP_FALLBACK_NON_FT = 10;
+let _warnedNoFt = false;
+function _marksPerOp() {
+  const v = globalThis.game?.fourththing?.constants?.MARKS_PER_OP ?? globalThis.game?.fourththing?.pricing?.MARKS_PER_OP;
+  if (Number.isFinite(Number(v))) return Number(v);
+  if (!_warnedNoFt) { _warnedNoFt = true; console.warn("[bbttcc-factions/op-engine] fourththing MARKS_PER_OP unavailable — using the non-fourththing fallback."); }
+  return MARKS_PER_OP_FALLBACK_NON_FT;
+}
 
 // Canonical OP keys — must stay in sync with faction sheet & raid console.
 const OP_KEYS = [
@@ -35,24 +48,21 @@ function _safeNum(v, fb = 0) {
 }
 
 // --- Marks <-> OP display helpers ---
-// marks → "X.Y OP" string. Trims trailing zero on whole values ("3 OP" not "3.0 OP").
-function formatMarksAsOP(marks) {
-  const m = _safeNum(marks, 0);
-  const op = m / OP_TO_MARKS;
-  if (Number.isInteger(op)) return `${op} OP`;
-  return `${op.toFixed(1)} OP`;
-}
-// marks → "X.Y" (no unit suffix) for tight UI cells.
-function formatMarksAsOPNumber(marks) {
-  const m = _safeNum(marks, 0);
-  const op = m / OP_TO_MARKS;
-  if (Number.isInteger(op)) return String(op);
-  return op.toFixed(1);
-}
+// ── Unit ruling 2026-09-06 (owner): MARKS are the one quantity unit for the nine
+// OP channels — storage, API, authored data AND display. "OP" survives only as
+// the resource's NAME ("Violence OP"), never as a number. The two formatters
+// below kept their historical names so every caller flipped at once; they now
+// render marks. Prefer the new names in fresh code.
+const MARKS_UNIT = "marks";
+function formatMarks(marks) { return `${Math.round(_safeNum(marks, 0))} ${MARKS_UNIT}`; }
+function formatMarksNumber(marks) { return String(Math.round(_safeNum(marks, 0))); }
+// Legacy names → marks (they used to divide by 10 and print OP).
+function formatMarksAsOP(marks) { return formatMarks(marks); }
+function formatMarksAsOPNumber(marks) { return formatMarksNumber(marks); }
 // Convenience: whole-OP integer → marks. For one-shot legacy callers that still
 // want to express "spend 2 OP" without manually multiplying.
 function opToMarks(op) {
-  return Math.round(_safeNum(op, 0) * OP_TO_MARKS);
+  return Math.round(_safeNum(op, 0) * _marksPerOp());
 }
 
 function _sumBank(bank) {
@@ -367,7 +377,7 @@ async function _migrateOneActor(actor) {
     if (f.opBank && typeof f.opBank === "object") {
       const newBank = {};
       for (const k of OP_KEYS) {
-        newBank[k] = Math.round(_safeNum(f.opBank[k], 0) * OP_TO_MARKS);
+        newBank[k] = Math.round(_safeNum(f.opBank[k], 0) * _marksPerOp());
       }
       updates[`flags.${MOD_ID}.opBank`] = newBank;
       touched = true;
@@ -375,13 +385,13 @@ async function _migrateOneActor(actor) {
     if (f.opCaps && typeof f.opCaps === "object") {
       const newCaps = {};
       for (const k of OP_KEYS) {
-        newCaps[k] = Math.round(_safeNum(f.opCaps[k], 0) * OP_TO_MARKS);
+        newCaps[k] = Math.round(_safeNum(f.opCaps[k], 0) * _marksPerOp());
       }
       updates[`flags.${MOD_ID}.opCaps`] = newCaps;
       touched = true;
     }
     if (Number.isFinite(Number(f.opCapPer)) && Number(f.opCapPer) > 0) {
-      updates[`flags.${MOD_ID}.opCapPer`] = Math.round(_safeNum(f.opCapPer, 0) * OP_TO_MARKS);
+      updates[`flags.${MOD_ID}.opCapPer`] = Math.round(_safeNum(f.opCapPer, 0) * _marksPerOp());
       touched = true;
     }
 
@@ -410,7 +420,7 @@ async function _runMarksMigration() {
       return;
     }
 
-    log(`OP marks migration: ${candidates.length} actor(s) pending. Multiplying opBank/opCaps × ${OP_TO_MARKS}...`);
+    log(`OP marks migration: ${candidates.length} actor(s) pending. Multiplying opBank/opCaps × ${_marksPerOp()}...`);
     let ok = 0, fail = 0;
     for (const a of candidates) {
       const r = await _migrateOneActor(a);
@@ -418,7 +428,7 @@ async function _runMarksMigration() {
     }
     log(`OP marks migration: done. migrated=${ok}, failed=${fail}.`);
     if (ok > 0) {
-      ui.notifications?.info?.(`Bad Eden: migrated ${ok} faction OP bank(s) to marks (1 OP = ${OP_TO_MARKS} marks).`);
+      ui.notifications?.info?.(`Bad Eden: migrated ${ok} faction OP bank(s) to marks (1 OP = ${_marksPerOp()} marks).`);
     }
   } catch (e) {
     warn("OP marks migration sweep failed", e);
@@ -436,13 +446,17 @@ function _attach() {
     apiRoot.preview = preview;
     apiRoot.commit  = commit;
     apiRoot.KEYS    = OP_KEYS.slice();
-    apiRoot.OP_TO_MARKS = OP_TO_MARKS;
-    apiRoot.formatMarksAsOP = formatMarksAsOP;
-    apiRoot.formatMarksAsOPNumber = formatMarksAsOPNumber;
+    apiRoot.OP_TO_MARKS = _marksPerOp();           // snapshot at ready (system loaded by now)
+    apiRoot.marksPerOp = _marksPerOp;               // live reader
+    apiRoot.MARKS_UNIT = MARKS_UNIT;
+    apiRoot.fmt = formatMarks;                 // marks → "N marks"
+    apiRoot.fmtNum = formatMarksNumber;        // marks → "N"
+    apiRoot.formatMarksAsOP = formatMarksAsOP;             // legacy name, renders marks
+    apiRoot.formatMarksAsOPNumber = formatMarksAsOPNumber; // legacy name, renders marks
     apiRoot.opToMarks = opToMarks;
     apiRoot.runMarksMigration = _runMarksMigration;
 
-    log("OP Engine API ready (marks unit, 1 OP = 10 marks) → game.bbttcc.api.op.{preview, commit, KEYS, OP_TO_MARKS, formatMarksAsOP, formatMarksAsOPNumber, opToMarks}");
+    log(`OP Engine API ready (marks unit, 1 OP = ${_marksPerOp()} marks) → game.bbttcc.api.op.{preview, commit, KEYS, OP_TO_MARKS, marksPerOp, fmt, fmtNum, opToMarks}`);
   } catch (e) {
     warn("OP Engine wiring failed", e);
   }

@@ -48,7 +48,7 @@
   const CAP_MULT    = { stable: 1, stretched: 1,    overextended: 0.85, strained: 0.70, critical: 0.50 };
   const COST_MULT   = { stable: 1, stretched: 1.25, overextended: 1.5,  strained: 2,    critical: Infinity };
   const MORALE_MULT = { stable: 1, stretched: 1,    overextended: 0.95, strained: 0.90, critical: 0.80 };
-  const MARKS_PER_TROOP = 1;   // 10 troops = 1 OP
+  const MARKS_PER_TROOP = 1;   // 10 troops = 10 marks
 
   // ── Faction reads ─────────────────────────────────────────────────────────────
   function _tier(f) {
@@ -148,7 +148,7 @@
     const costMarks = Math.ceil(t * MARKS_PER_TROOP * mult);
     const { split, shortfall } = _autoSplit(f, costMarks);
     return { ok: shortfall <= 0, troops: t, room, costMarks, band: b, mult, split, shortfall, pool: p,
-             reason: shortfall > 0 ? `${f.name} can't pay ${costMarks / 10} OP — short ${shortfall / 10} OP across all banks.` : undefined };
+             reason: shortfall > 0 ? `${f.name} can't pay ${costMarks} marks — short ${shortfall} marks across all banks.` : undefined };
   }
 
   async function raiseTroops(factionId, opts = {}) {
@@ -166,7 +166,7 @@
         const m = Math.max(0, Math.round(_num(v, 0)));
         if (m > 0) { split[b] = m; sum += m; }
       }
-      if (sum !== q.costMarks) return { ok: false, reason: `payment (${sum / 10} OP) must equal the bill (${q.costMarks / 10} OP)` };
+      if (sum !== q.costMarks) return { ok: false, reason: `payment (${sum} marks) must equal the bill (${q.costMarks} marks)` };
     }
 
     const opApi = _api()?.op;
@@ -174,7 +174,7 @@
       const deltas = {}; for (const [b, m] of Object.entries(split)) deltas[b] = -m;
       const res = await opApi.commit(f.id, deltas, { source: "siege", label: `Raise Troops — ${q.troops} troops` });
       if (!res || res.committed === false || res.ok === false) {
-        return { ok: false, reason: `${f.name} can't pay ${q.costMarks / 10} OP — bank is short` };
+        return { ok: false, reason: `${f.name} can't pay ${q.costMarks} marks — bank is short` };
       }
     } else {
       console.warn(TAG, "op API unavailable — raising troops WITHOUT payment");
@@ -188,11 +188,11 @@
       await ChatMessage.create({
         content: `<div style="border:1px solid #b8863a;border-radius:6px;padding:.45rem .65rem;">
           <h3 style="margin:0 0 .25rem;color:#d9a441;">⚒ ${foundry.utils.escapeHTML(f.name)} beats the drums</h3>
-          <div style="font-size:0.82em;color:#ccc;">${q.troops} troops raised for ${q.costMarks / 10} OP${surch} — the host stands at <b>${pool.size}</b>/${p.cap}${p.effectiveCap < p.cap ? ` <span style="opacity:.7;">(fields ${Math.min(pool.size, p.effectiveCap)} — ${q.band})</span>` : ""}.</div>
+          <div style="font-size:0.82em;color:#ccc;">${q.troops} troops raised for ${q.costMarks} marks${surch} — the host stands at <b>${pool.size}</b>/${p.cap}${p.effectiveCap < p.cap ? ` <span style="opacity:.7;">(fields ${Math.min(pool.size, p.effectiveCap)} — ${q.band})</span>` : ""}.</div>
         </div>`
       });
     } catch (_e) {}
-    ui.notifications?.info?.(`${f.name}: +${q.troops} troops (−${q.costMarks / 10} OP) — pool ${pool.size}/${p.cap}.`);
+    ui.notifications?.info?.(`${f.name}: +${q.troops} troops (−${q.costMarks} marks) — pool ${pool.size}/${p.cap}.`);
     try { _api()?.siege?.refreshHud?.(); } catch (_e) {}
     return { ok: true, troops: q.troops, costMarks: q.costMarks, band: q.band, pool: get(f) };
   }

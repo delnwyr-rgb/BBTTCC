@@ -72,7 +72,7 @@
       if (typeof fn === "function") await fn(factionId, deltas, { source: "siege", label: "Siege Buffer refund", allowOvercap: false });
       else console.warn(TAG, "op.commit unavailable; refund skipped", deltas);
     } catch (e) { console.warn(TAG, "buffer refund failed", e); }
-    return { refunded: Math.round(refundedMarks / 10) };   // OP, for the chat card
+    return { refunded: Math.round(refundedMarks) };   // marks, for the chat card
   }
 
   function _hexFlags(hexDoc){ return foundry.utils.duplicate(hexDoc.flags?.[MOD_T] || {}); }
@@ -225,7 +225,7 @@
       content: `<div class="bbttcc-siege-outcome" style="border:1px solid ${color};border-radius:6px;padding:.5rem .7rem;">
         <h3 style="margin:0 0 .25rem;color:${color};">🏰 ${foundry.utils.escapeHTML(cfg.label)} — ${foundry.utils.escapeHTML(hexName || "Siege")}</h3>
         <div style="font-size:0.85em;color:#bbb;">
-          ${cfg.transferHex ? "Hex taken. " : ""}${cfg.modifiers?.length ? `Modifiers: ${cfg.modifiers.join(", ")}. ` : ""}${refunded ? `Buffer refund: +${refunded} OP. ` : ""}${holdingsSummary && holdingsSummary !== "no holdings at hex" ? `Holdings: ${holdingsSummary}.` : ""}
+          ${cfg.transferHex ? "Hex taken. " : ""}${cfg.modifiers?.length ? `Modifiers: ${cfg.modifiers.join(", ")}. ` : ""}${refunded ? `Buffer refund: +${refunded} marks. ` : ""}${holdingsSummary && holdingsSummary !== "no holdings at hex" ? `Holdings: ${holdingsSummary}.` : ""}
         </div>
         ${musterSummary ? `<div style="font-size:0.82em;color:#e0b0a0;margin-top:.25rem;">⚔ ${foundry.utils.escapeHTML(musterSummary)}</div>` : ""}
         ${beats.length ? `<details style="margin-top:.35rem;"><summary style="cursor:pointer;color:${color};font-size:0.82em;">Siege Saga (${(state.narrativeBeats || []).length} beats)</summary><ul style="margin:.25rem 0 0;padding-left:1.1rem;font-size:0.8em;color:#ccc;">${beatList}</ul></details>` : ""}
@@ -320,7 +320,7 @@
       }
 
       Hooks.callAll("bbttcc:siege:writtenBack", { siegeId, hexUuid, status: state.status });
-      console.log(TAG, `wrote back ${state.status} for ${siegeId} (refund ${refunded} OP, holdings: ${holdingsSummary}).`);
+      console.log(TAG, `wrote back ${state.status} for ${siegeId} (refund ${refunded} marks, holdings: ${holdingsSummary}).`);
     } catch (err) {
       console.error(TAG, "write-back failed", err);
       ui.notifications?.error?.("Siege outcome write-back failed — see console.");

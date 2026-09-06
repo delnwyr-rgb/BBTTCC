@@ -1789,15 +1789,12 @@ function _opKeyLabel(key) {
 }
 
 // Marks helpers — bank values are stored in marks (1 OP = 10 marks).
-const _OP_TO_MARKS = 10;
+// OP↔marks ratio from the one authority (rfi-pricing → api.op / fourththing.constants). Never a literal here.
+function _mpo() { return game.bbttcc?.api?.op?.OP_TO_MARKS ?? game.fourththing?.constants?.MARKS_PER_OP ?? game.fourththing?.pricing?.MARKS_PER_OP; }
 // Canon check die (2d10, tens explode) — from the system when loaded, literal otherwise.
 function _ftCanonDie() { try { return game.fourththing?.rolls?.checkFormula?.() || "2d10x10"; } catch (_e) { return "2d10x10"; } }
-function _marksToOpDisplay(marks) {
-  const n = _num(marks, 0);
-  const op = n / _OP_TO_MARKS;
-  if (Number.isInteger(op)) return String(op);
-  return op.toFixed(1);
-}
+// Marks are the unit everywhere (owner ruling 2026-09-06) — whole marks.
+function _marksToOpDisplay(marks) { return String(Math.round(_num(marks, 0))); }
 
 function _readOpBankAll(faction) {
   try {
@@ -1821,7 +1818,7 @@ async function _computeFactionOpRollBonusMap(faction) {
       // Mirror _rollChoiceCheck exactly: bank contributes whole OPs (marks/10
       // floor), roster contributions are already authored in OP units. The
       // chips previously showed raw marks (+45 for 4.5 OP) — display-only bug.
-      const baseOp = Math.floor(_num(bank[key], 0) / _OP_TO_MARKS);
+      const baseOp = Math.floor(_num(bank[key], 0) / _mpo());
       const rosterSum = Array.isArray(roster) ? roster.reduce((s, a) => s + _readActorOp(a, key), 0) : 0;
       out[key] = baseOp + rosterSum;
     }
@@ -1841,11 +1838,11 @@ function _buildOpChipsHtml(bank, focusKey) {
       const opDisplay = _marksToOpDisplay(vMarks);
       const label = _opKeyLabel(k);
       // "ok" = at least 1 full OP available (10 marks). "empty" = below 1 OP.
-      const state = (vMarks >= _OP_TO_MARKS) ? "ok" : "empty";
+      const state = (vMarks >= _mpo()) ? "ok" : "empty";
       const focus = (focusKey && String(focusKey) === String(k)) ? " focus" : "";
-      const tt = (vMarks >= _OP_TO_MARKS)
-        ? ("Faction " + label + " OP available: " + opDisplay + " (" + vMarks + " marks)")
-        : ("No " + label + " OP available (" + vMarks + " marks)");
+      const tt = (vMarks >= _mpo())
+        ? ("Faction " + label + " available: " + opDisplay + " marks (a check costs " + _mpo() + ")")
+        : ("Not enough " + label + " (" + vMarks + " marks; a check costs " + _mpo() + ")");
 
       chips.push(
         `<span class="bbttcc-op-chip ${state}${focus}" data-op="${_escapeHtml(k)}" title="${_escapeHtml(tt)}">${_escapeHtml(label)}: ${opDisplay}</span>`
@@ -1901,7 +1898,7 @@ function _buildOpRollBonusChipsHtml(bonuses, focusKey) {
 function _evalOpGateForKey(faction, opKey, allowDesperation) {
   // pool is in MARKS; gate = ≥1 OP available (10 marks).
   const v = _readOpBank(faction, opKey);
-  if (v >= _OP_TO_MARKS) return { ok: true, mode: "normal", pool: v };
+  if (v >= _mpo()) return { ok: true, mode: "normal", pool: v };
   if (allowDesperation) return { ok: true, mode: "desperation", pool: v };
   return { ok: false, mode: "blocked", pool: v };
 }
@@ -1933,21 +1930,21 @@ function _applyOpGatesToDialogButtons(dlg, faction, choices, allowDesperation) {
       if (!gate.ok) {
         $b.prop("disabled", true);
         $b.addClass("bbttcc-roll-blocked");
-        $b.attr("title", "Action Unavailable\nRequires 1 " + _opKeyLabel(opKey) + " OP.\nThe faction cannot support this action.");
+        $b.attr("title", "Action Unavailable\nRequires " + _mpo() + " " + _opKeyLabel(opKey) + " marks.\nThe faction cannot support this action.");
         return;
       }
 
       if (gate.mode === "desperation") {
         $b.prop("disabled", false);
         $b.addClass("bbttcc-roll-desperate");
-        $b.attr("title", "Desperation Attempt\nNo " + _opKeyLabel(opKey) + " OP remains.\nRoll proceeds, but consequences are guaranteed.");
+        $b.attr("title", "Desperation Attempt\nNo " + _opKeyLabel(opKey) + " marks remain.\nRoll proceeds, but consequences are guaranteed.");
         try { el.find('.bbttcc-op-chip[data-op="' + opKey + '"]').addClass("desperate"); } catch (_e2) {}
         return;
       }
 
       $b.prop("disabled", false);
       $b.removeClass("bbttcc-roll-blocked bbttcc-roll-desperate");
-      $b.attr("title", "Faction Support Available\nSpending 1 " + _opKeyLabel(opKey) + " OP authorizes this roll.");
+      $b.attr("title", "Faction Support Available\nSpending " + _mpo() + " " + _opKeyLabel(opKey) + " marks authorizes this roll.");
     });
   } catch (e) {
     warn("applyOpGatesToDialogButtons failed:", e);
@@ -1962,7 +1959,7 @@ async function _confirmDesperation(opKey) {
       content:
         "<p>You are attempting an action without faction support.</p>" +
         "<p><b>This roll is a Desperation Attempt.</b></p>" +
-        "<p style='opacity:.85'>No <b>" + label + " OP</b> remains. Consequences are guaranteed.</p>",
+        "<p style='opacity:.85'>No <b>" + label + " marks</b> remain. Consequences are guaranteed.</p>",
       buttons: {
         yes: { icon: '<i class="fas fa-exclamation-triangle"></i>', label: "Proceed Anyway", callback: function () { resolve(true); } },
         no:  { icon: '<i class="fas fa-ban"></i>', label: "Stand Down",     callback: function () { resolve(false); } }
@@ -1984,13 +1981,13 @@ async function _spendOneOpForAttempt(faction, opKey, reason) {
 
     const deltas = {};
     // Spend 1 OP per attempt = 10 marks.
-    deltas[String(opKey)] = -_OP_TO_MARKS;
+    deltas[String(opKey)] = -_mpo();
 
     await op.commit(factionId, deltas, reason || ("Campaign OP check: " + String(opKey)));
     return true;
   } catch (e) {
     warn("OP spend failed (attempt spendOneOpForAttempt).", e);
-    try { ui.notifications && ui.notifications.warn && ui.notifications.warn("Could not spend 1 " + _opKeyLabel(opKey) + " OP (see console)."); } catch (_e2) {}
+    try { ui.notifications && ui.notifications.warn && ui.notifications.warn("Could not spend " + _mpo() + " " + _opKeyLabel(opKey) + " marks (see console)."); } catch (_e2) {}
     return false;
   }
 }
@@ -2000,8 +1997,8 @@ async function _spendFactionOpSupport(faction, opKey, amount, reason) {
     amount = _num(amount, 0);
     if (!faction || !opKey || amount <= 0) return false;
 
-    // amount arrives in OP (UI-facing); convert to marks at the engine boundary.
-    const amountMarks = Math.round(Math.abs(amount) * _OP_TO_MARKS);
+    // amount is MARKS (owner ruling 2026-09-06) — no conversion.
+    const amountMarks = Math.round(Math.abs(amount));
 
     const api = game && game.bbttcc && game.bbttcc.api ? game.bbttcc.api : null;
     const op = api && api.op ? api.op : null;
@@ -2026,7 +2023,7 @@ async function _spendFactionOpSupport(faction, opKey, amount, reason) {
 }
 function _supportBonusForSpend(spend) {
   spend = _num(spend, 0);
-  return Math.max(0, spend) * 2; // +2 per OP
+  return Math.floor(Math.max(0, spend) / 10) * 2; // +2 per 10 marks (spend is marks)
 }
 
 async function _sacrificeHpToFactionOp(actor, faction, opKey, hpCost, reason) {
@@ -2047,15 +2044,15 @@ async function _sacrificeHpToFactionOp(actor, faction, opKey, hpCost, reason) {
     const op = api && api.op ? api.op : null;
     if (op && typeof op.commit === "function") {
       // HP sacrifice → +1 OP = +10 marks.
-      const deltas = {}; deltas[String(opKey)] = +_OP_TO_MARKS;
+      const deltas = {}; deltas[String(opKey)] = +_mpo();
       await op.commit(faction.id, deltas, reason || ("HP sacrifice -> " + String(opKey)));
     } else {
       const bank = _readOpBankAll(faction);
-      bank[String(opKey)] = _num(bank[String(opKey)], 0) + _OP_TO_MARKS;
+      bank[String(opKey)] = _num(bank[String(opKey)], 0) + _mpo();
       await faction.setFlag("bbttcc-factions", "opBank", bank);
     }
 
-    ui.notifications?.info?.("Sacrifice accepted: -" + hpCost + " HP  ->  +1 " + _opKeyLabel(opKey) + " OP (Faction).");
+    ui.notifications?.info?.("Sacrifice accepted: -" + hpCost + " HP  ->  +" + _mpo() + " " + _opKeyLabel(opKey) + " marks (Faction).");
     return true;
   } catch (e) {
     warn("sacrificeHpToFactionOp failed", e);
@@ -2108,7 +2105,7 @@ async function _rollChoiceCheck(choice, ctx={}) {
     // OP-check roll bonus: faction bank contributes whole OPs only (marks/10 floor).
     // Roster contributions stay as-is (already authored in OP units).
     const baseMarks = _readOpBank(faction, key);
-    const baseOp = Math.floor(baseMarks / _OP_TO_MARKS);
+    const baseOp = Math.floor(baseMarks / _mpo());
     const roster = await _getFactionRoster(faction);
     const rosterSum = roster.reduce((s,a)=>s+_readActorOp(a,key),0);
     const bonus = baseOp + rosterSum;
@@ -2383,7 +2380,7 @@ ${
                        let sac = "";
                        if (isOp && opKey && pool <= 0 && ctx && ctx.rosterActorId) {
                          sac = '<div style="margin-top:6px;">' +
-                                 '<button type="button" class="bbttcc-sacrifice-btn" data-op="' + _escapeHtml(opKey) + '" data-hp="5" title="Convert 5 HP into +1 ' + _escapeHtml(_opKeyLabel(opKey)) + ' OP for the faction.">' +
+                                 '<button type="button" class="bbttcc-sacrifice-btn" data-op="' + _escapeHtml(opKey) + '" data-hp="5" title="Convert 5 HP into +' + _mpo() + ' ' + _escapeHtml(_opKeyLabel(opKey)) + ' marks for the faction.">' +
                                    ' Bleed (5 HP) ? +1 ' + _escapeHtml(_opKeyLabel(opKey)) + ' OP' +
                                  '</button>' +
                                '</div>';
@@ -2459,7 +2456,7 @@ ${
               const sel = html && html[0] ? html[0].querySelector('select[name="bbttccRosterActor"]') : null;
               const rosterActorId = sel ? (sel.value || null) : null;
 
-              // Support/backing (Faction OP spend -> +2 per OP bonus)  -  optional
+              // Support/backing (Faction spend in MARKS -> +2 per 10 marks)  -  optional
               // NOTE: Support UI may be absent; fall back to ctx/choice fields.
               var supportOpKey = String(
                 (ch && (ch.supportOpKey || (ch.support && ch.support.opKey))) ||
@@ -2596,7 +2593,7 @@ ${
                 if (supportOpKey && supportSpend > 0) {
                   const pool2 = _readOpBank(faction, supportOpKey);
                   if (pool2 < supportSpend) {
-                    ui.notifications?.warn?.("Not enough " + _opKeyLabel(supportOpKey) + " OP for backing.");
+                    ui.notifications?.warn?.("Not enough " + _opKeyLabel(supportOpKey) + " marks for backing.");
                     await _offerRetryInChain(campaign, beat, ctx);
                     finish({ acted: false, gated: "backing" });
                     return;
@@ -5685,7 +5682,7 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
     }
     if (supportOpKey && supportSpend > 0 && faction) {
       const pool2 = _readOpBank(faction, supportOpKey);
-      if (pool2 < supportSpend) return { acted: false, error: "Not enough " + _opKeyLabel(supportOpKey) + " OP for backing." };
+      if (pool2 < supportSpend) return { acted: false, error: "Not enough " + _opKeyLabel(supportOpKey) + " marks for backing." };
       const okSpend2 = await _spendFactionOpSupport(faction, supportOpKey, supportSpend, "Faction backing: " + (beat.label || beat.id || ""));
       if (!okSpend2) return { acted: false, error: "Could not spend faction OP for backing." };
     }

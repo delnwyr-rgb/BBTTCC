@@ -323,11 +323,12 @@ function kindLabel(k) {
 }
 
 function costLabel(cost) {
+  // Catalog costs are MARKS (authored in marks since 2026-09-06; legacy OP rows migrated ×10 at ready).
   const c = cost && typeof cost === "object" ? cost : {};
   const econ = Number(c.economy ?? 0) || 0;
   const parts = [];
-  if (econ) parts.push(`Econ ${econ}`);
-  const rest = Object.entries(c).filter(([k,_]) => k !== "economy").map(([k,v]) => `${k} ${v}`);
+  if (econ) parts.push(`Econ ${Math.round(econ)} marks`);
+  const rest = Object.entries(c).filter(([k,_]) => k !== "economy").map(([k,v]) => `${k} ${Math.round(Number(v) || 0)} marks`);
   return parts.concat(rest).join(" · ") || "0";
 }
 
@@ -458,7 +459,7 @@ const MARKET_TIPS = {
   // ---- Market app (player-facing) ----
   context:   "Context — who is buying and where deliveries land. Vendor + Buyer Faction are required; Buyer Character only matters for gear, the Delivery Hex only for facility/asset purchases. All picks persist per client between sessions.",
   vendor:    "Vendor — which market you are browsing. Players only see markets the GM has flagged Active; the GM sees inactive ones suffixed '(inactive)'. Your selection is remembered per client.",
-  faction:   "Buyer Faction — the faction whose OP bank pays for every purchase here (1 OP = 10 marks). Players see factions they own; the GM sees all. The purchase receipt is written to this faction's war log.",
+  faction:   "Buyer Faction — the faction whose OP bank pays for every purchase here . Bank and prices are in marks. Players see factions they own; the GM sees all. The purchase receipt is written to this faction's war log.",
   character: "Buyer Character — where purchased GEAR lands: a copy of the item is created in this character's inventory, stamped as vendor-bought. Required before buying gear; ignored for rigs, facilities, and hex assets.",
   hex:       "Delivery Hex UUID — target hex for facility, facility-upgrade, and hex-asset purchases (a Drawing UUID, e.g. Scene.<id>.Drawing.<id>). Facilities merge onto the hex's primary facility; assets append to its asset list. Those purchases cannot complete without it. Gear and rigs ignore this field.",
   note:      "Notes — free text stamped onto the purchase receipt (faction war log entry + GM whisper). Use it to record why, or for whom, the purchase was made.",
@@ -478,7 +479,7 @@ const MARKET_TIPS = {
   // ---- Catalog editor (GM-facing) ----
   editorVendor:  "Vendor — which market's catalog you are editing. The vendor fields and every entry row below belong to this vendor.",
   vendorAdd:     "Add Vendor — creates a new market ('New Vendor') and selects it, saved immediately. New markets start Active (player-visible); rename and stock it, then Save.",
-  entryAdd:      "Add Entry — prepends a blank gear entry (Economy OP cost 1) to this vendor's catalog, saved immediately. Fill in its fields, then hit Save to persist the edits.",
+  entryAdd:      "Add Entry — prepends a blank gear entry (Economy cost 10 marks) to this vendor's catalog, saved immediately. Fill in its fields, then hit Save to persist the edits.",
   vendorDel:     "Delete Market — removes the selected vendor from the vendor list.",
   save:          "Save — writes the vendor fields and every entry row on screen into the world settings. Field edits are NOT persisted until you Save; add / duplicate / delete / drop-import actions save on their own.",
   vendorActive:  "Active — player-visibility switch. Unchecked, this market is hidden from the player Market app entirely (the GM still sees it, marked '(inactive)'). Stage a market before opening it, or close one narratively.",
@@ -489,7 +490,7 @@ const MARKET_TIPS = {
   editorEntries: "Entries — every catalog row this vendor stocks. Edit fields inline (then Save), or use the row buttons to duplicate / delete.",
   entryName:     "Name — the entry's display name in the player catalog (independent of the underlying item's own name).",
   entryKind:     "Kind — what the purchase delivers. gear → item copy to the buyer character; rig → new rig on the buying faction; facility → merged onto the delivery hex's primary facility; hex_asset → appended to the hex's asset list; rig_upgrade / facility_upgrade → JSON patch merged onto an existing rig / the hex facility; actor → clones a prebuilt Actor (rig/boss/NPC) into the world, assigned to the buying faction.",
-  entryCost:     "Economy OP Cost — the legacy base price, in Economy OP (fractional allowed; 1 OP = 10 marks). For gear whose item carries a stamped RFI flag price (flags.fourththing.rfi.item.price), the flag price overrides this number. The final charge is scaled by the buyer's Economic Horizon (×1/×2/×4 over-horizon; Standard Issue gear is free).",
+  entryCost:     "Economy Cost — the base price, in Economy MARKS (whole numbers). For gear whose item carries a stamped RFI flag price (flags.fourththing.rfi.item.price), the flag price overrides this number. The final charge is scaled by the buyer's Economic Horizon (×1/×2/×4 over-horizon; Standard Issue gear is free).",
   entryBlurb:    "Blurb — one line of flavor shown under the entry in the player catalog.",
   entryPayload:  "Payload — what actually gets delivered. Gear / actor: the source document UUID. Rig: the rigData JSON. Facility: the facilityPatch JSON. Hex asset: {key, label} JSON. Upgrades: a JSON patch (rig upgrades can pick their target via patch.target rigId / name / latest).",
   entryDup:      "Duplicate — clones this entry (name suffixed '(Copy)') to the top of the catalog, saved immediately.",
@@ -531,7 +532,7 @@ const DEFAULT_CATALOG = [
     name: "Field Medkit (Surplus)",
     blurb: "Bandages, syringes, clean-ish gloves. Keeps you from dying of dumb.",
     uuid: "", // Compendium.x.y.Item.<id>
-    cost: { economy: 1 }
+    cost: { economy: 10 }
   },
   {
     id: "starter-rig-war",
@@ -549,7 +550,7 @@ const DEFAULT_CATALOG = [
       passiveBonuses: [],
       turnEffectsRaw: []
     },
-    cost: { economy: 3 }
+    cost: { economy: 30 }
   },
   {
     id: "starter-facility-bunker",
@@ -571,7 +572,7 @@ const DEFAULT_CATALOG = [
       hexBinding: { notes: "" },
       integration: { autoApplyRaidBonuses: true, autoApplyTurnEffects: true, turnEffects: [], resolutionHooks: {} }
     },
-    cost: { economy: 4 }
+    cost: { economy: 40 }
   },
   {
     id: "hex-asset-workshop",
@@ -580,7 +581,7 @@ const DEFAULT_CATALOG = [
     name: "Workshop Bay (Hex Asset)",
     blurb: "A place where tools exist and people argue about them.",
     asset: { key: "workshop_bay", label: "Workshop Bay" },
-    cost: { economy: 2 }
+    cost: { economy: 20 }
   }
 
 ,
@@ -591,7 +592,7 @@ const DEFAULT_CATALOG = [
   name: "Imported Item",
   blurb: "",
   uuid: "Compendium.bbttcc-master-content.items.Item.XvliX6HYw04Ao3A4",
-  cost: { economy: 1 }
+  cost: { economy: 10 }
 },
 {
   id: "gear-hlvn",
@@ -600,7 +601,7 @@ const DEFAULT_CATALOG = [
   name: "Imported Item",
   blurb: "",
   uuid: "Compendium.bbttcc-master-content.items.Item.HlvNlhDr9F2COugT",
-  cost: { economy: 1 }
+  cost: { economy: 10 }
 }
 ];
 
@@ -620,6 +621,9 @@ Hooks.once("init", () => {
     type: Object,
     default: DEFAULT_CATALOG
   });
+
+  // One-time catalog unit migration flag (OP → marks, owner ruling 2026-09-06).
+  game.settings.register(MODULE_ID, "catalogMarksMigrated", { scope: "world", config: false, type: Boolean, default: false });
 
   game.settings.register(MODULE_ID, "lastContext", {
     name: "Market Context",
@@ -650,9 +654,8 @@ async function spendEconomyOP(factionId, econCost, meta = {}) {
   const opApi = game.bbttcc?.api?.op;
   if (!opApi || typeof opApi.commit !== "function") throw new Error("OP API not available (game.bbttcc.api.op.commit).");
 
-  // econCost is in OP (catalog units); engine consumes MARKS (1 OP = 10 marks).
-  const OP_TO_MARKS = (opApi.OP_TO_MARKS ?? 10);
-  const marksDelta = -Math.abs(Math.round(n * OP_TO_MARKS));
+  // econCost is MARKS (catalog authored in marks since 2026-09-06; legacy OP catalogs are migrated ×10 at ready).
+  const marksDelta = -Math.abs(Math.round(n));
   // Spending uses NEGATIVE deltas (world convention).
   const deltas = { economy: marksDelta };
 
@@ -880,13 +883,12 @@ async function openBuyConfirmDialog({ entry, factionId, faction }) {
   // shows a different number than what actually commits (fixed 2026-07-07):
   // Standard Issue gear is free, over-horizon strains ×2/×4, non-gear kinds
   // pay base within horizon.
-  const dOPtoMarks = (game.bbttcc?.api?.op?.OP_TO_MARKS ?? 10);
-  const dBaseCost = Number(flagPrice.marks) / dOPtoMarks;
+  const dBaseCost = Number(flagPrice.marks);   // marks
   const dDistance = rarityDistance(await resolveEntryRarity(entry), factionEconomicHorizon(faction));
   const dKind = String(entry.kind || "").toLowerCase();
   let dEconCost = scaledEconomyCost(dBaseCost, dDistance);
   if (dDistance <= 0 && dKind && dKind !== "gear") dEconCost = dBaseCost;
-  const scaledMarks = Math.round(dEconCost * dOPtoMarks);
+  const scaledMarks = Math.round(dEconCost);
   const rawMarks = Number(flagPrice.marks) || 0;
   const scaleNote = (scaledMarks !== rawMarks)
     ? (scaledMarks === 0
@@ -999,10 +1001,9 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
   if (flagPrice && Number(flagPrice.marks) < 0) {
     throw new Error(`${entry.name} is priceless / not for sale.`);
   }
-  const OP_TO_MARKS = (game.bbttcc?.api?.op?.OP_TO_MARKS ?? 10);
   const baseCost = flagPrice
-    ? (Number(flagPrice.marks) / OP_TO_MARKS)
-    : (Number(entry?.cost?.economy ?? 0) || 0);
+    ? Number(flagPrice.marks)
+    : (Number(entry?.cost?.economy ?? 0) || 0);   // both MARKS
 
   const horizon = factionEconomicHorizon(faction);
   const rarity = await resolveEntryRarity(entry);
@@ -1053,7 +1054,7 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
   // pay each portion to its native pool; single-currency items pay the whole
   // amount to their native pool. Legacy catalog entries (no flag price) keep
   // the Economy-only path.
-  const totalMarks = Math.round(econCost * OP_TO_MARKS);
+  const totalMarks = Math.round(econCost);   // marks
   let payDeltas;
   if (flagPrice?.split && Object.keys(flagPrice.split).length) {
     const splitSum = Object.values(flagPrice.split).reduce((a, v) => a + (Number(v) || 0), 0);
@@ -1453,10 +1454,9 @@ try {
 
       // Phase 5: prefer RFI item-flag price (gear) over legacy catalog cost.
       const flagPrice = await resolveItemFlagPrice(entry);
-      const OP_TO_MARKS = (game.bbttcc?.api?.op?.OP_TO_MARKS ?? 10);
-      const baseCost = flagPrice
-        ? (Number(flagPrice.marks) / OP_TO_MARKS)
-        : (Number(entry?.cost?.economy ?? 0) || 0);
+  const baseCost = flagPrice
+    ? Number(flagPrice.marks)
+    : (Number(entry?.cost?.economy ?? 0) || 0);   // both MARKS
       const rarity = await resolveEntryRarity(entry);
       const distance = rarityDistance(rarity, horizon0);
       let econCost = scaledEconomyCost(baseCost, distance);
@@ -1871,7 +1871,7 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
   async _entryAdd() {
     const cat = _catalogArray().map(_normalizeEntry);
     const id = _makeId("entry");
-    cat.unshift(_normalizeEntry({ id, vendorId: this.vendorId, kind: "gear", name: "New Entry", blurb: "", uuid: "", cost: { economy: 1 } }));
+    cat.unshift(_normalizeEntry({ id, vendorId: this.vendorId, kind: "gear", name: "New Entry", blurb: "", uuid: "", cost: { economy: 10 } }));
     await game.settings.set(MODULE_ID, "catalog", cat);
     this.render(false);
   }
@@ -1930,7 +1930,7 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
       const doc = await fromUuid(u);
       const name = doc?.name || "Item";
       const id = _makeId("gear");
-      catalog.unshift(_normalizeEntry({ id, vendorId, kind: "gear", name, blurb: "", uuid: u, cost: { economy: 1 } }));
+      catalog.unshift(_normalizeEntry({ id, vendorId, kind: "gear", name, blurb: "", uuid: u, cost: { economy: 10 } }));
       count += 1;
     }
 
@@ -2010,4 +2010,28 @@ game.bbttcc.api.market.openCatalogEditor = (() => {
   } catch (_e) {}
 
 log("ready — market API mounted at game.bbttcc.api.market (openMarket/openCatalogEditor/purchase/listVendors/listCatalog)");
+});
+
+
+// ── Catalog unit migration (owner ruling 2026-09-06: marks everywhere) ──────
+// Legacy catalog rows were authored in OP; every consumer now reads them as MARKS.
+// Runs once per world (GM), multiplies every numeric cost field ×10, stamps the flag.
+Hooks.once("ready", async () => {
+  try {
+    if (!game.user?.isGM) return;
+    if (game.settings.get(MODULE_ID, "catalogMarksMigrated")) return;
+    const M = (game.bbttcc?.api?.op?.OP_TO_MARKS ?? game.fourththing?.constants?.MARKS_PER_OP ?? game.fourththing?.pricing?.MARKS_PER_OP);
+    if (!Number.isFinite(Number(M))) { console.warn(`[${MODULE_ID}] catalog migration skipped — MARKS_PER_OP unavailable`); return; }
+    const raw = game.settings.get(MODULE_ID, "catalog");
+    const cat = Array.isArray(raw) ? foundry.utils.deepClone(raw) : [];
+    let rows = 0;
+    for (const e of cat) {
+      if (!e || typeof e !== "object" || !e.cost || typeof e.cost !== "object") continue;
+      for (const [k, v] of Object.entries(e.cost)) { const n = Number(v); if (Number.isFinite(n) && n !== 0) { e.cost[k] = Math.round(n * Number(M)); rows++; } }
+    }
+    if (rows) await game.settings.set(MODULE_ID, "catalog", cat);
+    await game.settings.set(MODULE_ID, "catalogMarksMigrated", true);
+    console.log(`[${MODULE_ID}] catalog costs migrated OP → marks (×${M}): ${rows} cost field(s) on ${cat.length} entr${cat.length === 1 ? "y" : "ies"}.`);
+    if (rows) ui.notifications?.info?.(`Bad Eden Market: ${rows} catalog price(s) converted to marks (×${M}).`);
+  } catch (e) { console.error(`[${MODULE_ID}] catalog marks migration failed`, e); }
 });

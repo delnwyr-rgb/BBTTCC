@@ -1,6 +1,7 @@
 // Roll For Initiation System — module.js  v0.3.0
 // Sprint A: Magic Engine | Sprint B: Combat Engine | Sprint C: Bad Eden Bridge
 
+import { MARKS_PER_OP } from "./rfi-pricing.js";   // the one OP↔marks authority
 import {
   getBBTTCCContext,
   getTerrainMagicModifiers,
@@ -177,6 +178,7 @@ import {
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const FT = {
+  MARKS_PER_OP,                 // 1 OP = 10 marks — from rfi-pricing.js (the one authority)
   SEPHIROTH: {
     gevurah: { label: "Gevurah", color: "#c03030", domain: "Judgment, precision force"      },
     chesed:  { label: "Chesed",  color: "#4a90d9", domain: "Healing, generosity"            },
@@ -10440,7 +10442,7 @@ function _ftLineageStrip(actor) {
       envelope: `T${a.tier ?? "?"} · ${a.bracket ?? "?"}${a.bestiary?.role ? ` · ${a.bestiary.role}` : ""}`,
       creatureType,
       qliphah: q ? `${q.name}${q.hullOf ? ` (hull of ${cap(q.hullOf)})` : ""} — ${cap(q.grade || "lesser")}` : "",
-      bounty: Number.isFinite(bounty) && bounty > 0 ? `${bounty}m (${(bounty / 10).toFixed(1)} OP)` : "",
+      bounty: Number.isFinite(bounty) && bounty > 0 ? `${bounty} marks` : "",
       bountyTip: Number.isFinite(bounty) && bounty > 0
         ? `Bounty ${bounty} marks, credited to the OP pool matching how the creature is resolved (default ${a.price?.currency ?? "violence"}).${Number.isFinite(hire) && hire > 0 ? ` Hire ${hire} marks.` : " Not for hire."}`
         : "",

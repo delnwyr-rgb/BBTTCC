@@ -44,7 +44,7 @@
     yesod:   "economy",
     malkuth: "economy"
   };
-  const YIELD_OP_PER_TURN = 1; // integrated spark hex → +1 OP/turn (owner ruling)
+  const YIELD_MARKS_PER_TURN = 10; // integrated spark hex → +10 marks/turn (owner ruling; marks are the unit 2026-09-06)
 
   function parseKey(key) {
     const m = /^spark_([a-z]+)_([a-z]+)$/.exec(String(key || "").trim());
@@ -184,7 +184,7 @@
       if (!payload?.apply) return;
       if (!game.user?.isGM) return;
       const op = game.bbttcc?.api?.op;
-      if (!op?.commit || !op?.opToMarks) return;
+      if (!op?.commit) return;
 
       // Group yields per faction so each faction gets ONE commit.
       const perFaction = new Map(); // factionId → { deltas, lines }
@@ -205,8 +205,8 @@
             if (game.settings.get("bbttcc-epic", "daath")?.deadLamp === info.sephirah) continue;
           } catch (_e) {}
           const bag = perFaction.get(fid) ?? { deltas: {}, lines: [] };
-          bag.deltas[channel] = (bag.deltas[channel] || 0) + op.opToMarks(YIELD_OP_PER_TURN);
-          bag.lines.push(`${info.key} → +${YIELD_OP_PER_TURN} ${channel}`);
+          bag.deltas[channel] = (bag.deltas[channel] || 0) + YIELD_MARKS_PER_TURN;
+          bag.lines.push(`${info.key} → +${YIELD_MARKS_PER_TURN} ${channel} marks`);
           perFaction.set(fid, bag);
         }
       }

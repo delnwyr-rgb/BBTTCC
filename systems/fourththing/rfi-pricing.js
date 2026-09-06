@@ -29,7 +29,12 @@ console.log("[rfi-pricing] Module loading — registering hooks");
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
-// 1 OP = 10 marks (canon since 2026-05-09).
+// ★ THE ONE AUTHORITY for the OP↔marks ratio (canon since 2026-05-09; owner
+// ruling 2026-09-06 "marks everywhere" — marks are the quantity unit, "OP" is
+// only the resource's name). Every other file reads this: the system copies it
+// onto game.fourththing.constants / .pricing at init; bbttcc-factions'
+// op-engine republishes it as game.bbttcc.api.op.OP_TO_MARKS at ready. No
+// other literal 10 may exist for this ratio — the phase-4 sweep greps for it.
 export const MARKS_PER_OP = 10;
 
 // Tier base — geometric ×3 progression. T1: 50 / T2: 150 / T3: 450 / T4: 1350.

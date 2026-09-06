@@ -306,7 +306,7 @@
           // Supply Overrun v2: real profit + logistics relief next turn
           label: "Supply Overrun",
           maneuverKey: "supply_overrun",
-          deferred: { when: "nextRound", opDeltas: { economy: 2, logistics: 1 } },
+          deferred: { when: "nextRound", opDeltas: { economy: 20, logistics: 10 } },   // marks
           note: "Supply Overrun (preview): Next round gain +2 Economy and +1 Logistics on success."
         }
       ],
@@ -320,7 +320,7 @@
       factionEffects: [
         {
           factionId: ctx.attackerFactionId || null,
-          deferred: { when: "nextRound", opDeltas: { faith: 1 } },
+          deferred: { when: "nextRound", opDeltas: { faith: 10 } },   // marks
           note: "Prayer in the Smoke (preview): +1 Faith OP next round on success."
         }
       ],
@@ -536,7 +536,7 @@
           maneuverKey: "industrial_sabotage",
           recurring: {
             turns: 3,
-            opDeltas: { economy: -1 }
+            opDeltas: { economy: -10 }   /* marks */
           },
           note: "Industrial Sabotage (preview): Defender loses 1 Economy OP per turn for 3 turns on success."
         }
@@ -983,7 +983,7 @@
   THROUGHPUT["unity_surge"] = function (ctx) {
     if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
 
-    const opAll = { violence: 2, nonlethal: 2, intrigue: 2, economy: 2, softpower: 2, diplomacy: 2, logistics: 2, culture: 2, faith: 2 };
+    const opAll = { violence: 20, nonlethal: 20, intrigue: 20, economy: 20, softpower: 20, diplomacy: 20, logistics: 20, culture: 20, faith: 20 };   // marks
 
     return {
       factionEffects: [
@@ -993,7 +993,7 @@
             when: "nextRound",
             opDeltas: opAll
           },
-          note: "Unity Surge (preview): Attacker gains +2 to every OP next round on success."
+          note: "Unity Surge (preview): Attacker gains +20 marks to every OP channel next round on success."
         }
       ],
       meta: { source: "throughput", maneuverKey: "unity_surge", preview: true }

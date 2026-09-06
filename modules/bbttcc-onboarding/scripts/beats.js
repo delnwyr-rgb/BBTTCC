@@ -463,7 +463,7 @@ const stewardshipTurn = {
 
   enter: async (ctx) => {
     const op = globalThis.game?.bbttcc?.api?.op;
-    const fmt = (m) => { try { return op?.formatMarksAsOP ? op.formatMarksAsOP(m) : `${(Number(m) || 0) / 10} OP`; } catch (_) { return `${(Number(m) || 0) / 10} OP`; } };
+    const fmt = (m) => { try { return op?.fmt ? op.fmt(m) : `${Math.round(Number(m) || 0)} marks`; } catch (_) { return `${Math.round(Number(m) || 0)} marks`; } };
     let said = false;
     if (ctx.faction && op?.preview) {
       try {
@@ -536,8 +536,8 @@ const outfitting = {
       // usually means the player was looking at a previous run's banner.
       const granted = g?.granted || {};
       if (g?.ok && Object.keys(granted).length) {
-        const econOP = ((Number(granted.economy) || 0) / 10).toFixed(1).replace(/\.0$/, "");
-        await ctx.speak(`A training stipend just topped up ${ctx.faction.name} — up to what your tier can hold, not a mark more (Economy +${econOP} OP). Check that banner's sheet, not an older one.`);
+        const econMarks = Math.round(Number(granted.economy) || 0);
+        await ctx.speak(`A training stipend just topped up ${ctx.faction.name} — up to what your tier can hold, not a mark more (Economy +${econMarks} marks). Check that banner's sheet, not an older one.`);
         await _pause(600);
       } else if (g?.alreadyFull) {
         await ctx.speak(`${ctx.faction.name}'s banks are already full to the tier cap — nothing to top up. Spend freely.`);

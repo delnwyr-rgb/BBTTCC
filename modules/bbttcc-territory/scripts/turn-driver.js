@@ -827,7 +827,7 @@ async function computeLogisticsPressureForFaction(factionActor){
   // three sim factions). Falls back to bank if no cap is set.
   const capsBank = clone(getFlag(factionActor, `${MOD_FACTIONS}.opCaps`, {}));
   const logisticsMarks = safeNum(capsBank.logistics) > 0 ? safeNum(capsBank.logistics) : safeNum(bank.logistics);
-  const logisticsOP = Math.floor(logisticsMarks / 10);
+  const logisticsOP = Math.floor(logisticsMarks / 10);   // rule unit: one "logistics slot" per 10 marks (not a displayed quantity)
 
   const { activeRigCount, logisticsRigCount } = readRigs(factionActor);
 

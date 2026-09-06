@@ -196,7 +196,7 @@ const BEATS_HELP = {
   fxDarkness: "Darkness Δ — feeds world Darkness attributed to this faction. Use for corrupting outcomes.",
   fxVP: "Victory (VP) Δ — direct Victory Point adjustment for the faction.",
   fxAllowOvercap: "Allow OP Overcap — OP deltas normally refuse to raise a track past its cap (and always refuse underflow). Check to let this beat exceed the cap.",
-  fxOpBank: "OP Bank Δ — per-track OP deltas (positive or negative) applied through the OP Engine: underflow refused; overcap refused unless Allow Overcap is on.",
+  fxOpBank: "OP Bank Δ — per-track deltas IN MARKS (the one unit; a check costs 10), positive or negative, applied through the OP Engine: underflow refused; overcap refused unless Allow Overcap is on.",
 
   // Casualties (injected)
   casualties: "Casualties — writes standardized casualties.* tags into the beat's Tags; the Casualty Engine reads them on resolution: hex severity hits the hex's integration/development, attacker/defender severities hit Morale/Loyalty/Victory (war weariness).",
