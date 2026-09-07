@@ -410,6 +410,14 @@ for (const b of beats) {
   }
 }
 
+// ── C09 no-exit menus (mirrors the engine boot beat-lint, module.js ~8013): every labeled choice checked → a failed
+//    roll re-offers the trap. Doctrine (patch-no-exit-menus 2026-08-28): add an UNCHECKED exit that costs time or collapses
+//    into the bad outcome — never one strictly better than rolling.
+for (const b of beats) {
+  const lc = labeledChoices(b);
+  if (lc.length && lc.every(ch => s(ch.checkStat))) F("C09", "WARN", b.id, `no-exit menu — all ${lc.length} choices are checked; add an unchecked exit (slow lane costing timePoints, or the existing bad outcome)`);
+}
+
 // ── quests: Q01–Q08 ─────────────────────────────────────────────────────────
 const questBeats = new Map();  // questId → beats
 for (const b of beats) {

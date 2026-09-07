@@ -51,7 +51,12 @@ Hooks.once("init", () => {
   game.settings.register(MODULE_ID, "campaignWakeBeatId", {
     name: "Onboarding — campaign beat that begins training",
     hint: "When this campaign beat resolves, a public 'Report for training' card offers every player a Begin Onboarding button. Blank disables the handoff.",
-    scope: "world", config: true, type: String, default: "fates_and_destinies_incarnate"
+    scope: "world", config: true, type: String, default: "fates_and_destinies_adam_kadmon"
+  });
+  game.settings.register(MODULE_ID, "wakeThemeSrc", {
+    name: "Onboarding — theme to blast when training begins",
+    hint: "Audio path played to EVERY client the moment the wake beat resolves (the drop into bodies). Blank disables. Owner ruling 2026-09-07: Section D.",
+    scope: "world", config: true, type: String, default: "art/bbttcc/GOTTGAIT/Tunes/Section%20D.m4a"
   });
   game.settings.register(MODULE_ID, "campaignResumeBeatId", {
     name: "Onboarding — campaign beat to run after graduation",
@@ -77,6 +82,14 @@ Hooks.once("ready", () => {
       for (const u of (game.users?.contents ?? [])) {
         if (u.getFlag?.(MODULE_ID, "campaignClass")) u.unsetFlag(MODULE_ID, "campaignClass").catch(() => {});
       }
+      // The drop into bodies: blast the theme to every connected client (once, from the GM seat).
+      try {
+        const src = String(game.settings.get(MODULE_ID, "wakeThemeSrc") || "").trim();
+        if (src) {
+          const AH = foundry.audio?.AudioHelper ?? globalThis.AudioHelper;
+          AH?.play?.({ src, volume: 0.8, loop: false }, true);
+        }
+      } catch (e) { warn("wake theme failed", e); }
       ChatMessage.create({
         content: `<div class="bbttcc-onb-handoff">` +
           `<h3>🎓 Report for training</h3>` +

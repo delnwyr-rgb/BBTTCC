@@ -19,13 +19,19 @@
  *   5. 22 beats carry duplicated IDENTICAL factionEffects rows (editor re-saves);
  *      the engine applies every row, so "morale −1" landed as −8. Collapsed to
  *      one row each (DEDUPE_FACTION_ROWS). The Act 2 walk verified stacking.
+ *   6. (added 2026-09-07 after the boot beat-lint flagged 5 no-exit menus that
+ *      step 4 CREATED) — every checked menu needs an UNCHECKED exit that is never
+ *      strictly better than rolling (doctrine: patch-no-exit-menus 2026-08-28):
+ *        hazards (radiation pocket, weather front, Tifaret) → a slow-lane outcome
+ *        beat costing timePoints 1; Balcones ×2 → collapses into the existing
+ *        "Final Fail" outcome (which nothing routed to before). Label-guarded.
  *
  * DRY_RUN default true — prints every change and writes nothing. Backs up the
  * `campaigns` and `encounterTables` settings to a download before writing.
  * Idempotent: re-running after apply reports 0 changes.
  */
 (async () => {
-  const DRY_RUN = true;                        // <-- set false to apply
+  const DRY_RUN = false;                        // <-- set false to apply
   const DEDUPE_FACTION_ROWS = true;
   const NS = "bbttcc-campaign";
   // Proposed check stats for the fail-route choices (edit freely). beatId → { choiceIndex: [checkStat, checkDC] }
@@ -48,6 +54,7 @@
   const camp = camps?.[cid];
   if (!camp) return ui.notifications.error("No active campaign.");
   const beats = Array.isArray(camp.beats) ? camp.beats : Object.values(camp.beats || {});
+  if (!Array.isArray(camp.beats)) camp.beats = beats;
   const by = (id) => beats.find(b => b?.id === id);
   let rawT = game.settings.get(NS, "encounterTables"); const tStr = typeof rawT === "string";
   const tables = tStr ? JSON.parse(rawT) : foundry.utils.deepClone(rawT || {});
@@ -82,6 +89,42 @@
     const rows = b?.worldEffects?.factionEffects; if (!Array.isArray(rows) || rows.length < 2) continue;
     const seen = new Set(), out = []; for (const r of rows) { const k = JSON.stringify(r); if (seen.has(k)) continue; seen.add(k); out.push(r); }
     if (out.length !== rows.length) { b.worldEffects.factionEffects = out; log("dedupe", b.id, `${rows.length} rows → ${out.length}`); } }
+
+  // 6. unchecked exits for the menus step 4 made all-checked
+  const mkSlowLane = (id, label, description, memoryText) => ({
+    id, label, type: "outcome_trigger", timeScale: "leg", timePoints: 1, tags: "travel words_door slow_lane", politicalTags: "",
+    outcomes: { success: null, failure: null },
+    inject: { cooldownTurns: 0, repeatable: true, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit" },
+    actors: [], refs: {}, choices: [{ label: "Onward", next: "", description: "", checkStat: "", checkDC: 0, failNext: "" }],
+    description, memoryText, playerFacing: true, playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true
+  });
+  const SLOW = [
+    mkSlowLane("enc_minor_radiation_pocket_wait_it_out", "Minor Radiation Pocket — Wait It Out",
+      "You do the least heroic thing available: you sit down upwind and wait for the pocket to drift. It drifts the way weather drifts — eventually, and on nobody's schedule. A day goes to the Geiger click and a card game nobody wins.",
+      "The party waited out a radiation pocket — a full day lost, nothing glowing."),
+    mkSlowLane("enc_weather_front_wait_it_out", "Weather Front — Wait It Out",
+      "Tarps up, backs to the wind, tempers short. The front takes the day it wants and gives back mud. Nobody rolled anything; nobody drowned; nobody will speak of the cold-rations dinner again.",
+      "The party hunkered down through a weather front — a day spent, no one lost."),
+    mkSlowLane("forest_of_tifaret_back_out", "Forest of Early Tifaret — Back Out the Way You Came",
+      "You retreat along your own bootprints while the canopy pretends not to watch. The forest does not stop you. It also does not forget you. The long way round costs the day and leaves the argument for another one.",
+      "The party backed out of the Forest of Early Tifaret — a day lost, the forest's question left unanswered.")
+  ];
+  const EXITS = [
+    ["enc_minor_radiation_pocket", "Wait it out — let the pocket drift, spend the day", "enc_minor_radiation_pocket_wait_it_out", "No roll, no risk, no glow: a day lost to a very slow cloud."],
+    ["enc_weather_front", "Hunker down — wait the front out, spend the day", "enc_weather_front_wait_it_out", "No roll: tarps, cold rations, and a day given to the sky."],
+    ["forest_of_tifaret_leave", "Back out the way you came — a day lost to the green", "forest_of_tifaret_back_out", "Retreat is a maneuver. A slow one."],
+    ["balcones_faulting_you_line_opening", "Let the fault have its way — ride it out", "balcones_faulting_you_line_final_fail", "No roll. The line does what it was always going to do, and it does it to you."],
+    ["balcones_faulting_you_line_choices", "Let the fault have its way — ride it out", "balcones_faulting_you_line_final_fail", "No roll. The line does what it was always going to do, and it does it to you."]
+  ];
+  for (const nb of SLOW) { if (by(nb.id)) continue; beats.push(nb); if (!Array.isArray(camp.beats)) camp.beats = beats; log("slow-lane", nb.id, `new outcome beat (timePoints 1)`); }
+  for (const [bid, label, next, description] of EXITS) {
+    const b = by(bid); if (!b) { log("SKIP", bid, "beat not found"); continue; }
+    if (!by(next)) { log("SKIP", bid, `exit target ${next} missing`); continue; }
+    b.choices = Array.isArray(b.choices) ? b.choices : [];
+    if (b.choices.some(c => String(c?.label || "").trim() === label)) continue;
+    b.choices.push({ label, next, description, checkStat: "", checkDC: 0, failNext: "" });
+    log("exit", bid, `+ unchecked "${label}" → ${next}`);
+  }
 
   console.group(`[punchlist] ${DRY_RUN ? "DRY RUN — " : ""}${changes.length} change(s)`); console.table(changes); console.groupEnd();
   if (!changes.length) return ui.notifications.info("Punch list: nothing to change (already applied).");

@@ -4699,8 +4699,12 @@ async function _beatRequiresMet(beat, campaign, ctx) {
       // .phaseAdvance SETS phase N satisfies its own storyPhase >= N gate —
       // the beat that opens the act cannot also wait for it.
       if (String(c.flag) === "storyPhase" && val !== null) {
+        // …but ONLY from the act immediately below it (2026-09-07, live-caught:
+        // the Crown Mall intro — sets 4, gated ≥4 — was invited on turn 0 because
+        // any setter satisfied its own gate from ANY phase). An opener may step
+        // the world forward one act, never leap.
         const own = Number(beat?.worldEffects?.phaseAdvance?.set);
-        if (Number.isFinite(own)) val = Math.max(Number(val), own);
+        if (Number.isFinite(own) && own === Number(val) + 1) val = own;
       }
       if (val === null) {
         warn(`[inject.requires] unknown gate source '${c.flag}' on beat '${beat?.id}' — treating as unmet.`);
@@ -4778,8 +4782,12 @@ async function _beatGateReport(beat, campaign, ctx = {}) {
       let val = _resolveGateValue(c.flag);
       // Act-openers carry their own act — mirror of _beatRequiresMet.
       if (String(c.flag) === "storyPhase" && val !== null) {
+        // …but ONLY from the act immediately below it (2026-09-07, live-caught:
+        // the Crown Mall intro — sets 4, gated ≥4 — was invited on turn 0 because
+        // any setter satisfied its own gate from ANY phase). An opener may step
+        // the world forward one act, never leap.
         const own = Number(beat?.worldEffects?.phaseAdvance?.set);
-        if (Number.isFinite(own)) val = Math.max(Number(val), own);
+        if (Number.isFinite(own) && own === Number(val) + 1) val = own;
       }
       const op = c.gte != null ? `≥ ${c.gte}` : c.lte != null ? `≤ ${c.lte}` : c.eq != null ? `= ${c.eq}` : "?";
       const text = `${String(c.flag)} ${op}`;
