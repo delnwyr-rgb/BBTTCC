@@ -24,7 +24,9 @@ const SETTING_OVERSHOOT_BEATS = "overshoot.drawsBeats";  // Reality-Tear → Adv
 const SETTING_DIRECTOR_ENABLED = "director.enabled";     // Story Director: World-Turn tick on/off
 const SETTING_DIRECTOR_STATE = "directorState";          // Story Director runtime state (budget, fired beats, level floors, pressure)
 const SETTING_DIRECTOR_PRESSURE_THRESHOLD = "director.pressureThreshold"; // pressure needed for a MID-TURN director look
-const SETTING_DIRECTOR_AUTOINVITE = "director.autoInvite"; // auto-post "NPC wants a word" cards when speaker moments open
+const SETTING_DIRECTOR_AUTOINVITE = "director.autoInvite";
+const SETTING_SEAL_QUESTS = "director.sealCompletedQuests"; // 2026-09-07 ruling: a completed quest's beats never fire again
+const SETTING_SEAL_ACTS   = "director.sealDoneActs";        // 2026-09-07 ruling: a finished act's content is done in its entirety // auto-post "NPC wants a word" cards when speaker moments open
 const SETTING_DIRECTOR_TTONLY_CHAINS = "director.turnTickOnlyChains"; // CSV of storyChains that only fire on the world-turn tick (seam-excluded)
 // Turn Ledger (2026-07-08): one World Turn = a time budget in days. Beats and
 // travel legs debit it (world.addTime — the previously-dormant sink); the
@@ -3174,6 +3176,26 @@ async function _appendAAEDecisionHistory(factionId, record, cap = 50) {
 async function executeBeat(campaign, beat, ctx = {}) {
   if (!beat) return;
 
+  // Seals (2026-09-07): completed quest / finished act ⇒ the beat stays closed on
+  // EVERY path (runBeat ignores inject.requires by design, so this is the one door).
+  try {
+    if (ctx?.force !== true) {
+      const seal = await _beatSealed(beat, campaign, ctx);
+      if (seal.sealed) {
+        const lbl = beat.label || beat.id || "(unnamed)";
+        log(`[seal] '${beat.id}' refused — ${seal.why}`);
+        if (game.user?.isGM) {
+          ChatMessage.create({
+            whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
+            speaker: { alias: "Bad Eden" },
+            content: `<div style="border-left:3px solid #8a6d3b;padding:.35em .6em;background:rgba(138,109,59,.08);">🔒 <b>${foundry.utils.escapeHTML(String(lbl))}</b> stays closed — ${foundry.utils.escapeHTML(String(seal.why))}.<br><span style="opacity:.7;font-size:.85em;">Completed quests and finished acts don't replay (ruling 2026-09-07). Per-beat opt-out: <code>inject.evergreen</code>. One-off override: <code>runBeat(cid, id, {force:true})</code>.</span></div>`
+          }).catch(() => {});
+        }
+        return { ok: false, sealed: true, why: seal.why };
+      }
+    }
+  } catch (eSeal) { warn("[seal] entry check failed (fail-open):", eSeal); }
+
   await logBeatToGottgait(campaign, beat);
 
   const type  = beat.type || "unknown";
@@ -4636,8 +4658,51 @@ function _coalitionQuestTrack(campaign, ctx) {
   return _questTrackMemo.get(campaign);
 }
 
+// ---------------------------------------------------------------------------
+// SEALS (owner rulings 2026-09-07): "Quests, once completed, should by
+// definition not be able to fire beats again" and "Acts, once done, should
+// have their content gated as done in its entirety." One authority, consulted
+// at executeBeat ENTRY (every path: arrival injector, chains, chat buttons,
+// Director) and inside _beatRequiresMet (Director picks, conversation offers,
+// invitation cards). A beat's act = the `gte` of its storyPhase gate; act 0
+// (onboarding) is exempt so training can replay. inject.evergreen = true opts
+// a beat out of both seals (town services meant to outlive their act).
+// ---------------------------------------------------------------------------
+function _beatActOf(beat) {
+  const req = beat?.inject?.requires; if (!req) return null;
+  let act = null;
+  for (const c of (Array.isArray(req) ? req : [req])) {
+    if (c && typeof c === "object" && String(c.flag) === "storyPhase" && Number.isFinite(Number(c.gte))) act = Math.max(act ?? -Infinity, Number(c.gte));
+  }
+  return act;
+}
+async function _beatSealed(beat, campaign, ctx = {}) {
+  const no = { sealed: false, why: null };
+  try {
+    if (!beat || beat.inject?.evergreen === true) return no;
+    let sealQ = true, sealA = true;
+    try { sealQ = game.settings.get(MOD_ID, SETTING_SEAL_QUESTS) !== false; } catch (_e) {}
+    try { sealA = game.settings.get(MOD_ID, SETTING_SEAL_ACTS) !== false; } catch (_e) {}
+    if (sealQ && beat.questId) {
+      const qid = String(beat.questId).trim();
+      const track = await _coalitionQuestTrack(campaign, ctx);
+      if (track && (track.completed?.[qid] || track.archived?.[qid])) {
+        const qn = track.completed?.[qid]?.questName || track.archived?.[qid]?.questName || qid;
+        return { sealed: true, why: `its quest "${qn}" is ${track.completed?.[qid] ? "completed" : "archived"}`, kind: "quest", questId: qid };
+      }
+    }
+    if (sealA) {
+      const act = _beatActOf(beat);
+      const phase = _storyPhaseGet();
+      if (act !== null && act >= 1 && phase > act) return { sealed: true, why: `it belongs to Act ${act} and the story has moved on to Act ${phase}`, kind: "act", act, phase };
+    }
+  } catch (e) { warn("[seal] evaluation failed (fail-open):", e); }
+  return no;
+}
+
 async function _beatRequiresMet(beat, campaign, ctx) {
   try {
+    if ((await _beatSealed(beat, campaign, ctx)).sealed) return false;   // sealed beats are never eligible
     const req = beat?.inject?.requires;
     if (!req) return true;                         // ungated → always eligible
     const conds = Array.isArray(req) ? req : [req];
@@ -7103,6 +7168,8 @@ function buildCampaignAPI() {
     setAllCampaigns,
     runCampaign,
     runBeat,
+    // 2026-09-07 seals: why a beat won't fire (completed quest / finished act). {sealed, why, kind}
+    sealed: async (campaignId, beatId, ctx = {}) => { const c = getCampaign(campaignId); const b = (c?.beats || []).find(x => String(x?.id) === String(beatId)); return b ? _beatSealed(b, c, ctx) : { sealed: false, why: "beat not found" }; },
     injector: { fire: injectorFire },
     // Gate introspection for GM consoles: report(beat, campaign?, ctx?) gives
     // per-condition met/unmet; requiresMet is the boolean the engine itself uses.
@@ -7778,6 +7845,17 @@ Hooks.once("init", () => {
     config: true,
     type: Boolean,
     default: true
+  });
+
+  game.settings.register(MOD_ID, SETTING_SEAL_QUESTS, {
+    name: "Story Director — seal completed quests",
+    hint: "A beat whose quest sits in the coalition's Completed or Archived bucket never fires again (arrival, chain, Director, conversation, invitation). Authored opt-out per beat: inject.evergreen = true. GM override per run: ctx.force.",
+    scope: "world", config: true, type: Boolean, default: true
+  });
+  game.settings.register(MOD_ID, SETTING_SEAL_ACTS, {
+    name: "Story Director — seal finished acts",
+    hint: "A beat gated storyPhase ≥ N is Act N content; once storyPhase has moved past N the beat is done in its entirety and never fires again. Act 0 (onboarding) is exempt so training can replay. Opt-out per beat: inject.evergreen = true.",
+    scope: "world", config: true, type: Boolean, default: true
   });
 
   game.settings.register(MOD_ID, SETTING_DIRECTOR_PRESSURE_THRESHOLD, {

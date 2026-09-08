@@ -1790,30 +1790,39 @@ const CampaignBeatInjector = {
       const rule = _blockedByBeatRules(state, projected, ctx, nowTurn);
       if (rule.blocked) return { ok: true, fired: false, triggerType, why: rule.why, campaignId, beatId };
 
-      // Execute beat
-      const execRes = await _executeBeat(campaignId, beatId, triggerType, ctx, { beatId, direct:true });
-      if (!execRes.ok) return execRes;
-
-      // Record state
+      // Record state FIRST (2026-09-07). runBeat deliberately stays pending until the
+      // WHOLE awaited chain finishes (Pike → Town Walk → …, see THE CLOSE RACE in
+      // bbttcc-campaign). Recording after execution meant the once/oncePerHex gate
+      // learned nothing for the entire town visit — leave and return, and the
+      // arrival beat fired again (Allesh-Gilliam "Pike Doesn't Get Up" ×2; the
+      // Khezek-Tor ×2 wart was the same hole). Pre-commit, roll back only if the
+      // runner itself is missing or throws.
       const rec = _beatState(state, beatId);
+      const snapshot = foundry.utils.duplicate(rec);
       rec.firedCount = Number(rec.firedCount || 0) + 1;
       rec.lastFiredAt = Date.now();
       rec.lastFiredTurn = nowTurn;
-
       if (ctx?.hexUuid && effInject.oncePerHex) {
         rec.firedHexes ??= {};
         rec.firedHexes[String(ctx.hexUuid)] = (rec.firedHexes[String(ctx.hexUuid)] || 0) + 1;
       }
-
       if (ctx?.factionId && effInject.oncePerFaction) {
         rec.firedFactions ??= {};
         rec.firedFactions[String(ctx.factionId)] = (rec.firedFactions[String(ctx.factionId)] || 0) + 1;
       }
-
       state.lastInjectedAt = Date.now();
       state.lastInjectedTurn = nowTurn;
-
       await _setInjectorState(state);
+
+      // Execute beat (may take minutes — the gate is already closed behind us)
+      const execRes = await _executeBeat(campaignId, beatId, triggerType, ctx, { beatId, direct:true });
+      if (!execRes.ok) {
+        try {
+          const st2 = _getInjectorState(); st2.beatHistory ??= {}; st2.beatHistory[beatId] = snapshot;
+          await _setInjectorState(st2);
+        } catch (eRB) { console.warn(TAG, "injector rollback failed", eRB); }
+        return execRes;
+      }
 
       return { ok: true, fired: true, triggerType, campaignId, beatId };
     } catch (e) {
@@ -1906,10 +1915,10 @@ const CampaignBeatInjector = {
     }
     const beat = winner._beat;
 
-    const execRes = await _executeBeat(campaignId, beat.id, triggerType, ctx, { beatId: beat.id, score: winner.score, tagCount: winner.tagCount, tags: winner.tags });
-    if (!execRes.ok) return execRes;
-
-    // Record state (only on success)
+    // Record state FIRST (2026-09-07) — same pre-commit as maybeRunBeatById: the runner's
+    // promise stays open for the whole awaited chain, so a post-execution write leaves the
+    // once gates open for the entire visit. Roll back only on runner failure.
+    const snapshot = foundry.utils.duplicate(_beatState(state, beat.id));
     const rec = _beatState(state, beat.id);
     rec.firedCount = Number(rec.firedCount || 0) + 1;
     rec.lastFiredAt = Date.now();
@@ -1924,8 +1933,14 @@ const CampaignBeatInjector = {
     }
     state.lastInjectedAt = Date.now();
     state.lastInjectedTurn = nowTurn;
-
     await _setInjectorState(state);
+
+    const execRes = await _executeBeat(campaignId, beat.id, triggerType, ctx, { beatId: beat.id, score: winner.score, tagCount: winner.tagCount, tags: winner.tags });
+    if (!execRes.ok) {
+      try { const st2 = _getInjectorState(); st2.beatHistory ??= {}; st2.beatHistory[beat.id] = snapshot; await _setInjectorState(st2); }
+      catch (eRB) { console.warn(TAG, "injector rollback failed", eRB); }
+      return execRes;
+    }
 
     return { ok: true, fired: true, triggerType, campaignId, beatId: beat.id, winner: execRes.winner };
   }
