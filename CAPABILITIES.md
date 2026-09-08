@@ -234,6 +234,7 @@ Tools: **84 macros** — 47 DRY_RUN=true (incl. 2026-08-27 `patch-bandit-ambush-
 *The overworld layer* v1.4.0 — hex-to-hex movement (OP cost, terrain tier, weather, domain gating, 2d10 travel check + encounter roll), multi-leg **Travel Console** with passenger factions + armed mitigation, vertical dive/ascend, scene transitions, world overview map, and the **Chase** primitive. Hosts the LIVE CampaignBeatInjector.
 
 ### API
+- **`api.travel.passageFor(factionId, hexLike)`** (`hex-travel.js`, 2026-09-07) → `{free, why:"owner"|"allied"|null, ownerId, devStage}` — THE free-passage authority (dev-6 hex + owner-or-ally ⇒ travel cost 0). Used by `travelHex` execution AND the Travel Console (leg rows, totals, stack estimate, passenger debits). Any new cost preview must call it; before this the console showed full freight while execution charged 0.
 - **`api.travel.travelHex`** (`api.travel.js:1008`; core engine `hex-travel.js`, drift guard re-asserts the wrapper `api.travel.js:1016-1036`).
 - `travel.domains.*` (`hex-travel.js:1807-1824`): terrainMedium, requiredDomainsForTerrain, rigDomains, factionTravelDomains, canFactionEnterTerrain, factionSubDepth, factionAirReach.
 - `travel.dive/surface/ascend/descend` (`:1827-1832`); `api._hexTravel.{TERRAIN_TABLE, getHexAtPoint, getHexTerrainSpec, _encounterDc}` (the console's preview contract).

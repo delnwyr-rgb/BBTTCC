@@ -1253,10 +1253,26 @@
         $stackList.innerHTML = lines.join("");
       }
 
-      function _computePerLegMarksCost() {
+      // Free-passage rule (dev-6 hex + owner/ally ⇒ 0) — reads the ENGINE's authority so the
+      // preview, the stack estimate, and the passenger debits all match what travelHex charges.
+      function _passage(fid, hexEntry) {
+        try {
+          const fn = game.bbttcc?.api?.travel?.passageFor;
+          if (typeof fn !== "function" || !fid || !hexEntry?.uuid) return { free: false, why: null };
+          return fn(fid, hexEntry.uuid) || { free: false, why: null };
+        } catch (_e) { return { free: false, why: null }; }
+      }
+      function _applyPassage(cost, fid, hexEntry) {
+        const p = _passage(fid, hexEntry);
+        if (p.free) for (const k of Object.keys(cost || {})) cost[k] = 0;
+        return p;
+      }
+
+      function _computePerLegMarksCost(forFactionId = null) {
         // Mirror the leg-cost arithmetic from render() so passenger debits
         // match what the lead pays. Returns one marks delta per leg per
-        // OP-category (positive numbers; commit will negate).
+        // OP-category (positive numbers; commit will negate). When a faction id
+        // is given, that faction's free-passage rights are applied per leg.
         const per = [];
         for (const L of legs) {
           const t = hexes.find(h => h.id === L.toId);
@@ -1269,6 +1285,7 @@
               cost[k] = Math.max(0, Math.round(Number(cost[k] || 0) * mult));
             }
           }
+          if (forFactionId) _applyPassage(cost, forFactionId, t);
           per.push(cost);
         }
         return per;
@@ -1423,13 +1440,13 @@
           return;
         }
         $stackCostBlock.style.display = "";
-        const perLeg = _computePerLegMarksCost();
         const lines = [];
         let anyUnaffordable = false;
         for (const fid of joiningFactionIds) {
           const f = game.actors?.get(fid);
           if (!f) continue;
           const mult = Number(costMultipliers[fid] ?? 1);
+          const perLeg = _computePerLegMarksCost(fid);   // passenger's own free-passage rights
           const totals = _sumLegCosts(perLeg, mult);
           const bank = f?.getFlag?.(MOD_FCT, "opBank") || {};
           const shortfalls = [];
@@ -1700,6 +1717,10 @@
             }
             costLabel = `🜂 Ley Gate • ${opToStr(cost) || "—"}`;
           }
+          {
+            const pass = _applyPassage(cost, $fac?.value || "", t);
+            if (pass.free) costLabel = `🛣 ${pass.why === "owner" ? "Your roads" : "Allied roads"} • free`;
+          }
           const hazard   = hazardForHex(t);
 
           const hazardHtml = hazard
@@ -1761,6 +1782,7 @@
               cost[k] = Math.max(0, Math.round(Number(cost[k] || 0) * mult));
             }
           }
+          _applyPassage(cost, $fac?.value || "", t);
 
           for (const [k, v] of Object.entries(cost)) {
             const kk = String(k).toLowerCase();
@@ -2230,6 +2252,8 @@
                   const mult = Number(costMultipliers[fid] ?? 1);
                   const deltas = {};
                   let anyDelta = false;
+                  // Passenger rides free onto a dev-6 hex it owns or is allied with (same rule the lead got).
+                  if (_passage(fid, destHex).free) { console.log(TAG, `passenger ${passenger.name} rides free on leg ${i + 1} (dev-6 owner/ally)`); continue; }
                   for (const [k, v] of Object.entries(legCost)) {
                     const n = Math.max(0, Math.round(Number(v || 0) * mult));
                     if (n > 0) { deltas[String(k).toLowerCase()] = -n; anyDelta = true; }

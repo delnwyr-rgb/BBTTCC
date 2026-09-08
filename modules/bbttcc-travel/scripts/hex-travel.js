@@ -535,6 +535,30 @@ const TERRAIN_TABLE = {
   return out;
 }
 
+  // Free-passage authority (owner directive 2026-06-06): dev-6 hex + owner-or-ally ⇒ cost 0.
+  // Accepts a Drawing placeable, DrawingDocument, uuid string, or the raw territory flags.
+  // Returns { free, why: "owner"|"allied"|null, ownerId, devStage }.
+  function passageFor(factionId, hexLike) {
+    const out = { free: false, why: null, ownerId: "", devStage: 0 };
+    try {
+      let tf = null;
+      if (typeof hexLike === "string") { const d = fromUuidSync(hexLike); tf = d?.flags?.[MOD_TERR] || null; }
+      else if (hexLike?.document?.flags) tf = hexLike.document.flags?.[MOD_TERR] || null;
+      else if (hexLike?.flags) tf = hexLike.flags?.[MOD_TERR] || null;
+      else if (hexLike && (hexLike.factionId !== undefined || hexLike.development !== undefined || hexLike.integration !== undefined)) tf = hexLike;
+      tf = tf || {};
+      const fid = String(factionId || "").trim();
+      out.devStage = Number(tf.development?.stage ?? tf.integration?.progress ?? 0) || 0;
+      out.ownerId = String(tf.factionId || tf.ownerId || "").trim();
+      if (!fid || !out.ownerId || out.devStage < 6) return out;
+      if (out.ownerId === fid) { out.free = true; out.why = "owner"; return out; }
+      const rel = game.bbttcc?.api?.factions?.relations;
+      const ALLIED = 5; // relations tier ladder: ..., friendly=4, allied=5
+      if (rel?.tier && Number(rel.tier(out.ownerId, fid)) >= ALLIED) { out.free = true; out.why = "allied"; }
+    } catch (_e) {}
+    return out;
+  }
+
   async function spendOP({ factionId, cost, reason = "travel" }) {
     const actor = game.actors.get(factionId);
     if (!actor) throw new Error("spendOP: faction actor not found");
@@ -955,24 +979,15 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     // (development.stage / integration.progress == 6) costs NOTHING to move
     // through for the OWNING faction and its ALLIES (relations tier >= allied).
     // Civilization means roads. Applied after the gate discount, before GM
-    // overrides (costSet still has final authority).
+    // overrides (costSet still has final authority). Rule lives in passageFor()
+    // so the Travel Console preview + passenger debits read the SAME authority
+    // (2026-09-07: preview showed full freight while execution charged 0).
     try {
-      const tf = to?.document?.flags?.[MOD_TERR] || to?.flags?.[MOD_TERR] || {};
-      const devStage = Number(tf.development?.stage ?? tf.integration?.progress ?? 0);
-      if (devStage >= 6) {
-        const hexOwnerId = String(tf.factionId || tf.ownerId || "").trim();
-        let freeRide = false, why = "";
-        if (hexOwnerId && hexOwnerId === factionId) { freeRide = true; why = "owner"; }
-        else if (hexOwnerId) {
-          const rel = game.bbttcc?.api?.factions?.relations;
-          const ALLIED = 5; // relations tier ladder: ..., friendly=4, allied=5
-          if (rel?.tier && Number(rel.tier(hexOwnerId, factionId)) >= ALLIED) { freeRide = true; why = "allied"; }
-        }
-        if (freeRide) {
-          for (const k of Object.keys(ctx.cost || {})) ctx.cost[k] = 0;
-          ctx.devSixFreePassage = why;
-          console.log(TAG, "Dev-6 free passage:", { hexOwnerId, factionId, why });
-        }
+      const pass = passageFor(factionId, to);
+      if (pass.free) {
+        for (const k of Object.keys(ctx.cost || {})) ctx.cost[k] = 0;
+        ctx.devSixFreePassage = pass.why;
+        console.log(TAG, "Dev-6 free passage:", { hexOwnerId: pass.ownerId, factionId, why: pass.why });
       }
     } catch (e) {
       console.warn(TAG, "dev-6 free-passage check failed (non-fatal)", e);
@@ -1962,8 +1977,11 @@ function registerTravelAPI() {
     TERRAIN_TABLE,
     getHexAtPoint,
     getHexTerrainSpec,
-    _encounterDc
+    _encounterDc,
+    passageFor
   };
+  // Public: does `factionId` ride free onto this hex? (dev-6 + owner/ally rule)
+  api.travel.passageFor = passageFor;
 
   // Movement-domain gating surface — reused by combat (underwater zone detection),
   // the dive transition, and any UI that wants to preview reachability.
