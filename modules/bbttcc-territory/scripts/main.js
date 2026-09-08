@@ -236,7 +236,11 @@ const DOSSIER_SIZE_MULT = {
   none: 0, outpost: 0.5, village: 0.75, town: 1.0, city: 1.5, metropolis: 2.0, megalopolis: 3.0
 };
 
-const DOSSIER_SEPHIROT_HINTS = [
+const _SEPH_HINT_NAMES = ["Keter","Chokhmah","Binah","Chesed","Gevurah","Tiferet","Netzach","Hod","Yesod","Malkuth"];
+const _fmtBonus = (b) => Object.entries(b).filter(([,v]) => v).map(([k,v]) => `+${v} ${k.charAt(0).toUpperCase()+k.slice(1)}`).join(", ") || "no bonus";
+// Derived from sephirotResourceBonus — the one authority (the hand-written list drifted: it promised Chokmah +2 Trade).
+const DOSSIER_SEPHIROT_HINTS = _SEPH_HINT_NAMES.map(n => ({ key: n.toLowerCase(), label: n, bonus: _fmtBonus(sephirotResourceBonus(n)) }));   // (keyFromName is a const declared later — TDZ at load)
+const _DOSSIER_SEPHIROT_HINTS_LEGACY = [
   { key:"keter",    label:"Keter",    bonus:"+1 to all resources" },
   { key:"chokmah",  label:"Chokmah",  bonus:"+2 Knowledge, +2 Trade" },
   { key:"binah",    label:"Binah",    bonus:"+2 Knowledge, +2 Trade" },
@@ -338,7 +342,7 @@ function computeHexNextSteps(dr) {
         label: "No sephirothic alignment — assigning one adds resource bonuses",
         detail: recs.map(r => `${r.label}: ${r.bonus}`).join(" • "),
         activityKeys: [],
-        configHint: "Set in Hex Config (no strategic activity needed)."
+        configHint: "In play: gather a matching Spark and integrate it on this hex (Tikkun), or perform an Act of Repair. The GM can also set it directly in Hex Config."
       });
     }
 
@@ -1736,6 +1740,64 @@ function computeEffectiveResources(base, sephirotName, modifiers){
   };
 
   return { effective, added:add, multipliers:{mAll,mTrade} };
+}
+
+/* ---------------- Ritual → alignment coupling (owner ruling 2026-09-07) ----------------
+ * "Aligning a hex takes a ritual." The in-play ritual is a Tikkun spark integrated on the
+ * hex (bbttcc:spark:hexIntegrated). Until now that only wrote the spark state; the
+ * sephirothic ALIGNMENT the Dossier, yield calc and Unity bonus read (sephirotKey/Name/
+ * Uuid + recomputed resources) was a GM-only Hex Config field. This writes exactly what
+ * the Hex Config save writes, from the hex's current type/size/modifiers, so the ritual IS
+ * the alignment. Never overwrites an alignment the GM set by hand.
+ * Spark keys (tikkun) → territory names: the one spelling difference is chokmah → Chokhmah. */
+const SPARK_KEY_TO_SEPHIROT_NAME = {
+  keter:"Keter", chokmah:"Chokhmah", chokhmah:"Chokhmah", binah:"Binah", chesed:"Chesed", gevurah:"Gevurah",
+  tiferet:"Tiferet", netzach:"Netzach", hod:"Hod", yesod:"Yesod", malkuth:"Malkuth"
+};
+async function alignHexToSephirot(hexDocOrUuid, sephirahKey, { source = "ritual", overwrite = false, byName = "" } = {}) {
+  const doc = (typeof hexDocOrUuid === "string") ? await fromUuid(hexDocOrUuid) : (hexDocOrUuid?.document ?? hexDocOrUuid);
+  if (!doc?.update) return { ok:false, error:"hex not found" };
+  const tf = foundry.utils.getProperty(doc, `flags.${MOD}`) ?? {};
+  if (!(tf.isHex === true || tf.kind === "territory-hex" || tf.hexId)) return { ok:false, error:"not a hex" };
+  const selName = SPARK_KEY_TO_SEPHIROT_NAME[String(sephirahKey||"").toLowerCase()];
+  if (!selName) return { ok:false, error:`unknown sephirah '${sephirahKey}'` };
+  const before = String(tf.sephirotKey || "").toLowerCase();
+  if (before && !overwrite) return { ok:true, skipped:true, reason:`already aligned to ${before}` };
+  const selKey = keyFromName(selName);
+  const found = (await buildSephirotList()).find(s => s.name === selName);
+  const selUuid = found?.uuid || selKey;
+  // Mirror the Hex Config save: base vector = manual base when the GM overrode it, else the Type×Size ladder.
+  const typeKey = String(tf.type||"settlement").toLowerCase(), sizeKey = String(tf.size||"none").toLowerCase();
+  const typedBase = TYPE_BASE[typeKey] || TYPE_BASE.settlement, sizeMult = SIZE_MULT[sizeKey] ?? 0;
+  const sized = Object.fromEntries(["food","materials","trade","military","knowledge"].map(k => [k, Math.round((typedBase[k]||0) * sizeMult)]));
+  const manual = !!tf.manualOverride && Object.values(tf.calc?.base || tf.resources || {}).some(n => Number(n) > 0);
+  const vector = manual ? (tf.calc?.base || tf.resources) : sized;
+  const mods = Array.isArray(tf.modifiers) ? tf.modifiers : [];
+  const calc = computeEffectiveResources(vector, selName, mods);
+  const resources = manual ? (tf.resources || vector) : calc.effective;
+  const flowState = String(tf.leylines?.flowState || "normal");
+  let effectiveCached = tf.effectiveCached; try { effectiveCached = resourcesToOP(resources, flowState); } catch (_e) {}
+  await doc.update({
+    [`flags.${MOD}.resources`]: resources,
+    [`flags.${MOD}.sephirotBonus`]: calc.added,
+    [`flags.${MOD}.calc`]: { base: vector, sephirotName: selName, multipliers: calc.multipliers, modifiers: mods, effective: calc.effective },
+    [`flags.${MOD}.sephirotUuid`]: selUuid,
+    [`flags.${MOD}.sephirotName`]: selName,
+    [`flags.${MOD}.sephirotKey`]: selKey,
+    [`flags.${MOD}.effectiveCached`]: effectiveCached,
+    [`flags.${MOD}.effectiveAt`]: Date.now()
+  });
+  try {
+    await recordHexImprovement(doc, {
+      kind: before ? "sephirot_changed" : "sephirot_set",
+      label: `Sephirot: ${before || "(none)"} → ${selKey}`,
+      description: `Aligned to ${selName} by ${source}${byName ? ` (${byName})` : ""}; resource bonuses recomputed.`,
+      source, before: { sephirotKey: before || null, sephirotName: tf.sephirotName || null }, after: { sephirotKey: selKey, sephirotName: selName }, reversible: true
+    });
+  } catch (_e) {}
+  try { Hooks.callAll("bbttcc:territory:hexUpdated", { hexUuid: doc.uuid }); } catch (_e) {}
+  console.log(`[${MOD}] hex "${tf.name || doc.id}" aligned to ${selName} (${source})`, { added: calc.added, effective: calc.effective });
+  return { ok:true, sephirotKey: selKey, sephirotName: selName, added: calc.added, effective: calc.effective };
 }
 
 /* Optional: OP cache from resources (unchanged; harmless for UI) */
@@ -3198,6 +3260,16 @@ Hooks.once("ready", ()=>{
 
   // Phase 1.5: GM write adapter for hex direct edits
   game.bbttcc.api.territory.gmSetHex = gmSetHex;
+  game.bbttcc.api.territory.alignHexToSephirot = alignHexToSephirot;
+  // Ritual → alignment: an integrated spark aligns an UNaligned hex (primary GM seat writes; Drawings are GM-owned).
+  Hooks.on("bbttcc:spark:hexIntegrated", async ({ hexUuid, sephirah, actorId } = {}) => {
+    try {
+      const gm = game.users?.activeGM; if (!gm || gm.id !== game.user?.id) return;
+      const who = actorId ? (game.actors?.get(actorId)?.name || "") : "";
+      const r = await alignHexToSephirot(hexUuid, sephirah, { source: "spark ritual", byName: who });
+      if (r?.ok && !r.skipped) ui.notifications?.info?.(`Hex aligned to ${r.sephirotName} — the spark took root.`);
+    } catch (e) { console.warn(`[${MOD}] spark→alignment coupling failed`, e); }
+  });
 
   // Hex Dossier — Improvement Ledger (Phase 2). Other modules instrument
   // their hex mutations by calling these helpers; the dossier UI reads from

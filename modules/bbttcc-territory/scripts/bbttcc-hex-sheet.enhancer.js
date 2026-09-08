@@ -192,7 +192,7 @@
 
     // ---- Dossier pane ----
     whatsHere:  "What's Here — the hex's current identity: integration stage, sephirothic alignment if set, and the production trace showing how base pips become final output.",
-    sephirot:   "Sephirot — the sephirah this hex is aligned to. Alignment adds flat bonuses to the hex's effective output (e.g. Keter +1 to all resources, Gevurah +3 Military +1 Defense, Malkuth +4 Trade) and matters to campaign goals that want aligned territory.",
+    sephirot:   "Sephirot — the sephirah this hex is aligned to. Alignment adds flat bonuses to the hex's effective output (e.g. Keter +1 to all resources, Gevurah +3 Military, Chokhmah +3 Knowledge, Malkuth +3 Materials) and matters to campaign goals that want aligned territory. In play: integrate a matching Spark on the hex (Tikkun).",
     production: "Production trace — how output is computed: base pips from the hex type, × size multiplier (outpost 0.5 … megalopolis 3.0), × integration multiplier (×1.05 at 3+, ×1.10 at 5, ×1.20 at 6). Modifiers and sephirot bonuses apply on top in the live income engine.",
     prodManual: "Manual override — the pips stored on this hex override the auto-calculated production.",
     modifiers:  "Active Modifiers — named effects stamped on this hex (Fortified +3 defense, Trade Hub +50% trade, Damaged Infrastructure −25% production, Radiation Zone −75%…). They scale the hex's production and defense every turn; each entry records when and how it arrived.",

@@ -2149,10 +2149,15 @@
           factors.explorationValue += 1.5;
           relevanceReasons.push("extends reach beyond owned hexes");
         }
-        if (toHexUuid && ownedHexSet.has(toHexUuid)) factors.explorationValue -= 0.5;
-        if (toHexUuid && startHexSet.has(toHexUuid)) factors.explorationValue -= 0.5;
+        // An owned or start hex is a PATROL, not exploration (2026-09-07: the advisor
+        // told the Errata Society its smartest move was to travel to Allesh-Gilliam —
+        // the hex it was standing on — "for fresher exploration value").
+        const isOwnedDest = !!(toHexUuid && ownedHexSet.has(toHexUuid));
+        const isStartDest = !!(toHexUuid && startHexSet.has(toHexUuid));
+        if (isOwnedDest) { factors.explorationValue -= 2; relevanceReasons.push("revisits a hex you already hold"); }
+        if (isStartDest) factors.explorationValue -= 2;
         if (toHexUuid && latestTravelHexUuid && toHexUuid === latestTravelHexUuid) factors.explorationValue -= 0.75;
-        if (seenCount === 0) {
+        if (seenCount === 0 && !isOwnedDest && !isStartDest) {
           factors.explorationValue += 1;
           relevanceReasons.push("offers fresher exploration value");
         } else if (seenCount >= 2) {
@@ -2355,7 +2360,7 @@
       darknessBenefit: "darkness relief",
       historyPenalty: "history",
       campaignFit: "campaign fit",
-      duplicatePenalty: "duplicated grant copies",
+      duplicatePenalty: "duplicate maneuver grants",
       pressureFit: "pressure fit",
       certainty: "certainty",
       explorationValue: "exploration value",
@@ -2404,13 +2409,12 @@
     const positives = Object.entries(candidate?.factors || {})
       .filter(([, v]) => Number(v || 0) > 0)
       .sort((a, b) => Number(b[1] || 0) - Number(a[1] || 0));
-    for (const [k] of positives.slice(0, 2)) {
+    for (const [k] of positives.filter(([k]) => k !== "risk" && k !== "certainty").slice(0, 2)) {
       const label = formatFactorLabel(k);
       if (!basis.some(x => x.toLowerCase().includes(label.toLowerCase()))) basis.push(`helped by ${label}`);
     }
-    const risk = String(candidate?.riskBand || candidate?.historicalRisk?.riskBand || "").toLowerCase();
-    if (risk === "low" && !basis.includes("keeps risk low")) basis.push("keeps risk low");
-    return basis.slice(0, 4);
+    // "Risk is <band>." is appended by every explanation template — don't say it twice.
+    return basis.filter(b => b !== "keeps risk low").slice(0, 3);
   }
 
   function explainWinningCandidate(candidate, category) {
@@ -2454,7 +2458,7 @@
     const loser = runnerUp.label || runnerUp.key || runnerUp.activityKey || runnerUp.toHexName || "runner-up";
     const reasons = [];
     const scoreDelta = Math.round((((Number(top.score || 0) - Number(runnerUp.score || 0)) || 0) * 100)) / 100;
-    if (scoreDelta) reasons.push(`scored ${scoreDelta} lower`);
+    if (scoreDelta) reasons.push(Math.abs(scoreDelta) < 0.25 ? "came in a hair behind" : "trailed on the overall read");
 
     const topRisk = bandRank(top?.riskBand);
     const loseRisk = bandRank(runnerUp?.riskBand);
@@ -2464,9 +2468,10 @@
     if (loseCost > topCost) reasons.push(`cost more OP`);
 
     const negFactors = Object.entries(runnerUp?.factors || {}).filter(([,v]) => Number(v || 0) < 0).sort((a,b)=>Number(a[1])-Number(b[1]));
-    if (negFactors.length) reasons.push(`penalized on ${formatFactorLabel(negFactors[0][0])}`);
+    if (negFactors.length) reasons.push(`lost ground on ${formatFactorLabel(negFactors[0][0])}`);
+    if (!reasons.length) reasons.push("simply ranked a step lower");
 
-    return `${loser} placed behind ${category} winner because it ${reasons.join(", ")}.`;
+    return `${loser} placed behind the ${category} pick because it ${reasons.join(", ")}.`;
   }
 
   function malBandPhrase(confidence) {
@@ -2592,7 +2597,9 @@
 
     const deduped = uniqueBy(seeds, s => `${s.fromHexUuid || ""}::${s.toHexUuid || ""}`)
       .filter(s => !!s.toHexUuid)
-      .filter(s => !(s.fromHexUuid && s.toHexUuid && String(s.fromHexUuid) === String(s.toHexUuid)));
+      .filter(s => !(s.fromHexUuid && s.toHexUuid && String(s.fromHexUuid) === String(s.toHexUuid)))
+      // origin unknown → the start/home hex is where the party most likely IS; never propose it as a destination
+      .filter(s => !(!s.fromHexUuid && new Set((Array.isArray(observation?.territory?.startHexes) ? observation.territory.startHexes : []).map(x => String(x || ""))).has(String(s.toHexUuid))));
 
     const out = [];
 
@@ -2634,7 +2641,7 @@
     const recent = Array.isArray(observation?.raid?.recentRaidLogs) ? observation.raid.recentRaidLogs : [];
     const seeds = [];
 
-    if (session?.activityKey || session?.targetUuid) {
+    if (session?.targetUuid || session?.targetName) {   // a raid with no target is not advice (2026-09-07: "Target is —.")
       seeds.push({
         activityKey: session?.activityKey || null,
         targetUuid: session?.targetUuid || null,
@@ -2645,7 +2652,7 @@
     }
 
     for (const r of recent) {
-      if (!r?.activityKey && !r?.targetUuid) continue;
+      if (!r?.targetUuid && !r?.targetName) continue;
       seeds.push({
         activityKey: r.activityKey || null,
         targetUuid: r.targetUuid || null,
@@ -2673,7 +2680,7 @@
       out.push({
         type: "raid",
         category: "raid",
-        label: seed.activityKey || "Raid",
+        label: (() => { const k = String(seed.activityKey || "").replace(/[_-]+/g, " ").trim(); const pretty = k ? k.replace(/\b\w/g, ch => ch.toUpperCase()) : "Raid"; return seed.targetName ? `${pretty} — ${seed.targetName}` : pretty; })(),
         activityKey: est.activityKey || seed.activityKey || null,
         targetUuid: est.targetUuid || seed.targetUuid || null,
         targetName: seed.targetName || null,
