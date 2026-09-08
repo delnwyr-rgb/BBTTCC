@@ -732,6 +732,25 @@ function deriveTradeRouteCountFromWarLogs(factionActor){
   return null;
 }
 
+// Stored route edges (2026-09-07): certitude first. Counts distinct {a,b} pairs where BOTH ends are
+// owned by the faction and the edge is recorded on at least one end. Returns null when the faction
+// has no stored routes at all, so the legacy readers still cover old worlds.
+function deriveTradeRouteCountFromEdges(factionId){
+  try {
+    const owned = new Map();   // uuid → drawing doc
+    for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) {
+      const tf = d.flags?.[MOD_TERRITORY]; if (!tf || !(tf.isHex === true || tf.kind === "territory-hex")) continue;
+      if (String(tf.factionId || tf.ownerId || "") === String(factionId)) owned.set(d.uuid, d);
+    }
+    let any = false; const edges = new Set();
+    for (const [uuid, d] of owned) {
+      const routes = d.flags?.[MOD_TERRITORY]?.routes; if (!Array.isArray(routes)) continue;
+      any = true;
+      for (const r of routes) { const other = String(r?.hexUuid || ""); if (owned.has(other)) edges.add([uuid, other].sort().join("|")); }
+    }
+    return any ? edges.size : null;
+  } catch { return null; }
+}
 function deriveTradeRouteCountFromScene(factionId){
   try {
     const scene = canvas?.scene;
@@ -832,7 +851,8 @@ async function computeLogisticsPressureForFaction(factionActor){
   const { activeRigCount, logisticsRigCount } = readRigs(factionActor);
 
   // Trade routes: try warlog parse first, else derive on active scene if possible.
-  let tradeRouteCount = deriveTradeRouteCountFromWarLogs(factionActor);
+  let tradeRouteCount = deriveTradeRouteCountFromEdges(fid);           // stored edges win (certitude)
+  if (tradeRouteCount === null) tradeRouteCount = deriveTradeRouteCountFromWarLogs(factionActor);
   if (tradeRouteCount === null) {
     const derived = deriveTradeRouteCountFromScene(fid);
     tradeRouteCount = (derived === null) ? 0 : derived;
@@ -1391,6 +1411,15 @@ async function applyHexPendingSweep(){
         if (rmLegacy.size) { f.modifiers = f.modifiers.filter(m => !rmLegacy.has(m)); actionable = true; }
       }
 
+      // route edges (2026-09-07): stored on the hex as flags.bbttcc-territory.routes = [{hexUuid, kind, since}]
+      f.routes = Array.isArray(f.routes) ? f.routes.slice() : [];
+      if (Array.isArray(pend.routes) && pend.routes.length) {
+        for (const r of pend.routes) {
+          if (!r?.hexUuid) continue;
+          if (!f.routes.some(x => x?.hexUuid === r.hexUuid && x?.kind === (r.kind || "trade"))) f.routes.push({ hexUuid: String(r.hexUuid), kind: String(r.kind || "trade"), since: Date.now() });
+        }
+        actionable = true;
+      }
       // numeric deltas → mods
       const mods = dup(f.mods || {});
       for (const [pk, mk] of [["defenseDelta","defense"],["tradeYieldDelta","tradeYield"],["loyaltyDelta","loyalty"],["enemyLoyaltyDelta","enemyLoyalty"],["moraleDelta","morale"],["radiationRisk","radiation"]]) {
@@ -1404,6 +1433,7 @@ async function applyHexPendingSweep(){
       patches.push({
         _id: d.id,
         [`flags.${MOD_TERRITORY}.modifiers`]: f.modifiers,
+        [`flags.${MOD_TERRITORY}.routes`]: f.routes,
         [`flags.${MOD_TERRITORY}.mods`]: mods,
         [`flags.${MOD_TERRITORY}.turn.applied`]: applied,
         [`flags.${MOD_TERRITORY}.turn.-=pending`]: null

@@ -1318,6 +1318,11 @@ const categories = this._buildCategories(acts);
       })();
       const selectedKey = this._plannerState.selectedKey || filtered[0]?.key || "";
       const wantsRigTarget = isRigActivity(selectedKey);
+      // Routes have TWO ends (owner ruling 2026-09-07: "certitude when possible") — Establish
+      // Trade Route / Supply Line take a TO hex owned by the same faction; the edge is stored on
+      // both hexes at turn time and counted deterministically (no more nearest-six guessing).
+      const ROUTE_ACTIVITIES = new Set(["establish_trade_route", "establish_supply_line"]);
+      const wantsRouteTarget = ROUTE_ACTIVITIES.has(String(selectedKey || ""));
 
       // --- Top: Faction + Target (Hex OR Rig) ---
       const top = document.createElement("div");
@@ -1417,6 +1422,29 @@ if ((this._lockedFactionId || this._lockFaction) && !game.user.isGM) {
 
       hexRow.appendChild(hexSel);
       hexRow.appendChild(pickBtn);
+      // TO hex row (route activities only): hexes owned by the planning faction, minus the FROM hex.
+      const toRow = document.createElement("div");
+      toRow.style.display = "flex"; toRow.style.gap = "4px"; toRow.style.alignItems = "center";
+      const toLbl = document.createElement("span"); toLbl.textContent = "→ To"; toLbl.style.cssText = "flex:0 0 auto;font-size:0.8rem;opacity:.8;";
+      const toSel = document.createElement("select"); toSel.style.flex = "1 1 auto"; toSel.style.padding = "2px 4px";
+      const _fillToSel = () => {
+        const fid = String(this._plannerState.factionId || this._plannerState.attackerId || facSel?.value || "");
+        const from = String(hexSel.value || "");
+        toSel.innerHTML = "";
+        const owned = hexesAll.filter(h => {
+          if (String(h.uuid) === from) return false;
+          let tf = null; try { tf = fromUuidSync(h.uuid)?.flags?.["bbttcc-territory"] || null; } catch (_e) {}
+          return tf && String(tf.factionId || tf.ownerId || "") === fid;
+        });
+        for (const h of owned) { const o = document.createElement("option"); o.value = h.uuid; o.textContent = h.name; toSel.appendChild(o); }
+        if (!owned.length) { const o = document.createElement("option"); o.value = ""; o.textContent = "(no other owned hex)"; toSel.appendChild(o); }
+        const want = String(this._plannerState.toHexUuid || "");
+        if (want && owned.some(h => String(h.uuid) === want)) toSel.value = want; else this._plannerState.toHexUuid = toSel.value || "";
+      };
+      _fillToSel();
+      toSel.addEventListener("change", () => { this._plannerState.toHexUuid = toSel.value || ""; });
+      hexSel.addEventListener("change", _fillToSel);
+      toRow.appendChild(toLbl); toRow.appendChild(toSel);
 
       // Rig chooser rows (NEW)
       const rigRow1 = document.createElement("div");
@@ -1512,6 +1540,7 @@ if (wantsRigTarget) {
   targetWrap.appendChild(rigRow2);
 } else {
   targetWrap.appendChild(hexRow);
+  if (wantsRouteTarget) targetWrap.appendChild(toRow);
 }
 top.appendChild(targetWrap);
 
@@ -1988,7 +2017,13 @@ wrap.appendChild(top);
                 ui.notifications?.warn?.("Select a target hex first.");
                 return;
               }
-              await game.bbttcc.api.raid.planActivity({ attackerId, targetUuid, activityKey, note });
+              let toHexUuid = null;
+              if (wantsRouteTarget) {
+                toHexUuid = String(toSel.value || "");
+                if (!toHexUuid) { ui.notifications?.warn?.("Routes need a TO hex your faction owns."); return; }
+                if (toHexUuid === String(targetUuid)) { ui.notifications?.warn?.("A route needs two different hexes."); return; }
+              }
+              await game.bbttcc.api.raid.planActivity({ attackerId, targetUuid, activityKey, note, toHexUuid });
             }
           } catch (e) {
             console.error(e);
@@ -2079,7 +2114,7 @@ Hooks.once("init",()=>{
   };
 
   // UPDATED: supports both hex targets and rig targets
-  raidAPI.planActivity = async function({ attackerId, targetUuid=null, activityKey, note="", targetType="hex", defenderId=null, rigId=null, targetName=null }){
+  raidAPI.planActivity = async function({ attackerId, targetUuid=null, activityKey, note="", targetType="hex", defenderId=null, rigId=null, targetName=null, toHexUuid=null }){
     if(!attackerId || !activityKey) throw new Error("Missing required params.");
     const attacker = game.actors.get(attackerId); if(!attacker) throw new Error("Attacker not found.");
 
@@ -2110,6 +2145,10 @@ Hooks.once("init",()=>{
       const tf = tdoc?.getFlag?.(TERR_ID) || tdoc?.flags?.[TERR_ID] || {};
       resolvedTargetName = tf?.name || tdoc?.text || tdoc?.id || "Unknown Hex";
 
+      let toHexName = null;
+      if (toHexUuid) {
+        try { const t2 = await fromUuid(toHexUuid); const d2 = t2?.document ?? t2; const tf2 = d2?.getFlag?.(TERR_ID) || d2?.flags?.[TERR_ID] || {}; toHexName = tf2?.name || d2?.text || d2?.id || "Unknown Hex"; } catch (_e) { toHexName = "Unknown Hex"; }
+      }
       entry = {
         ts: Date.now(),
         date: (new Date()).toLocaleString(),
@@ -2118,8 +2157,9 @@ Hooks.once("init",()=>{
         targetType: "hex",
         targetUuid,
         targetName: resolvedTargetName,
+        ...(toHexUuid ? { toHexUuid: String(toHexUuid), toHexName } : {}),
         activityKey: String(activityKey),
-        summary: `${attacker.name} planned ${activityKey} on ${resolvedTargetName}`,
+        summary: `${attacker.name} planned ${activityKey} on ${resolvedTargetName}${toHexName ? ` → ${toHexName}` : ""}`,
         note: String(note||"")
       };
     }

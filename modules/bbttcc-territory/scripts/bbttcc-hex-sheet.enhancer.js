@@ -1702,6 +1702,22 @@
         // non-fatal
       }
 
+      // ───────────── Trade Routes card (stored edges, 2026-09-07) ─────────────
+      try {
+        const doc = this._hexDoc;
+        const routes = Array.isArray(doc?.flags?.[MOD_T]?.routes) ? doc.flags[MOD_T].routes : [];
+        const mainPane = root.querySelector('main.bbttcc-pane');
+        const scroller = mainPane ? (mainPane.querySelector('.bbttcc-pane-scroll') || mainPane) : null;
+        const prevR = scroller?.querySelector('[data-bbttcc-routes-card="1"]'); if (prevR) prevR.remove();
+        if (scroller && routes.length) {
+          const esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
+          const rows = routes.map(r => { let nm = r.hexUuid; try { const d2 = fromUuidSync(r.hexUuid); nm = d2?.flags?.[MOD_T]?.name || d2?.text || nm; } catch (_e) {} return `<li>${r.kind === "supply" ? "🛤" : "🔗"} ${esc(r.kind === "supply" ? "Supply line" : "Trade route")} → <b>${esc(nm)}</b></li>`; }).join("");
+          const cardR = document.createElement('div'); cardR.className = 'bbttcc-hex-card'; cardR.setAttribute('data-bbttcc-routes-card', '1');
+          cardR.innerHTML = `<h3 style="margin:0 0 .3rem;">Trade Routes</h3><ul style="margin:0;padding-left:1.1rem;font-size:.9em;">${rows}</ul>`;
+          const gmNotes = scroller.querySelector('[data-bbttcc-gm-notes-card="1"]');
+          if (gmNotes) scroller.insertBefore(cardR, gmNotes); else scroller.appendChild(cardR);
+        }
+      } catch (eR) { console.warn("[bbttcc-hex-sheet] routes card failed", eR); }
       // ───────────── Quests card (Hex ↔ Quest links) ─────────────
       try {
         const doc = this._hexDoc;
