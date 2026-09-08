@@ -318,6 +318,8 @@ const OVERVIEW_TIPS = {
   colResources: "Resources (per turn) — the faction's summed effective yields: each hex's base pips × size multiplier × modifiers, plus sephirot bonuses, totalled across every holding. This is the production the turn engine converts into OP income.",
   colDefense:   "Defense — the summed defensive bonuses across the faction's hexes, from size (Village/Town +1 … Megalopolis +4), modifiers (Fortified +3, Well-Maintained +1, Difficult Terrain +1…), and sephirot (Gevurah +1). Each hex's own share applies when that hex is raided.",
   colOpen:      "Open — jump to this faction's full sheet.",
+  relations:    "Faction relations — every non-neutral pair in the world, most extreme first (at war / hostile / unfriendly / friendly / allied). Read from each faction's relationship map (api.factions.relations); a pair both sides agree on shows once, a lopsided pair shows both directions. Beat gates, raid maneuvers and travel free-passage read these tiers — this is where to look when a door won't open.",
+  relQuiet:     "All quiet — every faction pair is neutral. Relations move through beats, the Faction Exchange, diplomacy actions and raids.",
   rowUnclaimed: "Unclaimed — the aggregate of every hex with no owning faction. Its yields flow to no one until the hexes are claimed.",
 
   // ---- Injected Faction-Health / Great-Work columns ----
@@ -493,7 +495,36 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
     }
 
     rows.sort((A,B)=>A.factionName.localeCompare(B.factionName));
-    return { rows };
+
+    /* Faction relations (moved here from the Campaign Visualizer rail,
+       2026-09-07 owner ruling): every non-neutral pair, most extreme first.
+       A pair both sides record identically shows once; a lopsided pair
+       (A thinks "allied", B thinks "unfriendly") shows both directions. */
+    const relations = [];
+    try {
+      const rel = game.bbttcc?.api?.factions?.relations;
+      if (rel?.list) {
+        const seen = new Map();   // unordered key -> tier
+        for (const fa of factions) {
+          for (const r of (rel.list(fa.id) || [])) {
+            if (!r || String(r.tier) === "neutral") continue;
+            const key = [fa.id, r.id].sort().join("|");
+            const idx = Number(r.tierIdx ?? 3);
+            if (seen.get(key) === idx) continue;
+            seen.set(key, idx);
+            relations.push({
+              from: fa.name, fromId: fa.id, to: r.name, toId: r.id,
+              tier: String(r.tier).replace(/_/g, " "),
+              cls: (r.tier === "at_war" || r.tier === "hostile") ? "bad" : (r.tier === "unfriendly") ? "warn" : "good",
+              dist: Math.abs(idx - 3)
+            });
+          }
+        }
+        relations.sort((a, b) => (b.dist - a.dist) || a.from.localeCompare(b.from) || a.to.localeCompare(b.to));
+      }
+    } catch (e) { warn("relations rollup failed", e); }
+
+    return { rows, relations };
   }
 
   async _onRender(ctx, opts) {

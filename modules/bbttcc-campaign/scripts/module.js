@@ -755,6 +755,11 @@ function _normalizeQuest(id, data = {}) {
     // Bidirectional with hex flag flags["bbttcc-territory"].quests[questId].
     hexIds: Array.isArray(q?.hexIds) ? Array.from(new Set(q.hexIds.map(String))) : [],
 
+    // Completion stamps (2026-09-07): set by setQuestStatus("completed"),
+    // cleared on reopen. Older completed quests carry none — display "—".
+    completedTs: (q?.completedTs != null) ? Number(q.completedTs) : null,
+    completedTurn: (q?.completedTurn != null) ? Number(q.completedTurn) : null,
+
     createdTs: q?.createdTs ?? Date.now(),
     updatedTs: q?.updatedTs ?? Date.now()
   };
@@ -846,7 +851,17 @@ async function setQuestStatus(id, status) {
   if (status !== "active" && status !== "completed" && status !== "archived") status = "active";
   const cur = getQuest(id);
   if (!cur) throw new Error("setQuestStatus: quest not found: " + String(id || ""));
-  return await saveQuest(id, Object.assign({}, cur, { status: status }));
+  const patch = { status: status };
+  if (status === "completed") {
+    if (cur.completedTs == null) {
+      patch.completedTs = Date.now();
+      patch.completedTurn = (typeof _getTurnNumberSafe === "function") ? _getTurnNumberSafe() : null;
+    }
+  } else {
+    patch.completedTs = null;
+    patch.completedTurn = null;
+  }
+  return await saveQuest(id, Object.assign({}, cur, patch));
 }
 
 async function deleteQuest(id) {
@@ -3488,6 +3503,33 @@ async function executeBeat(campaign, beat, ctx = {}) {
   if (hasDialogContent && (type !== "encounter" || !hasEncounterKey || _hasChoices) && !isCinematic) {
     dialogRes = await _runBeatDialog(campaign, beat, ctx);
     // After dialog resolves, we still apply world effects below (keeps pipeline).
+    // Choice ledger (2026-09-07, owner ruling): record the pick itself —
+    // beat, label, where it routed, turn — so the Visualizer's LOCKED block
+    // can say what the table decided. Capped; newest last. GM-only write,
+    // same seat rule as the fired-history mark.
+    try {
+      if (game.user?.isGM && dialogRes && dialogRes.acted && dialogRes.choiceIndex != null) {
+        const ch = dialogRes.choice || {};
+        const rec = {
+          v: 1,
+          ts: Date.now(),
+          turn: (typeof _getTurnNumberSafe === "function") ? _getTurnNumberSafe() : (Number(campaign?.turn) || 0),
+          campaignId: String(campaign?.id || ""),
+          beatId: String(beat.id),
+          beatLabel: String(beat.label || beat.id || ""),
+          questId: String(beat.questId || "").trim() || null,
+          choiceIndex: Number(dialogRes.choiceIndex),
+          label: String(ch.label || "").trim() || ("Choice " + String(Number(dialogRes.choiceIndex) + 1)),
+          next: String((dialogRes.check && dialogRes.check.ok === false) ? (ch.failNext || "") : (ch.next || "")).trim() || null,
+          checkOk: (dialogRes.check && typeof dialogRes.check.ok === "boolean") ? dialogRes.check.ok : null
+        };
+        await _mutateDirectorState(async (st) => {
+          st.choices = Array.isArray(st.choices) ? st.choices : [];
+          st.choices.push(rec);
+          if (st.choices.length > 200) st.choices.splice(0, st.choices.length - 200);
+        });
+      }
+    } catch (eLedger) { warn("choice ledger record failed:", eLedger); }
   }
 
   // Quest acceptance prompt (only on questRole=start beats)
@@ -5127,13 +5169,17 @@ function _readDirectorState() {
     o.levelPrompts = (o.levelPrompts && typeof o.levelPrompts === "object") ? o.levelPrompts : {};
     o.declinedStory = (o.declinedStory && typeof o.declinedStory === "object") ? o.declinedStory : {};
     o.declinedChains = (o.declinedChains && typeof o.declinedChains === "object") ? o.declinedChains : {};
+    // Choice ledger (Visualizer play-view, 2026-09-07): every menu pick the
+    // table makes, appended at routing time. Decision Memory only records
+    // politically tagged picks — this is the plain "what did they choose".
+    o.choices = Array.isArray(o.choices) ? o.choices : [];
     o.lastStoryTurn = Number(o.lastStoryTurn) || 0;
     o.stewardLevelFloor = Number(o.stewardLevelFloor) || 0;
     o.factionTierFloor = Number(o.factionTierFloor) || 0;
     o.pressure = Math.max(0, Number(o.pressure) || 0);
     return o;
   } catch (e) {
-    return { firedStoryBeats: {}, dialogueFired: {}, invited: {}, levelPrompts: {}, lastStoryTurn: 0, stewardLevelFloor: 0, factionTierFloor: 0, pressure: 0 };
+    return { firedStoryBeats: {}, dialogueFired: {}, invited: {}, levelPrompts: {}, choices: [], lastStoryTurn: 0, stewardLevelFloor: 0, factionTierFloor: 0, pressure: 0 };
   }
 }
 async function _writeDirectorState(state) {
@@ -7509,7 +7555,7 @@ const CAMPAIGN_HELP = {
   "tab-travel": "Travel Tables — the travel encounter tables the travel engine rolls when a journey leg triggers an encounter. Create, repair, preview, and edit them here.",
   "tab-beats": "Beats — the selected campaign's content, beat by beat, in canonical order: filters, reordering, and Run/Edit per row. A beat is one runnable unit (scene + dialog + effects).",
   "tab-quests": "Quests — the quest registry for this campaign: status bookkeeping, ordering, and hex links (map hints) per quest. Beats join a quest via beat.questId.",
-  "tab-flow": "Visualizer — a read-only pan/zoom flow map of the campaign built from beat links (Next/Success/Failure/Choices). Two views: quest bubbles (overview) or the per-beat decision tree (detail).",
+  "tab-flow": "Visualizer — the play surface: ONE quest at a time as a top-down branching chart (Next/Success/Failure/Choices), following the quest the story is standing in. The rail says where you are, what fired, what was decided, and what is next.",
 
   // ── Campaign tab ──────────────────────────────────────────────────────────
   campaigns: "Campaigns — every campaign definition stored in this world (hidden world setting). Click one to load it into the Beats/Quests/Visualizer tabs; the ★ Active one is what the automated systems read.",
@@ -7546,7 +7592,7 @@ const CAMPAIGN_HELP = {
   "delete-table": "Delete — removes the table from the registry (confirm, no undo). The beats its entries pointed at are untouched.",
 
   // ── Beats tab ─────────────────────────────────────────────────────────────
-  "beats-list": "Beats — the selected campaign's beats in canonical array order. Order matters: it is the # column, the Visualizer's root (first beat), and what Run (campaign) fires first.",
+  "beats-list": "Beats — the selected campaign's beats in canonical array order. Order matters: it is the # column, the Visualizer's fallback quest order, and what Run (campaign) fires first.",
   "beats-count": "Shown / total — how many beats survive the current filters, out of the campaign's full list.",
   "beats-search": "Filter — live text match against beat id, label, and type. Display only.",
   "beats-type": "Type — show only one beat type (the list is collected from this campaign's beats: cinematic, encounter, custom…).",
@@ -7562,7 +7608,7 @@ const CAMPAIGN_HELP = {
   "move-up": "▲ — move this beat one slot up in the canonical order.",
   "move-down": "▼ — move this beat one slot down in the canonical order.",
   "move-bottom": "⤓ — move this beat to the bottom of the canonical order.",
-  "set-index": "Set index — type a 1-based position; the beat is spliced to that slot in the canonical order. Order drives the # column, the Visualizer root, and Run (campaign).",
+  "set-index": "Set index — type a 1-based position; the beat is spliced to that slot in the canonical order. Order drives the # column, the Visualizer's fallback quest order, and Run (campaign).",
   "run-beat": "▶ Run — executes the beat NOW: journal auto-open, narration audio, scene activation (or cinematic chain), description/choices dialog, encounter launch, world & quest effects, and its time cost (timeScale → world time points). Already-fired beats ask for one confirm.",
   "edit-beat": "Edit — opens the Beat Editor (label/type/turn, scene, dialog & choices, outcomes, actors, encounter, world effects, audio…). Saving an id change rewrites other beats' outcome/choice links to follow it.",
   "beat-menu": "More actions — Duplicate and Delete.",
@@ -7570,7 +7616,7 @@ const CAMPAIGN_HELP = {
   "delete-beat": "Delete — removes the beat (no undo). The confirm dialog first scans for anything linking to it (other beats' next/outcome/choice routes and encounter-table entries) and offers 'Delete + Clear Links' (also nulls those routes and removes the table entries) or 'Delete Only' (leaves them dangling).",
 
   // ── Quests tab ────────────────────────────────────────────────────────────
-  "quests-list": "Quests — the world quest registry filtered to this campaign. A quest is grouping + bookkeeping: beats reference it via beat.questId, hexes via quest links; status feeds filters and the Visualizer's bubble colors.",
+  "quests-list": "Quests — the world quest registry filtered to this campaign. A quest is grouping + bookkeeping: beats reference it via beat.questId, hexes via quest links; status feeds filters and the Visualizer's quest list.",
   "quest-search": "Search — live text match on quest name and id. Display only.",
   "quest-status": "Status — filter quests by active / completed / archived. Independent control: it no longer affects the Beats tab's quest-status filter.",
   "new-quest": "+ New Quest — creates a quest record scoped to the selected campaign. The Quest ID is the stable key beats reference (beat.questId) — it is locked after creation.",
@@ -7596,10 +7642,10 @@ const CAMPAIGN_HELP = {
   "flow-zoom-in": "Zoom in (+30% per click). Tip: the mouse wheel zooms straight to the cursor.",
   "flow-zoom-out": "Zoom out (−30% per click). Tip: the mouse wheel zooms straight to the cursor.",
   "flow-reset": "Fit — returns zoom and pan to the whole-graph view.",
-  "flow-canvas": "Flow map — drag the background to pan. Beats view: click a node to open it in the Beat Editor. Quests view: click a bubble to expand its inner beat chips; click a chip to edit that beat.",
-  "flow-turn": "Turn — restrict the graph to beats assigned to one Strategic Turn (All Turns = the whole campaign).",
-  "flow-quest": "Quest — keep only that quest's beats PLUS everything reachable from them (forward closure), so cross-quest hand-offs stay visible.",
-  "flow-view": "View — Quests (overview): one bubble per quest with aggregated cross-quest links. Lanes (arc): one horizontal lane per quest in authoring order, every beat shown (nothing pruned), gates surfaced as ⛩ badges. Beats (detail): the per-beat decision tree — disconnected beats root their own trees to the right. Your choice persists per user."
+  "flow-canvas": "The chart — root at the top, branches downward. ● HERE = the last fired spine beat; ⏭ NEXT = what the rail is pointing at; the road already travelled glows gold. Drag to pan, wheel to zoom, click a beat to select it (Run / Edit), click a dashed → stub to jump to that quest.",
+  "flow-quest": "Quest — which quest the chart draws. ▶ marks the quest the story stands in, ✓ completed ones. Picking here turns Follow off; routes that leave the quest show as dashed → stubs.",
+  "flow-follow": "Follow the story — the chart tracks the quest of the last fired spine beat, so after every beat it is already showing the right chart. Picking a quest turns it off; click to snap back.",
+
 };
 
 function _registerCampaignHelp() {

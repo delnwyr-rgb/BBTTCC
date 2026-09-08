@@ -419,911 +419,219 @@ if (q) {
 }
 
 // ---------------------------------------------------------------------------
-// Flow Visualizer (Org Chart)
-// - Replaces the legacy Flow tab list with a pan/zoom SVG graph.
-// - Canon rules:
-//   * Travel/Random beats are designated by beat.timeScale === "leg" (optional lane toggle).
-//   * Turn assignment badge uses beat.turnNumber.
-// - Read-only: clicking a node opens the Beat Editor.
+// Flow Visualizer — ONE QUEST AT A TIME, TOP-DOWN (2026-09-07 owner ruling).
+// - The chart renders the quest the story is standing in (or the quest the GM
+//   picked) as a top-down branching tree: root = the quest's opening beat,
+//   branches = Next / Success / Failure / Choices.
+// - Routes that leave the quest are drawn as EXIT STUBS ("→ Other Quest");
+//   clicking one switches the chart to that quest.
+// - Travel-leg beats (timeScale "leg") stay off unless the Travel toggle is on.
+// - The old Quests-overview / Lanes modes and the Turn / Act / Scope filters
+//   were retired the same day — a full-corpus display was the wrong tool for
+//   the play surface. Authoring still lives on the Beats tab.
 // ---------------------------------------------------------------------------
+
+const FLOW_UNASSIGNED = "__unassigned__";
 
 function _isTravelBeat(beat) {
   return String((beat && beat.timeScale) || "").trim().toLowerCase() === "leg";
 }
 
-function _extractEdges(beats) {
-  const edges = [];
-  const byId = {};
-  for (const b of beats) if (b?.id) byId[String(b.id)] = b;
-
-  const pushEdge = (fromId, toId, kind, label) => {
-    const a = String(fromId || "").trim();
-    const b = String(toId || "").trim();
-    if (!a || !b) return;
-    if (!byId[b]) return; // only link to existing beats
-    edges.push({ from: a, to: b, kind: String(kind || "link"), label: String(label || "") });
-  };
-
-  for (const b of beats) {
-    const fromId = String(b?.id || "").trim();
-    if (!fromId) continue;
-
-    const o = b?.outcomes || null;
-    if (o) {
-      if (o.success) pushEdge(fromId, o.success, "success", "Success");
-      if (o.failure) pushEdge(fromId, o.failure, "failure", "Failure");
-    }
-
-    const choices = Array.isArray(b?.choices) ? b.choices : [];
-    for (let i = 0; i < choices.length; i++) {
-      const ch = choices[i];
-      if (!ch) continue;
-      if (ch.next) pushEdge(fromId, ch.next, "choice", ch.label || ("Choice " + String(i + 1)));
-      if (ch.failNext) pushEdge(fromId, ch.failNext, "choice_fail", (ch.label || ("Choice " + String(i + 1))) + " (Fail)");
-    }
-  }
-
-  return edges;
+function _flowQuestIdOf(b) {
+  return String((b && b.questId) || "").trim() || FLOW_UNASSIGNED;
 }
 
-function _computeDepths(startId, nodes, edges) {
-  const depth = {};
-  for (const n of nodes) depth[n.id] = Infinity;
-  if (startId && depth[startId] != null) depth[startId] = 0;
-
-  const out = {};
-  const q = [];
-  if (startId && depth[startId] === 0) q.push(startId);
-
-  const adj = {};
-  for (const e of edges) {
-    adj[e.from] ??= [];
-    adj[e.from].push(e.to);
+// Every outgoing route of a beat, in authoring order of the fields.
+function _flowBeatEdges(b) {
+  const out = [];
+  const push = (to, kind, label) => {
+    const t = String(to || "").trim();
+    if (t) out.push({ to: t, kind, label: String(label || "") });
+  };
+  if (b?.next) push(b.next, "next", "Next");
+  const o = b?.outcomes || null;
+  if (o) {
+    if (o.success) push(o.success, "success", "Success");
+    if (o.failure) push(o.failure, "failure", "Failure");
   }
-
-  while (q.length) {
-    const cur = q.shift();
-    const d = depth[cur] ?? Infinity;
-    const nexts = adj[cur] || [];
-    for (const nx of nexts) {
-      if ((depth[nx] ?? Infinity) > d + 1) {
-        depth[nx] = d + 1;
-        q.push(nx);
-      }
-    }
-  }
-
-  // Replace Infinity with a stable "far right" lane based on authoring order
-  let max = 0;
-  for (const k of Object.keys(depth)) if (isFinite(depth[k])) max = Math.max(max, depth[k]);
-
-  for (const n of nodes) {
-    const d = depth[n.id];
-    out[n.id] = isFinite(d) ? d : (max + 1);
+  const ch = Array.isArray(b?.choices) ? b.choices : [];
+  for (let i = 0; i < ch.length; i++) {
+    const c = ch[i];
+    if (!c) continue;
+    const lbl = c.label || ("Choice " + String(i + 1));
+    if (c.next) push(c.next, "choice", lbl);
+    if (c.failNext) push(c.failNext, "choice_fail", lbl + " (Fail)");
   }
   return out;
 }
 
+// Canonical quest order: questStep when authored, authoring index otherwise.
+function _flowSeqOf(b, authIdx) {
+  const s = Number(b?.questStep);
+  if (b?.questStep != null && Number.isFinite(s)) return s;
+  return 1e6 + (authIdx.get(String(b?.id)) ?? 0);
+}
+
 function _buildFlowGraph(campaign, opts) {
-  // Choose-your-own-adventure decision tree visualizer
-  // - One visualization per Turn/Chapter
-  // - Nodes are meaningful scene beats only (exclude cinematic/travel)
-  // - Branches are outgoing beat links (choices/success/failure)
-
   opts = opts || {};
+  const beatsAll = Array.isArray(campaign && campaign.beats) ? campaign.beats : [];
+  const questId = String(opts.questId || "").trim() || FLOW_UNASSIGNED;
+  const showTravel = !!opts.showTravel;
+  const questNames = opts.questNames || {};
+  const runtime = opts.runtime || null;
 
-  var beatsAll = Array.isArray(campaign && campaign.beats) ? campaign.beats : [];
-
-  var isTag = function (b, key) {
+  const isTag = (b, key) => {
     try {
-      var tags = b && b.tags;
+      let tags = b && b.tags;
       if (!tags) return false;
       if (typeof tags === "string") tags = tags.split(/\s*,\s*/g);
       if (!Array.isArray(tags)) return false;
-      var k = String(key || "").trim().toLowerCase();
-      for (var i = 0; i < tags.length; i++) {
-        var t = String(tags[i] || "").trim().toLowerCase();
-        if (!t) continue;
-        if (t === k) return true;
-        if (t.indexOf(k + ":") === 0) return true;
-      }
-      return false;
-    } catch (e) {
-      return false;
-    }
+      const k = String(key || "").trim().toLowerCase();
+      return tags.some(t => { const s = String(t || "").trim().toLowerCase(); return s === k || s.indexOf(k + ":") === 0; });
+    } catch (_e) { return false; }
   };
+  const isTravel = b => _isTravelBeat(b) || isTag(b, "travel");
+  const isCinematic = b => String((b && b.type) || "").trim().toLowerCase() === "cinematic";
 
-  var getTurn = function (b) {
-    try {
-      if (!b || typeof b !== "object") return null;
-      var cand = null;
-      // common fields
-      if (b.turnNumber != null) cand = b.turnNumber;
-      else if (b.turn != null) cand = b.turn;
-      else if (b.chapter != null) cand = b.chapter;
-      else if (b.meta && b.meta.turn != null) cand = b.meta.turn;
-      else if (b.injection && b.injection.turn != null) cand = b.injection.turn;
+  const authIdx = new Map(beatsAll.map((b, i) => [String(b?.id), i]));
+  const allById = {};
+  for (const b of beatsAll) if (b?.id) allById[String(b.id)] = b;
 
-      if (cand != null && cand !== "") {
-        var n = Number(cand);
-        if (isFinite(n) && n >= 1) return Math.floor(n);
-      }
+  // The quest's own beats (travel lane optional).
+  const beats = beatsAll.filter(b => b && b.id && _flowQuestIdOf(b) === questId && (showTravel || !isTravel(b)));
+  const byId = {};
+  for (const b of beats) byId[String(b.id)] = b;
+  const seqOf = b => _flowSeqOf(b, authIdx);
 
-      // tags like turn:1, chapter:2
-      var tags = b.tags;
-      if (typeof tags === "string") tags = tags.split(/\s*,\s*/g);
-      if (Array.isArray(tags)) {
-        for (var i = 0; i < tags.length; i++) {
-          var t = String(tags[i] || "").trim().toLowerCase();
-          var m = t.match(/^(turn|chapter)\s*:\s*(\d+)$/);
-          if (m && m[2]) return Math.max(1, parseInt(m[2], 10));
+  // Edges inside the quest + exit stubs for routes that leave it.
+  const edges = [];
+  const adj = {};
+  const inDeg = {};
+  const stubs = {};   // targetBeatId -> stub node
+  for (const b of beats) inDeg[String(b.id)] = 0;
+  for (const b of beats) {
+    const from = String(b.id);
+    for (const e of _flowBeatEdges(b)) {
+      const target = allById[e.to];
+      if (!target) continue;                      // dangling route — the Census reports it
+      if (byId[e.to]) {
+        if (e.to === from) continue;              // self-loop: a hub returning to itself
+        edges.push({ from, to: e.to, kind: e.kind, label: e.label });
+        (adj[from] = adj[from] || []).push(e.to);
+        inDeg[e.to] = (inDeg[e.to] || 0) + 1;
+      } else {
+        if (!showTravel && isTravel(target)) continue;
+        const sid = "exit:" + e.to;
+        if (!stubs[sid]) {
+          const tq = _flowQuestIdOf(target);
+          stubs[sid] = {
+            id: sid,
+            kind: "exit",
+            label: String(target.label || target.id),
+            targetBeatId: e.to,
+            targetQuestId: tq,
+            questName: (tq === FLOW_UNASSIGNED) ? "(no quest)" : String(questNames[tq] || tq),
+            _order: authIdx.get(e.to) ?? 1e9
+          };
         }
+        edges.push({ from, to: sid, kind: e.kind, label: e.label });
+        (adj[from] = adj[from] || []).push(sid);
       }
-      return null;
-    } catch (e) {
-      return null;
     }
+  }
+
+  // Root: the campaign's opening beat if it belongs here; else the earliest
+  // beat (quest order) nothing inside the quest routes INTO; else the earliest.
+  let rootId = null;
+  const openId = String(campaign?.openingBeatId || "").trim();
+  if (openId && byId[openId]) rootId = openId;
+  if (!rootId && beats.length) {
+    const sorted = beats.slice().sort((a, b) => seqOf(a) - seqOf(b));
+    const orphanRoot = sorted.find(b => !inDeg[String(b.id)]);
+    rootId = String((orphanRoot || sorted[0]).id);
+  }
+
+  // Tidy tree: x = in-order leaf slot, y = depth. Children in quest order.
+  const orderOf = id => {
+    if (stubs[id]) return stubs[id]._order;
+    const b = byId[id];
+    return b ? seqOf(b) : 1e9;
   };
+  const kidsOf = id => (adj[id] || []).slice().sort((a, b) => (orderOf(a) - orderOf(b)) || String(a).localeCompare(String(b)));
 
-  var showTravel = !!opts.showTravel;
-
-  // Cinematic detection (beat.type === "cinematic"). Cinematic beats are
-  // FIRST-CLASS in the visualizer (flow glue) — detected but never excluded;
-  // node/chip renderers use it for the purple accent styling.
-  var isCinematic = function (b) {
-    return String((b && b.type) || "").trim().toLowerCase() === "cinematic";
-  };
-
-  var isTravel = function (b) {
-    try {
-      if (_isTravelBeat(b)) return true;
-    } catch (e) {}
-    if (isTag(b, "travel")) return true;
-    return false;
-  };
-
-  var isMeaningful = function (b) {
-    if (!b || !b.id) return false;
-    // Travel beats are optional lane.
-    if (!showTravel && isTravel(b)) return false;
-    return true;
-  };
-
-  // Determine selected turn: default = latest turn with content
-  var selectedTurn = null;
-  if (opts.turn != null && opts.turn !== "") {
-    var tn = Number(opts.turn);
-    if (isFinite(tn) && tn >= 1) selectedTurn = Math.floor(tn);
-  }
-
-  var turns = [];
-  var seenTurns = {};
-  for (var i = 0; i < beatsAll.length; i++) {
-    var b0 = beatsAll[i];
-    if (!isMeaningful(b0)) continue;
-    var t0 = getTurn(b0);
-    if (t0 == null) continue;
-    if (!seenTurns[t0]) { seenTurns[t0] = true; turns.push(t0); }
-  }
-  turns.sort(function (a, b) { return a - b; });
-
-  if (selectedTurn == null) {
-    // If the caller didn't specify a turn, we treat it as "All".
-    // (UI will show the All Turns option.)
-    if (opts.turn != null && opts.turn !== "" && String(opts.turn) !== "all") {
-      selectedTurn = turns.length ? turns[turns.length - 1] : 1;
-    } else {
-      selectedTurn = null;
-    }
-  }
-
-  // Filter beats by Turn (optional). If selectedTurn is null, include all turns.
-  var beats = [];
-  for (i = 0; i < beatsAll.length; i++) {
-    var b1 = beatsAll[i];
-    if (!isMeaningful(b1)) continue;
-    var t1 = getTurn(b1);
-    if (t1 == null) t1 = 1;
-
-    if (selectedTurn != null && t1 !== selectedTurn) continue;
-    beats.push(b1);
-  }
-
-  // Quest filter (optional): when set, we keep the closure of beats reachable
-  // from any beat with beat.questId === questId (includes cinematics/post glue).
-  var questId = String(opts.questId || "all");
-  if (questId && questId !== "all") {
-    var byAll = {};
-    for (i = 0; i < beatsAll.length; i++) {
-      var bAll = beatsAll[i];
-      if (bAll && bAll.id) byAll[String(bAll.id)] = bAll;
-    }
-
-    // Build global adjacency from all beats (respect travel lane toggle via isMeaningful)
-    var edgesAll = _extractEdges(beatsAll.filter(isMeaningful));
-    var adjAll = {};
-    for (i = 0; i < edgesAll.length; i++) {
-      var ee = edgesAll[i];
-      if (!ee || !ee.from || !ee.to) continue;
-      adjAll[ee.from] = adjAll[ee.from] || [];
-      adjAll[ee.from].push(ee.to);
-    }
-
-    var seeds = [];
-    for (i = 0; i < beatsAll.length; i++) {
-      var qb = beatsAll[i];
-      if (!qb || !qb.id) continue;
-      if (String(qb.questId || "").trim() === questId) seeds.push(String(qb.id));
-    }
-
-    var keep = {};
-    var q = seeds.slice();
-    for (i = 0; i < q.length; i++) keep[q[i]] = true;
-
-    // BFS forward closure (cycle-safe)
-    var guard = 0;
-    while (q.length && guard < 5000) {
-      guard++;
-      var cur = q.shift();
-      var kids = adjAll[cur] || [];
-      for (var k = 0; k < kids.length; k++) {
-        var nx = kids[k];
-        if (!nx) continue;
-        if (keep[nx]) continue;
-        keep[nx] = true;
-        q.push(nx);
-      }
-    }
-
-    // Apply closure to the currently turn-filtered beats list
-    beats = beats.filter(function(bx){
-      return bx && bx.id && keep[String(bx.id)];
-    });
-  }
-
-  // Act filter (Phase Charter, 2026-07-15): slice the graph to one act of the
-  // funnel. A beat's act = the gte of its storyPhase gate; pacing.ambient
-  // beats form their own "ambient" slice; spine/system beats (no storyPhase
-  // gate) only appear under "All Acts".
-  var actFilter = (opts.actFilter == null) ? "all" : String(opts.actFilter);
-  if (actFilter !== "all") {
-    var actOf = function (b) {
-      try {
-        if (b && b.pacing && b.pacing.ambient) return "ambient";
-        var req = b && b.inject && b.inject.requires;
-        var arr = Array.isArray(req) ? req : (req ? [req] : []);
-        for (var ai = 0; ai < arr.length; ai++) {
-          var c = arr[ai];
-          if (c && c.flag === "storyPhase") return String(Math.floor(Number(c.gte != null ? c.gte : c.eq) || 0));
-        }
-        return null;
-      } catch (e) { return null; }
-    };
-    beats = beats.filter(function (bx) { return actOf(bx) === actFilter; });
-  }
-
-  // Scope (play console, 2026-07-15): the Builder authors, the Visualizer
-  // PLAYS. "play" renders the living map only — the trail (fired), the
-  // present (ready / invited / cooling) and the horizon (blocked by exactly
-  // one unmet condition — where a storyPhase gate only counts if it is the
-  // very NEXT act; without that rule every future beat is "one condition
-  // away" from its own phase gate and the whole campaign floods back in).
-  // "all" = the author's full corpus.
-  var scope = (opts.scope == null) ? "all" : String(opts.scope);
-  if (scope === "play" && opts.runtime && opts.runtime.byId) {
-    var curPhase = 0;
-    try { curPhase = Number(game.settings.get("bbttcc-campaign", "storyPhase")) || 0; } catch (ePh) {}
-    var inPlay = function (b) {
-      var rt = opts.runtime.byId[String(b.id)];
-      if (!rt) return false;
-      if (rt.state === "fired" || rt.state === "ready" || rt.state === "cooling") return true;
-      if (rt.invited) return true;
-      if (rt.state === "blocked") {
-        var unmet = (rt.reasons || []).filter(function (r) { return !r.met; });
-        if (unmet.length !== 1) return false;
-        var r0 = unmet[0];
-        if (r0 && r0.kind === "flag" && /^storyPhase\b/.test(String(r0.text || ""))) {
-          var m = String(r0.text).match(/≥\s*(\d+)/);
-          var want = m ? Number(m[1]) : 99;
-          return want <= curPhase + 1;
-        }
-        return true;
-      }
-      return false;
-    };
-    beats = beats.filter(inPlay);
-  }
-
-  // Nodes by id
-  var byId = {};
-  for (i = 0; i < beats.length; i++) byId[String(beats[i].id)] = beats[i];
-
-  // Extract outgoing edges (success/failure + choices + next)
-  var edges = [];
-  var adj = {};
-  var pushEdge = function (fromId, toId, kind, label) {
-    var a = String(fromId || "").trim();
-    var c = String(toId || "").trim();
-    if (!a || !c) return;
-    if (!byId[c]) return; // only within selected turn
-    edges.push({ from: a, to: c, kind: String(kind || "link"), label: String(label || "") });
-    adj[a] = adj[a] || [];
-    adj[a].push(c);
-  };
-
-  for (i = 0; i < beats.length; i++) {
-    var bb = beats[i];
-    if (!bb || !bb.id) continue;
-    var from = String(bb.id);
-
-    if (bb.next) pushEdge(from, bb.next, "next", "Next");
-
-    var o = bb.outcomes || null;
-    if (o) {
-      if (o.success) pushEdge(from, o.success, "success", "Success");
-      if (o.failure) pushEdge(from, o.failure, "failure", "Failure");
-    }
-
-    var ch = Array.isArray(bb.choices) ? bb.choices : [];
-    for (var ci = 0; ci < ch.length; ci++) {
-      var choice = ch[ci];
-      if (!choice) continue;
-      if (choice.next) pushEdge(from, choice.next, "choice", choice.label || ("Choice " + String(ci + 1)));
-      if (choice.failNext) pushEdge(from, choice.failNext, "choice_fail", (choice.label || ("Choice " + String(ci + 1))) + " (Fail)");
-    }
-  }
-
-  // ---------------------------------------------------------------------------
-  // Quest-mode branch (B9 trim): collapse beats to per-quest bubbles, keep
-  // cross-quest edges; allow inline expand to show inner beat chips.
-  // Returns early with the questTree graph if viewMode === "quests".
-  // ---------------------------------------------------------------------------
-  if (String(opts.viewMode || "beats") === "quests") {
-    var UNASSIGNED_Q = "__unassigned__";
-
-    // Group filtered beats by questId (filtered = already turn/quest/travel-aware).
-    var beatToQId = {};
-    var beatsByQId = {};
-    for (var bi2 = 0; bi2 < beats.length; bi2++) {
-      var bq = beats[bi2];
-      if (!bq || !bq.id) continue;
-      var qid = String(bq.questId || "").trim() || UNASSIGNED_Q;
-      beatToQId[String(bq.id)] = qid;
-      (beatsByQId[qid] = beatsByQId[qid] || []).push(bq);
-    }
-
-    // Resolve quest definitions (name + status + order) via the campaign API.
-    var qDefs = {};
-    try {
-      var qapi = game.bbttcc && game.bbttcc.api && game.bbttcc.api.campaign ? game.bbttcc.api.campaign.quests : null;
-      var qList = (qapi && typeof qapi.listQuests === "function")
-        ? qapi.listQuests({ campaignId: campaign.id, status: "all" })
-        : [];
-      for (var qi2 = 0; qi2 < (qList || []).length; qi2++) {
-        var qd = qList[qi2];
-        if (qd && qd.id) qDefs[String(qd.id)] = qd;
-      }
-    } catch (_eQDefs) {}
-
-    // Cross-quest edges (one per quest pair; aggregates link kinds for tooltip).
-    var xEdgeByKey = {};
-    for (var ei2 = 0; ei2 < edges.length; ei2++) {
-      var xe = edges[ei2];
-      var fromQ = beatToQId[xe.from];
-      var toQ = beatToQId[xe.to];
-      if (!fromQ || !toQ) continue;
-      if (fromQ === toQ) continue;
-      var keyX = fromQ + ">>" + toQ;
-      if (!xEdgeByKey[keyX]) {
-        xEdgeByKey[keyX] = {
-          from: "quest:" + fromQ,
-          to: "quest:" + toQ,
-          kind: "cross-quest",
-          label: "",
-          count: 0,
-          kinds: {}
-        };
-      }
-      xEdgeByKey[keyX].count++;
-      xEdgeByKey[keyX].kinds[xe.kind] = (xEdgeByKey[keyX].kinds[xe.kind] || 0) + 1;
-    }
-    var xEdges = Object.values(xEdgeByKey);
-
-    // Sizing constants for quest bubbles + inner beat chips.
-    var Q_NODE_W = 360;
-    var Q_NODE_H_COLLAPSED = 110;
-    var Q_BEAT_CHIP_H = 30;
-    var Q_BEAT_CHIP_PAD = 6;
-    var Q_EXPAND_HEADER = 78;   // header space above inner chips
-    var Q_EXPAND_FOOTER = 14;
-
-    var expandedSet = (opts.expandedQuests instanceof Set) ? opts.expandedQuests : new Set();
-
-    // Build quest nodes (variable height).
-    var qNodes = [];
-    var qOrderCounter = 0;
-    for (var qkey in beatsByQId) {
-      if (!Object.prototype.hasOwnProperty.call(beatsByQId, qkey)) continue;
-      var qbeats = beatsByQId[qkey];
-      var isUnassigned = (qkey === UNASSIGNED_Q);
-      var def = isUnassigned ? null : qDefs[qkey];
-      var qName = isUnassigned ? "Unassigned" : ((def && def.name) ? def.name : qkey);
-      var qStatus = isUnassigned ? "" : ((def && def.status) ? def.status : "active");
-      var expanded = !isUnassigned && expandedSet.has(qkey);
-      var innerH = expanded
-        ? (Q_EXPAND_HEADER + qbeats.length * (Q_BEAT_CHIP_H + Q_BEAT_CHIP_PAD) + Q_EXPAND_FOOTER)
-        : Q_NODE_H_COLLAPSED;
-
-      qNodes.push({
-        id: "quest:" + qkey,
-        kind: "quest",
-        questId: qkey,
-        isUnassigned: isUnassigned,
-        name: qName,
-        status: qStatus,
-        expanded: expanded,
-        beats: qbeats.slice(),
-        beatCount: qbeats.length,
-        width: Q_NODE_W,
-        height: innerH,
-        _order: qOrderCounter++
-      });
-    }
-
-    // Deterministic sort: unassigned last, otherwise quest.order asc, then name.
-    qNodes.sort(function (a, b) {
-      if (a.isUnassigned !== b.isUnassigned) return a.isUnassigned ? 1 : -1;
-      var ao = (qDefs[a.questId] && qDefs[a.questId].order != null) ? Number(qDefs[a.questId].order) : 999999;
-      var bo = (qDefs[b.questId] && qDefs[b.questId].order != null) ? Number(qDefs[b.questId].order) : 999999;
-      if (ao !== bo) return ao - bo;
-      return String(a.name).localeCompare(String(b.name));
-    });
-
-    // ID -> node + adjacency.
-    var qById = {};
-    for (var qni = 0; qni < qNodes.length; qni++) qById[qNodes[qni].id] = qNodes[qni];
-
-    var qAdj = {};
-    for (var xei = 0; xei < xEdges.length; xei++) {
-      var xeE = xEdges[xei];
-      if (!qById[xeE.from] || !qById[xeE.to]) continue;
-      (qAdj[xeE.from] = qAdj[xeE.from] || []).push(xeE.to);
-    }
-
-    // Roots = nodes with no incoming edge (fallback: all if cyclic).
-    var inDeg = {};
-    for (var idn = 0; idn < qNodes.length; idn++) inDeg[qNodes[idn].id] = 0;
-    for (var sa in qAdj) {
-      if (!Object.prototype.hasOwnProperty.call(qAdj, sa)) continue;
-      var list = qAdj[sa];
-      for (var li = 0; li < list.length; li++) {
-        if (inDeg[list[li]] != null) inDeg[list[li]]++;
-      }
-    }
-    var qRoots = qNodes.filter(function (n) { return inDeg[n.id] === 0; });
-    if (!qRoots.length && qNodes.length) qRoots = [qNodes[0]];
-
-    // Tidy-tree layout over the cross-quest DAG.
-    var qLeaf = {};
-    var qVisit = {};
-    var countLeavesQ = function (id) {
-      if (qLeaf[id] != null) return qLeaf[id];
-      if (qVisit[id]) return 1;
-      qVisit[id] = true;
-      var ks = qAdj[id] || [];
-      if (!ks.length) { qLeaf[id] = 1; qVisit[id] = false; return 1; }
-      var sum = 0;
-      for (var ki = 0; ki < ks.length; ki++) sum += countLeavesQ(ks[ki]);
-      qLeaf[id] = Math.max(1, sum);
-      qVisit[id] = false;
-      return qLeaf[id];
-    };
-    for (var ri2 = 0; ri2 < qRoots.length; ri2++) countLeavesQ(qRoots[ri2].id);
-
-    var qAssigned = {};
-    var qXPos = {};
-    var qDepthOf = {};
-    var qCursor = 0;
-    var assignQ = function (id, depth) {
-      if (qAssigned[id]) return;
-      qAssigned[id] = true;
-      qDepthOf[id] = depth;
-      var ks = (qAdj[id] || []).slice();
-      ks.sort(function (a, b) {
-        var ao = qById[a] ? qById[a]._order : 999999;
-        var bo = qById[b] ? qById[b]._order : 999999;
-        return ao - bo;
-      });
-      if (!ks.length) { qXPos[id] = qCursor++; return; }
-      for (var ki = 0; ki < ks.length; ki++) assignQ(ks[ki], depth + 1);
-      var minx = Infinity, maxx = -Infinity;
-      for (var kj = 0; kj < ks.length; kj++) {
-        var cx = qXPos[ks[kj]];
-        if (cx < minx) minx = cx;
-        if (cx > maxx) maxx = cx;
-      }
-      qXPos[id] = (isFinite(minx) && isFinite(maxx)) ? (minx + maxx) / 2 : qCursor++;
-    };
-    for (var ri3 = 0; ri3 < qRoots.length; ri3++) assignQ(qRoots[ri3].id, 0);
-    // Catch orphan / cycle-only nodes.
-    for (var on = 0; on < qNodes.length; on++) {
-      if (!qAssigned[qNodes[on].id]) assignQ(qNodes[on].id, 0);
-    }
-
-    // Per-depth max height drives the vertical stacking.
-    var maxHByDepth = {};
-    for (var di2 = 0; di2 < qNodes.length; di2++) {
-      var dnode = qNodes[di2];
-      var d = qDepthOf[dnode.id] || 0;
-      if (!maxHByDepth[d] || dnode.height > maxHByDepth[d]) maxHByDepth[d] = dnode.height;
-    }
-    var depthKeys = Object.keys(maxHByDepth).map(Number).sort(function (a, b) { return a - b; });
-    var yOfDepth = {};
-    var yAcc = 100;
-    var QGAP_Y = 90;
-    for (var dk = 0; dk < depthKeys.length; dk++) {
-      yOfDepth[depthKeys[dk]] = yAcc;
-      yAcc += maxHByDepth[depthKeys[dk]] + QGAP_Y;
-    }
-
-    // Normalize xPos to pixels.
-    var minLeafQ = Infinity, maxLeafQ = -Infinity;
-    for (var xk in qXPos) {
-      if (!Object.prototype.hasOwnProperty.call(qXPos, xk)) continue;
-      var vx = qXPos[xk];
-      if (vx < minLeafQ) minLeafQ = vx;
-      if (vx > maxLeafQ) maxLeafQ = vx;
-    }
-    if (!isFinite(minLeafQ)) minLeafQ = 0;
-    if (!isFinite(maxLeafQ)) maxLeafQ = 0;
-
-    var QGAP_X = 440;
-    var QPAD_X = 120;
-    var qPos = {};
-    var qMaxX = 0, qMaxY = 0;
-    for (var pi2 = 0; pi2 < qNodes.length; pi2++) {
-      var pn = qNodes[pi2];
-      var xL = (qXPos[pn.id] != null) ? qXPos[pn.id] : 0;
-      var dP = qDepthOf[pn.id] || 0;
-      var xPixQ = QPAD_X + Math.floor((xL - minLeafQ) * QGAP_X);
-      var yPixQ = (yOfDepth[dP] != null) ? yOfDepth[dP] : 100;
-      qPos[pn.id] = { x: xPixQ, y: yPixQ };
-      if (xPixQ + pn.width > qMaxX) qMaxX = xPixQ + pn.width;
-      if (yPixQ + pn.height > qMaxY) qMaxY = yPixQ + pn.height;
-    }
-
-    var qRootId = (qRoots[0] && qRoots[0].id) || (qNodes[0] && qNodes[0].id) || null;
-
-    return {
-      v: 4,
-      mode: "questTree",
-      viewMode: "quests",
-      turnNumber: selectedTurn,
-      turns: turns,
-      nodes: qNodes,
-      edges: xEdges,
-      pos: qPos,
-      size: { w: Math.max(1800, qMaxX + QPAD_X), h: Math.max(800, qMaxY + 100) },
-      constants: {
-        NODE_W: Q_NODE_W,
-        NODE_H: Q_NODE_H_COLLAPSED,
-        BEAT_CHIP_H: Q_BEAT_CHIP_H,
-        BEAT_CHIP_PAD: Q_BEAT_CHIP_PAD,
-        EXPAND_HEADER: Q_EXPAND_HEADER
-      },
-      rootId: qRootId
-    };
-  }
-
-  // ---------------------------------------------------------------------------
-  // Lane-mode branch (Atlas census follow-up, 2026-07-14): quest lanes × authoring
-  // order. Unlike the tree modes this shows EVERY filtered beat (no root-
-  // reachability pruning — orphan constellations stay visible), one horizontal
-  // lane per quest, x = authoring order. Gates (inject.requires) surface as a
-  // node badge + tooltip. Returns early with the laneGrid graph.
-  // ---------------------------------------------------------------------------
-  if (String(opts.viewMode || "beats") === "lanes") {
-    var UNASSIGNED_L = "__unassigned__";
-
-    // Resolve quest definitions (name + status + order) via the campaign API.
-    var lDefs = {};
-    try {
-      var lapi = game.bbttcc && game.bbttcc.api && game.bbttcc.api.campaign ? game.bbttcc.api.campaign.quests : null;
-      var lList = (lapi && typeof lapi.listQuests === "function")
-        ? lapi.listQuests({ campaignId: campaign.id, status: "all" })
-        : [];
-      for (var lqi = 0; lqi < (lList || []).length; lqi++) {
-        var lqd = lList[lqi];
-        if (lqd && lqd.id) lDefs[String(lqd.id)] = lqd;
-      }
-    } catch (_eLDefs) {}
-
-    // Human-readable gate strings from beat.inject.requires.
-    var gateStrings = function (b) {
-      try {
-        var req = b && b.inject && b.inject.requires;
-        if (!req) return [];
-        var arr = Array.isArray(req) ? req : [req];
-        var out = [];
-        for (var gi = 0; gi < arr.length; gi++) {
-          var c = arr[gi];
-          if (!c || typeof c !== "object") continue;
-          if (c.flag) {
-            var op = (c.gte != null) ? ("≥ " + c.gte) : (c.lte != null) ? ("≤ " + c.lte) : (c.eq != null) ? ("= " + c.eq) : "?";
-            out.push(String(c.flag) + " " + op);
-          } else if (c.questBucket) {
-            var qn = (lDefs[String(c.questBucket)] && lDefs[String(c.questBucket)].name) || String(c.questBucket);
-            out.push("quest “" + qn + "” " + (c.is ? ("is " + c.is) : ("not " + c.isNot)));
-          } else if (c.beatMark) {
-            out.push("beat “" + String(c.beatMark) + "” " + String(c.state || "seen"));
-          }
-        }
-        return out;
-      } catch (eG) { return []; }
-    };
-
-    // Group filtered beats by questId, preserving authoring order within lanes.
-    var laneBeats = {};
-    for (var lbi = 0; lbi < beats.length; lbi++) {
-      var lb = beats[lbi];
-      if (!lb || !lb.id) continue;
-      var lqid = String(lb.questId || "").trim() || UNASSIGNED_L;
-      (laneBeats[lqid] = laneBeats[lqid] || []).push({ beat: lb, order: lbi });
-    }
-
-    // Lane order: quest.order asc, then name; unassigned last.
-    var laneIds = Object.keys(laneBeats);
-    var laneName = function (qid) {
-      if (qid === UNASSIGNED_L) return "Unassigned";
-      return (lDefs[qid] && lDefs[qid].name) ? String(lDefs[qid].name) : qid;
-    };
-    laneIds.sort(function (a, b) {
-      var au = (a === UNASSIGNED_L), bu = (b === UNASSIGNED_L);
-      if (au !== bu) return au ? 1 : -1;
-      var ao = (lDefs[a] && lDefs[a].order != null) ? Number(lDefs[a].order) : 999999;
-      var bo = (lDefs[b] && lDefs[b].order != null) ? Number(lDefs[b].order) : 999999;
-      if (ao !== bo) return ao - bo;
-      return laneName(a).localeCompare(laneName(b));
-    });
-
-    var L_NODE_W = 420;
-    var L_NODE_H = 130;
-    var L_PAD_X = 150;
-    var L_PAD_Y = 96;     // room for the first lane label
-    var L_GAP_X = 70;     // dense horizontal rhythm inside a lane
-    var L_GAP_Y = 130;    // lane pitch gap (label lives in here)
-
-    var lNodes = [];
-    var lPos = {};
-    var lanesMeta = [];
-    var lMaxX = 0, lMaxY = 0;
-
-    for (var li2 = 0; li2 < laneIds.length; li2++) {
-      var lid = laneIds[li2];
-      var rows = laneBeats[lid];
-      var yPix2 = L_PAD_Y + li2 * (L_NODE_H + L_GAP_Y);
-      var lStatus = (lid !== UNASSIGNED_L && lDefs[lid] && lDefs[lid].status) ? String(lDefs[lid].status) : "";
-      lanesMeta.push({ id: lid, name: laneName(lid), status: lStatus, count: rows.length, y: yPix2 });
-
-      for (var lni = 0; lni < rows.length; lni++) {
-        var lbb = rows[lni].beat;
-        var lId = String(lbb.id);
-        var lTurn = getTurn(lbb);
-        var xPix2 = L_PAD_X + lni * (L_NODE_W + L_GAP_X);
-        lNodes.push({
-          id: lId,
-          label: String(lbb.label || lbb.id || lId),
-          type: String(lbb.type || "custom"),
-          timeScale: String(lbb.timeScale || "scene"),
-          turnNumber: (lTurn == null) ? null : lTurn,
-          isTravel: isTravel(lbb),
-          isCinematic: isCinematic(lbb),
-          gates: gateStrings(lbb),
-          rt: (opts.runtime && opts.runtime.byId && opts.runtime.byId[lId]) || null,
-          laneId: lid,
-          _order: rows[lni].order
-        });
-        lPos[lId] = { x: xPix2, y: yPix2 };
-        if (xPix2 + L_NODE_W > lMaxX) lMaxX = xPix2 + L_NODE_W;
-        if (yPix2 + L_NODE_H > lMaxY) lMaxY = yPix2 + L_NODE_H;
-      }
-    }
-
-    return {
-      v: 4,
-      mode: "laneGrid",
-      viewMode: "lanes",
-      turnNumber: selectedTurn,
-      turns: turns,
-      nodes: lNodes,
-      edges: edges,          // all beat-level edges among filtered beats — no pruning
-      pos: lPos,
-      lanes: lanesMeta,
-      // Tight floors — a single filtered lane should not float in dead space.
-      size: { w: Math.max(1200, lMaxX + L_PAD_X), h: Math.max(360, lMaxY + 110) },
-      constants: { NODE_W: L_NODE_W, NODE_H: L_NODE_H },
-      rootId: (lNodes[0] && lNodes[0].id) || null
-    };
-  }
-
-  // Root = first meaningful beat in authoring order (selected turn)
-  var rootId = (beats[0] && beats[0].id) ? String(beats[0].id) : null;
-
-  // Layout: tidy tree using leaf counts, with cycle guards
-  var leafCount = {};
-  var visiting = {};
-
-  var countLeaves = function (id) {
-    id = String(id || "");
-    if (!id) return 1;
-    if (leafCount[id] != null) return leafCount[id];
-    if (visiting[id]) return 1;
-    visiting[id] = true;
-    var kids = adj[id] || [];
-    if (!kids.length) {
-      leafCount[id] = 1;
-      visiting[id] = false;
-      return 1;
-    }
-    var sum = 0;
-    for (var k = 0; k < kids.length; k++) sum += countLeaves(kids[k]);
-    leafCount[id] = Math.max(1, sum);
-    visiting[id] = false;
-    return leafCount[id];
-  };
-
-  if (rootId) countLeaves(rootId);
-
-  // assign x positions by in-order leaves
-  var assigned = {};
-  var xPos = {};
-  var yPos = {};
-  var cursor = 0;
-
-  var assign = function (id, depth) {
-    id = String(id || "");
-    if (!id) return;
+  const assigned = {};
+  const xPos = {};
+  const yPos = {};
+  let cursor = 0;
+  const assign = (id, depth) => {
     if (assigned[id]) return;
     assigned[id] = true;
-
-    var kids = adj[id] || [];
-    if (!kids.length) {
-      var x = cursor;
-      cursor += 1;
-      xPos[id] = x;
-      yPos[id] = depth;
-      return;
-    }
-
-    // Ensure deterministic order based on authoring order
-    kids = kids.slice();
-    kids.sort(function (a, b) {
-      var oa = 999999, ob = 999999;
-      var ba = byId[a], bb2 = byId[b];
-      if (ba && ba._order != null) oa = Number(ba._order);
-      if (bb2 && bb2._order != null) ob = Number(bb2._order);
-      if (oa < ob) return -1;
-      if (oa > ob) return 1;
-      return String(a).localeCompare(String(b));
-    });
-
-    for (var i2 = 0; i2 < kids.length; i2++) assign(kids[i2], depth + 1);
-
-    // x is average of children's x
-    var minx = Infinity, maxx = -Infinity;
-    for (i2 = 0; i2 < kids.length; i2++) {
-      var cx = xPos[kids[i2]];
-      if (cx < minx) minx = cx;
-      if (cx > maxx) maxx = cx;
-    }
-    if (!isFinite(minx) || !isFinite(maxx)) {
-      xPos[id] = cursor;
-      cursor += 1;
-    } else {
-      xPos[id] = (minx + maxx) / 2;
-    }
+    const kids = kidsOf(id).filter(k => !assigned[k]);
+    if (!kids.length) { xPos[id] = cursor++; yPos[id] = depth; return; }
+    for (const k of kids) assign(k, depth + 1);
+    let minx = Infinity, maxx = -Infinity;
+    for (const k of kids) { const cx = xPos[k]; if (cx < minx) minx = cx; if (cx > maxx) maxx = cx; }
+    xPos[id] = (isFinite(minx) && isFinite(maxx)) ? (minx + maxx) / 2 : cursor++;
     yPos[id] = depth;
   };
-
-  // Stamp authoring order onto beats for stable sort above
-  for (i = 0; i < beats.length; i++) {
-    try { beats[i]._order = i; } catch (e) {}
-  }
-
   if (rootId) assign(rootId, 0);
-
-  // Forest pass (2026-07-14): the old layout only rendered beats REACHABLE
-  // from the first beat — a quest whose opening beat had no outgoing links
-  // (e.g. a dialog beat other beats route INTO) showed as "1 node". Every
-  // beat not yet placed now roots its own tree, laid out to the right in
-  // authoring order, so Beats view always shows the full filtered set.
-  for (i = 0; i < beats.length; i++) {
-    var bidF = String(beats[i].id);
-    if (!assigned[bidF]) assign(bidF, 0);
+  // Forest pass: beats nothing routes into (side entrances, dialogue-only
+  // beats) root their own trees to the right, in quest order.
+  for (const b of beats.slice().sort((a, b) => seqOf(a) - seqOf(b))) {
+    const id = String(b.id);
+    if (!assigned[id]) assign(id, 0);
   }
 
-  // Every filtered beat is placed — render them all.
-  var reachable = assigned;
+  const NODE_W = 300, NODE_H = 92, STUB_W = 232, STUB_H = 46;
+  const PAD_X = 60, PAD_Y = 70, GAP_X = 340, GAP_Y = 160;
 
-  var nodes = [];
-  for (i = 0; i < beats.length; i++) {
-    var b2 = beats[i];
-    var id2 = String(b2.id);
-    if (!reachable[id2]) continue;
-    var tn2 = getTurn(b2);
-    if (tn2 == null) tn2 = 1;
-    nodes.push({
-      id: id2,
-      label: String(b2.label || b2.id || id2),
-      type: String(b2.type || "custom"),
-      timeScale: String(b2.timeScale || "scene"),
-      turnNumber: tn2,
-      isTravel: false,
-      isCinematic: isCinematic(b2),
-      rt: (opts.runtime && opts.runtime.byId && opts.runtime.byId[id2]) || null,
-      _order: i
-    });
-  }
-
-  // Build pos in pixels (SPACING + READABILITY PASS)
-  var NODE_W = 420;      // wider chips = less wrapping
-  var NODE_H = 130;      // taller chips to allow 2–3 lines
-  var PAD_X  = 140;
-  var PAD_Y  = 90;
-  var GAP_X  = 420;      // more horizontal breathing room
-  var GAP_Y  = 400;      // THIS fixes vertical overlap
-
-  var pos = {};
-  var maxX = 0, maxY = 0;
-
-  // center root in view: normalize x positions
-  var minLeaf = Infinity, maxLeaf = -Infinity;
-  for (var nid in xPos) {
-    if (!Object.prototype.hasOwnProperty.call(xPos, nid)) continue;
-    var xv = xPos[nid];
-    if (xv < minLeaf) minLeaf = xv;
-    if (xv > maxLeaf) maxLeaf = xv;
-  }
+  let minLeaf = Infinity;
+  for (const k in xPos) if (xPos[k] < minLeaf) minLeaf = xPos[k];
   if (!isFinite(minLeaf)) minLeaf = 0;
-  if (!isFinite(maxLeaf)) maxLeaf = 0;
 
-  for (i = 0; i < nodes.length; i++) {
-    var nid2 = nodes[i].id;
-    var px = xPos[nid2];
-    var py = yPos[nid2];
-    if (px == null) px = 0;
-    if (py == null) py = 0;
-
-    var xPix = PAD_X + Math.floor((px - minLeaf) * GAP_X);
-    var yPix = PAD_Y + Math.floor(py * GAP_Y);
-    pos[nid2] = { x: xPix, y: yPix };
-    if (xPix + NODE_W > maxX) maxX = xPix + NODE_W;
-    if (yPix + NODE_H > maxY) maxY = yPix + NODE_H;
+  const nodes = [];
+  const pos = {};
+  let maxX = 0, maxY = 0;
+  const place = (n, w, h) => {
+    const x = PAD_X + Math.floor(((xPos[n.id] ?? 0) - minLeaf) * GAP_X) + Math.floor((NODE_W - w) / 2);
+    const y = PAD_Y + Math.floor((yPos[n.id] ?? 0) * GAP_Y);
+    pos[n.id] = { x, y };
+    n.width = w; n.height = h;
+    if (x + w > maxX) maxX = x + w;
+    if (y + h > maxY) maxY = y + h;
+    nodes.push(n);
+  };
+  for (const b of beats) {
+    const id = String(b.id);
+    if (!assigned[id]) continue;
+    place({
+      id,
+      kind: "beat",
+      label: String(b.label || b.id || id),
+      type: String(b.type || "custom"),
+      timeScale: String(b.timeScale || "scene"),
+      isTravel: isTravel(b),
+      isCinematic: isCinematic(b),
+      hasChoices: Array.isArray(b.choices) && b.choices.some(c => String(c?.label || "").trim()),
+      rt: (runtime && runtime.byId && runtime.byId[id]) || null
+    }, NODE_W, NODE_H);
   }
-
-  // Filter edges to reachable set
-  var edgesOut = [];
-  for (i = 0; i < edges.length; i++) {
-    var e2 = edges[i];
-    if (!reachable[e2.from] || !reachable[e2.to]) continue;
-    edgesOut.push(e2);
-  }
+  for (const sid of Object.keys(stubs)) if (assigned[sid]) place(stubs[sid], STUB_W, STUB_H);
 
   return {
-    v: 4,
-    mode: "turnTree",
-    turnNumber: selectedTurn,
-    turns: turns,
-    nodes: nodes,
-    edges: edgesOut,
-    pos: pos,
-    size: { w: Math.max(1800, maxX + PAD_X), h: Math.max(1100, maxY + PAD_Y) },
-    constants: { NODE_W: NODE_W, NODE_H: NODE_H },
-    rootId: rootId
+    v: 5,
+    mode: "questTree",
+    questId,
+    nodes,
+    edges,
+    pos,
+    size: { w: Math.max(900, maxX + PAD_X), h: Math.max(500, maxY + PAD_Y) },
+    constants: { NODE_W, NODE_H, STUB_W, STUB_H },
+    rootId,
+    beatCount: beats.length,
+    firedCount: beats.filter(b => runtime?.byId?.[String(b.id)]?.fired).length
   };
 }
-
-
 
 function _svgEscape(s) {
   return String(s ?? "")
@@ -1413,25 +721,13 @@ export class BBTTCCCampaignBuilderApp extends Application {
     this.questStatusFilter = options.questStatusFilter ?? "all"; // "all" | active | completed | archived
     this.questSearch = options.questSearch ?? "";
 
-    // Flow Visualizer UI state (non-persistent)
+    // Flow Visualizer UI state (2026-09-07: one quest at a time)
     this.flowShowTravel = !!options.flowShowTravel;
     this.flowZoom = Number(options.flowZoom ?? 1) || 1;
     this.flowPan = { x: Number(options.flowPanX ?? 0) || 0, y: Number(options.flowPanY ?? 0) || 0 };
-    this.flowTurn = (options.flowTurn != null) ? options.flowTurn : null;
-
-
-    // NEW: Quest filter for Visualizer
-    this.flowQuestId = options.flowQuestId ?? "all";
-
-    // NEW (B9 trim): View mode + expanded-quest set for quest-mode overview
-    //   - "beats" = legacy per-beat decision tree
-    //   - "quests" = per-quest bubbles; click bubble to expand inner beats
-    // Pulled from user flag if present; default = "quests" (the overview is the more useful first impression).
-    let _viewModeFlag = null;
-    try { _viewModeFlag = game.user?.getFlag?.("bbttcc-campaign", "flowViewMode") ?? null; } catch (_e) {}
-    this.flowViewMode = options.flowViewMode || _viewModeFlag || "quests";
-    if (this.flowViewMode !== "beats" && this.flowViewMode !== "quests" && this.flowViewMode !== "lanes") this.flowViewMode = "quests";
-    this.flowExpandedQuests = new Set(); // questIds expanded inline (session-scope)
+    this.flowQuestId = options.flowQuestId ?? null;   // charted quest (null = decide on mount)
+    this.flowFollow = null;                            // null = read the per-user flag on mount
+    this.flowSelectedBeatId = null;                    // selected card (Run / Edit)
 
     // Debounced renders for text inputs (prevents focus loss while typing)
     this._renderDebounceTimers = {};
@@ -2008,110 +1304,70 @@ const activeCampaignId = _getActiveCampaignId();
   }
 
   // -----------------------------------------------------------------------
-  // Now Panel (situation-console Stage 2, 2026-07-14): the right rail —
-  // where the world stands, what pressure it's under, what can happen next.
+  // Situation (2026-09-07): ONE computation of where the story stands, read
+  // by both the chart (which quest to follow, which beat to light as NEXT)
+  // and the rail. Returns data, not HTML.
+  //   anchor        — the freshest fired SPINE beat (ambient/travel/discovery
+  //                   beats never steer the story)
+  //   anchorQuestId — the quest the story is standing in
+  //   hero          — { kicker, title, beat, quest, runs:[{id,text}], note }
+  //   nextIds       — beats the hero is pointing at (chart highlight)
+  //   recent        — last fired, newest first
+  //   choices       — the choice ledger, newest first
+  //   completed     — quests with status completed, newest first
+  // The hero's decision ladder carries a year of live-caught lessons (dated
+  // inline) — port them, don't "simplify" them.
   // -----------------------------------------------------------------------
-  async _buildNowPanel(campaign, runtime) {
-    if (!runtime || !campaign) return null;
+  _computeSituation(campaign, runtime) {
     const NS = "bbttcc-campaign";
     const api = game.bbttcc?.api?.campaign;
-    const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-    const beats = Array.isArray(campaign.beats) ? campaign.beats : [];
+    const beats = Array.isArray(campaign?.beats) ? campaign.beats : [];
     const beatById = {};
     for (const b of beats) if (b?.id) beatById[String(b.id)] = b;
 
-    let questNames = {};
+    const questDefs = {};
     try {
-      for (const q of (api?.quests?.listQuests?.({ status: "all" }) || [])) questNames[q.id] = q.name || q.id;
+      for (const q of (api?.quests?.listQuests?.({ status: "all" }) || [])) if (q?.id) questDefs[String(q.id)] = q;
     } catch (_e) {}
+    const questNames = {};
+    for (const [id, q] of Object.entries(questDefs)) questNames[id] = q.name || id;
     const questOf = b => b?.questId ? (questNames[String(b.questId)] || String(b.questId)) : "";
 
-    const flyBtn = (id, label, extra = "", runnable = false) =>
-      `<div class="bbttcc-now-row">` +
-      `<button type="button" class="bbttcc-now-item" data-fly="${esc(id)}"><span class="t">${esc(label)}</span>${extra ? `<span class="x">${extra}</span>` : ""}</button>` +
-      `<button type="button" class="bbttcc-now-info" data-info="${esc(id)}" data-tooltip="Show the full beat description">ⓘ</button>` +
-      (runnable ? `<button type="button" class="bbttcc-now-run" data-run="${esc(id)}" data-tooltip="Run this beat now">▶</button>` : "") +
-      `</div>`;
-
-    // ── chains ────────────────────────────────────────────────────────────
-    let chainsHtml = "";
-    let chainsSignal = false;   // any progress → section opens
-    try {
-      const chains = await api?.director?.chains?.() || {};
-      const rows = [];
-      for (const [name, list] of Object.entries(chains)) {
-        if (!Array.isArray(list) || !list.length) continue;
-        const fired = list.filter(x => x.fired).length;
-        if (fired > 0) chainsSignal = true;
-        const next = list.find(x => !x.fired);
-        const pct = Math.round((fired / list.length) * 100);
-        rows.push(
-          `<div class="bbttcc-now-chain">
-            <div class="hd"><span class="nm">${esc(name)}</span><span class="ct">${fired}/${list.length}</span></div>
-            <div class="bar"><i style="width:${pct}%"></i></div>
-            ${next ? flyBtn(next.beatId, "→ " + (next.label || next.beatId), next.eligible ? "⚡" : "⛩", !!next.eligible) : `<div class="done">chain complete</div>`}
-          </div>`);
-      }
-      if (rows.length) chainsHtml = rows.join("");
-    } catch (_e) {}
-
-    // ── pressures / meters ────────────────────────────────────────────────
-    const getSetting = (k, d = 0) => { try { const v = game.settings.get(NS, k); return v == null ? d : v; } catch (_e) { return d; } };
-    let pressure = 0;
-    try { pressure = Number(api?.director?.state?.()?.pressure) || 0; } catch (_e) {}
-    const pThresh = Number(getSetting("director.pressureThreshold", 60)) || 60;
-    const wendigo = Number(getSetting("wendigoRung", 0)) || 0;
-    const meterRow = (label, val, max = null) => {
-      const pct = max ? Math.min(100, Math.round((Number(val) / max) * 100)) : null;
-      return `<div class="bbttcc-now-meter"><span class="lb">${esc(label)}</span>` +
-        (pct != null ? `<span class="bar"><i style="width:${pct}%"></i></span>` : "") +
-        `<span class="vl">${esc(String(val))}${max ? " / " + max : ""}</span></div>`;
-    };
-    let metersHtml =
-      meterRow("Director pressure", pressure, pThresh) +
-      meterRow("Wendigo rung", wendigo, 4) +
-      meterRow("Bandit mercy", getSetting("banditMercy")) +
-      meterRow("Bandit fear", getSetting("banditFear")) +
-      meterRow("Cadence respect", getSetting("cadenceRespect")) +
-      meterRow("Cadence tribute", getSetting("cadenceTribute")) +
-      meterRow("Cadence uncontested", getSetting("cadenceUncontested"));
-    const metersSignal = (pressure > 0) || (wendigo > 0) ||
-      ["banditMercy", "banditFear", "cadenceRespect", "cadenceTribute", "cadenceUncontested"]
-        .some(k => (Number(getSetting(k)) || 0) > 0);
-
-    // ── faction relations (non-neutral pairs, most extreme first) ────────
-    let relHtml = "";
-    let relSignal = false;
-    try {
-      const rel = game.bbttcc?.api?.factions?.relations;
-      if (rel?.list) {
-        const factions = game.actors.filter(a => {
-          try { return !!a.getFlag("bbttcc-factions", "isFaction") || a.system?.details?.type?.value === "faction"; }
-          catch (_e) { return false; }
-        });
-        let pairs = [];
-        for (const f of factions) {
-          for (const r of (rel.list(f.id) || [])) {
-            if (!r || String(r.tier) === "neutral") continue;
-            pairs.push({ from: f.name, to: r.name, tier: String(r.tier), idx: Number(r.tierIdx ?? 3) });
-          }
-        }
-        pairs.sort((a, b) => Math.abs(b.idx - 3) - Math.abs(a.idx - 3));
-        pairs = pairs.slice(0, 10);
-        relSignal = pairs.length > 0;
-        const tierCls = t => (t === "at_war" || t === "hostile") ? "bad" : (t === "unfriendly") ? "warn" : "good";
-        relHtml = pairs.map(p =>
-          `<div class="bbttcc-now-rel ${tierCls(p.tier)}"><span class="a">${esc(p.from)}</span> ▸ <span class="b">${esc(p.to)}</span><span class="tr">${esc(p.tier.replace("_", " "))}</span></div>`
-        ).join("") || `<div class="bbttcc-now-empty">all quiet — every relation neutral</div>`;
-      }
-    } catch (_e) {}
-
-    // ── available now / coming up / recent (play-console pass 2026-07-15) ─
-    const AUTO_ICO = { director: "⚙", inject: "🎲", hex: "⬢", dialogue: "🗣" };
     let curPhase = 0;
     try { curPhase = Number(game.settings.get(NS, "storyPhase")) || 0; } catch (_e) {}
 
-    // "Slide 03 — …" beats "Offices of Fates and Destini…" ×20.
+    const isAmbientBeat = b => !!b?.pacing?.ambient;
+    const isDiscoveryBeat = b => !!b?.targetHexUuid || /\bdiscovery\b/i.test(String(b?.tags || ""));
+    const isTravelBeat = b => String(b?.timeScale) === "leg";
+    // hero.note is rendered as HTML (it carries <b>) — every authored string
+    // that lands in it goes through esc here.
+    const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+    let ds = {};
+    try { ds = api?.director?.state?.() || {}; } catch (_e) { ds = {}; }
+    const firedSet = new Set([...Object.keys(ds.firedStoryBeats || {}), ...Object.keys(ds.dialogueFired || {})]);
+
+    // Fired history: a speaker beat fired through the menu lands in BOTH
+    // ledgers — merge by id, keep the record that knows its turn, freshest ts.
+    const byBeat = new Map();
+    for (const src of [ds.firedStoryBeats || {}, ds.dialogueFired || {}]) {
+      for (const [id, m] of Object.entries(src)) {
+        const row = { id, turn: m?.turn, ts: Number(m?.ts) || 0 };
+        const prev = byBeat.get(id);
+        if (!prev) { byBeat.set(id, row); continue; }
+        byBeat.set(id, { id, turn: prev.turn != null ? prev.turn : row.turn, ts: Math.max(prev.ts, row.ts) });
+      }
+    }
+    const hist = [...byBeat.values()].filter(h => beatById[h.id]).sort((a, b) => b.ts - a.ts);
+    const histCount = hist.length;
+    const anchorId = hist.find(h => {
+      const b = beatById[h.id];
+      return b && !isAmbientBeat(b) && !isDiscoveryBeat(b) && !isTravelBeat(b);
+    })?.id ?? null;
+    const anchor = anchorId ? beatById[anchorId] : null;
+
+    const _authIdx = new Map(beats.map((b, i) => [String(b.id), i]));
+    const seqOf = b => _flowSeqOf(b, _authIdx);
     const stripPrefix = (label, qn) => {
       const l = String(label || ""), q = String(qn || "");
       if (q && l.toLowerCase().startsWith(q.toLowerCase())) {
@@ -2120,354 +1376,272 @@ const activeCampaignId = _getActiveCampaignId();
       }
       return l;
     };
-    const isAmbientBeat = b => !!b?.pacing?.ambient;
-    // Location-anchored discovery beats (2026-08-23): a beat tagged
-    // `discovery` (or carrying targetHexUuid) waits on the party ARRIVING
-    // somewhere — listing it as "available" reads as a choice when it isn't
-    // one (the grief-refusal delights topped the list before the game began).
-    const isDiscoveryBeat = b => !!b?.targetHexUuid || /\bdiscovery\b/i.test(String(b?.tags || ""));
-    // Travel-leg beats (canon: timeScale === "leg") fire through the travel
-    // tables — "available" is not actionable information for them (2026-08-24:
-    // The Tent at the Edge of Town topped the list at the town gate).
-    const isTravelBeat = b => String(b?.timeScale) === "leg";
-    // Fired beats leave the available list and light the Recently-fired rail.
-    let firedSet = new Set();
-    try {
-      const ds0 = api?.director?.state?.() || {};
-      firedSet = new Set([...Object.keys(ds0.firedStoryBeats || {}), ...Object.keys(ds0.dialogueFired || {})]);
-    } catch (_e) {}
+    const readyStory = beats.filter(b => runtime.byId[String(b.id)]?.state === "ready"
+      && (!firedSet.has(String(b.id)) || b?.inject?.repeatable)
+      && !isAmbientBeat(b) && !isDiscoveryBeat(b) && !isTravelBeat(b));
 
-    // Canonical quest order (2026-08-23): questStep when authored, authoring
-    // index within the campaign as fallback. Natural compare keeps
-    // "Slide 2" ahead of "Slide 10".
-    const _authIdx = new Map(beats.map((b, i) => [String(b.id), i]));
-    const seqOf = b => {
-      const s = Number(b?.questStep);
-      return (b?.questStep != null && Number.isFinite(s)) ? s : 1e6 + (_authIdx.get(String(b?.id)) ?? 0);
+    // ── the hero: the DRIVING verb (2026-08-23 owner spec) ─────────────────
+    let hero = null;
+    const card = (kicker, title, beat, runs, note) => ({
+      kicker, title: title || "", beat: beat || null, quest: beat ? questOf(beat) : "",
+      runs: runs || [], note: note || ""
+    });
+    const run = (b, txt) => ({ id: String(b.id), text: txt || stripPrefix(b.label || b.id, questOf(b)) });
+    const whyOf = (b, n = 2) => {
+      const unmet = (runtime.byId[String(b.id)]?.reasons || []).filter(r => !r.met);
+      return esc(unmet.length
+        ? unmet.slice(0, n).map(r => r.text + (r.current !== undefined ? ` (now ${r.current})` : "")).join(" · ")
+        : "its own conditions");
     };
-    const natCmp = (a, b) => String(a).localeCompare(String(b), undefined, { numeric: true });
 
-    const readyAll = beats.filter(b => runtime.byId[String(b.id)]?.state === "ready"
-      && (!firedSet.has(String(b.id)) || b?.inject?.repeatable));
-    const readyStory = readyAll.filter(b => !isAmbientBeat(b) && !isDiscoveryBeat(b) && !isTravelBeat(b))
-      .sort((a, b) => {
-        const ra = runtime.byId[String(a.id)], rb = runtime.byId[String(b.id)];
-        const da = ra.auto.includes("director") ? 0 : 1, db = rb.auto.includes("director") ? 0 : 1;
-        if (da !== db) return da - db;
-        const qc = natCmp(questOf(a) || "~", questOf(b) || "~");
-        if (qc !== 0) return qc;
-        const sc = seqOf(a) - seqOf(b);
-        if (sc !== 0) return sc;
-        return natCmp(a.label || a.id, b.label || b.id);
-      });
-    const readyDiscovery = readyAll.filter(b => !isAmbientBeat(b) && isDiscoveryBeat(b));
-    const readyAmbient = readyAll.filter(b => isAmbientBeat(b) || (isTravelBeat(b) && !isDiscoveryBeat(b)));
-    const _addrIdx = buildBeatAddressIndex(beats);
-    const readyRow = b => {
-      const rt = runtime.byId[String(b.id)];
-      const ico = rt.auto.map(a => AUTO_ICO[a] || "").join("");
-      const q = questOf(b);
-      const addr = beatAddress(b, _addrIdx).short;
-      // Ambient rows: assess (fly/ⓘ) yes, execute (▶) no — they fire themselves.
-      return flyBtn(b.id, stripPrefix(b.label || b.id, q), `<code>${esc(addr)}</code> ${ico}${rt.hasAudio ? "🔊" : ""}${q ? ` <em>${esc(q)}</em>` : ""}`, !isAmbientBeat(b));
-    };
-    const readyHtml =
-      readyStory.slice(0, 25).map(readyRow).join("") +
-      (readyStory.length > 25 ? `<div class="bbttcc-now-empty">+ ${readyStory.length - 25} more…</div>` : "") +
-      (readyDiscovery.length
-        ? `<details class="bbttcc-now-sub"><summary>📍 On location (${readyDiscovery.length}) — waits for the party to arrive; not a menu</summary>` +
-          readyDiscovery.slice(0, 15).map(readyRow).join("") +
-          (readyDiscovery.length > 15 ? `<div class="bbttcc-now-empty">+ ${readyDiscovery.length - 15} more…</div>` : "") +
-          `</details>`
-        : "") +
-      (readyAmbient.length
-        ? `<details class="bbttcc-now-sub"><summary>🎲 Ambient pool (${readyAmbient.length}) — fires itself via travel/hexes</summary>` +
-          readyAmbient.slice(0, 15).map(readyRow).join("") +
-          (readyAmbient.length > 15 ? `<div class="bbttcc-now-empty">+ ${readyAmbient.length - 15} more…</div>` : "") +
-          `</details>`
-        : "");
-
-    // Horizon rule: a lone unmet storyPhase gate only counts as "coming up"
-    // when it is the very NEXT act — otherwise the whole funnel floods in.
-    const horizonOk = r => {
-      if (r && r.kind === "flag" && /^storyPhase\b/.test(String(r.text || ""))) {
-        const m = String(r.text).match(/≥\s*(\d+)/);
-        return (m ? Number(m[1]) : 99) <= curPhase + 1;
-      }
-      return true;
-    };
-    const comingRows = [];
-    for (const b of beats) {
-      const rt = runtime.byId[String(b.id)];
-      if (!rt) continue;
-      if (rt.state === "blocked") {
-        const unmet = (rt.reasons || []).filter(r => !r.met);
-        if (unmet.length === 1 && horizonOk(unmet[0])) {
-          comingRows.push({ b, why: unmet[0].text + (unmet[0].current !== undefined ? ` (now ${unmet[0].current})` : "") });
-        }
-      } else if (rt.state === "cooling") {
-        comingRows.push({ b, why: `cooling until T${rt.cooldownUntil}` });
-      }
-    }
-    const comingHtml = comingRows.slice(0, 15).map(r =>
-      flyBtn(r.b.id, stripPrefix(r.b.label || r.b.id, questOf(r.b)), `<code>${esc(beatAddress(r.b, _addrIdx).short)}</code> <em>${esc(r.why)}</em>`)
-    ).join("") + (comingRows.length > 15 ? `<div class="bbttcc-now-empty">+ ${comingRows.length - 15} more…</div>` : "");
-
-    let recentHtml = "";
-    let histCount = 0;
-    let lastFiredId = null;
-    try {
-      const ds = api?.director?.state?.() || {};
-      // A speaker beat fired through the menu lands in BOTH ledgers (story
-      // run + dialogue consumption) — merge by id, keeping the record that
-      // knows its turn, then the freshest timestamp (dupe seen 2026-08-24).
-      const byBeat = new Map();
-      for (const src of [ds.firedStoryBeats || {}, ds.dialogueFired || {}]) {
-        for (const [id, m] of Object.entries(src)) {
-          const row = { id, turn: m?.turn, ts: Number(m?.ts) || 0 };
-          const prev = byBeat.get(id);
-          if (!prev) { byBeat.set(id, row); continue; }
-          byBeat.set(id, {
-            id,
-            turn: prev.turn != null ? prev.turn : row.turn,
-            ts: Math.max(prev.ts, row.ts)
-          });
-        }
-      }
-      const hist = [...byBeat.values()];
-      histCount = hist.length;
-      hist.sort((a, b) => b.ts - a.ts);
-      // The hero's anchor is the freshest fired SPINE beat — ambient, travel
-      // and discovery beats (road encounters like the Acid Bog, 2026-08-26)
-      // fire through the travel tables mid-ride and must not steer the story's
-      // NEXT ("the bog is waiting for us to finish the quest"). The Recently-
-      // fired rail below still shows everything.
-      lastFiredId = (hist.find(h => {
-        const b = beatById[h.id];
-        return b && !isAmbientBeat(b) && !isDiscoveryBeat(b) && !isTravelBeat(b);
-      })?.id) ?? null;
-      recentHtml = hist.slice(0, 10).map(h =>
-        flyBtn(h.id, (beatById[h.id]?.label || h.id), h.turn != null ? `T${h.turn}` : "")
-      ).join("") || `<div class="bbttcc-now-empty">nothing fired yet — the world is young</div>`;
-    } catch (_e) {}
-
-    // The hero is the DRIVING verb (2026-08-23, owner spec): always point at
-    // the next expected beat(s), or say plainly why there isn't one. Three
-    // states: 🎬 BEGIN (cold start — campaign.openingBeatId wins; authoring
-    // order has no correspondence to play order), ⏭ NEXT (routes out of the
-    // last fired beat that are ready and unfired; a branch shows up to three),
-    // 🧭 waiting (no route — the table has the wheel: choices, invites,
-    // travel, or discovery).
-    let heroHtml = "";
-    {
-      const heroCard = (kicker, title, quest, buttonsHtml, noteHtml) =>
-        `<div class="bbttcc-now-hero">` +
-        `<div class="k">${kicker}</div>` +
-        (title ? `<div class="t">${esc(title)}</div>` : "") +
-        (quest ? `<div class="q">${esc(quest)}</div>` : "") +
-        (buttonsHtml || "") +
-        (noteHtml ? `<div class="alt">${noteHtml}</div>` : "") +
-        `</div>`;
-      const runBtn = (b, txt) =>
-        `<button type="button" class="bbttcc-now-hero-run" data-run="${esc(b.id)}">▶ ${esc(txt || stripPrefix(b.label || b.id, questOf(b)))}</button>`;
-
-      // State zero (2026-08-24, owner spec): if a beat dialog is OPEN, the
-      // table is mid-choice — that IS what's next. Everything else waits.
-      const openDlg = (() => { try { return api?.openBeatDialog?.() || null; } catch (_e) { return null; } })();
-      if (openDlg) {
-        heroHtml = heroCard("🎭 PLAYER CHOICE IN PROGRESS", openDlg.label, "",
-          "",
-          `the table is deciding${openDlg.choices?.length ? ` — ${openDlg.choices.slice(0, 6).map(c => esc(c)).join(" · ")}${openDlg.choices.length > 6 ? " · …" : ""}` : ""}. The story continues from their pick.`);
-      } else if (histCount === 0 && readyStory.length) {
-        const openId = String(campaign?.openingBeatId || "").trim();
-        const opening = openId ? beats.find(b => String(b.id) === openId && runtime.byId[openId]?.state === "ready") : null;
-        const first = opening
-          || beats.find(b => !isAmbientBeat(b) && !isDiscoveryBeat(b) && runtime.byId[String(b.id)]?.state === "ready");
-        if (first) {
-          heroHtml = heroCard("🎬 BEGIN", first.label || first.id, questOf(first),
-            runBtn(first, "Run the opening beat"),
-            readyStory.length > 1 ? `…or browse ${readyStory.length - 1} other available beat${readyStory.length === 2 ? "" : "s"} below` : "");
-        }
-      } else if (histCount > 0) {
-        const lastFired = lastFiredId ? beatById[lastFiredId] : null;
-        const lastName = lastFired ? stripPrefix(lastFired.label || lastFired.id, questOf(lastFired)) : "";
-        const nextIds = lastFired
-          ? [...new Set((lastFired.choices || []).flatMap(c => [c?.next, c?.failNext]).filter(Boolean).map(String))]
-          : [];
-        const routedAll = nextIds
-          .map(id => beatById[id])
-          .filter(b => b && (!firedSet.has(String(b.id)) || b?.inject?.repeatable))
-          // dialogueOffer:false = "reached only by routing, never OFFERED" —
-          // and the hero is an offer surface (2026-09-04, live-caught: the
-          // unfired "Pulse of the Town" ANSWER beat was proposed as NEXT off
-          // a Pike anchor and read as an orphaned-but-blocking step).
-          .filter(b => b.dialogueOffer !== false);
-        // Fresh routes outrank revisits (2026-09-04, live-caught: the hero
-        // re-offered the completed Welcome Round as NEXT because a bounce-back
-        // choice routed to the fired-but-repeatable hub). A fired repeatable
-        // hub is a PLACE the table may return to, not the story's next step —
-        // unfired routes drive; a revisit only surfaces when the quest order
-        // below has nothing new either.
-        const routed = routedAll.filter(b => !firedSet.has(String(b.id)));
-        const revisits = routedAll.filter(b => firedSet.has(String(b.id)) && runtime.byId[String(b.id)]?.state === "ready");
-        const candidates = routed.filter(b => runtime.byId[String(b.id)]?.state === "ready");
-        // Gated routes are still THE ROAD (2026-08-24): a blocked next used to
-        // vanish silently, dead-ending the hero on the last fired beat. Show
-        // it, name it gated, and let the GM push through — runBeat ignores
-        // inject.requires by design (gates are the Director's concern).
-        const gated = candidates.length ? [] : routed.filter(b => runtime.byId[String(b.id)]?.state !== "ready");
-        if (candidates.length === 1) {
-          heroHtml = heroCard("⏭ NEXT", candidates[0].label || candidates[0].id, questOf(candidates[0]),
-            runBtn(candidates[0], "Run the next beat"),
-            lastName ? `after “${esc(lastName)}”` : "");
-        } else if (candidates.length > 1) {
-          heroHtml = heroCard("⏭ NEXT — the story branches", "", "",
-            candidates.slice(0, 3).map(b => runBtn(b)).join(""),
-            (candidates.length > 3 ? `+ ${candidates.length - 3} more route${candidates.length === 4 ? "" : "s"} below · ` : "") +
-            (lastName ? `out of “${esc(lastName)}”` : ""));
-        } else if (gated.length) {
-          const g = gated[0];
-          const unmetR = (runtime.byId[String(g.id)]?.reasons || []).filter(r => !r.met);
-          const why = unmetR.length
-            ? unmetR.slice(0, 2).map(r => r.text + (r.current !== undefined ? ` (now ${r.current})` : "")).join(" · ")
-            : "its own conditions";
-          heroHtml = heroCard("⏳ NEXT — waiting at its gate", g.label || g.id, questOf(g),
-            runBtn(g, "Run it anyway (override the gate)"),
-            `the authored route${lastName ? ` out of “${esc(lastName)}”` : ""} waits for: <b>${esc(why)}</b> — usually the gate is the design doing its job; override only on purpose`);
-        } else {
-          // No authored route — fall back to CANONICAL QUEST ORDER: the next
-          // ready, unfired beat of the same quest by questStep/authoring
-          // sequence. Only when the quest truly has nothing next does the
-          // wheel pass to the table.
-          let qNext = null, qGated = null;
-          const lq = lastFired ? String(lastFired.questId || "").trim() : "";
-          if (lq) {
-            const ls = seqOf(lastFired);
-            // Beats some choice already routes INTO are player destinations —
-            // a hub menu's venues, a branch's outcomes. Proposing one as
-            // quest-order NEXT offers it out of context (the "Seat at the
-            // Cookline" lesson, 2026-08-24): the fallback exists for beats
-            // with NO authored arrival, so only those qualify.
-            const seqById = new Map(beats.map(b => [String(b.id), seqOf(b)]));
-            const questById = new Map(beats.map(b => [String(b.id), String(b.questId || "").trim()]));
-            const choiceTargets = new Set();
-            for (const b of beats) for (const c of (b.choices || [])) {
-              for (const t of [c?.next, c?.failNext]) {
-                const id = String(t || "").trim();
-                if (!id) continue;
-                // Arrival = a SAME-QUEST FORWARD route only (2026-09-04 v2,
-                // live-caught: the Fixit ride's cross-quest "back to the
-                // crossroads" bounce marked the Crossroads as arrived-at, so
-                // quest order skipped it and front-ran the Act-2 Title Card).
-                // Back-references and cross-quest bounces are ways OUT, not
-                // authored arrivals. Same-quest forward routes (hub → venues)
-                // still mark real destinations — the Cookline lesson holds.
-                const bq = String(b.questId || "").trim();
-                const sameQuest = !!bq && bq === questById.get(id);
-                const forward = (seqById.get(id) ?? Infinity) > seqOf(b);
-                if (sameQuest && forward) choiceTargets.add(id);
-              }
+    // State zero (2026-08-24): an OPEN beat dialog IS what's next.
+    const openDlg = (() => { try { return api?.openBeatDialog?.() || null; } catch (_e) { return null; } })();
+    if (openDlg) {
+      hero = card("🎭 PLAYER CHOICE IN PROGRESS", openDlg.label, null, [],
+        `the table is deciding${openDlg.choices?.length ? ` — ${openDlg.choices.slice(0, 6).map(c => esc(c)).join(" · ")}${openDlg.choices.length > 6 ? " · …" : ""}` : ""}. The story continues from their pick.`);
+    } else if (histCount === 0 && readyStory.length) {
+      const openId = String(campaign?.openingBeatId || "").trim();
+      const opening = openId ? beats.find(b => String(b.id) === openId && runtime.byId[openId]?.state === "ready") : null;
+      const first = opening || readyStory[0];
+      if (first) hero = card("🎬 BEGIN", first.label || first.id, first, [run(first, "Run the opening beat")], "");
+    } else if (histCount > 0) {
+      const lastName = esc(anchor ? stripPrefix(anchor.label || anchor.id, questOf(anchor)) : "");
+      const nextIds = anchor
+        ? [...new Set((anchor.choices || []).flatMap(c => [c?.next, c?.failNext]).filter(Boolean).map(String))]
+        : [];
+      // dialogueOffer:false = reached only by routing, never OFFERED (2026-09-04).
+      const routedAll = nextIds.map(id => beatById[id])
+        .filter(b => b && (!firedSet.has(String(b.id)) || b?.inject?.repeatable))
+        .filter(b => b.dialogueOffer !== false);
+      // Fresh routes outrank revisits (2026-09-04).
+      const routed = routedAll.filter(b => !firedSet.has(String(b.id)));
+      const revisits = routedAll.filter(b => firedSet.has(String(b.id)) && runtime.byId[String(b.id)]?.state === "ready");
+      const candidates = routed.filter(b => runtime.byId[String(b.id)]?.state === "ready");
+      // Gated routes are still THE ROAD (2026-08-24): show, name the gate.
+      const gated = candidates.length ? [] : routed.filter(b => runtime.byId[String(b.id)]?.state !== "ready");
+      if (candidates.length === 1) {
+        hero = card("⏭ NEXT", candidates[0].label || candidates[0].id, candidates[0],
+          [run(candidates[0], "Run the next beat")], lastName ? `after “${lastName}”` : "");
+      } else if (candidates.length > 1) {
+        hero = card("⏭ NEXT — the story branches", "", null, candidates.slice(0, 3).map(b => run(b)),
+          (candidates.length > 3 ? `+ ${candidates.length - 3} more route${candidates.length === 4 ? "" : "s"} on the chart · ` : "") +
+          (lastName ? `out of “${lastName}”` : ""));
+        hero.quest = questOf(candidates[0]);
+      } else if (gated.length) {
+        const g = gated[0];
+        hero = card("⏳ NEXT — waiting at its gate", g.label || g.id, g, [run(g, "Run it anyway (override the gate)")],
+          `the authored route${lastName ? ` out of “${lastName}”` : ""} waits for: <b>${whyOf(g)}</b> — usually the gate is the design doing its job; override only on purpose`);
+      } else {
+        // No authored route — CANONICAL QUEST ORDER fallback.
+        let qNext = null, qGated = null;
+        const lq = anchor ? String(anchor.questId || "").trim() : "";
+        if (lq) {
+          const ls = seqOf(anchor);
+          const questById = new Map(beats.map(b => [String(b.id), String(b.questId || "").trim()]));
+          // Same-quest FORWARD routes mark authored arrivals (2026-09-04 v2) —
+          // those are player destinations, never proposed out of context.
+          const choiceTargets = new Set();
+          for (const b of beats) for (const c of (b.choices || [])) {
+            for (const t of [c?.next, c?.failNext]) {
+              const id = String(t || "").trim();
+              if (!id) continue;
+              const bq = String(b.questId || "").trim();
+              const sameQuest = !!bq && bq === questById.get(id);
+              const tgt = beatById[id];
+              const forward = tgt ? seqOf(tgt) > seqOf(b) : false;
+              if (sameQuest && forward) choiceTargets.add(id);
             }
-            // Future-act steps are invisible to the quest-order hero
-            // (2026-09-04, live-caught: after the Green Ring cinematic the
-            // hero dangled the Act-2 Green Ring scene behind an override
-            // button — an attractive nuisance; overriding fired the Act-2
-            // Elsin echo convo a whole act early). A step gated storyPhase
-            // above the CURRENT act — and not an opener that brings that act
-            // itself — belongs to the future, not to NEXT.
-            const futureAct = (b) => {
-              const reqs = Array.isArray(b?.inject?.requires) ? b.inject.requires : [];
-              const own = Number(b?.worldEffects?.phaseAdvance?.set) || 0;
-              return reqs.some(r => r && String(r.flag) === "storyPhase"
-                && Number(r.gte) > Math.max(curPhase, own));
-            };
-            const qRouted = beats
-              .filter(b => String(b.questId || "").trim() === lq
-                && !futureAct(b)
-                // routing-only nodes are never offered (see routedAll above)
-                && b.dialogueOffer !== false
-                // Fired is fired — proposing a fired hub as NEXT loops
-                // forever (the "Cookline is the hub" lesson, 2026-08-24).
-                // firedSet alone carries that lesson: it includes fired
-                // repeatables. The old extra `!inject.repeatable` exclusion
-                // overshot — campaigns whose authoring stamps repeatable:true
-                // on EVERY beat (Thatward's Ho!, April boilerplate) lost their
-                // whole quest-order fallback and the hero dead-ended in
-                // "waiting" after any choiceless beat (found live 2026-08-30).
-                // An UNFIRED repeatable beat that is next in quest order is a
-                // legitimate step.
-                && !firedSet.has(String(b.id))
-                && !isAmbientBeat(b) && !isDiscoveryBeat(b)
-                && !choiceTargets.has(String(b.id))
-                && seqOf(b) > ls)
-              .sort((a, b) => seqOf(a) - seqOf(b));
-            qNext = qRouted.find(b => runtime.byId[String(b.id)]?.state === "ready") || null;
-            // Same lesson as authored routes (2026-08-24): a gated next-in-quest
-            // must be SHOWN, not swallowed — the Allesh arrival chain dead-ended
-            // on "table's hands" while Joans sat one step away behind its gate.
-            qGated = qNext ? null : (qRouted[0] || null);
           }
-          if (qNext) {
-            heroHtml = heroCard("⏭ NEXT — quest order", qNext.label || qNext.id, questOf(qNext),
-              runBtn(qNext, "Run the next beat"),
-              `no authored route after “${esc(lastName)}” — following the quest's canonical order`);
-          } else if (qGated) {
-            const unmetQ = (runtime.byId[String(qGated.id)]?.reasons || []).filter(r => !r.met);
-            const whyQ = unmetQ.length
-              ? unmetQ.slice(0, 2).map(r => r.text + (r.current !== undefined ? ` (now ${r.current})` : "")).join(" · ")
-              : "its own conditions";
-            // Turn-gated NEXT is not a gate to override — it's the world turn
-            // asking to be run (2026-09-04, live-caught: the GM missed the
-            // one-shot "turn is locked" button, looped the town, and no
-            // surface pointed back at the Turn Driver). Name the doorway.
-            const turnOnly = unmetQ.length && unmetQ.every(r => /^turn\s*[≥≤=]/.test(String(r.text || "")));
-            if (turnOnly) {
-              heroHtml = heroCard("🔒 NEXT — on the other side of the turn", qGated.label || qGated.id, questOf(qGated),
-                "",
-                `the story resumes once the world moves: set every faction's plans, then run the <b>Turn Driver</b> (toolbar). Waits for: <b>${esc(whyQ)}</b>`);
-            } else {
-              heroHtml = heroCard("⏳ NEXT — waiting at its gate (quest order)", qGated.label || qGated.id, questOf(qGated),
-                runBtn(qGated, "Run it anyway (override the gate)"),
-                `next in the quest's canonical order after “${esc(lastName)}” waits for: <b>${esc(whyQ)}</b> — usually that's the design doing its job`);
-            }
-          } else if (revisits.length) {
-            const r0 = revisits[0];
-            heroHtml = heroCard("↺ THE DOOR'S STILL OPEN", r0.label || r0.id, questOf(r0),
-              runBtn(r0, "Return there"),
-              `nothing new is routed${lastName ? ` after “${esc(lastName)}”` : ""} — but the table can always go back.`);
+          // Future-act steps are invisible to the quest-order hero (2026-09-04).
+          const futureAct = (b) => {
+            const reqs = Array.isArray(b?.inject?.requires) ? b.inject.requires : [];
+            const own = Number(b?.worldEffects?.phaseAdvance?.set) || 0;
+            return reqs.some(r => r && String(r.flag) === "storyPhase" && Number(r.gte) > Math.max(curPhase, own));
+          };
+          const qRouted = beats
+            .filter(b => String(b.questId || "").trim() === lq
+              && !futureAct(b)
+              && b.dialogueOffer !== false
+              // Fired is fired (2026-08-24 / 2026-08-30): firedSet alone
+              // carries the lesson — an UNFIRED repeatable next-in-order is
+              // a legitimate step.
+              && !firedSet.has(String(b.id))
+              && !isAmbientBeat(b) && !isDiscoveryBeat(b)
+              && !choiceTargets.has(String(b.id))
+              && seqOf(b) > ls)
+            .sort((a, b) => seqOf(a) - seqOf(b));
+          qNext = qRouted.find(b => runtime.byId[String(b.id)]?.state === "ready") || null;
+          qGated = qNext ? null : (qRouted[0] || null);
+        }
+        if (qNext) {
+          hero = card("⏭ NEXT — quest order", qNext.label || qNext.id, qNext, [run(qNext, "Run the next beat")],
+            `no authored route after “${lastName}” — following the quest's canonical order`);
+        } else if (qGated) {
+          const unmetQ = (runtime.byId[String(qGated.id)]?.reasons || []).filter(r => !r.met);
+          // Turn-gated NEXT is the world turn asking to be run (2026-09-04).
+          const turnOnly = unmetQ.length && unmetQ.every(r => /^turn\s*[≥≤=]/.test(String(r.text || "")));
+          if (turnOnly) {
+            hero = card("🔒 NEXT — on the other side of the turn", qGated.label || qGated.id, qGated, [],
+              `the story resumes once the world moves: set every faction's plans, then run the <b>Turn Driver</b> (toolbar). Waits for: <b>${whyOf(qGated)}</b>`);
           } else {
-            heroHtml = heroCard("🧭 IN THE TABLE'S HANDS", "", "", "",
-              `No single next beat${lastName ? ` after “${esc(lastName)}”` : ""} — the story is waiting on the players: a choice, a conversation invite, travel, or something they have to walk into. Watch chat, or browse below.`);
+            hero = card("⏳ NEXT — waiting at its gate (quest order)", qGated.label || qGated.id, qGated,
+              [run(qGated, "Run it anyway (override the gate)")],
+              `next in the quest's canonical order after “${lastName}” waits for: <b>${whyOf(qGated)}</b> — usually that's the design doing its job`);
           }
+        } else if (revisits.length) {
+          const r0 = revisits[0];
+          hero = card("↺ THE DOOR'S STILL OPEN", r0.label || r0.id, r0, [run(r0, "Return there")],
+            `nothing new is routed${lastName ? ` after “${lastName}”` : ""} — but the table can always go back.`);
+        } else {
+          hero = card("🧭 IN THE TABLE'S HANDS", "", null, [],
+            `No single next beat${lastName ? ` after “${lastName}”` : ""} — the story is waiting on the players: a choice, a conversation invite, travel, or something they have to walk into. Watch chat.`);
         }
       }
+    } else {
+      hero = card("🎬 NOTHING TO BEGIN", "", null, [], "no beat is ready to open the campaign — check the opening beat's gates on the Beats tab.");
     }
 
-    // ── assemble ──────────────────────────────────────────────────────────
+    const nextIds = hero ? hero.runs.map(r => r.id) : [];
+    if (hero && hero.beat && !nextIds.length && /NEXT/.test(hero.kicker)) nextIds.push(String(hero.beat.id));
+
+    // The quest the story stands in: anchor's quest, else the opening beat's.
+    let anchorQuestId = anchor ? _flowQuestIdOf(anchor) : null;
+    if (!anchorQuestId) {
+      const openId = String(campaign?.openingBeatId || "").trim();
+      const ob = openId ? beatById[openId] : null;
+      anchorQuestId = ob ? _flowQuestIdOf(ob) : (beats[0] ? _flowQuestIdOf(beats[0]) : null);
+    }
+
+    const recent = hist.slice(0, 5).map(h => {
+      const b = beatById[h.id];
+      return { id: h.id, label: b?.label || h.id, quest: questOf(b), turn: h.turn, ts: h.ts };
+    });
+    const cid = String(campaign?.id || "");
+    const choices = (Array.isArray(ds.choices) ? ds.choices : [])
+      .filter(c => c && (!c.campaignId || !cid || String(c.campaignId) === cid))
+      .slice(-8).reverse();
+    const completed = Object.values(questDefs)
+      .filter(q => String(q.status || "").toLowerCase() === "completed"
+        && (!q.campaignId || !cid || String(q.campaignId) === cid))
+      .sort((a, b) => (Number(b.completedTs) || 0) - (Number(a.completedTs) || 0))
+      .slice(0, 6);
+
+    return { beatById, questDefs, questNames, questOf, curPhase, anchor, anchorId, anchorQuestId, hero, nextIds, recent, choices, completed, firedSet, histCount };
+  }
+
+  // -----------------------------------------------------------------------
+  // The rail (2026-09-07 owner ruling): three blocks and nothing else —
+  // NOW (act · turn · quest · here · next), RECENT (last five fired), LOCKED
+  // (choices taken · quests completed). Chains / pressures / relations /
+  // browse / coming-up left this surface; a World-view home is owed.
+  // -----------------------------------------------------------------------
+  async _buildNowPanel(campaign, runtime, sit) {
+    if (!runtime || !campaign || !sit) return null;
+    const NS = "bbttcc-campaign";
+    const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    const { beatById, questOf } = sit;
+    const _addrIdx = buildBeatAddressIndex(Array.isArray(campaign.beats) ? campaign.beats : []);
+    const addrOf = b => { try { return beatAddress(b, _addrIdx).short; } catch (_e) { return ""; } };
+
+    const flyBtn = (id, label, extra = "", runnable = false) =>
+      `<div class="bbttcc-now-row">` +
+      `<button type="button" class="bbttcc-now-item" data-fly="${esc(id)}" data-tooltip="Fly the chart to this beat"><span class="t">${esc(label)}</span>${extra ? `<span class="x">${extra}</span>` : ""}</button>` +
+      `<button type="button" class="bbttcc-now-info" data-info="${esc(id)}" data-tooltip="Show the full beat description">ⓘ</button>` +
+      (runnable ? `<button type="button" class="bbttcc-now-run" data-run="${esc(id)}" data-tooltip="Run this beat now">▶</button>` : "") +
+      `</div>`;
+
+    // ── NOW ──────────────────────────────────────────────────────────────
+    const qid = sit.anchorQuestId;
+    const qDef = qid ? sit.questDefs[qid] : null;
+    const qName = qid ? (qid === FLOW_UNASSIGNED ? "(no quest)" : (sit.questNames[qid] || qid)) : "—";
+    const qStatus = String(qDef?.status || "").toLowerCase();
+    const hereHtml = sit.anchor
+      ? flyBtn(sit.anchorId, sit.anchor.label || sit.anchorId, `<code>${esc(addrOf(sit.anchor))}</code>`)
+      : `<div class="bbttcc-now-empty">nothing fired yet — the world is young</div>`;
+    const h = sit.hero;
+    const heroHtml = h ? (
+      `<div class="bbttcc-now-hero">` +
+      `<div class="k">${esc(h.kicker)}</div>` +
+      (h.title ? `<div class="t">${esc(h.title)}</div>` : "") +
+      (h.quest ? `<div class="q">${esc(h.quest)}</div>` : "") +
+      h.runs.map(r => `<button type="button" class="bbttcc-now-hero-run" data-run="${esc(r.id)}">▶ ${esc(r.text)}</button>`).join("") +
+      (h.note ? `<div class="alt">${h.note}</div>` : "") +
+      `</div>`) : "";
+    // Story chains ARE quest chains (2026-09-07 owner ruling): the old
+    // campaign-wide chains section folds into the charted quest — each
+    // Director chain with beats in this quest shows its progress and the
+    // next chain beat (⚡ eligible now / ⛩ gated). Computed locally from
+    // THIS campaign (api.director.chains() reads the ACTIVE campaign, which
+    // need not be the one the Builder has open).
+    let chainsHtml = "";
+    try {
+      const chartQ = String(sit.chartQuestId || "");
+      const chainMap = {};
+      for (const b of (Array.isArray(campaign.beats) ? campaign.beats : [])) {
+        const ch = String(b?.storyChain || b?.inject?.storyChain || "").trim();
+        if (!ch || !b?.id) continue;
+        (chainMap[ch] = chainMap[ch] || []).push(b);
+      }
+      const rows = [];
+      for (const [name, list] of Object.entries(chainMap)) {
+        if (!list.some(b => _flowQuestIdOf(b) === chartQ)) continue;
+        const fired = list.filter(b => sit.firedSet.has(String(b.id))).length;
+        const next = list.find(b => !sit.firedSet.has(String(b.id)));
+        const pct = Math.round((fired / list.length) * 100);
+        const eligible = next ? runtime.byId[String(next.id)]?.state === "ready" : false;
+        const pretty = name.replace(/_/g, " ");
+        rows.push(
+          `<div class="bbttcc-now-chain" data-tooltip="Director chain “${esc(name)}” — the Story Director fires these in order as pressure and gates allow">` +
+          `<div class="hd"><span class="nm">⚙ ${esc(pretty)}</span><span class="ct">${fired}/${list.length}</span></div>` +
+          `<div class="bar"><i style="width:${pct}%"></i></div>` +
+          (next ? flyBtn(next.id, "→ " + (next.label || next.id), eligible ? "⚡" : "⛩", eligible) : `<div class="done">chain complete</div>`) +
+          `</div>`);
+      }
+      if (rows.length) chainsHtml = `<div class="bbttcc-now-kv"><span class="k">CHAIN${rows.length === 1 ? "" : "S"}</span></div>` + rows.join("");
+    } catch (_eCh) {}
+
+    const nowHtml =
+      `<div class="bbttcc-now-kv"><span class="k">QUEST</span><span class="v">${esc(qName)}${qStatus && qStatus !== "active" ? ` <i class="st ${esc(qStatus)}">${esc(qStatus)}</i>` : ""}</span></div>` +
+      `<div class="bbttcc-now-kv"><span class="k">HERE</span></div>` + hereHtml +
+      heroHtml +
+      chainsHtml;
+
+    // ── RECENT ───────────────────────────────────────────────────────────
+    const recentHtml = sit.recent.map(r =>
+      flyBtn(r.id, r.label, `${r.quest ? `<em>${esc(r.quest)}</em> ` : ""}${r.turn != null ? `T${esc(String(r.turn))}` : ""}`)
+    ).join("") || `<div class="bbttcc-now-empty">nothing fired yet</div>`;
+
+    // ── LOCKED ───────────────────────────────────────────────────────────
+    const choiceRows = sit.choices.map(c => {
+      const b = beatById[String(c.beatId)];
+      const at = b ? (b.label || c.beatId) : (c.beatLabel || c.beatId);
+      const chk = (c.checkOk === true) ? " ✓" : (c.checkOk === false) ? " ✗" : "";
+      return `<div class="bbttcc-now-lock">` +
+        `<button type="button" class="bbttcc-now-item" data-fly="${esc(c.beatId)}" data-tooltip="Fly the chart to the beat where this was decided">` +
+        `<span class="t">「${esc(c.label)}」${chk}</span><span class="x">T${esc(String(c.turn ?? "?"))}</span></button>` +
+        `<div class="at">at ${esc(at)}</div></div>`;
+    }).join("");
+    const questRows = sit.completed.map(q =>
+      `<div class="bbttcc-now-lock done"><span class="t">✓ ${esc(q.name || q.id)}</span><span class="x">${q.completedTurn != null ? `T${esc(String(q.completedTurn))}` : "—"}</span></div>`
+    ).join("");
+    const lockedHtml =
+      (choiceRows || `<div class="bbttcc-now-empty">no choices recorded yet</div>`) +
+      `<div class="bbttcc-now-kv"><span class="k">QUESTS COMPLETED</span></div>` +
+      (questRows || `<div class="bbttcc-now-empty">none yet</div>`);
+
+    // ── assemble ─────────────────────────────────────────────────────────
     const rail = document.createElement("div");
     rail.className = "bbttcc-now-panel";
     rail.dataset.tour = "campaign.now-panel";
-    const sec = (title, body, open = true) =>
-      `<details class="bbttcc-now-sec" ${open ? "open" : ""}><summary>${title}</summary><div class="bd">${body}</div></details>`;
-    // Progressive disclosure: actionable first, zero-signal sections start
-    // collapsed — the rail grows back to full depth as the campaign does.
+    const block = (title, body) => `<section class="bbttcc-now-block"><h5>${title}</h5><div class="bd">${body}</div></section>`;
     rail.innerHTML =
       `<div class="bbttcc-now-grip" data-tooltip="Drag to resize the panel"></div>` +
-      `<div class="bbttcc-now-head"><button type="button" class="bbttcc-now-expand" data-expand data-tooltip="Toggle wide panel">⟷</button>ACT ${curPhase} · TURN ${esc(String(runtime.turn))}` +
+      `<div class="bbttcc-now-head"><button type="button" class="bbttcc-now-expand" data-expand data-tooltip="Toggle wide panel">⟷</button>ACT ${sit.curPhase} · TURN ${esc(String(runtime.turn))}` +
       (runtime.ledger ? `<span>${esc(String(runtime.ledger.spent))}/${esc(String(runtime.ledger.budget))} days${Number(runtime.ledger.debt) ? ` · debt ${esc(String(runtime.ledger.debt))}` : ""}</span>` : "") +
       `</div>` +
-      heroHtml +
-      // Browse, not a to-do list (2026-08-24, owner feedback): "available"
-      // isn't actionable information — the hero carries the guidance, this
-      // collapses to a reference shelf.
-      `<details class="bbttcc-now-sub"><summary>🗂 Browse runnable (${readyStory.length}${readyAmbient.length ? ` · 🎲 ${readyAmbient.length}` : ""}${readyDiscovery.length ? ` · 📍 ${readyDiscovery.length}` : ""}) — reference, not a to-do list</summary>` +
-      (readyHtml || `<div class="bbttcc-now-empty">nothing eligible right now</div>`) +
-      `</details>` +
-      sec(`⏳ Coming up (${comingRows.length})`, comingHtml || `<div class="bbttcc-now-empty">nothing within one condition of unlocking</div>`) +
-      (chainsHtml ? sec("⚙ Story chains", chainsHtml, chainsSignal) : "") +
-      sec("🌡 Pressures", metersHtml, metersSignal) +
-      (relHtml ? sec("🤝 Faction relations", relHtml, relSignal) : "") +
-      sec("✓ Recently fired", recentHtml, false);
+      block("▶ NOW", nowHtml) +
+      block("✓ RECENT", recentHtml) +
+      block("🔒 LOCKED", lockedHtml);
 
     // Width: persisted per user; drag the left-edge grip or toggle ⟷ wide.
     const NOW_W_DEFAULT = 300, NOW_W_WIDE = 540, NOW_W_MIN = 240, NOW_W_MAX = 720;
@@ -2480,7 +1654,6 @@ const activeCampaignId = _getActiveCampaignId();
       if (persist) { try { game.user?.setFlag?.(NS, "nowPanelWidth", nowW); } catch (_e) {} }
     };
     setW(nowW);
-
     const grip = rail.querySelector(".bbttcc-now-grip");
     if (grip) {
       grip.addEventListener("mousedown", ev => {
@@ -2533,12 +1706,9 @@ const activeCampaignId = _getActiveCampaignId();
   async _mountFlowVisualizer(rootEl) {
     try {
       if (!rootEl) return;
-
       const host = rootEl.querySelector("[data-role='flowviz']");
       if (!host) return;
 
-      // Resolve the selected campaign directly from the Campaign API.
-      // Do NOT rely on prior render context; tab switches can run before _lastContext is updated.
       const api = game.bbttcc && game.bbttcc.api ? game.bbttcc.api.campaign : null;
       const cid = String(this.campaignId || "").trim();
       const campaign = (api && cid && typeof api.getCampaign === "function") ? api.getCampaign(cid) : null;
@@ -2546,530 +1716,217 @@ const activeCampaignId = _getActiveCampaignId();
         host.innerHTML = "<p class='bbttcc-muted'>No campaign selected.</p>";
         return;
       }
+      const beatsAll = Array.isArray(campaign.beats) ? campaign.beats : [];
 
-      // Truth Layer: live runtime state (fired/ready/blocked/autofire/audio).
+      // Truth Layer: live runtime state (fired/ready/blocked/audio) per beat.
       let runtime = null;
       try { runtime = await this._computeFlowRuntime(campaign); } catch (eRt) { console.warn(TAG, "flow runtime failed", eRt); }
+      if (!runtime) runtime = { byId: {}, turn: 0, ledger: null };
+      const sit = this._computeSituation(campaign, runtime);
 
-      // Resolve Scope ONCE. It used to be read inline here and again (from the
-      // user flag) inside the bar builder; the in-scope quest probe below has to
-      // agree with the graph it is describing, and on first render this.flowScope
-      // is still unset.
-      const flowScopeNow = String(this.flowScope ?? (game.user?.getFlag?.("bbttcc-campaign", "flowScope") ?? "play"));
-      this.flowScope = flowScopeNow;
+      // Which quest? FOLLOW (default) = the quest the story stands in; a manual
+      // pick from the dropdown turns follow off until the GM snaps it back.
+      if (this.flowFollow == null) {
+        let f = null;
+        try { f = game.user?.getFlag?.("bbttcc-campaign", "flowFollow"); } catch (_e) {}
+        this.flowFollow = (f == null) ? true : !!f;
+      }
+      const questsWithBeats = new Map();   // questId -> count
+      const questFired = new Map();        // questId -> fired count
+      for (const b of beatsAll) {
+        if (!b?.id) continue;
+        const q = _flowQuestIdOf(b);
+        questsWithBeats.set(q, (questsWithBeats.get(q) || 0) + 1);
+        if (runtime.byId[String(b.id)]?.fired) questFired.set(q, (questFired.get(q) || 0) + 1);
+      }
+      if (this.flowFollow || !this.flowQuestId || !questsWithBeats.has(String(this.flowQuestId))) {
+        this.flowQuestId = (sit.anchorQuestId && questsWithBeats.has(sit.anchorQuestId))
+          ? sit.anchorQuestId
+          : (questsWithBeats.keys().next().value || null);
+      }
+      const questId = this.flowQuestId;
 
-      // Turn/Chapter decision-tree visualizer. Default = latest turn with content.
       const graph = _buildFlowGraph(campaign, {
-        turn: this.flowTurn,
-        questId: this.flowQuestId,
+        questId,
         showTravel: this.flowShowTravel,
-        viewMode: this.flowViewMode,
-        expandedQuests: this.flowExpandedQuests,
-        actFilter: this.flowActFilter ?? "all",
-        scope: flowScopeNow,
-        runtime
+        runtime,
+        questNames: sit.questNames
       });
-      // 2026-08-15 — an empty result must NOT swallow the filter bar. It used
-      // to `return` here, which left the band unrendered: filter yourself into
-      // a combination with no beats (Scope "In play" + a quest that isn't) and
-      // the only way back was reloading the app. The header RESET only clears
-      // zoom/pan, not filters. The bar is built below regardless; the
-      // empty-state notice + a Clear-filters escape hatch are appended after.
       const flowEmpty = !graph || !graph.nodes || !graph.nodes.length;
 
-      // Which quests actually have beats under the OTHER active filters
-      // (scope/turn/act, quest filter deliberately ignored)? Building the graph
-      // in quest mode with questId "all" answers that exactly, and reuses the
-      // scope logic instead of re-deriving it here. Feeds the Quest dropdown so
-      // an unreachable quest can't be picked in the first place.
-      let questsInScope = null;
-      try {
-        const probe = (graph && graph.viewMode === "quests" && String(this.flowQuestId || "all") === "all")
-          ? graph
-          : _buildFlowGraph(campaign, {
-              turn: this.flowTurn,
-              questId: "all",
-              showTravel: this.flowShowTravel,
-              viewMode: "quests",
-              expandedQuests: new Set(),
-              actFilter: this.flowActFilter ?? "all",
-              scope: flowScopeNow,
-              runtime
-            });
-        const ids = (probe && Array.isArray(probe.nodes) ? probe.nodes : [])
-          .map(n => String(n && n.questId || "").trim())
-          .filter(Boolean);
-        if (ids.length) questsInScope = new Set(ids);
-      } catch (_eProbe) {}
-
-      // Keep local state in sync (graph decides the fallback).
-      try { if (!flowEmpty) this.flowTurn = graph.turnNumber; } catch (e) {}
-
-      // Clear previous render
       host.innerHTML = "";
       try { if (!host.style.minHeight) host.style.minHeight = "720px"; } catch (e) {}
 
-      // Inject a compact Turn selector bar (no template changes required).
+      const _tip = (key) => { try { return game.bbttcc?.help?.tip?.("campaign", key) || ""; } catch (_e) { return ""; } };
+      const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+      // ── the bar: Quest · Follow ──────────────────────────────────────────
       try {
-        // Central hover-help for JS-built controls (dictionary registered by
-        // scripts/module.js under the "campaign" namespace).
-        const _tip = (key) => { try { return game.bbttcc?.help?.tip?.("campaign", key) || ""; } catch (_e) { return ""; } };
-
-        // HexChrome styling: use the --cb-* design tokens (scoped on the app
-        // root by campaign-builder.css) instead of hand-inlined colors.
-        const styleBarSelect = (el) => {
-          el.style.padding = "4px 8px";
-          el.style.borderRadius = "var(--cb-radius)";
-          el.style.border = "1px solid var(--cb-border)";
-          el.style.background = "var(--cb-bg-soft)";
-          el.style.color = "var(--cb-text-main)";
-        };
-        const styleBarLabel = (el) => {
-          el.style.fontWeight = "800";
-          el.style.color = "var(--cb-data)";
-        };
-
         const bar = document.createElement("div");
         bar.className = "bbttcc-flowviz-bar";
         bar.dataset.tour = "campaign.flow-bar";
-        bar.style.display = "flex";
-        bar.style.alignItems = "center";
-        bar.style.justifyContent = "space-between";
-        bar.style.gap = "12px";
-        bar.style.padding = "6px 8px";
-        bar.style.margin = "0 0 8px 0";
-        bar.style.border = "1px solid var(--cb-border)";
-        bar.style.borderRadius = "var(--cb-radius)";
-        bar.style.background = "var(--cb-bg-soft)";
 
         const left = document.createElement("div");
-        left.style.display = "flex";
-        left.style.alignItems = "center";
-        left.style.gap = "10px";
+        left.className = "l";
 
-        // Scope: the play-console dial. "In play" = the living map (trail +
-        // present + next-act horizon); "Everything" = the author's corpus.
-        const scLbl = document.createElement("div");
-        styleBarLabel(scLbl);
-        scLbl.textContent = "Scope";
-        scLbl.dataset.tooltip = "In play: only fired beats, beats ready or cooling now, and beats one condition from unlocking (next act at most) — the map grows as the campaign is played. Everything: the full authored corpus.";
-        const scSel = document.createElement("select");
-        scSel.dataset.tooltip = scLbl.dataset.tooltip;
-        styleBarSelect(scSel);
-        const scCur = flowScopeNow;
-        for (const [val, label] of [["play", "▶ In play"], ["all", "🛠 Everything"]]) {
-          const o = document.createElement("option");
-          o.value = val;
-          o.textContent = label;
-          if (scCur === val) o.selected = true;
-          scSel.appendChild(o);
-        }
-        scSel.dataset.tour = "campaign.flow-scope";
-        scSel.addEventListener("change", (ev) => {
-          this.flowScope = String(ev.target.value || "play");
-          try { game.user?.setFlag?.("bbttcc-campaign", "flowScope", this.flowScope); } catch (_e) {}
-          this._flowResetView();
-          this.render(false);
-        });
-
-        const lbl = document.createElement("div");
-        styleBarLabel(lbl);
-        lbl.textContent = "Turn";
-        const _turnTip = _tip("flow-turn");
-        if (_turnTip) lbl.dataset.tooltip = _turnTip;
-
-        const sel = document.createElement("select");
-        if (_turnTip) sel.dataset.tooltip = _turnTip;
-        styleBarSelect(sel);
-
-        // Empty results still need a usable Turn list, and the turn the user
-        // actually picked must stay visible in it even when nothing matched —
-        // otherwise the select silently reads "All Turns" while flowTurn is set.
-        const turns = (() => {
-          const base = (graph && Array.isArray(graph.turns) && graph.turns.length)
-            ? graph.turns.slice()
-            : (graph && graph.turnNumber ? [graph.turnNumber] : []);
-          if (this.flowTurn != null && !base.some(t => String(t) === String(this.flowTurn))) base.push(this.flowTurn);
-          if (!base.length) base.push(1);
-          return base.sort((a, b) => Number(a) - Number(b));
-        })();
-        const turnSelected = (this.flowTurn != null) ? String(this.flowTurn) : String((graph && graph.turnNumber) || 1);
-
-        // "All" (no turn filter)
-        const optAll = document.createElement("option");
-        optAll.value = "all";
-        optAll.textContent = "All Turns";
-        if (this.flowTurn == null) optAll.selected = true;
-        sel.appendChild(optAll);
-
-        for (let ti = 0; ti < turns.length; ti++) {
-          const opt = document.createElement("option");
-          opt.value = String(turns[ti]);
-          opt.textContent = "Turn " + String(turns[ti]);
-          if (this.flowTurn != null && String(turns[ti]) === turnSelected) opt.selected = true;
-          sel.appendChild(opt);
-        }
-
-        sel.addEventListener("change", (ev) => {
-          try {
-            const raw = String(ev.target.value || "").trim();
-            if (raw === "all") this.flowTurn = null;
-            else {
-              const v = Number(raw);
-              if (isFinite(v) && v >= 1) this.flowTurn = Math.floor(v);
-            }
-          } catch (e2) { this.flowTurn = null; }
-          this._flowResetView();
-          this.render(false);
-        });
-
-        // Quest filter
         const qLbl = document.createElement("div");
-        styleBarLabel(qLbl);
+        qLbl.className = "lbl";
         qLbl.textContent = "Quest";
         const _questTip = _tip("flow-quest");
         if (_questTip) qLbl.dataset.tooltip = _questTip;
-
         const qSel = document.createElement("select");
+        qSel.className = "sel";
+        qSel.dataset.tour = "campaign.flow-quest";
         if (_questTip) qSel.dataset.tooltip = _questTip;
-        styleBarSelect(qSel);
-
-        const optQAll = document.createElement("option");
-        optQAll.value = "all";
-        optQAll.textContent = "All Quests";
-        if (!this.flowQuestId || String(this.flowQuestId) === "all") optQAll.selected = true;
-        qSel.appendChild(optQAll);
-
-        try {
-          const qapi = game.bbttcc?.api?.campaign?.quests;
-          const qs = qapi?.listQuests ? (qapi.listQuests({ campaignId: campaign.id, status: "all", search: "" }) || []) : [];
-          const arr = Array.isArray(qs) ? qs.slice() : [];
-          arr.sort((a,b)=>String(a.name||a.id||"").localeCompare(String(b.name||b.id||""), game.i18n.lang));
-          // 2026-08-15 — offer only quests that HAVE beats under the other
-          // active filters (scope/turn/act). Picking e.g. an out-of-play quest
-          // while Scope is "In play" used to render an empty map with no way
-          // back. `questsInScope` is null when the probe couldn't run — then we
-          // fall back to listing everything rather than showing an empty list.
-          const curQ = String(this.flowQuestId || "all");
-          let curListed = false;
-          for (let qi=0; qi<arr.length; qi++) {
-            const q = arr[qi];
-            if (!q || !q.id) continue;
-            const qid = String(q.id);
-            if (questsInScope && !questsInScope.has(qid) && qid !== curQ) continue;
-            const o = document.createElement("option");
-            o.value = qid;
-            const unreachable = !!(questsInScope && !questsInScope.has(qid));
-            o.textContent = unreachable
-              ? "⚠ " + String(q.name || qid) + " — no beats in this scope"
-              : String(q.name || qid);
-            if (curQ === qid) { o.selected = true; curListed = true; }
-            qSel.appendChild(o);
-          }
-          // Selection that no longer resolves to a quest at all (deleted quest,
-          // stale flag): keep it visible so the select never lies about state.
-          if (curQ !== "all" && !curListed) {
-            const o = document.createElement("option");
-            o.value = curQ;
-            o.textContent = "⚠ " + curQ + " — not found";
-            o.selected = true;
-            qSel.appendChild(o);
-          }
-        } catch (_eQ) {}
-
+        // Quest order: the one the story stands in first, then quest.order,
+        // completed ones after active, (no quest) last.
+        const qRows = [...questsWithBeats.entries()].map(([id, n]) => {
+          const d = sit.questDefs[id];
+          return {
+            id, n,
+            name: id === FLOW_UNASSIGNED ? "(no quest)" : String(d?.name || id),
+            status: String(d?.status || "active").toLowerCase(),
+            order: (d && d.order != null) ? Number(d.order) : 9e15
+          };
+        });
+        const rank = r => (r.id === sit.anchorQuestId) ? 0 : (r.id === FLOW_UNASSIGNED) ? 3 : (r.status === "completed") ? 2 : (r.status === "archived") ? 2.5 : 1;
+        qRows.sort((a, b) => (rank(a) - rank(b)) || (a.order - b.order) || a.name.localeCompare(b.name));
+        for (const r of qRows) {
+          const o = document.createElement("option");
+          o.value = r.id;
+          const mark = (r.id === sit.anchorQuestId) ? "▶ " : (r.status === "completed") ? "✓ " : (r.status === "archived") ? "▫ " : "";
+          o.textContent = `${mark}${r.name} (${questFired.get(r.id) || 0}/${r.n})`;
+          if (r.id === questId) o.selected = true;
+          qSel.appendChild(o);
+        }
         qSel.addEventListener("change", (ev) => {
-          this.flowQuestId = String(ev.target.value || "all");
+          this.flowQuestId = String(ev.target.value || "");
+          this.flowFollow = false;
+          try { game.user?.setFlag?.("bbttcc-campaign", "flowFollow", false); } catch (_e) {}
+          this.flowSelectedBeatId = null;
           this._flowResetView();
           this.render(false);
         });
 
-        // Act filter (Phase Charter): slice the map to one act of the funnel.
-        const aLbl = document.createElement("div");
-        styleBarLabel(aLbl);
-        aLbl.textContent = "Act";
-        aLbl.dataset.tooltip = "Filter to one act of the Phase Charter funnel — a beat's act is its storyPhase gate. Ambient = the phase-free pool (travel encounters, the Garden). Spine/system beats appear only under All Acts.";
-        const aSel = document.createElement("select");
-        aSel.dataset.tooltip = aLbl.dataset.tooltip;
-        styleBarSelect(aSel);
-        const ACT_NAMES = ["THE OFFICES", "SETTLING", "SPARKS", "THE WIDENING TRAIL", "THE VAULT & THE SKY", "THATWARDS HO!", "GLOOMGILL"];
-        const actCur = String(this.flowActFilter ?? "all");
-        for (const [val, label] of [["all", "All Acts"],
-          ...ACT_NAMES.map((n, i) => [String(i), `ACT ${i} — ${n}`]),
-          ["ambient", "Ambient pool"]]) {
-          const o = document.createElement("option");
-          o.value = val;
-          o.textContent = label;
-          if (actCur === val) o.selected = true;
-          aSel.appendChild(o);
-        }
-        aSel.addEventListener("change", (ev) => {
-          this.flowActFilter = String(ev.target.value || "all");
+        const follow = document.createElement("button");
+        follow.type = "button";
+        follow.className = "bbttcc-btn bbttcc-btn-xs bbttcc-flow-follow" + (this.flowFollow ? " on" : "");
+        follow.dataset.tour = "campaign.flow-follow";
+        follow.textContent = this.flowFollow ? "⟲ Following the story" : "⟲ Follow the story";
+        follow.dataset.tooltip = _tip("flow-follow") || "Follow: the chart tracks the quest the story is standing in (the last fired spine beat). Picking a quest above turns this off; click to snap back.";
+        follow.addEventListener("click", (ev) => {
+          ev.preventDefault();
+          this.flowFollow = !this.flowFollow;
+          try { game.user?.setFlag?.("bbttcc-campaign", "flowFollow", this.flowFollow); } catch (_e) {}
+          this.flowSelectedBeatId = null;
           this._flowResetView();
           this.render(false);
         });
 
-        // View mode selector (Beats | Quests) — B9 trim
-        const vLbl = document.createElement("div");
-        styleBarLabel(vLbl);
-        vLbl.textContent = "View";
-        const _viewTip = _tip("flow-view");
-        if (_viewTip) vLbl.dataset.tooltip = _viewTip;
-
-        const vSel = document.createElement("select");
-        if (_viewTip) vSel.dataset.tooltip = _viewTip;
-        styleBarSelect(vSel);
-
-        for (const [val, label] of [["quests", "Quests (overview)"], ["lanes", "Lanes (arc)"], ["beats", "Beats (detail)"]]) {
-          const o = document.createElement("option");
-          o.value = val;
-          o.textContent = label;
-          if (String(this.flowViewMode) === val) o.selected = true;
-          vSel.appendChild(o);
-        }
-
-        vSel.addEventListener("change", (ev) => {
-          const v = String(ev.target.value || "quests");
-          this.flowViewMode = (v === "beats" || v === "lanes") ? v : "quests";
-          // Persist user's preference across sessions.
-          try { game.user?.setFlag?.("bbttcc-campaign", "flowViewMode", this.flowViewMode); } catch (_e) {}
-          // Clear expansion when leaving quest mode so re-entry is clean.
-          if (this.flowViewMode !== "quests") this.flowExpandedQuests = new Set();
-          this._flowResetView();
-          this.render(false);
-        });
-
-        left.appendChild(scLbl);
-        left.appendChild(scSel);
-        left.appendChild(lbl);
-        left.appendChild(sel);
         left.appendChild(qLbl);
         left.appendChild(qSel);
-        left.appendChild(aLbl);
-        left.appendChild(aSel);
-        left.appendChild(vLbl);
-        left.appendChild(vSel);
+        left.appendChild(follow);
         bar.appendChild(left);
 
         const right = document.createElement("div");
-        right.style.display = "flex";
-        right.style.alignItems = "center";
-        right.style.gap = "8px";
-
-        const hint = document.createElement("div");
-        hint.style.color = "var(--cb-text-muted)";
-        hint.style.fontSize = "12px";
-        hint.textContent = "Flow map (includes cinematics; optional filters)";
-        right.appendChild(hint);
+        right.className = "r";
+        right.dataset.tour = "campaign.flow-meta";
+        const PHN = ["THE OFFICES", "SETTLING", "SPARKS", "THE WIDENING TRAIL", "THE VAULT & THE SKY", "THATWARDS HO!", "GLOOMGILL"];
+        let tik = 0;
+        try { tik = Number(game.bbttcc?.api?.campaign?.tikkun?.get?.() ?? 0) || 0; } catch (_e) {}
+        // Director pressure (2026-09-08 owner ruling): the ONE meter a GM acts
+        // on — TIMING, not eligibility. Accrues 30/turn · 8/travel leg ·
+        // 10/raid round · 3/resolved beat; at the threshold the Director
+        // looks at the next seam and offers the next chain beat (GM veto).
+        // Fire → 0, decline → halved. Arc flags (wendigo/bandit/cadence…)
+        // deliberately NOT shown — the beat card names them in context.
+        let pressure = 0, pThresh = 60;
+        try { pressure = Number(api?.director?.state?.()?.pressure) || 0; } catch (_e) {}
+        try { pThresh = Number(game.settings.get("bbttcc-campaign", "director.pressureThreshold")) || 60; } catch (_e) {}
+        const pHot = pressure >= pThresh;
+        const pTip = `Director pressure ${pressure} / ${pThresh} — story TIMING. Accrues 30 per world turn, 8 per travel leg, 10 per raid round, 3 per resolved beat. ${pHot
+          ? "AT THRESHOLD: the Story Director will look at the next seam (travel leg, raid round, resolved beat) and offer the next eligible chain beat — you get a veto."
+          : `At ${pThresh} the Story Director looks at the next seam and offers the next eligible chain beat (GM veto).`} Firing resets it to 0; declining halves it and benches that chain until next turn. Threshold: Configure Settings → Bad Eden Campaign.`;
+        right.innerHTML =
+          `<span class="act">ACT ${sit.curPhase} — ${esc(PHN[sit.curPhase] || "?")}</span>` +
+          `<span class="sep">·</span><span>Turn <b>${esc(String(runtime.turn))}</b></span>` +
+          (runtime.ledger && Number.isFinite(Number(runtime.ledger.spent)) ? `<span class="sep">·</span><span>${esc(String(runtime.ledger.spent))}/${esc(String(runtime.ledger.budget))} days</span>` : "") +
+          (tik > 0 ? `<span class="sep">·</span><span class="tik" data-tooltip="Tikkun Dividend — earned redemption ease">✨ TIKKUN ×${tik}</span>` : "") +
+          `<span class="sep">·</span><span class="press${pHot ? " hot" : ""}" data-tooltip="${esc(pTip)}">⚡ ${pressure}/${pThresh}</span>` +
+          (!flowEmpty ? `<span class="sep">·</span><span data-tooltip="Beats fired in this quest / beats in this quest">${graph.firedCount}/${graph.beatCount} fired</span>` : "");
         bar.appendChild(right);
-
         host.appendChild(bar);
-      } catch (eBar) {}
+      } catch (eBar) { console.warn(TAG, "flow bar failed", eBar); }
 
-      // Empty result — the bar is mounted above, so this is now a state you can
-      // steer out of. Name the filters that are actually narrowing the view and
-      // give a one-click way back (the header RESET only clears zoom/pan).
-      if (flowEmpty) {
-        try {
-          const empty = document.createElement("div");
-          empty.className = "bbttcc-muted";
-          empty.style.padding = "10px 2px";
-
-          const active = [];
-          if (flowScopeNow === "play") active.push("Scope <b>In play</b>");
-          if (this.flowTurn != null) active.push("Turn <b>" + String(this.flowTurn) + "</b>");
-          if (this.flowQuestId && String(this.flowQuestId) !== "all") active.push("a <b>Quest</b> filter");
-          if (this.flowActFilter && String(this.flowActFilter) !== "all") active.push("an <b>Act</b> filter");
-
-          const msg = document.createElement("p");
-          msg.style.margin = "0 0 8px 0";
-          msg.innerHTML = active.length
-            ? "No beats match the current filters — " + active.join(" · ") + "."
-            : "No beats to visualize.";
-          empty.appendChild(msg);
-
-          if (active.length) {
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.textContent = "↺ Clear filters";
-            btn.dataset.tooltip = "Reset Turn, Quest and Act to All. Scope stays as you set it — flip it above if you want the full authored corpus.";
-            btn.style.padding = "4px 10px";
-            btn.style.borderRadius = "var(--cb-radius)";
-            btn.style.border = "1px solid var(--cb-border)";
-            btn.style.background = "var(--cb-bg-soft)";
-            btn.style.color = "var(--cb-text-main)";
-            btn.style.cursor = "pointer";
-            btn.addEventListener("click", (ev) => {
-              ev.preventDefault();
-              this.flowTurn = null;
-              this.flowQuestId = "all";
-              this.flowActFilter = "all";
-              this._flowResetView();
-              this.render(false);
-            });
-            empty.appendChild(btn);
-          }
-          host.appendChild(empty);
-        } catch (_eEmpty) {
-          host.appendChild(Object.assign(document.createElement("p"), {
-            className: "bbttcc-muted", textContent: "No beats to visualize."
-          }));
-        }
-        return;
-      }
-
-
-      // Auto-center root beat when the view is in its default state.
-      // Keeps zoom buttons useful and avoids inconsistent renders across resizes.
-      try {
-        const z0 = Number(this.flowZoom || 1) || 1;
-        const p0x = (this.flowPan && Number.isFinite(this.flowPan.x)) ? this.flowPan.x : 0;
-        const p0y = (this.flowPan && Number.isFinite(this.flowPan.y)) ? this.flowPan.y : 0;
-        const isDefaultView = (Math.abs(z0 - 1) < 0.001) && (p0x === 0) && (p0y === 0);
-
-        if (isDefaultView && graph && graph.mode !== "laneGrid" && graph.rootId && graph.pos && graph.pos[graph.rootId]) {
-          // Favor readable chips over full-fit. We center root slightly right of center (accounts for sidebar),
-          // and near the top quarter.
-          const rootPos = graph.pos[graph.rootId];
-          const rw = graph.constants.NODE_W;
-          const rh = graph.constants.NODE_H;
-
-          // Default zoom: readable; can be adjusted by buttons.
-          this.flowZoom = 1.20;
-
-          // Pan will be refined after svg mounts (needs host rect), so store a "pending center" marker.
-          this.__bbttccFlowPendingCenter = {
-            x: rootPos.x + (rw / 2),
-            y: rootPos.y + (rh / 2)
-          };
-        }
-      } catch (_eAuto) {}
-      // (SVG will mount below the bar)
-
-      // Controls summary (small)
-      const meta = document.createElement("div");
-      meta.className = "bbttcc-muted";
-      meta.dataset.tour = "campaign.flow-meta";
-      meta.style.margin = "0 0 6px 0";
-      meta.style.fontSize = "12px";
-      const sep = " <span class='bbttcc-inline-separator'>·</span> ";
-      let metaHtml =
-        "<span><b>" + String(graph.nodes.length) + "</b> nodes</span>" + sep +
-        "<span><b>" + String(graph.edges.length) + "</b> links</span>" +
-        (this.flowShowTravel ? sep + "<span>Travel lane: <b>shown</b></span>" : "");
-      if (runtime) {
-        try {
-          const ph = Number(game.settings.get("bbttcc-campaign", "storyPhase")) || 0;
-          const PHN = ["THE OFFICES", "SETTLING", "SPARKS", "THE WIDENING TRAIL", "THE VAULT & THE SKY", "THATWARDS HO!", "GLOOMGILL"];
-          metaHtml += sep + `<span style="color:var(--cb-data,#93c5fd);font-weight:800;letter-spacing:.08em">ACT ${ph} — ${PHN[ph] || "?"}</span>`;
-          const tik = Number(game.bbttcc?.api?.campaign?.tikkun?.get?.() ?? 0) || 0;
-          if (tik > 0) metaHtml += sep + `<span style="color:var(--cb-accent,#fbbf24);font-weight:800;letter-spacing:.08em" data-tooltip="Tikkun Dividend — earned redemption ease: hexes heal at darkness ≤ ${3 + tik}, integration ${15 * tik}% lighter">✨ TIKKUN ×${tik}</span>`;
-        } catch (_ePh) {}
-        metaHtml += sep + `<span>Turn <b>${runtime.turn}</b></span>`;
-        if (runtime.ledger && Number.isFinite(Number(runtime.ledger.spent)) && Number.isFinite(Number(runtime.ledger.budget))) {
-          metaHtml += sep + `<span>${runtime.ledger.spent}/${runtime.ledger.budget} days</span>`;
-        }
-        const counts = { ready: 0, blocked: 0, fired: 0, audio: 0 };
-        for (const r of Object.values(runtime.byId)) {
-          if (r.state === "ready") counts.ready++;
-          if (r.state === "blocked") counts.blocked++;
-          if (r.state === "fired") counts.fired++;
-          if (r.hasAudio) counts.audio++;
-        }
-        metaHtml += sep +
-          `<span style="color:rgba(74,222,128,0.95)">⚡ ${counts.ready} ready</span>` + sep +
-          `<span style="color:rgba(245,158,11,0.95)">⛩ ${counts.blocked} blocked</span>` + sep +
-          `<span style="color:rgba(148,163,184,0.9)">✓ ${counts.fired} fired</span>` + sep +
-          `<span style="color:rgba(34,211,238,0.95)">🔊 ${counts.audio}</span>`;
-      }
-      meta.innerHTML = metaHtml;
-      host.appendChild(meta);
-
-      // Stage 2 layout: map + Now Panel side by side.
+      // ── map + rail ──────────────────────────────────────────────────────
       const flowRow = document.createElement("div");
       flowRow.className = "bbttcc-flow-row";
       host.appendChild(flowRow);
       const svgWrap = document.createElement("div");
       svgWrap.className = "bbttcc-flow-svgwrap";
       flowRow.appendChild(svgWrap);
+      sit.chartQuestId = questId;
       let nowPanel = null;
-      try { nowPanel = await this._buildNowPanel(campaign, runtime); } catch (eNP) { console.warn(TAG, "now-panel failed", eNP); }
+      try { nowPanel = await this._buildNowPanel(campaign, runtime, sit); } catch (eNP) { console.warn(TAG, "now-panel failed", eNP); }
       if (nowPanel) flowRow.appendChild(nowPanel);
+
+      if (flowEmpty) {
+        const empty = document.createElement("div");
+        empty.className = "bbttcc-muted bbttcc-flow-empty";
+        empty.innerHTML = questId
+          ? `<p>This quest has no beats to chart${this.flowShowTravel ? "" : " (travel-leg beats are hidden — 🧭 Travel in the header shows them)"}.</p>`
+          : `<p>No beats to visualize.</p>`;
+        svgWrap.appendChild(empty);
+        this.__flowFlyTo = (beatId) => this._flowFlyElsewhere(beatId, sit);
+        return;
+      }
 
       const svgNS = "http://www.w3.org/2000/svg";
       const svg = document.createElementNS(svgNS, "svg");
       svg.setAttribute("width", "100%");
-      // Use available panel height (keeps the visualizer big and readable)
       let hostRect = null;
       try { hostRect = host.getBoundingClientRect(); } catch (_eH) { hostRect = null; }
       const panelH = hostRect && hostRect.height ? Math.floor(hostRect.height) : 720;
-      const svgH = Math.max(640, Math.min(1400, panelH)); // clamp to sane bounds
+      const svgH = Math.max(640, Math.min(1400, panelH));
       svg.setAttribute("height", String(svgH));
       svg.setAttribute("viewBox", `0 0 ${graph.size.w} ${graph.size.h}`);
-      svg.style.border = "1px solid rgba(148,163,184,0.18)";
-      svg.style.borderRadius = "14px";
-      svg.style.background = "rgba(2,6,23,0.25)";
-      svg.style.cursor = "grab";
-      svg.style.userSelect = "none";
+      svg.classList.add("bbttcc-flow-svg");
 
-      // Background rect for panning
       const bg = document.createElementNS(svgNS, "rect");
-      bg.setAttribute("x", "0");
-      bg.setAttribute("y", "0");
-      bg.setAttribute("width", String(graph.size.w));
-      bg.setAttribute("height", String(graph.size.h));
+      bg.setAttribute("x", "0"); bg.setAttribute("y", "0");
+      bg.setAttribute("width", String(graph.size.w)); bg.setAttribute("height", String(graph.size.h));
       bg.setAttribute("fill", "transparent");
       svg.appendChild(bg);
-
       const g = document.createElementNS(svgNS, "g");
       svg.appendChild(g);
 
-      // Apply pan/zoom
       const applyTransform = () => {
         const z = Number(this.flowZoom || 1) || 1;
         const px = (this.flowPan && Number.isFinite(this.flowPan.x)) ? this.flowPan.x : 0;
         const py = (this.flowPan && Number.isFinite(this.flowPan.y)) ? this.flowPan.y : 0;
         g.setAttribute("transform", `translate(${px} ${py}) scale(${z})`);
       };
+
+      // viewBox user units vs screen px — every mouse→graph conversion goes
+      // through `s` (xMidYMid letterbox offsets included).
+      const viewMap = () => {
+        let r = null;
+        try { r = svg.getBoundingClientRect(); } catch (_e) { r = null; }
+        const rw = r && r.width ? r.width : 980;
+        const rh = r && r.height ? r.height : 720;
+        const s = Math.min(rw / graph.size.w, rh / graph.size.h) || 1;
+        return { r, rw, rh, s, ox: (rw - graph.size.w * s) / 2, oy: (rh - graph.size.h * s) / 2 };
+      };
+
       applyTransform();
 
-      // Auto-fit on first open (only if user hasn't panned/zoomed yet)
-      try {
-        const z0 = Number(this.flowZoom || 1) || 1;
-        const p0x = (this.flowPan && Number.isFinite(this.flowPan.x)) ? this.flowPan.x : 0;
-        const p0y = (this.flowPan && Number.isFinite(this.flowPan.y)) ? this.flowPan.y : 0;
-        const isDefaultView = (Math.abs(z0 - 1) < 0.001) && (p0x === 0) && (p0y === 0);
-
-        if (isDefaultView && graph.mode !== "laneGrid") {
-          // (laneGrid opens at zoom 1 / pan 0 — with the viewBox letterbox
-          //  that IS the whole-graph fit; wheel-zoom from there.)
-          let hostRect2 = null;
-          try { hostRect2 = host.getBoundingClientRect(); } catch (_eFit) { hostRect2 = null; }
-          const availW = hostRect2 && hostRect2.width ? Math.floor(hostRect2.width) : 980;
-          const availH = hostRect2 && hostRect2.height ? Math.floor(hostRect2.height) : 720;
-
-          const fitW = availW * 0.92;
-          const fitH = availH * 0.86;
-
-          const zFit = Math.max(0.6, Math.min(1.8, Math.min(fitW / graph.size.w, fitH / graph.size.h)));
-          this.flowZoom = Math.round(zFit * 100) / 100;
-
-          // Center graph in viewport
-          const px = Math.floor((availW - (graph.size.w * this.flowZoom)) / 2);
-          const py = Math.floor((availH - (graph.size.h * this.flowZoom)) / 2);
-          this.flowPan = { x: px, y: py };
-          applyTransform();
-        }
-      } catch (_eAutoFit) {}
-
-      // Marker defs
+      // Markers + node gradient.
       const defs = document.createElementNS(svgNS, "defs");
       const mkMarker = (id, color) => {
         const m = document.createElementNS(svgNS, "marker");
         m.setAttribute("id", id);
-        m.setAttribute("markerWidth", "10");
-        m.setAttribute("markerHeight", "10");
-        m.setAttribute("refX", "9");
-        m.setAttribute("refY", "3");
+        m.setAttribute("markerWidth", "10"); m.setAttribute("markerHeight", "10");
+        m.setAttribute("refX", "9"); m.setAttribute("refY", "3");
         m.setAttribute("orient", "auto");
         const p = document.createElementNS(svgNS, "path");
         p.setAttribute("d", "M0,0 L9,3 L0,6 Z");
@@ -3080,9 +1937,6 @@ const activeCampaignId = _getActiveCampaignId();
       defs.appendChild(mkMarker("bbttcc-arrow", "rgba(148,163,184,0.55)"));
       defs.appendChild(mkMarker("bbttcc-arrow-success", "rgba(34,197,94,0.65)"));
       defs.appendChild(mkMarker("bbttcc-arrow-failure", "rgba(239,68,68,0.65)"));
-
-      // Node body gradient (2026-07 facelift): quiet vertical falloff so the
-      // cards read as raised chips instead of flat slabs.
       const nodeGrad = document.createElementNS(svgNS, "linearGradient");
       nodeGrad.setAttribute("id", "bbttcc-node-grad");
       nodeGrad.setAttribute("x1", "0"); nodeGrad.setAttribute("y1", "0");
@@ -3097,679 +1951,392 @@ const activeCampaignId = _getActiveCampaignId();
 
       const NODE_W = graph.constants.NODE_W;
       const NODE_H = graph.constants.NODE_H;
-
-      const nodeById = {};
-      for (const b of (campaign.beats || [])) nodeById[String(b.id)] = b;
-
-      // Per-graph-node metadata (width/height) for variable-size nodes (quest mode).
       const graphNodeById = {};
-      for (const gn of (graph.nodes || [])) graphNodeById[String(gn.id)] = gn;
+      for (const gn of graph.nodes) graphNodeById[String(gn.id)] = gn;
+      const nextSet = new Set(sit.nextIds.map(String));
+      const hereId = sit.anchorId ? String(sit.anchorId) : null;
 
-      const isQuestMode = (graph.mode === "questTree");
-      const isLaneMode = (graph.mode === "laneGrid");
-
-      // Lane labels + separators go under everything (lane mode only).
-      if (isLaneMode && Array.isArray(graph.lanes)) {
-        const statusColorL = (s) => {
-          const k = String(s || "").toLowerCase();
-          if (k === "completed") return "rgba(34,197,94,0.85)";
-          if (k === "archived") return "rgba(148,163,184,0.70)";
-          if (k === "active") return "rgba(245,158,11,0.85)";
-          return "rgba(148,163,184,0.45)";
-        };
-        for (const lane of graph.lanes) {
-          const sep = document.createElementNS(svgNS, "line");
-          sep.setAttribute("x1", "24");
-          sep.setAttribute("y1", String(lane.y - 34));
-          sep.setAttribute("x2", String(graph.size.w - 24));
-          sep.setAttribute("y2", String(lane.y - 34));
-          sep.setAttribute("stroke", "rgba(148,163,184,0.12)");
-          sep.setAttribute("stroke-width", "1");
-          g.appendChild(sep);
-
-          const dot = document.createElementNS(svgNS, "circle");
-          dot.setAttribute("cx", "36");
-          dot.setAttribute("cy", String(lane.y - 15));
-          dot.setAttribute("r", "5");
-          dot.setAttribute("fill", statusColorL(lane.status));
-          g.appendChild(dot);
-
-          const lt = document.createElementNS(svgNS, "text");
-          lt.setAttribute("x", "50");
-          lt.setAttribute("y", String(lane.y - 10));
-          lt.setAttribute("font-size", "14");
-          lt.setAttribute("font-weight", "800");
-          lt.setAttribute("letter-spacing", "2");
-          lt.style.fill = "var(--cb-data, #93c5fd)";
-          lt.textContent = String(lane.name || "").toUpperCase();
-          g.appendChild(lt);
-
-          const lc = document.createElementNS(svgNS, "text");
-          lc.setAttribute("x", "50");
-          lc.setAttribute("y", String(lane.y - 10));
-          lc.setAttribute("dx", String(12 + String(lane.name || "").length * 11));
-          lc.setAttribute("font-size", "11");
-          lc.setAttribute("font-weight", "600");
-          lc.setAttribute("letter-spacing", "1");
-          lc.setAttribute("fill", "rgba(148,163,184,0.75)");
-          lc.textContent = `${lane.count} BEAT${lane.count === 1 ? "" : "S"}${lane.status ? " · " + String(lane.status).toUpperCase() : ""}`;
-          g.appendChild(lc);
-        }
-      }
-
-      // Draw edges first (under nodes)
+      // ── edges (under nodes), top-down S-curves ──────────────────────────
       for (const e of graph.edges) {
-        const a = graph.pos[e.from];
-        const b = graph.pos[e.to];
+        const a = graph.pos[e.from], b = graph.pos[e.to];
         if (!a || !b) continue;
-
-        const srcNode = graphNodeById[e.from];
-        const dstNode = graphNodeById[e.to];
-        const srcW = (srcNode && srcNode.width) ? srcNode.width : NODE_W;
-        const srcH = (srcNode && srcNode.height) ? srcNode.height : NODE_H;
-        const dstW = (dstNode && dstNode.width) ? dstNode.width : NODE_W;
-
-        let x1, y1, x2, y2, c1x, c1y, c2x, c2y;
-        if (isLaneMode) {
-          // Horizontal flow: leave the source's right edge, enter the target's
-          // left edge. Backward/self-column links bow underneath instead.
-          const forward = (b.x > a.x + srcW);
-          if (forward) {
-            x1 = a.x + srcW; y1 = a.y + (srcH / 2);
-            x2 = b.x;        y2 = b.y + (NODE_H / 2);
-            const dx = Math.max(46, (x2 - x1) * 0.45);
-            c1x = x1 + dx; c1y = y1;
-            c2x = x2 - dx; c2y = y2;
-          } else {
-            x1 = a.x + (srcW / 2); y1 = a.y + srcH;
-            x2 = b.x + (dstW / 2); y2 = b.y + NODE_H;
-            const bow = 70 + Math.min(120, Math.abs(x1 - x2) * 0.08);
-            c1x = x1; c1y = y1 + bow;
-            c2x = x2; c2y = y2 + bow;
-          }
+        const src = graphNodeById[e.from], dst = graphNodeById[e.to];
+        const x1 = a.x + (src.width / 2), y1 = a.y + src.height;
+        const x2 = b.x + (dst.width / 2), y2 = b.y;
+        const up = y2 <= y1;   // back-link (hub returns): bow around the side
+        let d;
+        if (!up) {
+          const dy = Math.max(40, (y2 - y1) * 0.5);
+          d = `M ${x1} ${y1} C ${x1} ${y1 + dy}, ${x2} ${y2 - dy}, ${x2} ${y2}`;
         } else {
-          x1 = a.x + (srcW / 2);
-          y1 = a.y + srcH;
-          x2 = b.x + (dstW / 2);
-          y2 = b.y;
-          const dy = Math.max(60, (y2 - y1) * 0.55);
-          c1x = x1; c1y = y1 + dy;
-          c2x = x2; c2y = y2 - dy;
+          const bow = 90 + Math.min(160, Math.abs(x1 - x2) * 0.1);
+          const sx = (x2 >= x1) ? 1 : -1;
+          d = `M ${x1} ${y1} C ${x1 + sx * bow} ${y1 + 60}, ${x2 + sx * bow} ${y2 - 60}, ${x2} ${y2}`;
         }
-
         const path = document.createElementNS(svgNS, "path");
-        path.setAttribute("d", `M ${x1} ${y1} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x2} ${y2}`);
+        path.setAttribute("d", d);
         path.setAttribute("fill", "none");
-
-        let stroke = "rgba(148,163,184,0.35)";
-        let marker = "url(#bbttcc-arrow)";
-        let dash = "";
-
-        if (isQuestMode) {
-          // Cross-quest edges: single neutral color (aggregates many beat-level edges).
-          stroke = "rgba(148,163,184,0.55)";
-          marker = "url(#bbttcc-arrow)";
-        } else if (e.kind === "success") { stroke = "rgba(34,197,94,0.45)"; marker = "url(#bbttcc-arrow-success)"; }
+        let stroke = "rgba(148,163,184,0.35)", marker = "url(#bbttcc-arrow)", dash = "";
+        if (e.kind === "success") { stroke = "rgba(34,197,94,0.45)"; marker = "url(#bbttcc-arrow-success)"; }
         else if (e.kind === "failure") { stroke = "rgba(239,68,68,0.45)"; marker = "url(#bbttcc-arrow-failure)"; }
-        else if (e.kind === "choice_fail") { dash = "6 5"; stroke = "rgba(239,68,68,0.30)"; marker = "url(#bbttcc-arrow)"; }
-        else if (e.kind === "choice") { dash = "6 5"; stroke = "rgba(148,163,184,0.30)"; marker = "url(#bbttcc-arrow)"; }
-
+        else if (e.kind === "choice_fail") { dash = "6 5"; stroke = "rgba(239,68,68,0.30)"; }
+        else if (e.kind === "choice") { dash = "6 5"; stroke = "rgba(148,163,184,0.30)"; }
+        // Light the road actually travelled / offered.
+        const litFrom = graphNodeById[e.from]?.rt?.fired;
+        const litTo = graphNodeById[e.to]?.rt?.fired || nextSet.has(e.to);
+        if (litFrom && litTo) { stroke = "rgba(251,191,36,0.75)"; }
         path.setAttribute("stroke", stroke);
-        path.setAttribute("stroke-width", isQuestMode ? "2.5" : "2");
+        path.setAttribute("stroke-width", (litFrom && litTo) ? "3" : "2");
         if (dash) path.setAttribute("stroke-dasharray", dash);
         path.setAttribute("marker-end", marker);
-
-        // Tooltip
         const t = document.createElementNS(svgNS, "title");
-        if (isQuestMode) {
-          const kindsStr = e.kinds
-            ? Object.entries(e.kinds).map(([k, v]) => v > 1 ? `${k}×${v}` : k).join(", ")
-            : (e.kind || "");
-          t.textContent = `${e.from.replace(/^quest:/, "")} → ${e.to.replace(/^quest:/, "")}\n${e.count || 1} beat link${(e.count || 1) === 1 ? "" : "s"}${kindsStr ? " (" + kindsStr + ")" : ""}`;
-        } else {
-          t.textContent = `${e.label || e.kind}: ${e.from} → ${e.to}`;
-        }
+        t.textContent = `${e.label || e.kind}: ${e.from} → ${e.to.replace(/^exit:/, "")}`;
         path.appendChild(t);
-
+        // Choice label on the wire (short).
+        if ((e.kind === "choice" || e.kind === "choice_fail") && e.label && !up) {
+          const lt = document.createElementNS(svgNS, "text");
+          lt.setAttribute("x", String((x1 + x2) / 2));
+          lt.setAttribute("y", String((y1 + y2) / 2 - 4));
+          lt.setAttribute("text-anchor", "middle");
+          lt.setAttribute("font-size", "10");
+          lt.setAttribute("fill", "rgba(203,213,225,0.75)");
+          lt.setAttribute("paint-order", "stroke");
+          lt.setAttribute("stroke", "rgba(2,6,23,0.85)");
+          lt.setAttribute("stroke-width", "3");
+          const s = String(e.label);
+          lt.textContent = s.length > 26 ? s.slice(0, 26) + "…" : s;
+          g.appendChild(lt);
+        }
         g.appendChild(path);
       }
 
-      // ---------------------------------------------------------------------
-      // Quest-mode node rendering (B9 trim): quest bubbles + inline beat chips.
-      // ---------------------------------------------------------------------
-      if (isQuestMode) {
-        const Q_W = graph.constants.NODE_W;
-        const Q_H_COLLAPSED = graph.constants.NODE_H;
-        const Q_CHIP_H = graph.constants.BEAT_CHIP_H || 30;
-        const Q_CHIP_PAD = graph.constants.BEAT_CHIP_PAD || 6;
-        const Q_EXPAND_HEADER = graph.constants.EXPAND_HEADER || 78;
+      // ── nodes ───────────────────────────────────────────────────────────
+      const nodeEls = {};
+      const badge = (parent, text, bx, by, w, line) => {
+        const r = document.createElementNS(svgNS, "rect");
+        r.setAttribute("x", String(bx)); r.setAttribute("y", String(by));
+        r.setAttribute("rx", "8"); r.setAttribute("ry", "8");
+        r.setAttribute("width", String(w)); r.setAttribute("height", "16");
+        r.setAttribute("fill", "rgba(2,6,23,0.35)");
+        r.setAttribute("stroke", line); r.setAttribute("stroke-width", "1");
+        const t = document.createElementNS(svgNS, "text");
+        t.setAttribute("x", String(bx + w / 2)); t.setAttribute("y", String(by + 11.5));
+        t.setAttribute("text-anchor", "middle");
+        t.setAttribute("fill", "rgba(226,232,240,0.92)");
+        t.setAttribute("font-size", "9"); t.setAttribute("font-weight", "700"); t.setAttribute("letter-spacing", "0.6");
+        t.textContent = text;
+        parent.appendChild(r); parent.appendChild(t);
+      };
 
-        const statusColor = (s) => {
-          const k = String(s || "").toLowerCase();
-          if (k === "completed") return "rgba(34,197,94,0.85)";   // green
-          if (k === "archived") return "rgba(148,163,184,0.70)";   // gray
-          if (k === "active") return "rgba(245,158,11,0.85)";      // amber
-          return "rgba(148,163,184,0.45)";                          // unassigned / unknown
-        };
-
-        for (const n of graph.nodes) {
-          const p = graph.pos[n.id];
-          if (!p) continue;
-
-          const node = document.createElementNS(svgNS, "g");
-          node.setAttribute("data-quest-id", n.questId);
-          node.style.cursor = "pointer";
-
-          // Bubble
-          const rect = document.createElementNS(svgNS, "rect");
-          rect.setAttribute("x", String(p.x));
-          rect.setAttribute("y", String(p.y));
-          rect.setAttribute("rx", "16");
-          rect.setAttribute("ry", "16");
-          rect.setAttribute("width", String(Q_W));
-          rect.setAttribute("height", String(n.height));
-
-          const isUnassigned = !!n.isUnassigned;
-          let fill = "rgba(15,23,42,0.65)";
-          let stroke = n.expanded ? "rgba(56,189,248,0.55)" : "rgba(148,163,184,0.35)";
-          if (isUnassigned) { fill = "rgba(30,41,59,0.50)"; stroke = "rgba(148,163,184,0.25)"; }
-          rect.setAttribute("fill", fill);
-          rect.setAttribute("stroke", stroke);
-          rect.setAttribute("stroke-width", n.expanded ? "3" : "2");
-          node.appendChild(rect);
-
-          // Status pip (left of header text)
-          if (!isUnassigned) {
-            const pip = document.createElementNS(svgNS, "circle");
-            pip.setAttribute("cx", String(p.x + 22));
-            pip.setAttribute("cy", String(p.y + 30));
-            pip.setAttribute("r", "7");
-            pip.setAttribute("fill", statusColor(n.status));
-            pip.setAttribute("stroke", "rgba(255,255,255,0.15)");
-            pip.setAttribute("stroke-width", "1");
-            node.appendChild(pip);
-          }
-
-          // Quest name (large)
-          const nameEl = document.createElementNS(svgNS, "text");
-          nameEl.setAttribute("x", String(p.x + (isUnassigned ? 18 : 40)));
-          nameEl.setAttribute("y", String(p.y + 36));
-          nameEl.setAttribute("fill", "rgba(255,255,255,0.95)");
-          nameEl.setAttribute("font-size", "17");
-          nameEl.setAttribute("font-weight", "800");
-          const nm = String(n.name || "").length > 28 ? (String(n.name).slice(0, 28) + "…") : String(n.name || "");
-          nameEl.textContent = nm;
-          node.appendChild(nameEl);
-
-          // Sub line: beat count + status text
-          const subQ = document.createElementNS(svgNS, "text");
-          subQ.setAttribute("x", String(p.x + 18));
-          subQ.setAttribute("y", String(p.y + 58));
-          subQ.setAttribute("fill", "rgba(255,255,255,0.65)");
-          subQ.setAttribute("font-size", "12");
-          const subParts = [];
-          subParts.push(n.beatCount + " beat" + (n.beatCount === 1 ? "" : "s"));
-          if (!isUnassigned && n.status) subParts.push(String(n.status));
-          subQ.textContent = subParts.join("  ·  ");
-          node.appendChild(subQ);
-
-          // Expand/collapse chevron (top-right) — hidden for unassigned (no quest record)
-          if (!isUnassigned) {
-            const chev = document.createElementNS(svgNS, "text");
-            chev.setAttribute("x", String(p.x + Q_W - 20));
-            chev.setAttribute("y", String(p.y + 32));
-            chev.setAttribute("fill", "rgba(255,255,255,0.75)");
-            chev.setAttribute("font-size", "16");
-            chev.setAttribute("font-weight", "700");
-            chev.setAttribute("text-anchor", "end");
-            chev.textContent = n.expanded ? "▾" : "▸";
-            node.appendChild(chev);
-          }
-
-          // Hint text bottom-right for collapsed quests
-          if (!n.expanded && !isUnassigned) {
-            const hint = document.createElementNS(svgNS, "text");
-            hint.setAttribute("x", String(p.x + Q_W - 14));
-            hint.setAttribute("y", String(p.y + n.height - 14));
-            hint.setAttribute("fill", "rgba(255,255,255,0.45)");
-            hint.setAttribute("font-size", "10.5");
-            hint.setAttribute("text-anchor", "end");
-            hint.textContent = "click to expand";
-            node.appendChild(hint);
-          }
-
-          // Tooltip
-          const tq = document.createElementNS(svgNS, "title");
-          tq.textContent =
-            (n.name || "") + "\n" +
-            n.beatCount + " beat" + (n.beatCount === 1 ? "" : "s") +
-            (isUnassigned ? "" : ("\nstatus: " + (n.status || "active"))) +
-            "\nclick to " + (n.expanded ? "collapse" : "expand");
-          node.appendChild(tq);
-
-          // Click handler -> toggle expansion. (Unassigned bucket: noop.)
-          if (!isUnassigned) {
-            node.addEventListener("click", (ev) => {
-              ev.preventDefault();
-              ev.stopPropagation();
-              // Ignore clicks that originated from an inner beat chip (those have their own handler).
-              if (ev.target && ev.target.closest && ev.target.closest("g[data-flow-beat-chip]")) return;
-              if (this.flowExpandedQuests.has(n.questId)) this.flowExpandedQuests.delete(n.questId);
-              else this.flowExpandedQuests.add(n.questId);
-              this.render(false);
-            });
-          }
-
-          // Inner beat chips when expanded.
-          if (n.expanded && Array.isArray(n.beats) && n.beats.length) {
-            const chipX = p.x + 14;
-            let chipY = p.y + Q_EXPAND_HEADER;
-            const chipW = Q_W - 28;
-
-            for (const ib of n.beats) {
-              const chip = document.createElementNS(svgNS, "g");
-              chip.setAttribute("data-flow-beat-chip", "1");
-              chip.setAttribute("data-beat-id", String(ib.id));
-              chip.style.cursor = "pointer";
-
-              const cr = document.createElementNS(svgNS, "rect");
-              cr.setAttribute("x", String(chipX));
-              cr.setAttribute("y", String(chipY));
-              cr.setAttribute("rx", "8");
-              cr.setAttribute("ry", "8");
-              cr.setAttribute("width", String(chipW));
-              cr.setAttribute("height", String(Q_CHIP_H));
-
-              // Subtle type-aware stroke (mirrors flat-mode coloring).
-              let cStroke = "rgba(148,163,184,0.28)";
-              if (String(ib.type) === "encounter") cStroke = "rgba(245,158,11,0.40)";
-              else if (String(ib.type) === "cinematic") cStroke = "rgba(168,85,247,0.45)";
-
-              cr.setAttribute("fill", "rgba(2,6,23,0.50)");
-              cr.setAttribute("stroke", cStroke);
-              cr.setAttribute("stroke-width", "1.5");
-              chip.appendChild(cr);
-
-              // Chip label (truncate)
-              const cl = document.createElementNS(svgNS, "text");
-              cl.setAttribute("x", String(chipX + 10));
-              cl.setAttribute("y", String(chipY + 14));
-              cl.setAttribute("fill", "rgba(255,255,255,0.92)");
-              cl.setAttribute("font-size", "12");
-              cl.setAttribute("font-weight", "700");
-              const cLabel = String(ib.label || ib.id || "");
-              cl.textContent = cLabel.length > 36 ? (cLabel.slice(0, 36) + "…") : cLabel;
-              chip.appendChild(cl);
-
-              // Chip sub-line: id + type
-              const cs = document.createElementNS(svgNS, "text");
-              cs.setAttribute("x", String(chipX + 10));
-              cs.setAttribute("y", String(chipY + 26));
-              cs.setAttribute("fill", "rgba(255,255,255,0.55)");
-              cs.setAttribute("font-size", "10");
-              cs.textContent = String(ib.id || "") + (ib.type ? " · " + String(ib.type) : "");
-              chip.appendChild(cs);
-
-              const ct = document.createElementNS(svgNS, "title");
-              ct.textContent = (ib.label || ib.id || "") + "\nid: " + (ib.id || "") + (ib.type ? "\ntype: " + ib.type : "");
-              chip.appendChild(ct);
-
-              chip.addEventListener("click", (ev) => {
-                ev.preventDefault();
-                ev.stopPropagation();
-                const fullBeat = nodeById[String(ib.id)] || ib;
-                if (!fullBeat) return;
-                this._openBeatEditor(campaign.id, this._ensureBeatShape(fullBeat), "core");
-              });
-
-              node.appendChild(chip);
-              chipY += Q_CHIP_H + Q_CHIP_PAD;
-            }
-          }
-
-          g.appendChild(node);
-        }
-      } else {
-      // Draw nodes
       for (const n of graph.nodes) {
         const p = graph.pos[n.id];
         if (!p) continue;
-
         const node = document.createElementNS(svgNS, "g");
-        node.setAttribute("data-beat-id", n.id);
         node.style.cursor = "pointer";
 
-        // Accent per type — used for the edge stroke, the left accent bar,
-        // and the badge line color (2026-07 facelift).
+        if (n.kind === "exit") {
+          node.setAttribute("data-exit-quest", n.targetQuestId);
+          node.setAttribute("data-beat-id", n.targetBeatId);
+          const rect = document.createElementNS(svgNS, "rect");
+          rect.setAttribute("x", String(p.x)); rect.setAttribute("y", String(p.y));
+          rect.setAttribute("rx", "22"); rect.setAttribute("ry", "22");
+          rect.setAttribute("width", String(n.width)); rect.setAttribute("height", String(n.height));
+          rect.setAttribute("fill", "rgba(15,23,42,0.55)");
+          rect.setAttribute("stroke", "rgba(56,189,248,0.45)");
+          rect.setAttribute("stroke-width", "1.4");
+          rect.setAttribute("stroke-dasharray", "5 4");
+          node.appendChild(rect);
+          const t1 = document.createElementNS(svgNS, "text");
+          t1.setAttribute("x", String(p.x + n.width / 2)); t1.setAttribute("y", String(p.y + 19));
+          t1.setAttribute("text-anchor", "middle");
+          t1.setAttribute("fill", "rgba(125,211,252,0.95)"); t1.setAttribute("font-size", "12"); t1.setAttribute("font-weight", "800");
+          const qn = String(n.questName);
+          t1.textContent = "→ " + (qn.length > 26 ? qn.slice(0, 26) + "…" : qn);
+          node.appendChild(t1);
+          const t2 = document.createElementNS(svgNS, "text");
+          t2.setAttribute("x", String(p.x + n.width / 2)); t2.setAttribute("y", String(p.y + 35));
+          t2.setAttribute("text-anchor", "middle");
+          t2.setAttribute("fill", "rgba(148,163,184,0.8)"); t2.setAttribute("font-size", "10");
+          const ln = String(n.label);
+          t2.textContent = ln.length > 34 ? ln.slice(0, 34) + "…" : ln;
+          node.appendChild(t2);
+          const tt = document.createElementNS(svgNS, "title");
+          tt.textContent = `Leaves this quest → ${n.questName}\n${n.label}\nclick to open that quest's chart`;
+          node.appendChild(tt);
+          node.addEventListener("click", (ev) => {
+            ev.preventDefault(); ev.stopPropagation();
+            this.flowQuestId = n.targetQuestId;
+            this.flowFollow = false;
+            try { game.user?.setFlag?.("bbttcc-campaign", "flowFollow", false); } catch (_e) {}
+            this.flowSelectedBeatId = n.targetBeatId;
+            this._flowResetView();
+            this.render(false);
+          });
+          g.appendChild(node);
+          continue;
+        }
+
+        node.setAttribute("data-beat-id", n.id);
+        const rt = n.rt || null;
+        const state = rt?.state || null;
+        const isHere = hereId === n.id;
+        const isNext = nextSet.has(n.id);
+
         let accent = "rgba(148,163,184,0.55)";
         if (n.isTravel) accent = "rgba(56,189,248,0.70)";
         if (String(n.type) === "encounter") accent = "rgba(245,158,11,0.60)";
         if (n.isCinematic) accent = "rgba(168,85,247,0.70)";
-        const gates = Array.isArray(n.gates) ? n.gates : [];
-        if (gates.length) accent = "rgba(245,158,11,0.85)";
 
-        // Truth Layer: live state drives the card's border + dimming.
-        const rt = n.rt || null;
-        const state = rt?.state || null;
-        let stateStroke = "rgba(148,163,184,0.22)";
-        let stateStrokeW = "1.2";
-        if (state === "ready")   { stateStroke = "rgba(74,222,128,0.70)";  stateStrokeW = "2"; }
-        if (state === "blocked") { stateStroke = "rgba(245,158,11,0.60)";  stateStrokeW = "1.6"; }
-        if (state === "cooling") { stateStroke = "rgba(56,189,248,0.55)";  stateStrokeW = "1.6"; }
+        let stateStroke = "rgba(148,163,184,0.22)", stateStrokeW = "1.2";
+        if (state === "ready")   { stateStroke = "rgba(74,222,128,0.70)"; stateStrokeW = "2"; }
+        if (state === "blocked") { stateStroke = "rgba(245,158,11,0.60)"; stateStrokeW = "1.6"; }
+        if (state === "cooling") { stateStroke = "rgba(56,189,248,0.55)"; stateStrokeW = "1.6"; }
+        if (isNext)              { stateStroke = "rgba(251,191,36,0.95)"; stateStrokeW = "3"; }
+        if (isHere)              { stateStroke = "rgba(251,191,36,0.75)"; stateStrokeW = "2.4"; }
 
         const rect = document.createElementNS(svgNS, "rect");
-        rect.setAttribute("x", String(p.x));
-        rect.setAttribute("y", String(p.y));
-        rect.setAttribute("rx", "10");
-        rect.setAttribute("ry", "10");
-        rect.setAttribute("width", String(NODE_W));
-        rect.setAttribute("height", String(NODE_H));
+        rect.setAttribute("x", String(p.x)); rect.setAttribute("y", String(p.y));
+        rect.setAttribute("rx", "10"); rect.setAttribute("ry", "10");
+        rect.setAttribute("width", String(NODE_W)); rect.setAttribute("height", String(NODE_H));
         rect.setAttribute("fill", "url(#bbttcc-node-grad)");
         rect.setAttribute("stroke", stateStroke);
         rect.setAttribute("stroke-width", stateStrokeW);
+        rect.setAttribute("data-base-stroke", stateStroke);
+        rect.setAttribute("data-base-stroke-width", stateStrokeW);
         node.appendChild(rect);
-        if (state === "fired") node.setAttribute("opacity", "0.45");
+        if (state === "fired" && !isHere) node.setAttribute("opacity", "0.5");
 
-        // Left accent bar
         const bar = document.createElementNS(svgNS, "rect");
-        bar.setAttribute("x", String(p.x + 2));
-        bar.setAttribute("y", String(p.y + 8));
-        bar.setAttribute("rx", "2");
-        bar.setAttribute("ry", "2");
-        bar.setAttribute("width", "4");
-        bar.setAttribute("height", String(NODE_H - 16));
+        bar.setAttribute("x", String(p.x + 2)); bar.setAttribute("y", String(p.y + 8));
+        bar.setAttribute("rx", "2"); bar.setAttribute("ry", "2");
+        bar.setAttribute("width", "4"); bar.setAttribute("height", String(NODE_H - 16));
         bar.setAttribute("fill", accent);
         node.appendChild(bar);
 
-        // Top line: label (truncate)
+        // Ribbon above the card: ● HERE / ⏭ NEXT
+        if (isHere || isNext) {
+          const rb = document.createElementNS(svgNS, "text");
+          rb.setAttribute("x", String(p.x + 4)); rb.setAttribute("y", String(p.y - 6));
+          rb.setAttribute("fill", "rgba(251,191,36,0.95)");
+          rb.setAttribute("font-size", "10"); rb.setAttribute("font-weight", "800"); rb.setAttribute("letter-spacing", "1.6");
+          rb.textContent = isNext ? (isHere ? "● HERE · ⏭ NEXT" : "⏭ NEXT") : "● HERE";
+          node.appendChild(rb);
+        }
+
         const label = document.createElementNS(svgNS, "text");
-        label.setAttribute("x", String(p.x + 18));
-        label.setAttribute("y", String(p.y + 30));
+        label.setAttribute("x", String(p.x + 16)); label.setAttribute("y", String(p.y + 27));
         label.setAttribute("fill", "rgba(240,244,252,0.96)");
-        label.setAttribute("font-size", "15");
-        label.setAttribute("font-weight", "700");
-        const lbl = n.label.length > 34 ? (n.label.slice(0, 34) + "…") : n.label;
-        label.textContent = lbl;
+        label.setAttribute("font-size", "13.5"); label.setAttribute("font-weight", "700");
+        label.textContent = n.label.length > 30 ? (n.label.slice(0, 30) + "…") : n.label;
         node.appendChild(label);
 
-        // Second line: the stable id, in mono
         const sub = document.createElementNS(svgNS, "text");
-        sub.setAttribute("x", String(p.x + 18));
-        sub.setAttribute("y", String(p.y + 52));
+        sub.setAttribute("x", String(p.x + 16)); sub.setAttribute("y", String(p.y + 44));
         sub.setAttribute("fill", "rgba(148,163,184,0.80)");
-        sub.setAttribute("font-size", "10.5");
+        sub.setAttribute("font-size", "9.5");
         sub.setAttribute("font-family", "ui-monospace, Menlo, Consolas, monospace");
         sub.textContent = n.id;
         node.appendChild(sub);
 
-        // Badges — quiet outline chips, uppercase micro-type
-        const badge = (text, bx, by, w, line) => {
-          const r = document.createElementNS(svgNS, "rect");
-          r.setAttribute("x", String(bx));
-          r.setAttribute("y", String(by));
-          r.setAttribute("rx", "9");
-          r.setAttribute("ry", "9");
-          r.setAttribute("width", String(w));
-          r.setAttribute("height", "18");
-          r.setAttribute("fill", "rgba(2,6,23,0.35)");
-          r.setAttribute("stroke", line);
-          r.setAttribute("stroke-width", "1");
-          const t = document.createElementNS(svgNS, "text");
-          t.setAttribute("x", String(bx + w / 2));
-          t.setAttribute("y", String(by + 13));
-          t.setAttribute("text-anchor", "middle");
-          t.setAttribute("fill", "rgba(226,232,240,0.92)");
-          t.setAttribute("font-size", "10");
-          t.setAttribute("font-weight", "700");
-          t.setAttribute("letter-spacing", "0.8");
-          t.textContent = text;
-          node.appendChild(r);
-          node.appendChild(t);
-        };
-
-        // Right-aligned badges (INSET for breathing room)
-        const by = p.y + 11;
-        const BADGE_INSET = 14;
-        let bx = p.x + NODE_W - BADGE_INSET;
-        const addBadge = (text, line) => {
-          const w = Math.max(34, Math.round(14 + text.length * 6.4));
-          bx -= w;
-          badge(text, bx, by, w, line);
-          bx -= 6;
-        };
-
-        addBadge(String(n.type || "custom").toUpperCase(), "rgba(148,163,184,0.40)");
-        if (n.turnNumber) addBadge("T" + String(n.turnNumber), "rgba(34,197,94,0.45)");
-        if (n.isTravel) addBadge("LEG", "rgba(56,189,248,0.45)");
-        if (gates.length || rt?.gated) addBadge("⛩ " + String(gates.length || (rt?.reasons?.length ?? 0)), "rgba(245,158,11,0.65)");
-
-        // Truth Layer bottom row: state · autofire class · audio
-        const by2 = p.y + NODE_H - 29;
-        let bx2 = p.x + NODE_W - BADGE_INSET;
-        const addBadge2 = (text, line) => {
-          const w = Math.max(34, Math.round(14 + text.length * 6.4));
-          bx2 -= w;
-          badge(text, bx2, by2, w, line);
-          bx2 -= 6;
-        };
+        // Top-right: TYPE · ⛩n   Bottom-right: state · 🔊
+        let bx = p.x + NODE_W - 10;
+        const addTop = (text, line) => { const w = Math.max(28, Math.round(12 + text.length * 5.8)); bx -= w; badge(node, text, bx, p.y + 8, w, line); bx -= 5; };
+        addTop(String(n.type || "custom").toUpperCase(), "rgba(148,163,184,0.40)");
+        if (rt?.gated) addTop("⛩ " + String(rt.reasons?.length ?? 0), rt.blocked ? "rgba(245,158,11,0.75)" : "rgba(74,222,128,0.5)");
+        let bx2 = p.x + NODE_W - 10;
+        const addBot = (text, line) => { const w = Math.max(28, Math.round(12 + text.length * 5.8)); bx2 -= w; badge(node, text, bx2, p.y + NODE_H - 24, w, line); bx2 -= 5; };
         if (rt) {
-          if (rt.state === "fired") addBadge2("✓ FIRED" + (rt.firedTurn != null ? " T" + rt.firedTurn : ""), "rgba(34,197,94,0.55)");
-          else if (rt.state === "ready") addBadge2("⚡ READY", "rgba(74,222,128,0.80)");
-          else if (rt.state === "blocked") addBadge2("⛩ BLOCKED", "rgba(245,158,11,0.75)");
-          else if (rt.state === "cooling") addBadge2("⏳ T" + String(rt.cooldownUntil), "rgba(56,189,248,0.60)");
-          if (rt.invited && rt.state !== "fired") addBadge2("✉ INVITED", "rgba(168,85,247,0.55)");
-          if (rt.hasAudio) addBadge2("🔊", "rgba(34,211,238,0.55)");
-          const AUTO_LBL = { director: "⚙ DIR", inject: "🎲 INJ", hex: "⬢ HEX", dialogue: "🗣 DLG" };
-          for (const a of (rt.auto || [])) addBadge2(AUTO_LBL[a] || a, "rgba(148,163,184,0.40)");
-
-          // Command Deck: ▶ run affordance on ready beats (bottom-left).
-          // Ambient beats fire THEMSELVES (travel/hex) — no GM trigger here;
-          // the Beats tab remains the manual override.
+          if (rt.state === "fired") addBot("✓ FIRED" + (rt.firedTurn != null ? " T" + rt.firedTurn : ""), "rgba(34,197,94,0.55)");
+          else if (rt.state === "ready") addBot("⚡ READY", "rgba(74,222,128,0.80)");
+          else if (rt.state === "blocked") addBot("⛩ BLOCKED", "rgba(245,158,11,0.75)");
+          else if (rt.state === "cooling") addBot("⏳ T" + String(rt.cooldownUntil), "rgba(56,189,248,0.60)");
+          if (rt.invited && rt.state !== "fired") addBot("✉ INVITED", "rgba(168,85,247,0.55)");
+          if (rt.hasAudio) addBot("🔊", "rgba(34,211,238,0.55)");
+          // ▶ affordance on ready beats (ambient beats fire themselves).
           if (rt.state === "ready" && !rt.ambient) {
             const runG = document.createElementNS(svgNS, "g");
             runG.style.cursor = "pointer";
-            const rcx = p.x + 26, rcy = p.y + NODE_H - 22;
+            const rcx = p.x + 24, rcy = p.y + NODE_H - 18;
             const rc = document.createElementNS(svgNS, "circle");
-            rc.setAttribute("cx", String(rcx)); rc.setAttribute("cy", String(rcy)); rc.setAttribute("r", "12");
-            rc.setAttribute("fill", "rgba(34,197,94,0.18)");
-            rc.setAttribute("stroke", "rgba(74,222,128,0.80)");
-            rc.setAttribute("stroke-width", "1.5");
+            rc.setAttribute("cx", String(rcx)); rc.setAttribute("cy", String(rcy)); rc.setAttribute("r", "10");
+            rc.setAttribute("fill", "rgba(34,197,94,0.18)"); rc.setAttribute("stroke", "rgba(74,222,128,0.80)"); rc.setAttribute("stroke-width", "1.5");
             const tri = document.createElementNS(svgNS, "path");
-            tri.setAttribute("d", `M ${rcx - 3.5} ${rcy - 5} L ${rcx + 5.5} ${rcy} L ${rcx - 3.5} ${rcy + 5} Z`);
+            tri.setAttribute("d", `M ${rcx - 3} ${rcy - 4.5} L ${rcx + 5} ${rcy} L ${rcx - 3} ${rcy + 4.5} Z`);
             tri.setAttribute("fill", "rgba(74,222,128,0.95)");
-            const rtT = document.createElementNS(svgNS, "title");
-            rtT.textContent = "Run this beat now";
+            const rtT = document.createElementNS(svgNS, "title"); rtT.textContent = "Run this beat now";
             runG.appendChild(rc); runG.appendChild(tri); runG.appendChild(rtT);
-            runG.addEventListener("click", (ev) => {
-              ev.preventDefault();
-              ev.stopPropagation();
-              this._runBeatFromConsole(n.id);
-            });
+            runG.addEventListener("click", (ev) => { ev.preventDefault(); ev.stopPropagation(); this._runBeatFromConsole(n.id); });
             node.appendChild(runG);
           }
         }
 
-        // Tooltip — the full situation readout for this beat
         const title = document.createElementNS(svgNS, "title");
-        let tip =
-          `${n.label}\n` +
-          `id: ${n.id}\n` +
-          `type: ${n.type} · timeScale: ${n.timeScale}` +
-          (n.turnNumber ? ` · turn ${n.turnNumber}` : "") +
-          (n.isTravel ? " · travel" : "") + "\n";
+        let tip = `${n.label}\nid: ${n.id}\ntype: ${n.type} · timeScale: ${n.timeScale}${n.isTravel ? " · travel" : ""}\n`;
         if (rt) {
           tip += `state: ${String(rt.state || "idle").toUpperCase()}` +
             (rt.firedTurn != null ? ` (fired T${rt.firedTurn})` : "") +
             (rt.cooldownUntil != null ? ` (cooling until T${rt.cooldownUntil})` : "") +
             (rt.invited ? " · invited" : "") + "\n";
-          if (rt.reasons && rt.reasons.length) {
-            tip += "gates:\n" + rt.reasons.map(r =>
-              `  ${r.met ? "✓" : "✗"} ${r.text}${r.current !== undefined ? `  (now: ${r.current})` : ""}`).join("\n") + "\n";
-          }
-          if (rt.auto && rt.auto.length) tip += `autofire: ${rt.auto.join(", ")}\n`;
-          if (rt.ambient) tip += "ambient: fires itself — force-run from the Beats tab if needed\n";
-          tip += rt.hasAudio ? "audio: 🔊 recorded\n" : "audio: silent\n";
-        } else if (gates.length) {
-          tip += `gated on: ${gates.join("  AND  ")}\n`;
+          if (rt.reasons?.length) tip += "gates:\n" + rt.reasons.map(r => `  ${r.met ? "✓" : "✗"} ${r.text}${r.current !== undefined ? `  (now: ${r.current})` : ""}`).join("\n") + "\n";
+          if (rt.auto?.length) tip += `autofire: ${rt.auto.join(", ")}\n`;
+          if (rt.ambient) tip += "ambient: fires itself\n";
         }
+        tip += "click to select — Run / Edit";
         title.textContent = tip;
         node.appendChild(title);
 
-        // Click handler -> open beat editor
         node.addEventListener("click", (ev) => {
-          ev.preventDefault();
-          ev.stopPropagation();
-          const beat = nodeById[n.id];
-          if (!beat) return;
-          this._openBeatEditor(campaign.id, this._ensureBeatShape(beat), "core");
+          ev.preventDefault(); ev.stopPropagation();
+          selectNode(n.id);
         });
-
+        nodeEls[n.id] = node;
         g.appendChild(node);
       }
-      } // end legacy beat-mode node renderer
 
-      // -----------------------------------------------------------------
-      // Camera: drag anywhere to pan (incl. over nodes; a real drag
-      // suppresses the node click), mouse wheel zooms to the cursor.
-      // The g-transform works in viewBox USER units while mouse events are
-      // SCREEN px — everything must convert through the viewBox scale `s`
-      // (with xMidYMid letterbox offsets), or drags crawl and zoom drifts.
-      // -----------------------------------------------------------------
-      const viewMap = () => {
-        let r = null;
-        try { r = svg.getBoundingClientRect(); } catch (_e) { r = null; }
-        const rw = r && r.width ? r.width : 980;
-        const rh = r && r.height ? r.height : 720;
-        const s = Math.min(rw / graph.size.w, rh / graph.size.h) || 1;
-        const ox = (rw - graph.size.w * s) / 2;
-        const oy = (rh - graph.size.h * s) / 2;
-        return { r, rw, rh, s, ox, oy };
+      // ── selection card (click a beat → Run / Edit) ──────────────────────
+      const card = document.createElement("div");
+      card.className = "bbttcc-flow-card";
+      card.hidden = true;
+      svgWrap.appendChild(card);
+      const beatOf = id => beatsAll.find(b => String(b?.id) === String(id)) || null;
+      const selectNode = (id, force = false) => {
+        const prev = this.flowSelectedBeatId;
+        if (prev && nodeEls[prev]) {
+          const r = nodeEls[prev].querySelector("rect");
+          if (r) { r.setAttribute("stroke", r.getAttribute("data-base-stroke")); r.setAttribute("stroke-width", r.getAttribute("data-base-stroke-width")); }
+        }
+        if (!id || (!force && prev === id && !card.hidden)) { this.flowSelectedBeatId = null; card.hidden = true; return; }
+        this.flowSelectedBeatId = id;
+        const el = nodeEls[id];
+        if (el) { const r = el.querySelector("rect"); if (r) { r.setAttribute("stroke", "rgba(34,211,238,0.95)"); r.setAttribute("stroke-width", "3.5"); } }
+        const b = beatOf(id);
+        if (!b) { card.hidden = true; return; }
+        const rt = runtime.byId[id] || null;
+        const desc = String(b.description || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+        const unmet = (rt?.reasons || []).filter(r => !r.met);
+        const runLabel = !rt ? "▶ Run" : rt.state === "ready" ? "▶ Run" : rt.state === "blocked" ? "▶ Run anyway (override gate)" : rt.state === "fired" ? "▶ Run again" : "▶ Run";
+        card.innerHTML =
+          `<div class="hd"><div class="ttl">${esc(b.label || id)}</div><button type="button" class="x" data-close data-tooltip="Close">✕</button></div>` +
+          `<div class="idl">${esc(id)}${b.questId ? ` · ${esc(sit.questOf(b))}` : ""}${rt ? ` · <b class="st ${esc(rt.state)}">${esc(String(rt.state || "idle").toUpperCase())}${rt.firedTurn != null ? ` T${rt.firedTurn}` : ""}</b>` : ""}</div>` +
+          (unmet.length ? `<div class="gate">⛩ waits for: ${esc(unmet.slice(0, 3).map(r => r.text + (r.current !== undefined ? ` (now ${r.current})` : "")).join(" · "))}</div>` : "") +
+          `<div class="ds${desc ? "" : " none"}">${desc ? esc(desc.length > 420 ? desc.slice(0, 420) + "…" : desc) : "(no description authored)"}</div>` +
+          `<div class="btns">` +
+          (rt?.ambient ? `<span class="bbttcc-muted">fires itself via travel/hexes</span>` : `<button type="button" class="run" data-run="${esc(id)}">${esc(runLabel)}</button>`) +
+          `<button type="button" class="edit" data-edit="${esc(id)}">✎ Edit</button>` +
+          `</div>`;
+        card.hidden = false;
       };
+      card.addEventListener("click", (ev) => {
+        const close = ev.target?.closest?.("[data-close]");
+        if (close) { ev.preventDefault(); selectNode(null); return; }
+        const run = ev.target?.closest?.("[data-run]");
+        if (run) { ev.preventDefault(); this._runBeatFromConsole(run.dataset.run); return; }
+        const ed = ev.target?.closest?.("[data-edit]");
+        if (ed) {
+          ev.preventDefault();
+          const b = beatOf(ed.dataset.edit);
+          if (b) this._openBeatEditor(campaign.id, this._ensureBeatShape(b), "core");
+        }
+      });
+
+      // ── camera: drag to pan (a real drag suppresses the click), wheel zooms
+      //    to the cursor ─────────────────────────────────────────────────────
       const panXY = () => ({
         x: (this.flowPan && Number.isFinite(this.flowPan.x)) ? this.flowPan.x : 0,
         y: (this.flowPan && Number.isFinite(this.flowPan.y)) ? this.flowPan.y : 0
       });
-
-      let dragging = false;
-      let movedFar = false;
+      let dragging = false, movedFar = false;
       let start = { x: 0, y: 0, px: 0, py: 0, s: 1 };
-
-      const onDown = (ev) => {
+      svg.addEventListener("mousedown", (ev) => {
         if (ev.button !== 0 && ev.button !== 1) return;
-        dragging = true;
-        movedFar = false;
+        dragging = true; movedFar = false;
         svg.style.cursor = "grabbing";
-        const p = panXY();
-        const vm = viewMap();
+        const p = panXY(), vm = viewMap();
         start = { x: ev.clientX, y: ev.clientY, px: p.x, py: p.y, s: vm.s || 1 };
         ev.preventDefault();
-      };
-
-      const onMove = (ev) => {
+      });
+      svg.addEventListener("mousemove", (ev) => {
         if (!dragging) return;
-        const dx = ev.clientX - start.x;
-        const dy = ev.clientY - start.y;
+        const dx = ev.clientX - start.x, dy = ev.clientY - start.y;
         if (!movedFar && (Math.abs(dx) + Math.abs(dy)) > 5) movedFar = true;
-        // screen px → user units so the graph tracks the cursor 1:1
         this.flowPan = { x: start.px + dx / start.s, y: start.py + dy / start.s };
         applyTransform();
-      };
-
-      const onUp = () => {
-        if (!dragging) return;
-        dragging = false;
-        svg.style.cursor = "grab";
-      };
-
-      svg.addEventListener("mousedown", onDown);
-      svg.addEventListener("mousemove", onMove);
+      });
+      const onUp = () => { if (!dragging) return; dragging = false; svg.style.cursor = "grab"; };
       svg.addEventListener("mouseup", onUp);
       svg.addEventListener("mouseleave", onUp);
-
-      // A drag that actually moved must not fire the node's click-to-edit.
       svg.addEventListener("click", (ev) => {
         if (!movedFar) return;
         movedFar = false;
-        ev.preventDefault();
-        ev.stopPropagation();
+        ev.preventDefault(); ev.stopPropagation();
       }, true);
-
-      // Wheel = zoom to cursor.
-      const ZMIN = BBTTCCCampaignBuilderApp._FLOW_ZOOM_MIN;
-      const ZMAX = BBTTCCCampaignBuilderApp._FLOW_ZOOM_MAX;
+      bg.addEventListener("click", () => { if (!movedFar) selectNode(null); });
+      const ZMIN = BBTTCCCampaignBuilderApp._FLOW_ZOOM_MIN, ZMAX = BBTTCCCampaignBuilderApp._FLOW_ZOOM_MAX;
       svg.addEventListener("wheel", (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
+        ev.preventDefault(); ev.stopPropagation();
         const oldZ = Number(this.flowZoom || 1) || 1;
         const newZ = Math.max(ZMIN, Math.min(ZMAX, oldZ * Math.exp(-ev.deltaY * 0.0016)));
         if (newZ === oldZ) return;
         const vm = viewMap();
         const mx = vm.r ? (ev.clientX - vm.r.left) : vm.rw / 2;
         const my = vm.r ? (ev.clientY - vm.r.top) : vm.rh / 2;
-        // mouse position in user units
-        const ux = (mx - vm.ox) / vm.s;
-        const uy = (my - vm.oy) / vm.s;
-        const p = panXY();
-        const k = newZ / oldZ;
+        const ux = (mx - vm.ox) / vm.s, uy = (my - vm.oy) / vm.s;
+        const p = panXY(), k = newZ / oldZ;
         this.flowPan = { x: ux - (ux - p.x) * k, y: uy - (uy - p.y) * k };
         this.flowZoom = Math.round(newZ * 1000) / 1000;
         applyTransform();
       }, { passive: false });
 
-
-      // If we have a pending center target, compute pan based on host dimensions.
-      try {
-        const pend = this.__bbttccFlowPendingCenter;
-        if (pend && pend.x != null && pend.y != null) {
-          let hostRect2 = null;
-          try { hostRect2 = host.getBoundingClientRect(); } catch (_eR) { hostRect2 = null; }
-
-          const vw = hostRect2 && hostRect2.width ? hostRect2.width : 980;
-          const vh = hostRect2 && hostRect2.height ? hostRect2.height : 720;
-
-          const z = Number(this.flowZoom || 1) || 1;
-          const targetCX = vw * 0.52;
-          const targetCY = vh * 0.26;
-
-          this.flowPan = {
-            x: Math.floor(targetCX - (pend.x * z)),
-            y: Math.floor(targetCY - (pend.y * z))
-          };
-          // clear and apply
-          this.__bbttccFlowPendingCenter = null;
-          applyTransform();
-        }
-      } catch (_eC) {}
       svgWrap.appendChild(svg);
 
-      // Fly-to-node hook for the Now Panel (closure over this mount's camera).
+      // Auto-frame on a fresh view (needs the mounted rect): whole tree when
+      // its cards still read, otherwise a readable zoom with the root
+      // top-centre — the chart is read top-down, so the root is the way in.
+      try {
+        const z0 = Number(this.flowZoom || 1) || 1;
+        const p0 = panXY();
+        if ((Math.abs(z0 - 1) < 0.001) && p0.x === 0 && p0.y === 0) {
+          const vm = viewMap();
+          const screenNodeW = NODE_W * vm.s;
+          if (screenNodeW < 210) {
+            const z = Math.max(0.6, Math.min(2.5, 230 / (NODE_W * vm.s)));
+            const rootP = graph.pos[graph.rootId] || { x: 0, y: 0 };
+            this.flowZoom = Math.round(z * 100) / 100;
+            this.flowPan = {
+              x: graph.size.w / 2 - (rootP.x + NODE_W / 2) * z,
+              y: (-vm.oy / vm.s) + 36 - rootP.y * z
+            };
+            applyTransform();
+          }
+        }
+      } catch (_eAuto) {}
+
+      // Fly-to for the rail: in this quest → pan there; elsewhere → switch.
       this.__flowFlyTo = (beatId) => {
         try {
           const id = String(beatId || "");
           const p = graph.pos[id];
-          if (!p) { ui.notifications?.info?.("That beat isn't in the current view/filter."); return; }
+          if (!p) { this._flowFlyElsewhere(id, sit); return; }
           const gn = graphNodeById[id] || {};
           const w = gn.width || NODE_W, h = gn.height || NODE_H;
           const vm = viewMap();
-          // zoom so the node reads comfortably (~45% of viewport width)
-          let z = (0.45 * vm.rw / vm.s) / w;
-          z = Math.max(BBTTCCCampaignBuilderApp._FLOW_ZOOM_MIN, Math.min(BBTTCCCampaignBuilderApp._FLOW_ZOOM_MAX, z));
-          const ucx = (vm.rw / 2 - vm.ox) / vm.s;
-          const ucy = (vm.rh / 2 - vm.oy) / vm.s;
+          let z = (0.4 * vm.rw / vm.s) / w;
+          z = Math.max(ZMIN, Math.min(ZMAX, z));
+          const ucx = (vm.rw / 2 - vm.ox) / vm.s, ucy = (vm.rh / 2 - vm.oy) / vm.s;
           this.flowZoom = Math.round(z * 1000) / 1000;
           this.flowPan = { x: ucx - (p.x + w / 2) * z, y: ucy - (p.y + h / 2) * z };
           applyTransform();
-          // brief pulse on the target
-          const gEl = svg.querySelector(`g[data-beat-id="${CSS.escape(id)}"] rect`);
-          if (gEl) {
-            const prevW = gEl.getAttribute("stroke-width");
-            const prevS = gEl.getAttribute("stroke");
-            gEl.setAttribute("stroke", "rgba(34,211,238,0.95)");
-            gEl.setAttribute("stroke-width", "5");
-            setTimeout(() => { try { gEl.setAttribute("stroke", prevS); gEl.setAttribute("stroke-width", prevW); } catch (_e) {} }, 1300);
-          }
+          selectNode(id, true);
         } catch (eF) { console.warn(TAG, "flyTo failed", eF); }
       };
+      // A pending selection from a quest switch (exit stub / fly elsewhere).
+      if (this.flowSelectedBeatId && graph.pos[this.flowSelectedBeatId]) {
+        const pending = this.flowSelectedBeatId;
+        this.flowSelectedBeatId = null;
+        setTimeout(() => { try { this.__flowFlyTo(pending); } catch (_e) {} }, 0);
+      } else {
+        this.flowSelectedBeatId = null;
+      }
     } catch (e) {
       console.warn(TAG, "Flow visualizer render failed:", e);
       try {
@@ -3777,6 +2344,19 @@ const activeCampaignId = _getActiveCampaignId();
         if (host) host.innerHTML = "<p class='bbttcc-muted'>Visualizer error — see console.</p>";
       } catch (_e2) {}
     }
+  }
+
+  // A beat outside the charted quest: switch the chart to its quest (follow
+  // off) and select it after the re-render.
+  _flowFlyElsewhere(beatId, sit) {
+    const b = sit?.beatById?.[String(beatId)];
+    if (!b) { ui.notifications?.info?.("That beat isn't in this campaign."); return; }
+    this.flowQuestId = _flowQuestIdOf(b);
+    this.flowFollow = false;
+    try { game.user?.setFlag?.("bbttcc-campaign", "flowFollow", false); } catch (_e) {}
+    this.flowSelectedBeatId = String(beatId);
+    this._flowResetView();
+    this.render(false);
   }
 
   _flowZoomBy(delta) {

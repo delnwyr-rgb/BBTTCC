@@ -180,6 +180,24 @@
     .bbttcc-campaign-overview tbody em {
       opacity: 0.78;
     }
+    .bbttcc-campaign-overview .bbttcc-ov-rel-head {
+      display: flex; align-items: baseline; gap: .5rem; margin: 1rem 0 .35rem;
+    }
+    .bbttcc-campaign-overview .bbttcc-ov-rel-head h3 { margin: 0; font-size: 1rem; }
+    .bbttcc-campaign-overview .bbttcc-ov-rel-head small { opacity: .75; }
+    .bbttcc-campaign-overview .bbttcc-ov-rels {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .25rem .75rem;
+    }
+    .bbttcc-campaign-overview .bbttcc-ov-rel {
+      display: flex; gap: .35rem; align-items: baseline; padding: .2rem .5rem;
+      border-radius: 6px; border: 1px solid rgba(148,163,184,0.18); background: rgba(2,6,23,0.25);
+    }
+    .bbttcc-campaign-overview .bbttcc-ov-rel .tr {
+      margin-left: auto; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+    }
+    .bbttcc-campaign-overview .bbttcc-ov-rel.bad .tr  { color: #f87171; }
+    .bbttcc-campaign-overview .bbttcc-ov-rel.warn .tr { color: #fbbf24; }
+    .bbttcc-campaign-overview .bbttcc-ov-rel.good .tr { color: #4ade80; }
   </style>
 
   <header class="flexrow" style="gap:.5rem; align-items:center; margin-bottom:.5rem;" data-tour="overview.header">
@@ -252,4 +270,21 @@
       {{/unless}}
     </tbody>
   </table>
+
+  <div class="bbttcc-ov-rel-head" data-tour="overview.relations">
+    <h3 data-tooltip="{{bbttccTip 'overview' 'relations'}}">Faction relations</h3>
+    <small>non-neutral pairs · most extreme first</small>
+  </div>
+  {{#if relations.length}}
+    <div class="bbttcc-ov-rels">
+      {{#each relations}}
+        <div class="bbttcc-ov-rel {{cls}}">
+          <span class="a">{{from}}</span> ▸ <span class="b">{{to}}</span>
+          <span class="tr">{{tier}}</span>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <p><em data-tooltip="{{bbttccTip 'overview' 'relQuiet'}}">All quiet — every relation neutral.</em></p>
+  {{/if}}
 </section>

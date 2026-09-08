@@ -1391,6 +1391,94 @@
 /* ── Now Panel (situation console Stage 2) ───────────────────────────────── */
 .bbttcc-campaign-builder-root .bbttcc-flow-row { display: flex; gap: 10px; align-items: stretch; min-height: 0; }
 .bbttcc-campaign-builder-root .bbttcc-flow-svgwrap { flex: 1 1 auto; min-width: 0; }
+.bbttcc-campaign-builder-root .bbttcc-flow-svgwrap { position: relative; }
+.bbttcc-campaign-builder-root .bbttcc-flow-svg {
+  display: block; border: 1px solid rgba(148,163,184,0.18); border-radius: 14px;
+  background: rgba(2,6,23,0.25); cursor: grab; user-select: none;
+}
+.bbttcc-campaign-builder-root .bbttcc-flow-empty { padding: 24px 12px; font-style: italic; }
+
+/* ── One-quest Visualizer (2026-09-07): bar · selection card · rail blocks ── */
+.bbttcc-campaign-builder-root .bbttcc-flowviz-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 6px 10px; margin: 0 0 8px; border: 1px solid var(--cb-border, rgba(148,163,184,0.25));
+  border-radius: var(--cb-radius, 10px); background: var(--cb-bg-soft, rgba(15,23,42,0.5));
+}
+.bbttcc-campaign-builder-root .bbttcc-flowviz-bar .l { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.bbttcc-campaign-builder-root .bbttcc-flowviz-bar .lbl { font-weight: 800; color: var(--cb-data, #93c5fd); letter-spacing: .06em; }
+.bbttcc-campaign-builder-root .bbttcc-flowviz-bar .sel {
+  max-width: 420px; padding: 4px 8px; border-radius: var(--cb-radius, 8px);
+  border: 1px solid var(--cb-border, rgba(148,163,184,0.3)); background: var(--cb-bg-soft, rgba(2,6,23,0.4)); color: var(--cb-text-main, #e2e8f0);
+}
+.bbttcc-campaign-builder-root .bbttcc-flow-follow { border-radius: 999px; padding: 3px 12px; }
+.bbttcc-campaign-builder-root .bbttcc-flow-follow.on {
+  border-color: rgba(251,191,36,0.7); background: rgba(251,191,36,0.14); color: #fde68a;
+}
+.bbttcc-campaign-builder-root .bbttcc-flowviz-bar .r {
+  display: flex; align-items: baseline; gap: 6px; font-size: 12px; color: var(--cb-text-muted, #94a3b8); white-space: nowrap;
+}
+.bbttcc-campaign-builder-root .bbttcc-flowviz-bar .r .act { color: var(--cb-data, #93c5fd); font-weight: 800; letter-spacing: .08em; }
+.bbttcc-campaign-builder-root .bbttcc-flowviz-bar .r .tik { color: var(--cb-accent, #fbbf24); font-weight: 800; letter-spacing: .08em; }
+.bbttcc-campaign-builder-root .bbttcc-flowviz-bar .r .sep { opacity: .5; }
+.bbttcc-campaign-builder-root .bbttcc-flowviz-bar .r .press { color: var(--cb-text-muted, #94a3b8); font-weight: 700; font-variant-numeric: tabular-nums; }
+.bbttcc-campaign-builder-root .bbttcc-flowviz-bar .r .press.hot { color: #fbbf24; text-shadow: 0 0 6px rgba(251,191,36,0.45); }
+
+.bbttcc-campaign-builder-root .bbttcc-flow-card {
+  position: absolute; left: 12px; bottom: 12px; width: min(420px, calc(100% - 24px));
+  padding: 10px 12px; border-radius: 10px; font-size: 12px; z-index: 3;
+  border: 1px solid rgba(34,211,238,0.55); background: rgba(2,6,23,0.92);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45); color: var(--cb-text-main, #e2e8f0);
+}
+.bbttcc-campaign-builder-root .bbttcc-flow-card .hd { display: flex; align-items: flex-start; gap: 8px; }
+.bbttcc-campaign-builder-root .bbttcc-flow-card .ttl { flex: 1 1 auto; font-weight: 800; font-size: 14px; line-height: 1.3; }
+.bbttcc-campaign-builder-root .bbttcc-flow-card .x {
+  flex: 0 0 auto; width: 22px; height: 20px; padding: 0; line-height: 1; border-radius: 5px; cursor: pointer;
+  border: 1px solid transparent; background: transparent; color: var(--cb-text-muted, #94a3b8);
+}
+.bbttcc-campaign-builder-root .bbttcc-flow-card .x:hover { color: #fff; border-color: rgba(148,163,184,0.5); }
+.bbttcc-campaign-builder-root .bbttcc-flow-card .idl {
+  font-family: ui-monospace, Menlo, monospace; font-size: 10px; color: var(--cb-text-muted, #94a3b8); margin: 2px 0 6px;
+}
+.bbttcc-campaign-builder-root .bbttcc-flow-card .st.ready { color: #4ade80; }
+.bbttcc-campaign-builder-root .bbttcc-flow-card .st.blocked { color: #fbbf24; }
+.bbttcc-campaign-builder-root .bbttcc-flow-card .st.fired { color: #94a3b8; }
+.bbttcc-campaign-builder-root .bbttcc-flow-card .st.cooling { color: #38bdf8; }
+.bbttcc-campaign-builder-root .bbttcc-flow-card .gate { color: #fbbf24; font-size: 11px; margin-bottom: 6px; }
+.bbttcc-campaign-builder-root .bbttcc-flow-card .ds { line-height: 1.5; max-height: 120px; overflow-y: auto; }
+.bbttcc-campaign-builder-root .bbttcc-flow-card .ds.none { font-style: italic; color: var(--cb-text-muted, #94a3b8); }
+.bbttcc-campaign-builder-root .bbttcc-flow-card .btns { display: flex; gap: 8px; margin-top: 8px; align-items: center; }
+.bbttcc-campaign-builder-root .bbttcc-flow-card .btns button {
+  padding: 5px 12px; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 12px;
+  border: 1px solid var(--cb-border, rgba(148,163,184,0.3)); background: var(--cb-bg-soft, rgba(15,23,42,0.6)); color: var(--cb-text-main, #e2e8f0);
+}
+.bbttcc-campaign-builder-root .bbttcc-flow-card .btns .run { border-color: rgba(74,222,128,0.7); background: rgba(34,197,94,0.2); color: #bbf7d0; }
+.bbttcc-campaign-builder-root .bbttcc-flow-card .btns .run:hover { background: rgba(34,197,94,0.36); }
+.bbttcc-campaign-builder-root .bbttcc-flow-card .btns .edit:hover { background: rgba(148,163,184,0.18); }
+
+.bbttcc-campaign-builder-root .bbttcc-now-block {
+  border: 1px solid rgba(148,163,184,0.14); border-radius: 8px; background: rgba(2,6,23,0.25); padding: 0 0 6px;
+}
+.bbttcc-campaign-builder-root .bbttcc-now-block > h5 {
+  margin: 0; padding: 6px 8px 4px; font-size: 11px; font-weight: 800; letter-spacing: .14em;
+  color: var(--cb-data, #93c5fd); border-bottom: 1px solid rgba(148,163,184,0.12);
+}
+.bbttcc-campaign-builder-root .bbttcc-now-block > .bd { padding: 4px 6px 0; display: flex; flex-direction: column; gap: 4px; }
+.bbttcc-campaign-builder-root .bbttcc-now-kv { display: flex; gap: 8px; align-items: baseline; padding: 2px 7px 0; }
+.bbttcc-campaign-builder-root .bbttcc-now-kv .k { font-size: 9.5px; font-weight: 800; letter-spacing: .16em; color: var(--cb-text-muted, #94a3b8); }
+.bbttcc-campaign-builder-root .bbttcc-now-kv .v { font-weight: 700; }
+.bbttcc-campaign-builder-root .bbttcc-now-kv .st { font-style: normal; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: #4ade80; }
+.bbttcc-campaign-builder-root .bbttcc-now-kv .st.archived { color: #94a3b8; }
+.bbttcc-campaign-builder-root .bbttcc-now-chain { padding: 0 0 2px; }
+.bbttcc-campaign-builder-root .bbttcc-now-chain .hd { display: flex; justify-content: space-between; padding: 2px 7px 0; font-weight: 700; text-transform: capitalize; }
+.bbttcc-campaign-builder-root .bbttcc-now-chain .ct { color: var(--cb-text-muted, #94a3b8); font-variant-numeric: tabular-nums; }
+.bbttcc-campaign-builder-root .bbttcc-now-chain .bar { display: block; height: 5px; border-radius: 3px; background: rgba(148,163,184,0.15); overflow: hidden; margin: 3px 7px; }
+.bbttcc-campaign-builder-root .bbttcc-now-chain .bar i { display: block; height: 100%; background: var(--cb-data, #38bdf8); border-radius: 3px; }
+.bbttcc-campaign-builder-root .bbttcc-now-chain .done { color: rgba(74,222,128,0.9); font-size: 11px; padding: 0 7px 4px; }
+.bbttcc-campaign-builder-root .bbttcc-now-lock { padding: 0 0 2px; }
+.bbttcc-campaign-builder-root .bbttcc-now-lock .at { font-size: 10.5px; color: var(--cb-text-muted, #94a3b8); padding: 0 7px 2px 18px; }
+.bbttcc-campaign-builder-root .bbttcc-now-lock.done { display: flex; justify-content: space-between; gap: 6px; padding: 3px 7px; }
+.bbttcc-campaign-builder-root .bbttcc-now-lock.done .t { color: #4ade80; font-weight: 700; }
+.bbttcc-campaign-builder-root .bbttcc-now-lock.done .x { color: var(--cb-text-muted, #94a3b8); font-size: 11px; }
 .bbttcc-campaign-builder-root .bbttcc-now-panel {
   flex: 0 0 300px; max-width: 300px; overflow-y: auto; max-height: 76vh;
   display: flex; flex-direction: column; gap: 8px; padding: 8px;
@@ -1418,25 +1506,6 @@
 .bbttcc-campaign-builder-root .bbttcc-now-item .x { flex: 0 0 auto; color: var(--cb-text-muted, #94a3b8); font-size: 11px; }
 .bbttcc-campaign-builder-root .bbttcc-now-item .x em { font-style: normal; opacity: .8; }
 .bbttcc-campaign-builder-root .bbttcc-now-empty { color: var(--cb-text-muted, #94a3b8); font-size: 11.5px; padding: 2px 7px; font-style: italic; }
-.bbttcc-campaign-builder-root .bbttcc-now-chain .hd { display: flex; justify-content: space-between; padding: 2px 7px 0; font-weight: 700; }
-.bbttcc-campaign-builder-root .bbttcc-now-chain .ct { color: var(--cb-text-muted, #94a3b8); font-variant-numeric: tabular-nums; }
-.bbttcc-campaign-builder-root .bbttcc-now-chain .bar,
-.bbttcc-campaign-builder-root .bbttcc-now-meter .bar {
-  display: block; height: 6px; border-radius: 3px; background: rgba(148,163,184,0.15); overflow: hidden; margin: 3px 7px;
-}
-.bbttcc-campaign-builder-root .bbttcc-now-chain .bar i,
-.bbttcc-campaign-builder-root .bbttcc-now-meter .bar i { display: block; height: 100%; background: var(--cb-data, #38bdf8); border-radius: 3px; }
-.bbttcc-campaign-builder-root .bbttcc-now-chain .done { color: rgba(74,222,128,0.9); font-size: 11px; padding: 0 7px 4px; }
-.bbttcc-campaign-builder-root .bbttcc-now-meter { display: grid; grid-template-columns: 1fr 72px 52px; gap: 6px; align-items: center; padding: 0 7px; }
-.bbttcc-campaign-builder-root .bbttcc-now-meter .lb { color: var(--cb-text-main, #e2e8f0); }
-.bbttcc-campaign-builder-root .bbttcc-now-meter .bar { margin: 0; }
-.bbttcc-campaign-builder-root .bbttcc-now-meter .vl { text-align: right; font-variant-numeric: tabular-nums; color: var(--cb-text-muted, #94a3b8); }
-.bbttcc-campaign-builder-root .bbttcc-now-rel { padding: 3px 7px; border-radius: 6px; display: flex; gap: 5px; align-items: baseline; }
-.bbttcc-campaign-builder-root .bbttcc-now-rel .tr { margin-left: auto; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
-.bbttcc-campaign-builder-root .bbttcc-now-rel.bad .tr { color: #f87171; }
-.bbttcc-campaign-builder-root .bbttcc-now-rel.warn .tr { color: #fbbf24; }
-.bbttcc-campaign-builder-root .bbttcc-now-rel.good .tr { color: #4ade80; }
-
 /* ── Command Deck (situation console Stage 3) ────────────────────────────── */
 .bbttcc-campaign-builder-root .bbttcc-now-row { display: flex; gap: 4px; align-items: center; }
 .bbttcc-campaign-builder-root .bbttcc-now-row .bbttcc-now-item { flex: 1 1 auto; min-width: 0; }

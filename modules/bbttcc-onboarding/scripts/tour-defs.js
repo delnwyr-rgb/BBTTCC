@@ -1161,33 +1161,27 @@ const campaignEngineTour = {
       pre: '[data-action="main-tab"][data-tab="flow"]',
       selector: '[data-tour="campaign.flow-canvas"]',
       optional: true,
-      text: "Every other room in this machine BUILDS the campaign. This room plays it. Beats are live cards: ⚡ ready now, ⛩ blocked (hover for exactly which condition, with its current value), ✓ fired — dimmed and turn-stamped, ⏳ cooling. A green ▶ on a ready card fires it right here.\nScroll to zoom at the cursor, drag anywhere to pan, click a card to open its editor.",
+      text: "Every other room in this machine BUILDS the campaign. This room plays it. One quest at a time, drawn top-down: root at the top, branches for every choice and outcome. ● HERE is the last fired beat, ⏭ NEXT is where the story goes, and the road you have already walked glows gold. Dashed → stubs are doors into other quests — click one to jump.\nScroll to zoom at the cursor, drag anywhere to pan, click a beat to select it: Run or Edit.",
       speak: "The other tabs are the workshop. This is the— *bzzt* —cockpit."
     },
     {
-      id: "flowscope", title: "Scope — the map that grows",
-      selector: '[data-tour="campaign.flow-scope"]',
+      id: "flowquest", title: "Quest — and Follow",
+      selector: '[data-tour="campaign.flow-quest"]',
       optional: true,
-      text: "▶ In play (the default) shows only the living map: the trail behind you, what's ready or cooling now, and what's within one unlock of the table. 🛠 Everything is the author's full corpus — all 600-odd beats.\nIn play, the map GROWS as the campaign is played. Act 6 stays invisible until the world walks toward it."
-    },
-    {
-      id: "flowbar", title: "The flow toolbar",
-      selector: '[data-tour="campaign.flow-bar"]',
-      optional: true,
-      text: "Turn, Quest, Act and View filters — they stack with Scope. Act slices one act of the funnel (Ambient = the phase-free pool: travel encounters, the Garden); Lanes view lays quests out as horizontal timelines, the fastest way to sanity-check an arc.\n🔄 Reset opens the Reset Console; 📊 Census prints the campaign's health report."
+      text: "The chart FOLLOWS the story by default: whichever quest the last fired beat belongs to is the one on screen, so after every beat it is already showing the right chart. Pick a quest here to look elsewhere (Follow switches off); ⟲ Follow the story snaps it back.\n▶ marks the quest the story stands in, ✓ the ones completed."
     },
     {
       id: "flowmeta", title: "The truth strip",
       selector: '[data-tour="campaign.flow-meta"]',
       optional: true,
-      text: "Where the world stands, in one line: current ACT and its name, world turn, days spent against the month's budget, and the live counts — ⚡ ready · ⛩ blocked · ✓ fired · 🔊 voiced.\nWhen anyone asks 'where are we in the campaign?', the answer is this strip."
+      text: "Where the world stands, in one line: current ACT and its name, world turn, days spent against the month's budget, and how much of this quest has fired.\nWhen anyone asks 'where are we in the campaign?', the answer is this strip."
     },
     {
-      id: "nowpanel", title: "The Now Panel — your co-pilot",
+      id: "nowpanel", title: "The rail — three blocks, nothing else",
       selector: '[data-tour="campaign.now-panel"]',
       optional: true,
-      text: "On a brand-new campaign this opens with one unmissable card: 🎬 BEGIN — the canonical opening beat and a big ▶. Your first click requires zero knowledge.\nBelow it: ⚡ Available now (story beats first; the self-firing 🎲 ambient pool folded away), ⏳ Coming up with the exact condition each beat waits on, and sections that wake as they gain signal — chains, pressures, faction relations. Every row: click to fly the camera there, ⓘ for the full description, ▶ to fire. Drag the left edge to widen.",
-      speak: "It starts with one button. It ends with a war room. That's— —static— —intentional."
+      text: "▶ NOW: the quest you are in, the beat you are standing on, and one unmissable card for what comes next — on a brand-new campaign that card is 🎬 BEGIN with a big ▶. ✓ RECENT: the last five beats fired. 🔒 LOCKED: the choices the table has made and the quests it has completed.\nEvery row: click to fly the chart there, ⓘ for the full description, ▶ to fire. Drag the left edge to widen.",
+      speak: "It starts with one button. It ends with a— —static— —a story you can read back."
     }
   ]
 };
