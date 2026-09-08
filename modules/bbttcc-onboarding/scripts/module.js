@@ -53,6 +53,12 @@ Hooks.once("init", () => {
     hint: "When this campaign beat resolves, a public 'Report for training' card offers every player a Begin Onboarding button. Blank disables the handoff.",
     scope: "world", config: true, type: String, default: "fates_and_destinies_adam_kadmon"
   });
+  game.settings.register(MODULE_ID, "operatorAudience", {
+    name: "Onboarding — who sees the Operator's instruction lines",
+    hint: "run = only the Steward being trained (plus GMs); all = the whole table. Two-client test 2026-09-07: a non-participant saw every line.",
+    scope: "world", config: true, type: String, default: "run",
+    choices: { run: "The trainee + GMs", all: "Everyone" }
+  });
   game.settings.register(MODULE_ID, "wakeThemeSrc", {
     name: "Onboarding — theme to blast when training begins",
     hint: "Audio path played to EVERY client the moment the wake beat resolves (the drop into bodies). Blank disables. Owner ruling 2026-09-07: Section D.",
@@ -90,11 +96,21 @@ Hooks.once("ready", () => {
           AH?.play?.({ src, volume: 0.8, loop: false }, true);
         }
       } catch (e) { warn("wake theme failed", e); }
+      // The card speaks as the OPERATOR — never as the GM's own Steward (live-caught
+      // 2026-09-07: it wore "Toblerone" and read as his button). Two buttons = the
+      // two hotbar macros: Begin/Resume (start) and Reset & run again (reset → start
+      // from the top). Each player clicks on THEIR OWN screen — the Proving Ground
+      // lane is per client.
       ChatMessage.create({
+        speaker: { alias: "◇ OPERATOR" },
         content: `<div class="bbttcc-onb-handoff">` +
           `<h3>🎓 Report for training</h3>` +
-          `<p>You wake on the Proving Ground. Anyone who hasn't run the gauntlet — or wants the refresher — click below. Everyone else, stretch; the orientation film starts when the class graduates.</p>` +
-          `<button type="button" class="bbttcc-onb-begin">▶ Begin Onboarding</button></div>`
+          `<p>You wake on the Proving Ground. <b>Each of you, on your own screen:</b> Begin drops you into your Steward and picks up wherever you left off; Reset wipes your progress and runs the whole gauntlet again. Everyone else, stretch; the orientation film starts when the class graduates.</p>` +
+          `<p style="font-size:.85em;opacity:.8">No Steward assigned yet? Set your character first (player config → Select Character) — the Operator can't incarnate nobody.</p>` +
+          `<div style="display:flex;gap:.5rem;flex-wrap:wrap;">` +
+          `<button type="button" class="bbttcc-onb-begin">▶ Begin / Resume Onboarding</button>` +
+          `<button type="button" class="bbttcc-onb-reset">↺ Reset &amp; run again</button>` +
+          `</div></div>`
       });
     } catch (e) { warn("wake handoff card failed", e); }
   });
@@ -104,15 +120,39 @@ Hooks.once("ready", () => {
   // cores (a live legacy registration spams deprecation warnings on v13+).
   const _bindOnbChatButtons = (_msg, html) => {
     const root = html?.[0] ?? html;
+    // Steward pre-check shared by both buttons: say what's wrong in plain words
+    // instead of letting start() fail quietly on a player's screen.
+    const _stewardOrExplain = () => {
+      const s = game.bbttcc?.onboarding?.resolve?.steward?.(game.user);
+      if (s) return s;
+      ui.notifications?.error?.(`${game.user.name}: no Steward assigned to you. Player config → Select Character, then click again.`);
+      return null;
+    };
+    const _enroll = async () => {
+      // Enroll in the class: THIS is what marks the run as campaign
+      // session-0 rather than a solo refresher — graduation only hands
+      // back to the campaign for enrolled users (2026-08-29).
+      try { await game.user?.setFlag?.(MODULE_ID, "campaignClass", true); } catch (_) {}
+    };
     root?.querySelectorAll?.(".bbttcc-onb-begin")?.forEach(btn => {
       btn.addEventListener("click", async () => {
+        if (!_stewardOrExplain()) return;
         btn.disabled = true;
-        // Enroll in the class: THIS is what marks the run as campaign
-        // session-0 rather than a solo refresher — graduation only hands
-        // back to the campaign for enrolled users (2026-08-29).
-        try { await game.user?.setFlag?.(MODULE_ID, "campaignClass", true); } catch (_) {}
-        game.bbttcc?.onboarding?.start?.({ fromStart: true })
+        await _enroll();
+        // Begin/Resume = the Start macro: picks up where this Steward left off (fresh Stewards start at the top).
+        game.bbttcc?.onboarding?.start?.()
           ?.catch?.(e => { warn("onboarding start failed", e); btn.disabled = false; });
+      });
+    });
+    root?.querySelectorAll?.(".bbttcc-onb-reset")?.forEach(btn => {
+      btn.addEventListener("click", async () => {
+        if (!_stewardOrExplain()) return;
+        btn.disabled = true;
+        await _enroll();
+        // Reset & run again = the Reset macro, then a from-the-top run.
+        try { await game.bbttcc?.onboarding?.reset?.(); } catch (e) { warn("onboarding reset failed", e); }
+        game.bbttcc?.onboarding?.start?.({ fromStart: true })
+          ?.catch?.(e => { warn("onboarding restart failed", e); btn.disabled = false; });
       });
     });
     root?.querySelectorAll?.(".bbttcc-onb-resume")?.forEach(btn => {

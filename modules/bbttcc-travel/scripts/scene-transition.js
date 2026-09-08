@@ -142,11 +142,14 @@
             // view this client last had on that scene (or its stored initial),
             // which can be an off-map corner (onboarding, owner 2026-08-29).
             landAt = null } = opts;
-    if (_busy) return false;
+    // Never decline silently — callers that don't fall back stranded a player
+    // (onboarding two-client test 2026-09-07). Say why in the console.
+    if (_busy) { console.warn("[bbttcc transition] dive declined — another dive is still in flight on this client", { target: targetSceneUuid, label }); return false; }
     let scene;
     try { scene = await fromUuid(targetSceneUuid); } catch (e) { scene = null; }
     if (!(scene instanceof Scene)) {
       ui.notifications?.warn(`Scene transition: target scene not found${label ? ` for "${label}"` : ""}.`);
+      console.warn("[bbttcc transition] dive declined — target did not resolve to a Scene", { target: targetSceneUuid, label, isGM: game.user?.isGM });
       return false;
     }
     _busy = true;

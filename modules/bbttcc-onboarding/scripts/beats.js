@@ -79,18 +79,29 @@ async function _enterScene(scene, label, lane = 0) {
   if (!scene) return;
   const tx = _tx();
   const landAt = _sceneLanding(scene, lane);
+  // The dive returns FALSE (not a throw) when it is busy or can't resolve the
+  // target — a player client left on the wrong scene with no message (two-client
+  // test 2026-09-07: Toblerone dove, Mags stayed put). Any non-true result now
+  // falls back to a plain view, and we say so in the console AND to the player.
+  let dove = false;
   try {
-    if (tx?.dive) await tx.dive(scene.uuid, { focus: _scenePoint(scene, 0.5, 0.5, lane), audience: "view", label, landAt });
-    else {
-      await scene.view?.();
-      try { if (canvas?.scene?.id === scene.id) await canvas.animatePan({ ...landAt, duration: 320 }); } catch (_) {}
-    }
+    if (tx?.dive) dove = (await tx.dive(scene.uuid, { focus: _scenePoint(scene, 0.5, 0.5, lane), audience: "view", label, landAt })) === true;
   } catch (e) {
-    console.warn(TAG, `dive into "${label}" failed; viewing instead`, e);
+    console.warn(TAG, `dive into "${label}" threw; viewing instead`, e);
+  }
+  if (!dove) {
+    if (tx?.dive) console.warn(TAG, `dive into "${label}" did not complete (busy or unresolved) — viewing the scene directly`);
     try {
       await scene.view?.();
       if (canvas?.scene?.id === scene.id) await canvas.animatePan({ ...landAt, duration: 320 });
-    } catch (_) {}
+    } catch (e) {
+      console.error(TAG, `could not view "${label}" (${scene.name})`, e);
+      ui.notifications?.warn?.(`Onboarding: couldn't move you to "${scene.name}" — ${e?.message ?? e}. Tell your GM.`);
+    }
+  }
+  if (canvas?.scene?.id !== scene.id) {
+    console.warn(TAG, `after entering "${label}" this client is still on "${canvas?.scene?.name ?? "(no scene)"}"`);
+    ui.notifications?.warn?.(`Onboarding: you should now be on "${scene.name}" but this client is still on ${canvas?.scene?.name ?? "no scene"}. Tell your GM (console has details).`);
   }
 }
 

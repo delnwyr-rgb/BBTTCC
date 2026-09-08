@@ -34,10 +34,21 @@ function getBeat(id) { return _beats.find(b => b.id === id) || null; }
 
 function _ns() { return globalThis.game?.bbttcc?.onboarding; }
 
+// Default audience for instruction lines: the trainee + every active GM (world
+// setting operatorAudience = "run"), or the whole table ("all"). A non-participant
+// watched a whole run scroll by in the 2026-09-07 two-client test.
+let _speakUserId = null;   // the user whose run is in progress on this client
+function _defaultAudience() {
+  try { if (game.settings.get(MODULE_ID, "operatorAudience") === "all") return "all"; } catch (_) {}
+  const ids = new Set((game.users?.contents ?? []).filter(u => u.active && u.isGM).map(u => u.id));
+  ids.add(_speakUserId || game.user.id);
+  return [...ids];
+}
 async function _speak(line, opts) {
   const s = _ns()?.speak;
-  if (typeof s === "function") return s(line, opts);
-  try { await ChatMessage.create({ content: String(line ?? "") }); } catch (_) {}
+  const o = { ...(opts || {}) }; if (o.audience == null) o.audience = _defaultAudience();
+  if (typeof s === "function") return s(line, o);
+  try { await ChatMessage.create({ content: String(line ?? ""), whisper: Array.isArray(o.audience) ? o.audience : undefined }); } catch (_) {}
 }
 
 function _progress(steward) {
@@ -259,6 +270,7 @@ async function start({ user = game.user, fromStart = false, from = null, only = 
   }
 
   _running = true;
+  _speakUserId = user?.id || null;
   let pingIv = null;   // declared OUTSIDE the try — the finally clears it
   try {
     let p = _progress(steward);

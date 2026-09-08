@@ -29,9 +29,38 @@
     return { node: idx >= 0 ? arr[idx] : null, idx, arr };
   }
 
+  // Drawings belong to their author: a PLAYER seat cannot update the hex Drawing
+  // (live 2026-09-07: "User Mags lacks permission to update Drawing … in parent
+  // Scene" on Harvest). GM seats write directly; player seats relay the ONE thing
+  // a harvest may change — a node's charges, decrement only — to the GM seat via
+  // the codebase's seat primitive (bbttcc-core gmExec).
+  const RELAY_TYPE = "territory.hexNode.charges";
   async function writeNodeUpdate(hexDoc, idx, arr, patch) {
     const next = arr.map((n, i) => (i === idx ? { ...n, ...patch } : n));
-    await hexDoc.update({ [NODES_PATH]: next });
+    const gx = game.bbttcc?.api?.gmExec;
+    if (game.user?.isGM || !gx?.call) { await hexDoc.update({ [NODES_PATH]: next }); return; }
+    const onlyCharges = Object.keys(patch || {}).every(k => k === "charges");
+    if (!onlyCharges) throw new Error("hex node write from a player seat may only change charges.");
+    await gx.call(RELAY_TYPE, { sceneId: hexDoc.parent?.id, drawingId: hexDoc.id, nodeId: arr[idx]?.id, charges: Number(patch.charges) });
+  }
+  function _registerChargesRelay() {
+    const gx = game.bbttcc?.api?.gmExec;
+    if (!gx?.register) return;
+    gx.register(RELAY_TYPE, async (p, meta) => {
+      const scene = game.scenes?.get(String(p?.sceneId || ""));
+      const doc = scene?.drawings?.get(String(p?.drawingId || ""));
+      const tf = doc?.flags?.[MOD] || {};
+      if (!doc || !(tf.isHex === true || tf.kind === "territory-hex" || tf.hexId)) throw new Error("not a hex drawing");
+      const arr = Array.isArray(foundry.utils.getProperty(doc, NODES_PATH)) ? foundry.utils.getProperty(doc, NODES_PATH) : [];
+      const idx = arr.findIndex(n => String(n?.id) === String(p?.nodeId));
+      if (idx < 0) throw new Error("node not found");
+      const cur = Number(arr[idx].charges ?? 0), want = Number(p?.charges);
+      if (!Number.isFinite(want) || want < 0 || want >= cur) throw new Error(`charges may only decrement (${cur} → ${want} refused)`);
+      const next = arr.map((n, i) => (i === idx ? { ...n, charges: want } : n));
+      await doc.update({ [NODES_PATH]: next });
+      console.log("[bbttcc-territory] hex node charges", `${arr[idx].label || arr[idx].id}: ${cur} → ${want}`, `(for ${meta?.fromUserName || "?"})`);
+      return { ok: true, charges: want };
+    });
   }
 
   /**
@@ -388,6 +417,7 @@
   }
 
   Hooks.once("ready", () => {
+    _registerChargesRelay();
     try {
       game.bbttcc = game.bbttcc || {};
       game.bbttcc.api = game.bbttcc.api || {};

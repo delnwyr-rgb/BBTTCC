@@ -86,7 +86,35 @@
   // Core spend function
   // ---------------------------------------------------------------------------
 
-  async function spendForAction({
+  // Seat-aware entry (2026-09-07): the action ends in a hex Drawing write, which a
+  // PLAYER seat cannot perform (Drawings belong to their author — live: Harvest
+  // threw "lacks permission to update Drawing"). GM seats run locally; player
+  // seats relay to the primary GM via bbttcc-core gmExec, whose handler checks the
+  // caller OWNS the paying faction before spending on their behalf.
+  const BU_RELAY = "territory.buildUnits.spend";
+  async function spendForAction(opts = {}) {
+    const gx = game.bbttcc?.api?.gmExec;
+    if (game.user?.isGM || !gx?.call) return _spendForActionLocal(opts);
+    const { factionId = null, hexUuid = null, action = "fortify", costOverride = null, note = "" } = opts;
+    try { return await gx.call(BU_RELAY, { factionId, hexUuid, action, costOverride, note }); }
+    catch (e) { ui.notifications?.error?.(`Build Units: ${e?.message ?? e}`); return { ok: false, reason: "relay-failed", error: String(e?.message ?? e) }; }
+  }
+  function _registerBuRelay() {
+    const gx = game.bbttcc?.api?.gmExec;
+    if (!gx?.register) return;
+    gx.register(BU_RELAY, async (p, meta) => {
+      const hexDoc = await resolveHexDoc(p?.hexUuid);
+      if (!hexDoc) throw new Error("hex not found");
+      const tf = hexDoc.flags?.[MODT] || {};
+      const A = asActor(p?.factionId || tf.factionId || tf.ownerId || null);
+      if (!A) throw new Error("no owning faction");
+      const caller = game.users?.get(String(meta?.fromUserId || ""));
+      if (!meta?.local && !(caller && A.testUserPermission?.(caller, "OWNER"))) throw new Error(`${caller?.name || "caller"} does not own ${A.name}`);
+      const res = await _spendForActionLocal({ factionId: A.id, hexUuid: p?.hexUuid, action: p?.action, costOverride: p?.costOverride, note: `${p?.note || ""}${meta?.fromUserName ? ` (via ${meta.fromUserName})` : ""}`.trim() });
+      return res;
+    });
+  }
+  async function _spendForActionLocal({
     factionId = null,
     hexUuid   = null,
     action    = "fortify",
@@ -296,6 +324,7 @@
   });
 
   Hooks.once("ready", () => {
+    _registerBuRelay();
     publishAPI();
   });
 })();
