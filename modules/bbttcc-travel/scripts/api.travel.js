@@ -1224,7 +1224,7 @@
   // (a steward of the faction, else the controlled token). null when unknown.
   function _hexDocContaining(scene, cx, cy) {
     try {
-      if (canvas?.scene?.id === scene.id) {
+      if (canvas?.scene && scene?.id && canvas.scene.id === scene.id && canvas.drawings?.placeables?.length) {
         const pt = new PIXI.Point(cx, cy);
         for (const d of canvas.drawings.placeables) { const f = d.document?.flags?.["bbttcc-territory"]; if (!f || !(f.isHex || f.kind === "territory-hex" || f.name)) continue; if (d.containsPoint?.(pt) || d.bounds?.contains(cx, cy)) return d.document; }
         return null;
