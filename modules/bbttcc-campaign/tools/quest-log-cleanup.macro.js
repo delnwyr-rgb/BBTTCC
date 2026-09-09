@@ -64,12 +64,15 @@
     if (!qid.startsWith("word_")) continue; const beat = byId[qid.slice(5)]; const actor = beat ? game.actors.get(beat.speakerActorId) : null; if (!beat || !actor) continue;
     const nm = nameFor(actor, beat); if (nm !== q.name) { changes.push(`rename ${qid}: "${q.name}" → "${nm}"`); q.name = nm; regDirty = true; }
     renamed[qid] = nm; const line = lineFor(actor, beat.inviteText); plainOf[qid] = line.plain; speakerOf[qid] = actor.name;
-    const esc = actor.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); const doubled = new RegExp(`<p><b>${esc}</b> `);
-    if (line.html.indexOf("<b>") !== 0 && doubled.test(String(q.description || ""))) { q.description = String(q.description).replace(doubled, "<p>"); regDirty = true; changes.push(`scrub ${qid}: description`); }
+    // Regenerate the FIRST paragraph from the current invite line (covers doubled names AND rewritten lines like Tamsin's).
+    const desc = String(q.description || ""); const first = `<p>${line.html}</p>`;
+    const next = /^<p>[\s\S]*?<\/p>/.test(desc) ? desc.replace(/^<p>[\s\S]*?<\/p>/, first) : first + desc;
+    if (next !== desc) { q.description = next; regDirty = true; changes.push(`scrub ${qid}: description`); }
   }
   for (const [F, t] of tracks) for (const b of ["active", "completed", "archived"]) for (const [qid, e] of Object.entries(t[b])) {
     if (renamed[qid] && e.questName !== renamed[qid]) { e.questName = renamed[qid]; changes.push(`rename track ${F.name}: ${qid}`); }
-    const nm = speakerOf[qid], plain = plainOf[qid]; if (!nm || !plain || plain.indexOf(nm) === 0) continue;
+    const nm = speakerOf[qid], plain = plainOf[qid]; if (!nm || !plain) continue;
+    // notes/history that are an invite line (start with the speaker's name) → the current clean line
     if (typeof e.notes === "string" && e.notes.startsWith(nm + " ") && e.notes !== plain) { e.notes = plain; changes.push(`scrub track ${F.name}: ${qid} notes`); }
     for (const h of (e.history || [])) for (const k of ["text", "note"]) if (h && typeof h[k] === "string" && h[k].startsWith(nm + " ") && h[k] !== plain && h[k] !== NOTE) { h[k] = plain; }
   }
