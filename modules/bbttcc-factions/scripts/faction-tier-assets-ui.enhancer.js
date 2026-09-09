@@ -52,10 +52,12 @@
     return Math.max(0, Math.min(4, Math.floor(n)));
   }
 
+  // Mirrors the Turn Driver's five bands via faction-pressure's bandToNum (2026-09-08).
   function bandTextFromNum(n) {
     if (n <= 0) return "STABLE";
     if (n === 1) return "STRETCHED";
-    if (n === 2) return "STRAINED";
+    if (n === 2) return "OVEREXTENDED";
+    if (n === 3) return "STRAINED";
     return "CRITICAL";
   }
 
@@ -264,8 +266,8 @@
   function chipClassForOverext(bandNum) {
     if (bandNum <= 0) return "ok";
     if (bandNum === 1) return "warn";
-    if (bandNum === 2) return "danger";
-    return "doom";
+    if (bandNum <= 3) return "danger";   // overextended, strained
+    return "doom";                       // critical
   }
 
   function chipClassForUpkeep(unpaid) {
@@ -318,7 +320,7 @@
       const upkCls  = chipClassForUpkeep(unpaid);
       const rskCls  = chipClassForRisk(risk);
 
-      const dangerOn = unpaid || bandNum >= 2;
+      const dangerOn = unpaid || bandNum >= 3;   // strained or worse (overextended = warn chip only)
 
       const wrap = document.createElement("div");
       wrap.className = "bbttcc-tier-assets-wrap";

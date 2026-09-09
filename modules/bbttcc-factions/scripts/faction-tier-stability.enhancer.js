@@ -37,7 +37,7 @@
     const p = get(actor, `flags.${MODF}.pressure`, {}) || {};
     return {
       unpaidUpkeep: !!p.unpaidUpkeep,
-      overextensionBand: clampInt(p.overextensionBand, 0, 3),
+      overextensionBand: clampInt(p.overextensionBand, 0, 4),   // 5 bands since 2026-09-08 (critical = 4)
       updatedTs: Number(p.updatedTs ?? 0) || 0
     };
   }
@@ -47,7 +47,7 @@
 
     const cur = get(actor, `flags.${MODF}.progression.stability`, {}) || {};
     const prevStable = clampInt(cur.stableTurns, 0, 9999);
-    const prevMaxOver = clampInt(cur.maxOverextDuringSpan, 0, 3);
+    const prevMaxOver = clampInt(cur.maxOverextDuringSpan, 0, 4);
 
     const now = Date.now();
 

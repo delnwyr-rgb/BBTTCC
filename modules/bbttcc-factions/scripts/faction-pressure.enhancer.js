@@ -57,17 +57,20 @@
   function bandToNum(band) {
     const k = String(band || "").toLowerCase();
     // Turn Driver bands: stable, stretched, overextended, strained, critical :contentReference[oaicite:2]{index=2}
+    // One number per Turn Driver band (2026-09-08): strained and critical used
+    // to share 3, and the Assets chip labelled 3 "CRITICAL" — so a STRAINED
+    // faction read CRITICAL in one chip and STRAINED in the banner beside it.
     if (k === "stable") return 0;
     if (k === "stretched") return 1;
     if (k === "overextended") return 2;
     if (k === "strained") return 3;
-    if (k === "critical") return 3;
+    if (k === "critical") return 4;
     return 0;
   }
 
   function bandToRisk(n) {
-    if (n >= 3) return "high";
-    if (n === 2) return "medium";
+    if (n >= 3) return "high";      // strained, critical
+    if (n === 2) return "medium";   // overextended
     return "low";
   }
 
