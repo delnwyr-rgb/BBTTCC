@@ -1214,6 +1214,45 @@
     await game.settings.set(RIDE_NS, RIDE_KEY, all);
     return { ok: true };
   }
+  // Where does the coalition stand? (1) a paused ride's remaining legs start
+  // where the party is; (2) else the hex under a party token on the world hub
+  // (a steward of the faction, else the controlled token). null when unknown.
+  function _hexDocContaining(scene, cx, cy) {
+    try {
+      if (canvas?.scene?.id === scene.id) {
+        const pt = new PIXI.Point(cx, cy);
+        for (const d of canvas.drawings.placeables) { const f = d.document?.flags?.["bbttcc-territory"]; if (!f || !(f.isHex || f.kind === "territory-hex" || f.name)) continue; if (d.containsPoint?.(pt) || d.bounds?.contains(cx, cy)) return d.document; }
+        return null;
+      }
+      for (const d of scene.drawings ?? []) { const f = d.flags?.["bbttcc-territory"]; if (!f || !(f.isHex || f.kind === "territory-hex" || f.name)) continue; const w = Number(d.shape?.width || 0), h = Number(d.shape?.height || 0); if (cx >= d.x && cx <= d.x + w && cy >= d.y && cy <= d.y + h) return d; }
+    } catch (_e) {}
+    return null;
+  }
+  function whereIs(factionId) {
+    const fid = String(factionId || "").replace(/^Actor\./, "");
+    try {
+      const sess = fid ? rideGet(fid) : null;
+      const fromUuid = sess?.legs?.[0]?.fromUuid;
+      if (fromUuid) { const d = fromUuidSync(fromUuid); const doc = d?.document ?? d; if (doc) return { hexUuid: doc.uuid, doc, name: String(doc.flags?.["bbttcc-territory"]?.name || ""), via: "ride" }; }
+    } catch (_e) {}
+    try {
+      const hub = (canvas?.scene?.flags?.["bbttcc-travel"]?.isWorldHub ? canvas.scene : null) || game.scenes?.find?.(sc => sc.flags?.["bbttcc-travel"]?.isWorldHub) || null;
+      if (!hub) return null;
+      const tokens = (hub.tokens?.contents ?? hub.tokens ?? []).filter(t => { const a = t.actor || game.actors.get(t.actorId); const f = a?.flags?.["bbttcc-factions"]; return a && (String(f?.factionId || "") === fid || a.id === fid); });
+      const pick = tokens[0] || (canvas?.scene?.id === hub.id ? canvas.tokens?.controlled?.[0]?.document : null);
+      if (!pick) return null;
+      const w = Number(pick.width || 1) * hub.grid.size, h = Number(pick.height || 1) * hub.grid.size;
+      const doc = _hexDocContaining(hub, Number(pick.x) + w / 2, Number(pick.y) + h / 2);
+      return doc ? { hexUuid: doc.uuid, doc, name: String(doc.flags?.["bbttcc-territory"]?.name || ""), via: "token" } : null;
+    } catch (_e) { return null; }
+  }
+  async function arriveAt(hexUuid, opts = {}) {
+    const ref = await fromUuid(hexUuid).catch(() => null); const doc = ref?.document ?? ref;
+    if (!doc) return { ok: false, reason: "hex not resolved" };
+    const factionId = opts.factionId || null;
+    await runHexEnterBeatNow({ context: { to: { document: doc }, factionId }, hexUuid: doc.uuid }, { factionId });
+    return { ok: true, hexUuid: doc.uuid };
+  }
   async function rideSave(factionId, session) {
     // World-setting writes are GM work — player seats relay via gmExec.
     if (game.user?.isGM) return _rideWriteLocal(factionId, session);
@@ -1247,6 +1286,11 @@
 
     api.travelHex = travelHex;
     api.travel.travelHex = travelHex;
+
+    // Party position + arrival (2026-09-09): a ride beat whose destination is
+    // the hex the party already stands on skips the console and just arrives.
+    api.travel.whereIs = whereIs;
+    api.travel.arriveAt = arriveAt;
 
     // RideSession (Phase 2): the ride as a persisted, seat-safe object.
     api.travel.rideSession = {

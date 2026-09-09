@@ -1346,10 +1346,25 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     // design) and arrival fires via campaign.hexOverrides[hexUuid].onEnterBeatId.
     // ctx.skipOpenTravel: executeBeat applies this op EARLY (a stage direction
     // arrives with the dialog, not behind it) and tells the tail not to repeat.
+    let alreadyHere = false;
     if (we.openTravel && typeof we.openTravel === "object" && !ctx.skipOpenTravel) {
       try {
         const dest = String(we.openTravel.hexName || "").trim();
         const note = String(we.openTravel.note || "").trim();
+        // Already standing on the destination (2026-09-09)? Don't ask the table
+        // to ride there — arrive (per-act on-enter list) and say so.
+        try {
+          const trav = game.bbttcc?.api?.travel;
+          const camp = ctx.campaignId ? game.bbttcc?.api?.campaign?.getCampaign?.(ctx.campaignId) : null;
+          const fid = String(ctx.factionId || camp?.factionId || (camp?.factionIds || [])[0] || "").replace(/^Actor\./, "");
+          const here = (dest && fid && typeof trav?.whereIs === "function") ? trav.whereIs(fid) : null;
+          if (here && _normHexName(here.name) === _normHexName(dest)) {
+            alreadyHere = true;
+            if (typeof trav.arriveAt === "function") await trav.arriveAt(here.hexUuid, { factionId: fid });
+            changed = true; notes.push(`openTravel:alreadyHere:${dest}`);
+          }
+        } catch (eH) { console.warn(TAG, "already-here check failed (opening travel as usual)", eH); }
+      if (!alreadyHere) {
         // Prefer the scene that CONTAINS the destination hex (the hex map, e.g.
         // River Heart) — the Travel Console reads hexes off the viewed canvas,
         // so the world-hub overview is a dead end for route planning. Fallback:
@@ -1369,6 +1384,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         await _openTravelOnThisClient(payload); // sockets don't echo to the sender
         changed = true;
         notes.push("openTravel" + (dest ? `:${dest}` : ""));
+      }
       } catch (e) {
         console.warn(TAG, "openTravel failed", e);
       }
@@ -1377,7 +1393,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     if (changed) console.log(TAG, "Applied worldEffects", { beatId: beatCtx.beatId, beatType: beatCtx.beatType, notes: notes });
     else console.log(TAG, "No worldEffects applied (no-ops)", { beatId: beatCtx.beatId });
 
-    return { applied: changed, notes: notes };
+    return { applied: changed, notes: notes, alreadyHere };
   }
 
   // ── openTravel client-side plumbing ────────────────────────────────────────

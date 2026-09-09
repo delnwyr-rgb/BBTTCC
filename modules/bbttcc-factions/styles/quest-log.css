@@ -237,3 +237,14 @@
   object-fit: cover;
   display: block;
 }
+
+
+/* Scroll + resize (owner request 2026-09-09): the window is resizable, but the
+   panes grew with their content and the list ran off the bottom. Make the root
+   a column that fills the window, and let LIST and DETAIL scroll inside it. */
+.bbttcc-quest-log .window-content { display: flex; flex-direction: column; overflow: hidden; height: 100%; padding: 0; }
+.bbttcc-quest-log-root { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; height: 100%; box-sizing: border-box; }
+.bbttcc-quest-log__tabs { flex: 0 0 auto; }
+.bbttcc-quest-log__head { flex: 0 0 auto; }
+.bbttcc-quest-log__body { flex: 1 1 auto; min-height: 0; height: auto; }
+.bbttcc-quest-log__list, .bbttcc-quest-log__detail { min-height: 0; max-height: 100%; overflow-y: auto; }

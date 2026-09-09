@@ -3488,11 +3488,17 @@ async function executeBeat(campaign, beat, ctx = {}) {
     try {
       const wmEarly = game.bbttcc?.api?.worldMutation;
       if (wmEarly?.applyWorldEffects) {
-        await wmEarly.applyWorldEffects(
+        const rEarly = await wmEarly.applyWorldEffects(
           { id: beat.id, worldEffects: { openTravel: beat.worldEffects.openTravel } },
-          { source: "bbttcc-campaign", campaignId: campaign.id, campaignTitle: campaign.label, beatId: beat.id }
+          { source: "bbttcc-campaign", campaignId: campaign.id, campaignTitle: campaign.label, beatId: beat.id, factionId: ctx?.factionId || campaign.factionId || null }
         );
         openTravelApplied = true;
+        // Already at the destination (2026-09-09): the arrival ran; the ride
+        // dialog ("plot the ride on the Travel Console") would be nonsense.
+        if (rEarly?.alreadyHere) {
+          log(`[openTravel] '${beat.id}' — party already at ${beat.worldEffects.openTravel.hexName}; arrived instead of riding.`);
+          return { ok: true, alreadyHere: true };
+        }
       }
     } catch (eOT) { warn("early openTravel failed:", eOT); }
   }
