@@ -1229,7 +1229,17 @@
         for (const d of canvas.drawings.placeables) { const f = d.document?.flags?.["bbttcc-territory"]; if (!f || !(f.isHex || f.kind === "territory-hex" || f.name)) continue; if (d.containsPoint?.(pt) || d.bounds?.contains(cx, cy)) return d.document; }
         return null;
       }
-      for (const d of scene.drawings ?? []) { const f = d.flags?.["bbttcc-territory"]; if (!f || !(f.isHex || f.kind === "territory-hex" || f.name)) continue; const w = Number(d.shape?.width || 0), h = Number(d.shape?.height || 0); if (cx >= d.x && cx <= d.x + w && cy >= d.y && cy <= d.y + h) return d; }
+      // Hex drawings are POLYGONS: shape.width/height are null, the outline is
+      // shape.points (relative to x,y). Point-in-polygon, then nearest centroid.
+      const pip = (px, py, pts) => { let inside = false; for (let i = 0, k = pts.length - 2; i < pts.length; k = i, i += 2) { const xi = pts[i], yi = pts[i + 1], xk = pts[k], yk = pts[k + 1]; if (((yi > py) !== (yk > py)) && (px < (xk - xi) * (py - yi) / ((yk - yi) || 1e-9) + xi)) inside = !inside; } return inside; };
+      let best = null, bestD = Infinity;
+      for (const d of scene.drawings ?? []) {
+        const f = d.flags?.["bbttcc-territory"]; if (!f || !(f.isHex || f.kind === "territory-hex" || f.name)) continue;
+        const pts = Array.isArray(d.shape?.points) && d.shape.points.length >= 6 ? d.shape.points.map(Number) : null;
+        if (pts) { if (pip(cx - Number(d.x || 0), cy - Number(d.y || 0), pts)) return d; let sx = 0, sy = 0, n = 0, r = 0; for (let i = 0; i < pts.length; i += 2) { sx += pts[i]; sy += pts[i + 1]; n++; } sx = sx / n + Number(d.x || 0); sy = sy / n + Number(d.y || 0); for (let i = 0; i < pts.length; i += 2) r = Math.max(r, Math.hypot(pts[i] + Number(d.x || 0) - sx, pts[i + 1] + Number(d.y || 0) - sy)); const dist = Math.hypot(sx - cx, sy - cy); if (dist <= r && dist < bestD) { best = d; bestD = dist; } }
+        else { const w = Number(d.shape?.width || 0), h = Number(d.shape?.height || 0); if (w && h && cx >= d.x && cx <= d.x + w && cy >= d.y && cy <= d.y + h) return d; }
+      }
+      return best;
     } catch (_e) {}
     return null;
   }
