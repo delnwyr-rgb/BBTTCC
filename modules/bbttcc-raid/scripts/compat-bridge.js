@@ -311,6 +311,10 @@ function buildOptionStrategicDef(key, meta){
     groupOrder: Number(spec.groupOrder || 90),
 
     storyOnly,
+    // Tooltip prose (2026-09-08): these rows had none. Honest about the engine.
+    text: storyOnly
+      ? `Character option (L2): ${pretty}. Story-driven — the GM adjudicates its effect on the target this turn; no engine change.`
+      : `Character option (L2): ${pretty}. Queues the "${mechTag}" tag on the target hex at the next Turn Advance.`,
     apply: storyOnly ? baseApply : mechApply
   };
 }

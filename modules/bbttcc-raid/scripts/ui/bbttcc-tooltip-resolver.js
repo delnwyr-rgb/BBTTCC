@@ -133,6 +133,8 @@
 
   function getFallbackText(key, def){
     const k = normKey(key);
+    // Planner's table is the authority (published as api.raid.ACTIVITY_TEXT, 2026-09-08).
+    try { const t = game?.bbttcc?.api?.raid?.ACTIVITY_TEXT?.[k]; if (t) return t; } catch (_e) {}
     if (FALLBACK_TEXT[k]) return FALLBACK_TEXT[k];
 
     // Also try to resolve by label → normalized (for edge cases)

@@ -270,11 +270,12 @@
         return;
       }
 
+      // Copy-paste of propaganda_tour BUFFED the enemy hex (audit 2026-09-08).
+      // Canon copy: "−2 Loyalty to enemy Hex" — hostile broadcast, no morale gift.
       await enqueuePendingRepairs(ctx.targetUuid, ["Propaganda"], []);
-      await adjustHexTrack(ctx.targetUuid, "morale", +2);
-      await adjustHexTrack(ctx.targetUuid, "loyalty", +1);
+      await adjustHexTrack(ctx.targetUuid, "loyalty", -2);
 
-      await pushWarLog(A, 'Psych Ops Broadcast: +Propaganda; +2 Morale, +1 Loyalty (target hex).');
+      await pushWarLog(A, 'Psych Ops Broadcast: +Propaganda; −2 Loyalty (target hex).');
     },
 
     // ===== Canon T2: Peace Accords =====
@@ -466,7 +467,7 @@
       await setNextTurnFlag(A, { inquisitionMandate: incNextTurn(A, "inquisitionMandate", 1) });
 
       const u = await adjustFactionTrack(A, "unity", +1);
-      const d = await adjustFactionTrack(A, "darkness", +1);
+      const d = await adjustFactionTrack(A, "darkness", -1);   // canon: "Darkness −1" (sign was inverted; audit 2026-09-08)
 
       await pushWarLog(A, `Inquisition Mandate: nextTurn.inquisitionMandate=1; Unity ${u.before} → ${u.after}; Darkness ${d.before} → ${d.after}. (STUB: pending GM/WME resolution)`);
     },
@@ -560,6 +561,9 @@
       await pushWarLog(A, `Apocalyptic Weapon Test: nextTurn.apocalypticWeaponTest=1; Darkness ${d.before} → ${d.after}; Morale ${m.before} → ${m.after}. (STUB: pending GM/WME resolution)`);
     },
 
+    // The loader slugifies "Dragon's Parley" to dragon_s_parley — this handler
+    // was keyed dragons_parley, so 130 marks bought nothing (audit 2026-09-08).
+    async dragon_s_parley(ctx){ return this.dragons_parley(ctx); },
     async dragons_parley(ctx){
       const A = game.actors.get(ctx.factionId);
       if (!A) return;

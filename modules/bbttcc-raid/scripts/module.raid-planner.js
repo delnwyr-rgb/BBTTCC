@@ -126,8 +126,61 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     mass_mobilization: "+25% OP generation next turn, then −25%.",
     enlightenment_congress: "Raise Enlightenment for all PCs by 1.",
     project_eden: "Create 'Garden City' Hex aligned to Tiferet.",
-    apocalyptic_weapon_test: "Destroy enemy Hex; Darkness +3."
+    apocalyptic_weapon_test: "Destroy enemy Hex; Darkness +3.",
+
+    // ── Rows that had NO prose anywhere (audit 2026-09-08) ─────────────────
+    // Written from what apply() actually does — every line below is a real
+    // engine effect, applied at the next Turn Advance unless stated otherwise.
+    fortify_hex: "Raise the hex's defences: +Fortified modifier, Defense +2.",
+    patrol_routes: "Put boots on the roads: +Patrolled, Defense +1, Morale +1. A Fortified hex may also gain Well-Maintained.",
+    secure_perimeter: "Stake out the approaches: +Strategic Position, Defense +1.",
+    supply_cache: "Lay in stores: +Supply Cache, Defense +1.",
+    supply_depot: "Build a depot: +Logistics Hub, Defense +1, Trade yield +5.",
+    establish_supply_line: "Link this hex to one you own (pick the TO hex): +Supply Line on both ends, Trade yield +10. Sieges draw on it.",
+    establish_trade_route: "Open trade with one of your hexes (pick the TO hex): +Trade Hub, Trade yield +20; the route is stored on both hexes.",
+    develop_infrastructure_std: "Invest in the town: Defense +1, Trade yield +5, Integration +1.",
+    infrastructure_expansion: "Expand the works: +Expanded Infrastructure, Defense +2, Trade yield +10.",
+    reconstruction_drive_std: "Rebuild after damage: removes Damaged Infrastructure, +Well-Maintained, Defense +2, Trade yield +5, Integration +1.",
+    diplomatic_mission_std: "Send envoys: +Diplomatic Ties, Trade yield +10, Loyalty +1.",
+    defuse_tensions: "Talk the town down: removes Hostile Population, +Loyal Population, Loyalty +2, Morale +2.",
+    loyalty_program: "Win the locals over: +Loyal Population, Loyalty +2, Morale +1.",
+    cultural_festival_std: "Throw a festival: +Cultural Festival, Morale +2, Trade yield +5.",
+    propaganda_campaign: "Paper the walls: +Propaganda, Morale +2, Loyalty +1 on the target hex.",
+    alignment_shift: "Consecrate the hex to the Tree: +Sanctified, +Pilgrimage Site, Morale +1, Loyalty +1.",
+    gather_intel: "Send scouts: tags the hex Intel. The DC advantage this is meant to grant is not wired yet — GM adjudicates.",
+    policy_reforms: "Administrative reform. The OP-gain and DC bonuses it schedules have no engine consumer yet — story-driven, GM adjudicates.",
+    mass_mobilization_std: "Call up the militia: your next raid gains initiative and one free maneuver.",
+    repair_fortifications: "Mend the walls: the hex's primary facility recovers one damage step.",
+    repair_rig: "Field repairs on one of your rigs (pick the rig): recovers one damage step.",
+
+    // Siege clash activities (bbttcc-raid siege-counter-activities)
+    bombard: "Siege, attacker: batter the current wall layer — rolled structure damage; a breached layer opens the next.",
+    escalade: "Siege, attacker: ladders on the wall — 1d10+10 structure damage to the current layer.",
+    sapper_undermine: "Siege, attacker: collapse a tunnel under the wall — 3d10+12 concussive structure damage.",
+    ram_gate: "Siege, attacker: drive the ram home — 2d10+12 concussive damage and the garrison staggers.",
+    boiling_oil: "Siege, defender: drain the besiegers' supply buffer by 2; your garrison's morale +1.",
+    flaming_pitch: "Siege, defender: drain the besiegers' supply buffer by 2; your garrison's morale +1.",
+    cls_marshal: "Harmony Marshal, attacker: rally the standard — siege buffer +2, morale +1.",
+    cls_wyrdlens: "Wyrdlens Adept, attacker: read the weak point — 2d10+14 structure damage.",
+    cls_courier: "Shadow Courier, attacker: open the postern — 3d10+12 structure damage.",
+    cls_aurablade: "Aurablade, attacker: mercy's edge — the defender loses 1 Anytime budget.",
+    cls_linguist: "Cosmic Linguist, attacker: cite the clause — the defender loses 1 Renewal.",
+    cls_pact: "Pactkeeper, attacker: call the debt — siege buffer +2.",
+    cls_bulwark: "Bulwark, defender: brace the breach — Anytime budget +2, morale +1.",
+    cls_soulsmith: "Soul-Smith, defender: field refit — Renewal +2, morale +1.",
+    cls_dreamwalker: "Dreamwalker, defender: phantom host — besiegers' buffer −2, morale +1."
   };
+
+  // ONE authority for fallback prose (2026-09-08): the Raid Console's
+  // ui/bbttcc-tooltip-resolver.js used to carry its own copy of this table.
+  // It now reads game.bbttcc.api.raid.ACTIVITY_TEXT first.
+  (function publishActivityText(tries){
+    try {
+      const r = game?.bbttcc?.api?.raid;
+      if (r) { if (!r.ACTIVITY_TEXT) r.ACTIVITY_TEXT = FALLBACK_TEXT; return; }
+    } catch (_e) {}
+    if ((tries || 0) < 80) setTimeout(function(){ publishActivityText((tries || 0) + 1); }, 250);
+  })(0);
 
   function _resolve(kind, key){
     const EFFECTS = _getEffects();
