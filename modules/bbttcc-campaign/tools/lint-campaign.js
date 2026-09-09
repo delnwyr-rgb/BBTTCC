@@ -468,6 +468,54 @@ for (const [q, list] of questBeats) {
 }
 if (quests) for (const [q, qd] of Object.entries(quests)) if (!questBeats.has(q) && !accepted.has(q)) F("Q06", "INFO", null, `registry quest "${qd?.name || q}" (${q}) has no beats and is never accepted`, { quest: q });
 
+// ── seals & acceptance: S01–S04, Q09–Q10 (2026-09-09, after the Lyrenn East Channels stall) ──
+{
+  // Q09: a beat gated on `questBucket is active` for a quest that NO beat ever accepts.
+  const acceptors = new Map();   // questId → [beatId]
+  for (const b of beats) for (const row of (b.worldEffects?.questEffects || [])) {
+    if (String(row?.action || "") === "accept" && s(row.questId)) { if (!acceptors.has(s(row.questId))) acceptors.set(s(row.questId), []); acceptors.get(s(row.questId)).push(b.id); }
+  }
+  const warnedQ = new Set();
+  for (const b of beats) for (const c of condsOf(b)) {
+    if (c.questBucket == null || s(c.is) !== "active") continue;
+    const q = s(c.questBucket); if (acceptors.has(q) || warnedQ.has(q)) continue;
+    warnedQ.add(q);
+    F("Q09", "ERROR", b.id, `gated on quest '${quests?.[q]?.name || q}' being ACTIVE, but no beat has a questEffects accept for it — unreachable by play (Reset Console / GM only)`);
+  }
+  // Q10: an acceptance beat that accepts nothing, or a different quest than its own.
+  for (const b of beats) {
+    if (!/acceptance/i.test(s(b.id)) && !/quest acceptance/i.test(s(b.label))) continue;
+    const own = s(b.questId);
+    const acc = (b.worldEffects?.questEffects || []).filter(r => String(r?.action || "") === "accept").map(r => s(r.questId));
+    if (!acc.length) F("Q10", "ERROR", b.id, `acceptance beat accepts NO quest (own quest ${quests?.[own]?.name || own || "(none)"})`);
+    else if (own && !acc.includes(own)) F("Q10", "ERROR", b.id, `acceptance beat accepts ${acc.map(q => quests?.[q]?.name || q).join(", ")} but belongs to '${quests?.[own]?.name || own}'`);
+  }
+  // S01: a route DOWN the act ladder — once the source's act is open the target is sealed (unless inject.evergreen).
+  let down = 0;
+  for (const b of beats) {
+    const from = phaseOf(b); if (from == null || from < 2) continue;
+    for (const [to, via] of routeTargets(b)) {
+      const t = byId.get(s(to)); if (!t) continue;
+      const tp = phaseOf(t); if (tp == null || tp < 1 || tp >= from || t.inject?.evergreen === true) continue;
+      down++;
+      F("S01", "WARN", b.id, `${via} → '${to}' (${t.label || to}) is Act ${tp} content — SEALED once Act ${from} opens; route to an Act-${from} hub or set inject.evergreen`);
+    }
+  }
+  // S02: a "ride" choice that does not open travel — a letter teleporting the party.
+  for (const b of beats) for (const [i, ch] of (b.choices || []).entries()) {
+    if (!/^(🐎|ride|saddle)/i.test(s(ch?.label))) continue;
+    const t = byId.get(s(ch.next)); if (!t) continue;
+    if (!t.worldEffects?.openTravel && t.type !== "travel" && !/travel/i.test(s(t.tags))) F("S02", "WARN", b.id, `choice[${i}] "${ch.label}" → '${ch.next}' has no openTravel — the party arrives without a travel leg`);
+  }
+  // S03: hex arrival with a single act-gated beat and no per-act list.
+  for (const [uuid, rec] of Object.entries(campaign.hexOverrides || {})) {
+    if (Array.isArray(rec?.onEnterBeatIds)) continue;
+    const bid = s(rec?.onEnterBeatId || rec?.beatId); const t = byId.get(bid); if (!t) continue;
+    const tp = phaseOf(t); if (tp == null) continue;
+    F("S03", "INFO", bid, `hexOverride ${uuid} arrives on an Act-${tp} beat only — arrivals in other acts get nothing (use onEnterBeatIds: [act-N hub, ...])`);
+  }
+}
+
 // ── effects: E02–E14 ────────────────────────────────────────────────────────
 const arrayKeys = ["factionEffects", "relationshipEffects", "worldModifiers", "turnRequests", "purifyHexes"];
 const ladder = [];

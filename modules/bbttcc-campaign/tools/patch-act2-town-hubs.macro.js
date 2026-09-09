@@ -69,6 +69,7 @@
   const HUB_FOR = {   // Act-1 hub → the town's Act-2 hub
     lyrenn_main_scene: "lyrenn_quest_scene", lyrenn_opening_scene: "lyrenn_quest_scene", lyrenn_town_walk: "lyrenn_quest_scene", lyrenn_green_ring_cinematic: "lyrenn_green_ring",
     allesh_gilliam_town_walk: "allesh_gilliam_introduction_to_hq", ag_crossroads_first_rides: "allesh_gilliam_introduction_to_hq", allesh_gilliam_hq_cinematics: "allesh_gilliam_introduction_to_hq", allesh_gilliam_st_gilliams_cinematics: "allesh_gilliam_introduction_to_hq",
+    allesh_gilliam_yarrow_welcome: "allesh_gilliam_introduction_to_hq", allesh_gilliam_etta_welcome: "allesh_gilliam_introduction_to_hq",
     khezek_tor_main_scene: "khezek_tor_quest_scene", khezek_tor_town_walk: "khezek_tor_quest_scene"
   };
   for (const v of new Set(Object.values(HUB_FOR))) if (!byId[v]) changes.push(`⚠ Act-2 hub ${v} missing — routes into it will dangle`);
@@ -87,14 +88,30 @@
     beats.splice(i >= 0 ? i + 1 : beats.length, 0, ride); byId[ride.id] = ride;
     changes.push("NEW ride beat lyrenn_word_ride (openTravel → Lyrenn)");
   }
+  // Ride-home beat: "Ride back — the other road waits" used to route into the Act-1 Crossroads picker.
+  if (!byId.ride_back_home) {
+    const home = {
+      id: "ride_back_home", type: "dialog", label: "The Road Home",
+      questId: byId.allesh_gilliam_introduction_to_hq?.questId || "quest_Cq1v3hJpXarX5rXJ", questStep: 998,
+      description: p("The other road waits, the way it always does. Plot the ride on the Travel Console — Allesh-Gilliam, or wherever the ledger says you are needed next."),
+      choices: [choice("🐎 Saddle up — ride out", "", "Run the planned route on the Travel Console."), choice("Stay a while longer", "", "")],
+      inject: { repeatable: true, requires: [{ flag: "storyPhase", gte: 2 }] },
+      worldEffects: { openTravel: { hexName: "Allesh-Gilliam" } }, tags: "travel act2", playerFacing: true, playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true
+    };
+    beats.push(home); byId[home.id] = home; changes.push("NEW ride_back_home (openTravel → Allesh-Gilliam)");
+  }
+  for (const b of beats) for (const ch of (b.choices || [])) if (/^Ride back/i.test(ch.label || "") && ch.next === "ag_crossroads_first_rides") { ch.next = "ride_back_home"; changes.push(`${b.id}: "${ch.label}" → ride_back_home`); }
+
   for (const wid of ["lyrenn_word_channels", "lyrenn_word_treeline"]) {
     const w = byId[wid]; if (!w) continue;
     for (const ch of (w.choices || [])) if (/^Ride for Lyrenn/i.test(ch.label || "") && ch.next !== "lyrenn_word_ride") { changes.push(`${wid}: "${ch.label}" ${ch.next} → lyrenn_word_ride`); ch.next = "lyrenn_word_ride"; }
   }
 
   // ── 3. Acceptance beats accept their OWN quest + open the investigation ──
+  // Entry beats that are not named "acceptance" but ARE the door (lint Q09, 2026-09-09).
+  const ENTRY_ALSO = new Set(["forest_of_tifaret_approach"]);
   for (const b of beats) {
-    if (!/acceptance/i.test(b.id) && !/quest acceptance/i.test(b.label || "")) continue;
+    if (!/acceptance/i.test(b.id) && !/quest acceptance/i.test(b.label || "") && !ENTRY_ALSO.has(b.id)) continue;
     if (!b.questId) { changes.push(`⚠ ${b.id}: no questId — skipped`); continue; }
     b.worldEffects = b.worldEffects || {};
     const qe = Array.isArray(b.worldEffects.questEffects) ? b.worldEffects.questEffects : [];
