@@ -627,6 +627,23 @@
       return String(beatId || "").trim() || null;
     } catch (_e) { return null; }
   }
+  // Per-act arrival (2026-09-09): a hex may carry a LIST — campaign override
+  // `onEnterBeatIds: [...]`, or any id field with "|" separators. The first beat
+  // whose story gate passes fires; a sealed / ungated one falls through. So
+  // ["lyrenn_quest_scene", "lyrenn_opening_scene"] = Act-2 hub in Act 2, the
+  // Act-1 opening in Act 1.
+  function readOnEnterBeatIds(campaign, hexUuid, toDrawing) {
+    const out = [];
+    const push = (v) => { for (const s of String(v || "").split("|")) { const t = s.trim(); if (t && !out.includes(t)) out.push(t); } };
+    try {
+      const ov = (campaign && (campaign.hexOverrides || (campaign.overrides && campaign.overrides.hex))) || null;
+      const rec = ov ? (ov[hexUuid] || null) : null;
+      if (rec && Array.isArray(rec.onEnterBeatIds)) for (const id of rec.onEnterBeatIds) push(id);
+      if (rec) push(rec.onEnterBeatId || rec.beatId);
+    } catch (_e) {}
+    push(readHexOnEnterBeatIdFromDrawing(toDrawing));
+    return out;
+  }
 
   const _recent = new Map();
   function dkey(campaignId, beatId, hexUuid, factionId) { return [campaignId || "", beatId || "", hexUuid || "", factionId || ""].join("|"); }
@@ -685,10 +702,8 @@
     const campaign = getCampaignById(campaignId);
     if (!campaign) { warn("Hex enter skipped: campaign not found", campaignId); return; }
 
-    const beatId =
-      readCampaignOverrideOnEnterBeatId(campaign, hexUuid) ||
-      readHexOnEnterBeatIdFromDrawing(to) ||
-      null;
+    const beatIds = readOnEnterBeatIds(campaign, hexUuid, to);
+    const beatId = beatIds[0] || null;
 
     if (!beatId) { log("Hex enter: no beat configured", { hexUuid, campaignId }); return; }
 
@@ -738,14 +753,20 @@
 
     // Prefer injector path (gated)
     if (typeof injector.maybeRunBeatById === "function") {
-      const res = await injector.maybeRunBeatById({
-        campaignId: campaignId,
-        beatId: beatId,
-        triggerType: "hex_enter",
-        ctx: enterCtx,
-        defaults: { oncePerHex: true }
-      });
-      log("Hex enter: maybeRunBeatById →", res);
+      // Try the list in order; a beat refused by its story gate / seal falls through.
+      for (const id of beatIds) {
+        const res = await injector.maybeRunBeatById({
+          campaignId: campaignId,
+          beatId: id,
+          triggerType: "hex_enter",
+          ctx: enterCtx,
+          defaults: { oncePerHex: true }
+        });
+        log("Hex enter: maybeRunBeatById →", id, res);
+        const gated = res && res.ok && res.fired === false && /requires|seal/i.test(String(res.why || ""));
+        if (!gated) return;
+      }
+      log("Hex enter: every configured beat is gated for this act", { beatIds });
       return;
     }
 

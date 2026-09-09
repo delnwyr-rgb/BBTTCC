@@ -3199,6 +3199,9 @@ async function executeBeat(campaign, beat, ctx = {}) {
       if (seal.sealed) {
         const lbl = beat.label || beat.id || "(unnamed)";
         log(`[seal] '${beat.id}' refused — ${seal.why}`);
+        // A child reached by an authored route (choice → next) simply ends the
+        // chain: the player's dialog closes, no GM card (2026-09-09).
+        if (ctx?.__chain) return { ok: false, sealed: true, why: seal.why, routed: true };
         if (game.user?.isGM) {
           ChatMessage.create({
             whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
@@ -4736,13 +4739,12 @@ async function _beatSealed(beat, campaign, ctx = {}) {
         return { sealed: true, why: `its quest "${qn}" is ${track.completed?.[qid] ? "completed" : "archived"}`, kind: "quest", questId: qid };
       }
     }
-    // Repeatable beats are PLACES, not chapter content (2026-09-08): town
-    // hubs, rounds, crossroads, venue intros. 274 Act-2 beats route "Leave"
-    // into Act-1 hubs (Welcome Round ×40, Lyrenn Intro ×36, KT Cookline ×9);
-    // sealing them on the Title Card dead-ended every town the moment Act 2
-    // opened. The act seal therefore skips inject.repeatable; the quest seal
-    // above still closes a hub whose own quest is completed.
-    if (sealA && beat.inject?.repeatable !== true) {
+    // Owner ruling 2026-09-09 ("the walk beats are squarely Act 1"): the act
+    // seal applies to repeatable hubs too. Act-2 content that used to "Leave"
+    // into Act-1 hubs is re-routed to per-act hubs by
+    // tools/patch-act2-town-hubs.macro.js; a routed child that is sealed now
+    // ends the chain quietly (see executeBeat) instead of whispering.
+    if (sealA) {
       const act = _beatActOf(beat);
       const phase = _storyPhaseGet();
       if (act !== null && act >= 1 && phase > act) return { sealed: true, why: `it belongs to Act ${act} and the story has moved on to Act ${phase}`, kind: "act", act, phase };
