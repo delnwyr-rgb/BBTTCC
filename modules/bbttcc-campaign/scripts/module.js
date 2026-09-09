@@ -6099,11 +6099,19 @@ function _onBeatResolvedStoryMark({ beat } = {}) {
 // door open…"), Act-2 conversation lines are full sentences that start with the
 // speaker's name — the card printed "Father Tamsin Father Tamsin keeps…". If the
 // line already names the speaker, render it alone.
+function _inviteNameMatch(a, b) {   // "caulder" ≈ "calder", "sable" = "sable"; short words must match exactly
+  if (a === b) return true;
+  if (a.length < 4 || b.length < 4) return false;
+  const m = a.length, n = b.length; if (Math.abs(m - n) > 2) return false;
+  let prev = Array.from({ length: n + 1 }, (_, j) => j);
+  for (let i = 1; i <= m; i++) { const cur = [i]; for (let j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; }
+  return prev[n] <= 2;
+}
 function _inviteLine(actor, inviteText) {
   const text = String(inviteText || "").trim() || "wants a word.";
   const words = String(actor?.name || "").toLowerCase().split(/[\s,'’-]+/).filter(w => w.length > 2);
-  const head = text.toLowerCase().split(/[\s,'’]+/).slice(0, 4);
-  const namesItself = words.some(w => head.includes(w));
+  const head = text.toLowerCase().split(/[\s,'’]+/).slice(0, 4).map(w => w.replace(/[^a-z0-9]/g, ""));
+  const namesItself = words.some(w => head.some(h => _inviteNameMatch(w, h)));
   return { text, html: namesItself ? foundry.utils.escapeHTML(text) : `<b>${foundry.utils.escapeHTML(String(actor?.name || ""))}</b> ${foundry.utils.escapeHTML(text)}`, plain: namesItself ? text : `${actor?.name || ""} ${text}` };
 }
 // "A Word from X" ×2 per NPC was indistinguishable in the Quest Log (owner,
@@ -6210,7 +6218,7 @@ async function _acceptTalkInvitation(message) {
   });
 }
 // exposed for the rename tool (tools/patch-invite-names.macro.js)
-try { globalThis.__bbttccInviteQuestName = _inviteQuestName; } catch (_e) {}
+try { globalThis.__bbttccInviteQuestName = _inviteQuestName; globalThis.__bbttccInviteLine = _inviteLine; } catch (_e) {}
 
 function _bindTalkInviteButtons(message, root) {
   try {
