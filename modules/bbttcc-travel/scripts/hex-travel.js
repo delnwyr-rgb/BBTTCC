@@ -1787,6 +1787,15 @@ const CampaignBeatInjector = {
       // We temporarily project effInject onto the beat-like object.
       const projected = Object.assign({}, effectiveBeat, { inject: effInject });
 
+      // Story gate (2026-09-08): the by-id path (hex onEnterBeatId) skipped
+      // inject.requires while the tag path honoured it — so a hex whose
+      // on-enter beat is Act-2 content ("Visit Your New HQ", storyPhase ≥ 2)
+      // fired it during Act 1. Same authority as the tag path; also carries the
+      // quest/act seals. Fail-open when the campaign API is absent.
+      if (beat && !(await _requiresMet(projected, campaign, ctx))) {
+        return { ok: true, fired: false, triggerType, why: "requires unmet (inject.requires / seal)", campaignId, beatId };
+      }
+
       const rule = _blockedByBeatRules(state, projected, ctx, nowTurn);
       if (rule.blocked) return { ok: true, fired: false, triggerType, why: rule.why, campaignId, beatId };
 

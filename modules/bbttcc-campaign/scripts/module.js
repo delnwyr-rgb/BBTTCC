@@ -4101,7 +4101,7 @@ async function runBeat(id, beatId, ctx = {}) {
   const effectiveId = (redirectId && redirectId !== beatId) ? redirectId : beatId;
   const b = (c.beats || []).find(x => x.id === effectiveId);
   if (!b) return ui.notifications?.warn?.(`Beat '${effectiveId}' not found in '${id}'.`);
-  await executeBeat(c, b, ctx);
+  return await executeBeat(c, b, ctx);   // surfaces {ok:false, sealed:true, why} to console callers (2026-09-08)
 }
 
 // ---------------------------------------------------------------------------
@@ -4725,7 +4725,10 @@ async function _beatSealed(beat, campaign, ctx = {}) {
     let sealQ = true, sealA = true;
     try { sealQ = game.settings.get(MOD_ID, SETTING_SEAL_QUESTS) !== false; } catch (_e) {}
     try { sealA = game.settings.get(MOD_ID, SETTING_SEAL_ACTS) !== false; } catch (_e) {}
-    if (sealQ && beat.questId) {
+    // Act 0 (onboarding) is exempt from BOTH seals: its quest ("Offices of
+    // Fates and Destinies") stays completed in the coalition track across a
+    // From-the-Top, and the ruling's intent is that training replays (2026-09-08).
+    if (sealQ && beat.questId && _beatActOf(beat) !== 0) {
       const qid = String(beat.questId).trim();
       const track = await _coalitionQuestTrack(campaign, ctx);
       if (track && (track.completed?.[qid] || track.archived?.[qid])) {
@@ -4733,7 +4736,13 @@ async function _beatSealed(beat, campaign, ctx = {}) {
         return { sealed: true, why: `its quest "${qn}" is ${track.completed?.[qid] ? "completed" : "archived"}`, kind: "quest", questId: qid };
       }
     }
-    if (sealA) {
+    // Repeatable beats are PLACES, not chapter content (2026-09-08): town
+    // hubs, rounds, crossroads, venue intros. 274 Act-2 beats route "Leave"
+    // into Act-1 hubs (Welcome Round ×40, Lyrenn Intro ×36, KT Cookline ×9);
+    // sealing them on the Title Card dead-ended every town the moment Act 2
+    // opened. The act seal therefore skips inject.repeatable; the quest seal
+    // above still closes a hub whose own quest is completed.
+    if (sealA && beat.inject?.repeatable !== true) {
       const act = _beatActOf(beat);
       const phase = _storyPhaseGet();
       if (act !== null && act >= 1 && phase > act) return { sealed: true, why: `it belongs to Act ${act} and the story has moved on to Act ${phase}`, kind: "act", act, phase };
@@ -4835,8 +4844,20 @@ async function _beatRequiresMet(beat, campaign, ctx) {
 // Never throws; on evaluation error mirrors the evaluator's fail-open with
 // { met:true, error:true }.
 async function _beatGateReport(beat, campaign, ctx = {}) {
-  const out = { gated: false, met: true, conditions: [], error: false };
+  const out = { gated: false, met: true, conditions: [], error: false, sealed: null };
   try {
+    // Seals first (2026-09-08): the Visualizer read this report and offered a
+    // plain ▶ Run on a beat executeBeat would refuse. A sealed beat reports as
+    // gated + unmet with a `seal` condition so consoles can show 🔒 and offer
+    // the force override instead.
+    try {
+      const seal = await _beatSealed(beat, campaign, ctx);
+      if (seal?.sealed) {
+        out.sealed = seal;
+        out.gated = true; out.met = false;
+        out.conditions.push({ text: `🔒 sealed — ${seal.why}`, met: false, kind: "seal", seal });
+      }
+    } catch (_e) {}
     const req = beat?.inject?.requires;
     if (!req) return out;
     const conds = Array.isArray(req) ? req : [req];

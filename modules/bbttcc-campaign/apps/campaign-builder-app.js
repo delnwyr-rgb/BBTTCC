@@ -1248,7 +1248,7 @@ const activeCampaignId = _getActiveCampaignId();
   // console — run a beat with the soft-lock confirm, launch the Reset
   // Console / Campaign Census tools.
   // -----------------------------------------------------------------------
-  async _runBeatFromConsole(beatId) {
+  async _runBeatFromConsole(beatId, opts = {}) {
     try {
       const api = this._requireApi();
       if (!api?.runBeat) return ui.notifications?.warn?.("Campaign API missing runBeat.");
@@ -1276,8 +1276,14 @@ const activeCampaignId = _getActiveCampaignId();
         if (!ok) return;
       }
 
-      await api.runBeat(campaignId, id);
-      ui.notifications?.info?.(`▶ Beat fired: ${id}`);
+      // force:true = the GM's one-off seal override (2026-09-08) — executeBeat
+      // refuses sealed beats on every other path.
+      const res = opts?.force === true ? await api.runBeat(campaignId, id, { force: true }) : await api.runBeat(campaignId, id);
+      if (res && res.ok === false && res.sealed) {
+        ui.notifications?.warn?.(`🔒 ${id} stays closed — ${res.why || "its chapter is finished"}. See the GM whisper in chat.`);
+      } else {
+        ui.notifications?.info?.(`▶ Beat fired: ${id}`);
+      }
       this.render(false); // refresh the truth layer + Now Panel
     } catch (e) {
       console.warn(TAG, "console run-beat failed", e);
@@ -1386,7 +1392,14 @@ const activeCampaignId = _getActiveCampaignId();
       kicker, title: title || "", beat: beat || null, quest: beat ? questOf(beat) : "",
       runs: runs || [], note: note || ""
     });
-    const run = (b, txt) => ({ id: String(b.id), text: txt || stripPrefix(b.label || b.id, questOf(b)) });
+    const run = (b, txt, force = false) => ({ id: String(b.id), text: txt || stripPrefix(b.label || b.id, questOf(b)), force: !!force });
+    // Seal (2026-09-08): the gate report's `seal` condition — completed quest /
+    // finished act. A sealed NEXT gets a 🔒 card and a force override, never a
+    // plain ▶ Run that executeBeat would refuse.
+    const sealOf = (b) => (runtime.byId[String(b.id)]?.reasons || []).find(r => r?.kind === "seal")?.seal || null;
+    const sealCard = (b, kicker, lastName) => card(`🔒 ${kicker} — sealed`, b.label || b.id, b,
+      [run(b, "Open it anyway (override the seal)", true)],
+      `${lastName ? `after “${lastName}” ` : ""}the next beat is closed — <b>${esc(sealOf(b)?.why || "its chapter is finished")}</b>. Completed quests and finished acts don't replay (ruling 2026-09-07). To reopen for good: move its quest back to <i>active</i> in the Reset Console, or set <code>inject.evergreen</code> on the beat.`);
     const whyOf = (b, n = 2) => {
       const unmet = (runtime.byId[String(b.id)]?.reasons || []).filter(r => !r.met);
       return esc(unmet.length
@@ -1427,6 +1440,8 @@ const activeCampaignId = _getActiveCampaignId();
           (candidates.length > 3 ? `+ ${candidates.length - 3} more route${candidates.length === 4 ? "" : "s"} on the chart · ` : "") +
           (lastName ? `out of “${lastName}”` : ""));
         hero.quest = questOf(candidates[0]);
+      } else if (gated.length && sealOf(gated[0])) {
+        hero = sealCard(gated[0], "NEXT", lastName);
       } else if (gated.length) {
         const g = gated[0];
         hero = card("⏳ NEXT — waiting at its gate", g.label || g.id, g, [run(g, "Run it anyway (override the gate)")],
@@ -1476,6 +1491,8 @@ const activeCampaignId = _getActiveCampaignId();
         if (qNext) {
           hero = card("⏭ NEXT — quest order", qNext.label || qNext.id, qNext, [run(qNext, "Run the next beat")],
             `no authored route after “${lastName}” — following the quest's canonical order`);
+        } else if (qGated && sealOf(qGated)) {
+          hero = sealCard(qGated, "NEXT (quest order)", lastName);
         } else if (qGated) {
           const unmetQ = (runtime.byId[String(qGated.id)]?.reasons || []).filter(r => !r.met);
           // Turn-gated NEXT is the world turn asking to be run (2026-09-04).
@@ -1564,7 +1581,7 @@ const activeCampaignId = _getActiveCampaignId();
       `<div class="k">${esc(h.kicker)}</div>` +
       (h.title ? `<div class="t">${esc(h.title)}</div>` : "") +
       (h.quest ? `<div class="q">${esc(h.quest)}</div>` : "") +
-      h.runs.map(r => `<button type="button" class="bbttcc-now-hero-run" data-run="${esc(r.id)}">▶ ${esc(r.text)}</button>`).join("") +
+      h.runs.map(r => `<button type="button" class="bbttcc-now-hero-run" data-run="${esc(r.id)}"${r.force ? ` data-force="1"` : ""}>▶ ${esc(r.text)}</button>`).join("") +
       (h.note ? `<div class="alt">${h.note}</div>` : "") +
       `</div>`) : "";
     // Story chains ARE quest chains (2026-09-07 owner ruling): the old
@@ -1694,7 +1711,7 @@ const activeCampaignId = _getActiveCampaignId();
         return;
       }
       const run = ev.target?.closest?.("[data-run]");
-      if (run) { ev.preventDefault(); ev.stopPropagation(); this._runBeatFromConsole(run.dataset.run); return; }
+      if (run) { ev.preventDefault(); ev.stopPropagation(); this._runBeatFromConsole(run.dataset.run, { force: run.dataset.force === "1" }); return; }
       const btn = ev.target?.closest?.("[data-fly]");
       if (!btn) return;
       ev.preventDefault();
