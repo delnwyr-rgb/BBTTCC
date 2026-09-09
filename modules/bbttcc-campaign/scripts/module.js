@@ -6156,10 +6156,21 @@ async function _acceptTalkInvitation(message) {
       + (beat?.label ? `<p><b>Regarding:</b> ${esc(String(beat.label))}</p>` : "")
       + `<p><i>They sent this word themselves — when you find them, they'll know you came because they asked.</i></p>`
   });
-  await _applyQuestEffects(campaign, {
+  const qfx = await _applyQuestEffects(campaign, {
     id: beatId || `talk_invite_${actor.id}`,
     worldEffects: { questEffects: [{ action: "accept", questId: qid, text: `${actor.name} ${inviteText}` }] }
   }, {});
+  // Verify-after-write (2026-09-09): after the "Act 2 Ahoy!" restore the registry
+  // held nine accepted Words the coalition track did not — the Quest Log reads
+  // the TRACK. If the accept did not land there, say so now, not next session.
+  try {
+    const facs = await _resolveCampaignFactions(campaign, {});
+    const landed = facs.length && facs.every(f => !!(f.getFlag?.("bbttcc-factions", "quests")?.active?.[qid]));
+    if (!landed) {
+      console.error(`${TAG} talk-invite accept did NOT reach the coalition track`, { qid, factions: facs.map(f => f.name), qfx });
+      ui.notifications?.error?.(`⚠ "${actor.name}" was logged in the registry but NOT on the coalition quest track — run tools/repair-quest-track-from-registry.`);
+    }
+  } catch (_eV) {}
   try { await message.setFlag(MOD_ID, "talkInvite", Object.assign({}, inv, { accepted: true, questId: qid })); } catch (_e) {}
   await ChatMessage.create({
     speaker: { alias: "Bad Eden" },
