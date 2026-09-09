@@ -11,7 +11,7 @@
           "economy": 10
         },
         "effects": {
-          "text": "+1 Economy regen next turn."
+          "text": "+20 marks Economy into the bank next turn (10-mark spend; the tier cap applies)."
         },
         "minFactionTier": 1
       }
@@ -29,7 +29,7 @@
           "intrigue": 10
         },
         "effects": {
-          "text": "Reveal alignment of 1 adjacent Hex."
+          "text": "Reveals one fogged hex next to the target and whispers the alignment and holder of every neighbour."
         },
         "minFactionTier": 1
       }
@@ -85,7 +85,7 @@
           "faith": 10
         },
         "effects": {
-          "text": "+1 Empathy Meter."
+          "text": "Faction Morale (Empathy) +1."
         },
         "minFactionTier": 1
       }
@@ -104,7 +104,7 @@
           "softPower": 10
         },
         "effects": {
-          "text": "Reduce regional Darkness −1."
+          "text": "Faction Darkness −1."
         },
         "minFactionTier": 1
       }
@@ -123,7 +123,7 @@
           "nonLethal": 10
         },
         "effects": {
-          "text": "Prevent Infiltration attempts next turn."
+          "text": "Next turn, Intrigue raids (infiltration) against your hexes are refused — the raider spends nothing and gains nothing."
         },
         "minFactionTier": 1
       }
@@ -180,7 +180,7 @@
           "diplomacy": 10
         },
         "effects": {
-          "text": "+1 Faith regen; Loyalty +1 to Hex."
+          "text": "+10 marks Faith next turn; Loyalty +1 on the target hex."
         },
         "minFactionTier": 1
       }
@@ -198,7 +198,7 @@
           "intrigue": 30
         },
         "effects": {
-          "text": "Establish 1 Trade Route (+1 Diplomacy regen)."
+          "text": "A trade route from the target hex to a TO hex you hold (the planner asks for it); +10 marks Diplomacy next turn; Darkness +1."
         },
         "minFactionTier": 2
       }
@@ -217,7 +217,7 @@
           "nonLethal": 20
         },
         "effects": {
-          "text": "Increase Violence cap +1 for 2 turns."
+          "text": "Violence cap +10 marks for 2 turns."
         },
         "minFactionTier": 2
       }
@@ -255,7 +255,7 @@
           "softPower": 20
         },
         "effects": {
-          "text": "Share Alignment bonus between Hexes."
+          "text": "Copies the target hex's sephirot alignment onto a TO hex you hold that has none (the planner asks for it)."
         },
         "minFactionTier": 2
       }
@@ -274,7 +274,7 @@
           "diplomacy": 10
         },
         "effects": {
-          "text": "Reveal enemy OP pools next turn."
+          "text": "Next turn, the target hex holder's OP pools and planned activities are whispered to you."
         },
         "minFactionTier": 2
       }
@@ -293,7 +293,7 @@
           "faith": 10
         },
         "effects": {
-          "text": "Remove 1 Darkness; Empathy +1."
+          "text": "Faction Darkness −1; Morale (Empathy) +1."
         },
         "minFactionTier": 2
       }
@@ -311,7 +311,7 @@
           "diplomacy": 30
         },
         "effects": {
-          "text": "Prevent enemy Raids for 2 turns on both sides."
+          "text": "A 2-turn truce with the target hex's holder: raids either way are refused and cost nothing."
         },
         "minFactionTier": 2
       }
@@ -349,7 +349,7 @@
           "diplomacy": 20
         },
         "effects": {
-          "text": "Initiate social combat; gain intel on enemy plans."
+          "text": "Immediate intel on the target hex's holder: OP bank, their standing toward you, and what they have planned this turn."
         },
         "minFactionTier": 2
       }
@@ -368,7 +368,7 @@
           "violence": 20
         },
         "effects": {
-          "text": "Steal +2 Economy from enemy; Darkness +1."
+          "text": "Takes up to 20 marks Economy from the target hex's holder into your bank; hex Loyalty −1; your Darkness +1."
         },
         "minFactionTier": 2
       }
@@ -387,7 +387,7 @@
           "faith": 40
         },
         "effects": {
-          "text": "Cleanse 1 Corrupted Hex."
+          "text": "Cleanses a hex you hold: Contaminated / Radiation Zone / Damaged Infrastructure / Hostile Population removed, darkness pips 0, Purified, a corrupted spark repaired."
         },
         "minFactionTier": 3
       }
@@ -406,7 +406,7 @@
           "softPower": 30
         },
         "effects": {
-          "text": "Merge resources for 1 Strategic Turn."
+          "text": "With a mutual ally (target one of their hexes): both factions' OP income ×1.15 this turn."
         },
         "minFactionTier": 3
       }
@@ -424,7 +424,7 @@
           "economy": 40
         },
         "effects": {
-          "text": "Double Economy output for 2 turns."
+          "text": "Economy income ×2 for 2 turns; the target hex's Loyalty −1."
         },
         "minFactionTier": 3
       }
@@ -462,7 +462,7 @@
           "softPower": 20
         },
         "effects": {
-          "text": "Reduce Darkness Track −2."
+          "text": "Faction Darkness −2; every hex you hold loses a darkness pip; your stewards wash 1 Darkness."
         },
         "minFactionTier": 3
       }
@@ -481,7 +481,7 @@
           "faith": 20
         },
         "effects": {
-          "text": "Prevent Morale loss globally for 1 turn."
+          "text": "No faction loses Morale to Darkness this turn."
         },
         "minFactionTier": 3
       }
@@ -500,7 +500,7 @@
           "faith": 20
         },
         "effects": {
-          "text": "Convert Darkness to +2 Economy; Empathy −1."
+          "text": "Burns 1 Faction Darkness for +20 marks Economy now; Morale (Empathy) −1."
         },
         "minFactionTier": 3
       }
@@ -519,7 +519,7 @@
           "violence": 20
         },
         "effects": {
-          "text": "Reduce Siege costs by 25%."
+          "text": "Your next Begin Siege costs 25% less (one use)."
         },
         "minFactionTier": 3
       }
@@ -538,7 +538,7 @@
           "intrigue": 20
         },
         "effects": {
-          "text": "Expose Qliphothic assets; Darkness −1."
+          "text": "The target hex is revealed and its spark, darkness pips and conditions are whispered to you; Faction Darkness −1."
         },
         "minFactionTier": 3
       }
@@ -557,7 +557,7 @@
           "economy": 30
         },
         "effects": {
-          "text": "Create permanent 'Blessed Ground' in Hex (−1 Darkness regen)."
+          "text": "Blessed Ground on a hex you hold: −1 Faction Darkness every turn it stands; +10 marks Faith next turn."
         },
         "minFactionTier": 3
       }
@@ -576,7 +576,7 @@
           "culture": 5
         },
         "effects": {
-          "text": "Trigger Tikkun Phase C for one Spark."
+          "text": "Integrates the dormant spark seated on the target hex (lights a Lamp; debits your Reach)."
         },
         "minFactionTier": 3
       }
@@ -595,7 +595,7 @@
           "economy": 60
         },
         "effects": {
-          "text": "+25% OP generation next turn, then −25%."
+          "text": "OP income ×1.25 this turn, then ×0.75 the turn after."
         },
         "minFactionTier": 3
       }
@@ -614,7 +614,7 @@
           "diplomacy": 50
         },
         "effects": {
-          "text": "Raise Enlightenment for all PCs by 1."
+          "text": "Every steward of your faction climbs one Enlightenment level."
         },
         "minFactionTier": 3
       }
@@ -633,7 +633,7 @@
           "softPower": 5
         },
         "effects": {
-          "text": "Create 'Garden City' Hex aligned to Tiferet."
+          "text": "A hex you hold becomes a Garden City: aligned to Tiferet, Purified, +Well-Maintained, +Loyal Population, darkness pips 0."
         },
         "minFactionTier": 3
       }
@@ -652,7 +652,7 @@
           "intrigue": 40
         },
         "effects": {
-          "text": "Destroy enemy Hex; Darkness +3."
+          "text": "The target hex is blasted: Contaminated + Radiation Zone, darkness pips +3, Morale/Loyalty −3, integration reset, contested. Your Darkness +3, its holder's +1, your stewards +1 each."
         },
         "minFactionTier": 3
       }
@@ -671,7 +671,7 @@
           "violence": 60
         },
         "effects": {
-          "text": "Purify enemy Hex without destruction."
+          "text": "A rival's hex is purified without being taken: taints and hostile tags removed, darkness pips 0, Purified."
         },
         "minFactionTier": 3
       }
@@ -690,7 +690,7 @@
           "faith": 50
         },
         "effects": {
-          "text": "Negotiate with Ego-Dragon fragment; if successful, Darkness −3."
+          "text": "A 2d10 check (DC 14, +1 per lit Lamp). Success: Faction Darkness −3 and your stewards wash 1. Failure: Darkness +1 and the Adversary stirs."
         },
         "minFactionTier": 3
       }
@@ -709,7 +709,7 @@
           "softPower": 10
         },
         "effects": {
-          "text": "Merge three purified Sparks into Final Ritual."
+          "text": "If the Dragon has risen and the Final Ritual is not underway, begins it with your stewards; otherwise reports the Lamps and sparks still missing."
         },
         "minFactionTier": 3
       }
@@ -728,7 +728,7 @@
           "economy": 60
         },
         "effects": {
-          "text": "Permanently raise global Empathy Meter +2."
+          "text": "Every faction's Morale (Empathy) +2 now and its resting Morale +2 for good; your Darkness −1."
         },
         "minFactionTier": 3
       }
@@ -747,7 +747,7 @@
           "faith": 80
         },
         "effects": {
-          "text": "Collapse Qliphothic gate; resets Darkness Track to 0."
+          "text": "Your whole Darkness map — institutional and every hex key — resets to 0; stewards wash to their taint; a corrupted spark on the target is repaired."
         },
         "minFactionTier": 3
       }
@@ -894,8 +894,13 @@
         "tier": 1,
         "rarity": "uncommon",
         "category": "Violence / Military",
-        "opCosts": { "violence": 15, "logistics": 10 },
-        "effects": { "text": "Defender stiffens the defence: +1 Anytime budget per round AND +1 Renewal pool for the duration. Played by the besieged faction; target the besieged hex." },
+        "opCosts": {
+          "violence": 15,
+          "logistics": 10
+        },
+        "effects": {
+          "text": "Defender stiffens the defence: +1 Anytime budget per round AND +1 Renewal pool for the duration. Played by the besieged faction; target the besieged hex."
+        },
         "minFactionTier": 1,
         "activityKey": "reinforce_garrison",
         "siegeCounterActivity": true
@@ -911,8 +916,13 @@
         "tier": 2,
         "rarity": "rare",
         "category": "Diplomacy / Statecraft",
-        "opCosts": { "diplomacy": 20, "softPower": 20 },
-        "effects": { "text": "Summon an allied relief force. Pushes a wave onto the siege that arrives in 2 turns; on arrival the GM convenes the Relief Scene (Phase E.3). Requires a willing ally. Target the besieged hex." },
+        "opCosts": {
+          "diplomacy": 20,
+          "softPower": 20
+        },
+        "effects": {
+          "text": "Summon an allied relief force. Pushes a wave onto the siege that arrives in 2 turns; on arrival the GM convenes the Relief Scene (Phase E.3). Requires a willing ally. Target the besieged hex."
+        },
         "minFactionTier": 1,
         "activityKey": "call_relief",
         "siegeCounterActivity": true
@@ -928,8 +938,13 @@
         "tier": 2,
         "rarity": "rare",
         "category": "Diplomacy / Statecraft",
-        "opCosts": { "diplomacy": 20, "softPower": 15 },
-        "effects": { "text": "Defender offers a negotiated surrender. The attacker may accept (won_sack) or refuse at next resolution (siege.resolveTerms). Target the besieged hex." },
+        "opCosts": {
+          "diplomacy": 20,
+          "softPower": 15
+        },
+        "effects": {
+          "text": "Defender offers a negotiated surrender. The attacker may accept (won_sack) or refuse at next resolution (siege.resolveTerms). Target the besieged hex."
+        },
         "minFactionTier": 1,
         "activityKey": "sue_for_terms",
         "siegeCounterActivity": true
@@ -945,8 +960,12 @@
         "tier": 1,
         "rarity": "uncommon",
         "category": "Violence / Military",
-        "opCosts": { "violence": 10 },
-        "effects": { "text": "A named defender Champion takes the wall: locked Active for 2 turns and +1 Anytime budget. Optional note {\"championId\":\"...\"} picks the champion; otherwise the first eligible. Target the besieged hex." },
+        "opCosts": {
+          "violence": 10
+        },
+        "effects": {
+          "text": "A named defender Champion takes the wall: locked Active for 2 turns and +1 Anytime budget. Optional note {\"championId\":\"...\"} picks the champion; otherwise the first eligible. Target the besieged hex."
+        },
         "minFactionTier": 1,
         "activityKey": "champion_defends_wall",
         "siegeCounterActivity": true
@@ -962,8 +981,12 @@
         "tier": 1,
         "rarity": "uncommon",
         "category": "Faith / Doctrine",
-        "opCosts": { "faith": 10 },
-        "effects": { "text": "Beseech the powers: the next Event Deck draw re-rolls in the defender's favour (consumed when the deck fires, Phase F). Target the besieged hex." },
+        "opCosts": {
+          "faith": 10
+        },
+        "effects": {
+          "text": "Beseech the powers: the next Event Deck draw re-rolls in the defender's favour (consumed when the deck fires, Phase F). Target the besieged hex."
+        },
         "minFactionTier": 1,
         "activityKey": "pray_for_omen",
         "siegeCounterActivity": true
@@ -979,8 +1002,14 @@
         "tier": 2,
         "rarity": "rare",
         "category": "Diplomacy / Statecraft",
-        "opCosts": { "diplomacy": 20, "violence": 10, "softPower": 10 },
-        "effects": { "text": "Attacker issues an ultimatum. The defender responds: yield (won_surrender) · parley (besieger Buffer +10) · refuse (−1 morale) — via siege.resolveSurrender. Target the besieged hex." },
+        "opCosts": {
+          "diplomacy": 20,
+          "violence": 10,
+          "softPower": 10
+        },
+        "effects": {
+          "text": "Attacker issues an ultimatum. The defender responds: yield (won_surrender) · parley (besieger Buffer +10) · refuse (−1 morale) — via siege.resolveSurrender. Target the besieged hex."
+        },
         "minFactionTier": 1,
         "activityKey": "demand_surrender",
         "siegeCounterActivity": true
@@ -996,8 +1025,13 @@
         "tier": 2,
         "rarity": "rare",
         "category": "Soft Power / Culture",
-        "opCosts": { "softPower": 15, "diplomacy": 10 },
-        "effects": { "text": "A named attacker Champion withdraws from the siege (status Absent) — the Achilles-in-his-tent lever. Optional note {\"championId\":\"...\"}; otherwise the first active. Target the besieged hex." },
+        "opCosts": {
+          "softPower": 15,
+          "diplomacy": 10
+        },
+        "effects": {
+          "text": "A named attacker Champion withdraws from the siege (status Absent) — the Achilles-in-his-tent lever. Optional note {\"championId\":\"...\"}; otherwise the first active. Target the besieged hex."
+        },
         "minFactionTier": 1,
         "activityKey": "champion_withdraws",
         "siegeCounterActivity": true
@@ -1013,8 +1047,13 @@
         "tier": 1,
         "rarity": "uncommon",
         "category": "Diplomacy / Statecraft",
-        "opCosts": { "diplomacy": 20, "softPower": 10 },
-        "effects": { "text": "Coax an Absent attacker Champion back to the line (status Active). Optional note {\"championId\":\"...\"}; otherwise the first absent. Target the besieged hex." },
+        "opCosts": {
+          "diplomacy": 20,
+          "softPower": 10
+        },
+        "effects": {
+          "text": "Coax an Absent attacker Champion back to the line (status Active). Optional note {\"championId\":\"...\"}; otherwise the first absent. Target the besieged hex."
+        },
         "minFactionTier": 1,
         "activityKey": "champion_returns",
         "siegeCounterActivity": true
@@ -1030,8 +1069,13 @@
         "tier": 3,
         "rarity": "rare",
         "category": "Violence / Military",
-        "opCosts": { "violence": 40, "logistics": 20 },
-        "effects": { "text": "Throw everything at the walls: the next Breach Scene's maneuver budget is doubled, and the Buffer drops 30 OP regardless of outcome. Lights the Convene pip. Target the besieged hex." },
+        "opCosts": {
+          "violence": 40,
+          "logistics": 20
+        },
+        "effects": {
+          "text": "Throw everything at the walls: the next Breach Scene's maneuver budget is doubled, and the Buffer drops 30 OP regardless of outcome. Lights the Convene pip. Target the besieged hex."
+        },
         "minFactionTier": 1,
         "activityKey": "storm_final_assault",
         "siegeCounterActivity": true
@@ -1047,8 +1091,14 @@
         "tier": 4,
         "rarity": "legendary",
         "category": "Intrigue / Subterfuge",
-        "opCosts": { "intrigue": 40, "diplomacy": 20, "softPower": 20 },
-        "effects": { "text": "The T4 gambit at the gate: a 3-roll gate — sneak (Intrigue vs the defender's Suspicion), sabotage (Faith or Diplomacy), breach (Violence). All succeed and the final layer opens from within (won_trojan_horse); any fail and your forces are halved, Buffer drops 40, morale −2. Sinon Mode (optional): sacrifice an active Champion — they die regardless of the outcome, but every roll gains +5 OR one roll of your choice auto-succeeds, and their name binds to the saga forever. Resolve via the Siege HUD 🐴 Trojan button or game.bbttcc.api.siege.openTrojanHorseDialog. Target the besieged hex." },
+        "opCosts": {
+          "intrigue": 40,
+          "diplomacy": 20,
+          "softPower": 20
+        },
+        "effects": {
+          "text": "The T4 gambit at the gate: a 3-roll gate — sneak (Intrigue vs the defender's Suspicion), sabotage (Faith or Diplomacy), breach (Violence). All succeed and the final layer opens from within (won_trojan_horse); any fail and your forces are halved, Buffer drops 40, morale −2. Sinon Mode (optional): sacrifice an active Champion — they die regardless of the outcome, but every roll gains +5 OR one roll of your choice auto-succeeds, and their name binds to the saga forever. Resolve via the Siege HUD 🐴 Trojan button or game.bbttcc.api.siege.openTrojanHorseDialog. Target the besieged hex."
+        },
         "minFactionTier": 4,
         "activityKey": "trojan_horse",
         "siegeTrojanHorse": true

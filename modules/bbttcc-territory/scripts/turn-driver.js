@@ -327,6 +327,18 @@ function ensureConsumePlannedShim(){
       // SIM-BADEDEN fix 2026-06-05 (Bug 2): pay the FULL declared cost vector
       // up front; an activity the faction cannot afford is refused outright
       // (consumed from the queue, logged unaffordable, effect NOT run).
+      // Truce / Border Patrol (2026-09-09): a refused raid costs nothing.
+      if (apply) {
+        const refusal = await raidRefusalFor({ factionActor, effect, entry });
+        if (refusal) {
+          finalizedEntries.push(Object.assign(
+            finalizeEntry({ entry, factionActor, effect, effectResult: { ok:false, skipped:"refused" }, spendResult: { ok:true, paid:{} } }),
+            { summary: refusal }
+          ));
+          continue;
+        }
+      }
+
       const spendResult = apply
         ? await payActivityCost({ factionActor, effect, entry })
         : { ok:true, preview:true, paid:{} };
@@ -352,10 +364,13 @@ function ensureConsumePlannedShim(){
           try {
             await handler({
               factionId: factionActor.id,
+              attackerId: entry.attackerId || factionActor.id,
               activityKey: entry.activityKey,
               targetUuid: entry.targetUuid || null,
               targetName: entry.targetName || null,
-              notes: entry.note || entry.notes || ""
+              toHexUuid: entry.toHexUuid || null,     // route/exchange rows (2026-09-09)
+              notes: entry.note || entry.notes || "",
+              entry
             });
             effectResult = { ok:true, routed:"strategic-throughput" };
           } catch (e) {
@@ -710,7 +725,7 @@ function countSpecials(owned){
     if (isMod(mods, "major port") || mods.some(m => safeStr(m).toLowerCase().includes("major port"))) majorPort++;
     if (isMod(mods, "road network") || mods.some(m => safeStr(m).toLowerCase().includes("road"))) roadNet++;
     // SIM-BADEDEN tuning 2026-06-05: count Supply Line hexes for capacity credit
-    if (mods.some(m => safeStr(m).toLowerCase().includes("supply line"))) supplyLine++;
+    if (mods.some(m => { const t = safeStr(m).toLowerCase(); return t.includes("supply line") || t.includes("supply cache"); })) supplyLine++;   // Supply Cache = logistics infra too (2026-09-09)
   }
 
   return { city, special, depot, majorPort, roadNet, supplyLine };
@@ -1050,6 +1065,18 @@ async function advanceOPRegen({ apply=false, factionId=null } = {}){
       if (logiMult !== 1 && logiBefore > 0) {
         opsDelta.logistics = Math.floor(logiBefore * logiMult);
       }
+      // Per-faction income plan (2026-09-09): bonuses.regenPlan[{inTurns, mult, channels?}] — entries due now (inTurns ≤ 1) multiply this Advance's income.
+      const regenNotes = [];
+      try {
+        const plan = A.getFlag("bbttcc-factions", "bonuses")?.regenPlan;
+        if (Array.isArray(plan)) for (const e of plan) {
+          if (safeNum(e?.inTurns, 1) > 1) continue;
+          const mult = Number(e?.mult); if (!Number.isFinite(mult) || mult === 1) continue;
+          const chans = Array.isArray(e?.channels) && e.channels.length ? e.channels : Object.keys(opsDelta);
+          for (const k of chans) { const b0 = safeNum(opsDelta[k]); if (b0 > 0) opsDelta[k] = Math.floor(b0 * mult); }
+          regenNotes.push(`${e?.label || "income plan"}: ${chans.length === Object.keys(opsDelta).length ? "all channels" : chans.join("/")} ×${mult}`);
+        }
+      } catch (e) { warn("regenPlan apply failed", e); }
       const totalGained = Object.values(opsDelta).reduce((a,b)=>a+b,0);
 
       const row = { factionId: A.id, factionName: A.name, gained: totalGained, opsDelta, applied:false };
@@ -1080,7 +1107,7 @@ async function advanceOPRegen({ apply=false, factionId=null } = {}){
           const keys = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
 
           for (const k of keys) {
-            const cap = Number(caps[k] ?? 0);
+            const cap = Number(caps[k] ?? 0) + (Number(caps[k] ?? 0) > 0 ? capBumpFor(A, k) : 0);   // temporary cap bumps (Training Drills)
             if (cap > 0) {
               newBank[k] = Math.min(Number(newBank[k] ?? 0), cap);
             }
@@ -1091,6 +1118,7 @@ async function advanceOPRegen({ apply=false, factionId=null } = {}){
         await A.update({ [`flags.${MOD_FACTIONS}.opBank`]: newBank, [`flags.${MOD_FACTIONS}.stockpile`]: newStock });
 
         const warLogs = clone(getFlag(A, `${MOD_FACTIONS}.warLogs`, [])) || [];
+        if (regenNotes.length) warLogs.push({ ts: Date.now(), date: (new Date()).toLocaleString(), type: "turn", activity: "regen_plan", summary: `Income plan: ${regenNotes.join("; ")}.` });
         // Overextension note (only when it actually reduces logistics regen)
         if (logiMult !== 1 && logiBefore > 0) {
           const nowTs = Date.now();
@@ -1475,6 +1503,85 @@ async function applyQueuedPostEffects(){
 // consumer anywhere. Deferred income never arrived. This step ticks each
 // entry's turnOffset on Apply and pays matured opDeltas (MARKS) into opBank,
 // clamped to opCaps.
+/* ---------------- faction bonus consumers (2026-09-09) ----------------
+ * flags.bbttcc-factions.bonuses.{regenPlan[], capBump{}, truce{}, nextTurn{borderPatrol, noMoraleLoss, spyInsertion}}
+ * Written by strategic-throughput handlers; read here, in advanceOPRegen, in
+ * consumePlanned (raid refusal) and in advance-turn.tracks (noMoraleLoss,
+ * Blessed Ground). tickFactionBonuses() runs once per applied Advance and is
+ * the only thing that expires them — hardCleanupQueued never touches bonuses.
+ */
+function capBumpFor(F, k){
+  try { const b = F.getFlag(MOD_FACTIONS, "bonuses")?.capBump?.[k]; return (b && safeNum(b.turns) > 0) ? safeNum(b.add) : 0; } catch { return 0; }
+}
+async function raidRefusalFor({ factionActor, effect, entry }){
+  try {
+    if (effect?.kind === "strategic") return null;
+    const raid = game.bbttcc?.api?.raid || {};
+    const key = String(entry.activityKey || "").toLowerCase();
+    const types = raid.TYPES || raid.getTypes?.() || {};
+    const canon = String((typeof raid.resolveCanonical === "function" ? raid.resolveCanonical(key) : null) || types[key]?.raidType || key).toLowerCase();
+    if (!types[canon] && !types[key]) return null;               // not a raid entry
+    let defender = entry.defenderId ? game.actors.get(entry.defenderId) : null;
+    if (!defender && entry.targetUuid) {
+      const ref = await fromUuid(entry.targetUuid); const d = ref?.document ?? ref;
+      const tf = d?.flags?.[MOD_TERRITORY] || {}; const oid = tf.factionId || tf.ownerId;
+      defender = oid ? game.actors.get(oid) : null;
+    }
+    if (!defender || defender.id === factionActor.id) return null;
+    const bA = factionActor.getFlag(MOD_FACTIONS, "bonuses") || {};
+    const bD = defender.getFlag(MOD_FACTIONS, "bonuses") || {};
+    const truce = safeNum(bA.truce?.[defender.id]?.turns) > 0 || safeNum(bD.truce?.[factionActor.id]?.turns) > 0;
+    if (truce) return `${factionActor.name} did NOT raid ${entry.targetName || defender.name}: Peace Accords with ${defender.name} hold. No OP spent.`;
+    if (canon === "intrigue" && safeNum(bD.nextTurn?.borderPatrol) > 0) return `${factionActor.name}'s infiltration of ${entry.targetName || defender.name} was turned back by ${defender.name}'s Border Patrol. No OP spent.`;
+  } catch (e) { warn("raidRefusalFor failed (fail-open)", e); }
+  return null;
+}
+async function spyReport(F, spy){
+  try {
+    const T = game.actors.get(spy?.targetFactionId); if (!T) return;
+    const bank = T.getFlag(MOD_FACTIONS, "opBank") || {};
+    const planned = (T.getFlag(MOD_FACTIONS, "warLogs") || []).filter(e => e?.type === "planned").map(e => `${foundry.utils.escapeHTML(String(e.activityKey || e.activity || "?"))} → ${foundry.utils.escapeHTML(String(e.targetName || "?"))}`);
+    const ids = new Set(ChatMessage.getWhisperRecipients("GM").map(u => u.id));
+    for (const u of game.users ?? []) { try { if (F.testUserPermission?.(u, "OWNER")) ids.add(u.id); } catch {} }
+    const keys = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
+    await ChatMessage.create({ whisper: [...ids], speaker: { alias: "Bad Eden" },
+      content: `<div style="border-left:3px solid #6c8ebf;padding:.35em .6em;background:rgba(108,142,191,.08);"><b>Spy Insertion — ${foundry.utils.escapeHTML(T.name)}</b><div style="font-size:.9em;margin-top:.25em">OP bank (marks): ${keys.map(k => `${k} <b>${safeNum(bank[k])}</b>`).join(" · ")}<br>Planned: ${planned.length ? planned.join("; ") : "nothing"}</div></div>` });
+    const wl = clone(F.getFlag(MOD_FACTIONS, "warLogs") || []);
+    wl.push({ ts: Date.now(), date: (new Date()).toLocaleString(), type: "turn", activity: "spy_insertion", summary: `Spy Insertion: ${T.name}'s OP pools and plans reported (see whisper).` });
+    await F.update({ [`flags.${MOD_FACTIONS}.warLogs`]: wl });
+  } catch (e) { warn("spyReport failed", e); }
+}
+async function tickFactionBonuses(){
+  for (const F of allFactions()) {
+    try {
+      const b = clone(F.getFlag(MOD_FACTIONS, "bonuses") || {});
+      let dirty = false; const notes = [];
+      if (Array.isArray(b.regenPlan) && b.regenPlan.length) {
+        const next = [];
+        for (const e of b.regenPlan) { const t = safeNum(e?.inTurns, 1); if (t <= 1) { notes.push(`${e?.label || "income plan"} ×${e?.mult} applied`); continue; } next.push(Object.assign({}, e, { inTurns: t - 1 })); }
+        b.regenPlan = next; dirty = true;
+      }
+      if (b.capBump && typeof b.capBump === "object") {
+        for (const [k, v] of Object.entries(b.capBump)) { const t = safeNum(v?.turns) - 1; if (t <= 0) { delete b.capBump[k]; notes.push(`${k} cap bump ended`); } else b.capBump[k] = Object.assign({}, v, { turns: t }); }
+        if (!Object.keys(b.capBump).length) delete b.capBump; dirty = true;
+      }
+      if (b.truce && typeof b.truce === "object") {
+        for (const [id, v] of Object.entries(b.truce)) { const t = safeNum(v?.turns) - 1; if (t <= 0) { delete b.truce[id]; notes.push(`truce with ${v?.with || id} ended`); } else b.truce[id] = Object.assign({}, v, { turns: t }); }
+        if (!Object.keys(b.truce).length) delete b.truce; dirty = true;
+      }
+      const nt = b.nextTurn || {};
+      if (nt.borderPatrol) { const t = safeNum(nt.borderPatrol) - 1; if (t <= 0) { delete nt.borderPatrol; notes.push("Border Patrol stood down"); } else nt.borderPatrol = t; dirty = true; }
+      if (nt.noMoraleLoss) { delete nt.noMoraleLoss; dirty = true; }
+      if (nt.spyInsertion) { const due = safeNum(nt.spyInsertion.due, 1) - 1; if (due <= 0) { await spyReport(F, nt.spyInsertion); delete nt.spyInsertion; } else nt.spyInsertion = Object.assign({}, nt.spyInsertion, { due }); dirty = true; }
+      if (dirty) {
+        const upd = { [`flags.${MOD_FACTIONS}.bonuses`]: b };
+        if (notes.length) { const wl = clone(F.getFlag(MOD_FACTIONS, "warLogs") || []); wl.push({ ts: Date.now(), date: (new Date()).toLocaleString(), type: "turn", activity: "bonuses", summary: notes.join("; ") + "." }); upd[`flags.${MOD_FACTIONS}.warLogs`] = wl; }
+        await F.update(upd);
+      }
+    } catch (e) { warn("tickFactionBonuses failed for", F?.name, e); }
+  }
+}
+
 async function applyScheduledOPBonuses(){
   const dup = (x)=>foundry.utils.duplicate(x ?? {});
   const rows = [];
@@ -1496,14 +1603,18 @@ async function applyScheduledOPBonuses(){
       let bank = dup(F.getFlag(MOD_FACTIONS, "opBank") || {});
       const caps = dup(F.getFlag(MOD_FACTIONS, "opCaps") || {});
       const gained = {};
+      const lost = {};   // marks that hit the tier cap (owner ruling 2026-09-09: caps stay hard — but say so)
       for (const s of matured) {
         for (const [k, v] of Object.entries(s?.opDelta || {})) {
           const n = safeNum(v);
           if (!n) continue;
-          const cap = safeNum(caps[k]);
-          const next = safeNum(bank[k]) + n;
+          const cap = safeNum(caps[k]) + (safeNum(caps[k]) > 0 ? capBumpFor(F, k) : 0);
+          const before = safeNum(bank[k]);
+          const next = before + n;
           bank[k] = cap > 0 ? Math.min(next, cap) : next;
-          gained[k] = safeNum(gained[k]) + n;
+          const kept = bank[k] - before;
+          gained[k] = safeNum(gained[k]) + kept;
+          if (n > kept) lost[k] = safeNum(lost[k]) + (n - kept);
         }
       }
 
@@ -1512,10 +1623,11 @@ async function applyScheduledOPBonuses(){
       if (Object.keys(gained).length) updates[`flags.${MOD_FACTIONS}.opBank`] = bank;
       await F.update(updates);
 
-      if (Object.keys(gained).length) {
+      if (Object.keys(gained).length || Object.keys(lost).length) {
         const wl = dup(F.getFlag(MOD_FACTIONS, "warLogs") || []);
-        const txt = Object.entries(gained).map(([k,v]) => `${k}:+${v}`).join(", ");
-        wl.push({ ts: Date.now(), date: (new Date()).toLocaleString(), type: "turn", activity: "scheduled_op", summary: `Scheduled OP matured: ${txt} (marks).` });
+        const txt = Object.entries(gained).filter(([,v]) => v).map(([k,v]) => `${k}:+${v}`).join(", ") || "nothing";
+        const lostTxt = Object.entries(lost).map(([k,v]) => `${k}:${v}`).join(", ");
+        wl.push({ ts: Date.now(), date: (new Date()).toLocaleString(), type: "turn", activity: "scheduled_op", summary: `Scheduled OP matured: ${txt} (marks).${lostTxt ? ` ⚠ ${lostTxt} marks hit the tier cap and were lost — spend before the payout lands, or raise the tier.` : ""}` });
         await F.update({ [`flags.${MOD_FACTIONS}.warLogs`]: wl });
         rows.push({ factionId: F.id, gained });
       }
@@ -1607,6 +1719,7 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
 
     let regen = { changed:false, rows:[] };
     if (apply) regen = await advanceOPRegen({ apply:true });
+    if (apply) await tickFactionBonuses();   // expire regenPlan / capBump / truce / nextTurn boons (2026-09-09)
 
     let logistics = { changed:false, rows:[] };
     if (apply) logistics = await computeLogisticsPressureForAllFactions({ apply:true });

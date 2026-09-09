@@ -321,7 +321,7 @@
     interdict_supply_line: { fn: handleInterdict,        label: "Interdict Supply Line", cost: { intrigue: 15, violence: 10 }, band: "standard" },
     escort_supply_line:    { fn: handleEscort,           label: "Escort Supply Line",    cost: { violence: 10, logistics: 10 }, band: "standard" },
     counter_interdict:     { fn: handleCounterInterdict, label: "Counter-Interdict",     cost: { violence: 10, intrigue: 10 },  band: "standard" },
-    sortie:                { fn: handleSortie,           label: "Sortie",                cost: { violence: 20 },                band: "standard" }
+    sortie:                { fn: handleSortie,           label: "Sortie",                cost: { violence: 20 },                band: "standard", siege: true, siegeSide: "defender", siegeOrder: 7, icon: "🚪" }   // the authored Sortie (owner ruling 2026-09-09) — keeps its seat in the Siege — Defender group
   };
 
   whenRaidReady((api) => whenSiegeStateReady((S) => {
@@ -351,6 +351,7 @@
         label: def.label,
         cost: def.cost,
         siegeThreatVector: true,
+        ...(def.siege ? { siege: true, siegeSide: def.siegeSide || "defender", siegeOrder: def.siegeOrder ?? null, icon: def.icon } : {}),
         async apply({ entry }){
           const r = await shared({
             factionId: entry?.attackerId || entry?.factionId,

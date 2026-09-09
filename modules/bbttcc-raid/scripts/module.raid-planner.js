@@ -139,17 +139,17 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     establish_supply_line: "Link this hex to one you own (pick the TO hex): +Supply Line on both ends, Trade yield +10. Sieges draw on it.",
     establish_trade_route: "Open trade with one of your hexes (pick the TO hex): +Trade Hub, Trade yield +20; the route is stored on both hexes.",
     develop_infrastructure_std: "Invest in the town: Defense +1, Trade yield +5, Integration +1.",
-    infrastructure_expansion: "Expand the works: +Expanded Infrastructure, Defense +2, Trade yield +10.",
-    reconstruction_drive_std: "Rebuild after damage: removes Damaged Infrastructure, +Well-Maintained, Defense +2, Trade yield +5, Integration +1.",
+    infrastructure_expansion: "Expand the works: +Expanded Infrastructure, Defense +2, Trade yield +10, Integration +1.",
+    reconstruction_drive_std: "Rebuild after damage: removes Damaged Infrastructure, +Well-Maintained, Defense +2, Trade yield +5, Integration +1; an occupied or contested hex becomes Claimed.",
     diplomatic_mission_std: "Send envoys: +Diplomatic Ties, Trade yield +10, Loyalty +1.",
     defuse_tensions: "Talk the town down: removes Hostile Population, +Loyal Population, Loyalty +2, Morale +2.",
     loyalty_program: "Win the locals over: +Loyal Population, Loyalty +2, Morale +1.",
     cultural_festival_std: "Throw a festival: +Cultural Festival, Morale +2, Trade yield +5.",
     propaganda_campaign: "Paper the walls: +Propaganda, Morale +2, Loyalty +1 on the target hex.",
-    alignment_shift: "Consecrate the hex to the Tree: +Sanctified, +Pilgrimage Site, Morale +1, Loyalty +1.",
-    gather_intel: "Send scouts: tags the hex Intel. The DC advantage this is meant to grant is not wired yet — GM adjudicates.",
-    policy_reforms: "Administrative reform. The OP-gain and DC bonuses it schedules have no engine consumer yet — story-driven, GM adjudicates.",
-    mass_mobilization_std: "Call up the militia: your next raid gains initiative and one free maneuver.",
+    alignment_shift: "Consecrate the hex to the Tree: +Sanctified, +Pilgrimage Site, Morale +1, Loyalty +1 next turn; +10 marks Faith next turn.",
+    gather_intel: "Send scouts: the hex is revealed now, a dossier (holder, defense, loyalty, morale, integration, modifiers, alignment) is whispered to you, and it carries the Intel tag next turn.",
+    policy_reforms: "Administrative reform: OP income ×1.05 this turn.",
+    mass_mobilization_std: "Call up the militia: your next raid gains initiative advantage and one free maneuver.",
     repair_fortifications: "Mend the walls: the hex's primary facility recovers one damage step.",
     repair_rig: "Field repairs on one of your rigs (pick the rig): recovers one damage step.",
 
@@ -1078,9 +1078,19 @@ if (_fid) {
         const raidKeys = new Set(Object.keys(TYPES).map(k=>String(k).toLowerCase()));
         const arr = [];
 
+        // Collapsed pairs (owner ruling 2026-09-09: "keep the better one"). The
+        // spec stays registered so already-planned entries still resolve; the
+        // planner just stops offering it. `retired:true` on a spec does the same.
+        const RETIRED = {
+          propaganda_tour:            "same effect as Propaganda Campaign (T1, no tier lock)",
+          reconstruction_drive:       "folded into Reconstruction Drive (std) — repairs + status → Claimed + Integration +1",
+          flaming_pitch:              "identical to Boiling Oil",
+          develop_infrastructure_std: "Infrastructure Expansion is strictly better at the same price (and now carries Integration +1)"
+        };
         for (const [key, v] of Object.entries(EFFECTS)) {
           if (!v || v.kind !== "strategic") continue;
           if (raidKeys.has(String(key).toLowerCase())) continue;
+          if (v.retired === true || RETIRED[String(key)]) continue;
 
           let label = v.label || prettifyKey(key);
           let primary = v.primaryKey || v.primaryOp || null;
@@ -1374,7 +1384,7 @@ const categories = this._buildCategories(acts);
       // Routes have TWO ends (owner ruling 2026-09-07: "certitude when possible") — Establish
       // Trade Route / Supply Line take a TO hex owned by the same faction; the edge is stored on
       // both hexes at turn time and counted deterministically (no more nearest-six guessing).
-      const ROUTE_ACTIVITIES = new Set(["establish_trade_route", "establish_supply_line"]);
+      const ROUTE_ACTIVITIES = new Set(["establish_trade_route", "establish_supply_line", "smuggling_network", "cultural_exchange"]);   // two-hex rows (2026-09-09)
       const wantsRouteTarget = ROUTE_ACTIVITIES.has(String(selectedKey || ""));
 
       // --- Top: Faction + Target (Hex OR Rig) ---

@@ -407,11 +407,14 @@
     const lines = [];
 
     for (const A of facs) {
-      let ownedRadiated = 0;
+      let ownedRadiated = 0, blessed = 0;
       for (const sc of game.scenes ?? []) {
         for (const d of sc.drawings ?? []) {
           const tf = d.flags?.[MODT]; if (!tf) continue;
-          if (ownsHex(A.id, tf) && isRadiated(tf)) ownedRadiated++;
+          if (!ownsHex(A.id, tf)) continue;
+          if (isRadiated(tf)) ownedRadiated++;
+          // Sanctum Expansion (2026-09-09): each Blessed Ground hex you hold is −1 Darkness per turn.
+          if (Array.isArray(tf.modifiers) && tf.modifiers.some(m => String(m).toLowerCase() === "blessed ground")) blessed++;
         }
       }
 
@@ -423,6 +426,7 @@
       const before = g;
       if (ownedRadiated > 0) g = Math.min(DARK_CAP, g + 1);
       else                   g = Math.max(0, g - 1);
+      if (blessed > 0)       g = Math.max(0, g - blessed);
 
       if (g !== before) {
         const next = (typeof box === "object" && box) ? box : {};
@@ -431,7 +435,7 @@
         const dir = (g > before) ? "↑" : "↓";
         lines.push(
           `• <b>${foundry.utils.escapeHTML(A.name)}</b>: Darkness ${dir} ${before} → ${g}`
-          + (ownedRadiated>0 ? ` (radiated hexes: ${ownedRadiated})` : "")
+          + (ownedRadiated>0 ? ` (radiated hexes: ${ownedRadiated})` : "") + (blessed>0 ? ` (Blessed Ground: ${blessed})` : "")
         );
       }
     }
@@ -498,7 +502,8 @@
       let m     = Number(A.getFlag(MODF, "morale") ?? 50);
 
       const before = m;
-      if (g >= 1) m = clamp(m - 1, 0, 100);
+      const shielded = !!(A.getFlag(MODF, "bonuses")?.nextTurn?.noMoraleLoss);   // Crisis Summit (2026-09-09)
+      if (g >= 1 && !shielded) m = clamp(m - 1, 0, 100);
       else if (g === 0 && m < 50) m = clamp(m + 1, 0, 100);
 
       if (m !== before) {

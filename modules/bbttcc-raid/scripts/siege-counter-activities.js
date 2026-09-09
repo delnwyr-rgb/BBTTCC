@@ -423,8 +423,9 @@
     const actor = game.actors.get(factionId);
     let spent = 0;
     const r = await _withSiege(S, targetUuid, (state) => {
-      const before = Number(state.buffer) || 0;
-      state.buffer = Math.max(0, before - drain); spent = before - state.buffer;
+      // Buffer is an OBJECT of channels (siege-state), never a scalar — Number({}) was NaN → 0, so these drains never bit (audit 2026-09-09).
+      if (!state.buffer || typeof state.buffer !== "object") state.buffer = {};
+      const shave = S.shaveBuffer(state.buffer, drain); spent = Number(shave?.shaved) || 0;
       if (selfRenewal) state.renewalPool = Math.max(0, (Number(state.renewalPool) || 0) + selfRenewal);
       S.appendNarrativeBeat(state, { turn: _turn(), kind: key, title, description: `${actor?.name || "The garrison"} — the besiegers' supply scatters (−${spent} Buffer)${selfRenewal ? `; ${selfRenewal < 0 ? "at a cost" : "and rallies"} (Renewal ${selfRenewal > 0 ? "+" : ""}${selfRenewal})` : ""}.` });
     });
@@ -435,7 +436,10 @@
     return { ok: true, summary: `${title} — attacker Buffer −${spent}.` };
   }
   const boiling_oil  = (ctx) => _defenderBufferManeuver(ctx, { key: "boiling_oil",  title: "Boiling Oil",  drain: 2, morale: +1, vfxHook: "boilingOil" });
-  const sortie       = (ctx) => _defenderBufferManeuver(ctx, { key: "sortie",       title: "Sortie",       drain: 3, selfRenewal: -1, vfxHook: "sortie" });
+  // `sortie` is NOT registered here any more (owner ruling 2026-09-09): the authored
+  // threat-vector Sortie in siege-threat-vectors.js (sever Supply Line, Buffer −15,
+  // 1d4 holdings at risk) is the one that runs. This generic clash body used to
+  // overwrite it because this file loads later.
   const flaming_pitch= (ctx) => _defenderBufferManeuver(ctx, { key: "flaming_pitch", title: "Flaming Pitch", drain: 2, morale: +1, vfxHook: "flamingPitch" });
 
   // ── Content Sprint batch 2b (2026-06-13) — class-granted siege maneuvers ─────
@@ -493,7 +497,6 @@
     sapper_undermine:      { fn: sapper_undermine,      label: "Sapper's Undermine",   cost: { violence: 20, logistics: 30 }, clashCost: 25, band: "rare",     siege: true, siegeSide: "attacker", siegeOrder: 7, tempo: "clash", icon: "⛏" },
     ram_gate:              { fn: ram_gate,              label: "Ram the Gate",         cost: { violence: 30 },                 clashCost: 20, band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 8, tempo: "clash", icon: "🪵" },
     boiling_oil:           { fn: boiling_oil,           label: "Boiling Oil",          cost: { violence: 15, logistics: 10 }, clashCost: 12, band: "standard", siege: true, siegeSide: "defender", siegeOrder: 6, tempo: "clash", icon: "🛢" },
-    sortie:                { fn: sortie,                label: "Sortie",               cost: { violence: 20 },                 clashCost: 18, band: "rare",     siege: true, siegeSide: "defender", siegeOrder: 7, tempo: "clash", icon: "🚪" },
     flaming_pitch:         { fn: flaming_pitch,         label: "Flaming Pitch",        cost: { violence: 10, faith: 5 },       clashCost: 12, band: "standard", siege: true, siegeSide: "defender", siegeOrder: 8, tempo: "clash", icon: "🔥" },
     // ── Content Sprint batch 2b — class-granted clash maneuvers (one per Steward) ──
     cls_marshal:     { fn: cls_marshal,     label: "Rally the Standard",  cost: { softPower: 15, diplomacy: 10 }, clashCost: 15, band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 10, tempo: "clash", icon: "🎏", grantedByClass: "harmonymarshal" },

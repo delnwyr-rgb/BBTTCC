@@ -155,6 +155,7 @@
       // Existing dev-ish activities in compat-bridge/EFFECTS
       develop_infrastructure:     { add: 1 },
       develop_infrastructure_std: { add: 1 },
+      infrastructure_expansion:   { add: 1 },   // inherits the retired develop_infrastructure_std's integration credit (2026-09-09)
       reconstruction_drive:       { add: 1 },
       reconstruction_drive_std:   { add: 1 },
       expand_territory:           { setAtLeast: 1, add: 0 }

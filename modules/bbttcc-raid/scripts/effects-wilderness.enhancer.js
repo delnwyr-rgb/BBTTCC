@@ -396,6 +396,68 @@
       });
     }
 
-    console.log(TAG, "Wilderness development effects installed:", Object.keys(SITE_TYPES));
+    // -----------------------------------------------------------------------
+    // 5) Found District (owner ruling 2026-09-09 — closes the "no strategic
+    //    activity grows a town" gap). One row per district type, delegating to
+    //    the Townbuilder (api.territory.townbuilder.foundDistrict), which is the
+    //    ONE authority: City+ size, free slot, no duplicate type, and it charges
+    //    BUILD UNITS — so these rows carry NO OP cost (never double-bill).
+    // -----------------------------------------------------------------------
+    const DISTRICT_LABELS = {
+      settlement: "Found Settlement District", fortress: "Found Fortress District", mine: "Found Mining District",
+      farm: "Found Farming District", port: "Found Port District", factory: "Found Factory District",
+      research: "Found Research District", temple: "Found Temple District"
+    };
+    const DISTRICT_PRIMARY = { settlement:"softpower", fortress:"violence", mine:"economy", farm:"economy", port:"economy", factory:"logistics", research:"intrigue", temple:"faith" };
+    const tb = () => game.bbttcc?.api?.territory?.townbuilder || null;
+    function districtBlock(doc, f, type, actor){
+      const api = tb();
+      if (!api) return "Townbuilder is not loaded on this client.";
+      const name = f?.name || "This hex";
+      const fid = String(f?.factionId || f?.ownerId || "");
+      if (actor && fid && fid !== String(actor.id)) return `${name} is not held by ${actor.name}.`;
+      const settlement = api.getSettlement(doc);
+      if (!settlement) return `${name} has no buildings yet — districts grow out of a living town. Raise something through the Hex Sheet → Townbuilder first.`;
+      const { size, tier } = api.ladderFor(doc);
+      const isGM = !!game.user?.isGM;
+      if (!tier?.districts && !isGM) return `${name} is a ${size} — district slots unlock at City size (Upgrade the settlement first).`;
+      if ((settlement.districts?.length || 0) >= (tier?.districts ?? 0) && !isGM) return `${name} has used all ${tier?.districts ?? 0} district slot(s) at ${size} size.`;
+      const hexType = String(f?.type || "").toLowerCase();
+      if (type === hexType) return `${name} already IS a ${type} — found a district that adds something new.`;
+      if ((settlement.districts || []).some(d => String(d.type).toLowerCase() === type)) return `${name} already has a ${type} district.`;
+      return null;
+    }
+    for (const type of ["settlement","fortress","mine","farm","port","factory","research","temple"]) {
+      const effKey = `found_district_${type}`;
+      EFFECTS[effKey] = Object.assign({}, EFFECTS[effKey], {
+        kind: "strategic",
+        band: "standard",
+        label: DISTRICT_LABELS[type],
+        primaryKey: DISTRICT_PRIMARY[type],
+        cost: {}, opCosts: {},
+        groupKey: "town_growth", groupLabel: "Town Growth", groupOrder: 6,
+        description: `Grow a City-sized settlement you hold with a ${type} district: half of a ${type}'s base yield is added on top of the town's own, and the ${type} building menu opens there. Paid in BUILD UNITS through the Townbuilder (no OP). Needs a free district slot (City 1 · Metropolis 2 · Megalopolis 3) and a different type from the hex itself.`,
+        async canPlan({ actor, targetDoc, targetFlags }){
+          const why = districtBlock(targetDoc, targetFlags || targetDoc?.flags?.[MOD_T] || {}, type, actor);
+          return why ? { ok:false, reason: why } : { ok:true };
+        },
+        async apply({ actor, entry }){
+          if (!entry?.targetUuid) return "No target selected.";
+          const doc = await getHexDocumentFromEntry(entry);
+          if (!doc) return "Target is not a valid hex Drawing/Tile.";
+          const f = doc.flags?.[MOD_T] || {};
+          const why = districtBlock(doc, f, type, actor);
+          if (why) return `${DISTRICT_LABELS[type]} REFUSED — ${why}`;
+          const name = String(entry?.note || "").trim().slice(0, 60) || "";   // the planner's GM note doubles as the district's name
+          const res = await tb().foundDistrict({ hexDoc: doc, type, name });
+          if (!res?.ok) return `${DISTRICT_LABELS[type]} failed — ${res?.error || "Townbuilder refused"}`;
+          const d = res.settlement?.districts?.at?.(-1);
+          console.log(TAG, effKey, { actor: actor?.name, target: entry?.targetUuid, district: d });
+          return `${DISTRICT_LABELS[type]}: "${d?.name || type}" founded in ${f.name || "the hex"} — the ${type} menu is open there and its yield share starts next turn.`;
+        }
+      });
+    }
+
+    console.log(TAG, "Wilderness development effects installed:", Object.keys(SITE_TYPES), "+ districts");
   });
 })();

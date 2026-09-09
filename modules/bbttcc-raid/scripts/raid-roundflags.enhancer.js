@@ -36,7 +36,10 @@
       const flags = A ? foundry.utils.duplicate(A.flags?.[FCT_ID]||{}) : {};
       const turnNext = (((flags.turn||{}).pending)||{}).nextTurn || {};
       const postNext = (((flags.post||{}).pending)||{}).nextRound || {};
-      const use = Object.keys(turnNext).length ? turnNext : postNext;
+      // bonuses.nextTurn survives hardCleanupQueued; turn.pending does not (audit 2026-09-09) — Mass Mobilization writes here now.
+      const bonusNext = ((flags.bonuses||{}).nextTurn) || {};
+      const use = Object.keys(turnNext).length ? turnNext : (Object.keys(postNext).length ? postNext : bonusNext);
+      const usedBonus = use === bonusNext && (bonusNext.initiativeAdv || bonusNext.freeManeuver);
       const wantAdv  = !!use.initiativeAdv;
       const wantFree = !!use.freeManeuver;
 
@@ -60,6 +63,12 @@
         try { await refundManeuverCosts(A, args.maneuversAtt); } catch(e){ console.warn("[bbttcc-raid/roundflags] refund fail", e); }
       }
 
+      if (A && usedBonus) {
+        try {
+          const f = foundry.utils.duplicate(A.flags?.[FCT_ID]||{});
+          if (f.bonuses?.nextTurn) { delete f.bonuses.nextTurn.initiativeAdv; delete f.bonuses.nextTurn.freeManeuver; await A.update({ [`flags.${FCT_ID}.bonuses`]: f.bonuses }); }
+        } catch {}
+      }
       // Clear legacy POST once used
       if (A && Object.keys(postNext).length){
         try {

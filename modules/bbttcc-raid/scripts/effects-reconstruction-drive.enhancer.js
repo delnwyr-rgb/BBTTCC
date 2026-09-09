@@ -24,8 +24,14 @@
     if (!pend.repairs.addModifiers.includes("Well-Maintained")) pend.repairs.addModifiers.push("Well-Maintained");
     pend.defenseDelta    = Number(pend.defenseDelta||0) + Number(defenseDelta||0);
     pend.tradeYieldDelta = Number(pend.tradeYieldDelta||0) + Number(tradeYieldDelta||0);
-    await doc.update({ [`flags.${MOD_T}.turn.pending`]: pend });
-    return `Queued: -Damaged Infrastructure, +Well-Maintained • +${defenseDelta} Defense, +${tradeYieldDelta} Trade Yield`;
+    // Folded in from the retired T2 "Reconstruction Drive" row (2026-09-09):
+    // "Upgrade Hex status to 'Claimed'" — an occupied/contested hex settles.
+    const status = String(f.status || "").toLowerCase();
+    const claim = (status === "occupied" || status === "contested");
+    const upd = { [`flags.${MOD_T}.turn.pending`]: pend };
+    if (claim) upd[`flags.${MOD_T}.status`] = "claimed";
+    await doc.update(upd);
+    return `Queued: -Damaged Infrastructure, +Well-Maintained • +${defenseDelta} Defense, +${tradeYieldDelta} Trade Yield${claim ? " • status → Claimed" : ""}`;
   }
 
   whenRaidReady((api)=>{
