@@ -6,19 +6,22 @@
  * which is what the Quest Log shows, does not have it. Seen after the 2026-09-09
  * restore of "Act 2 Ahoy!": registry had 9 Act-2 Words, the track had none.
  *
- * Rule: every registry quest with status "active" that is in NO bucket of a
- * campaign faction's track is added to that faction's ACTIVE bucket (same entry
- * shape the engine writes). Completed/archived registry quests are left alone.
+ * Rule: every `word_*` INVITATION quest in the registry (an invitation only exists
+ * in the registry once the GM accepted it) that is in NO bucket of a campaign
+ * faction's track is added to that faction's ACTIVE bucket. Other registry quests
+ * are NEVER touched — the registry's status "active" is an authoring default, not
+ * evidence of acceptance (the first version of this macro got that wrong and
+ * pushed all 59 catalog quests onto the tracks; see undo-repair-quest-track).
  * Idempotent. DRY_RUN default true. Run as GM with "Thatward's Ho!" active.
  */
 (async () => {
-  const DRY_RUN = true;                 // <-- set false to apply
+  const DRY_RUN = false;                 // <-- set false to apply
   const NS = "bbttcc-campaign", MODF = "bbttcc-factions";
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
   const api = game.bbttcc?.api?.campaign; const cid = api?.getActiveCampaignId?.(); const camp = api?.getCampaign?.(cid);
   if (!camp) return ui.notifications.error("No active campaign.");
   let reg = game.settings.get(NS, "quests"); if (typeof reg === "string") { try { reg = JSON.parse(reg); } catch (_e) { reg = {}; } }
-  const active = Object.values(reg || {}).filter(q => String(q?.status || "active") === "active");
+  const active = Object.values(reg || {}).filter(q => String(q?.id || "").startsWith("word_") && String(q?.status || "active") === "active");
   const refs = [...(camp.factionIds || []), camp.factionId].filter(Boolean).map(r => String(r).replace(/^Actor\./, ""));
   const factions = [...new Set(refs)].map(id => game.actors.get(id)).filter(Boolean);
   if (!factions.length) return ui.notifications.error("Campaign has no factions.");
