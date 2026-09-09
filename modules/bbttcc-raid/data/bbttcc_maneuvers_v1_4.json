@@ -11,7 +11,7 @@
           "violence": 20
         },
         "effects": {
-          "text": "Force enemy reroll lowest d20 this round."
+          "text": "Forces the opposing side to reroll its whole 2d10 this round."
         },
         "raidTypes": [
           "Assault",
@@ -37,7 +37,7 @@
           "softPower": 10
         },
         "effects": {
-          "text": "Reduce Alarm Level by 1."
+          "text": "On success in an Infiltration-Alarm raid: alarm −1."
         },
         "raidTypes": [
           "Infiltration",
@@ -115,7 +115,7 @@
           "diplomacy": 10
         },
         "effects": {
-          "text": "Borrow +1 enemy OP for this round."
+          "text": "+1 to your roll and −1 to the opponent's this round."
         },
         "raidTypes": [
           "Liberation",
@@ -192,7 +192,7 @@
           "faith": 10
         },
         "effects": {
-          "text": "Allies gain advantage vs Fear; Darkness −1 regionally."
+          "text": "Advantage on the attacker's roll this round; on success your faction's Darkness −1."
         },
         "raidTypes": [
           "Ritual/Tikkun",
@@ -243,7 +243,7 @@
           "intrigue": 30
         },
         "effects": {
-          "text": "Ignore one Fortified modifier this turn."
+          "text": "If the target hex is Fortified, the defender's bonus is cut by 2 this round."
         },
         "raidTypes": [
           "Infiltration",
@@ -269,7 +269,7 @@
           "faith": 20
         },
         "effects": {
-          "text": "Negate first casualty this round."
+          "text": "Your side's first casualty this round is negated."
         },
         "raidTypes": [
           "Assault",
@@ -322,7 +322,7 @@
           "violence": 30
         },
         "effects": {
-          "text": "Gain initiative for next round."
+          "text": "Your NEXT round's roll is made with advantage (initiative)."
         },
         "raidTypes": [
           "Assault",
@@ -402,7 +402,7 @@
           "intrigue": 10
         },
         "effects": {
-          "text": "Reroll one attack die per ally within range."
+          "text": "Advantage on the attacker's roll this round."
         },
         "raidTypes": [
           "Assault",
@@ -427,7 +427,7 @@
           "intrigue": 30
         },
         "effects": {
-          "text": "Enemy communications fail; their Alarm Level +2."
+          "text": "Enemy communications fail: the opposing side rolls with disadvantage this round; in an Infiltration-Alarm raid the alarm also drops 1."
         },
         "raidTypes": [
           "Infiltration",
@@ -504,7 +504,7 @@
           "intrigue": 10
         },
         "effects": {
-          "text": "Apply attack effect twice vs different targets."
+          "text": "+2 to the attacker's roll this round; on success, enemy tokens on the bound battle scene take 7 damage."
         },
         "raidTypes": [
           "Assault",
@@ -529,7 +529,7 @@
           "softPower": 30
         },
         "effects": {
-          "text": "+2 to Empathy Meter after victory."
+          "text": "On success: Unity (Empathy) +2."
         },
         "raidTypes": [
           "Liberation",
@@ -583,7 +583,7 @@
           "violence": 20
         },
         "effects": {
-          "text": "+3 attack for one construct; loses 1 HP."
+          "text": "+3 to the attacker's roll this round; your own tokens on the bound battle scene take 1 damage."
         },
         "raidTypes": [
           "Assault",
@@ -637,7 +637,7 @@
           "violence": 20
         },
         "effects": {
-          "text": "Convert enemy Darkness gain to −1 for you."
+          "text": "On success: your faction's Darkness −1 and the enemy faction's Darkness +1."
         },
         "raidTypes": [
           "Ritual/Tikkun",
@@ -663,7 +663,7 @@
           "economy": 20
         },
         "effects": {
-          "text": "Rerun one failed roll this round on Success; on failure, Darkness +1."
+          "text": "If the attacker's roll fails, it is rerolled once; Darkness +1."
         },
         "raidTypes": [
           "Espionage",
@@ -689,7 +689,7 @@
           "logistics": 10
         },
         "effects": {
-          "text": "Remove 'Fortified' tag from target."
+          "text": "On success the target hex loses its Fortified modifier."
         },
         "raidTypes": [
           "Siege",
@@ -767,7 +767,7 @@
           "softPower": 50
         },
         "effects": {
-          "text": "Auto-win one opposed roll; Darkness −1."
+          "text": "In a contested round you lose, your total is raised to match the defender's; Darkness −1."
         },
         "raidTypes": [
           "Ritual/Tikkun",
@@ -792,7 +792,7 @@
           "violence": 60
         },
         "effects": {
-          "text": "Reduce enemy leader’s OP cap by 3 permanently."
+          "text": "On success the enemy faction's Violence cap drops 30 marks, permanently."
         },
         "raidTypes": [
           "Assault",
@@ -818,7 +818,7 @@
           "economy": 30
         },
         "effects": {
-          "text": "Re-roll your faction's round result once; you must keep the second result. Darkness +1."
+          "text": "Reopens the previous committed round as a fresh round to be replayed; Darkness +1. No OP is refunded."
         },
         "raidTypes": [
           "Espionage",
@@ -845,7 +845,7 @@
           "softPower": 50
         },
         "effects": {
-          "text": "All allies gain +2 to every OP next round."
+          "text": "Next round your faction gains +20 marks in every OP pool."
         },
         "raidTypes": [
           "Liberation",
@@ -897,7 +897,7 @@
           "faith": 40
         },
         "effects": {
-          "text": "End combat for 1 round; Darkness −2 if enemy accepts."
+          "text": "All enemy maneuvers this round are nullified while yours resolve; on success your Darkness −2 and the enemy's Morale +1."
         },
         "raidTypes": [
           "Courtly Intrigue",
@@ -949,7 +949,7 @@
           "softPower": 60
         },
         "effects": {
-          "text": "Instantly purify a Corrupted Spark; requires Victory context."
+          "text": "On success the corrupted Spark seated on the target hex is repaired."
         },
         "raidTypes": [
           "Ritual/Tikkun"
@@ -974,7 +974,7 @@
           "faith": 50
         },
         "effects": {
-          "text": "Restore 1 destroyed Hex to GenPop status."
+          "text": "On success the target hex is restored: taints and damage removed, darkness pips 0, Purified."
         },
         "raidTypes": [
           "Liberation",
@@ -1000,7 +1000,7 @@
           "intrigue": 50
         },
         "effects": {
-          "text": "Summon Ego-Dragon fragment; +4 attack, double Darkness risk."
+          "text": "+4 to the attacker's roll this round; your faction's Darkness +2 whatever happens."
         },
         "raidTypes": [
           "Ritual/Tikkun",

@@ -1470,6 +1470,7 @@ function _effectsMans() {
   const out = {};
   for (const [k,v] of Object.entries(EFFECTS)) {
     if (v?.kind !== "maneuver") continue;
+    if (v?.retired === true) continue;   // collapsed duplicates (owner ruling 2026-09-09) stay registered for already-selected rounds
     // Two source shapes: compat-bridge stores `cost` (lowercase keys); the
     // JSON loader stores `opCosts` (camelCase keys like softPower/nonLethal).
     // Normalize to lowercase so OP_KEYS-driven consumers (_dominantOp,
@@ -1984,7 +1985,7 @@ const _MAN_KEYS_BY_TYPE = {
   assault_defense: ["patch_the_breach", "quantum_shield", "defensive_entrenchment", "last_stand_banner", "defender_s_reversal"],
   occupation_defense: ["patch_the_breach", "defender_s_reversal", "last_stand_banner"],
   siege_defense: ["last_stand_banner", "patch_the_breach", "defender_s_reversal"],
-  any: ["supply_surge", "divine_favor"],
+  any: ["divine_favor"],   // supply_surge retired 2026-09-09 (duplicate of Logistical Surge)
 };
 
 function _mansForType(type){
@@ -6395,7 +6396,14 @@ try {
         margin: m,
         source: "margin-default"
       };
+      // Bless the Fallen (wired 2026-09-09): "negate first casualty this round".
+      const _lcA = (r.mansSelected || []).map(k => String(k||"").toLowerCase()); const _lcD = (r.mansSelectedDef || []).map(k => String(k||"").toLowerCase());
+      if (_lcA.includes("bless_the_fallen") && r.meta.casualties.attacker > 0) { r.meta.casualties.attacker -= 1; r.meta.casualties.source += "+bless_the_fallen(att)"; }
+      if (_lcD.includes("bless_the_fallen") && r.meta.casualties.defender > 0) { r.meta.casualties.defender -= 1; r.meta.casualties.source += "+bless_the_fallen(def)"; }
     } catch (e) { console.warn("[bbttcc-raid] casualty compute failed", e); }
+
+    // Hex / actor writing maneuvers (wired 2026-09-09) — success-gated, GM seat.
+    try { await _b3ApplyStateManeuvers(r, attacker, defender); } catch (e) { console.warn("[bbttcc-raid] state maneuvers failed", e); }
 
     r.open = false; r.committed = true;
 
@@ -7448,36 +7456,36 @@ function _bbttccDoctrineAllowsManeuver(factionActor, mKey){
 // later via an index; the map below is the source of truth today.)
 // ════════════════════════════════════════════════════════════════════════════
 const CREW_MANEUVER_GRANTS = {
-  "Mercenary Band":       ["suppressive_fire", "rally_the_line", "supply_overrun", "command_overdrive", "siege_breaker_volley", "ego_breaker"],
-  "Peacekeeper Corps":    ["patch_the_breach", "last_stand_banner", "quantum_shield", "defender_s_reversal", "moral_high_ground"],
-  "Covert Ops Cell":      ["smoke_and_mirrors", "saboteur_s_edge", "signal_hijack", "chrono_loop_command", "reality_hack"],
-  "Cultural Ambassadors": ["flash_bargain", "empathic_surge", "counter_propaganda_wave", "flash_interdict", "unity_surge"],
-  "Diplomatic Envoys":    ["flash_bargain", "empathic_surge", "moral_high_ground", "temporal_armistice", "engine_of_absolution"],
-  "Survivors/Militia":    ["rally_the_line", "patch_the_breach", "last_stand_banner", "defender_s_reversal", "logistical_surge"],
+  "Mercenary Band":       ["suppressive_fire", "rally_the_line", "supply_overrun", "command_overdrive", "siege_breaker_volley", "ego_breaker", "artillery_salvo", "coordinated_strike", "sap_the_walls", "sortie_en_masse", "total_mobilization"],
+  "Peacekeeper Corps":    ["patch_the_breach", "last_stand_banner", "quantum_shield", "defender_s_reversal", "moral_high_ground", "shore_the_gate", "subdue_nonlethal", "forward_resupply"],
+  "Covert Ops Cell":      ["smoke_and_mirrors", "saboteur_s_edge", "signal_hijack", "chrono_loop_command", "reality_hack", "hide_in_shadow", "take_cover", "disable_alarm", "conceal_body", "pick_lock", "bypass_obstacle", "tailgate"],
+  "Cultural Ambassadors": ["flash_bargain", "empathic_surge", "counter_propaganda_wave", "flash_interdict", "unity_surge", "cultural_offensive", "diplomatic_channel", "impersonate", "courtly_public_toast", "courtly_stage_distraction", "courtly_sidle_closer"],
+  "Diplomatic Envoys":    ["flash_bargain", "empathic_surge", "moral_high_ground", "temporal_armistice", "engine_of_absolution", "diplomatic_channel", "courtly_whispered_aside", "courtly_quote_old_law", "courtly_call_question", "courtly_patrons_word", "courtly_sidle_closer"],
+  "Survivors/Militia":    ["rally_the_line", "patch_the_breach", "last_stand_banner", "defender_s_reversal", "logistical_surge", "forward_resupply", "shore_the_gate", "total_mobilization"],
   // Canonical compendium names are PLURAL ("Abyssal Cartographers"/"Gridbreakers") —
   // ftNormalizeAssetName strips "Crew Type:"/"(Tier N)" but not the plural, so the
   // grant key must match the pack form or the grant silently never fires (raid-gauntlet audit 2026-06-07).
-  "Abyssal Cartographers": ["smoke_and_mirrors", "psychic_disruption", "chrono_loop_command", "reality_hack"],
-  "Ashbound Survivors":   ["patch_the_breach", "last_stand_banner", "quantum_shield", "bless_the_fallen", "logistical_surge"],
-  "Gridbreakers":         ["signal_hijack", "flash_interdict", "industrial_sabotage", "overclock_the_golems", "void_signal_collapse"],
-  "Ironbound Ascendants": ["suppressive_fire", "supply_overrun", "tactical_overwatch", "echo_strike_protocol", "siege_breaker_volley", "ego_breaker"],
-  "Storm Wardens":        ["rally_the_line", "quantum_shield", "radiant_retaliation", "faithful_intervention", "harmonic_chant"],
-  "Verdant Stalkers":     ["saboteur_s_edge", "signal_hijack", "psychic_disruption", "overclock_the_golems"]
+  "Abyssal Cartographers": ["smoke_and_mirrors", "psychic_disruption", "chrono_loop_command", "reality_hack", "hide_in_shadow", "conceal_body", "courtly_read_the_room"],
+  "Ashbound Survivors":   ["patch_the_breach", "last_stand_banner", "quantum_shield", "bless_the_fallen", "logistical_surge", "shore_the_gate", "forward_resupply", "field_chaplaincy"],
+  "Gridbreakers":         ["signal_hijack", "flash_interdict", "industrial_sabotage", "overclock_the_golems", "void_signal_collapse", "pick_lock", "bypass_obstacle", "tailgate", "disable_alarm", "sap_the_walls"],
+  "Ironbound Ascendants": ["suppressive_fire", "supply_overrun", "tactical_overwatch", "echo_strike_protocol", "siege_breaker_volley", "ego_breaker", "artillery_salvo", "coordinated_strike", "sap_the_walls", "crack_the_keep"],
+  "Storm Wardens":        ["rally_the_line", "quantum_shield", "radiant_retaliation", "faithful_intervention", "harmonic_chant", "prayer_pulse", "field_chaplaincy"],
+  "Verdant Stalkers":     ["saboteur_s_edge", "signal_hijack", "psychic_disruption", "overclock_the_golems", "hide_in_shadow", "take_cover", "tailgate"]
 };
 // All 10 canonical occult associations (resolverWeights). Names are matched slash/space-
 // insensitively (see _normName), so "Prophet/Oracle" and the item form "Prophet / Oracle" both hit.
 const OCCULT_MANEUVER_GRANTS = {
-  "Kabbalist":          ["prayer_in_the_smoke", "harmonic_chant", "sephirotic_intervention", "unity_surge"],
-  "Alchemist":          ["industrial_sabotage", "overclock_the_golems", "logistical_surge", "bless_the_fallen"],
-  "Tarot Mage":         ["chrono_loop_command", "reality_hack", "temporal_armistice", "psychic_disruption"],
-  "Gnostic":            ["counter_propaganda_wave", "moral_high_ground", "reality_hack", "smoke_and_mirrors"],
-  "Goetic Summoner":    ["qliphothic_gambit", "psychic_disruption", "ego_dragon_echo", "ego_breaker"],
-  "Rosicrucian":        ["faithful_intervention", "harmonic_chant", "quantum_shield", "radiant_retaliation"],
+  "Kabbalist":          ["prayer_in_the_smoke", "harmonic_chant", "sephirotic_intervention", "unity_surge", "prayer_pulse", "field_chaplaincy"],
+  "Alchemist":          ["industrial_sabotage", "overclock_the_golems", "logistical_surge", "bless_the_fallen", "forward_resupply", "sap_the_walls"],
+  "Tarot Mage":         ["chrono_loop_command", "reality_hack", "temporal_armistice", "psychic_disruption", "courtly_plant_a_doubt", "courtly_forged_letter", "courtly_read_the_room"],
+  "Gnostic":            ["counter_propaganda_wave", "moral_high_ground", "reality_hack", "smoke_and_mirrors", "courtly_read_the_room", "cultural_offensive"],
+  "Goetic Summoner":    ["qliphothic_gambit", "psychic_disruption", "ego_dragon_echo", "ego_breaker", "crack_the_keep"],
+  "Rosicrucian":        ["faithful_intervention", "harmonic_chant", "quantum_shield", "radiant_retaliation", "courtly_patrons_word", "courtly_forged_letter", "field_chaplaincy"],
   // Compendium item is "Biomancer/Fleshcrafter" — key must carry the subtitle or the grant never fires (raid-gauntlet audit 2026-06-07).
-  "Biomancer/Fleshcrafter": ["bless_the_fallen", "faithful_intervention", "radiant_retaliation", "empathic_surge"],
-  "Exorcist/Purifier":  ["radiant_retaliation", "bless_the_fallen", "crown_of_mercy", "harmonic_chant"],
-  "Prophet/Oracle":     ["faithful_intervention", "moral_high_ground", "crown_of_mercy", "prayer_in_the_smoke"],
-  "Shaman":             ["prayer_in_the_smoke", "harmonic_chant", "radiant_retaliation", "empathic_surge"]
+  "Biomancer/Fleshcrafter": ["bless_the_fallen", "faithful_intervention", "radiant_retaliation", "empathic_surge", "field_chaplaincy", "subdue_nonlethal"],
+  "Exorcist/Purifier":  ["radiant_retaliation", "bless_the_fallen", "crown_of_mercy", "harmonic_chant", "field_chaplaincy", "prayer_pulse"],
+  "Prophet/Oracle":     ["faithful_intervention", "moral_high_ground", "crown_of_mercy", "prayer_in_the_smoke", "prayer_pulse", "courtly_read_the_room"],
+  "Shaman":             ["prayer_in_the_smoke", "harmonic_chant", "radiant_retaliation", "empathic_surge", "prayer_pulse", "field_chaplaincy"]
 };
 // CLASS → MANEUVER GRANTS (the class-grant layer, sibling to crews/occult). A steward CLASS
 // on the faction's ROSTER arms the faction with that class's signature maneuvers — "a Bulwark
@@ -7486,15 +7494,15 @@ const OCCULT_MANEUVER_GRANTS = {
 // ⚙️ TUNE HERE. (The obstacle-key abilities themselves — Catastrophic Entry, The Last Word —
 // are class-locked at the ability level; this layer is the broader maneuver access.)
 const CLASS_MANEUVER_GRANTS = {
-  "Bulwark":        ["patch_the_breach", "last_stand_banner", "quantum_shield", "defender_s_reversal", "siege_breaker_volley", "tactical_overwatch"],
-  "Cosmic Linguist":["counter_propaganda_wave", "moral_high_ground", "unity_surge", "empathic_surge", "reality_hack"],
-  "Shadow Courier": ["smoke_and_mirrors", "saboteur_s_edge", "signal_hijack", "chrono_loop_command"],
-  "Pactkeeper":     ["faithful_intervention", "sephirotic_intervention", "qliphothic_gambit", "harmonic_chant"],
-  "Wyrdlens Adept": ["psychic_disruption", "reality_hack", "moral_high_ground", "chrono_loop_command"],
-  "Aurablade":      ["suppressive_fire", "rally_the_line", "echo_strike_protocol", "ego_breaker"],
-  "Dreamwalker":    ["psychic_disruption", "smoke_and_mirrors", "reality_hack", "empathic_surge"],
-  "Harmony Marshal":["rally_the_line", "command_overdrive", "empathic_surge", "moral_high_ground", "unity_surge"],
-  "Soul-Smith":     ["industrial_sabotage", "overclock_the_golems", "supply_overrun", "logistical_surge"]
+  "Bulwark":        ["patch_the_breach", "last_stand_banner", "quantum_shield", "defender_s_reversal", "siege_breaker_volley", "tactical_overwatch", "sap_the_walls", "shore_the_gate", "crack_the_keep", "artillery_salvo"],
+  "Cosmic Linguist":["counter_propaganda_wave", "moral_high_ground", "unity_surge", "empathic_surge", "reality_hack", "cultural_offensive", "diplomatic_channel", "courtly_the_last_word", "courtly_quote_old_law", "courtly_call_question"],
+  "Shadow Courier": ["smoke_and_mirrors", "saboteur_s_edge", "signal_hijack", "chrono_loop_command", "hide_in_shadow", "take_cover", "disable_alarm", "conceal_body", "impersonate", "courtly_forged_letter"],
+  "Pactkeeper":     ["faithful_intervention", "sephirotic_intervention", "qliphothic_gambit", "harmonic_chant", "prayer_pulse", "courtly_patrons_word"],
+  "Wyrdlens Adept": ["psychic_disruption", "reality_hack", "moral_high_ground", "chrono_loop_command", "courtly_read_the_room", "courtly_plant_a_doubt"],
+  "Aurablade":      ["suppressive_fire", "rally_the_line", "echo_strike_protocol", "ego_breaker", "coordinated_strike", "sortie_en_masse"],
+  "Dreamwalker":    ["psychic_disruption", "smoke_and_mirrors", "reality_hack", "empathic_surge", "hide_in_shadow", "courtly_stage_distraction"],
+  "Harmony Marshal":["rally_the_line", "command_overdrive", "empathic_surge", "moral_high_ground", "unity_surge", "coordinated_strike", "sortie_en_masse", "total_mobilization", "courtly_public_toast", "courtly_whispered_aside"],
+  "Soul-Smith":     ["industrial_sabotage", "overclock_the_golems", "supply_overrun", "logistical_surge", "forward_resupply", "sap_the_walls", "shore_the_gate"]
 };
 // Name normalizer: lowercase, collapse whitespace, and strip spaces around slashes — so the
 // spec form ("Prophet/Oracle", "Survivors/Militia") and the compendium-item form
@@ -8637,6 +8645,60 @@ async function _b3ConsumeStrategicBoons(round, attacker){
   } catch (e) { warn("consume strategic boons failed", e); }
 }
 
+// Maneuvers whose payoff is a hex / actor write the bundle channels cannot
+// express (2026-09-09 audit wiring): Siege Breaker Volley, Engine of
+// Absolution, Crown of Mercy, Ego Breaker. Success-gated; GM seat only.
+async function _b3ApplyStateManeuvers(round, attacker, defender){
+  if (!game.user?.isGM || !round) return;
+  const a = (round.mansSelected || []).map(k => String(k||"").toLowerCase());
+  const wants = ["siege_breaker_volley","engine_of_absolution","crown_of_mercy","ego_breaker"].filter(k => a.includes(k));
+  if (!wants.length) return;
+  if (!_b3IsSuccessOutcome(round)) { round.meta ||= {}; round.meta.b3 ||= {}; round.meta.b3.stateManeuvers = { skipped: "no success", keys: wants }; return; }
+  const notes = [];
+  let doc = null; try { const ref = round.targetUuid ? await fromUuid(round.targetUuid) : null; doc = ref?.document ?? ref ?? null; } catch(_e) {}
+  const tf = doc?.flags?.["bbttcc-territory"] || {};
+  const hexName = String(tf.name || doc?.text || "the hex");
+  const terr = game.bbttcc?.api?.territory;
+  const setMods = async (add, remove) => {
+    if (!doc) return { added: [], removed: [] };
+    const cur = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];
+    const low = (x) => String(x||"").toLowerCase();
+    const removed = cur.filter(m => remove.some(rm => low(rm) === low(m)));
+    let next = cur.filter(m => !remove.some(rm => low(rm) === low(m)));
+    const added = add.filter(x => !next.some(m => low(m) === low(x))); next = next.concat(added);
+    if (added.length || removed.length) {
+      await doc.update({ "flags.bbttcc-territory.modifiers": next }, { parent: doc.parent });
+      const rec = terr?.recordHexModifierTransition;
+      if (typeof rec === "function") { for (const m of added) { try { await rec(doc, m, "added", { activity: "raid_maneuver", factionId: attacker?.id }, `raid:${doc.id}:${m}:add`); } catch(_e) {} } for (const m of removed) { try { await rec(doc, m, "removed", { activity: "raid_maneuver", factionId: attacker?.id }, `raid:${doc.id}:${m}:rm`); } catch(_e) {} } }
+    }
+    return { added, removed };
+  };
+  if (wants.includes("siege_breaker_volley")) {
+    const r2 = await setMods([], ["Fortified"]);
+    notes.push(r2.removed.length ? `Siege Breaker Volley: ${hexName} loses Fortified` : `Siege Breaker Volley: ${hexName} was not Fortified`);
+  }
+  if (wants.includes("engine_of_absolution")) {
+    const r2 = await setMods(["Well-Maintained"], ["Contaminated","Radiation Zone","Damaged Infrastructure","Hostile Population"]);
+    try { if (doc) { const mods = foundry.utils.duplicate(tf.mods || {}); mods.darkness = 0; await doc.update({ "flags.bbttcc-territory.mods": mods }, { parent: doc.parent }); } } catch(_e) {}
+    try { await terr?.setCondition?.(round.targetUuid, "Purified", true); } catch(_e) {}
+    notes.push(`Engine of Absolution: ${hexName} restored — Purified, darkness pips 0${r2.removed.length ? `, removed ${r2.removed.join(", ")}` : ""}`);
+  }
+  if (wants.includes("crown_of_mercy")) {
+    let rr = null; try { rr = await game.bbttcc?.api?.tikkun?.hex?.repair?.(round.targetUuid); } catch(e) { rr = { ok:false, error: e.message }; }
+    notes.push(rr?.ok ? `Crown of Mercy: the ${rr.key} spark at ${hexName} is repaired${rr.already ? " (already clean)" : ""}` : `Crown of Mercy: ${rr?.error || "no spark seated at the target"}`);
+  }
+  if (wants.includes("ego_breaker") && defender) {
+    try {
+      const b = foundry.utils.duplicate(defender.getFlag("bbttcc-factions", "bonuses") || {}); b.capBump = b.capBump || {};
+      const cur = b.capBump.violence || { add: 0, turns: 0 }; b.capBump.violence = { add: Number(cur.add||0) - 30, turns: 9999 };
+      await defender.update({ "flags.bbttcc-factions.bonuses": b });
+      notes.push(`Ego Breaker: ${defender.name}'s Violence cap −30 marks (permanent)`);
+    } catch(_e) {}
+  }
+  round.meta ||= {}; round.meta.b3 ||= {}; round.meta.b3.stateManeuvers = { applied: notes };
+  try { if (attacker && notes.length) { const wl = foundry.utils.duplicate(attacker.getFlag("bbttcc-factions", "warLogs") || []); wl.push({ ts: Date.now(), date: (new Date()).toLocaleString(), type: "raid", activity: "maneuver_state", summary: notes.join("; ") + "." }); await attacker.update({ "flags.bbttcc-factions.warLogs": wl }); } } catch(_e) {}
+}
+
 function _b3ComputeThisRoundMods(round, mansAtt, mansDef){
   function lc(s){ return String(s||"").toLowerCase().trim(); }
 
@@ -8740,6 +8802,16 @@ function _b3ComputeThisRoundMods(round, mansAtt, mansDef){
     if (d.includes("psychic_disruption")) {
       out.rollModeAtt = "dis";
       out.notes.push("psychic_disruption: attacker disadvantage");
+    }
+    // Saboteur's Edge (wired 2026-09-09): "ignore one Fortified modifier" — when the
+    // target hex is Fortified, the defender's +3 is cut by 2 this round.
+    if (a.includes("saboteur_s_edge")) {
+      try {
+        const ref = round?.targetUuid ? fromUuidSync(round.targetUuid) : null; const doc = ref?.document ?? ref;
+        const mods = doc?.flags?.["bbttcc-territory"]?.modifiers;
+        if (Array.isArray(mods) && mods.some(m => String(m).toLowerCase() === "fortified")) { out.defenderBonusDelta -= 2; out.notes.push("saboteur_s_edge: Fortified ignored (defender −2)"); }
+        else out.notes.push("saboteur_s_edge: target not Fortified — no effect");
+      } catch(_e) {}
     }
   } catch(_e) {}
   out.suppressive = { att: attHasSuppressive, def: defHasSuppressive };

@@ -139,7 +139,17 @@ const OPTION_L1_SPECS = {
   turn_the_card:          { primaryKey:"intrigue",   cost:{ intrigue:10 },   raidTypes:["espionage","infiltration","propaganda"] },
   inherited_deference:    { primaryKey:"softpower",  cost:{ softpower:10 },  raidTypes:["liberation","occupation","courtly_intrigue"] },
   psychological_pressure: { primaryKey:"softpower",  cost:{ softpower:10 },  raidTypes:["propaganda","espionage","liberation"] },
-  sight_of_the_tree:      { primaryKey:"faith",      cost:{ faith:10 },      raidTypes:["ritual","liberation","siege"] }
+  sight_of_the_tree:      { primaryKey:"faith",      cost:{ faith:10 },      raidTypes:["ritual","liberation","siege"] },
+  // The nine that were free and everywhere (owner ruling 2026-09-09): priced in their archetype's channel; bodies in maneuvers-audit-wiring.
+  shock_command:          { primaryKey:"violence",   cost:{ violence:10 },   raidTypes:["assault","occupation","liberation","siege"] },
+  bureaucratic_override:  { primaryKey:"economy",    cost:{ economy:10 },    raidTypes:["occupation","liberation","propaganda","courtly"] },
+  prepared_insight:       { primaryKey:"intrigue",   cost:{ intrigue:10 },   raidTypes:["espionage","infiltration","ritual","courtly"] },
+  hardened_advance:       { primaryKey:"violence",   cost:{ violence:10 },   raidTypes:["assault","occupation","siege"] },
+  silent_entry:           { primaryKey:"intrigue",   cost:{ intrigue:10 },   raidTypes:["infiltration","espionage"] },
+  formal_parley:          { primaryKey:"diplomacy",  cost:{ diplomacy:10 },  raidTypes:["liberation","propaganda","courtly"] },
+  rapid_transmutation:    { primaryKey:"economy",    cost:{ economy:10 },    raidTypes:["ritual","siege","occupation"] },
+  pierce_the_veil:        { primaryKey:"faith",      cost:{ faith:10 },      raidTypes:["ritual","espionage","liberation"] },
+  veiled_access:          { primaryKey:"intrigue",   cost:{ intrigue:10 },   raidTypes:["infiltration","espionage","courtly"] }
 };
 
 // L2 Option Strategics: define primary OP + baseline costs + grouping.

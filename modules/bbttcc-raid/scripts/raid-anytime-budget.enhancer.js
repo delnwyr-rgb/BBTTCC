@@ -79,10 +79,19 @@
     const anchor = _anchorFor(scope, ctx);
     const factionId = String(ctx?.factionId || ctx?.attackerFactionId || ctx?.defenderFactionId || "anon");
     const bucket = _bucketFor(factionId, scope, anchor);
+    if (bucket.has("__exhausted__")) {
+      return { ok: false, scope, anchor, factionId, note: `${scope} anytime budget exhausted for ${factionId} (a heavy maneuver used it all)` };
+    }
     if (bucket.has(String(maneuverKey))) {
       return { ok: false, scope, anchor, factionId, note: `${scope} budget consumed for ${factionId}` };
     }
     return { ok: true, scope, anchor, factionId };
+  }
+  // `cost.anytime: N` (Champion Duel = 2) is an ANYTIME-BUDGET price, not an OP key (owner ruling 2026-09-09):
+  // N ≥ 2 spends the whole anytime budget for the scope, not just this key's slot.
+  function _anytimePrice(maneuverKey) {
+    const eff = game.bbttcc?.api?.raid?.EFFECTS?.[String(maneuverKey || "")];
+    return Number(eff?.cost?.anytime ?? eff?.opCosts?.anytime ?? 1) || 1;
   }
 
   function consume(maneuverKey, ctx = {}) {
@@ -94,7 +103,8 @@
     const factionId = String(ctx?.factionId || ctx?.attackerFactionId || ctx?.defenderFactionId || "anon");
     const bucket = _bucketFor(factionId, scope, anchor);
     bucket.add(String(maneuverKey));
-    return { ok: true, scope, anchor, factionId };
+    if (_anytimePrice(maneuverKey) >= 2) bucket.add("__exhausted__");
+    return { ok: true, scope, anchor, factionId, price: _anytimePrice(maneuverKey) };
   }
 
   function reset({ factionId = null, scope = null } = {}) {
