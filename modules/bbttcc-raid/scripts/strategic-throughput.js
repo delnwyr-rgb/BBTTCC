@@ -231,6 +231,15 @@
     }
   }
   const CLEAN_TAGS = ["Contaminated", "Radiation Zone", "Damaged Infrastructure", "Hostile Population", "Propaganda"];
+  // A steward's own sephirah: identity flags (bbttcc-character-options) → mirror flag → the "Alignment: X" Item.
+  function stewardSephirah(actor){
+    if (!actor) return "";
+    const norm = (v) => { const k = String(v || "").toLowerCase().replace(/^alignment[:\-\s]+/, "").replace(/[^a-z]/g, ""); return { chokhmah:"chokmah", tiphareth:"tiferet", tipheret:"tiferet", geburah:"gevurah", kether:"keter" }[k] || k; };
+    try { const id = game.bbttcc?.api?.identity?.getIdentityFlags?.(actor.id) ?? actor.getFlag?.("bbttcc-character-options", "identity"); const k = id?.sephirothicAlignment?.key || id?.sephirothicAlignment?.name; if (k) return norm(k); } catch (_e) {}
+    try { const m = actor.flags?.["bbttcc-character-options"]?.sephirot; const k = m?.key || m?.id || m?.name; if (k && isNaN(Number(k))) return norm(k); } catch (_e) {}
+    try { const it = (actor.items?.contents ?? []).find(i => /^alignment[:\-]/i.test(String(i?.name || "")) || i.getFlag?.("bbttcc-character-options", "category") === "sephirothic-alignments"); if (it) return norm(it.name); } catch (_e) {}
+    return "";
+  }
 
   async function adjustHexTrack(hexUuid, track, delta){
     if (!hexUuid) return;
@@ -724,7 +733,68 @@
         try { await game.fourththing?.epic?.adversary?.force?.("stirring"); } catch (_e) {}
         await pushWarLog(A, `Dragon's Parley: the fragment TURNS AWAY (rolled ${r.total} vs DC 14, +${lamps} lamps) — Darkness ${d.before} → ${d.after}; the Adversary stirs.`);
       }
-    }
+    },
+
+    // ═══════════════════════════ CHARACTER OPTIONS — L2 (owner blessed 2026-09-09) ═══════════════════════════
+    // archetype
+    async optact_doctrine_force_projection(ctx){ const A = game.actors.get(ctx.factionId); await setNextTurnFlag(A, { initiativeAdv: true }); await pushWarLog(A, "Doctrine: Force Projection — your next raid gains initiative advantage."); },
+    async optact_consecrated_alignment(ctx){
+      const A = game.actors.get(ctx.factionId);
+      const doc = await hexDoc(ctx.targetUuid); if (!doc) { await pushWarLog(A, "Consecrated Alignment: no target hex."); return; }
+      const steward = stewardsOf(ctx.factionId).map(s => ({ s, key: stewardSephirah(s) })).find(x => x.key);
+      if (!steward) { await pushWarLog(A, "Consecrated Alignment: no steward of yours carries a sephirotic alignment to consecrate with."); return; }
+      const align = game.bbttcc?.api?.territory?.alignHexToSephirot;
+      const r = typeof align === "function" ? await align(doc, steward.key, { source: "consecrated alignment", overwrite: false, byName: steward.s.name }) : { ok: false, error: "alignHexToSephirot missing" };
+      await pushWarLog(A, r?.ok && !r.skipped ? `Consecrated Alignment: ${hexName(doc)} is aligned to ${r.sephirotName || steward.key} by ${steward.s.name}.` : `Consecrated Alignment: ${hexName(doc)} — ${r?.reason || r?.error || "already aligned; kept"}.`);
+    },
+    async optact_administrative_optimization(ctx){ const A = game.actors.get(ctx.factionId); await addRegenPlan(A, [{ inTurns: 1, mult: 1.05, label: "Administrative Optimization" }]); await pushWarLog(A, "Administrative Optimization: OP income ×1.05 this turn."); },
+    async optact_arcane_attribution(ctx){ return this.gather_intel(ctx); },
+    async optact_dynastic_resonance(ctx){
+      const A = game.actors.get(ctx.factionId);
+      const doc = await hexDoc(ctx.targetUuid); const B = doc ? await factionOfHex(doc) : null;
+      if (!B || B.id === A?.id) { await pushWarLog(A, "Dynastic Resonance: target a hex held by ANOTHER faction."); return; }
+      const rel = relationsApi(); if (!rel?.get || !rel?.set) { await pushWarLog(A, "Dynastic Resonance: relations engine unavailable."); return; }
+      const ladder = rel.TIER_KEYS || ["at_war","hostile","unfriendly","neutral","friendly","allied"];
+      const cur = rel.get(B, A); const i = ladder.indexOf(cur);
+      if (i < 0 || i >= ladder.length - 1) { await pushWarLog(A, `Dynastic Resonance: ${B.name} already stands ${cur} toward you.`); return; }
+      const r = await rel.set(B, A, ladder[i + 1], { reason: "Dynastic Resonance" });
+      await pushWarLog(A, r?.ok === false ? `Dynastic Resonance: ${r.error}` : `Dynastic Resonance: ${B.name} now stands ${ladder[i + 1]} toward you (was ${cur}).`);
+    },
+    async optact_operational_cohesion(ctx){ const A = game.actors.get(ctx.factionId); await setNextTurnFlag(A, { freeManeuver: true }); await pushWarLog(A, "Operational Cohesion: your next raid gets one free maneuver."); },
+    // crew
+    async optact_contract_warfare_doctrine(ctx){ const A = game.actors.get(ctx.factionId); await addCapBump(A, "violence", 10, 1); await pushWarLog(A, "Contract Warfare Doctrine: Violence cap +10 marks this turn."); },
+    async optact_stability_enforcement(ctx){
+      const A = game.actors.get(ctx.factionId); const doc = await hexDoc(ctx.targetUuid); if (!doc) { await pushWarLog(A, "Stability Enforcement: no target hex."); return; }
+      const m = await setHexModifiers(doc, ["Patrolled"], ["Hostile Population"], { activity: "optact_stability_enforcement", factionId: ctx.factionId });
+      await adjustHexTrack(ctx.targetUuid, "loyalty", +1);
+      await pushWarLog(A, `Stability Enforcement at ${hexName(doc)}: ${m.removed.length ? "Hostile Population removed; " : ""}+Patrolled; Loyalty +1.`);
+    },
+    async optact_deep_cover_network(ctx){ return this.spy_insertion(ctx); },
+    async optact_cultural_diffusion(ctx){
+      const A = game.actors.get(ctx.factionId); const doc = await hexDoc(ctx.targetUuid); if (!doc) { await pushWarLog(A, "Cultural Diffusion: no target hex."); return; }
+      await setHexModifiers(doc, ["Loyal Population"], [], { activity: "optact_cultural_diffusion", factionId: ctx.factionId });
+      await adjustHexTrack(ctx.targetUuid, "morale", +1);
+      await pushWarLog(A, `Cultural Diffusion at ${hexName(doc)}: +Loyal Population; Morale +1.`);
+    },
+    async optact_integration_framework(ctx){
+      const A = game.actors.get(ctx.factionId); const doc = await hexDoc(ctx.targetUuid);
+      if (!doc || hexOwnerId(doc) !== String(ctx.factionId)) { await pushWarLog(A, "Integration Framework: target a hex you HOLD."); return; }
+      const integ = foundry.utils.duplicate(tfOf(doc).integration || {}); const before = Number(integ.progress || 0) || 0; integ.progress = Math.min(6, before + 1);
+      await patchHex(doc, { [`flags.${MODT}.integration`]: integ });
+      await pushWarLog(A, `Integration Framework: ${hexName(doc)} integration ${before} → ${integ.progress}/6.`);
+    },
+    async optact_never_scattered(ctx){ const A = game.actors.get(ctx.factionId); await setNextTurnFlag(A, { borderPatrol: 2 }); await pushWarLog(A, "Never Scattered: infiltration raids against your hexes are refused next turn."); },
+    // occult
+    async optact_guided_ascent(ctx){
+      const A = game.actors.get(ctx.factionId); const wash = game.fourththing?.darkness?.wash; let n = 0;
+      for (const s of stewardsOf(ctx.factionId)) { try { if (typeof wash === "function" && s.isOwner) { await wash(s, 1, "guided_ascent"); n++; } } catch (_e) {} }
+      await pushWarLog(A, `Guided Ascent: ${n} steward(s) washed 1 Darkness.`);
+    },
+    async optact_philosophic_exchange(ctx){ const A = game.actors.get(ctx.factionId); const m = await bumpFactionMeter(A, "morale", +1); await scheduleFactionOP(A, { culture: 10 }, 1); await pushWarLog(A, `Philosophic Exchange: Morale (Empathy) ${m.before} → ${m.after}; +10 marks Culture next turn.`); },
+    async optact_thread_the_spread(ctx){ return this.recon_sweep(ctx); },
+    async optact_doctrine_of_clarity(ctx){ const A = game.actors.get(ctx.factionId); const d = await adjustFactionDarkness(A, -1); await pushWarLog(A, `Doctrine of Clarity: Darkness ${d.before} → ${d.after}.`); },
+    async optact_ritual_binding(ctx){ return this.great_work_ritual(ctx); },
+    async optact_silent_brotherhood(ctx){ return this.courtly_intrigue_council(ctx); }
   };
 
   // ----------------------------

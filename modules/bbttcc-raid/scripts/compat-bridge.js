@@ -145,15 +145,49 @@ const OPTION_L1_SPECS = {
 // L2 Option Strategics: define primary OP + baseline costs + grouping.
 // Some are mechanical-tag queueing (as already implemented), others storyOnly.
 const OPTION_L2_SPECS = {
-  operational_cohesion:   { primaryKey:"violence",   cost:{ violence:10, logistics:10 }, groupOrder: 1 },
-  stability_enforcement:  { primaryKey:"nonlethal",  cost:{ nonlethal:10, economy:10 },  groupOrder: 2, mechTag:"Stability Enforcement" },
-  ritual_binding:         { primaryKey:"intrigue",   cost:{ intrigue:20, faith:10 },     groupOrder: 3 },
-  consecrated_alignment:  { primaryKey:"faith",      cost:{ faith:20, softpower:10 },    groupOrder: 4, mechTag:"Consecrated Alignment" },
-  never_scattered:        { primaryKey:"logistics",  cost:{ logistics:10 },             groupOrder: 5 },
-  thread_the_spread:      { primaryKey:"intrigue",   cost:{ intrigue:10 },              groupOrder: 6 },
-  dynastic_resonance:     { primaryKey:"softpower",  cost:{ softpower:10, diplomacy:10 },groupOrder: 7 },
-  cultural_diffusion:     { primaryKey:"culture",    cost:{ softpower:20, culture:10 },  groupOrder: 8, mechTag:"Cultural Diffusion" },
-  guided_ascent:          { primaryKey:"faith",      cost:{ faith:20 },                 groupOrder: 9 }
+  // Owner blessed the wiring table 2026-09-09 — every L2 row now has a cost AND a
+  // real body (strategic-throughput.js `optact_*` handlers win over apply()).
+  // archetype
+  doctrine_force_projection:   { primaryKey:"violence",   cost:{ violence:10, logistics:10 }, groupOrder: 1 },
+  consecrated_alignment:       { primaryKey:"faith",      cost:{ faith:20, softpower:10 },    groupOrder: 2 },
+  administrative_optimization: { primaryKey:"economy",    cost:{ economy:10, softpower:10 },  groupOrder: 3 },
+  arcane_attribution:          { primaryKey:"intrigue",   cost:{ intrigue:10, softpower:10 }, groupOrder: 4 },
+  dynastic_resonance:          { primaryKey:"softpower",  cost:{ softpower:10, diplomacy:10 },groupOrder: 5 },
+  operational_cohesion:        { primaryKey:"violence",   cost:{ violence:10, logistics:10 }, groupOrder: 6 },
+  // crew
+  contract_warfare_doctrine:   { primaryKey:"violence",   cost:{ violence:10, economy:10 },   groupOrder: 7 },
+  stability_enforcement:       { primaryKey:"nonlethal",  cost:{ nonlethal:10, economy:10 },  groupOrder: 8 },
+  deep_cover_network:          { primaryKey:"intrigue",   cost:{ intrigue:20 },              groupOrder: 9 },
+  cultural_diffusion:          { primaryKey:"culture",    cost:{ softpower:20, culture:10 },  groupOrder: 10 },
+  integration_framework:       { primaryKey:"diplomacy",  cost:{ diplomacy:10, softpower:10 },groupOrder: 11 },
+  never_scattered:             { primaryKey:"logistics",  cost:{ logistics:10 },             groupOrder: 12 },
+  // occult
+  guided_ascent:               { primaryKey:"faith",      cost:{ faith:20 },                 groupOrder: 13 },
+  philosophic_exchange:        { primaryKey:"culture",    cost:{ culture:10, faith:10 },      groupOrder: 14 },
+  thread_the_spread:           { primaryKey:"intrigue",   cost:{ intrigue:10 },              groupOrder: 15 },
+  doctrine_of_clarity:         { primaryKey:"faith",      cost:{ faith:10, intrigue:10 },     groupOrder: 16 },
+  ritual_binding:              { primaryKey:"intrigue",   cost:{ intrigue:20, faith:10 },     groupOrder: 17 },
+  silent_brotherhood:          { primaryKey:"intrigue",   cost:{ intrigue:10, softpower:10 }, groupOrder: 18 }
+};
+const OPTION_L2_TEXT = {
+  doctrine_force_projection:   "Warlord: your next raid gains initiative advantage.",
+  consecrated_alignment:       "Hierophant: aligns the target hex to your steward's own sephirah (a hex already aligned keeps its alignment).",
+  administrative_optimization: "Mayor-Administrator: OP income ×1.05 this turn.",
+  arcane_attribution:          "Wizard-Scholar: the target hex is revealed and a full dossier (holder, defense, loyalty, morale, integration, modifiers, alignment) is whispered to you.",
+  dynastic_resonance:          "Ancient Blood: the target hex's holder moves one step warmer toward you on the relations ladder.",
+  operational_cohesion:        "Squad Leader: your next raid gets one free maneuver.",
+  contract_warfare_doctrine:   "Mercenary Band: Violence cap +10 marks this turn.",
+  stability_enforcement:       "Peacekeeper Corps: removes Hostile Population, adds Patrolled, Loyalty +1 on the target hex.",
+  deep_cover_network:          "Covert Ops Cell: next turn, the target hex holder's OP pools and plans are whispered to you.",
+  cultural_diffusion:          "Cultural Ambassadors: +Loyal Population and Morale +1 on the target hex.",
+  integration_framework:       "Diplomatic Envoys: the target hex you hold gains one Integration step (max 6).",
+  never_scattered:             "Survivors' Militia: next turn, infiltration raids against your hexes are refused.",
+  guided_ascent:               "Kabbalist: every steward of your faction washes 1 Darkness.",
+  philosophic_exchange:        "Alchemist: Morale (Empathy) +1 now and +10 marks Culture next turn.",
+  thread_the_spread:           "Tarot Mage: reveals one fogged hex next to the target and whispers every neighbour's alignment and holder.",
+  doctrine_of_clarity:         "Gnostic: faction Darkness −1.",
+  ritual_binding:              "Goetic Summoner: integrates the dormant spark seated on the target hex (lights a Lamp; debits your Reach).",
+  silent_brotherhood:          "Rosicrucian: immediate intel on the target hex's holder — OP bank, their standing toward you, and what they have planned."
 };
 
 function _prettyTitle(key){
@@ -276,7 +310,7 @@ function buildOptionStrategicDef(key, meta){
   const pretty = _prettyTitle(key);
   const spec = OPTION_L2_SPECS[key] || {};
   const mechTag = spec.mechTag || null;
-  const storyOnly = !mechTag;
+  const storyOnly = false;   // every L2 has an engine body now (2026-09-09) — see strategic-throughput.js optact_* handlers
 
   const opCosts = spec.cost || {};
   const primaryKey = spec.primaryKey || "misc";
@@ -312,9 +346,7 @@ function buildOptionStrategicDef(key, meta){
 
     storyOnly,
     // Tooltip prose (2026-09-08): these rows had none. Honest about the engine.
-    text: storyOnly
-      ? `Character option (L2): ${pretty}. Story-driven — the GM adjudicates its effect on the target this turn; no engine change.`
-      : `Character option (L2): ${pretty}. Queues the "${mechTag}" tag on the target hex at the next Turn Advance.`,
+    text: OPTION_L2_TEXT[key] || `Character option (L2): ${pretty}.`,
     apply: storyOnly ? baseApply : mechApply
   };
 }
