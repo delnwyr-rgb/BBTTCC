@@ -6095,16 +6095,45 @@ function _onBeatResolvedStoryMark({ beat } = {}) {
 // where / why) in the coalition Quest Log, and the party goes and FINDS the
 // NPC. The quest completes itself when the invited moment is actually played
 // (any surface). Authorable `beat.inviteText` replaces the default line.
+// Invitation copy (2026-09-09): Act-1 welcome lines are predicates ("keeps the
+// door open…"), Act-2 conversation lines are full sentences that start with the
+// speaker's name — the card printed "Father Tamsin Father Tamsin keeps…". If the
+// line already names the speaker, render it alone.
+function _inviteLine(actor, inviteText) {
+  const text = String(inviteText || "").trim() || "wants a word.";
+  const words = String(actor?.name || "").toLowerCase().split(/[\s,'’-]+/).filter(w => w.length > 2);
+  const head = text.toLowerCase().split(/[\s,'’]+/).slice(0, 4);
+  const namesItself = words.some(w => head.includes(w));
+  return { text, html: namesItself ? foundry.utils.escapeHTML(text) : `<b>${foundry.utils.escapeHTML(String(actor?.name || ""))}</b> ${foundry.utils.escapeHTML(text)}`, plain: namesItself ? text : `${actor?.name || ""} ${text}` };
+}
+// "A Word from X" ×2 per NPC was indistinguishable in the Quest Log (owner,
+// 2026-09-09). The beat's own label, minus the town prefix and the speaker's
+// name, tells them apart; generic "Conversation"/"Chat with" labels fall back
+// to the act.
+function _inviteQuestName(actor, beat) {
+  const name = String(actor?.name || "Someone");
+  // Town prefix = everything up to the first SPACED dash ("Allesh-Gilliam — …", "Khezek-Tor - …").
+  const short = String(beat?.label || "").replace(/^.+?\s[—–-]\s+/, "").trim();
+  const generic = !short || /\b(conversation|convo)\s*$/i.test(short) || /^(chat|talk)\b/i.test(short);
+  if (generic) {
+    const req = Array.isArray(beat?.inject?.requires) ? beat.inject.requires : (beat?.inject?.requires ? [beat.inject.requires] : []);
+    const act = req.find(r => r && r.flag === "storyPhase" && Number.isFinite(Number(r.gte)))?.gte;
+    return act != null ? `A Word from ${name} (Act ${act})` : `A Word from ${name}`;
+  }
+  return `A Word from ${name} — ${short}`;
+}
+
 async function _postTalkInvitation(actor, beats = []) {
   try {
     const esc = foundry.utils.escapeHTML;
     const first = Array.isArray(beats) ? beats[0] : beats;
-    const inviteText = String(first?.inviteText || "").trim() || "wants a word.";
+    const line = _inviteLine(actor, first?.inviteText);
+    const inviteText = line.text;
     await ChatMessage.create({
       speaker: { alias: "Bad Eden" },
       content: `<div class="bbttcc-talk-invite" style="border-left:3px solid #4db8b0;padding:.45em .6em;background:rgba(77,184,176,.08);">
         <img src="${esc(actor.img || "icons/svg/mystery-man.svg")}" style="width:28px;height:28px;object-fit:cover;border:1px solid #666;border-radius:4px;vertical-align:middle;margin-right:.4em;"/>
-        <b>${esc(actor.name)}</b> ${esc(inviteText)}<br>
+        ${line.html}<br>
         <button type="button" data-bbttcc-invite-accept="${esc(actor.id)}" style="width:auto;padding:.25em .8em;margin-top:.35em;">
           <i class="fa-solid fa-envelope-open-text"></i> Accept the invitation</button>
         <span style="opacity:.65;font-size:.85em;margin-left:.4em;">— logs who wants you, where, and why in the Quest Log.</span>
@@ -6148,17 +6177,19 @@ async function _acceptTalkInvitation(message) {
     || (labelTown && labelTown.length < 40 ? `${labelTown} — ask around town` : "somewhere nearby — ask around town");
   const esc = foundry.utils.escapeHTML;
   const qid = `word_${beatId || actor.id}`;
+  const line = _inviteLine(actor, inviteText);
+  const questName = _inviteQuestName(actor, beat);
   await createQuest(qid, {
-    name: `A Word from ${actor.name}`,
+    name: questName,
     status: "active",
-    description: `<p><b>${esc(actor.name)}</b> ${esc(inviteText)}</p>`
+    description: `<p>${line.html}</p>`
       + `<p><b>Where:</b> ${esc(whereLine)}</p>`
       + (beat?.label ? `<p><b>Regarding:</b> ${esc(String(beat.label))}</p>` : "")
       + `<p><i>They sent this word themselves — when you find them, they'll know you came because they asked.</i></p>`
   });
   const qfx = await _applyQuestEffects(campaign, {
     id: beatId || `talk_invite_${actor.id}`,
-    worldEffects: { questEffects: [{ action: "accept", questId: qid, text: `${actor.name} ${inviteText}` }] }
+    worldEffects: { questEffects: [{ action: "accept", questId: qid, text: line.plain }] }
   }, {});
   // Verify-after-write (2026-09-09): after the "Act 2 Ahoy!" restore the registry
   // held nine accepted Words the coalition track did not — the Quest Log reads
@@ -6175,9 +6206,11 @@ async function _acceptTalkInvitation(message) {
   await ChatMessage.create({
     speaker: { alias: "Bad Eden" },
     content: `<div style="border-left:3px solid #4db8b0;padding:.35em .6em;background:rgba(77,184,176,.06);">
-      📜 <b>A Word from ${esc(actor.name)}</b> — logged in the Quest Log. Find them ${sceneName ? `at <b>${esc(sceneName)}</b>` : "in town"}.</div>`
+      📜 <b>${esc(questName)}</b> — logged in the Quest Log. Find them ${sceneName ? `at <b>${esc(sceneName)}</b>` : "in town"}.</div>`
   });
 }
+// exposed for the rename tool (tools/patch-invite-names.macro.js)
+try { globalThis.__bbttccInviteQuestName = _inviteQuestName; } catch (_e) {}
 
 function _bindTalkInviteButtons(message, root) {
   try {
