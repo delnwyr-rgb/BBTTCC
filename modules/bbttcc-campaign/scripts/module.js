@@ -3093,6 +3093,16 @@ async function _applyQuestEffects(campaign, beat, ctx) {
         if (Object.keys(del).length) await faction.update(del, { render: false });
       } catch (eDel) { console.warn("[bbttcc-campaign] quest bucket deletion sync failed", eDel); }
       await faction.setFlag(MOD, "quests", next);
+      // Verify-after-write (2026-09-09, "all six"): the Quest Log reads THIS flag.
+      // If any row's quest is not where we just put it, rewrite the whole box
+      // once (unset + set), then shout if it still is not there.
+      try {
+        const expect = []; for (const row of rows) { const q = String(row?.questId || "").trim(); if (!q) continue; const a = String(row.action || "accept").toLowerCase(); expect.push([q, a === "complete" || a === "completed" ? "completed" : (a === "archive" || a === "archived") ? "archived" : "active"]); }
+        const has = (t) => expect.every(([q, b]) => !!(t?.[b]?.[q]));
+        let t = faction.getFlag(MOD, "quests");
+        if (!has(t)) { await faction.unsetFlag(MOD, "quests"); await faction.setFlag(MOD, "quests", next); t = faction.getFlag(MOD, "quests"); }
+        if (!has(t)) { console.error("[bbttcc-campaign] quest track write did NOT land", { faction: faction.name, expect, beat: beat?.id }); ui.notifications?.error?.(`⚠ Quest track write failed on ${faction.name} — run tools/quest-log-cleanup.`); }
+      } catch (_eV) {}
     }
     try {
       // Refresh, never OPEN (same popping-sheets fix as the accept path).
@@ -6236,6 +6246,11 @@ function _bindTalkInviteButtons(message, root) {
       if (inv.accepted) {   // already sealed — show state, stay inert
         btn.disabled = true;
         btn.innerHTML = `<i class="fa-solid fa-check"></i> Invitation accepted`;
+        continue;
+      }
+      if (inv.stale) {      // newer than the save that was loaded — its once-gate no longer exists
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> Predates the loaded save`;
         continue;
       }
       if (btn.dataset.bbttccBound) continue;   // v13 fires BOTH render hooks — bind once

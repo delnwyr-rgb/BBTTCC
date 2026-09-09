@@ -847,6 +847,53 @@
   // Global fallback (cannot be wiped by bbttcc API rebuilds)
   globalThis.__bbttcc_auditStrategicThroughput = auditThroughputWiring;
 
+  // ── Plan-time refusals (owner ruling 2026-09-09 "all six"): every activity
+  // whose target must satisfy something says so BEFORE the plan is written, so
+  // no OP is spent on a refusal at resolution. ctx = { actor, targetDoc, targetFlags, activityKey, toHexUuid }.
+  const _tfOwner = (tf) => String(tf?.factionId || tf?.ownerId || "").replace(/^Actor\./, "");
+  const _mine    = ({ actor, targetFlags }) => _tfOwner(targetFlags) === String(actor?.id);
+  const _rival   = ({ actor, targetFlags }) => { const o = _tfOwner(targetFlags); return !!o && o !== String(actor?.id); };
+  const _nm      = (tf) => String(tf?.name || "the hex");
+  const _size    = (tf) => String(tf?.size || "").toLowerCase();
+  const ok = { ok: true }; const no = (reason) => ({ ok: false, reason });
+  const CAN_PLAN = {
+    establish_outpost: (c) => _tfOwner(c.targetFlags) ? no(`${_nm(c.targetFlags)} is already held${_mine(c) ? " by you" : ""} — Establish Outpost claims UNCLAIMED ground.`) : ok,
+    develop_outpost_stability: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to stabilize.`) : (!["outpost","village",""].includes(_size(c.targetFlags)) ? no(`${_nm(c.targetFlags)} is a ${_size(c.targetFlags)} — Develop Outpost is for a young outpost or village.`) : ok),
+    upgrade_outpost_settlement: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to upgrade.`) : (_size(c.targetFlags) !== "outpost" ? no(`${_nm(c.targetFlags)} is a ${_size(c.targetFlags) || "settled hex"} — Upgrade is Outpost → Village; use the Townbuilder above that.`) : ok),
+    establish_trade_route: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours — a trade route starts from a hex you hold.`) : (!c.toHexUuid ? no("Pick a TO hex you hold for the route.") : ok),
+    establish_supply_line:  (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours — a supply line starts from a hex you hold.`) : (!c.toHexUuid ? no("Pick a TO hex you hold for the line.") : ok),
+    smuggling_network:      (c) => !c.toHexUuid ? no("Pick a TO hex you hold — the network needs two ends.") : ok,
+    cultural_exchange:      (c) => !c.toHexUuid ? no("Pick a TO hex — the exchange needs a hex to receive the alignment.") : ok,
+    peace_accords:          (c) => !_rival(c) ? no(`${_nm(c.targetFlags)} has no rival holder to make terms with — target a hex held by ANOTHER faction.`) : ok,
+    resource_expropriation: (c) => !_rival(c) ? no(`${_nm(c.targetFlags)} has no rival holder to expropriate.`) : ok,
+    spy_insertion:          (c) => !_rival(c) ? no(`${_nm(c.targetFlags)} has no rival holder to spy on.`) : ok,
+    courtly_intrigue_council:(c) => !_rival(c) ? no(`${_nm(c.targetFlags)} has no rival holder to intrigue against.`) : ok,
+    alliance_summit:        (c) => { if (!_rival(c)) return no(`${_nm(c.targetFlags)} is not held by another faction — target one of your ALLY's hexes.`); const B = game.actors.get(_tfOwner(c.targetFlags)); const r = game.bbttcc?.api?.factions?.relations; try { if (r?.get && !(r.get(c.actor, B) === "allied" && r.get(B, c.actor) === "allied")) return no(`${B?.name || "that faction"} is not a mutual ally — no summit.`); } catch (_e) {} return ok; },
+    judgment_of_light:      (c) => !_rival(c) ? no(`${_nm(c.targetFlags)} is not a rival's hex — Judgment of Light purifies ANOTHER faction's ground.`) : ok,
+    psych_ops_broadcast:    (c) => !_rival(c) ? no(`${_nm(c.targetFlags)} has no rival populace to broadcast at.`) : ok,
+    industrial_sabotage:    (c) => !_rival(c) ? no(`${_nm(c.targetFlags)} has no rival holder to sabotage.`) : ok,
+    apocalyptic_weapon_test:(c) => _mine(c) ? no(`${_nm(c.targetFlags)} is YOURS — you would be bombing yourself.`) : ok,
+    project_eden:           (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours — Project Eden grows a Garden City on ground you HOLD.`) : ok,
+    terraforming_project:   (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to cleanse — target a hex you HOLD.`) : ok,
+    sanctum_expansion:      (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours — Blessed Ground goes on a hex you HOLD.`) : ok,
+    industrial_revolution:  (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours — the revolution happens in YOUR works.`) : ok,
+    pilgrimage_route:       (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours — the route blesses a hex you HOLD.`) : ok,
+    ration_distribution:    (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours — rations go to a hex you HOLD.`) : ok,
+    great_work_ritual:      (c) => (c.targetFlags?.spark?.key ? ok : no(`${_nm(c.targetFlags)} has no spark seated — nothing to integrate.`)),
+    optact_integration_framework: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to integrate.`) : ok,
+    optact_consecrated_alignment: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to consecrate.`) : ok,
+    optact_dynastic_resonance: (c) => !_rival(c) ? no(`${_nm(c.targetFlags)} has no other holder to warm toward you.`) : ok,
+    optact_deep_cover_network: (c) => !_rival(c) ? no(`${_nm(c.targetFlags)} has no rival holder to infiltrate.`) : ok,
+    optact_silent_brotherhood: (c) => !_rival(c) ? no(`${_nm(c.targetFlags)} has no rival holder to read.`) : ok
+  };
+  function attachCanPlan(){
+    try {
+      const EFFECTS = game.bbttcc?.api?.raid?.EFFECTS || {}; let n = 0;
+      for (const [k, fn] of Object.entries(CAN_PLAN)) { const e = EFFECTS[k]; if (e && typeof e.canPlan !== "function") { e.canPlan = async (c) => { try { return fn(c) || ok; } catch (_e) { return ok; } }; n++; } }
+      return n;
+    } catch (_e) { return 0; }
+  }
+
   function attach(){
     game.bbttcc = game.bbttcc || { api:{} };
     game.bbttcc.api = game.bbttcc.api || {};
@@ -858,7 +905,10 @@
 
     game.bbttcc.api.auditStrategicThroughput = auditThroughputWiring;
     game.bbttcc.api.turn.auditStrategicThroughput = auditThroughputWiring;
+    game.bbttcc.api.raid.CAN_PLAN = CAN_PLAN;
+    attachCanPlan();
   }
+  Hooks.once("ready", () => { for (const ms of [0, 600, 2000, 5000]) setTimeout(attachCanPlan, ms); });
 
   function boot(){
     attach();

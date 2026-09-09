@@ -2785,7 +2785,10 @@ const doctrine = await (async () => {
         key: k0
       };
     })
-    .sort((a,b)=> String(a.name||"").localeCompare(String(b.name||"")));
+    .sort((a,b)=> String(a.name||"").localeCompare(String(b.name||"")))
+    // Duplicate doctrine items (same kind+key granted more than once) collapse to
+    // one row with a ×N badge (2026-09-09); tools/dedupe-doctrine-items removes them.
+    .reduce((acc, row) => { const k = `${row.kind || ""}:${String(row.key || "").toLowerCase()}`; const prev = k !== ":" ? acc.find(r => `${r.kind || ""}:${String(r.key || "").toLowerCase()}` === k) : null; if (prev) { prev.dupes = (prev.dupes || 1) + 1; prev.name = String(prev.name || "").replace(/ ×\d+$/, "") + ` ×${prev.dupes}`; } else acc.push(row); return acc; }, []);
 
   // Courtly Secrets are NOT doctrine items — they're items flagged
   // flags.bbttcc-raid.secret (effectKey + acquisition). List them for the

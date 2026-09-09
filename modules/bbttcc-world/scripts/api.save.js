@@ -272,6 +272,17 @@
           report.journal++;
         } catch (e) { report.errors.push(`journal ${j.name}: ${e?.message || e}`); }
       }
+      // 5. chat hygiene (2026-09-09): saves don't carry chat, so invitation cards
+      //    written AFTER this slot still show live Accept buttons — but their
+      //    Director once-gates were just rolled back. Seal them.
+      try {
+        const cutoff = Number(snap.at) || 0; report.staleCards = 0;
+        for (const m of game.messages ?? []) {
+          const inv = m.getFlag?.("bbttcc-campaign", "talkInvite");
+          if (!inv || inv.accepted || inv.stale) continue;
+          if (Number(m.timestamp) > cutoff) { await m.setFlag("bbttcc-campaign", "talkInvite", Object.assign({}, inv, { stale: true, staleReason: `loaded save "${row.label}"` })); report.staleCards++; }
+        }
+      } catch (e) { report.errors.push(`chat hygiene: ${e?.message || e}`); }
     } finally {
       game.bbttcc.saveRestoreActive = false;
     }
@@ -281,6 +292,7 @@
         whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
         content: `<div class="bbttcc-card"><b>💾 Save loaded: ${foundry.utils.escapeHTML(row.label)}</b><br/>` +
           `${report.settings} settings · actors ${report.actorsUpdated} updated / ${report.actorsCreated} created / ${report.actorsDeleted} deleted · ${report.scenes} scenes (${report.drawings} drawings, ${report.tokens} tokens) · ${report.journal} journal` +
+          (report.staleCards ? ` · ${report.staleCards} newer invitation card(s) sealed` : "") +
           (report.errors.length ? `<br/><span style="color:#f87171">${report.errors.length} error(s) — see console</span>` : "") +
           `<br/><i>All clients reload now.</i></div>`
       });
