@@ -2796,7 +2796,14 @@ if (game.bbttcc?.runVisuals) {
             const p = findHexAtPoint(tok.center);
             if (p) fromHex = hexes.find(h => h.id === p.id) || null;
           }
-          if (toHex && fromHex && fromHex.id !== toHex.id) {
+          // No token on the map? The coalition's recorded position (every arrival writes it — 2026-09-09).
+          if (!fromHex && facId) {
+            try { const w = game.bbttcc?.api?.travel?.whereIs?.(facId); if (w?.doc) fromHex = hexes.find(h => h.uuid === w.hexUuid || h.id === w.doc.id) || null; } catch (_eW) {}
+          }
+          if (toHex && fromHex && fromHex.id === toHex.id) {
+            if ($rt) $rt.value = toHex.uuid;
+            setPickStatus(`You are already at ${toHex.label} — nothing to ride. Close the console, or pick another destination.`);
+          } else if (toHex && fromHex && fromHex.id !== toHex.id) {
             autoPlanRoute(fromHex, toHex);
           } else if (toHex) {
             if ($rt) $rt.value = toHex.uuid;

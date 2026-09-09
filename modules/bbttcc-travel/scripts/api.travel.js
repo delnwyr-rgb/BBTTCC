@@ -702,6 +702,11 @@
     const campaign = getCampaignById(campaignId);
     if (!campaign) { warn("Hex enter skipped: campaign not found", campaignId); return; }
 
+    // "You are here" (2026-09-09): every arrival records the coalition's position
+    // on the faction actor — the Travel Console and openTravel read it back when
+    // no faction token stands on the map (a restore can leave the map tokenless).
+    try { await _recordPosition((ctx && ctx.factionId) || (opts && opts.factionId) || null, to, hexUuid); } catch (_eP) {}
+
     const beatIds = readOnEnterBeatIds(campaign, hexUuid, to);
     const beatId = beatIds[0] || null;
 
@@ -1228,12 +1233,38 @@
     } catch (_e) {}
     return null;
   }
+  async function _recordPosition(factionId, to, hexUuid) {
+    const fid = String(factionId || "").replace(/^Actor\./, ""); if (!fid || !game.user?.isGM) return;
+    const A = game.actors.get(fid); if (!A) return;
+    const doc = (to && to.document) ? to.document : to;
+    const name = String(doc?.flags?.["bbttcc-territory"]?.name || "").replace(/[\s ]+/g, " ").trim();
+    const cur = A.getFlag("bbttcc-factions", "travel") || {};
+    if (cur.atHexUuid === hexUuid) return;
+    await A.setFlag("bbttcc-factions", "travel", Object.assign({}, cur, { atHexUuid: hexUuid, atHexName: name, ts: Date.now() }));
+  }
+  // GM convenience: pin the coalition to a hex by uuid or name (after a restore, or a From-the-Top).
+  async function setPosition(factionId, hexRef) {
+    const fid = String(factionId || "").replace(/^Actor\./, "");
+    let doc = null;
+    try { const r = await fromUuid(String(hexRef)); doc = r?.document ?? r; } catch (_e) {}
+    if (!doc) {
+      const want = String(hexRef || "").replace(/[\s ]+/g, " ").trim().toLowerCase();
+      for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) { const n = String(d.flags?.["bbttcc-territory"]?.name || "").replace(/[\s ]+/g, " ").trim().toLowerCase(); if (n && n === want) { doc = d; break; } if (doc) break; }
+    }
+    if (!doc) return { ok: false, reason: "hex not found" };
+    await _recordPosition(fid, { document: doc }, doc.uuid);
+    return { ok: true, hexUuid: doc.uuid, name: doc.flags?.["bbttcc-territory"]?.name || "" };
+  }
   function whereIs(factionId) {
     const fid = String(factionId || "").replace(/^Actor\./, "");
     try {
       const sess = fid ? rideGet(fid) : null;
       const fromUuid = sess?.legs?.[0]?.fromUuid;
       if (fromUuid) { const d = fromUuidSync(fromUuid); const doc = d?.document ?? d; if (doc) return { hexUuid: doc.uuid, doc, name: String(doc.flags?.["bbttcc-territory"]?.name || ""), via: "ride" }; }
+    } catch (_e) {}
+    try {
+      const rec = fid ? game.actors.get(fid)?.getFlag?.("bbttcc-factions", "travel") : null;
+      if (rec?.atHexUuid) { const d = fromUuidSync(rec.atHexUuid); const doc = d?.document ?? d; if (doc) return { hexUuid: doc.uuid, doc, name: String(doc.flags?.["bbttcc-territory"]?.name || rec.atHexName || ""), via: "recorded", ts: rec.ts }; }
     } catch (_e) {}
     try {
       const hub = (canvas?.scene?.flags?.["bbttcc-travel"]?.isWorldHub ? canvas.scene : null) || game.scenes?.find?.(sc => sc.flags?.["bbttcc-travel"]?.isWorldHub) || null;
@@ -1291,6 +1322,7 @@
     // the hex the party already stands on skips the console and just arrives.
     api.travel.whereIs = whereIs;
     api.travel.arriveAt = arriveAt;
+    api.travel.setPosition = setPosition;
 
     // RideSession (Phase 2): the ride as a persisted, seat-safe object.
     api.travel.rideSession = {
