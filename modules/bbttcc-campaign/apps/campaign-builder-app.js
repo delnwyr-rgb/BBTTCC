@@ -1489,8 +1489,8 @@ const activeCampaignId = _getActiveCampaignId();
           qGated = qNext ? null : (qRouted[0] || null);
         }
         if (qNext) {
-          hero = card("⏭ NEXT — quest order", qNext.label || qNext.id, qNext, [run(qNext, "Run the next beat")],
-            `no authored route after “${lastName}” — following the quest's canonical order`);
+          hero = card("★ RECOMMENDED NEXT — quest order", qNext.label || qNext.id, qNext, [run(qNext, "Run the recommended beat")],
+            `no authored route after “${lastName}” — the quest's canonical order. Any accepted quest below is fair game instead.`);
         } else if (qGated && sealOf(qGated)) {
           hero = sealCard(qGated, "NEXT (quest order)", lastName);
         } else if (qGated) {
@@ -1623,6 +1623,55 @@ const activeCampaignId = _getActiveCampaignId();
       heroHtml +
       chainsHtml;
 
+    // ── IN PLAY (owner ruling 2026-09-09: Act 2 is open-world — the story
+    //    order is a RECOMMENDATION; accepted-but-unfinished quests are the
+    //    real menu, any order, drop one and come back) ───────────────────
+    let inPlayHtml = "";
+    try {
+      const facRef = String(campaign.factionId || (campaign.factionIds || [])[0] || "").replace(/^Actor\./, "");
+      const fac = facRef ? game.actors.get(facRef) : null;
+      const track = fac?.getFlag?.("bbttcc-factions", "quests") || {};
+      const activeIds = Object.keys(track.active || {});
+      const beatsArr = Array.isArray(campaign.beats) ? campaign.beats : [];
+      const idx = new Map(beatsArr.map((b, i) => [String(b?.id), i]));
+      const ordKey = b => [Number.isFinite(Number(b?.questStep)) ? Number(b.questStep) : 1e9, idx.get(String(b?.id)) ?? 1e9];
+      const hexName = (id) => { for (const sc of game.scenes ?? []) { const d = sc.drawings?.get?.(id); if (d) return String(d.flags?.["bbttcc-territory"]?.name || "").replace(/\s+/g, " ").trim(); } return ""; };
+      const whereOf = (qd, b) => {
+        const hx = (qd?.hexIds || []).map(hexName).filter(Boolean); if (hx.length) return hx.join(" · ");
+        const sid = String(b?.sceneId || "").replace(/^Scene\./, ""); const sc = sid ? game.scenes?.get?.(sid) : null; return sc ? String(sc.name) : "";
+      };
+      const recQ = String(sit.hero?.beat?.questId || sit.anchorQuestId || "");
+      const rows = [];
+      const words = [];
+      const sortedIds = activeIds.slice().sort((a, b) => (a === recQ ? -1 : b === recQ ? 1 : 0) || (Number(track.active[a]?.acceptedTs) || 0) - (Number(track.active[b]?.acceptedTs) || 0));
+      for (const qid of sortedIds) {
+        const e = track.active[qid] || {};
+        if (qid.startsWith("word_")) {   // an invitation: its "next" is the conversation beat itself
+          const bid = qid.slice(5); const b = beatById[bid]; const st = runtime.byId[bid]?.state;
+          words.push(flyBtn(bid, e.questName || qid, st === "ready" ? "⚡" : (st === "fired" ? "✓" : "⛩"), st === "ready"));
+          continue;
+        }
+        const qd = sit.questDefs[qid] || null; const name = e.questName || sit.questNames[qid] || qid;
+        const qBeats = beatsArr.filter(b => _flowQuestIdOf(b) === qid).sort((a, b) => { const A = ordKey(a), B = ordKey(b); return A[0] - B[0] || A[1] - B[1]; });
+        const fired = qBeats.filter(b => sit.firedSet.has(String(b.id))).length;
+        const unfired = qBeats.filter(b => !sit.firedSet.has(String(b.id)) && b.dialogueOffer !== false && !b.pacing?.ambient);
+        const next = unfired.find(b => runtime.byId[String(b.id)]?.state === "ready") || unfired[0] || null;
+        const eligible = next ? runtime.byId[String(next.id)]?.state === "ready" : false;
+        const pct = qBeats.length ? Math.round((fired / qBeats.length) * 100) : 0;
+        const where = whereOf(qd, next);
+        rows.push(
+          `<div class="bbttcc-now-chain${qid === recQ ? " rec" : ""}" data-tooltip="${qid === recQ ? "Recommended — the story order's pick. " : ""}Accepted, not finished. Any order is fine.">` +
+          `<div class="hd"><span class="nm">${qid === recQ ? "★ " : "◇ "}${esc(name)}</span><span class="ct">${fired}/${qBeats.length}${where ? ` · ${esc(where)}` : ""}</span></div>` +
+          `<div class="bar"><i style="width:${pct}%"></i></div>` +
+          (next ? flyBtn(next.id, "→ " + (next.label || next.id), eligible ? "⚡" : "⛩", eligible) : `<div class="done">no unfired step</div>`) +
+          `</div>`);
+      }
+      if (rows.length || words.length) {
+        inPlayHtml = (rows.join("") || `<div class="bbttcc-now-empty">no quests accepted</div>`) +
+          (words.length ? `<div class="bbttcc-now-kv"><span class="k">WORDS TO ANSWER</span></div>` + words.join("") : "");
+      }
+    } catch (eIP) { console.warn(TAG, "in-play block failed", eIP); }
+
     // ── RECENT ───────────────────────────────────────────────────────────
     const recentHtml = sit.recent.map(r =>
       flyBtn(r.id, r.label, `${r.quest ? `<em>${esc(r.quest)}</em> ` : ""}${r.turn != null ? `T${esc(String(r.turn))}` : ""}`)
@@ -1657,6 +1706,7 @@ const activeCampaignId = _getActiveCampaignId();
       (runtime.ledger ? `<span>${esc(String(runtime.ledger.spent))}/${esc(String(runtime.ledger.budget))} days${Number(runtime.ledger.debt) ? ` · debt ${esc(String(runtime.ledger.debt))}` : ""}</span>` : "") +
       `</div>` +
       block("▶ NOW", nowHtml) +
+      (inPlayHtml ? block("🧭 IN PLAY — any order", inPlayHtml) : "") +
       block("✓ RECENT", recentHtml) +
       block("🔒 LOCKED", lockedHtml);
 

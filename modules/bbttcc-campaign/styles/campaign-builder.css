@@ -1570,3 +1570,7 @@
 .bbttcc-campaign-builder-root .bbttcc-now-sub summary {
   cursor: pointer; font-size: 11.5px; color: var(--cb-text-muted, #94a3b8); padding: 3px 7px;
 }
+
+/* IN PLAY (2026-09-09): the recommended quest is starred, not enforced */
+.bbttcc-campaign-builder-root .bbttcc-now-chain.rec .hd .nm { color: #facc15; }
+.bbttcc-campaign-builder-root .bbttcc-now-chain.rec .bar i { background: #facc15; }
