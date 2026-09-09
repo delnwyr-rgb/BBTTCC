@@ -321,6 +321,28 @@
       }
     };
 
+    // Found Site gives a FRESH hex its identity — an outpost or village that is
+    // still generic. A hex has exactly one `type` (Townbuilder ruling 2026-07-15:
+    // ~25 call sites; a second establishment ships as a DISTRICT at City size,
+    // never as a type change). Run against Allesh-Gilliam on 2026-09-08 this
+    // overwrote the town's type with "farm" — the town's yields, menu and
+    // upkeep table all switched. Refuse established settlements and point at
+    // Townbuilder → Found District instead.
+    const ESTABLISHED_SIZES = new Set(["town", "city", "metropolis", "megalopolis"]);
+    const SITE_TYPE_KEYS = new Set([...Object.keys(SITE_TYPES), "factory"]);
+    function foundSiteBlock(f, spec, hexName){
+      const type = String(f?.type || "").toLowerCase();
+      const size = String(f?.size || "").toLowerCase();
+      const built = Array.isArray(f?.settlement?.assets) && f.settlement.assets.length > 0;
+      const name = hexName || f?.name || "This hex";
+      const hint = `To add a ${spec.type} here, open the Hex Sheet → Townbuilder → 🏛️ Found District (district slots unlock at City size).`;
+      if (type === spec.type) return `${name} already is a ${spec.type}.`;
+      if (ESTABLISHED_SIZES.has(size)) return `${name} is already an established ${size}${type ? ` (${type})` : ""}. ${spec.label} gives a fresh outpost or village its identity. ${hint}`;
+      if (SITE_TYPE_KEYS.has(type)) return `${name} is already a ${type} — a hex has one identity. ${hint}`;
+      if (built) return `${name} already has buildings raised on it — its identity is set. ${hint}`;
+      return null;
+    }
+
     for (const [key, spec] of Object.entries(SITE_TYPES)) {
       const effKey = `found_site_${key}`;
       EFFECTS[effKey] = Object.assign({}, EFFECTS[effKey], {
@@ -328,18 +350,26 @@
         band:  "standard",
         label: EFFECTS[effKey]?.label || spec.label,
         cost:  EFFECTS[effKey]?.cost  || copy(spec.cost),
-        description: EFFECTS[effKey]?.description || `Found a new ${key} site at a developed settlement.`,
+        description: EFFECTS[effKey]?.description || `Give a fresh outpost or village its identity as a ${key}: sets the hex type, adds ${(spec.addMods || []).join(", ")}, and shifts its yields. Established towns keep their type — add a ${key} DISTRICT through the Townbuilder instead.`,
+        // Plan-time refusal (raid-planner planActivity honours canPlan) — no OP moves.
+        async canPlan({ targetFlags, targetDoc }){
+          const why = foundSiteBlock(targetFlags || targetDoc?.flags?.[MOD_T] || {}, spec, targetFlags?.name);
+          return why ? { ok:false, reason: why } : { ok:true };
+        },
         async apply({ actor, entry }){
           if (!entry?.targetUuid) return "No target selected.";
           const doc = await getHexDocumentFromEntry(entry);
           if (!doc) return "Target is not a valid hex Drawing/Tile.";
 
-          await queueHexUpdate(doc, (f)=>{
-            const status = String(f.status || "").toLowerCase();
-            if (status !== "claimed" && status !== "occupied" && status !== "contested") {
-              // allow but warn in message
-            }
+          // Belt and braces for entries planned before the canPlan gate existed.
+          // OP was paid at resolution — the Strategic Activity Ledger's ↩ Back out refunds it.
+          const blockWhy = foundSiteBlock(doc.flags?.[MOD_T] || {}, spec, entry.targetName);
+          if (blockWhy) {
+            console.warn(TAG, effKey, "refused:", blockWhy);
+            return `${spec.label} REFUSED — ${blockWhy} (OP already paid this turn: use ↩ Back out in Hex Config → Strategic Activity History to refund.)`;
+          }
 
+          await queueHexUpdate(doc, (f)=>{
             f.type = spec.type;
             f.modifiers = Array.isArray(f.modifiers) ? f.modifiers.slice() : [];
             for (const m of spec.addMods || []) {

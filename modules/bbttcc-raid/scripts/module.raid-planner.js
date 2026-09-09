@@ -2026,6 +2026,7 @@ wrap.appendChild(top);
               await game.bbttcc.api.raid.planActivity({ attackerId, targetUuid, activityKey, note, toHexUuid });
             }
           } catch (e) {
+            if (e?.bbttccRefused) { ui.notifications?.warn?.(String(e.message || "That activity can't target this hex.")); return; }
             console.error(e);
             ui.notifications?.error?.("Failed to plan activity (see console).");
             return;
@@ -2144,6 +2145,23 @@ Hooks.once("init",()=>{
       const tdoc = target?.document ?? target;
       const tf = tdoc?.getFlag?.(TERR_ID) || tdoc?.flags?.[TERR_ID] || {};
       resolvedTargetName = tf?.name || tdoc?.text || tdoc?.id || "Unknown Hex";
+
+      // Plan-time target check (2026-09-08): an effect may declare
+      // canPlan({ actor, targetDoc, targetFlags, activityKey }) → { ok, reason }.
+      // OP is paid at turn resolution, so refusing HERE is the only refusal
+      // that costs the faction nothing (Found Farm on Allesh-Gilliam overwrote
+      // the town's type before this existed).
+      try {
+        const eff = (raidAPI.EFFECTS || {})[String(activityKey)];
+        if (eff && typeof eff.canPlan === "function") {
+          const verdict = await eff.canPlan({ actor: attacker, targetDoc: tdoc, targetFlags: tf, activityKey: String(activityKey), toHexUuid });
+          if (verdict && verdict.ok === false) {
+            const err = new Error(String(verdict.reason || "This activity can't target that hex."));
+            err.bbttccRefused = true;
+            throw err;
+          }
+        }
+      } catch (eCan) { if (eCan?.bbttccRefused) throw eCan; console.warn("[bbttcc-raid-planner] canPlan check failed (fail-open)", eCan); }
 
       let toHexName = null;
       if (toHexUuid) {
