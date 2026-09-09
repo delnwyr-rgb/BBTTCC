@@ -2774,14 +2774,17 @@ if (game.bbttcc?.runVisuals) {
           const toHex = hexes.find(h => _pfNorm(h.label) === _pfNorm(pf.toName)) || null;
           let fromHex = null;
           let facId = $fac?.value || "";
-          let tok = (facId ? canvas?.tokens?.placeables?.find(t => t?.actor?.id === facId) : null)
+          // The party is the faction's own token OR one of its stewards' tokens (2026-09-09 — the
+          // table rides on Marginalia's token, not on an Errata Society token).
+          const _isPartyOf = (t, id) => { const a = t?.actor; const f = a?.flags?.["bbttcc-factions"]; return !!a && (a.id === id || String(f?.factionId || "").replace(/^Actor\./, "") === id); };
+          let tok = (facId ? canvas?.tokens?.placeables?.find(t => _isPartyOf(t, facId)) : null)
                  || canvas?.tokens?.controlled?.[0] || null;
           // The default faction may have no token here (the GM's owned list is
           // alphabetical) — prefer whichever owned faction actually STANDS on
           // this map, and switch the dropdown to it so the plan matches.
           if (!tok) {
             for (const f of factions) {
-              const t2 = canvas?.tokens?.placeables?.find(t => t?.actor?.id === f.id);
+              const t2 = canvas?.tokens?.placeables?.find(t => _isPartyOf(t, f.id));
               if (t2) {
                 tok = t2; facId = f.id;
                 if ($fac && $fac.value !== f.id) {

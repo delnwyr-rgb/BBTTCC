@@ -1266,15 +1266,22 @@
       const rec = fid ? game.actors.get(fid)?.getFlag?.("bbttcc-factions", "travel") : null;
       if (rec?.atHexUuid) { const d = fromUuidSync(rec.atHexUuid); const doc = d?.document ?? d; if (doc) return { hexUuid: doc.uuid, doc, name: String(doc.flags?.["bbttcc-territory"]?.name || rec.atHexName || ""), via: "recorded", ts: rec.ts }; }
     } catch (_e) {}
+    // Token search — the party is the faction's OWN token or any of its stewards'
+    // tokens, on whichever hex-bearing scene it stands (the current scene first).
     try {
-      const hub = (canvas?.scene?.flags?.["bbttcc-travel"]?.isWorldHub ? canvas.scene : null) || game.scenes?.find?.(sc => sc.flags?.["bbttcc-travel"]?.isWorldHub) || null;
-      if (!hub) return null;
-      const tokens = (hub.tokens?.contents ?? hub.tokens ?? []).filter(t => { const a = t.actor || game.actors.get(t.actorId); const f = a?.flags?.["bbttcc-factions"]; return a && (String(f?.factionId || "") === fid || a.id === fid); });
-      const pick = tokens[0] || (canvas?.scene?.id === hub.id ? canvas.tokens?.controlled?.[0]?.document : null);
-      if (!pick) return null;
-      const w = Number(pick.width || 1) * hub.grid.size, h = Number(pick.height || 1) * hub.grid.size;
-      const doc = _hexDocContaining(hub, Number(pick.x) + w / 2, Number(pick.y) + h / 2);
-      return doc ? { hexUuid: doc.uuid, doc, name: String(doc.flags?.["bbttcc-territory"]?.name || ""), via: "token" } : null;
+      const isParty = (t) => { const a = t.actor || game.actors.get(t.actorId); const f = a?.flags?.["bbttcc-factions"]; return !!a && (a.id === fid || String(f?.factionId || "").replace(/^Actor\./, "") === fid); };
+      const hasHexes = (sc) => (sc.drawings?.contents ?? sc.drawings ?? []).some(d => { const f = d.flags?.["bbttcc-territory"]; return !!f && (f.isHex || f.kind === "territory-hex" || f.name); });
+      const scenes = [canvas?.scene, game.scenes?.active, ...(game.scenes?.contents ?? [])].filter((sc, i, arr) => sc && arr.findIndex(x => x?.id === sc.id) === i && hasHexes(sc));
+      for (const sc of scenes) {
+        const toks = (sc.tokens?.contents ?? sc.tokens ?? []).filter(isParty);
+        const pick = toks[0] || (canvas?.scene?.id === sc.id ? canvas.tokens?.controlled?.[0]?.document : null);
+        if (!pick) continue;
+        const gs = Number(sc.grid?.size || 100);
+        const w = Number(pick.width || 1) * gs, h = Number(pick.height || 1) * gs;
+        const doc = _hexDocContaining(sc, Number(pick.x) + w / 2, Number(pick.y) + h / 2);
+        if (doc) return { hexUuid: doc.uuid, doc, name: String(doc.flags?.["bbttcc-territory"]?.name || ""), via: "token", sceneId: sc.id };
+      }
+      return null;
     } catch (_e) { return null; }
   }
   async function arriveAt(hexUuid, opts = {}) {
