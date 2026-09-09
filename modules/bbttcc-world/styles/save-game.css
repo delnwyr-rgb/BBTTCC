@@ -1,0 +1,36 @@
+/* bbttcc-world — Save Games window */
+.bbttcc-save-game-app .window-content { padding: .6rem .8rem; }
+.bbttcc-save-game { display: flex; flex-direction: column; gap: .6rem; font-size: .92rem; }
+.bbttcc-save-game .sg-head { display: flex; justify-content: space-between; align-items: flex-start; gap: .75rem; }
+.bbttcc-save-game .sg-title { font-weight: 800; font-size: 1.3rem; }
+.bbttcc-save-game .sg-sub { font-size: .82rem; opacity: .8; }
+.bbttcc-save-game .sg-sub code { font-size: .78rem; }
+.bbttcc-save-game fieldset.sg-new { border: 1px solid rgba(255,255,255,.14); border-radius: 10px; padding: .5rem .6rem; }
+.bbttcc-save-game fieldset.sg-new legend { padding: 0 .35rem; opacity: .9; }
+.bbttcc-save-game .sg-new-row { display: flex; gap: .5rem; align-items: center; }
+.bbttcc-save-game .sg-new-row input[type="text"] { flex: 1 1 auto; }
+.bbttcc-save-game .sg-check { display: flex; gap: .3rem; align-items: center; white-space: nowrap; }
+.bbttcc-save-game .sg-save { white-space: nowrap; font-weight: 700; }
+.bbttcc-save-game .sg-warn { color: #fbbf24; font-size: .82rem; margin-top: .35rem; }
+.bbttcc-save-game .sg-golden {
+  display: flex; gap: .6rem; align-items: center; padding: .45rem .6rem; border-radius: 10px;
+  border: 1px solid rgba(251,191,36,.55); background: rgba(251,191,36,.10);
+}
+.bbttcc-save-game .sg-golden .star, .bbttcc-save-game .star { color: #fbbf24; font-size: 1.1rem; }
+.bbttcc-save-game .sg-golden span:nth-child(2) { flex: 1 1 auto; }
+.bbttcc-save-game table.sg-table { width: 100%; border-collapse: collapse; }
+.bbttcc-save-game table.sg-table th { text-align: left; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; opacity: .7; padding: .2rem .4rem; border-bottom: 1px solid rgba(255,255,255,.15); }
+.bbttcc-save-game table.sg-table td { padding: .35rem .4rem; border-bottom: 1px solid rgba(255,255,255,.07); vertical-align: top; }
+.bbttcc-save-game table.sg-table tr.is-golden td { background: rgba(251,191,36,.06); }
+.bbttcc-save-game td.c { text-align: center; }
+.bbttcc-save-game td.nw { white-space: nowrap; }
+.bbttcc-save-game .sg-by { font-size: .74rem; }
+.bbttcc-save-game .sg-sum { font-size: .78rem; }
+.bbttcc-save-game td.acts { display: flex; gap: .25rem; }
+.bbttcc-save-game td.acts .button { padding: .15rem .45rem; line-height: 1.4; }
+.bbttcc-save-game .sg-load { border-color: rgba(74,222,128,.6); color: #bbf7d0; background: rgba(34,197,94,.14); }
+.bbttcc-save-game .sg-load:hover { background: rgba(34,197,94,.3); }
+.bbttcc-save-game .sg-del:hover { border-color: rgba(248,113,113,.7); color: #f87171; }
+.bbttcc-save-game .sg-foot { display: flex; align-items: center; gap: .75rem; }
+.bbttcc-save-game .sg-import { cursor: pointer; }
+.bbttcc-save-game .sg-status { flex: 1 1 auto; font-size: .82rem; opacity: .85; }

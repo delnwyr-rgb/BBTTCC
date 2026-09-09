@@ -1,7 +1,7 @@
 {
   "id": "bbttcc-world",
   "title": "World State Engine",
-  "description": "World-state spine + GM God Panel (World State Manual Edit).",
+  "description": "World-state spine + GM God Panel (World State Manual Edit) + Save Games (full world save slots, golden master).",
   "version": "0.1.0",
   "authors": [
     {
@@ -11,10 +11,14 @@
   "esmodules": [
     "scripts/api.world.js",
     "scripts/module.js",
-    "apps/world-gm-panel.js"
+    "apps/world-gm-panel.js",
+    "scripts/api.save.js",
+    "apps/save-game-app.js",
+    "scripts/save-toolbar-button.js"
   ],
   "styles": [
-    "styles/world-gm-panel.css"
+    "styles/world-gm-panel.css",
+    "styles/save-game.css"
   ],
   "packs": [],
   "compatibility": {

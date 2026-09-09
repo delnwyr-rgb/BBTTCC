@@ -158,6 +158,7 @@
     <button type="button" class="ft-hexcfg-tab active" data-ft-tab="overview">Overview</button>
     <button type="button" class="ft-hexcfg-tab" data-ft-tab="resources">Modifiers &amp; Resources</button>
     <button type="button" class="ft-hexcfg-tab" data-ft-tab="leylines">Leylines</button>
+    {{#if isGM}}<button type="button" class="ft-hexcfg-tab" data-ft-tab="scenes">Scenes &amp; Layers</button>{{/if}}
     {{#if isGM}}<button type="button" class="ft-hexcfg-tab" data-ft-tab="gm">GM Overrides</button>{{/if}}
   </nav>
 
@@ -444,6 +445,10 @@
     </div>
 
     {{#if isGM}}
+    <!-- TAB: SCENES & LAYERS (aerial / dive / battle-scene panels inject here — 2026-09-08) -->
+    <div class="col ft-hexcfg-panel" data-ft-tab-panel="scenes">
+      <p class="hint" data-ft-scenes-placeholder>Altitude, depth and battle-scene links for this hex appear here.</p>
+    </div>
     <!-- TAB: GM OVERRIDES (manual-edit panel injects here) -->
     <div class="col ft-hexcfg-panel" data-ft-tab-panel="gm">
       <p class="hint" data-ft-gm-placeholder>The GM manual-edit panel appears here when <strong>GM Edit Mode</strong> is enabled in the Bad Eden Core (bbttcc-core) settings.</p>

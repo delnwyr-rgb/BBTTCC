@@ -92,7 +92,11 @@
 
   function bumpIntegrationProgress(f, amt=1){
     const integ = integrationFor(f).integration;
-    integ.progress = Number(integ.progress || 0) + Number(amt || 0);
+    // Integration is a 0–6 track everywhere else (territory-integration,
+    // effects-integration-activities, epic repair all clamp). This was the one
+    // writer that didn't — Allesh-Gilliam read 7/6 after a second founding
+    // activity (live-caught 2026-09-08).
+    integ.progress = Math.max(0, Math.min(6, Number(integ.progress || 0) + Number(amt || 0)));
     f.integration = integ;
   }
 

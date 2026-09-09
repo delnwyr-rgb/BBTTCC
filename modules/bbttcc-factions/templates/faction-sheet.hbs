@@ -417,12 +417,27 @@
                 <input type="number" min="0" step="1" value="{{fx.darkness.global}}" data-gm-track="darkness"/>
               </div>
               <div class="bbttcc-field" style="min-width:140px;">
+                <label>Build Units (BU)</label>
+                <input type="number" min="0" step="1" value="{{fx.buildUnits}}" data-gm-track="buildUnits" data-tooltip="Engineering Build Units banked by this faction (spent on Fortify / Repair / Townbuilder from any owned hex). Set to 0 for a fresh run."/>
+              </div>
+              <div class="bbttcc-field" style="min-width:140px;">
                 <label>Victory (VP)</label>
                 <input type="number" min="0" step="1" value="{{fx.victory.vp}}" data-gm-victory="vp"/>
               </div>
               <div class="bbttcc-field" style="min-width:140px;">
                 <label>Unity (%)</label>
                 <input type="number" min="0" step="1" value="{{fx.victory.unity}}" data-gm-victory="unity"/>
+              </div>
+              <div class="bbttcc-field" style="min-width:200px;">
+                <label>Faction Tier (level)</label>
+                <select data-gm-tier data-tooltip="Set the faction's tier directly (0 Emerging … 4 Mythic). Raising lifts OP pool ceilings to the band; lowering drops them to the band but never below what is banked. The Story Director's tier floor can re-raise coalition factions on the next turn.">
+                  <option value="">— unchanged —</option>
+                  <option value="0">T0 — Emerging</option>
+                  <option value="1">T1 — Established</option>
+                  <option value="2">T2 — Ascendant</option>
+                  <option value="3">T3 — Dominant</option>
+                  <option value="4">T4 — Mythic</option>
+                </select>
               </div>
             </div>
           </div>

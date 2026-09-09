@@ -1022,7 +1022,7 @@ export function deriveItemUnlockLevel(item) {
   return { tier, level };
 }
 
-export async function applyPathFeatures(actor) {
+export async function applyPathFeatures(actor, opts = {}) {
   if (!actor) return { imported: [], skipped: [], error: "No actor" };
 
   const classItem = actor.items.find(i => i.type === "class");
@@ -1098,13 +1098,17 @@ export async function applyPathFeatures(actor) {
 
   if (!toImport.length) return { imported: [], skipped, error: null };
 
+  // Level provenance (2026-09-08): stamp what a level-up imports so the
+  // minus button can find it again. Precedent: flags.fourththing.grantedByHeritage.
+  const stampLevel = Number(opts?.stampLevel);
   const data = toImport.map(({ doc }) => {
     const obj = doc.toObject();
     delete obj._id;
+    if (Number.isFinite(stampLevel) && stampLevel > 0) foundry.utils.setProperty(obj, "flags.fourththing.grantedAtLevel", stampLevel);
     return obj;
   });
   const created = await actor.createEmbeddedDocuments("Item", data);
-  return { imported: created.map(c => c.name), skipped, error: null, subclassFolderName };
+  return { imported: created.map(c => c.name), importedIds: created.map(c => c.id), skipped, error: null, subclassFolderName };
 }
 
 // ─── Starter manifestation kits ──────────────────────────────────────────────
@@ -1304,6 +1308,7 @@ export async function levelUp(actor) {
 
             // Grant chosen Bad Eden Technique (aptitude-point levels only)
             let grantedTechName = null;
+            let grantedTechId = null;
             // Radio list (2026-06-06): read the CHECKED radio — bare .val()
             // on a radio group returns the first input, not the selection.
             const techUuid = html.find("[name='techniqueChoice']:checked").val();
@@ -1313,8 +1318,10 @@ export async function levelUp(actor) {
                 if (src) {
                   const data = src.toObject();
                   delete data._id;
+                  foundry.utils.setProperty(data, "flags.fourththing.grantedAtLevel", newLevel);
                   const [created] = await actor.createEmbeddedDocuments("Item", [data]);
                   grantedTechName = created?.name ?? src.name;
+                  grantedTechId = created?.id ?? null;
                 }
               } catch (e) {
                 console.error("ft-progression: failed to grant technique", techUuid, e);
@@ -1325,10 +1332,11 @@ export async function levelUp(actor) {
             // Auto-grant any newly-unlocked path/doctrine principles + aptitude
             // ranks. Idempotent: applyPathFeatures dedupes by name and
             // applySkillGrantsFromFeatures dedupes by skill key.
-            let autoGranted = { imported: [], grantedSkills: [] };
+            let autoGranted = { imported: [], importedIds: [], grantedSkills: [] };
             try {
-              const pf = await applyPathFeatures(actor);
+              const pf = await applyPathFeatures(actor, { stampLevel: newLevel });
               if (pf?.imported?.length) autoGranted.imported = pf.imported;
+              if (pf?.importedIds?.length) autoGranted.importedIds = pf.importedIds;
               const sk = await applySkillGrantsFromFeatures(actor);
               if (Array.isArray(sk) && sk.length) autoGranted.grantedSkills = sk;
               const promoted = await promoteStampedAptitudeAEs(actor);
@@ -1344,10 +1352,34 @@ export async function levelUp(actor) {
             // Signature manifestations climb in tier with their steward (phase 1
             // — tier only). Only on an actual tier-up, not on every level.
             let signatureLeveled = [];
+            const signatureBumps = [];
             if (tierUp) {
+              // Record where each signature sat BEFORE the bump — the minus
+              // button restores exactly that, not "one tier down".
+              for (const it of actor.items) {
+                const mf = it.system?.manifestation;
+                if (mf?.isSignature === true && (Number(mf.tier) || 1) < newTier) signatureBumps.push({ id: it.id, from: Math.max(1, Number(mf.tier) || 1) });
+              }
               try { signatureLeveled = await levelSignatureManifestations(actor, newTier); }
               catch (e) { console.error("ft-progression: signature manifestation tier-up failed", e); }
             }
+
+            // Level ledger (2026-09-08, owner request "take Marginalia from 2 back
+            // to 1"): everything this level granted, keyed by level, so
+            // levelDown() can reverse it exactly. Levels gained before the
+            // ledger existed fall back to inference (see levelDown).
+            try {
+              await actor.update({ [`flags.fourththing.levelGrants.${newLevel}`]: {
+                v: 1, ts: Date.now(),
+                attrKey, attrFrom: cur, attrTo: newVal,
+                skillPointsGranted: gainSkillPts,
+                techniqueItemId: grantedTechId,
+                importedFeatureIds: autoGranted.importedIds,
+                grantedSkills: autoGranted.grantedSkills.slice(),
+                signatureBumps,
+                integrityTopUp: integrityGain
+              } });
+            } catch (e) { console.warn("ft-progression: level ledger write failed", e); }
 
             ChatMessage.create({
               speaker: ChatMessage.getSpeaker({ actor }),
@@ -1379,6 +1411,233 @@ export async function levelUp(actor) {
 }
 
 // ─── Skill rank up ────────────────────────────────────────────────────────────
+
+// ─── Level DOWN (2026-09-08, owner request) ───────────────────────────────────
+// GM-only. Removes the CURRENT level and everything it granted:
+//   · ledger levels (gained since 2026-09-08): exact reversal from
+//     flags.fourththing.levelGrants[L] — faculty point, aptitude points
+//     (unspent first, then the latest rank spends LIFO), technique + imported
+//     path features (by id), rank-1 grants, signature manifestation tiers.
+//   · pre-ledger levels: inference — items stamped grantedAtLevel L, feats whose
+//     unlock gate sits above the new level/tier, signatures above the new tier;
+//     the GM picks which faculty to lower (nothing recorded which one rose).
+// Derived values (Integrity/Stress max, Clarity max, Pace, class-ability
+// gates) fall out on their own from the new level. Also re-arms the Director's
+// level prompt and resets Epic convergence when dropping under 18.
+export async function levelDown(actor) {
+  if (!game.user?.isGM) return ui.notifications.warn("Only the GM can lower Initiation.");
+  if (!actor) return null;
+  const rawSys  = actor.system?.system ?? actor.system;
+  const srcRoot = actor.toObject().system;
+  const src     = srcRoot?.system ?? srcRoot ?? {};
+  const current = Number(src?.details?.level ?? rawSys?.details?.level) || 1;
+  if (current <= 1) return ui.notifications.warn(`${actor.name} is already at Initiation 1.`);
+  const target   = current - 1;
+  const oldTier  = tierForLevel(current);
+  const newTier  = tierForLevel(target);
+  const tierDown = newTier < oldTier;
+  const _esc = (x) => foundry.utils.escapeHTML(String(x ?? ""));
+
+  const ledgerAll = actor.getFlag?.("fourththing", "levelGrants") || {};
+  const ledger = ledgerAll?.[current] && typeof ledgerAll[current] === "object" ? ledgerAll[current] : null;
+
+  // ── faculty ───────────────────────────────────────────────────────────────
+  const attrNames = { violence: "Violence", intrigue: "Intrigue", presence: "Presence", body: "Body", mind: "Mind", soul: "Soul" };
+  const attrs = src?.attributes ?? {};
+  let attrHtml = "";
+  if (ledger) {
+    const k = ledger.attrKey;
+    const gained = Number(ledger.attrTo) > Number(ledger.attrFrom);
+    attrHtml = gained
+      ? `<div class="ft-ld-row">▾ <b>${_esc(attrNames[k] || k)}</b> ${_esc(attrs?.[k]?.value ?? "?")} → ${_esc(Math.max(1, (Number(attrs?.[k]?.value) || 2) - 1))} <span class="ft-ld-muted">(the faculty raised at this level)</span></div>`
+      : `<div class="ft-ld-row ft-ld-muted">no faculty point to reclaim (${_esc(attrNames[k] || k)} was already at cap)</div>`;
+  } else {
+    const opts = Object.keys(attrNames).map(k =>
+      `<option value="${k}">${attrNames[k]} (currently ${_esc(attrs?.[k]?.value ?? 2)})</option>`).join("");
+    attrHtml = `<div class="ft-ld-row"><label>▾ Lower which faculty by 1? <select name="attrChoice"><option value="">— skip —</option>${opts}</select></label>
+      <div class="ft-ld-muted">no record of which faculty rose at Initiation ${current} (gained before the ledger existed) — your call</div></div>`;
+  }
+
+  // ── aptitude points ───────────────────────────────────────────────────────
+  const ptsGranted = ledger ? (Number(ledger.skillPointsGranted) || 0) : (SKILL_POINT_LEVELS.has(current) ? 2 : 0);
+  const unspent = Number(src?.details?.skillPoints) || 0;
+  const spendsAll = Array.isArray(actor.getFlag?.("fourththing", "skillSpends")) ? actor.getFlag("fourththing", "skillSpends").slice() : [];
+  const fromUnspent = Math.min(unspent, ptsGranted);
+  let shortfall = ptsGranted - fromUnspent;
+  const revertSpends = [];
+  for (let i = spendsAll.length - 1; i >= 0 && shortfall > 0; i--) {
+    const sp = spendsAll[i];
+    const curRank = Number(src?.skills?.[sp.skill]?.value) || 0;
+    if (curRank <= 0) continue;
+    revertSpends.push({ idx: i, skill: sp.skill, from: curRank, to: Math.max(0, curRank - 1) });
+    shortfall--;
+  }
+  let ptsHtml = "";
+  if (ptsGranted) {
+    ptsHtml = `<div class="ft-ld-row">▾ Reclaim <b>${ptsGranted} aptitude points</b>: ${fromUnspent} from the unspent pool` +
+      (revertSpends.length ? `, ${revertSpends.length} by reverting the latest rank spends: ${revertSpends.map(r => `<b>${_esc(r.skill)}</b> ${r.from}→${r.to}`).join(", ")}` : "") +
+      (shortfall > 0 ? ` — <span class="ft-ld-warn">${shortfall} point${shortfall === 1 ? "" : "s"} can't be located (spent before the ledger existed); lower a rank by hand if you want it back</span>` : "") +
+      `</div>`;
+  }
+
+  // ── items to remove ───────────────────────────────────────────────────────
+  const removeRows = new Map(); // id -> {name, why}
+  for (const it of actor.items) {
+    const stamped = Number(it.getFlag?.("fourththing", "grantedAtLevel"));
+    if (Number.isFinite(stamped) && stamped === current) removeRows.set(it.id, { name: it.name, why: `granted at Initiation ${current}` });
+  }
+  if (ledger) {
+    if (ledger.techniqueItemId && actor.items.get(ledger.techniqueItemId)) removeRows.set(ledger.techniqueItemId, { name: actor.items.get(ledger.techniqueItemId).name, why: "technique picked at this level" });
+    for (const id of (ledger.importedFeatureIds || [])) if (actor.items.get(id)) removeRows.set(id, { name: actor.items.get(id).name, why: "path feature imported at this level" });
+  } else {
+    // Inference: anything whose unlock gate the new level no longer satisfies.
+    for (const it of actor.items) {
+      if (it.type !== "feat" || removeRows.has(it.id)) continue;
+      const stamped = Number(it.getFlag?.("fourththing", "grantedAtLevel"));
+      if (Number.isFinite(stamped) && stamped > 0 && stamped <= target) continue; // known to predate this level
+      const { tier: tg, level: lg } = deriveItemUnlockLevel(it);
+      if ((lg !== null && lg > target) || (tg !== null && tg > newTier)) removeRows.set(it.id, { name: it.name, why: `unlocks at ${lg !== null ? `level ${lg}` : `tier ${tg}`}` });
+    }
+  }
+  const itemsHtml = removeRows.size
+    ? [...removeRows.entries()].map(([id, r]) =>
+        `<label class="ft-ld-row ft-ld-check"><input type="checkbox" name="rm" value="${_esc(id)}" checked/> <b>${_esc(r.name)}</b> <span class="ft-ld-muted">— ${_esc(r.why)}</span></label>`).join("")
+    : `<div class="ft-ld-row ft-ld-muted">no items to remove</div>`;
+
+  // ── rank-1 grants from features (ledger only) ─────────────────────────────
+  const grantRows = (ledger?.grantedSkills || []).filter(k => (Number(src?.skills?.[k]?.value) || 0) === 1);
+  const grantsHtml = grantRows.length
+    ? grantRows.map(k => `<label class="ft-ld-row ft-ld-check"><input type="checkbox" name="rank0" value="${_esc(k)}" checked/> <b>${_esc(k)}</b> rank 1 → 0 <span class="ft-ld-muted">— granted by a feature at this level</span></label>`).join("")
+    : "";
+
+  // ── signature manifestations ──────────────────────────────────────────────
+  const sigRows = [];
+  if (tierDown) {
+    const known = new Map((ledger?.signatureBumps || []).map(b => [b.id, Math.max(1, Number(b.from) || 1)]));
+    for (const it of actor.items) {
+      const mf = it.system?.manifestation;
+      if (!mf || mf.isSignature !== true) continue;
+      const cur = Math.max(1, Math.min(4, Number(mf.tier) || 1));
+      const to = known.has(it.id) ? known.get(it.id) : newTier;
+      if (cur > to) sigRows.push({ id: it.id, name: it.name, from: cur, to });
+    }
+  }
+  const sigHtml = sigRows.length
+    ? `<div class="ft-ld-row">▾ Signature manifestations back to <b>Tier ${newTier}</b>: ${sigRows.map(r => `<b>${_esc(r.name)}</b> T${r.from}→T${r.to}`).join(", ")}</div>` : "";
+
+  const epicReset = target < 18 && !!actor.getFlag?.("bbttcc-epic", "converged");
+
+  const content = `<div class="ft-cast-dialog ft-ld">
+    <style>
+      .ft-ld .ft-ld-row { padding: .25rem .35rem; border-bottom: 1px solid rgba(255,255,255,.06); font-size: .8rem; line-height: 1.4; }
+      .ft-ld .ft-ld-check { display: flex; gap: .4rem; align-items: baseline; cursor: pointer; }
+      .ft-ld .ft-ld-muted { opacity: .65; font-size: .74rem; }
+      .ft-ld .ft-ld-warn { color: #f5a623; }
+      .ft-ld h4 { margin: .5rem 0 .2rem; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; opacity: .8; }
+    </style>
+    <div class="ft-preview-stats" style="margin-bottom:.4rem">
+      <span class="ft-prev-stat"><span class="ft-prev-label">Initiation</span><span class="ft-prev-val" style="color:#f87171">${current} → ${target}</span></span>
+      <span class="ft-prev-stat"><span class="ft-prev-label">Tier</span><span class="ft-prev-val" style="color:${tierDown ? "#f87171" : "#c0d4ff"}">${tierDown ? `${oldTier} → ${newTier}` : newTier}</span></span>
+    </div>
+    <p class="ft-ld-muted" style="margin:0 0 .3rem">${ledger ? "This level has a ledger — the reversal below is exact." : "No ledger for this level (gained before 2026-09-08) — the list below is inferred; untick anything you want to keep."}</p>
+    <h4>Faculty</h4>${attrHtml}
+    ${ptsGranted ? `<h4>Aptitude points</h4>${ptsHtml}` : ""}
+    <h4>Items removed</h4>${itemsHtml}
+    ${grantsHtml ? `<h4>Aptitude ranks granted by features</h4>${grantsHtml}` : ""}
+    ${sigHtml ? `<h4>Signature manifestations</h4>${sigHtml}` : ""}
+    <h4>Automatic</h4>
+    <div class="ft-ld-row ft-ld-muted">Integrity, Stress and Clarity maxima, Pace and class-ability gates recompute from the new level. The Story Director's level prompt is re-armed.${epicReset ? " <span class='ft-ld-warn'>Epic convergence is reset (dropping under 18).</span>" : ""}</div>
+  </div>`;
+
+  return new Promise((resolve) => {
+    new Dialog({
+      title: `Withdraw Initiation — ${actor.name} ${current} → ${target}`,
+      content,
+      buttons: {
+        down: {
+          icon: "<i class='fas fa-arrow-down'></i>",
+          label: `Remove Initiation ${current}`,
+          callback: async (html) => {
+            try {
+              const $h = html?.find ? html : $(html);
+              const updates = { "system.details.level": target, "system.details.tier": newTier };
+              const removed = [];
+
+              // faculty
+              let attrKey = ledger ? (Number(ledger.attrTo) > Number(ledger.attrFrom) ? ledger.attrKey : null) : String($h.find("[name='attrChoice']").val() || "");
+              if (attrKey && attrs?.[attrKey]) {
+                const curA = Number(attrs[attrKey].value) || 2;
+                updates[`system.attributes.${attrKey}.value`] = Math.max(1, curA - 1);
+                removed.push(`${attrNames[attrKey] || attrKey} ${curA} → ${Math.max(1, curA - 1)}`);
+              }
+
+              // aptitude points
+              if (ptsGranted) {
+                updates["system.details.skillPoints"] = Math.max(0, unspent - fromUnspent);
+                if (fromUnspent) removed.push(`${fromUnspent} unspent aptitude point${fromUnspent === 1 ? "" : "s"}`);
+                const spends = spendsAll.slice();
+                for (const r of revertSpends.slice().sort((a, b) => b.idx - a.idx)) {
+                  updates[`system.skills.${r.skill}.value`] = r.to;
+                  spends.splice(r.idx, 1);
+                  removed.push(`${r.skill} rank ${r.from} → ${r.to}`);
+                }
+                if (revertSpends.length) updates["flags.fourththing.skillSpends"] = spends;
+              }
+
+              // rank-1 grants
+              for (const k of $h.find("[name='rank0']:checked").map((_i, el) => el.value).get()) {
+                if ((Number(src?.skills?.[k]?.value) || 0) === 1) { updates[`system.skills.${k}.value`] = 0; removed.push(`${k} rank 1 → 0`); }
+              }
+
+              // ledger entry closed (null = absent; v14 has no nested "-=" delete)
+              if (ledger) updates[`flags.fourththing.levelGrants.${current}`] = null;
+
+              await actor.update(updates);
+
+              // items
+              const ids = $h.find("[name='rm']:checked").map((_i, el) => el.value).get().filter(id => actor.items.get(id));
+              if (ids.length) {
+                const names = ids.map(id => actor.items.get(id)?.name).filter(Boolean);
+                await actor.deleteEmbeddedDocuments("Item", ids);
+                removed.push(`items: ${names.join(", ")}`);
+              }
+
+              // signatures
+              if (sigRows.length) {
+                await actor.updateEmbeddedDocuments("Item", sigRows.map(r => ({ _id: r.id, "system.manifestation.tier": r.to })));
+                removed.push(`signatures → ${sigRows.map(r => `${r.name} T${r.to}`).join(", ")}`);
+              }
+
+              // director + epic
+              try { await game.bbttcc?.api?.campaign?.director?.rearmLevelPrompt?.(actor.id); } catch (_e) {}
+              if (epicReset) { try { await game.fourththing?.epic?.resetConvergence?.(actor); } catch (_e) {} }
+
+              ChatMessage.create({
+                speaker: ChatMessage.getSpeaker({ actor }),
+                whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
+                content: `<div class="fourththing-roll">
+                  <div class="ft-roll-header">
+                    <span class="ft-roll-name">▾ Initiation Withdrawn: ${_esc(actor.name)}</span>
+                    <span class="ft-defense-pill">Depth ${target}${tierDown ? ` · Tier ${newTier}` : ""}</span>
+                  </div>
+                  <p style="margin:.2rem 0;font-size:.82rem;opacity:.8">${removed.length ? removed.map(_esc).join("<br/>") : "No grants to reverse."}${ledger ? "" : "<br/><i>inferred (no ledger for this level)</i>"}</p>
+                </div>`
+              });
+              ui.notifications.info(`${actor.name}: Initiation ${current} → ${target}.`);
+              resolve({ target, newTier, removed });
+            } catch (e) {
+              console.error("ft-progression: levelDown failed", e);
+              ui.notifications.error(`${actor.name}: level down failed — see console.`);
+              resolve(null);
+            }
+          }
+        },
+        cancel: { label: "Cancel", callback: () => resolve(null) }
+      },
+      default: "cancel"
+    }).render(true);
+  });
+}
 
 export async function openSpendSkillPoints(actor) {
   const rawSys   = actor.system?.system ?? actor.system;
@@ -1462,6 +1721,17 @@ export async function openSpendSkillPoints(actor) {
         const spSpent = Object.keys(updates).length;
         if (spSpent > 0) {
           updates["system.details.skillPoints"] = Math.max(0, points - spSpent);
+          // Spend ledger (2026-09-08): levelDown reclaims points LIFO from here
+          // when the unspent pool can't cover what the removed level granted.
+          try {
+            const prior = actor.getFlag?.("fourththing", "skillSpends");
+            const spends = Array.isArray(prior) ? prior.slice() : [];
+            const lvlNow = Number(rawSys?.details?.level) || 1;
+            for (const [sk, newRank] of Object.entries(pending)) {
+              spends.push({ level: lvlNow, skill: sk, from: Number(skills?.[sk]?.value) || 0, to: Number(newRank) || 0, ts: Date.now() });
+            }
+            updates["flags.fourththing.skillSpends"] = spends.slice(-200);
+          } catch (_eLedger) {}
           await actor.update(updates);
           ui.notifications.info(`${actor.name}: ${spSpent} aptitude rank${spSpent > 1 ? 's' : ''} increased.`);
         }

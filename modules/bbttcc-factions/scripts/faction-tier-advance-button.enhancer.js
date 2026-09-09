@@ -44,6 +44,69 @@
     return true;
   }
 
+  // GM "set tier" (2026-09-08, owner request): the ONE way to write tier
+  // outside the gated +1 button. Raising: caps rise to the band (max, like
+  // the button). Lowering: caps fall to the band but never below what is
+  // banked — no confiscation (the green-ring reset's rule). Writes a War Log
+  // milestone. Returns { ok, from, to, capsChanged, floorWarning } — the
+  // Director's factionTierFloor re-promotes any coalition faction below it
+  // on the next turn tick, so the caller is told when that will happen.
+  async function setTier(actor, tier, opts = {}) {
+    if (!actor || !isFactionActor(actor)) return { ok: false, reason: "not a faction" };
+    if (!isGM()) return { ok: false, reason: "GM only" };
+    const to = Math.max(0, Math.min(4, Math.floor(Number(tier) || 0)));
+    const from = Math.max(0, Math.min(4, Math.floor(Number(get(actor, `flags.${MODF}.tier`, 0)) || 0)));
+    const update = { [`flags.${MODF}.tier`]: to };
+    let capsChanged = false;
+    const raw = get(actor, `flags.${MODF}.opCaps`, null);
+    if (raw && typeof raw === "object") {
+      const band = CAP_BAND[to] ?? CAP_BAND[0];
+      const bank = get(actor, `flags.${MODF}.opBank`, {}) || {};
+      const next = {};
+      for (const k of OP_KEYS) {
+        const cur = Math.max(0, Math.floor(Number(raw[k]) || 0));
+        const banked = Math.ceil(Math.max(0, Number(bank[k]) || 0));
+        const v = (to >= from) ? Math.max(cur, band) : Math.max(band, banked);
+        next[k] = v;
+        if (v !== cur) capsChanged = true;
+      }
+      if (capsChanged) update[`flags.${MODF}.opCaps`] = next;
+    }
+    if (to === from && !capsChanged) return { ok: true, from, to, capsChanged: false, unchanged: true };
+    if (to !== from) {
+      const warLogs = (get(actor, `flags.${MODF}.warLogs`, []) || []).slice();
+      warLogs.push({
+        type: "milestone",
+        activity: to > from ? "tier_advance" : "tier_reduce",
+        date: (new Date()).toLocaleString(),
+        summary: `GM set Faction Tier ${from} → ${to}${opts.note ? ` — ${opts.note}` : ""}.`
+      });
+      update[`flags.${MODF}.warLogs`] = warLogs;
+    }
+    await actor.update(update);
+    let floorWarning = null;
+    try {
+      const floor = Number(game.bbttcc?.api?.campaign?.director?.state?.()?.factionTierFloor) || 0;
+      if (to < floor) floorWarning = `Story Director tier floor is ${floor} — this faction will be re-raised on the next turn tick unless the floor is lowered (Reset Console → World → factionTierFloor).`;
+    } catch (_e) {}
+    console.log(TAG, `setTier ${actor.name}: ${from} → ${to}${capsChanged ? " (opCaps rebanded)" : ""}`);
+    try { actor.sheet?.render(false); } catch (_e) {}
+    return { ok: true, from, to, capsChanged, floorWarning };
+  }
+
+  Hooks.once("ready", () => {
+    try {
+      game.bbttcc = game.bbttcc || {};
+      game.bbttcc.api = game.bbttcc.api || {};
+      const root = (game.bbttcc.api.factions ??= {});
+      root.tier = Object.assign(root.tier || {}, {
+        get: (actor) => Math.max(0, Math.min(4, Math.floor(Number(get(actor, `flags.${MODF}.tier`, 0)) || 0))),
+        set: setTier,
+        band: CAP_BAND.slice()
+      });
+    } catch (e) { console.warn(TAG, "tier api install failed", e); }
+  });
+
   const esc = (s) => {
     try { return foundry.utils.escapeHTML(String(s ?? "")); }
     catch { return String(s ?? ""); }

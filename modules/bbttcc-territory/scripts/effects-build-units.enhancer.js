@@ -405,8 +405,13 @@ try {
       // ONLY inject into the Hex Configuration form. No `|| root` fallback —
       // that leaked the panel onto every other window (character sheets, macro
       // editor, …) that lacks a .bbttcc-hex-config host.
-      const host = root?.querySelector?.(".bbttcc-hex-config");
-      if (!host || host.querySelector(`[data-bbttcc='${cfg.id}']`)) return;
+      const cfgRoot = root?.querySelector?.(".bbttcc-hex-config");
+      // 2026-09-08: these panels used to append to the form root, below the
+      // tab strip — so they repeated under every tab. They live in the
+      // Scenes & Layers tab now (fallback: form root for the tab-less layout).
+      const host = cfgRoot?.querySelector?.('[data-ft-tab-panel="scenes"]') || cfgRoot;
+      if (!host || cfgRoot.querySelector(`[data-bbttcc='${cfg.id}']`)) return;
+      try { host.querySelector("[data-ft-scenes-placeholder]")?.remove(); } catch (_e) {}
 
       Promise.resolve(resolveHexDocument(app, html)).then(async (doc) => {
         if (!doc || !doc.uuid) return;
@@ -551,8 +556,10 @@ try {
     try {
       if (!game.user?.isGM) return;
       const root = el || (html instanceof jQuery ? html[0] : html);
-      const host = root?.querySelector?.(".bbttcc-hex-config");
-      if (!host || host.querySelector("[data-bbttcc='battle-scenes']")) return;
+      const cfgRoot = root?.querySelector?.(".bbttcc-hex-config");
+      const host = cfgRoot?.querySelector?.('[data-ft-tab-panel="scenes"]') || cfgRoot;
+      if (!host || cfgRoot.querySelector("[data-bbttcc='battle-scenes']")) return;
+      try { host.querySelector("[data-ft-scenes-placeholder]")?.remove(); } catch (_e) {}
       const api = game.bbttcc?.api?.raid?.battleScenes;
       if (!api?.list) return;
 

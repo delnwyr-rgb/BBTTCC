@@ -365,3 +365,28 @@
   });
 
 })();
+
+
+// ── Over-cap repair (2026-09-08) ─────────────────────────────────────────────
+// Integration is a 0–6 track; one writer (wilderness founding activities)
+// used to push past 6. Sweep every scene's hexes once per GM session and pull
+// any progress > 6 back to 6. Idempotent, GM-only, logs what it touched.
+Hooks.once("ready", async () => {
+  try {
+    if (!game.user?.isGM) return;
+    const MOD_T = "bbttcc-territory";
+    const fixed = [];
+    for (const scene of game.scenes) {
+      const updates = [];
+      for (const d of scene.drawings) {
+        const p = Number(d.flags?.[MOD_T]?.integration?.progress);
+        if (Number.isFinite(p) && p > 6) { updates.push({ _id: d.id, [`flags.${MOD_T}.integration.progress`]: 6 }); fixed.push(`${d.flags[MOD_T]?.name || d.id} (${p}→6)`); }
+      }
+      if (updates.length) await scene.updateEmbeddedDocuments("Drawing", updates);
+    }
+    if (fixed.length) {
+      console.log("[bbttcc-territory/integration] over-cap repair:", fixed);
+      ui.notifications?.info?.(`Integration repaired to 6/6 on ${fixed.length} hex${fixed.length === 1 ? "" : "es"}: ${fixed.slice(0, 4).join(", ")}${fixed.length > 4 ? "…" : ""}`);
+    }
+  } catch (e) { console.warn("[bbttcc-territory/integration] over-cap repair failed", e); }
+});

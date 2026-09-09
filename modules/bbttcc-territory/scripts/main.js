@@ -2097,8 +2097,8 @@ function bbttccInjectGMPanelIntoHexConfigDialog(dlg, dr){
   await setHexFn({
     hexUuid: dr.uuid,
     patch: {
-      // 🔑 Hand authority back to the system
-      manualOverride: false,
+      // (manualOverride deliberately NOT touched here either — it belongs to
+      //  the Save Behavior checkbox, see the apply branch.)
 
       // Clear all manual override values
       travel: { unitsOverride: null },
@@ -2140,7 +2140,14 @@ function bbttccInjectGMPanelIntoHexConfigDialog(dlg, dr){
           if (action === "apply") {
             const patch = {};
 
-            patch.manualOverride = true;
+            // 2026-09-08 — GM Apply used to force `manualOverride: true` ("hand
+            // authority to the GM"). That flag is ALSO the Modifiers-tab
+            // "Manual resource override" checkbox, and nothing in the engine
+            // reads it for authority any more — so every GM Apply (a note, a
+            // stage) silently re-checked the resource override the owner had
+            // just cleared (the sticky-override bug's second life). GM
+            // overrides now leave that flag alone; the Save Behavior checkbox
+            // is its only writer.
 
             const uo = String(val("gm.travel.unitsOverride") || "").trim();
             if (uo !== "") patch.travel = Object.assign(patch.travel || {}, { unitsOverride: Number(uo) });

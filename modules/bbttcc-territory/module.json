@@ -51,6 +51,7 @@
     "scripts/territory-build-units.enhancer.js",
     "scripts/townbuilder.js",
     "scripts/effects-build-units.enhancer.js",
+    "scripts/activity-ledger.enhancer.js",
     "scripts/bbttcc-hex-sheet.enhancer.js",
     "scripts/bbttcc-dashboard-hexsheet.enhancer.js",
     "scripts/bbttcc-facility-turn-effects.enhancer.js",

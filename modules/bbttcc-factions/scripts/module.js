@@ -2854,6 +2854,7 @@ const doctrine = await (async () => {
         warLogs,
         bank: turnBank,
         stockpile,
+        buildUnits: Math.max(0, Math.floor(Number(this.actor.getFlag(MODULE_ID, "buildUnits") ?? 0) || 0)),
         opBank,
         buildUnits,
         bankLine: fmtResLine(turnBank),
@@ -3626,12 +3627,14 @@ try {
       const moraleEl  = fieldset.querySelector(`[data-gm-track="morale"]`);
       const loyaltyEl = fieldset.querySelector(`[data-gm-track="loyalty"]`);
       const darkEl    = fieldset.querySelector(`[data-gm-track="darkness"]`);
+      const buEl      = fieldset.querySelector(`[data-gm-track="buildUnits"]`);
       const vpEl      = fieldset.querySelector(`[data-gm-victory="vp"]`);
       const unityEl   = fieldset.querySelector(`[data-gm-victory="unity"]`);
 
       const morale  = Math.max(0, Math.round(readNum(moraleEl)));
       const loyalty = Math.max(0, Math.round(readNum(loyaltyEl)));
       const darkness = Math.max(0, Math.round(readNum(darkEl)));
+      const buildUnits = Math.max(0, Math.round(readNum(buEl)));
       const vp = Math.max(0, Math.round(readNum(vpEl)));
       const unity = Math.max(0, Math.round(readNum(unityEl)));
 
@@ -3664,6 +3667,7 @@ try {
       updates[`flags.${MODULE_ID}.morale`] = morale;
       updates[`flags.${MODULE_ID}.loyalty`] = loyalty;
       updates[`flags.${MODULE_ID}.darkness`] = newDarkness;
+      if (buEl) updates[`flags.${MODULE_ID}.buildUnits`] = buildUnits;
       updates[`flags.${MODULE_ID}.victory`] = newVictory;
 
       try {
@@ -3680,6 +3684,19 @@ try {
           });
           await this.actor.setFlag(MODULE_ID, "warLogs", warLogs);
         }
+
+        // Faction Tier (2026-09-08): goes through api.factions.tier.set so caps
+        // and the War Log follow, and the Director-floor warning surfaces.
+        try {
+          const tierEl = fieldset.querySelector("[data-gm-tier]");
+          const tierRaw = String(tierEl?.value ?? "").trim();
+          if (tierRaw !== "") {
+            const res = await game.bbttcc?.api?.factions?.tier?.set?.(this.actor, Number(tierRaw), { note: note || "GM edit" });
+            if (res?.ok && !res.unchanged) ui.notifications?.info?.(`${this.actor.name}: Faction Tier ${res.from} → ${res.to}${res.capsChanged ? " (OP ceilings rebanded)" : ""}.`);
+            if (res?.floorWarning) ui.notifications?.warn?.(res.floorWarning, { permanent: true });
+            if (res && !res.ok) ui.notifications?.warn?.(`Tier not changed: ${res.reason || "unknown"}`);
+          }
+        } catch (eTier) { console.warn("[bbttcc-factions] GM tier set failed", eTier); }
 
         ui.notifications?.info?.("GM edits applied.");
         await rebuildFromFlags();

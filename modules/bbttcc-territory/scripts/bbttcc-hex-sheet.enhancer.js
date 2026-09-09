@@ -1711,11 +1711,44 @@
         const prevR = scroller?.querySelector('[data-bbttcc-routes-card="1"]'); if (prevR) prevR.remove();
         if (scroller && routes.length) {
           const esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
-          const rows = routes.map(r => { let nm = r.hexUuid; try { const d2 = fromUuidSync(r.hexUuid); nm = d2?.flags?.[MOD_T]?.name || d2?.text || nm; } catch (_e) {} return `<li>${r.kind === "supply" ? "🛤" : "🔗"} ${esc(r.kind === "supply" ? "Supply line" : "Trade route")} → <b>${esc(nm)}</b></li>`; }).join("");
+          const isGMr = !!game.user?.isGM;
+          const rows = routes.map((r, i) => { let nm = r.hexUuid; try { const d2 = fromUuidSync(r.hexUuid); nm = d2?.flags?.[MOD_T]?.name || d2?.text || nm; } catch (_e) {} return `<li style="display:flex;gap:.4rem;align-items:baseline;">${r.kind === "supply" ? "🛤" : "🔗"} ${esc(r.kind === "supply" ? "Supply line" : "Trade route")} → <b>${esc(nm)}</b>${isGMr ? `<button type="button" class="bbttcc-btn bbttcc-btn-xs" data-route-remove="${i}" data-tooltip="GM — remove this route from BOTH hexes (and any pending copy)" style="margin-left:auto;padding:0 .4rem;">✕</button>` : ""}</li>`; }).join("");
           const cardR = document.createElement('div'); cardR.className = 'bbttcc-hex-card'; cardR.setAttribute('data-bbttcc-routes-card', '1');
-          cardR.innerHTML = `<h3 style="margin:0 0 .3rem;">Trade Routes</h3><ul style="margin:0;padding-left:1.1rem;font-size:.9em;">${rows}</ul>`;
+          cardR.innerHTML = `<h3 style="margin:0 0 .3rem;display:flex;justify-content:space-between;align-items:baseline;">Trade Routes${isGMr && routes.length > 1 ? `<button type="button" class="bbttcc-btn bbttcc-btn-xs" data-route-remove="all" data-tooltip="GM — remove every route on this hex (both ends)">Clear all</button>` : ""}</h3><ul style="margin:0;padding-left:1.1rem;font-size:.9em;list-style:none;">${rows}</ul>`;
           const gmNotes = scroller.querySelector('[data-bbttcc-gm-notes-card="1"]');
           if (gmNotes) scroller.insertBefore(cardR, gmNotes); else scroller.appendChild(cardR);
+          // GM route removal (2026-09-08, owner: "how do I get rid of the trade
+          // routes"): an edge lives on BOTH hexes (2026-09-07) plus possibly in
+          // either hex's turn.pending.routes — strip all copies.
+          if (isGMr) cardR.addEventListener("click", async (ev) => {
+            const btn = ev.target?.closest?.("[data-route-remove]");
+            if (!btn) return;
+            ev.preventDefault(); ev.stopPropagation();
+            const which = String(btn.dataset.routeRemove);
+            const targets = which === "all" ? routes.slice() : [routes[Number(which)]].filter(Boolean);
+            if (!targets.length) return;
+            const stripFrom = async (hexDoc, otherUuid, kind) => {
+              if (!hexDoc) return;
+              const f = foundry.utils.deepClone(hexDoc.flags?.[MOD_T] || {});
+              const keep = (arr) => (Array.isArray(arr) ? arr : []).filter(x => !(String(x?.hexUuid) === String(otherUuid) && (!kind || String(x?.kind || "trade") === String(kind))));
+              const nextRoutes = keep(f.routes);
+              const pend = foundry.utils.deepClone(f.turn?.pending || {});
+              const nextPend = keep(pend.routes);
+              const upd = {};
+              if (nextRoutes.length !== (f.routes || []).length) upd[`flags.${MOD_T}.routes`] = nextRoutes;
+              if (nextPend.length !== (pend.routes || []).length) { pend.routes = nextPend; upd[`flags.${MOD_T}.turn.pending`] = pend; }
+              if (Object.keys(upd).length) await hexDoc.update(upd);
+            };
+            let n = 0;
+            for (const r of targets) {
+              let other = null; try { other = fromUuidSync(r.hexUuid); } catch (_e) {}
+              await stripFrom(doc, r.hexUuid, r.kind);
+              await stripFrom(other, doc.uuid, r.kind);
+              n++;
+            }
+            ui.notifications?.info?.(`Removed ${n} route${n === 1 ? "" : "s"} from ${doc.flags?.[MOD_T]?.name || "this hex"} (both ends).`);
+            try { this.render(false); } catch (_e) {}
+          });
         }
       } catch (eR) { console.warn("[bbttcc-hex-sheet] routes card failed", eR); }
       // ───────────── Quests card (Hex ↔ Quest links) ─────────────

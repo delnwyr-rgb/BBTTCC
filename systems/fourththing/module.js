@@ -48,7 +48,7 @@ import {
 } from "./ft-translation.js";
 
 import {
-  levelUp,
+  levelUp, levelDown,
   openSpendSkillPoints,
   applySkillGrantsFromFeatures,
   extractSkillGrantsFromFeature,
@@ -13552,6 +13552,7 @@ Hooks.once("init", function () {
       extractSkillGrantsFromFeature,
       promoteStampedAptitudeAEs,
       levelUp,
+      levelDown,
       resetLegendaryOnSceneChange
     },
     _classAutomation: {
@@ -18599,6 +18600,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         ftEditPortrait:   FourthThingCharacterSheet._onFtEditPortrait,
         // Sprint E: progression
         ftLevelUp:          FourthThingCharacterSheet._onFtLevelUp,
+        ftLevelAdjust:      FourthThingCharacterSheet._onFtLevelAdjust,
         ftSpendSkillPoints: FourthThingCharacterSheet._onFtSpendSkillPoints,
         ftGrantSkillRanks:  FourthThingCharacterSheet._onFtGrantSkillRanks,
         ftApplyPathFeatures:FourthThingCharacterSheet._onFtApplyPathFeatures,
@@ -19175,6 +19177,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
       return {
         actor,
+        isGM:          !!game.user?.isGM,
         system:        sysData,
         attributes,
         skills,
@@ -20575,6 +20578,20 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // Sprint E: Level up
     static async _onFtLevelUp(event, target) {
       await levelUp(this.actor);
+      this.render();
+    }
+
+    // ± Initiation (2026-09-08, owner request): + is the same Advance
+    // Initiation flow; − is GM-only, confirms, and reverses the removed
+    // level's grants (ledger-exact for levels gained since 2026-09-08,
+    // inferred before that). See levelDown() in ft-progression.js.
+    static async _onFtLevelAdjust(event, target) {
+      const delta = Number(target?.dataset?.delta) || 0;
+      if (delta > 0) await levelUp(this.actor);
+      else if (delta < 0) {
+        if (!game.user?.isGM) return ui.notifications?.warn?.("Only the GM can lower Initiation.");
+        await levelDown(this.actor);
+      }
       this.render();
     }
 

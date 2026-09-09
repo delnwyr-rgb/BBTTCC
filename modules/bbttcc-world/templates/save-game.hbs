@@ -1,0 +1,56 @@
+{{!-- bbttcc-world/templates/save-game.hbs --}}
+<section class="bbttcc-save-game">
+  <header class="sg-head">
+    <div>
+      <div class="sg-title">💾 Save Games</div>
+      <div class="bbttcc-muted sg-sub">Everything, exactly as it is: every Bad Eden setting, every actor with its items and feats, every scene's hexes and tokens, the Turn Press. Files live in <code>{{dir}}</code>.</div>
+    </div>
+    <button type="button" class="button" data-action="refresh">Refresh</button>
+  </header>
+
+  <fieldset class="sg-new">
+    <legend>New save</legend>
+    <div class="sg-new-row">
+      <input type="text" name="label" placeholder="Label — e.g. “Golden master · fresh world” or “Before Act 2 playtest”" />
+      <label class="sg-check"><input type="checkbox" name="golden" /> ★ Golden master</label>
+      <button type="button" class="button sg-save" data-action="save" {{#if busy}}disabled{{/if}}>💾 Save now</button>
+    </div>
+    {{#if others.length}}<div class="sg-warn">⚠ Also connected: {{#each others}}{{this}}{{#unless @last}}, {{/unless}}{{/each}} — saving is safe; loading reloads their clients.</div>{{/if}}
+  </fieldset>
+
+  {{#if golden}}
+  <div class="sg-golden">
+    <span class="star">★</span>
+    <span><b>Golden master:</b> {{golden.label}} <span class="bbttcc-muted">· {{golden.when}} · Turn {{golden.turn}} · Act {{golden.storyPhase}}</span></span>
+    <button type="button" class="button sg-load" data-slot-act="load" data-id="{{golden.id}}">⟲ Load golden master</button>
+  </div>
+  {{/if}}
+
+  <table class="sg-table">
+    <thead><tr><th></th><th>Save</th><th>When</th><th>Turn · Act</th><th>Contents</th><th></th></tr></thead>
+    <tbody>
+      {{#each slots}}
+      <tr class="{{#if golden}}is-golden{{/if}}">
+        <td class="c">{{#if golden}}<span class="star" title="Golden master">★</span>{{/if}}</td>
+        <td><b>{{label}}</b>{{#if note}}<div class="bbttcc-muted">{{note}}</div>{{/if}}<div class="bbttcc-muted sg-by">by {{by}} · {{size}}</div></td>
+        <td class="nw">{{when}}</td>
+        <td class="nw c">T{{turn}} · A{{storyPhase}}</td>
+        <td class="bbttcc-muted sg-sum">{{summary}}</td>
+        <td class="nw acts">
+          <button type="button" class="button sg-load" data-slot-act="load" data-id="{{id}}" title="Restore the world to this save">⟲ Load</button>
+          <button type="button" class="button" data-slot-act="golden" data-id="{{id}}" title="Mark / unmark as the golden master">★</button>
+          <button type="button" class="button" data-slot-act="export" data-id="{{id}}" title="Download the save file">⬇</button>
+          <button type="button" class="button sg-del" data-slot-act="delete" data-id="{{id}}" title="Delete this save">🗑</button>
+        </td>
+      </tr>
+      {{else}}
+      <tr><td colspan="6" class="c bbttcc-muted">No saves yet. Make one before the next From-the-Top run — then mark it ★ golden.</td></tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <footer class="sg-foot">
+    <label class="button sg-import">⬆ Import a save file <input type="file" accept=".json,application/json" data-action="import" hidden /></label>
+    <span class="sg-status" data-bind="status">{{status}}</span>
+  </footer>
+</section>

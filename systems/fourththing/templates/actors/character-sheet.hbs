@@ -33,7 +33,9 @@
       </div>
       {{/if}}
       <div class="ft-level-display">
+        {{#if isGM}}<button type="button" class="ft-level-adj ft-level-adj-minus" data-action="ftLevelAdjust" data-delta="-1" data-tooltip="GM: lower Initiation by one — confirms first, then removes what that level granted">−</button>{{/if}}
         <span class="ft-level-num">Initiation {{details.level}}</span>
+        <button type="button" class="ft-level-adj ft-level-adj-plus" data-action="ftLevelAdjust" data-delta="1" data-tooltip="Advance Initiation by one (same flow as ✦ Advance Initiation)">+</button>
         <span class="ft-tier-badge">Tier {{details.tier}}</span>
         {{#if details.statPoints}}<span class="ft-sp-badge ft-sp-stat" data-tooltip="Unspent attribute points — bump a Faculty by clicking it in edit mode.">{{details.statPoints}} attr pts</span>{{/if}}
         {{#if details.skillPoints}}<span class="ft-sp-badge ft-sp-skill" data-tooltip="Unspent aptitude points — click to open the spend dialog." data-action="ftSpendSkillPoints">{{details.skillPoints}} apt pts ▶</span>{{/if}}

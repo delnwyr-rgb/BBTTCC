@@ -7237,6 +7237,15 @@ function buildCampaignAPI() {
       tick: directorTick,
       chains: directorChains,
       reconcileLevels: directorReconcileLevels,
+      // Re-arm a steward's level-up prompt after a GM demotion (2026-09-08):
+      // levelPrompts[actorId] latches at the floor, so without this the
+      // Director never asks a lowered steward to climb again.
+      rearmLevelPrompt: async (actorId) => {
+        const id = String(actorId || "").trim();
+        if (!id || !game.user?.isGM) return false;
+        await _mutateDirectorState(s => { if (s.levelPrompts && id in s.levelPrompts) s.levelPrompts[id] = 0; });
+        return true;
+      },
       state: _readDirectorState,
       addPressure: _directorAddPressure
     },
