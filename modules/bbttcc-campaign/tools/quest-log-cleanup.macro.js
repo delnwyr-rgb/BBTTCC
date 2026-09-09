@@ -14,8 +14,14 @@
  * DRY_RUN default true. Paste THIS file fresh (a saved world Macro may be stale).
  */
 (async () => {
-  const DRY_RUN = true;                 // <-- set false to apply
-  const RETRACT = ["word_fixit_leyline_stabilizer_negotiation"];   // <-- accepted Words to take back
+  const DRY_RUN = false;                 // <-- set false to apply
+  const RETRACT = [                      // <-- accepted Words to take back (owner ruling 2026-09-09: the phantom batch goes)
+    "word_fixit_leyline_stabilizer_negotiation",   // Mara — already in the know
+    "word_khezek_tor_mine_that_answered_back",     // Drax — mine job not yet accepted at the KT hub
+    "word_khezek_tor_darkness_shipment",           // Brennig Tamsin — shipment job not yet accepted
+    "word_gullywasher_cultural_summit",            // Dougan — Close the Ledger is the Forgotten-Cause finale
+    "word_ag_tamsin_confrontation"                 // Father Tamsin — the Confessor's Debt not yet opened
+  ];
   const NS = "bbttcc-campaign", MODF = "bbttcc-factions", NOTE = "repair-quest-track-from-registry";
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
   const nameFor = globalThis.__bbttccInviteQuestName, lineFor = globalThis.__bbttccInviteLine;
