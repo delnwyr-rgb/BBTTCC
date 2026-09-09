@@ -1972,9 +1972,9 @@ async function _rcAutoFireMode(r, mode, attackerPre = null, defenderPre = null, 
 // curated + dynamic maneuver lists
 const _MAN_KEYS_BY_TYPE = {
   assault: ["rally_the_line", "supply_overrun", "suppressive_fire", "bless_the_fallen", "command_overdrive", "logistical_surge", "tactical_overwatch", "echo_strike_protocol", "overclock_the_golems", "siege_breaker_volley", "ego_breaker", "qliphothic_gambit"],
-  infiltration: ["smoke_and_mirrors", "psychic_disruption", "saboteurs_edge", "signal_hijack", "chrono_loop_command", "reality_hack", "flash_bargain", "overclock_the_golems", "supply_surge", "divine_favor"],
-  infiltration_alarm: ["smoke_and_mirrors", "psychic_disruption", "saboteurs_edge", "signal_hijack", "chrono_loop_command", "reality_hack", "flash_bargain", "overclock_the_golems", "supply_surge", "divine_favor"],
-  espionage: ["flash_bargain", "smoke_and_mirrors", "flash_interdict", "psychic_disruption", "saboteurs_edge", "signal_hijack", "chrono_loop_command", "reality_hack", "void_signal_collapse", "overclock_the_golems"],
+  infiltration: ["smoke_and_mirrors", "psychic_disruption", "saboteur_s_edge", "signal_hijack", "chrono_loop_command", "reality_hack", "flash_bargain", "overclock_the_golems", "supply_surge", "divine_favor"],
+  infiltration_alarm: ["smoke_and_mirrors", "psychic_disruption", "saboteur_s_edge", "signal_hijack", "chrono_loop_command", "reality_hack", "flash_bargain", "overclock_the_golems", "supply_surge", "divine_favor"],
+  espionage: ["flash_bargain", "smoke_and_mirrors", "flash_interdict", "psychic_disruption", "saboteur_s_edge", "signal_hijack", "chrono_loop_command", "reality_hack", "void_signal_collapse", "overclock_the_golems"],
   blockade: ["industrial_sabotage", "logistical_surge", "overclock_the_golems"],
   occupation: ["rally_the_line", "suppressive_fire", "last_stand_banner", "command_overdrive", "industrial_sabotage", "logistical_surge", "counter_propaganda_wave", "quantum_shield", "ego_breaker"],
   liberation: ["flash_bargain", "prayer_in_the_smoke", "rally_the_line", "bless_the_fallen", "command_overdrive", "empathic_surge", "faithful_intervention", "counter_propaganda_wave", "echo_strike_protocol", "harmonic_chant", "moral_high_ground", "radiant_retaliation", "engine_of_absolution", "sephirotic_intervention", "unity_surge", "flash_interdict"],
@@ -5460,11 +5460,15 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
     
 // B3.2: compute "thisRound" modifiers from selected maneuvers (A then B).
 const __b3ThisRound = _b3ComputeThisRoundMods(r, listA, listD);
+// Generic pre-roll consumer + strategic-layer boons (2026-09-09).
+const __b3Gen = await _b3GenericPreRollMods(r, listA, listD, attacker, defender);
+const __b3Boons = _b3ReadStrategicBoons(r, attacker, listA);
+try { __b3ThisRound.notes.push(...__b3Gen.notes); if (__b3Boons.initiativeAdv) __b3ThisRound.notes.push("strategic boon: initiative advantage"); if (__b3Boons.freeManeuver) __b3ThisRound.notes.push(`strategic boon: ${__b3Boons.freeKey} is free`); } catch(_e) {}
 // Defensive Entrenchment: defender gets +3 (contested) / +3 DC (non-contested).
 const __b3DefExtra2 = Number(__b3ThisRound?.defenderBonusDelta || 0) || 0;
 // Flash Bargain (and similar): add this-round roll bonus deltas onto the pending nextRoll bonuses.
-const __b3AttExtraFinal = Number(__b3AttExtra || 0) + Number(__b3ThisRound?.attackerRollBonusDelta || 0);
-const __b3DefExtraFinal = Number(__b3DefExtra || 0) + Number(__b3ThisRound?.defenderRollBonusDelta || 0);
+const __b3AttExtraFinal = Number(__b3AttExtra || 0) + Number(__b3ThisRound?.attackerRollBonusDelta || 0) + Number(__b3Gen.attBonus || 0);
+const __b3DefExtraFinal = Number(__b3DefExtra || 0) + Number(__b3ThisRound?.defenderRollBonusDelta || 0) + Number(__b3Gen.defBonus || 0);
 
 // B3.4: this-round roll modes (Psychic Disruption etc) override/stack with pending nextRoll modes.
 function __b3MergeMode(baseMode, addMode){
@@ -5477,8 +5481,8 @@ function __b3MergeMode(baseMode, addMode){
   if (b === "adv" || b === "advantage") return "adv";
   return "normal";
 }
-const __b3AttModeFinal = __b3MergeMode(__b3AttMode, __b3ThisRound?.rollModeAtt);
-const __b3DefModeFinal = __b3MergeMode(__b3DefMode, __b3ThisRound?.rollModeDef);
+const __b3AttModeFinal = __b3MergeMode(__b3MergeMode(__b3MergeMode(__b3AttMode, __b3ThisRound?.rollModeAtt), __b3Gen.attMode), __b3Boons.initiativeAdv ? "adv" : "normal");
+const __b3DefModeFinal = __b3MergeMode(__b3MergeMode(__b3DefMode, __b3ThisRound?.rollModeDef), __b3Gen.defMode);
 
 // Existing resolver (if present) remains compatible; it just won't get targetHexId for rigs
     const resolver = game.bbttcc?.api?.raid?.resolveRoundWithManeuvers;
@@ -6371,6 +6375,7 @@ try {
     }
 
     try { await _rcAutoFireMode(r, "post-commit", attacker, defender, this); } catch (e) { console.warn("[bbttcc-raid] post-commit auto-fire (standard)", e); }
+    try { await _b3ConsumeStrategicBoons(r, attacker); } catch (_e) {}
 
     // Damage Tracking Unification 2026-05-14 — casualties as a per-round
     // outcome. Margin-driven default; GM can edit r.meta.casualties via
@@ -8562,6 +8567,76 @@ function _b3ApplyEffectToMods(effect, mods, fallbackSide){
 }
 
 
+// ------------------------------------------------------------
+// Generic PRE-ROLL consumer (2026-09-09 maneuver audit). Authored bundles
+// (sprint2 / balance / opt_*) emit rollBonus / advantage / disadvantage with
+// window:"thisRound"; _b3ApplyEffectToMods only honours when:"nextRoll", so
+// every one of them was dropped. Ask each selected maneuver's throughput for
+// its bundle BEFORE the dice (outcomeTier "unknown" — success-gated handlers
+// return nothing, which is correct pre-roll) and fold thisRound dice effects
+// into the round. Keys the hard-coded switch already handles are skipped.
+// ------------------------------------------------------------
+const _B3_HARDCODED_KEYS = new Set(["flank_attack","defensive_entrenchment","battlefield_harmony","qliphothic_gambit","harmonic_chant","tactical_overwatch","flash_bargain","patch_the_breach","psychic_disruption","suppressive_fire","last_stand_banner"]);
+async function _b3GenericPreRollMods(round, mansAtt, mansDef, attacker, defender){
+  const out = { attBonus: 0, defBonus: 0, attMode: "normal", defMode: "normal", notes: [] };
+  try {
+    const simFn = game.bbttcc?.api?.agent?.simulate?.maneuver;
+    if (typeof simFn !== "function") return out;
+    const base = {
+      raidType: String(round?.activityKey || ""),
+      outcomeTier: "unknown",
+      attackerFactionId: attacker?.id || null,
+      defenderFactionId: defender?.id || null,
+      target: { type: String(round?.targetType || ""), uuid: round?.targetUuid || null, rigId: round?.rigId || null, creatureId: round?.creatureId || null, name: round?.targetName || null },
+      meta: { roundId: round?.roundId || null, preview: true, phase: "pre-roll" }
+    };
+    const sides = [["att", mansAtt], ["def", mansDef]];
+    for (const [side, list] of sides) {
+      for (const raw of (Array.isArray(list) ? list : [])) {
+        const key = String(raw || "").toLowerCase().trim();
+        if (!key || _B3_HARDCODED_KEYS.has(key)) continue;
+        let bundle = null;
+        try { const res = await simFn(Object.assign({}, base, { maneuverKey: key })) || {}; bundle = res.previewWorldEffects || null; } catch (_e) { bundle = null; }
+        const effs = Array.isArray(bundle?.roundEffects) ? bundle.roundEffects : [];
+        for (const e of effs) {
+          const t = String(e?.type || "").trim();
+          const when = String(e?.when || e?.window || "thisRound").toLowerCase();
+          if (when === "nextroll") continue;                       // stored post-commit by _b3ApplyEffectToMods
+          if (t !== "rollBonus" && t !== "advantage" && t !== "disadvantage") continue;
+          const tgt = _b3PickSideFromScope(e.scope, side);
+          if (t === "rollBonus") { const amt = Number(e.amount || 0) || 0; if (!amt) continue; if (tgt === "def") out.defBonus += amt; else out.attBonus += amt; out.notes.push(`${key}: ${tgt} roll ${amt > 0 ? "+" : ""}${amt}`); }
+          else if (t === "advantage") { if (tgt === "def") out.defMode = "adv"; else out.attMode = "adv"; out.notes.push(`${key}: ${tgt} advantage`); }
+          else { if (tgt === "def") out.defMode = "dis"; else out.attMode = "dis"; out.notes.push(`${key}: ${tgt} disadvantage`); }
+        }
+      }
+    }
+  } catch (e) { warn("B3 generic pre-roll mods failed (fail-open)", e); }
+  return out;
+}
+// Strategic-layer boons (flags.bbttcc-factions.bonuses.nextTurn) — written by
+// Mass Mobilization / Force Projection / Operational Cohesion. The resolver
+// raid-roundflags wrapped never existed, so these were never read (2026-09-09).
+function _b3ReadStrategicBoons(round, attacker, mansAtt){
+  const out = { initiativeAdv: false, freeManeuver: false, freeKey: null };
+  try {
+    const nt = attacker?.getFlag?.("bbttcc-factions", "bonuses")?.nextTurn || {};
+    if (nt.initiativeAdv) out.initiativeAdv = true;
+    if (nt.freeManeuver && Array.isArray(mansAtt) && mansAtt.length) { out.freeManeuver = true; out.freeKey = String(mansAtt[0]).toLowerCase(); _b3MarkManeuverFreeOnRound(round, out.freeKey); }
+    round.meta ||= {}; round.meta.b3 ||= {}; round.meta.b3.boons = out;
+  } catch (_e) {}
+  return out;
+}
+async function _b3ConsumeStrategicBoons(round, attacker){
+  try {
+    const used = round?.meta?.b3?.boons; if (!used || (!used.initiativeAdv && !used.freeManeuver)) return;
+    const b = foundry.utils.duplicate(attacker?.getFlag?.("bbttcc-factions", "bonuses") || {});
+    if (!b.nextTurn) return;
+    if (used.initiativeAdv) delete b.nextTurn.initiativeAdv;
+    if (used.freeManeuver) delete b.nextTurn.freeManeuver;
+    await attacker.update({ "flags.bbttcc-factions.bonuses": b });
+  } catch (e) { warn("consume strategic boons failed", e); }
+}
+
 function _b3ComputeThisRoundMods(round, mansAtt, mansDef){
   function lc(s){ return String(s||"").toLowerCase().trim(); }
 
@@ -8839,7 +8914,18 @@ async function _b3ExecuteRoundEffectsPostCommit({ round, attackerActor, defender
     for (const e of effs) _b3ApplyEffectToMods(e, mods, "att");
 
     const stored = await _b3StoreNextRollMods(attackerActor, mods);
-    return { ok:true, stored, count: effs.length, mods: mods };
+
+    // Battle-scene verbs for pre-roll / post-commit maneuvers (2026-09-09): the
+    // fire-time hook only dispatches "anytime" fires, and B2 excludes already-
+    // fired maneuvers from these bundles — so everything here is unapplied.
+    let scene = null;
+    try {
+      const si = game.bbttcc?.api?.raid?.sceneIntents;
+      const verbs = new Set(si?.NEW_VERBS || []);
+      const list = effs.filter(e => verbs.has(String(e?.type || "")));
+      if (si && list.length && game.user?.isGM) scene = await si.apply(list, { attackerFactionId: attackerActor?.id || null, defenderFactionId: defenderActor?.id || null, round, source: "commit" });
+    } catch (e) { warn("B3 scene verbs at commit failed", e); }
+    return { ok:true, stored, count: effs.length, mods: mods, scene };
   } catch (e) {
     warn("B3 executeRoundEffects failed", e);
     return { ok:false, stored:false, error: String(e) };

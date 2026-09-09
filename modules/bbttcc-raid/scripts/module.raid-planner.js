@@ -90,7 +90,7 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     rally_the_line: "+1 to next attack/defense for allies.",
     patch_the_breach: "Restore 1 Structure Point.",
     flash_bargain: "Borrow +1 enemy OP for this round.",
-    saboteurs_edge: "Ignore one Fortified modifier this turn.",
+    saboteur_s_edge: "Ignore one Fortified modifier this turn.",
     bless_the_fallen: "Negate first casualty this round.",
     logistical_surge: "Repeat last round's maneuver at no cost.",
     command_overdrive: "Gain initiative for next round.",

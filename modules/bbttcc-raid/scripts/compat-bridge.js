@@ -228,7 +228,7 @@ function buildOptionManeuverDef(key, meta){
   // Defaults if missing from spec table
   const primaryKey = spec?.primaryKey || "misc";
   const cost = spec?.cost || {};
-  const raidTypes = spec?.raidTypes || ["assault","infiltration","occupation","liberation","espionage","propaganda","siege","ritual","assault_defense","courtly_intrigue"];
+  const raidTypes = spec?.raidTypes || ["assault","infiltration","occupation","liberation","espionage","propaganda","siege","ritual","assault_defense","courtly"];   // "courtly" is the key the normalizer knows (2026-09-09)
 
   return {
     kind: "maneuver",
@@ -781,6 +781,8 @@ function publishCompat(){
   // Run normalization after injections (option maneuvers/strategics may add metadata).
   _normalizeEffectsRegistry();
   _applyFxMetadata();
+  // …and again whenever the JSON maneuver catalog lands late (2026-09-09).
+  Hooks.on("bbttcc:raid:maneuversLoaded", () => { try { _normalizeEffectsRegistry(); _applyFxMetadata(); } catch (e) { console.warn("[bbttcc-raid/compat] re-normalize failed", e); } });
 
 
   const api = {
@@ -845,4 +847,5 @@ Hooks.once("ready", publishCompat);
     // retry once after late-attach overwrites
     setTimeout(__bbttccNormalizeManeuverAvailability, 250);
   });
+  Hooks.on("bbttcc:raid:maneuversLoaded", () => { try { __bbttccNormalizeManeuverAvailability(); } catch (_e) {} });
 })();

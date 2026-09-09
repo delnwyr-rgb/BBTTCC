@@ -138,6 +138,10 @@
     }
 
     console.log(TAG, `Maneuvers loaded: added ${added}, merged ${merged}.`);
+    // The JSON lands ~150 ms + a fetch after ready — AFTER compat-bridge's
+    // normalizers and the fire-mode tag passes ran. Tell them to run again
+    // (2026-09-09: raw label raidTypes and string defenderAccess were leaking).
+    try { Hooks.callAll("bbttcc:raid:maneuversLoaded", { added, merged }); } catch (_e) {}
   }
 
   Hooks.once("ready", () => {

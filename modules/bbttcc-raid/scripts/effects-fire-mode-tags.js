@@ -123,5 +123,7 @@ Hooks.once("ready", () => {
   setTimeout(applyFireModeTags, 300);
   setTimeout(applyFireModeTags, 1500);
 });
+// Deterministic pass the moment the JSON catalog lands (2026-09-09) — no more racing the fetch.
+Hooks.on("bbttcc:raid:maneuversLoaded", () => { try { applyFireModeTags(); } catch (_e) {} });
 
 export { FIRE_MODE_TAGS, applyFireModeTags };
