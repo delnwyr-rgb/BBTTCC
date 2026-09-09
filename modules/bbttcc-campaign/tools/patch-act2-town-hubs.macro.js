@@ -20,7 +20,7 @@
  * Run as GM with "Thatward's Ho!" active.
  */
 (async () => {
-  const DRY_RUN = true;                 // <-- set false to apply
+  const DRY_RUN = false;                 // <-- set false to apply
   const NS = "bbttcc-campaign", TERR = "bbttcc-territory";
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
   const api = game.bbttcc?.api?.campaign; const cid = api?.getActiveCampaignId?.();
@@ -149,8 +149,10 @@
     let hit = null;
     for (const sc of game.scenes) for (const d of sc.drawings) { const tf = d.flags?.[TERR]; if (tf && (tf.isHex || tf.kind === "territory-hex" || tf.name) && norm(tf.name) === norm(name)) { hit = d; break; } if (hit) break; }
     if (!hit) { changes.push(`⚠ hex "${name}" not found on any scene — arrival override skipped`); continue; }
-    const existing = String(hit.flags?.[TERR]?.campaign?.onEnterBeatId || "").trim();
     const rec = camp.hexOverrides[hit.uuid] || {};
+    // The Act-1 fallback is whatever arrival was configured BEFORE this patch: the
+    // campaign override first (it already won over the drawing flag), then the flag.
+    const existing = String(rec.onEnterBeatId || rec.beatId || hit.flags?.[TERR]?.campaign?.onEnterBeatId || "").trim();
     const want = [hubId].concat(existing && existing !== hubId ? [existing] : []);
     if (JSON.stringify(rec.onEnterBeatIds || []) !== JSON.stringify(want)) { camp.hexOverrides[hit.uuid] = Object.assign({}, rec, { onEnterBeatIds: want }); changes.push(`arrival ${name}: [${want.join(" → ")}]`); }
   }
