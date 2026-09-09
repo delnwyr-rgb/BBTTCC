@@ -497,13 +497,15 @@ if (quests) for (const [q, qd] of Object.entries(quests)) if (!questBeats.has(q)
     for (const [to, via] of routeTargets(b)) {
       const t = byId.get(s(to)); if (!t) continue;
       const tp = phaseOf(t); if (tp == null || tp < 1 || tp >= from || t.inject?.evergreen === true) continue;
+      // phaseEntry = { belowPhase: N, to } redirects ONLY while storyPhase < N — safe when N ≤ target act + 1 (the target is never sealed when the redirect fires).
+      if (/^phaseEntry/.test(String(via)) && isNum(b.phaseEntry?.belowPhase) && Number(b.phaseEntry.belowPhase) <= tp + 1) continue;
       down++;
       F("S01", "WARN", b.id, `${via} → '${to}' (${t.label || to}) is Act ${tp} content — SEALED once Act ${from} opens; route to an Act-${from} hub or set inject.evergreen`);
     }
   }
   // S02: a "ride" choice that does not open travel — a letter teleporting the party.
   for (const b of beats) for (const [i, ch] of (b.choices || []).entries()) {
-    if (!/^(🐎|ride|saddle)/i.test(s(ch?.label))) continue;
+    if (!/^(🐎|ride (for|to|back|home|out|on)\b|saddle)/i.test(s(ch?.label))) continue;   // travel verbs only — not "ride the surge"/"ride it backward"
     const t = byId.get(s(ch.next)); if (!t) continue;
     if (!t.worldEffects?.openTravel && t.type !== "travel" && !/travel/i.test(s(t.tags))) F("S02", "WARN", b.id, `choice[${i}] "${ch.label}" → '${ch.next}' has no openTravel — the party arrives without a travel leg`);
   }
