@@ -2512,6 +2512,7 @@ ${
                   const ok = await _gmAdjudicate(label, '<div style="font-weight:700;">' + _escapeHtml(label) + '</div>' + promptLine + metaLine);
 
                   const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
+                  try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
                   if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
                   if (!ok) await _offerRetryInChain(campaign, beat, ctx);
 
@@ -2554,6 +2555,7 @@ ${
                   const ok = await _gmAdjudicate(label, '<div style="font-weight:700;">' + _escapeHtml(label) + '</div>' + promptLine + metaLine);
 
                   const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
+                  try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
                   if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
                   if (!ok) await _offerRetryInChain(campaign, beat, ctx);
 
@@ -2643,6 +2645,7 @@ ${
                   ? (ch.next || "")
                   : (ch.failNext || beat.outcomes?.failure || "");
 
+                try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
                 if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
                 if (!res.ok) await _offerRetryInChain(campaign, beat, ctx);
 
@@ -2658,6 +2661,7 @@ ${
 
 // No check: route to next
               const nextId = ch.next || "";
+              try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
               if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
 
               finish({
@@ -5814,6 +5818,7 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
           : '');
       const ok = await _gmAdjudicate(label, body);
       const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
+      try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
       if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
       return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch,
                check: { stat: String(ch.checkStat || "gm").trim().toLowerCase(), dc: _num(ch.checkDC, 0), ok: !!ok, kind: "gm" } };
@@ -5853,6 +5858,7 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
       ui.notifications?.info?.(`${label}: ${res.total}${res.kind === "op" ? ` (${_ftCanonDie()} + ${res.bonus})` : ""} vs DC ${res.dc}${res.momentumBanked ? ` · +${res.momentumBanked} Momentum` : ""}${res.doubleTen ? " · ✦ Decisive Moment" : ""}  ->  ${res.ok ? "SUCCESS" : "FAIL"}`);
     } catch (_eN) {}
     const nextId = res.ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
+    try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
     if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
     return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch,
              check: { stat: res.stat, dc: res.dc, total: res.total, ok: res.ok, kind: res.kind, bonus: (res.bonus != null ? res.bonus : null) } };
@@ -5860,6 +5866,7 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
 
   // No check: route to next
   const nextId = ch.next || "";
+  try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
   if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
   return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch };
 }
@@ -6021,6 +6028,43 @@ async function dialogueStoryStateFor(_actorId = null) {
 // of how the moment happened. Serialized through one promise chain: a routed
 // chain resolves several speaker beats back-to-back, and concurrent
 // read-modify-writes of the memories flag / directorState would drop entries.
+// The word is ANSWERED the moment the Stewards pick a reply on the speaker's
+// beat — not when the beat's whole downstream chain settles (2026-09-09).
+// Welcome/chat beats "Leave" into repeatable town hubs, and a routed chain's
+// resolve hook only fires when every descendant has returned, so "A Word from
+// X" sat active for as long as the party kept walking the town. Called at
+// every choice-pick site (menu + dialogue enact) and, as a fallback for
+// choice-less speaker beats, from the resolve listener. Idempotent, GM-only.
+async function _answerSpeakerWord(beat, choice = null) {
+  try {
+    if (!game.user?.isGM) return false;
+    const sid = String(beat?.speakerActorId || "").trim();
+    if (!sid || !beat?.id) return false;
+    // Consume the moment (unless the beat is authored repeatable).
+    try {
+      await _mutateDirectorState(s => {
+        if (!s.dialogueFired[beat.id]) s.dialogueFired[beat.id] = { ts: Date.now() };
+      });
+    } catch (_eS) {}
+    // Close the invitation quest, if one was accepted for this moment:
+    // the word was answered in person, so "A Word from X" completes.
+    const qid = `word_${beat.id}`;
+    const q = getQuest(qid);
+    if (q && q.status !== "completed") {
+      await setQuestStatus(qid, "completed");
+      const campaignId = getActiveCampaignId();
+      const campaign = campaignId ? getCampaign(campaignId) : null;
+      if (campaign) await _applyQuestEffects(campaign, {
+        id: beat.id,
+        worldEffects: { questEffects: [{ action: "complete", questId: qid, text: "Word answered in person." }] }
+      }, {});
+      log(`[dialogue] '${qid}' completed — word answered on '${beat.id}'${choice?.label ? ` ("${choice.label}")` : ""}.`);
+      return true;
+    }
+  } catch (eQ) { warn("[dialogue] invite-quest completion failed:", eQ); }
+  return false;
+}
+
 let _speakerMemoryChain = Promise.resolve();
 function _onBeatResolvedSpeakerMemory({ beat, outcome } = {}) {
   try {
@@ -6028,28 +6072,8 @@ function _onBeatResolvedSpeakerMemory({ beat, outcome } = {}) {
     const sid = String(beat?.speakerActorId || "").trim();
     if (!sid) return;
     _speakerMemoryChain = _speakerMemoryChain.then(async () => {
-      // Consume the moment (unless the beat is authored repeatable).
-      try {
-        await _mutateDirectorState(s => {
-          if (!s.dialogueFired[beat.id]) s.dialogueFired[beat.id] = { ts: Date.now() };
-        });
-      } catch (_eS) {}
-
-      // Close the invitation quest, if one was accepted for this moment:
-      // the word was answered in person, so "A Word from X" completes.
-      try {
-        const qid = `word_${beat.id}`;
-        const q = getQuest(qid);
-        if (q && q.status !== "completed") {
-          await setQuestStatus(qid, "completed");
-          const campaignId = getActiveCampaignId();
-          const campaign = campaignId ? getCampaign(campaignId) : null;
-          if (campaign) await _applyQuestEffects(campaign, {
-            id: beat.id,
-            worldEffects: { questEffects: [{ action: "complete", questId: qid, text: "Word answered in person." }] }
-          }, {});
-        }
-      } catch (eQ) { warn("[dialogue] invite-quest completion failed:", eQ); }
+      // Fallback for choice-less speaker beats; the pick sites already did this.
+      await _answerSpeakerWord(beat, outcome?.choice || null);
 
       const actor = game.actors?.get?.(sid);
       if (!actor) return;
