@@ -14,7 +14,7 @@
  * DRY_RUN default true. Paste THIS file fresh (a saved world Macro may be stale).
  */
 (async () => {
-  const DRY_RUN = false;                 // <-- set false to apply
+  const DRY_RUN = true;                 // <-- set false to apply
   const RETRACT = [                      // <-- accepted Words to take back (owner ruling 2026-09-09: the phantom batch goes)
     "word_fixit_leyline_stabilizer_negotiation",   // Mara — already in the know
     "word_khezek_tor_mine_that_answered_back",     // Drax — mine job not yet accepted at the KT hub
@@ -41,9 +41,14 @@
     const hs = (e.history || []).filter(h => h && h.note === NOTE); if (!hs.length || qid.startsWith("word_")) continue;
     repairTs = Math.min(repairTs, ...hs.map(h => Number(h.ts) || Infinity)); delete t.active[qid]; changes.push(`undo ${F.name}: − ${e.questName || qid}`);
   }
-  // 2. repair word_ quests
+  // 2. repair word_ quests — ONLY those this timeline actually invited (Director once-gate
+  //    set) or that some track already holds. A restore/From-the-Top leaves registry
+  //    leftovers from play that were never invited here: those are orphans (step 6).
+  const heldAnywhere = (qid) => tracks.some(([, t]) => t.active[qid] || t.completed[qid] || t.archived[qid]);
+  const invitedHere = (qid) => !!ds.invited[qid.slice(5)];
   for (const [qid, q] of Object.entries(reg)) {
     if (!qid.startsWith("word_") || RETRACT.includes(qid)) continue;
+    if (!invitedHere(qid) && !heldAnywhere(qid)) continue;
     for (const [F, t] of tracks) { if (t.active[qid] || t.completed[qid] || t.archived[qid]) continue;
       t.active[qid] = { v: 1, questId: qid, questName: String(q.name || qid), status: "active", acceptedTs: Number(q.createdTs) || now, lastTouchedTs: now, state: "", notes: "", progress: { beats: {} }, history: [{ ts: now, type: "accept", by: game.user.id, note: NOTE }] };
       changes.push(`repair ${F.name}: + ${q.name}`); }
@@ -56,6 +61,15 @@
   }
   const retractCards = game.messages.filter(m => { const inv = m.getFlag(NS, "talkInvite"); return inv && (RETRACT.includes(inv.questId) || (inv.beatIds || []).some(b => RETRACT.includes("word_" + b))); });
   for (const m of retractCards) changes.push(`retract chat: delete card ${m.id}`);
+  // 6. orphan invitation quests: a word_* registry entry that NO faction track holds
+  //    in any bucket is a leftover from play (an invitation is created on accept —
+  //    a From-the-Top baseline must carry none, or later accepts reuse the stale
+  //    entry and its old name). Deleted; their Director once-gates cleared too.
+  for (const qid of Object.keys(reg)) {
+    if (!qid.startsWith("word_") || heldAnywhere(qid) || invitedHere(qid)) continue;
+    delete reg[qid]; regDirty = true; changes.push(`orphan registry: − ${qid}`);
+    const beatId = qid.slice(5); if (ds.invited[beatId]) { delete ds.invited[beatId]; dsDirty = true; changes.push(`orphan once-gate: − ${beatId}`); }
+  }
   // 4. rename + scrub; Tamsin's line
   const tam = byId.allesh_gilliam_father_tamsin_conversation, TAM = "has set the kettle aside. There is a story he was a different man in, and he has decided you should hear it before anyone else tells it worse.";
   if (tam && tam.inviteText !== TAM) { tam.inviteText = TAM; campDirty = true; changes.push("Tamsin Act-2 invite line rewritten"); }
@@ -75,16 +89,6 @@
     // notes/history that are an invite line (start with the speaker's name) → the current clean line
     if (typeof e.notes === "string" && e.notes.startsWith(nm + " ") && e.notes !== plain) { e.notes = plain; changes.push(`scrub track ${F.name}: ${qid} notes`); }
     for (const h of (e.history || [])) for (const k of ["text", "note"]) if (h && typeof h[k] === "string" && h[k].startsWith(nm + " ") && h[k] !== plain && h[k] !== NOTE) { h[k] = plain; }
-  }
-  // 6. orphan invitation quests: a word_* registry entry that NO faction track holds
-  //    in any bucket is a leftover from play (an invitation is created on accept —
-  //    a From-the-Top baseline must carry none, or later accepts reuse the stale
-  //    entry and its old name). Deleted; their Director once-gates cleared too.
-  const held = new Set(); for (const [, t] of tracks) for (const b of ["active", "completed", "archived"]) for (const qid of Object.keys(t[b])) held.add(qid);
-  for (const qid of Object.keys(reg)) {
-    if (!qid.startsWith("word_") || held.has(qid)) continue;
-    delete reg[qid]; regDirty = true; changes.push(`orphan registry: − ${qid}`);
-    const beatId = qid.slice(5); if (ds.invited[beatId]) { delete ds.invited[beatId]; dsDirty = true; changes.push(`orphan once-gate: − ${beatId}`); }
   }
   // 5. phantom invitations posted after a bad repair
   const phantom = [];
