@@ -847,6 +847,30 @@ function readRigs(factionActor){
   return { activeRigCount: active, logisticsRigCount: logistics };
 }
 
+// Effective logistics CAP in marks (2026-09-10). Mirrors op-engine's _readCaps
+// resolution order exactly — explicit opCaps → opCapPer → tier band (tier flag,
+// else progression.victory.tierFromBadge, else 0) — so a faction with NO
+// explicit opCaps flag is sized by its tier band like every wizard-built
+// faction. Bank is the last resort only if the flag object is malformed.
+const _LOGI_CAP_BAND = [50, 70, 90, 110, 130];   // T0..T4, marks per bucket (1 OP = 10 marks)
+function _logisticsCapMarks(factionActor, bank){
+  try {
+    const f = factionActor?.flags?.[MOD_FACTIONS] || {};
+    if (f.opCaps && typeof f.opCaps === "object") {
+      const explicit = safeNum(f.opCaps.logistics);
+      if (explicit > 0) return explicit;
+    }
+    const per = safeNum(f.opCapPer);
+    if (per > 0) return per;
+    let tier = safeNum(f.tier, -1);
+    if (!(tier >= 0)) tier = safeNum(f.progression?.victory?.tierFromBadge, -1);
+    if (!(tier >= 0)) tier = 0;
+    return _LOGI_CAP_BAND[Math.max(0, Math.min(4, Math.floor(tier)))];
+  } catch (_e) {
+    return safeNum(bank?.logistics);
+  }
+}
+
 async function computeLogisticsPressureForFaction(factionActor){
   const fid = factionActor.id;
 
@@ -859,8 +883,12 @@ async function computeLogisticsPressureForFaction(factionActor){
   // meant to relieve pressure) cut capacity → worse band → −35% logistics
   // regen → bank pinned at 0 → ratio 10.0 forever (observed turns 3–20, all
   // three sim factions). Falls back to bank if no cap is set.
-  const capsBank = clone(getFlag(factionActor, `${MOD_FACTIONS}.opCaps`, {}));
-  const logisticsMarks = safeNum(capsBank.logistics) > 0 ? safeNum(capsBank.logistics) : safeNum(bank.logistics);
+  // 2026-09-10: resolve the cap through _logisticsCapMarks (explicit opCaps →
+  // opCapPer → TIER BAND), never straight to the bank. Onboarding-founded
+  // factions carry no explicit opCaps flag; the raw-flag read below sized
+  // Errata off its shrinking bank (capacity 3, ratio 1.33 STRAINED) while the
+  // wizard-built Sweet Release, same moves, read its caps (ratio 0.67 stable).
+  const logisticsMarks = _logisticsCapMarks(factionActor, bank);
   const logisticsOP = Math.floor(logisticsMarks / 10);   // rule unit: one "logistics slot" per 10 marks (not a displayed quantity)
 
   const { activeRigCount, logisticsRigCount } = readRigs(factionActor);
@@ -1077,6 +1105,21 @@ async function advanceOPRegen({ apply=false, factionId=null } = {}){
           regenNotes.push(`${e?.label || "income plan"}: ${chans.length === Object.keys(opsDelta).length ? "all channels" : chans.join("/")} ×${mult}`);
         }
       } catch (e) { warn("regenPlan apply failed", e); }
+      // Loyalty stability (wired 2026-09-10, owner ruling): advance-turn.tracks
+      // doLoyaltyPhase1 writes bonuses.nextTurn.opGainPct (−20/−10/+5/+10 by
+      // loyalty band) for THE NEXT Advance — this one. It had no reader and no
+      // expiry, so it only ever accumulated (Errata −40% by turn 2). Applied here
+      // to every channel's income; tickFactionBonuses (after regen) expires it
+      // and defenseDC together, so each turn's loyalty phase starts clean.
+      try {
+        const pctRaw = Number(A.getFlag("bbttcc-factions", "bonuses")?.nextTurn?.opGainPct);
+        const pct = Number.isFinite(pctRaw) ? Math.max(-100, Math.min(100, pctRaw)) : 0;
+        if (pct !== 0) {
+          const mult = 1 + pct / 100;
+          for (const k of Object.keys(opsDelta)) { const b0 = safeNum(opsDelta[k]); if (b0 > 0) opsDelta[k] = Math.max(0, Math.floor(b0 * mult)); }
+          regenNotes.push(`loyalty stability: all channels ${pct > 0 ? "+" : ""}${pct}%`);
+        }
+      } catch (e) { warn("loyalty opGainPct apply failed", e); }
       const totalGained = Object.values(opsDelta).reduce((a,b)=>a+b,0);
 
       const row = { factionId: A.id, factionName: A.name, gained: totalGained, opsDelta, applied:false };
@@ -1572,6 +1615,11 @@ async function tickFactionBonuses(){
       const nt = b.nextTurn || {};
       if (nt.borderPatrol) { const t = safeNum(nt.borderPatrol) - 1; if (t <= 0) { delete nt.borderPatrol; notes.push("Border Patrol stood down"); } else nt.borderPatrol = t; dirty = true; }
       if (nt.noMoraleLoss) { delete nt.noMoraleLoss; dirty = true; }
+      // Loyalty stability one-turn effects (2026-09-10): consumed this Advance
+      // (opGainPct in advanceOPRegen, defenseDC by raid defense DC readers) —
+      // clear so tracks' loyalty phases write a fresh value, never a running sum.
+      if (nt.opGainPct !== undefined) { delete nt.opGainPct; dirty = true; }
+      if (nt.defenseDC !== undefined) { delete nt.defenseDC; dirty = true; }
       if (nt.spyInsertion) { const due = safeNum(nt.spyInsertion.due, 1) - 1; if (due <= 0) { await spyReport(F, nt.spyInsertion); delete nt.spyInsertion; } else nt.spyInsertion = Object.assign({}, nt.spyInsertion, { due }); dirty = true; }
       if (dirty) {
         const upd = { [`flags.${MOD_FACTIONS}.bonuses`]: b };

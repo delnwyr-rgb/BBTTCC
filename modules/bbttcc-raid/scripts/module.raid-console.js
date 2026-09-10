@@ -2088,6 +2088,19 @@ function _mansForTypeDefense(typeKey){
 }
 
 // --- Core math helpers ------------------------------------------------------
+// Defender one-shot DC bonus (2026-09-10): the authored nextRaid.defenseBonus
+// slot PLUS the loyalty-stability defenseDC that advance-turn.tracks
+// doLoyaltyPhase2 writes to bonuses.nextTurn.defenseDC (−2/−1/+1/+2 by loyalty
+// band, expired each Advance by tickFactionBonuses). The latter had no reader
+// anywhere until now. Read by the projection, per-round view, Add Round and
+// the contested re-computation — one helper so they never disagree.
+function _rcDefenderNextBonus(dflags) {
+  const nr = Number(dflags?.bonuses?.nextRaid?.defenseBonus || 0);
+  const ldRaw = Number(dflags?.bonuses?.nextTurn?.defenseDC || 0);
+  const ld = Number.isFinite(ldRaw) ? Math.max(-5, Math.min(5, ldRaw)) : 0;
+  return (Number.isFinite(nr) ? nr : 0) + ld;
+}
+
 async function computeDryRun(attacker, { activityKey="assault", difficulty="normal", rollMode="normal", extraBonus=0, attackerBaseOverride=null } = {}, baseDC) {
   // Legacy single-roll vs DC (used for creature targets where no defender faction exists)
   const key = primaryKeyFor(activityKey);
@@ -3772,7 +3785,7 @@ _renderScenarioHUD(host, round){
       bonusTop = stagedOpBonus(stagedDTop);
       const dflags = defender?.flags?.[FCT_ID] || {};
       facDefTop = Number(dflags?.mods?.defense || 0);
-      nextBTop  = Number(dflags?.bonuses?.nextRaid?.defenseBonus || 0);
+      nextBTop  = _rcDefenderNextBonus(dflags);
 
       // Base DC:
       // - Hex/Facility: from hex flags.defense (default 10)
@@ -3873,7 +3886,7 @@ _renderScenarioHUD(host, round){
         holdingsBreak,
         nextB: nextBTop,
         projected: projTop,
-        breakdown: `Base ${baseTop} + Staged/2 ${bonusTop}${diffTop?` + Diff ${diffTop}`:""}${facDefTop?` + Defense ${facDefTop}`:""}${holdingsTop?` (incl. Holdings +${holdingsTop})`:""}${nextBTop?` + Next-Raid ${nextBTop}`:""} = ${projTop}`
+        breakdown: `Base ${baseTop} + Staged/2 ${bonusTop}${diffTop?` + Diff ${diffTop}`:""}${facDefTop?` + Defense ${facDefTop}`:""}${holdingsTop?` (incl. Holdings +${holdingsTop})`:""}${nextBTop?` + Next-Raid/Loyalty ${nextBTop}`:""} = ${projTop}`
       } : null
     };
 
@@ -3931,7 +3944,7 @@ _renderScenarioHUD(host, round){
       const defProjBonus = stagedOpBonus(stagedD);
       const dflagsR = def?.flags?.[FCT_ID] || {};
       const facDefR = Number(dflagsR?.mods?.defense || 0);
-      const nextBR  = Number(dflagsR?.bonuses?.nextRaid?.defenseBonus || 0);
+      const nextBR  = _rcDefenderNextBonus(dflagsR);
       const diffR   = Number(r.diffOffset || 0);
 
       const facDefTotal = facDefR + facDefBonus;
@@ -4262,7 +4275,7 @@ r.view = {
 
     const dflags = defender?.flags?.[FCT_ID] || {};
     const defenderModsDefense = Number(dflags?.mods?.defense || 0);
-    const nextRaidBonus = Number(dflags?.bonuses?.nextRaid?.defenseBonus || 0);
+    const nextRaidBonus = _rcDefenderNextBonus(dflags);
 
     const cont = await computeContested(attacker, defender, {
       activityKey: this.vm.activityKey,
@@ -5745,7 +5758,7 @@ try {
     const facDefBonus = Number(facilityOrRigProfile?.defenderDcBonus || 0);
     const dflags = defender?.flags?.[FCT_ID] || {};
     const defenderModsDefense = Number(dflags?.mods?.defense || 0);
-    const nextRaidBonus = Number(dflags?.bonuses?.nextRaid?.defenseBonus || 0);
+    const nextRaidBonus = _rcDefenderNextBonus(dflags);
 
     // B.1 patch 2026-05-14 — fix DC accumulation. Previously baseDefense
     // read r.DC, but r.DC is the PREVIEW defTotal (= preview_dice +

@@ -335,6 +335,11 @@
     const fFlags  = clone(A.flags?.[MODF] || {});
     let bank      = clone(fFlags.opBank || {});
     let fTurnPending = clone(fFlags.turn?.pending || {});
+    // 2026-09-10 (owner ruling): faction morale/loyalty deltas are APPLIED here,
+    // not queued. The old path pushed them into flags.bbttcc-factions.turn.pending
+    // — a slot nothing consumed, so the "+6 Morale" this pass logged every turn
+    // never landed (identical 6/6 sat there from turn 1 on). Run-local sums:
+    let dMorale = 0, dLoyalty = 0;
 
     if (!bankHasKnownShape(bank)) {
       console.warn(TAG, `Faction ${A.name} has unexpected opBank shape; upkeep normalization may be incomplete.`, bank);
@@ -437,7 +442,7 @@
         });
 
         // Faction-level penalties (morale)
-        fTurnPending.moraleDelta = N(fTurnPending.moraleDelta || 0) - 1;
+        dMorale -= 1;
       }
 
       // Holdings Phase D — neglect tracking + abandonment.
@@ -477,7 +482,7 @@
             abandonedHexCount++;
             abandonedUnitsTotal += totalLost;
             // Knock morale once more for the loss
-            fTurnPending.moraleDelta = N(fTurnPending.moraleDelta || 0) - 1;
+            dMorale -= 1;
           } else {
             neglectPatch = {
               turns: nextTurns,
@@ -519,7 +524,7 @@
     // each full_integration hex with paid upkeep: +2 morale
     const moraleBonus = (moraleShortCount * 1) + (moraleFullCount * 2);
     if (moraleBonus > 0) {
-      fTurnPending.moraleDelta = N(fTurnPending.moraleDelta || 0) + moraleBonus;
+      dMorale += moraleBonus;
       logLines.push(
         `• Integration morale bonus: +${moraleBonus} Morale ` +
         `(${moraleShortCount} short-integration, ${moraleFullCount} full-integration hexes with paid upkeep)`
@@ -531,22 +536,36 @@
     // each full_integration hex with paid upkeep: +2 loyalty
     const loyaltyBonus = (loyaltyShortCount * 1) + (loyaltyFullCount * 2);
     if (loyaltyBonus > 0) {
-      fTurnPending.loyaltyDelta = N(fTurnPending.loyaltyDelta || 0) + loyaltyBonus;
+      dLoyalty += loyaltyBonus;
       logLines.push(
         `• Integration loyalty bonus: +${loyaltyBonus} Loyalty ` +
         `(${loyaltyShortCount} short-integration, ${loyaltyFullCount} full-integration hexes with paid upkeep)`
       );
     }
 
-    // Apply faction updates
+    // Apply faction updates — morale/loyalty land NOW (clamped 0..100).
     const updates = {};
     updates[`flags.${MODF}.opBank`] = bank;
-    if (Object.keys(fTurnPending).length) {
-      updates[`flags.${MODF}.turn.pending`] = fTurnPending;
+    const track = (k) => (fFlags[k] === undefined || fFlags[k] === null) ? 50 : N(fFlags[k]);
+    const clamp100 = (v) => Math.max(0, Math.min(100, Math.round(v)));
+    if (dMorale !== 0) {
+      const before = track("morale"), after = clamp100(before + dMorale);
+      updates[`flags.${MODF}.morale`] = after;
+      logLines.push(`• Morale ${before} → ${after} (${dMorale > 0 ? "+" : ""}${dMorale} from upkeep)`);
+    }
+    if (dLoyalty !== 0) {
+      const before = track("loyalty"), after = clamp100(before + dLoyalty);
+      updates[`flags.${MODF}.loyalty`] = after;
+      logLines.push(`• Loyalty ${before} → ${after} (${dLoyalty > 0 ? "+" : ""}${dLoyalty} from upkeep)`);
     }
 
     if (Object.keys(updates).length) {
       await A.update(updates);
+    }
+    // Retire the dead-letter slot: stale queued deltas from before 2026-09-10
+    // would otherwise sit on the sheet forever (v14: unsetFlag, never "-=key").
+    for (const k of ["moraleDelta", "loyaltyDelta"]) {
+      if (fTurnPending[k] !== undefined) { try { await A.unsetFlag(MODF, `turn.pending.${k}`); } catch (_eU) {} }
     }
 
     // Apply hex updates
@@ -569,6 +588,8 @@
         unpaid: anyUnpaidGlobal,
         moraleBonus,
         loyaltyBonus,
+        moraleDelta: dMorale,
+        loyaltyDelta: dLoyalty,
         holdingsNeglected: neglectedHexCount,
         holdingsAbandonedHexes: abandonedHexCount,
         holdingsAbandonedUnits: abandonedUnitsTotal
@@ -581,7 +602,7 @@
         const content = `
           <p><b>Garrison Upkeep — ${foundry.utils.escapeHTML(A.name)}</b></p>
           <p>${logLines.join("<br/>")}</p>
-          ${anyUnpaidGlobal ? `<p style="color:#b91c1c;"><b>Unpaid upkeep detected.</b> Morale/Loyalty penalties queued.</p>` : ""}
+          ${anyUnpaidGlobal ? `<p style="color:#b91c1c;"><b>Unpaid upkeep detected.</b> Morale penalty applied; hex loyalty penalties queued.</p>` : ""}
           ${neglectedHexCount > 0 ? `<p style="color:#d97706;"><b>⚠ Holdings neglected:</b> ${neglectedHexCount} hex${neglectedHexCount===1?"":"es"} — pay upkeep next turn or units defect.</p>` : ""}
           ${abandonedHexCount > 0 ? `<p style="color:#b91c1c;"><b>💔 Holdings abandoned:</b> ${abandonedUnitsTotal} unit${abandonedUnitsTotal===1?"":"s"} defected from ${abandonedHexCount} hex${abandonedHexCount===1?"":"es"}.</p>` : ""}
           ${moraleBonus > 0 ? `<p style="color:#15803d;"><b>Integration morale bonus:</b> +${moraleBonus} Morale</p>` : ""}
