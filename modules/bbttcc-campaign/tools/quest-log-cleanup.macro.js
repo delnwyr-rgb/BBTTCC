@@ -76,6 +76,16 @@
     if (typeof e.notes === "string" && e.notes.startsWith(nm + " ") && e.notes !== plain) { e.notes = plain; changes.push(`scrub track ${F.name}: ${qid} notes`); }
     for (const h of (e.history || [])) for (const k of ["text", "note"]) if (h && typeof h[k] === "string" && h[k].startsWith(nm + " ") && h[k] !== plain && h[k] !== NOTE) { h[k] = plain; }
   }
+  // 6. orphan invitation quests: a word_* registry entry that NO faction track holds
+  //    in any bucket is a leftover from play (an invitation is created on accept —
+  //    a From-the-Top baseline must carry none, or later accepts reuse the stale
+  //    entry and its old name). Deleted; their Director once-gates cleared too.
+  const held = new Set(); for (const [, t] of tracks) for (const b of ["active", "completed", "archived"]) for (const qid of Object.keys(t[b])) held.add(qid);
+  for (const qid of Object.keys(reg)) {
+    if (!qid.startsWith("word_") || held.has(qid)) continue;
+    delete reg[qid]; regDirty = true; changes.push(`orphan registry: − ${qid}`);
+    const beatId = qid.slice(5); if (ds.invited[beatId]) { delete ds.invited[beatId]; dsDirty = true; changes.push(`orphan once-gate: − ${beatId}`); }
+  }
   // 5. phantom invitations posted after a bad repair
   const phantom = [];
   if (Number.isFinite(repairTs)) for (const [beatId, rec] of Object.entries(ds.invited)) if (Number(rec?.ts) >= repairTs) { phantom.push(beatId); delete ds.invited[beatId]; dsDirty = true; changes.push(`once-gate: − ${beatId} (posted after the bad repair)`); }
