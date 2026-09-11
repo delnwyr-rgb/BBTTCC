@@ -565,6 +565,7 @@ const LOGI = Object.freeze({
 
   CAPACITY_PER_LOGISTICS_OP: 1.0,
   CAPACITY_PER_TRADEPAIR: 1.0,
+  CAPACITY_PER_TRADEROUTE: 0.5,   // owner ruling 2026-09-10: every route counts, half a point each (pairs rounded a lone route to 0)
   CAPACITY_FULL_INTEG_PER_HEX: 0.5,
   CAPACITY_INFRA_DEPOT: 1.0,
   CAPACITY_INFRA_MAJORPORT: 1.0,
@@ -944,7 +945,9 @@ async function computeLogisticsPressureForFaction(factionActor){
 
   // 4) Compute Capacity
   const opCapacity = logisticsOP * LOGI.CAPACITY_PER_LOGISTICS_OP;
-  const tradeCapacity = Math.floor(tradeRouteCount / 2) * LOGI.CAPACITY_PER_TRADEPAIR;
+  // 2026-09-10 (owner ruling): linear, like every other capacity source — floor(n/2) pairs
+  // gave a faction's FIRST trade route nothing at all.
+  const tradeCapacity = tradeRouteCount * LOGI.CAPACITY_PER_TRADEROUTE;
   const integrationCapacity = fullIntegCount * LOGI.CAPACITY_FULL_INTEG_PER_HEX;
   const infraCapacity =
     (infraDepotCount * LOGI.CAPACITY_INFRA_DEPOT) +
