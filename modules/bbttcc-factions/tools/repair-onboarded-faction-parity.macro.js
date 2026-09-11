@@ -27,7 +27,7 @@
  * read the table, set DRY_RUN=false, run again.
  */
 (async () => {
-  const DRY_RUN = true;                       // ← flip to false to write
+  const DRY_RUN = false;                       // ← flip to false to write
   const NAMES = [];                           // ← e.g. ["The Errata Society"]; empty = all onboarding-founded
   const TRACK_SEED = 25;
   const RESEED_TRACKS_BELOW = 25;             // ← lift morale/loyalty below this to TRACK_SEED (1 = zeros only)
