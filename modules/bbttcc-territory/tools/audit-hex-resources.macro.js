@@ -13,6 +13,7 @@
  *
  * Reports, per hex: stored vs expected resources, type/size, owner, manual flag.
  *   • MISMATCH  — non-manual hex whose stored resources ≠ its own ladder → fixed when DRY_RUN=false
+ *   • CALC-STALE — resources already match, only the stored calc block is missing/old → backfilled
  *   • MANUAL    — manualOverride on with hand-set values: reported, never touched
  *   • MIS-SIZED — owned/occupied hex at size "none" (the "new outposts read None" trap)
  * Usage: paste in the GM console, read the table, set DRY_RUN=false, run again.
@@ -41,7 +42,9 @@
       const misSized = size === "none" && (owner || status === "occupied" || status === "claimed");
       if (rep.manual) rows.push({ scene: sc.name, hex: name, owner: ownerName, type: rep.type, size, status: "MANUAL", stored: fmt(rep.before), ladder: fmt(rep.base), note: misSized ? "size none" : "" });
       else if (rep.changed) {
-        rows.push({ scene: sc.name, hex: name, owner: ownerName, type: rep.type, size, status: DRY_RUN ? "MISMATCH" : "FIXED", stored: fmt(rep.before), expected: fmt(rep.resources), note: misSized ? "size none" : "" });
+        // Resources equal but no/stale calc block → the recompute only backfills calc; not a yield problem.
+        const calcOnly = fmt(rep.before) === fmt(rep.resources);
+        rows.push({ scene: sc.name, hex: name, owner: ownerName, type: rep.type, size, status: DRY_RUN ? (calcOnly ? "CALC-STALE" : "MISMATCH") : (calcOnly ? "CALC-FIXED" : "FIXED"), stored: fmt(rep.before), expected: fmt(rep.resources), note: (misSized ? "size none" : "") + (calcOnly ? (misSized ? "; " : "") + "resources already match — calc block backfilled" : "") });
         if (!DRY_RUN) { try { await api.recomputeHexResources(d, { source: "audit-hex-resources" }); fixed++; } catch (e) { rows[rows.length - 1].status = "ERROR"; rows[rows.length - 1].note = String(e?.message || e); } }
       }
       else if (misSized) rows.push({ scene: sc.name, hex: name, owner: ownerName, type: rep.type, size, status: "MIS-SIZED", stored: fmt(rep.before), expected: fmt(rep.resources), note: "owned/occupied at size none — set a size in Hex Config" });
