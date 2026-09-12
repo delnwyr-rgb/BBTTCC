@@ -550,7 +550,7 @@
       await enqueuePendingRepairs(ctx.targetUuid, ["Intel"], []);
       await revealHex(doc);
       const tf = tfOf(doc); const owner = tf.faction || tf.ownerName || (hexOwnerId(doc) ? game.actors.get(hexOwnerId(doc))?.name : "") || "unclaimed";
-      await whisperFaction(A, `Intel — ${hexName(doc)}`, `Held by <b>${esc(owner)}</b> · ${esc(tf.type || "?")} / ${esc(tf.size || "?")} · status ${esc(tf.status || "?")} · defense <b>${Number(tf.defense || 0)}</b> · loyalty ${Number(tf.loyalty || 0)} · morale ${Number(tf.morale || 0)} · integration ${Number(tf.integration?.progress || 0)}/6<br>Modifiers: ${(tf.modifiers || []).map(esc).join(", ") || "none"}<br>Alignment: ${esc(tf.sephirotName || tf.sephirotKey || "none")}`);
+      await whisperFaction(A, `Intel — ${hexName(doc)}`, `Held by <b>${esc(owner)}</b> · ${esc(tf.type || "?")} / ${esc(tf.size || "?")} · status ${esc(tf.status || "?")} · defense <b>${Number(tf.defense || 0)}</b> · loyalty ${Number(tf.mods?.loyalty ?? tf.loyalty ?? 0)} · morale ${Number(tf.mods?.morale ?? tf.morale ?? 0)} · integration ${Number(tf.integration?.progress || 0)}/6<br>Modifiers: ${(tf.modifiers || []).map(esc).join(", ") || "none"}<br>Alignment: ${esc(tf.sephirotName || tf.sephirotKey || "none")}`);
       await pushWarLog(A, `Gather Intel: ${hexName(doc)} scouted — dossier whispered; +Intel next turn.`);
     },
     // Alignment Shift (std) — +Sanctified, +Pilgrimage Site, Morale/Loyalty +1 next turn, and the faith boon is real: +10 marks Faith next turn.

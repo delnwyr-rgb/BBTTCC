@@ -156,6 +156,7 @@ const M = {
   MOD_TRADE: { "trade hub":0.5 }                        // territory getModifierEffects (mTrade)
 };
 if (KNOBS.priceMult == null) KNOBS.priceMult = ENGINE_PRICE_MULT;
+const LOGI_CAP_FLOOR = (() => { const m = /const\s+_LOGI_CAP_FLOOR\s*=\s*\[([^\]]*)\]/.exec(S.turnDriver || ""); if (!m) { DRIFT.push("_LOGI_CAP_FLOOR: not found in turn-driver — using [0,0,0,0,0]"); return [0,0,0,0,0]; } return m[1].split(",").map(x => Number(x.trim()) || 0); })();
 M.PHASE_MULT.occupation = ENGINE_OCCUPATION_MULT;   // parsed from the upkeep enhancer (ruling B halved it)
 if (KNOBS.sprawlExp != null) E.LOGI.SPRAWL_EXP = KNOBS.sprawlExp;
 if (KNOBS.sprawlThreshold != null) E.LOGI.SPRAWL_THRESHOLD = KNOBS.sprawlThreshold;
@@ -253,7 +254,7 @@ function logistics(F) {   // turn-driver computeLogisticsPressureForFaction (dis
   for (const h of F.hexes) { const p = h.progress; if (p <= 0) occ++; else if (p <= 3) short++; else full++; if (h.modifiers.some(m => /trade hub|ruins|outpost|port|vault|megastructure|rail yard/i.test(m))) special++; }
   const sprawlExcess = Math.max(0, n - L.SPRAWL_THRESHOLD);
   const demand = n * L.DEMAND_TERRITORY_PER_HEX + short * L.DEMAND_SHORT_PER_HEX + occ * L.DEMAND_OCCUPATION_PER_HEX + (F.distSteps || 0) * L.DEMAND_DISTANCE_PER_STEP + special * L.DEMAND_SPECIAL_PER_HEX + (sprawlExcess > 0 ? Math.pow(sprawlExcess, L.SPRAWL_EXP) * L.SPRAWL_MULT : 0);
-  const capMarks = M.CAP_BAND[F.tier]; const opCapacity = Math.floor(capMarks / 10) * L.CAPACITY_PER_LOGISTICS_OP;
+  const capMarks = Math.max(M.CAP_BAND[F.tier], LOGI_CAP_FLOOR[F.tier] ?? 0); const opCapacity = Math.floor(capMarks / 10) * L.CAPACITY_PER_LOGISTICS_OP;   // turn-driver _LOGI_CAP_FLOOR (2026-09-12)
   const tradeCapacity = L.CAPACITY_PER_TRADEROUTE != null ? F.routes * L.CAPACITY_PER_TRADEROUTE : Math.floor(F.routes / 2) * L.CAPACITY_PER_TRADEPAIR;
   const capacity = opCapacity + tradeCapacity + full * L.CAPACITY_FULL_INTEG_PER_HEX + (F.supplyLines || 0) * L.CAPACITY_INFRA_SUPPLYLINE;
   const ratio = capacity > 0 ? demand / capacity : Infinity;

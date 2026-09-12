@@ -898,19 +898,23 @@ function readRigs(factionActor){
 // explicit opCaps flag is sized by its tier band like every wizard-built
 // faction. Bank is the last resort only if the flag object is malformed.
 const _LOGI_CAP_BAND = [50, 70, 90, 110, 130];   // T0..T4, marks per bucket (1 OP = 10 marks)
+// Owner ruling 2026-09-12: a young faction's logistics CAPACITY never reads below the T1 band.
+// At T0 the 50-mark cap gave 5 capacity, so the first outpost (occupation counts double) put
+// every expanding faction at overextended on turn 1–2 (sim OP_ECONOMY_SIM_2026_09_11.md). This
+// floors the *capacity* derivation only — spend caps in op-engine are untouched.
+const _LOGI_CAP_FLOOR = [70, 70, 90, 110, 130];
 function _logisticsCapMarks(factionActor, bank){
   try {
     const f = factionActor?.flags?.[MOD_FACTIONS] || {};
-    if (f.opCaps && typeof f.opCaps === "object") {
-      const explicit = safeNum(f.opCaps.logistics);
-      if (explicit > 0) return explicit;
-    }
-    const per = safeNum(f.opCapPer);
-    if (per > 0) return per;
     let tier = safeNum(f.tier, -1);
     if (!(tier >= 0)) tier = safeNum(f.progression?.victory?.tierFromBadge, -1);
     if (!(tier >= 0)) tier = 0;
-    return _LOGI_CAP_BAND[Math.max(0, Math.min(4, Math.floor(tier)))];
+    const t = Math.max(0, Math.min(4, Math.floor(tier)));
+    let resolved = 0;
+    if (f.opCaps && typeof f.opCaps === "object" && safeNum(f.opCaps.logistics) > 0) resolved = safeNum(f.opCaps.logistics);
+    else if (safeNum(f.opCapPer) > 0) resolved = safeNum(f.opCapPer);
+    else resolved = _LOGI_CAP_BAND[t];
+    return Math.max(resolved, _LOGI_CAP_FLOOR[t]);
   } catch (_e) {
     return safeNum(bank?.logistics);
   }
