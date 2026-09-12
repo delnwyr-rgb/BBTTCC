@@ -364,10 +364,11 @@ function runTurn(F, policy, t, rand) {
   // regen (turn-driver advanceOPRegen): matrix income × loyalty pct (2026-09-10) × overextension logistics mult, clamp to caps
   const inc = factionIncome(F); const pct = KNOBS.loyaltyPenalty ? F.pendingPct : 0;
   const lg = logistics(F); F.lastBand = lg.band; const lm = M.OVEREXT_LOGI_MULT[lg.band] ?? 1;
-  for (const k of OPK) { let v = inc[k]; if (pct) v = Math.max(0, Math.floor(v * (1 + pct / 100))); if (k === "logistics" && lm !== 1) v = Math.floor(v * lm); F.bank[k] = Math.min(caps(F), F.bank[k] + v); }
+  for (const k of OPK) { let v = inc[k]; if (pct) v = Math.max(0, Math.floor(v * (1 + pct / 100))); if (k === "logistics" && lm !== 1) v = Math.floor(v * lm); F.bank[k] = F.bank[k] + v; }   // clamp AFTER the spend (engine clampBanksToCaps, 2026-09-12)
   if (policy.reward && KNOBS.rewardMarks > 0 && t % KNOBS.rewardEvery === 0) { const scarce = OPK.slice().sort((a, b) => F.bank[a] - F.bank[b])[0]; F.bank[scarce] = Math.min(caps(F), F.bank[scarce] + KNOBS.rewardMarks); row.notes.push(`reward +${KNOBS.rewardMarks} ${scarce}`); }
   F.pendingPct = 0;
   if (KNOBS.spendOrder === "after") applyPlans();
+  for (const k of OPK) F.bank[k] = Math.min(caps(F), F.bank[k]);   // cap clamp after planned spend
   if (t >= KNOBS.tierFloorTurn && F.tier < 1) F.tier = 1;   // Director tier floor (Act 2)
   // tracks: hex loyalty pull (2026-09-12) → drift → stability penalty for NEXT turn
   { const HEX_MOD_LOYALTY = { "loyal population":2, "hostile population":-2, "well-maintained":1, "damaged infrastructure":-1 };

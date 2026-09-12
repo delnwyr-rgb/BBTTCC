@@ -1041,6 +1041,29 @@ async function computeLogisticsPressureForFaction(factionActor){
   return payload;
 }
 
+// Cap clamp after the spend (2026-09-12) — see advanceOPRegen deferCapClamp. Marks above the
+// cap are still lost (caps stay hard — owner ruling), but only what the faction did not spend.
+async function clampBanksToCaps(){
+  const rows = [];
+  for (const A of allFactions()) {
+    try {
+      const bank = clone(getFlag(A, `${MOD_FACTIONS}.opBank`, zeroOps()));
+      const caps = A.getFlag(MOD_FACTIONS, "opCaps") || {};
+      const lost = {}; let dirty = false;
+      for (const k of Object.keys(bank)) {
+        const cap = Number(caps[k] ?? 0) + (Number(caps[k] ?? 0) > 0 ? capBumpFor(A, k) : 0);
+        if (cap > 0 && Number(bank[k]) > cap) { lost[k] = Number(bank[k]) - cap; bank[k] = cap; dirty = true; }
+      }
+      if (!dirty) continue;
+      const wl = clone(getFlag(A, `${MOD_FACTIONS}.warLogs`, [])) || [];
+      wl.push({ ts: Date.now(), date: (new Date()).toLocaleString(), type: "turn", activity: "cap_clamp", summary: `Over cap after spend — lost ${Object.entries(lost).map(([k, v]) => `${v} ${k}`).join(", ")}.` });
+      await A.update({ [`flags.${MOD_FACTIONS}.opBank`]: bank, [`flags.${MOD_FACTIONS}.warLogs`]: wl });
+      rows.push({ factionId: A.id, lost });
+    } catch (e) { warn("clampBanksToCaps failed for", A?.name, e); }
+  }
+  return { changed: rows.length > 0, rows };
+}
+
 async function computeLogisticsPressureForAllFactions({ apply=false } = {}){
   if (!apply) return { changed:false, rows:[] };
   const rows = [];
@@ -1124,7 +1147,7 @@ function computeTerritoryMatrixIncome(factionActor){
   }
 }
 
-async function advanceOPRegen({ apply=false, factionId=null } = {}){
+async function advanceOPRegen({ apply=false, factionId=null, deferCapClamp=false } = {}){
   const targets = factionId ? [game.actors.get(factionId)].filter(Boolean) : allFactions();
   const results = [];
 
@@ -1224,7 +1247,12 @@ async function advanceOPRegen({ apply=false, factionId=null } = {}){
         // ------------------------------------------------------------
         // OP CAP ENFORCEMENT
         // ------------------------------------------------------------
-        try {
+        // 2026-09-12: with REGEN BEFORE SPEND the clamp must wait until planned activities
+        // have been paid — a bank sitting at cap otherwise throws this turn's income away
+        // before the spend it was meant to fund (Errata lost 18 economy on the first Advance
+        // under the new order). driverAdvanceTurn passes deferCapClamp and calls
+        // clampBanksToCaps() after plannedRaidsStep; dry runs / legacy callers clamp here.
+        if (!deferCapClamp) try {
           const caps = A.getFlag("bbttcc-factions", "opCaps") || {};
           const keys = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
 
@@ -1853,7 +1881,7 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     if (apply) scheduledOP = await applyScheduledOPBonuses();
 
     let regen = { changed:false, rows:[] };
-    if (apply) regen = await advanceOPRegen({ apply:true });
+    if (apply) regen = await advanceOPRegen({ apply:true, deferCapClamp:true });
 
     // REGEN BEFORE SPEND (owner ruling 2026-09-12, sim OP_ECONOMY_SIM_2026_09_11.md set C):
     // planned activities are paid from the bank AFTER this turn's income lands, so a
@@ -1862,6 +1890,7 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     // must hold for this Advance's raids before they expire.
     if (apply) ensureConsumePlannedShim();
     const planned = await plannedRaidsStep({ apply });
+    if (apply) await clampBanksToCaps();     // caps bite AFTER the spend (2026-09-12) — income funds this turn's plans first
     if (apply) await tickFactionBonuses();   // expire regenPlan / capBump / truce / nextTurn boons (2026-09-09)
 
     let logistics = { changed:false, rows:[] };
