@@ -606,7 +606,7 @@
       const ownerId = tf.factionId || "";
       const owner = ownerId ? ((game.actors && game.actors.get) ? game.actors.get(ownerId) : null) : null;
 
-      const resources = tf.resources || {};
+      const resources = (game.bbttcc?.facts?.hex?.resources ? game.bbttcc.facts.hex.resources(tf) : (tf.resources || {}));   // facts: what the income engine will pay (2026-09-12)
       const keys = Object.keys(resources || {});
       const resourcesList = keys.map(function (k) { return { label: k, value: resources[k] }; });
 

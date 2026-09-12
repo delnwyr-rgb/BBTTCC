@@ -540,12 +540,8 @@
   // so a territory worked by pressed gangs drags the faction down every turn
   // and a loyal, well-kept one lifts it. Hexes with no score contribute 0.
   // ===========================================================================
-  const HEX_MOD_LOYALTY = { "loyal population": 2, "hostile population": -2, "well-maintained": 1, "well maintained": 1, "damaged infrastructure": -1 };
-  function hexLoyaltyScore(tf) {
-    let v = Number(tf?.mods?.loyalty || 0) || 0;
-    for (const m of (Array.isArray(tf?.modifiers) ? tf.modifiers : [])) { const k = String(m || "").toLowerCase(); if (HEX_MOD_LOYALTY[k] != null) v += HEX_MOD_LOYALTY[k]; }
-    return v;
-  }
+  // Hex loyalty score is a FACT owned by territory main.js (2026-09-12) — read it, never re-derive it.
+  function hexLoyaltyScore(tf) { const fn = game.bbttcc?.facts?.hex?.loyaltyScore; return (typeof fn === "function") ? fn(tf) : 0; }
   function ownedHexDocs(A) {
     const out = [];
     for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) { const tf = d.flags?.[MODT]; if (!tf) continue; if (String(tf.factionId || tf.ownerId) === String(A.id)) out.push(d); }
@@ -900,7 +896,7 @@
         if (!tf) continue;
         const owner = tf.factionId || tf.ownerId;
         if (!owner) continue;
-        const resources = tf.resources || {};
+        const resources = (game.bbttcc?.facts?.hex?.resources ? game.bbttcc.facts.hex.resources(tf) : (tf.resources || {}));   // facts (2026-09-12)
         const mats = Number(resources.materials || 0);
         if (!mats) continue;
         const cur = matsByFaction.get(owner) || 0;
@@ -949,86 +945,30 @@
   // TRADE ROUTES → LOGISTICS OP (ADJACENCY-BASED, ACTIVE SCENE)
   // ===========================================================================
 
-  function isTradeHubHex(tf) {
-    const mods = Array.isArray(tf.modifiers) ? tf.modifiers : [];
-    const type = String(tf.type || "").toLowerCase();
-    // Port or Trade Hub hex
-    if (mods.includes("Trade Hub")) return true;
-    if (type.includes("port")) return true;
-    return false;
-  }
-
+  // Trade routes → Logistics OP. Counts STORED EDGES through facts.routes.trade (2026-09-12) —
+  // the nearest-six adjacency guess this used to make was the third counter for one fact.
+  // Grant unchanged: +1 OP (10 marks) of logistics per two routes, capped by the faction's
+  // logistics cap (facts.faction.caps).
   async function doTradeRouteLogisticsBonus() {
-    const scene = canvas?.scene;
-    const placeables = canvas?.drawings?.placeables ?? [];
-    if (!scene || !placeables.length) return;
-
-    const byFactionRoutes = new Map(); // factionId -> Set of "idA|idB"
-
-    for (const hub of placeables) {
-      const tfHub = hub.document.flags?.[MODT];
-      if (!tfHub) continue;
-      const owner = tfHub.factionId || tfHub.ownerId;
-      if (!owner) continue;
-      if (!isTradeHubHex(tfHub)) continue;
-
-      const neighbors = neighborsDrawings(hub, placeables);
-      for (const n of neighbors) {
-        const tfN = n.document.flags?.[MODT];
-        if (!tfN) continue;
-        const ownerN = tfN.factionId || tfN.ownerId;
-        if (String(ownerN) !== String(owner)) continue;
-
-        const status = String(tfN.status || "").toLowerCase();
-        if (status === "unclaimed") continue; // only working routes on held territory
-
-        const key = [hub.id, n.id].sort().join("|");
-        const set = byFactionRoutes.get(owner) || new Set();
-        set.add(key);
-        byFactionRoutes.set(owner, set);
-      }
-    }
-
-    if (!byFactionRoutes.size) return;
-
-    const gm = gmIds();
-    const lines = [];
-
-    for (const [fid, set] of byFactionRoutes.entries()) {
-      const A = game.actors.get(fid);
-      if (!A) continue;
-
-      const routeCount = set.size;
-      const bonus = Math.floor(routeCount / 2); // every 2 routes → +1 Logistics OP
-      if (!bonus) continue;
-
-      const bank = foundry.utils.duplicate(A.getFlag(MODF,"opBank") || {});
+    const count = game.bbttcc?.facts?.routes?.trade; if (typeof count !== "function") return;
+    const mpo = Number(game.bbttcc?.api?.op?.OP_TO_MARKS) || Number(game.fourththing?.constants?.MARKS_PER_OP);   // rule unit
+    if (!(mpo > 0)) return;
+    const gm = gmIds(); const lines = [];
+    for (const A of facActors()) {
+      const routeCount = Number(count(A.id)) || 0;
+      const bonus = Math.floor(routeCount / 2); if (bonus <= 0) continue;
+      const bank = foundry.utils.duplicate(A.getFlag(MODF, "opBank") || {});
       const before = Number(bank.logistics || 0);
-      // bonus is whole OP; bank is MARKS (1 OP = 10 marks). Adding the raw
-      // integer to a marks bank under-credited the route bonus 10× — fixed
-      // in lockstep with the dnd5e build 2026-06-12.
-      const after = before + bonus * 10;
+      const cap = Number(game.bbttcc?.facts?.faction?.caps?.(A)?.logistics) || 0;
+      const after = cap > 0 ? Math.min(cap, before + bonus * mpo) : before + bonus * mpo;
+      if (after === before) continue;
       bank.logistics = after;
-      const warLogs = Array.isArray(A.getFlag(MODF,"warLogs")) ? A.getFlag(MODF,"warLogs").slice() : [];
+      const warLogs = Array.isArray(A.getFlag(MODF, "warLogs")) ? A.getFlag(MODF, "warLogs").slice() : [];
       warLogs.push({ ts: Date.now(), type: "logisticsRoute", summary: `Trade Routes: ${routeCount} → Logistics +${bonus}` });
-      await A.update({
-        [`flags.${MODF}.opBank`]: bank,
-        [`flags.${MODF}.warLogs`]: warLogs
-      });
-
-      lines.push(
-        `• <b>${foundry.utils.escapeHTML(A.name)}</b>: Trade Routes ${routeCount} `
-        + `→ Logistics OP +${bonus} (now ${after})`
-      );
+      await A.update({ [`flags.${MODF}.opBank`]: bank, [`flags.${MODF}.warLogs`]: warLogs });
+      lines.push(`• <b>${foundry.utils.escapeHTML(A.name)}</b>: Trade Routes ${routeCount} → Logistics ${before}→${after} marks`);
     }
-
-    if (lines.length && gm.length) {
-      await ChatMessage.create({
-        content: `<p><b>Trade Route Logistics Bonus</b></p>${lines.join("<br/>")}`,
-        whisper: gm,
-        speaker: { alias: "Bad Eden Economy" }
-      }).catch(()=>{});
-    }
+    if (lines.length && gm.length) await ChatMessage.create({ content: `<p><b>Trade Route Logistics Bonus</b></p>${lines.join("<br/>")}`, whisper: gm, speaker: { alias: "Bad Eden Economy" } }).catch(() => {});
   }
 
   // ===========================================================================

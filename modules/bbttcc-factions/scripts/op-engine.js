@@ -85,7 +85,46 @@ function _normalizeDeltas(raw) {
   return out;
 }
 
-function _readCaps(faction) {
+// ═════════════════════════════════════════════════════════════════════════════
+// FACTION FACTS — the ONE home for tier / caps / logistics-capacity cap (2026-09-12,
+// "fix the boat" item 1). Every other module reads these through game.bbttcc.facts.faction
+// at run time (or ES-imports the constants from this file); no other file may carry the
+// band literal or re-derive tier from flags. bin/ft-lint-facts enforces it.
+// ═════════════════════════════════════════════════════════════════════════════
+export const TIER_CAP_BAND_MARKS = [50, 70, 90, 110, 130];           // T0..T4, marks per bucket (1 OP = 10 marks)
+export const LOGISTICS_CAPACITY_FLOOR_MARKS = [70, 70, 90, 110, 130]; // owner ruling 2026-09-12: capacity never reads below the T1 band
+export function factionTier(faction) {
+  const f = faction?.flags?.[MOD_ID] || {};
+  let tier = _safeNum(f.tier, -1);
+  if (!Number.isFinite(tier) || tier < 0) {
+    const snap = f.progression && f.progression.victory ? f.progression.victory : null;
+    const tfb = snap ? _safeNum(snap.tierFromBadge, -1) : -1;
+    tier = (tfb >= 0) ? tfb : 0;
+  }
+  return Math.max(0, Math.min(4, Math.floor(tier)));
+}
+export function tierCapBand(tier) { return TIER_CAP_BAND_MARKS[Math.max(0, Math.min(4, Math.floor(Number(tier) || 0)))]; }
+/** Effective per-bucket caps in MARKS: explicit opCaps → opCapPer → tier band. */
+export function factionCaps(faction) {
+  try {
+    const f = faction?.flags?.[MOD_ID] || {};
+    const out = {};
+    if (f.opCaps && typeof f.opCaps === "object") { for (const k of OP_KEYS) out[k] = Math.max(0, Math.floor(_safeNum(f.opCaps[k], 0))); return out; }
+    const per = _safeNum(f.opCapPer, 0);
+    if (per > 0) { for (const k of OP_KEYS) out[k] = Math.max(0, Math.floor(per)); return out; }
+    const derived = tierCapBand(factionTier(faction));
+    for (const k of OP_KEYS) out[k] = derived;
+    return out;
+  } catch (_e) { const out = {}; for (const k of OP_KEYS) out[k] = 0; return out; }
+}
+/** Logistics CAPACITY cap in marks (turn-driver logistics pressure): caps.logistics floored by the tier floor. */
+export function factionLogisticsCapMarks(faction) {
+  const t = factionTier(faction);
+  return Math.max(_safeNum(factionCaps(faction).logistics, 0), LOGISTICS_CAPACITY_FLOOR_MARKS[t]);
+}
+
+function _readCaps(faction) { return factionCaps(faction); }
+function _readCaps_legacy(faction) {
   // Preferred: per-bucket caps at flags.bbttcc-factions.opCaps
   // Fallback: single cap-per-bucket at flags.bbttcc-factions.opCapPer
   // Final fallback: derive from factionLevel/level/buildUnits (alpha-safe)
@@ -447,6 +486,9 @@ function _attach() {
     apiRoot.fmt = formatMarks;                 // marks → "N marks"
     apiRoot.fmtNum = formatMarksNumber;        // marks → "N"
     apiRoot.runMarksMigration = _runMarksMigration;
+    // Facts layer (2026-09-12): one home per faction fact.
+    game.bbttcc.facts ??= {};
+    game.bbttcc.facts.faction = { tier: factionTier, caps: factionCaps, capBand: tierCapBand, logisticsCapMarks: factionLogisticsCapMarks, CAP_BAND: TIER_CAP_BAND_MARKS.slice(), LOGI_CAP_FLOOR: LOGISTICS_CAPACITY_FLOOR_MARKS.slice() };
 
     log(`OP Engine API ready (marks unit, 1 OP = ${_marksPerOp()} marks) → game.bbttcc.api.op.{preview, commit, KEYS, OP_TO_MARKS, marksPerOp, fmt, fmtNum} — every quantity is MARKS`);
   } catch (e) {

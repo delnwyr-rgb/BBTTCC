@@ -1,3 +1,4 @@
+import { factionTier, tierCapBand } from "./op-engine.js";   // facts (2026-09-12): the one home for tier + cap band
 /* modules/bbttcc-factions/scripts/module.js
  * Bad Eden — Faction Sheet (v13-safe)
  *
@@ -2503,15 +2504,7 @@ class BBTTCCFactionSheet extends ActorSheet {
     // faction with no explicit caps produced an OP-unit ceiling that was then
     // compared against a marks-unit bank — the header read "300 / 45" for a bank of
     // 30 OP against a 45 OP ceiling. Tier band mirrors op-engine exactly.
-    const TIER_CAP_BAND_MARKS = [50, 70, 90, 110, 130];   // T0..T4, per bucket
-    const derivedCapPerMarks = (() => {
-      let tier = Number(this.actor.getFlag(MODULE_ID, "tier"));
-      if (!Number.isFinite(tier) || tier < 0) {
-        tier = Number(this.actor.getFlag(MODULE_ID, "progression")?.victory?.tierFromBadge) || 0;
-      }
-      tier = Math.max(0, Math.min(4, Math.floor(tier)));
-      return TIER_CAP_BAND_MARKS[tier];
-    })();
+    const derivedCapPerMarks = tierCapBand(factionTier(this.actor));   // facts (op-engine) — 2026-09-12
 
     const opCaps = (() => {
       const out = {};
@@ -3597,15 +3590,12 @@ try {
           let tier = _safeNum(f.tier, -1);
           if (!Number.isFinite(tier) || tier < 0) {
             const snap = (f.progression && f.progression.victory) ? f.progression.victory : null;
-            const tfb = snap ? _safeNum(snap.tierFromBadge, -1) : -1;
+            const tfb = snap ? _safeNum(snap.tierFromBadge, -1) : -1;   // facts-ok: legacy sheet fallback; derivedPer comes from facts
             tier = (tfb >= 0) ? tfb : 0;
           }
           tier = Math.max(0, Math.min(4, Math.floor(tier)));
 
-          // Cap bands (per bucket), in MARKS. 1 OP = 10 marks.
-          // T0=50, T1=70, T2=90, T3=110, T4=130
-          const band = [50, 70, 90, 110, 130];
-          const derivedPer = band[tier] || 50;
+          const derivedPer = tierCapBand(tier);   // facts (op-engine) — 2026-09-12
 
           for (const k of OP_KEYS) out[k] = Math.max(0, Math.floor(derivedPer));
           return out;

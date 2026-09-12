@@ -1,3 +1,4 @@
+import { TIER_CAP_BAND_MARKS } from "./op-engine.js";
 // modules/bbttcc-factions/scripts/faction-tier-advance-button.enhancer.js
 // Bad Eden — GM Tier Advancement Button (v1.0)
 //
@@ -18,7 +19,7 @@
   // OP cap bands per bucket, in MARKS (1 OP = 10 marks) — mirrors op-engine's
   // tier-derived bands. T0=50, T1=70, T2=90, T3=110, T4=130.
   const OP_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
-  const CAP_BAND = [50, 70, 90, 110, 130];
+  const CAP_BAND = TIER_CAP_BAND_MARKS;   // facts (op-engine) — 2026-09-12
 
   // Raise explicit per-bucket opCaps to at least the tier band. Explicit
   // opCaps shadow the tier-derived bands in op-engine's _readCaps forever —

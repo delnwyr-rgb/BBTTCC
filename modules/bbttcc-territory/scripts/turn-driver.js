@@ -549,7 +549,7 @@ function deriveStockpileFromOwnedHexes(factionId){
         const tf = d.flags?.[MOD_TERRITORY]; if (!tf) continue;
         const owner = tf.factionId || tf.ownerId || "";
         if (owner !== factionId) continue;
-        const r = tf.resources || {};
+        const r = _hexYield(tf);   // facts.hex.resources (2026-09-12)
         sum.food      += safeNum(r.food);
         sum.materials += safeNum(r.materials);
         sum.trade     += safeNum(r.trade);
@@ -561,7 +561,7 @@ function deriveStockpileFromOwnedHexes(factionId){
         const tf = t.flags?.[MOD_TERRITORY]; if (!tf) continue;
         const owner = tf.factionId || tf.ownerId || "";
         if (owner !== factionId) continue;
-        const r = tf.resources || {};
+        const r = _hexYield(tf);   // facts.hex.resources (2026-09-12)
         sum.food      += safeNum(r.food);
         sum.materials += safeNum(r.materials);
         sum.trade     += safeNum(r.trade);
@@ -641,6 +641,14 @@ function isOwnedByFaction(tf, factionId){
   return String(owner) === String(factionId);
 }
 
+// Hex yield is a FACT owned by territory main.js (facts.hex.resources, computed on read from
+// type × size + sephirah + modifiers). No cache read here: if facts are missing that is a load
+// error worth seeing, not something to paper over with stale flags.
+function _hexYield(tf){
+  const fn = game.bbttcc?.facts?.hex?.resources;
+  if (typeof fn !== "function") { warn("facts.hex.resources missing — territory income cannot be computed"); return { food:0, materials:0, trade:0, military:0, knowledge:0 }; }
+  return fn(tf);
+}
 function getAllOwnedHexDocs(factionId){
   const out = [];
   try {
@@ -781,90 +789,7 @@ function countSpecials(owned){
   return { city, special, depot, majorPort, roadNet, supplyLine };
 }
 
-function deriveTradeRouteCountFromWarLogs(factionActor){
-  try {
-    const logs = factionActor.getFlag(MOD_FACTIONS, "warLogs") || [];
-    for (let i = logs.length - 1; i >= 0; i--) {
-      const e = logs[i];
-      if (!e) continue;
-      const s = safeStr(e.summary);
-      if (!s.includes("Trade Routes:")) continue;
-      const m = s.match(/Trade Routes:\s*(\d+)/i);
-      if (m) return safeNum(m[1], 0);
-      break;
-    }
-  } catch {}
-  return null;
-}
 
-// Stored route edges (2026-09-07): certitude first. Counts distinct {a,b} pairs where BOTH ends are
-// owned by the faction and the edge is recorded on at least one end. Returns null when the faction
-// has no stored routes at all, so the legacy readers still cover old worlds.
-function deriveTradeRouteCountFromEdges(factionId){
-  try {
-    const owned = new Map();   // uuid → drawing doc
-    for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) {
-      const tf = d.flags?.[MOD_TERRITORY]; if (!tf || !(tf.isHex === true || tf.kind === "territory-hex")) continue;
-      if (String(tf.factionId || tf.ownerId || "") === String(factionId)) owned.set(d.uuid, d);
-    }
-    let any = false; const edges = new Set();
-    for (const [uuid, d] of owned) {
-      const routes = d.flags?.[MOD_TERRITORY]?.routes; if (!Array.isArray(routes)) continue;
-      any = true;
-      for (const r of routes) { const other = String(r?.hexUuid || ""); if (owned.has(other)) edges.add([uuid, other].sort().join("|")); }
-    }
-    return any ? edges.size : null;
-  } catch { return null; }
-}
-function deriveTradeRouteCountFromScene(factionId){
-  try {
-    const scene = canvas?.scene;
-    const draws = canvas?.drawings?.placeables ?? [];
-    if (!scene || !draws.length) return null;
-
-    const isTradeHubHex = (tf) => {
-      const mods = Array.isArray(tf?.modifiers) ? tf.modifiers : [];
-      const type = safeStr(tf?.type).toLowerCase();
-      if (mods.some(m => safeStr(m).toLowerCase() === "trade hub")) return true;
-      if (type.includes("port")) return true;
-      return false;
-    };
-
-    const neighbors = (draw, all) => {
-      const c = draw.center ?? { x: draw.x + draw.w/2, y: draw.y + draw.h/2 };
-      return all
-        .filter(d => d.id !== draw.id)
-        .map(d => {
-          const cc = d.center ?? { x: d.x + d.w/2, y: d.y + d.h/2 };
-          return { d, dist: Math.hypot(cc.x - c.x, cc.y - c.y) };
-        })
-        .sort((a,b)=>a.dist-b.dist)
-        .slice(0, 6)
-        .map(x=>x.d);
-    };
-
-    const edges = new Set();
-    for (const hub of draws) {
-      const tfHub = hub.document?.flags?.[MOD_TERRITORY];
-      if (!tfHub) continue;
-      const owner = tfHub.factionId || tfHub.ownerId;
-      if (String(owner) !== String(factionId)) continue;
-      if (!isTradeHubHex(tfHub)) continue;
-
-      for (const n of neighbors(hub, draws)) {
-        const tfN = n.document?.flags?.[MOD_TERRITORY];
-        if (!tfN) continue;
-        const ownerN = tfN.factionId || tfN.ownerId;
-        if (String(ownerN) !== String(factionId)) continue;
-        const key = [hub.id, n.id].sort().join("|");
-        edges.add(key);
-      }
-    }
-    return edges.size;
-  } catch {
-    return null;
-  }
-}
 
 function readRigs(factionActor){
   const f = factionActor.flags?.[MOD_FACTIONS] || {};
@@ -902,27 +827,14 @@ function readRigs(factionActor){
 // else progression.victory.tierFromBadge, else 0) — so a faction with NO
 // explicit opCaps flag is sized by its tier band like every wizard-built
 // faction. Bank is the last resort only if the flag object is malformed.
-const _LOGI_CAP_BAND = [50, 70, 90, 110, 130];   // T0..T4, marks per bucket (1 OP = 10 marks)
-// Owner ruling 2026-09-12: a young faction's logistics CAPACITY never reads below the T1 band.
-// At T0 the 50-mark cap gave 5 capacity, so the first outpost (occupation counts double) put
-// every expanding faction at overextended on turn 1–2 (sim OP_ECONOMY_SIM_2026_09_11.md). This
-// floors the *capacity* derivation only — spend caps in op-engine are untouched.
-const _LOGI_CAP_FLOOR = [70, 70, 90, 110, 130];
+// Logistics CAPACITY cap in marks — facts.faction (op-engine) is the one home for tier / caps /
+// the capacity floor (2026-09-12, "fix the boat"). The bank is the last resort only if facts are
+// absent (logged), never a normal path.
 function _logisticsCapMarks(factionActor, bank){
-  try {
-    const f = factionActor?.flags?.[MOD_FACTIONS] || {};
-    let tier = safeNum(f.tier, -1);
-    if (!(tier >= 0)) tier = safeNum(f.progression?.victory?.tierFromBadge, -1);
-    if (!(tier >= 0)) tier = 0;
-    const t = Math.max(0, Math.min(4, Math.floor(tier)));
-    let resolved = 0;
-    if (f.opCaps && typeof f.opCaps === "object" && safeNum(f.opCaps.logistics) > 0) resolved = safeNum(f.opCaps.logistics);
-    else if (safeNum(f.opCapPer) > 0) resolved = safeNum(f.opCapPer);
-    else resolved = _LOGI_CAP_BAND[t];
-    return Math.max(resolved, _LOGI_CAP_FLOOR[t]);
-  } catch (_e) {
-    return safeNum(bank?.logistics);
-  }
+  const fn = game.bbttcc?.facts?.faction?.logisticsCapMarks;
+  if (typeof fn === "function") { try { return fn(factionActor); } catch (e) { warn("facts.faction.logisticsCapMarks failed", e); } }
+  warn("facts.faction missing — logistics capacity falling back to the bank for", factionActor?.name);
+  return safeNum(bank?.logistics);
 }
 
 async function computeLogisticsPressureForFaction(factionActor){
@@ -948,12 +860,10 @@ async function computeLogisticsPressureForFaction(factionActor){
   const { activeRigCount, logisticsRigCount } = readRigs(factionActor);
 
   // Trade routes: try warlog parse first, else derive on active scene if possible.
-  let tradeRouteCount = deriveTradeRouteCountFromEdges(fid);           // stored edges win (certitude)
-  if (tradeRouteCount === null) tradeRouteCount = deriveTradeRouteCountFromWarLogs(factionActor);
-  if (tradeRouteCount === null) {
-    const derived = deriveTradeRouteCountFromScene(fid);
-    tradeRouteCount = (derived === null) ? 0 : derived;
-  }
+  // Trade routes: stored edges are the ONLY counter (facts.routes, 2026-09-12). The war-log parse and
+  // the nearest-six geometry guess are gone — three counters for one fact was how a faction read 2
+  // routes it never built.
+  const tradeRouteCount = (typeof game.bbttcc?.facts?.routes?.trade === "function") ? game.bbttcc.facts.routes.trade(fid) : 0;
 
   // 2) Territory-side inputs
   const owned = getAllOwnedHexDocs(fid);
@@ -1136,7 +1046,7 @@ function computeTerritoryMatrixIncome(factionActor){
     const flows = {};
     for (const h of owned) {
       const tf = h.tf || {};
-      const res = tf.resources || {};
+      const res = _hexYield(tf);   // facts.hex.resources — yield COMPUTED on read (2026-09-12)
       const flow = String(tf.leylines?.flowState || "normal");
       flows[flow] = (flows[flow] || 0) + 1;
       const v = convert(res, flow) || {};

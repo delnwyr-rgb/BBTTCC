@@ -41,7 +41,7 @@
   }
 
   // Badge → Tier mapping (authoritative for Identity gate; not the whole tier system)
-  function tierFromBadge(badgeKey) {
+  function tierFromBadge(badgeKey) {   // facts-ok: the victory gate DERIVES the badge→tier snapshot that facts.faction.tier reads
     // emerging/rising/dominant/transcendent/ascendant :contentReference[oaicite:2]{index=2}
     switch (String(badgeKey || "").toLowerCase()) {
       case "rising":       return 1;
@@ -85,7 +85,7 @@
     // Current tier (if unset, treat as derived from badge for snapshot purposes)
     const curTierRaw = get(actor, `flags.${MODF}.tier`, null);
     const curTier = (curTierRaw === null || curTierRaw === undefined)
-      ? tierFromBadge(badgeKey)
+      ? tierFromBadge(badgeKey)   // facts-ok: the victory gate DERIVES the badge→tier snapshot that facts.faction.tier reads
       : Math.max(0, Math.min(4, Math.floor(Number(curTierRaw) || 0)));
 
     const requiredKey = requiredBadgeForNextTier(curTier);
@@ -93,7 +93,7 @@
 
     const snapshot = {
       badgeKey,
-      tierFromBadge: tierFromBadge(badgeKey),
+      tierFromBadge: tierFromBadge(badgeKey),   // facts-ok: the victory gate DERIVES the badge→tier snapshot that facts.faction.tier reads
       requiredBadgeForNextTier: requiredKey,
       meetsNextTier: meetsNext,
       updatedTs: Date.now()
@@ -105,7 +105,7 @@
 
     // Optional: set tier only if missing (do not override manual tier)
     if (curTierRaw === null || curTierRaw === undefined) {
-      patch[`flags.${MODF}.tier`] = snapshot.tierFromBadge;
+      patch[`flags.${MODF}.tier`] = snapshot.tierFromBadge;   // facts-ok: the victory gate DERIVES the badge→tier snapshot that facts.faction.tier reads
     }
 
     await actor.update(patch, { diff: true, recursive: true });

@@ -154,7 +154,7 @@ const E = {
 };
 // Hand-mirrored scalars (turn-driver / upkeep / tracks / op-engine) — line refs in comments.
 const M = {
-  CAP_BAND: [50, 70, 90, 110, 130],                      // op-engine _readCaps; faction-tier-advance-button CAP_BAND
+  CAP_BAND: (() => { const m = /export const TIER_CAP_BAND_MARKS\s*=\s*\[([^\]]*)\]/.exec(S.opEngine || ""); if (!m) { DRIFT.push("TIER_CAP_BAND_MARKS: not found in op-engine"); return [50,70,90,110,130]; } return m[1].split(",").map(x => Number(x.trim())); })(),   // facts.faction (op-engine) is the one home
   OVEREXT_LOGI_MULT: { overextended:0.90, strained:0.80, critical:0.65 },   // turn-driver advanceOPRegen 4.1
   PHASE_MULT: { occupation:1.5, short_integration:1.0, full_integration:0.3 }, // upkeep computeHexUpkeep 2)
   HOSTILITY_MULT: 1.25, LOYALTY_MULT: 0.85,             // upkeep 7)
@@ -165,7 +165,7 @@ const M = {
   MOD_TRADE: { "trade hub":0.5 }                        // territory getModifierEffects (mTrade)
 };
 if (KNOBS.priceMult == null) KNOBS.priceMult = ENGINE_PRICE_MULT;
-const LOGI_CAP_FLOOR = (() => { const m = /const\s+_LOGI_CAP_FLOOR\s*=\s*\[([^\]]*)\]/.exec(S.turnDriver || ""); if (!m) { DRIFT.push("_LOGI_CAP_FLOOR: not found in turn-driver — using [0,0,0,0,0]"); return [0,0,0,0,0]; } return m[1].split(",").map(x => Number(x.trim()) || 0); })();
+const LOGI_CAP_FLOOR = (() => { const m = /export const LOGISTICS_CAPACITY_FLOOR_MARKS\s*=\s*\[([^\]]*)\]/.exec(S.opEngine || ""); if (!m) { DRIFT.push("LOGISTICS_CAPACITY_FLOOR_MARKS: not found in op-engine — using [0,0,0,0,0]"); return [0,0,0,0,0]; } return m[1].split(",").map(x => Number(x.trim()) || 0); })();
 M.PHASE_MULT.occupation = ENGINE_OCCUPATION_MULT;   // parsed from the upkeep enhancer (ruling B halved it)
 if (KNOBS.sprawlExp != null) E.LOGI.SPRAWL_EXP = KNOBS.sprawlExp;
 if (KNOBS.sprawlThreshold != null) E.LOGI.SPRAWL_THRESHOLD = KNOBS.sprawlThreshold;
@@ -371,7 +371,7 @@ function runTurn(F, policy, t, rand) {
   for (const k of OPK) F.bank[k] = Math.min(caps(F), F.bank[k]);   // cap clamp after planned spend
   if (t >= KNOBS.tierFloorTurn && F.tier < 1) F.tier = 1;   // Director tier floor (Act 2)
   // tracks: hex loyalty pull (2026-09-12) → drift → stability penalty for NEXT turn
-  { const HEX_MOD_LOYALTY = { "loyal population":2, "hostile population":-2, "well-maintained":1, "damaged infrastructure":-1 };
+  { const HEX_MOD_LOYALTY = parseConst(S.territoryMain, "HEX_MOD_LOYALTY", { "loyal population":2, "hostile population":-2, "well-maintained":1, "damaged infrastructure":-1 }, "HEX_MOD_LOYALTY (territory main.js facts)");
     const score = h => (h.loyaltyMods || 0) + h.modifiers.reduce((a, m) => a + (HEX_MOD_LOYALTY[String(m).toLowerCase()] || 0), 0);
     const mean = F.hexes.length ? F.hexes.reduce((a, h) => a + score(h), 0) / F.hexes.length : 0; const pull = Math.max(-3, Math.min(3, Math.round(mean)));
     if (pull) { F.loyalty = Math.max(0, Math.min(100, F.loyalty + pull)); row.notes.push(`territory pull ${pull > 0 ? "+" : ""}${pull}`); } }

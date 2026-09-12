@@ -1742,6 +1742,66 @@ function computeEffectiveResources(base, sephirotName, modifiers){
   return { effective, added:add, multipliers:{mAll,mTrade} };
 }
 
+/* ═════════════════════════════════════════════════════════════════════════════
+ * HEX FACTS — the ONE home for a hex's identity-derived truths (2026-09-12, "fix the boat" items 1+2).
+ * Yield is COMPUTED ON READ from type × size (or the manual-override base) + sephirah + modifiers;
+ * flags.resources / calc / effectiveCached are a DISPLAY CACHE the Hex Config save and
+ * recomputeHexResources refresh — never a source the income engine reads. Loyalty score = the
+ * signed running total in mods.loyalty + what the modifier registry promises. Trade routes are
+ * counted from stored edges only. Published as game.bbttcc.facts.hex / facts.routes at ready;
+ * bin/ft-lint-facts fails any other file that reads the raw fields for a computation.
+ * ═════════════════════════════════════════════════════════════════════════════ */
+const HEX_MOD_LOYALTY = { "loyal population": 2, "hostile population": -2, "well-maintained": 1, "well maintained": 1, "damaged infrastructure": -1 };
+const _tfOf = (x) => (x && x.flags) ? (x.flags[MOD] || {}) : (x?.document?.flags?.[MOD] || x || {});
+export function hexType(tfLike) { return String(_tfOf(tfLike).type || "settlement").toLowerCase(); }
+export function hexSize(tfLike) { return String(_tfOf(tfLike).size || "none").toLowerCase(); }
+export function hexIntegration(tfLike) { const tf = _tfOf(tfLike); return Math.max(0, Math.min(6, Number(tf.integration?.progress ?? tf.development?.stage ?? 0) || 0)); }
+export function hexLoyalty(tfLike) { return Number(_tfOf(tfLike).mods?.loyalty || 0) || 0; }
+export function hexMorale(tfLike) { return Number(_tfOf(tfLike).mods?.morale || 0) || 0; }
+export function hexLoyaltyScore(tfLike) {
+  const tf = _tfOf(tfLike); let v = hexLoyalty(tf);
+  for (const m of (Array.isArray(tf.modifiers) ? tf.modifiers : [])) { const k = String(m || "").toLowerCase(); if (HEX_MOD_LOYALTY[k] != null) v += HEX_MOD_LOYALTY[k]; }
+  return v;
+}
+/** Base vector before sephirah + modifiers: the manual-override base when the GM set one, else the Type × Size ladder. */
+export function hexBaseVector(tfLike) {
+  const tf = _tfOf(tfLike);
+  const manual = !!tf.manualOverride && Object.values(tf.calc?.base || tf.resources || {}).some(n => Number(n) > 0);
+  if (manual) return Object.assign({ food:0, materials:0, trade:0, military:0, knowledge:0 }, tf.calc?.base || tf.resources || {});
+  const typedBase = TYPE_BASE[hexType(tf)] || TYPE_BASE.settlement, sizeMult = SIZE_MULT[hexSize(tf)] ?? 0;
+  return Object.fromEntries(["food","materials","trade","military","knowledge"].map(k => [k, Math.round((typedBase[k]||0) * sizeMult)]));
+}
+/** Effective resources, computed on read. Manual-override hexes return their hand-set resources verbatim (the save's rule). */
+export function hexResources(tfLike) {
+  const tf = _tfOf(tfLike);
+  const manual = !!tf.manualOverride && Object.values(tf.calc?.base || tf.resources || {}).some(n => Number(n) > 0);
+  if (manual) return Object.assign({ food:0, materials:0, trade:0, military:0, knowledge:0 }, tf.resources || {});
+  return computeEffectiveResources(hexBaseVector(tf), String(tf.sephirotName || ""), Array.isArray(tf.modifiers) ? tf.modifiers : []).effective;
+}
+/** Trade routes from stored edges: distinct owned↔owned pairs recorded on at least one end. The only counter. */
+export function factionTradeRoutes(factionId) {
+  const fid = String(factionId || "").replace(/^Actor\./, ""); if (!fid) return 0;
+  const owned = new Map();
+  for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) { const tf = d.flags?.[MOD]; if (!tf || !(tf.isHex === true || tf.kind === "territory-hex")) continue; if (String(tf.factionId || tf.ownerId || "") === fid) owned.set(d.uuid, d); }
+  const edges = new Set();
+  for (const [uuid, d] of owned) for (const r of (Array.isArray(d.flags?.[MOD]?.routes) ? d.flags[MOD].routes : [])) { if (String(r?.kind || "trade") !== "trade") continue; const other = String(r?.hexUuid || ""); if (owned.has(other)) edges.add([uuid, other].sort().join("|")); }
+  return edges.size;
+}
+export function factionSupplyLines(factionId) {
+  const fid = String(factionId || "").replace(/^Actor\./, ""); if (!fid) return 0; let n = 0;
+  for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) { const tf = d.flags?.[MOD]; if (!tf || String(tf.factionId || tf.ownerId || "") !== fid) continue; for (const r of (Array.isArray(tf.routes) ? tf.routes : [])) if (String(r?.kind) === "supply") n++; }
+  return n;
+}
+function _publishHexFacts() {
+  try {
+    game.bbttcc ??= { api:{} }; game.bbttcc.facts ??= {};
+    game.bbttcc.facts.hex = { type: hexType, size: hexSize, integration: hexIntegration, loyalty: hexLoyalty, morale: hexMorale, loyaltyScore: hexLoyaltyScore, baseVector: hexBaseVector, resources: hexResources, HEX_MOD_LOYALTY: Object.assign({}, HEX_MOD_LOYALTY), TYPE_BASE, SIZE_MULT };
+    game.bbttcc.facts.routes = { trade: factionTradeRoutes, supply: factionSupplyLines };
+  } catch (e) { console.warn(`[${MOD}] facts publish failed`, e); }
+}
+Hooks.once("init", _publishHexFacts);
+Hooks.once("ready", _publishHexFacts);
+
 /* ---------------- Modifier → resource recompute (owner ruling 2026-09-10) ----------------
  * The +50% trade of "Trade Hub" (and every other production modifier) only reaches
  * flags.resources — the field OP regen reads — when the Hex Config save or an
@@ -1757,14 +1817,12 @@ async function recomputeHexResources(hexDocOrUuid, { source = "recompute", dryRu
   const tf = foundry.utils.getProperty(doc, `flags.${MOD}`) ?? {};
   if (!(tf.isHex === true || tf.kind === "territory-hex" || tf.hexId)) return { ok:false, error:"not a hex" };
   const selName = String(tf.sephirotName || "");
-  const typeKey = String(tf.type||"settlement").toLowerCase(), sizeKey = String(tf.size||"none").toLowerCase();
-  const typedBase = TYPE_BASE[typeKey] || TYPE_BASE.settlement, sizeMult = SIZE_MULT[sizeKey] ?? 0;
-  const sized = Object.fromEntries(["food","materials","trade","military","knowledge"].map(k => [k, Math.round((typedBase[k]||0) * sizeMult)]));
+  const typeKey = hexType(tf), sizeKey = hexSize(tf);
   const manual = !!tf.manualOverride && Object.values(tf.calc?.base || tf.resources || {}).some(n => Number(n) > 0);
-  const vector = manual ? (tf.calc?.base || tf.resources) : sized;
+  const vector = hexBaseVector(tf);                       // facts: manual base or Type × Size ladder
   const mods = Array.isArray(tf.modifiers) ? tf.modifiers : [];
   const calc = computeEffectiveResources(vector, selName, mods);
-  const resources = manual ? (tf.resources || vector) : calc.effective;
+  const resources = hexResources(tf);                     // facts: the same computation the income engine reads
   const flowState = String(tf.leylines?.flowState || "normal");
   let effectiveCached = tf.effectiveCached; try { effectiveCached = resourcesToOP(resources, flowState); } catch (_e) {}
   const same = JSON.stringify(resources) === JSON.stringify(tf.resources || {})

@@ -5507,11 +5507,12 @@ async function _directorSeamLook(source) {
 // Explicit opCaps shadow tier-derived bands forever, so a tier raise must lift
 // them; max()-only, never lowers; no explicit caps → derived path follows tier.
 const _FT_OP_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
-const _FT_CAP_BAND = [50, 70, 90, 110, 130];
 async function _directorRaiseFactionOpCaps(actor, tier) {
   try {
+    const capBand = game.bbttcc?.facts?.faction?.capBand;   // facts (op-engine) — 2026-09-12; no local band literal
+    if (typeof capBand !== "function") { warn("[director] facts.faction.capBand missing — opCaps not raised"); return false; }
     const t = Math.max(0, Math.min(4, Math.floor(Number(tier) || 0)));
-    const band = _FT_CAP_BAND[t] ?? _FT_CAP_BAND[0];
+    const band = capBand(t);
     const raw = foundry.utils.getProperty(actor, "flags.bbttcc-factions.opCaps");
     if (!raw || typeof raw !== "object") return false;
     const next = {};

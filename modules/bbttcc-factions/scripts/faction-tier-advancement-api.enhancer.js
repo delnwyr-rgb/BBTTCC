@@ -87,7 +87,7 @@
     const raw = get(actor, `flags.${MODF}.tier`, null);
     if (raw === null || raw === undefined) {
       const snap = get(actor, `flags.${MODF}.progression.victory`, null);
-      if (snap && Number.isFinite(Number(snap.tierFromBadge))) return clampTier(snap.tierFromBadge);
+      { const fn = game.bbttcc?.facts?.faction?.tier; if (typeof fn === "function") return clampTier(fn(actor)); }   // facts (2026-09-12)
       return 0;
     }
     return clampTier(raw);
@@ -168,7 +168,7 @@
     const v = get(actor, `flags.${MODF}.progression.victory`, {}) || {};
     return {
       badgeKey: String(v.badgeKey || ""),
-      tierFromBadge: Number(v.tierFromBadge ?? 0),
+      tierFromBadge: Number(v.tierFromBadge ?? 0),   // facts-ok: report field, not a derivation
       requiredBadgeForNextTier: v.requiredBadgeForNextTier ?? null,
       meetsNextTier: !!v.meetsNextTier,
       updatedTs: v.updatedTs ?? null
