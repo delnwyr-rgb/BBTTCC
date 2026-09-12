@@ -320,7 +320,12 @@ function ensureConsumePlannedShim(){
       warn(`Effect handler failed for ${entry?.activityKey} (non-fatal).`, e);
       return { ok:false, error:e };
     }
-    return { ok:true, skipped:true };
+    // 2026-09-12: a strategic row that reaches here has NO handler — the enhancer that gives it
+    // one did not install (load-order race). The faction was still billed. Say so, loudly.
+    const noHandler = `⚠ ${entry?.activityKey}: effect registered without a handler — nothing ran (enhancer not installed this session?)`;
+    warn(noHandler, effect);
+    try { ui.notifications?.warn?.(noHandler); } catch (_e) {}
+    return { ok:true, skipped:true, noHandler:true, result: noHandler };
   }
 
   function finalizeEntry({ entry, factionActor, effect, effectResult, spendResult }){

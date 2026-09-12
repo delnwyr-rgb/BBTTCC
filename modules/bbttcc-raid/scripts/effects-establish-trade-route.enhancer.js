@@ -39,7 +39,15 @@
     return `Queued: add "Trade Hub" (+50% trade output)${edgeMsg}`;
   }
 
-  whenRaidReady((api)=>{
+  // Idempotent install (2026-09-12). A load-order race left this wrap missing at resolution on the
+  // first Advance under the new turn order — the activity was billed and "skipped" because the
+  // def in api.raid.EFFECTS had no apply(). Now: stamp the def, and re-run on the same retry
+  // schedule strategic-throughput uses (ready + 0.6/2/5/9 s) and on bbttcc:raid:maneuversLoaded,
+  // reinstalling whenever the live def lost the wrap.
+  const WRAP = "__bbttcc_trade_route_wrap";
+  function install(api){
+    const E0 = api?.EFFECTS; if (!E0) return false;
+    if (E0.establish_trade_route && E0.establish_trade_route[WRAP] === true && typeof E0.establish_trade_route.apply === "function") return true;
     const E = api.EFFECTS, base = E.establish_trade_route?.apply;
     E.establish_trade_route = Object.assign({}, E.establish_trade_route, {
       kind:"strategic", band:"standard", label:E.establish_trade_route?.label||"Establish Trade Route", cost:E.establish_trade_route?.cost||{ economy:30, diplomacy:10, logistics:10 },
@@ -49,6 +57,14 @@
         return [msg, extra].filter(Boolean).join(" • ") || "Trade Route queued.";
       }
     });
+    try { Object.defineProperty(E.establish_trade_route, WRAP, { value: true, enumerable: false }); } catch (_e) {}
     console.log(TAG,"installed");
+    return true;
+  }
+  whenRaidReady((api)=>{
+    install(api);
+    const again = () => { try { install(game?.bbttcc?.api?.raid || game?.modules?.get?.(MOD_R)?.api?.raid); } catch (_e) {} };
+    for (const ms of [600, 2000, 5000, 9000]) setTimeout(again, ms);
+    if (globalThis.Hooks) Hooks.on("bbttcc:raid:maneuversLoaded", again);
   });
 })();

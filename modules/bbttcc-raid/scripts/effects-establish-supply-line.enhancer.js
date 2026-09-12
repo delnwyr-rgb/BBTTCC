@@ -39,7 +39,15 @@
     return `Queued: add "Supply Line" • +${tradeYieldDelta} Trade Yield${edgeMsg}`;
   }
 
-  whenRaidReady((api)=>{
+  // Idempotent install (2026-09-12). A load-order race left this wrap missing at resolution on the
+  // first Advance under the new turn order — the activity was billed and "skipped" because the
+  // def in api.raid.EFFECTS had no apply(). Now: stamp the def, and re-run on the same retry
+  // schedule strategic-throughput uses (ready + 0.6/2/5/9 s) and on bbttcc:raid:maneuversLoaded,
+  // reinstalling whenever the live def lost the wrap.
+  const WRAP = "__bbttcc_supply_line_wrap";
+  function install(api){
+    const E0 = api?.EFFECTS; if (!E0) return false;
+    if (E0.establish_supply_line && E0.establish_supply_line[WRAP] === true && typeof E0.establish_supply_line.apply === "function") return true;
     const E = api.EFFECTS, base = E.establish_supply_line?.apply;
     E.establish_supply_line = Object.assign({}, E.establish_supply_line, {
       kind:"strategic", band:"standard", label:E.establish_supply_line?.label||"Establish Supply Line", cost:E.establish_supply_line?.cost||{ logistics:30, economy:10 },
@@ -49,6 +57,14 @@
         return [msg, extra].filter(Boolean).join(" • ") || "Supply Line queued.";
       }
     });
+    try { Object.defineProperty(E.establish_supply_line, WRAP, { value: true, enumerable: false }); } catch (_e) {}
     console.log(TAG,"installed");
+    return true;
+  }
+  whenRaidReady((api)=>{
+    install(api);
+    const again = () => { try { install(game?.bbttcc?.api?.raid || game?.modules?.get?.(MOD_R)?.api?.raid); } catch (_e) {} };
+    for (const ms of [600, 2000, 5000, 9000]) setTimeout(again, ms);
+    if (globalThis.Hooks) Hooks.on("bbttcc:raid:maneuversLoaded", again);
   });
 })();
