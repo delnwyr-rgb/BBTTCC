@@ -529,6 +529,69 @@
   // LOYALTY PHASE 1 — DRIFT + OP STABILITY
   // ===========================================================================
 
+  // ===========================================================================
+  // HEX LOYALTY → FACTION LOYALTY (owner ruling 2026-09-12)
+  // "Faction loyalty is, more or less, an aggregate of its hexes." Each hex has a
+  // loyalty SCORE = mods.loyalty (the signed running total the sweep, repair
+  // requests and ⚗ fuel side effects write) + the loyalty the modifier registry
+  // promises (Loyal Population +2, Hostile Population −2, Well-Maintained +1,
+  // Damaged Infrastructure −1). The mean score across owned hexes, clamped to
+  // ±3, is a per-turn PULL on faction loyalty, applied before drift/penalties
+  // so a territory worked by pressed gangs drags the faction down every turn
+  // and a loyal, well-kept one lifts it. Hexes with no score contribute 0.
+  // ===========================================================================
+  const HEX_MOD_LOYALTY = { "loyal population": 2, "hostile population": -2, "well-maintained": 1, "well maintained": 1, "damaged infrastructure": -1 };
+  function hexLoyaltyScore(tf) {
+    let v = Number(tf?.mods?.loyalty || 0) || 0;
+    for (const m of (Array.isArray(tf?.modifiers) ? tf.modifiers : [])) { const k = String(m || "").toLowerCase(); if (HEX_MOD_LOYALTY[k] != null) v += HEX_MOD_LOYALTY[k]; }
+    return v;
+  }
+  function ownedHexDocs(A) {
+    const out = [];
+    for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) { const tf = d.flags?.[MODT]; if (!tf) continue; if (String(tf.factionId || tf.ownerId) === String(A.id)) out.push(d); }
+    return out;
+  }
+  async function doHexLoyaltyPull() {
+    const facs = facActors(); const gm = gmIds(); const lines = []; const updates = [];
+    for (const A of facs) {
+      const owned = ownedHexDocs(A); if (!owned.length) continue;
+      const scores = owned.map(d => hexLoyaltyScore(d.flags?.[MODT] || {}));
+      const mean = scores.reduce((a, b) => a + b, 0) / scores.length;
+      const pull = Math.max(-3, Math.min(3, Math.round(mean)));
+      if (!pull) continue;
+      const before = Number(A.getFlag(MODF, "loyalty") ?? 50); const after = clamp(before + pull, 0, 100);
+      if (after === before) continue;
+      updates.push(A.update({ [`flags.${MODF}.loyalty`]: after }));
+      lines.push(`• <b>${foundry.utils.escapeHTML(A.name)}</b>: territory pull ${pull > 0 ? "+" : ""}${pull} (mean hex loyalty ${Math.round(mean * 10) / 10} over ${owned.length} hex${owned.length === 1 ? "" : "es"}) — Loyalty ${before}→${after}`);
+    }
+    if (updates.length) await Promise.allSettled(updates);
+    if (lines.length) await ChatMessage.create({ content: `<p><b>Territory → Loyalty</b></p>${lines.join("<br/>")}`, whisper: gm, speaker: { alias: "Bad Eden Loyalty" } }).catch(() => {});
+  }
+
+  // ===========================================================================
+  // SHARING PRESSURE (owner ruling 2026-09-12, target T7)
+  // The exchange engine keeps a ledger of Allied Sends and trades on both
+  // factions (api.factions.sharing). A faction that has BORROWED (received a
+  // net Allied Send) in three or more consecutive world turns is becoming a
+  // client: −1 Loyalty per turn while the streak holds, and the GM sees it.
+  // Lending costs nothing — the trace is the lever, the story spends it.
+  // ===========================================================================
+  async function doSharingPressure() {
+    const api = game.bbttcc?.api?.factions?.sharing; if (!api?.get) return;
+    const facs = facActors(); const gm = gmIds(); const lines = []; const updates = [];
+    for (const A of facs) {
+      let st = null; try { st = api.get(A.id); } catch (_e) { st = null; }
+      if (!st || Number(st.borrowStreak) < 3) continue;
+      const before = Number(A.getFlag(MODF, "loyalty") ?? 50); const after = clamp(before - 1, 0, 100);
+      if (after !== before) updates.push(A.update({ [`flags.${MODF}.loyalty`]: after }));
+      const patrons = Object.entries(st.borrowedFrom || {}).sort((a, b) => b[1].marks - a[1].marks).slice(0, 2).map(([, v]) => v.name).join(", ");
+      lines.push(`• <b>${foundry.utils.escapeHTML(A.name)}</b> has borrowed ${st.borrowStreak} turns running${patrons ? ` (mostly from ${foundry.utils.escapeHTML(patrons)})` : ""} — the sheet is starting to call it a client state. Loyalty ${before}→${after}.`);
+      try { const wl = (A.getFlag(MODF, "warLogs") || []).slice(); wl.push({ ts: Date.now(), date: new Date().toLocaleString(), type: "turn", activity: "sharing_pressure", summary: `Client-state pressure: borrowed ${st.borrowStreak} turns running — Loyalty ${before}→${after}.` }); updates.push(A.setFlag(MODF, "warLogs", wl)); } catch (_e) {}
+    }
+    if (updates.length) await Promise.allSettled(updates);
+    if (lines.length) await ChatMessage.create({ content: `<p><b>Sharing Pressure</b></p>${lines.join("<br/>")}`, whisper: gm, speaker: { alias: "Bad Eden Loyalty" } }).catch(() => {});
+  }
+
   async function doLoyaltyPhase1() {
     const facs = facActors();
     const gm   = gmIds();
@@ -598,9 +661,10 @@
         }
       }
 
-      // Unrest risk
+      // Unrest risk — strikes the LEAST loyal hex (2026-09-12), not a random one
+      const lowest = () => owned.slice().sort((a, b) => hexLoyaltyScore(a.flags?.[MODT] || {}) - hexLoyaltyScore(b.flags?.[MODT] || {}))[0];
       if (L < 30 && owned.length > 0 && Math.random() < 0.10) {
-        const hex = pick(owned);
+        const hex = lowest();
         const tf  = foundry.utils.deepClone(hex.flags[MODT] || {});
         tf.modifiers = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];
         if (!tf.modifiers.includes("Hostile Population")) {
@@ -619,9 +683,9 @@
         }
       }
 
-      // Extra bad: infra damage
+      // Extra bad: infra damage — also the least loyal hex (2026-09-12)
       if (L < 15 && owned.length > 0 && Math.random() < 0.25) {
-        const hex = pick(owned);
+        const hex = lowest();
         const tf  = foundry.utils.deepClone(hex.flags[MODT] || {});
         tf.modifiers = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];
         if (!tf.modifiers.includes("Damaged Infrastructure")) {
@@ -1053,8 +1117,10 @@
         await doLeylinePurityDrift();
         await doDarknessThresholds();
         await doDarknessMorale();
+        await doHexLoyaltyPull();     // territory mood pulls faction loyalty (2026-09-12)
         await doLoyaltyPhase1();
         await doLoyaltyPhase2();
+        await doSharingPressure();    // client-state drag after 3 borrowing turns (2026-09-12, T7)
         await doIntegrationPopulationShift();
         await doUnityRecompute();
         await doBuildUnitsFromMaterials();

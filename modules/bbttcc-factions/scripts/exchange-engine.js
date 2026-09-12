@@ -288,6 +288,43 @@ function _summarize(resource) {
 }
 
 // Allied Send: unilateral one-way grant. Friction = 0.
+// ── Sharing trace (owner ruling 2026-09-12, OP-economy target T7) ──────────────
+// Every Allied Send and Trade is recorded on BOTH factions at
+// flags.bbttcc-factions.sharing = { ledger:[…≤60], lentTo:{id:{name,marks,turns}}, borrowedFrom:{…} }.
+// "marks" = total marks moved (materials/BU excluded from the count, kept in the ledger row).
+// A trade counts as lending for the side whose net marks OUT exceed IN, borrowing for the other.
+// api.factions.sharing.get(id) summarises it, including borrowStreak = consecutive world turns
+// (ending at the current or previous turn) in which the faction was a net borrower — the
+// number the loyalty track reads for client-state pressure (advance-turn.tracks doSharingPressure).
+const SHARING_LEDGER_MAX = 60;
+function _worldTurn() { try { const t = Number(game.bbttcc?.api?.world?.getState?.()?.turn); return Number.isFinite(t) ? t : 0; } catch (_e) { return 0; } }
+function _marksTotal(res) { return Object.values(res?.marks || {}).reduce((a, v) => a + (Number(v) || 0), 0); }
+async function _recordSharing(A, B, { kind, sentByA, sentByB, reason, summary }) {
+  const turn = _worldTurn(); const ts = Date.now();
+  const outA = _marksTotal(sentByA), outB = _marksTotal(sentByB);
+  const netA = outA - outB;   // >0 A lent, <0 A borrowed
+  const write = async (X, Y, net, sent, received) => {
+    const cur = foundry.utils.duplicate(X.getFlag(MOD_ID, "sharing") || { ledger: [], lentTo: {}, borrowedFrom: {} });
+    cur.ledger = Array.isArray(cur.ledger) ? cur.ledger : []; cur.lentTo = cur.lentTo || {}; cur.borrowedFrom = cur.borrowedFrom || {};
+    cur.ledger.push({ ts, turn, kind, withId: Y.id, withName: Y.name, sent, received, net, reason: reason || "", summary });
+    if (cur.ledger.length > SHARING_LEDGER_MAX) cur.ledger = cur.ledger.slice(-SHARING_LEDGER_MAX);
+    if (net > 0) { const e = cur.lentTo[Y.id] || { name: Y.name, marks: 0, turns: [] }; e.name = Y.name; e.marks += net; if (!e.turns.includes(turn)) e.turns.push(turn); cur.lentTo[Y.id] = e; }
+    else if (net < 0) { const e = cur.borrowedFrom[Y.id] || { name: Y.name, marks: 0, turns: [] }; e.name = Y.name; e.marks += -net; if (!e.turns.includes(turn)) e.turns.push(turn); cur.borrowedFrom[Y.id] = e; }
+    await X.setFlag(MOD_ID, "sharing", cur);
+  };
+  try { await write(A, B, netA, sentByA, sentByB); await write(B, A, -netA, sentByB, sentByA); } catch (e) { console.warn(TAG, "sharing trace write failed", e); }
+}
+function sharingGet(factionOrId) {
+  const A = _resolveActor(factionOrId); if (!A) return null;
+  const cur = A.getFlag(MOD_ID, "sharing") || { ledger: [], lentTo: {}, borrowedFrom: {} };
+  const lentTotal = Object.values(cur.lentTo || {}).reduce((a, e) => a + (Number(e?.marks) || 0), 0);
+  const borrowedTotal = Object.values(cur.borrowedFrom || {}).reduce((a, e) => a + (Number(e?.marks) || 0), 0);
+  const borrowTurns = new Set(); for (const e of Object.values(cur.borrowedFrom || {})) for (const t of (e?.turns || [])) borrowTurns.add(Number(t));
+  const now = _worldTurn(); let streak = 0; let t = borrowTurns.has(now) ? now : (borrowTurns.has(now - 1) ? now - 1 : null);
+  if (t !== null) { while (borrowTurns.has(t)) { streak++; t--; } }
+  return { factionId: A.id, name: A.name, lentTotal, borrowedTotal, net: lentTotal - borrowedTotal, lentTo: cur.lentTo || {}, borrowedFrom: cur.borrowedFrom || {}, borrowStreak: streak, lastTurn: cur.ledger?.length ? cur.ledger[cur.ledger.length - 1].turn : null, ledger: cur.ledger || [] };
+}
+
 async function share({ from, to, offer, reason } = {}) {
   const A = _resolveActor(from);
   const B = _resolveActor(to);
@@ -327,6 +364,7 @@ async function share({ from, to, offer, reason } = {}) {
 
   const summary = `Allied Send: ${A.name} → ${B.name} (${_summarize(o)})${reason ? ` — ${reason}` : ""}`;
   await _writeWarLogs(A, B, summary);
+  await _recordSharing(A, B, { kind: "send", sentByA: o, sentByB: { marks: {} }, reason, summary });
 
   try {
     Hooks.callAll("bbttcc:economy:share", {
@@ -361,6 +399,7 @@ async function trade({ from, to, offer, ask, reason } = {}) {
 
   const summary = `Trade: ${A.name} ↔ ${B.name} — ${A.name} sent ${_summarize(_normResource(offer))}, received ${_summarize(_normResource(ask))} (mutual ${ct.mutualTier}, ${(friction*100)|0}% friction)${reason ? `; ${reason}` : ""}`;
   await _writeWarLogs(A, B, summary);
+  await _recordSharing(A, B, { kind: "trade", sentByA: _normResource(offer), sentByB: _normResource(ask), reason, summary });
 
   try {
     Hooks.callAll("bbttcc:economy:exchange", {
@@ -416,6 +455,8 @@ function _attach() {
     root.plan = plan;
     root.share = share;
     root.trade = trade;
+    root.sharing = { get: sharingGet };
+    game.bbttcc.api.factions.sharing = root.sharing;   // T7 trace reader for advance-turn.tracks (2026-09-12)
     root.OP_KEYS = OP_KEYS.slice();
 
     // Install the post-exchange refresh once.
@@ -425,7 +466,7 @@ function _attach() {
       game.bbttcc.__exchangeRefreshHook = true;
     }
 
-    console.log(TAG, "Exchange API ready → game.bbttcc.api.factions.exchange.{plan,share,trade}");
+    console.log(TAG, "Exchange API ready → game.bbttcc.api.factions.exchange.{plan,share,trade,sharing}");
   } catch (e) {
     console.warn(TAG, "Exchange API wiring failed", e);
   }

@@ -316,8 +316,13 @@ function runTurn(F, policy, t, rand) {
     for (const p of plans) {
       if (!canPay(F, p.recipe.cost)) { row.notes.push(`${p.key} HELD (cannot afford at resolution)`); continue; }
       pay(F, p.recipe.cost, `${p.key} via ${p.recipe.label}`);
+      const fxH = p.recipe.fx?.hex || {}, fxF = p.recipe.fx?.faction || {};
+      if (fxF.loyaltyDelta) F.loyalty = Math.max(0, Math.min(100, F.loyalty + Number(fxF.loyaltyDelta)));
+      if (fxF.moraleDelta) F.morale = Math.max(0, Math.min(100, F.morale + Number(fxF.moraleDelta)));
+      const fxTarget = () => (p.key === "establish_outpost") ? null : (F.hexes.filter(h => h.progress < 6).sort((a, b) => b.progress - a.progress)[0] || F.hexes[F.hexes.length - 1]);
+      if (fxH.loyaltyDelta) { const h = fxTarget(); if (h) h.loyaltyMods = (h.loyaltyMods || 0) + Number(fxH.loyaltyDelta); else F.pendingHexLoyalty = (F.pendingHexLoyalty || 0) + Number(fxH.loyaltyDelta); }
       const act = ACT[p.key];
-      if (p.key === "establish_outpost") F.hexes.push(foundedHex());
+      if (p.key === "establish_outpost") { const h = foundedHex(); if (F.pendingHexLoyalty) { h.loyaltyMods = F.pendingHexLoyalty; F.pendingHexLoyalty = 0; } F.hexes.push(h); }
       else if (p.key === "establish_trade_route") { F.routes++; const hub = F.hexes.find(h => !h.modifiers.includes("Trade Hub")); if (hub) hub.modifiers.push("Trade Hub"); }
       else if (act.progress) { const h = F.hexes.filter(h => h.progress < 6).sort((a, b) => b.progress - a.progress)[0]; if (h) { h.progress = Math.min(6, h.progress + act.progress); if (act.sizeUp && h.size === "outpost") h.size = "village"; if (h.progress >= 6 && !h.modifiers.includes("Loyal Population")) h.modifiers.push("Loyal Population"); } }
       row.notes.push(`${p.key}${p.recipe.label !== "engine" ? ` (${p.recipe.label})` : ""}`);
@@ -333,7 +338,11 @@ function runTurn(F, policy, t, rand) {
   F.pendingPct = 0;
   if (KNOBS.spendOrder === "after") applyPlans();
   if (t >= KNOBS.tierFloorTurn && F.tier < 1) F.tier = 1;   // Director tier floor (Act 2)
-  // tracks: loyalty drift + stability penalty for NEXT turn (doLoyaltyPhase1)
+  // tracks: hex loyalty pull (2026-09-12) → drift → stability penalty for NEXT turn
+  { const HEX_MOD_LOYALTY = { "loyal population":2, "hostile population":-2, "well-maintained":1, "damaged infrastructure":-1 };
+    const score = h => (h.loyaltyMods || 0) + h.modifiers.reduce((a, m) => a + (HEX_MOD_LOYALTY[String(m).toLowerCase()] || 0), 0);
+    const mean = F.hexes.length ? F.hexes.reduce((a, h) => a + score(h), 0) / F.hexes.length : 0; const pull = Math.max(-3, Math.min(3, Math.round(mean)));
+    if (pull) { F.loyalty = Math.max(0, Math.min(100, F.loyalty + pull)); row.notes.push(`territory pull ${pull > 0 ? "+" : ""}${pull}`); } }
   F.loyalty = Math.max(0, Math.min(100, F.loyalty + loyaltyDrift(F.loyalty))); F.pendingPct = loyaltyPct(F.loyalty);
   // garrison upkeep: pay per hex; integration morale/loyalty bonus applied directly
   let bonusM = 0, bonusL = 0, unpaid = false;
