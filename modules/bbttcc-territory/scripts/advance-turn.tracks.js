@@ -661,9 +661,15 @@
         }
       }
 
-      // Unrest risk — strikes the LEAST loyal hex (2026-09-12), not a random one
+      // Unrest risk — strikes the LEAST loyal hex (2026-09-12), and its odds follow that hex's
+      // loyalty score (owner ruling, same day): base 10% at score 0, ±5% per point, clamped
+      // 2%–60%. A work-gang hex at −2 riots at 20%; a Loyal Population hex at +2 sits at 2%.
+      // The roll happens when faction loyalty is under 30 (the old gate) OR when the lowest hex
+      // is at −3 or worse — a hostile-enough hex can riot even under a faction that is doing fine.
       const lowest = () => owned.slice().sort((a, b) => hexLoyaltyScore(a.flags?.[MODT] || {}) - hexLoyaltyScore(b.flags?.[MODT] || {}))[0];
-      if (L < 30 && owned.length > 0 && Math.random() < 0.10) {
+      const lowScore = owned.length ? hexLoyaltyScore(lowest().flags?.[MODT] || {}) : 0;
+      const unrestOdds = clamp(0.10 - 0.05 * lowScore, 0.02, 0.60);
+      if (owned.length > 0 && (L < 30 || lowScore <= -3) && Math.random() < unrestOdds) {
         const hex = lowest();
         const tf  = foundry.utils.deepClone(hex.flags[MODT] || {});
         tf.modifiers = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];
@@ -671,7 +677,7 @@
           tf.modifiers.push("Hostile Population");
           updates.push(hex.update({ [`flags.${MODT}`]: tf }, { parent: hex.parent }));
           lines.push(
-            `• ${A.name}: <b>Unrest</b> — ${hex.text||hex.name} gained <i>Hostile Population</i> (Loyalty ${L})`
+            `• ${A.name}: <b>Unrest</b> — ${hex.text||hex.name} gained <i>Hostile Population</i> (faction Loyalty ${L}; hex score ${lowScore}, odds ${Math.round(unrestOdds * 100)}%)`
           );
           // Hex Dossier — record loyalty-driven unrest event.
           try {
@@ -683,8 +689,9 @@
         }
       }
 
-      // Extra bad: infra damage — also the least loyal hex (2026-09-12)
-      if (L < 15 && owned.length > 0 && Math.random() < 0.25) {
+      // Extra bad: infra damage — also the least loyal hex, odds base 25% ±5%/point, 5%–75% (2026-09-12)
+      const infraOdds = clamp(0.25 - 0.05 * lowScore, 0.05, 0.75);
+      if (L < 15 && owned.length > 0 && Math.random() < infraOdds) {
         const hex = lowest();
         const tf  = foundry.utils.deepClone(hex.flags[MODT] || {});
         tf.modifiers = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];
@@ -692,7 +699,7 @@
           tf.modifiers.push("Damaged Infrastructure");
           updates.push(hex.update({ [`flags.${MODT}`]: tf }, { parent: hex.parent }));
           lines.push(
-            `• ${A.name}: <b>Infrastructure</b> — ${hex.text||hex.name} gained <i>Damaged Infrastructure</i> (Loyalty ${L})`
+            `• ${A.name}: <b>Infrastructure</b> — ${hex.text||hex.name} gained <i>Damaged Infrastructure</i> (faction Loyalty ${L}; hex score ${lowScore}, odds ${Math.round(infraOdds * 100)}%)`
           );
           // Hex Dossier — record loyalty-driven infra damage.
           try {
