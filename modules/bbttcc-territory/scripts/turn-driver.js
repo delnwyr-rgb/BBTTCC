@@ -233,7 +233,9 @@ function ensureConsumePlannedShim(){
     if (SELF_BILLING_ACTIVITIES.has(String(entry?.activityKey || ""))) {
       return { ok:true, selfBilling:true, paid:{} };
     }
-    const cost = normalizeCostVector(effect?.cost || effect?.opCosts || {});
+    // ⚗ Fuel recipe (2026-09-11): a planned entry may carry its own cost vector (the recipe the
+    // faction chose in the planner); it replaces the row's default price outright.
+    const cost = normalizeCostVector((entry?.recipe && typeof entry.recipe.cost === "object") ? entry.recipe.cost : (effect?.cost || effect?.opCosts || {}));
     if (!Object.keys(cost).length) return { ok:true, free:true, paid:{} };
 
     const bank = foundry.utils.duplicate(factionActor.getFlag(MOD_FACTIONS, "opBank") || {});
@@ -304,9 +306,10 @@ function ensureConsumePlannedShim(){
       plannedTs: entry.ts,
       primaryKey,
       opSpent: (spendResult && spendResult.paid) ? spendResult.paid : {},
+      ...(entry.recipe ? { recipe: entry.recipe } : {}),
       spendResult: spendResult || null,
       effectResult: effectResult || null,
-      summary: `${factionActor.name} executed ${entry.activityKey} on ${entry.targetName || entry.targetType || "target"}`
+      summary: `${factionActor.name} executed ${entry.activityKey} on ${entry.targetName || entry.targetType || "target"}${entry.recipe?.label ? ` via ${entry.recipe.label}` : ""}`
     };
   }
 
@@ -1399,7 +1402,7 @@ async function plannedRaidsStep({ apply=false } = {}){
       const key = String(e.activity || e.activityKey || "").toLowerCase();
       const spec = EFFECTS[key];
       const label = spec?.label || (key ? key.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase()) : "(unknown)");
-      const cost = spec?.cost || {};
+      const cost = (e?.recipe && typeof e.recipe.cost === "object") ? e.recipe.cost : (spec?.cost || {});   // recipe price wins (2026-09-11)
       const afford = canAfford(bank, cost);
       rows.push({ faction: F.name, factionId: F.id, activity: key, label, cost, canAfford: afford, days: ledgerDayCostFor(key) });
       any = true;

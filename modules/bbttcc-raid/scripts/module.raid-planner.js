@@ -1508,6 +1508,23 @@ if ((this._lockedFactionId || this._lockFaction) && !game.user.isGM) {
       toSel.addEventListener("change", () => { this._plannerState.toHexUuid = toSel.value || ""; });
       hexSel.addEventListener("change", _fillToSel);
       toRow.appendChild(toLbl); toRow.appendChild(toSel);
+      // ⚗ Fuel row (OP economy ruling B, 2026-09-11): rows with ≥2 recipes let the faction choose
+      // HOW it gets done — each recipe is a different cost vector across channels. The choice is
+      // stored on the planned entry and billed at resolution (turn-driver payActivityCost).
+      const recipeRow = document.createElement("div");
+      recipeRow.style.display = "flex"; recipeRow.style.gap = "4px"; recipeRow.style.alignItems = "center";
+      const recipeLbl = document.createElement("span"); recipeLbl.textContent = "⚗ Fuel"; recipeLbl.style.cssText = "flex:0 0 auto;font-size:0.8rem;opacity:.8;";
+      const recipeSel = document.createElement("select"); recipeSel.style.flex = "1 1 auto"; recipeSel.style.padding = "2px 4px";
+      const recipesForSelected = (() => { try { const d = game.bbttcc?.api?.raid?.EFFECTS?.[String(selectedKey || "")]; return Array.isArray(d?.recipes) ? d.recipes : []; } catch (_e) { return []; } })();
+      const wantsRecipe = recipesForSelected.length >= 2;
+      if (wantsRecipe) {
+        const fmtCost = (c) => Object.entries(c || {}).filter(([, v]) => Number(v) > 0).map(([k, v]) => `${v} ${k}`).join(" + ");
+        for (const r of recipesForSelected) { const o = document.createElement("option"); o.value = r.label; o.textContent = `${r.label} — ${fmtCost(r.cost)}${r.note ? ` · ${r.note}` : ""}`; recipeSel.appendChild(o); }
+        const want = String(this._plannerState.recipe || "");
+        if (want && recipesForSelected.some(r => r.label === want)) recipeSel.value = want; else this._plannerState.recipe = recipeSel.value || "";
+        recipeSel.addEventListener("change", () => { this._plannerState.recipe = recipeSel.value || ""; });
+        recipeRow.appendChild(recipeLbl); recipeRow.appendChild(recipeSel);
+      }
 
       // Rig chooser rows (NEW)
       const rigRow1 = document.createElement("div");
@@ -1604,6 +1621,7 @@ if (wantsRigTarget) {
 } else {
   targetWrap.appendChild(hexRow);
   if (wantsRouteTarget) targetWrap.appendChild(toRow);
+  if (wantsRecipe) targetWrap.appendChild(recipeRow);
 }
 top.appendChild(targetWrap);
 
@@ -2086,7 +2104,7 @@ wrap.appendChild(top);
                 if (!toHexUuid) { ui.notifications?.warn?.("Routes need a TO hex your faction owns."); return; }
                 if (toHexUuid === String(targetUuid)) { ui.notifications?.warn?.("A route needs two different hexes."); return; }
               }
-              await game.bbttcc.api.raid.planActivity({ attackerId, targetUuid, activityKey, note, toHexUuid });
+              await game.bbttcc.api.raid.planActivity({ attackerId, targetUuid, activityKey, note, toHexUuid, recipe: (wantsRecipe ? String(this._plannerState.recipe || "") : null) || null });
             }
           } catch (e) {
             if (e?.bbttccRefused) { ui.notifications?.warn?.(String(e.message || "That activity can't target this hex.")); return; }
@@ -2178,7 +2196,7 @@ Hooks.once("init",()=>{
   };
 
   // UPDATED: supports both hex targets and rig targets
-  raidAPI.planActivity = async function({ attackerId, targetUuid=null, activityKey, note="", targetType="hex", defenderId=null, rigId=null, targetName=null, toHexUuid=null }){
+  raidAPI.planActivity = async function({ attackerId, targetUuid=null, activityKey, note="", targetType="hex", defenderId=null, rigId=null, targetName=null, toHexUuid=null, recipe=null }){
     if(!attackerId || !activityKey) throw new Error("Missing required params.");
     const attacker = game.actors.get(attackerId); if(!attacker) throw new Error("Attacker not found.");
 
@@ -2243,6 +2261,13 @@ Hooks.once("init",()=>{
         summary: `${attacker.name} planned ${activityKey} on ${resolvedTargetName}${toHexName ? ` → ${toHexName}` : ""}`,
         note: String(note||"")
       };
+      // ⚗ Fuel recipe (2026-09-11): resolve the label against the row's recipes NOW so the
+      // planned entry carries a cost vector the turn driver can bill without re-lookup.
+      try {
+        const rs = game.bbttcc?.api?.raid?.EFFECTS?.[String(activityKey)]?.recipes;
+        const r = (recipe && Array.isArray(rs)) ? rs.find(x => x && x.label === String(recipe)) : null;
+        if (r) { entry.recipe = { label: r.label, cost: foundry.utils.duplicate(r.cost || {}), note: r.note || "" }; entry.summary += ` via ${r.label}`; }
+      } catch (_eR) {}
     }
 
     const prev = deepClone(attacker.getFlag(FCT_ID,"warLogs") || []);

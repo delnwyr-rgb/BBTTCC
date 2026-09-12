@@ -888,6 +888,73 @@
     optact_deep_cover_network: (c) => !_rival(c) ? no(`${_nm(c.targetFlags)} has no rival holder to infiltrate.`) : ok,
     optact_silent_brotherhood: (c) => !_rival(c) ? no(`${_nm(c.targetFlags)} has no rival holder to read.`) : ok
   };
+  // ── OP economy ruling B (owner, 2026-09-11; sim report OP_ECONOMY_SIM_2026_09_11.md) ──
+  // PRICE_MULT: every strategic activity price × 0.75, applied ONCE per cost object
+  // (non-enumerable stamp on the object, so a def re-wrapped by an enhancer that
+  // copies the same cost reference is not scaled twice; a fresh literal is).
+  // RECIPES: alternate fuels — "how the faction got it done". The planner offers a
+  // ⚗ Fuel select when a row has ≥2; planActivity stores the chosen {label,cost}
+  // on the planned entry and turn-driver payActivityCost bills THAT instead of the
+  // row's default. Same multiplier applies. `note` is flavour the planner shows;
+  // side effects per recipe are a later ruling.
+  const PRICE_MULT = 0.75;
+  const RECIPES = {
+    establish_outpost: [
+      { label:"hired labour",       cost:{ economy:20, logistics:10 } },
+      { label:"work gang",          cost:{ violence:20, logistics:10 },   note:"pressed labour under guard" },
+      { label:"pilgrim settlers",   cost:{ faith:15, softpower:10 },      note:"slower, but they came to stay" },
+      { label:"surveyor's gambit",  cost:{ intrigue:15, logistics:10 },   note:"a claim nobody saw filed" }
+    ],
+    establish_trade_route: [
+      { label:"bought caravan",     cost:{ economy:30, diplomacy:10, logistics:10 } },
+      { label:"treaty road",        cost:{ diplomacy:30, culture:10, logistics:10 } },
+      { label:"smugglers' run",     cost:{ intrigue:25, economy:10, logistics:10 }, note:"quiet, and it knows it" },
+      { label:"festival circuit",   cost:{ culture:25, diplomacy:10, logistics:10 }, note:"the road follows the music" }
+    ],
+    integration_framework: [
+      { label:"diplomatic envoys",  cost:{ diplomacy:10, softpower:10 } },
+      { label:"mission houses",     cost:{ faith:10, culture:10 } },
+      { label:"paid administrators",cost:{ economy:15, nonlethal:5 } },
+      { label:"whisper network",    cost:{ intrigue:15, nonlethal:5 },    note:"everyone belongs, or else" }
+    ],
+    optact_integration_framework: [
+      { label:"diplomatic envoys",  cost:{ diplomacy:10, softpower:10 } },
+      { label:"mission houses",     cost:{ faith:10, culture:10 } },
+      { label:"paid administrators",cost:{ economy:15, nonlethal:5 } },
+      { label:"whisper network",    cost:{ intrigue:15, nonlethal:5 },    note:"everyone belongs, or else" }
+    ],
+    develop_outpost_stability: [
+      { label:"garrison & grants",  cost:{ diplomacy:20, economy:10 } },
+      { label:"show of force",      cost:{ violence:20, nonlethal:10 } },
+      { label:"festival of belonging", cost:{ culture:20, softpower:10 } }
+    ],
+    upgrade_outpost_settlement: [
+      { label:"charter & works",    cost:{ economy:30, softpower:20, logistics:20 } },
+      { label:"festival founding",  cost:{ culture:30, faith:20, logistics:20 } }
+    ]
+  };
+  const _PRICED = "__bbttccPriced";
+  function scaleCost(cost){
+    const out = {};
+    for (const [k, v] of Object.entries(cost || {})) { const n = Number(v) || 0; if (n > 0) out[k] = Math.max(1, Math.round(n * PRICE_MULT)); }
+    Object.defineProperty(out, _PRICED, { value: PRICE_MULT, enumerable:false });
+    return out;
+  }
+  function applyPricePolicy(){
+    try {
+      const EFFECTS = game.bbttcc?.api?.raid?.EFFECTS || {}; let n = 0;
+      for (const [k, e] of Object.entries(EFFECTS)) {
+        if (!e || typeof e !== "object") continue;
+        for (const field of ["cost", "opCosts"]) {
+          const c = e[field]; if (!c || typeof c !== "object" || c[_PRICED]) continue;
+          e[field] = scaleCost(c); n++;
+        }
+        if (RECIPES[k] && !e.recipes) e.recipes = RECIPES[k].map(r => ({ label:r.label, note:r.note || "", cost: scaleCost(r.cost) }));
+      }
+      return n;
+    } catch (_e) { return 0; }
+  }
+
   function attachCanPlan(){
     try {
       const EFFECTS = game.bbttcc?.api?.raid?.EFFECTS || {}; let n = 0;
@@ -908,9 +975,12 @@
     game.bbttcc.api.auditStrategicThroughput = auditThroughputWiring;
     game.bbttcc.api.turn.auditStrategicThroughput = auditThroughputWiring;
     game.bbttcc.api.raid.CAN_PLAN = CAN_PLAN;
+    game.bbttcc.api.raid.PRICE_MULT = PRICE_MULT;
+    game.bbttcc.api.raid.RECIPES = RECIPES;
     attachCanPlan();
+    applyPricePolicy();
   }
-  Hooks.once("ready", () => { for (const ms of [0, 600, 2000, 5000]) setTimeout(attachCanPlan, ms); });
+  Hooks.once("ready", () => { for (const ms of [0, 600, 2000, 5000, 9000]) setTimeout(() => { attachCanPlan(); applyPricePolicy(); }, ms); });   // price policy + recipes ride the same retries: enhancers re-wrap defs with fresh cost literals up to a few seconds after ready
 
   function boot(){
     attach();

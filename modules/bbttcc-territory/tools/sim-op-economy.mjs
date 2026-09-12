@@ -46,6 +46,7 @@ const SRC = {
   compat:        path.join(REPO, "modules/bbttcc-raid/scripts/compat-bridge.js"),
   wilderness:    path.join(REPO, "modules/bbttcc-raid/scripts/effects-wilderness.enhancer.js"),
   tradeRoute:    path.join(REPO, "modules/bbttcc-raid/scripts/effects-establish-trade-route.enhancer.js"),
+  throughput:    path.join(REPO, "modules/bbttcc-raid/scripts/strategic-throughput.js"),
   pricing:       path.join(REPO, "systems/fourththing/rfi-pricing.js")
 };
 
@@ -55,13 +56,13 @@ const flag = (name, dflt) => { const i = argv.indexOf(`--${name}`); if (i < 0) r
 const num = (name, dflt) => { const v = flag(name, null); return v === null || v === true ? dflt : Number(v); };
 const KNOBS = {
   turns:            num("turns", 30),
-  priceMult:        num("price-mult", 1.0),          // every activity price × this
+  priceMult:        num("price-mult", null),         // every activity price × this (default = the engine's PRICE_MULT)
   econPriceMult:    num("econ-price-mult", 1.0),     // the ECONOMY part of every price × this (on top)
   occupationMult:   num("occupation-mult", 1.0),     // occupation-phase upkeep × this (engine 1.5 phase mult stays)
   spendOrder:       String(flag("spend-order", "before")),  // before = engine (plans paid before regen) | after
   sprawlExp:        num("sprawl-exp", null),         // override LOGI.SPRAWL_EXP
   sprawlThreshold:  num("sprawl-threshold", null),
-  recipes:          !!flag("recipes", false),        // alternate fuel recipes (PROPOSED table below)
+  recipes:          !flag("no-recipes", false),      // alternate fuel recipes (engine RECIPES table; --no-recipes for the single-price world)
   rewardMarks:      num("reward-marks", 0),          // story policy: marks/turn of quest+bounty reward
   rewardEvery:      num("reward-every", 2),
   gearEvery:        num("gear-every", 3),            // gear policy: buy every N turns
@@ -109,6 +110,10 @@ function parseCost(src, key, fallback) {
 }
 
 const S = Object.fromEntries(Object.entries(SRC).map(([k, p]) => [k, readSrc(p)]));
+// Engine price policy + recipes (ruling B, 2026-09-11) — the engine scales prices at run time, so the
+// literals in the source are BASE prices; the sim applies the same multiplier by default.
+const ENGINE_PRICE_MULT = (() => { const m = /const\s+PRICE_MULT\s*=\s*([\d.]+)/.exec(S.throughput || ""); if (!m) { DRIFT.push("PRICE_MULT: not found in strategic-throughput — using 1.0"); return 1.0; } return Number(m[1]); })();
+const ENGINE_OCCUPATION_MULT = (() => { const m = /if \(phase === "occupation"\)\s*phaseMult = ([\d.]+)/.exec(S.upkeep || ""); if (!m) { DRIFT.push("occupation phaseMult: not found in upkeep enhancer — using 1.5"); return 1.5; } return Number(m[1]); })();
 const E = {
   RES_TO_OP: parseConst(S.territoryMain, "RES_TO_OP", {
     economy:{food:0.5, materials:0.8, trade:1.0, military:0.1, knowledge:0.25},
@@ -150,6 +155,8 @@ const M = {
   MOD_PROD: { "well-maintained":0.25, "strategic position":0.10, "loyal population":0.15, "contaminated":-0.5, "damaged infrastructure":-0.25, "hostile population":-0.25, "difficult terrain":-0.10, "radiation zone":-0.75 }, // territory getModifierEffects (mAll)
   MOD_TRADE: { "trade hub":0.5 }                        // territory getModifierEffects (mTrade)
 };
+if (KNOBS.priceMult == null) KNOBS.priceMult = ENGINE_PRICE_MULT;
+M.PHASE_MULT.occupation = ENGINE_OCCUPATION_MULT;   // parsed from the upkeep enhancer (ruling B halved it)
 if (KNOBS.sprawlExp != null) E.LOGI.SPRAWL_EXP = KNOBS.sprawlExp;
 if (KNOBS.sprawlThreshold != null) E.LOGI.SPRAWL_THRESHOLD = KNOBS.sprawlThreshold;
 
@@ -162,8 +169,8 @@ const enginePrice = {
   establish_trade_route:      parseCost(S.tradeRoute, "establish_trade_route", { economy:30, diplomacy:10, logistics:10 }),
   integration_framework:      parseCost(S.compat, "integration_framework", { diplomacy:10, softpower:10 })
 };
-// PROPOSED alternate fuel recipes (T2). Not in the engine. Each is "how the faction got it done."
-const RECIPES = {
+// Alternate fuel recipes (T2): parsed from strategic-throughput RECIPES (ruling B shipped 2026-09-11); this literal is the fallback.
+const RECIPES = parseConst(S.throughput, "RECIPES", null, "RECIPES (strategic-throughput)") || {
   establish_outpost: [
     { label:"hired labour",     cost:{ economy:20, logistics:10 } },
     { label:"work gang",        cost:{ violence:20, logistics:10 }, note:"loyalty knock on the hex" },
@@ -369,7 +376,7 @@ function parity(savePath, factionName) {
 
 /* ───────────────────── run ───────────────────── */
 function header() {
-  console.log(`sim-op-economy — ${KNOBS.turns} turns · max hexes ${KNOBS.maxHexes} · price×${KNOBS.priceMult} (economy×${KNOBS.econPriceMult}) · occupation×${KNOBS.occupationMult} · spend ${KNOBS.spendOrder} regen · sprawl ^${E.LOGI.SPRAWL_EXP} over ${E.LOGI.SPRAWL_THRESHOLD} · recipes ${KNOBS.recipes ? "ON" : "off"} · tier floor T1 @ turn ${KNOBS.tierFloorTurn} · gear ${GEAR_MARKS} marks`);
+  console.log(`sim-op-economy — ${KNOBS.turns} turns · max hexes ${KNOBS.maxHexes} · price×${KNOBS.priceMult} (engine ${ENGINE_PRICE_MULT}) (economy×${KNOBS.econPriceMult}) · occupation×${KNOBS.occupationMult} (engine phase ${ENGINE_OCCUPATION_MULT}) · spend ${KNOBS.spendOrder} regen · sprawl ^${E.LOGI.SPRAWL_EXP} over ${E.LOGI.SPRAWL_THRESHOLD} · recipes ${KNOBS.recipes ? "ON" : "off"} · tier floor T1 @ turn ${KNOBS.tierFloorTurn} · gear ${GEAR_MARKS} marks`);
   if (DRIFT.length) { console.log("DRIFT? engine constants not parsed (fallbacks in use):"); for (const d of DRIFT) console.log("  · " + d); }
   else console.log("engine constants: all parsed from source ✓");
 }

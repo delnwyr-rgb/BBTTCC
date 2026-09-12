@@ -261,7 +261,7 @@
     // 2) Phase multiplier
     const phase = inferPhaseFromIntegration(integ);
     let phaseMult = 1.0;
-    if (phase === "occupation")             phaseMult = 1.5;
+    if (phase === "occupation")             phaseMult = 0.75;   // was 1.5 — OP economy ruling B (owner 2026-09-11): occupation upkeep × 0.5; sim OP_ECONOMY_SIM_2026_09_11.md
     else if (phase === "short_integration") phaseMult = 1.0;
     else if (phase === "full_integration")  phaseMult = 0.3; // baseline; outcome will zero for "good" results
 
