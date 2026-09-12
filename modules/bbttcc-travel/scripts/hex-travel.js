@@ -1,3 +1,4 @@
+import { TERRAIN_TABLE } from "/modules/bbttcc-core/scripts/economy.constants.js";
 // PATCHMARK: v13-roll-asyncopt-removed-and-tintguard-20251215-035023
 // PATCH: units-first travel distance fields (distanceUnits + derived distanceMiles from Foundry grid) — 20251218
 /* Bad Eden – Hex Travel Visual Engine (v1.1+parity)
@@ -25,39 +26,7 @@
 // before Ley Gate discount, free passage and costSet overrides.
 function _pricePolicyMult() { const m = Number(game?.bbttcc?.api?.raid?.PRICE_MULT); return (Number.isFinite(m) && m > 0) ? m : 0.75; }
 function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {}; for (const [k, v] of Object.entries(cost || {})) { const n = Number(v) || 0; out[k] = n > 0 ? Math.max(1, Math.round(n * m)) : 0; } return out; }
-const TERRAIN_TABLE = {
-    "plains":        { cost: { economy:10 }, tier:1, bias:"balanced" },
-    "grasslands":    { cost: { economy:10 }, tier:1, bias:"balanced" },
-    "forest":        { cost: { economy:10, intrigue:10 }, tier:2, bias:"hazard" },
-    "jungle":        { cost: { economy:10, intrigue:10 }, tier:2, bias:"hazard" },
-    "mountains":     { cost: { economy:20, logistics:10 }, tier:3, bias:"hazard" },
-    "highlands":     { cost: { economy:20, logistics:10 }, tier:3, bias:"hazard" },
-    "canyons":       { cost: { economy:10, violence:10 }, tier:2, bias:"combat" },
-    "badlands":      { cost: { economy:10, violence:10 }, tier:2, bias:"combat" },
-    "swamp":         { cost: { economy:20, nonLethal:10 }, tier:3, bias:"hazard" },
-    "mire":          { cost: { economy:20, nonLethal:10 }, tier:3, bias:"hazard" },
-    "desert":        { cost: { economy:20 }, tier:2, bias:"discovery" },
-    "ashWastes":     { cost: { economy:20 }, tier:2, bias:"discovery" },
-    "river":         { cost: { economy:10, logistics:10 }, tier:1, bias:"discovery", medium:"water", depthBand:"surface" },
-    "lake":          { cost: { economy:10, logistics:10 }, tier:1, bias:"discovery", medium:"water", depthBand:"surface" },
-    "sea":           { cost: { economy:30, logistics:20 }, tier:4, bias:"discovery", medium:"water", depthBand:"surface" },
-    "ocean":         { cost: { economy:30, logistics:20 }, tier:4, bias:"discovery", medium:"water", depthBand:"surface" },
-    // Underwater dive bands — reached by Diving from a surface-water hex (see
-    // game.bbttcc.api.travel.dive). Each band requires a water-sub (submersible)
-    // rig; depth governs Crushing pressure in underwater combat (FT.SUBMERSION_BITE).
-    "reef":          { cost: { economy:20, logistics:10 }, tier:2, bias:"discovery", medium:"water", depthBand:"reef" },
-    "depths":        { cost: { economy:30, logistics:20 }, tier:3, bias:"hazard",    medium:"water", depthBand:"deep" },
-    "abyss":         { cost: { economy:40, logistics:20 }, tier:4, bias:"extreme",   medium:"water", depthBand:"abyss" },
-    // Aerial bands — reached by Ascending from a hex (see game.bbttcc.api.travel
-    // .ascend). Sky/stratosphere need an air rig (flyer); orbit needs a space rig.
-    "sky":           { cost: { economy:10, logistics:10 }, tier:2, bias:"discovery", medium:"air",   altBand:"sky" },
-    "stratosphere":  { cost: { economy:20, logistics:20 }, tier:3, bias:"hazard",    medium:"air",   altBand:"stratosphere" },
-    "orbit":         { cost: { economy:40, logistics:30 }, tier:4, bias:"extreme",   medium:"space", altBand:"orbit" },
-    "ruins":         { cost: { economy:10, intrigue:10 }, tier:2, bias:"mix" },
-    "urbanWreckage": { cost: { economy:10, intrigue:10 }, tier:2, bias:"mix" },
-    "wasteland":     { cost: { economy:10, faith:10 }, tier:4, bias:"extreme" },
-    "radiation":     { cost: { economy:10, faith:10 }, tier:4, bias:"extreme" }
-  };
+// TERRAIN_TABLE lives in the economy constants table (item 5, 2026-09-12)
 
   // Visual toggles
   const VISUALS = {

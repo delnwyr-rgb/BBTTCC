@@ -25,7 +25,13 @@
         }
       }
     ],
-    "requires": []
+    "requires": [
+      {
+        "id": "bbttcc-core",
+        "type": "module",
+        "reason": "economy constants table + lifecycle contract (2026-09-12)"
+      }
+    ]
   },
   "esmodules": [
     "scripts/main.js",

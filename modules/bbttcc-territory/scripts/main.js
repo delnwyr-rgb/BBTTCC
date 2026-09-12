@@ -1,3 +1,4 @@
+import { RES_TO_OP, LEY_FLOW_MULT, TYPE_BASE, SIZE_MULT, HEX_MOD_LOYALTY, MOD_PRODUCTION, MOD_TRADE } from "/modules/bbttcc-core/scripts/economy.constants.js";
 /* ---------- bbttcc-territory / scripts/main.js (Auto-calc restored + Manual Override) ---------- */
 
 // BBTTCC_TERR_DASH_CLEANUP
@@ -1679,43 +1680,14 @@ function getModifierEffects(modifiers=[]){
   const bump=(pct)=>{ mAll *= (1+pct); };
   const bumpTrade=(pct)=>{ mTrade *= (1+pct); };
 
-  if (set.has("well-maintained"))        bump(+0.25);
-  if (set.has("fortified"))              { /* 0% prod */ }
-  if (set.has("strategic position"))     bump(+0.10);
-  if (set.has("loyal population"))       bump(+0.15);
-  if (set.has("trade hub"))              bumpTrade(+0.50);
-  if (set.has("contaminated"))           bump(-0.50);
-  if (set.has("damaged infrastructure")) bump(-0.25);
-  if (set.has("hostile population"))     bump(-0.25);
-  if (set.has("difficult terrain"))      bump(-0.10);
-  if (set.has("radiation zone"))         bump(-0.75);
-  if (set.has("supply line vulnerable")) bump(-0.15); // keep the original value
+  for (const [k, v] of Object.entries(MOD_PRODUCTION)) if (set.has(k)) bump(v);   // tables: economy constants (item 5)
+  for (const [k, v] of Object.entries(MOD_TRADE)) if (set.has(k)) bumpTrade(v);
   return { mAll, mTrade };
 }
 /** Type→base pips */
-const TYPE_BASE = {
-  settlement:{food:2, materials:1, trade:3, military:0, knowledge:0},
-  fortress:  {food:0, materials:3, trade:1, military:4, knowledge:0},
-  mine:      {food:0, materials:5, trade:2, military:0, knowledge:0},
-  farm:      {food:5, materials:1, trade:2, military:0, knowledge:0},
-  port:      {food:2, materials:2, trade:4, military:0, knowledge:0},
-  factory:   {food:0, materials:4, trade:3, military:0, knowledge:0},
-  research:  {food:0, materials:1, trade:1, military:0, knowledge:4},
-  temple:    {food:1, materials:1, trade:1, military:0, knowledge:2},
-  wasteland: {food:0, materials:1, trade:0, military:0, knowledge:0},
-  ruins:     {food:0, materials:2, trade:0, military:0, knowledge:1}
-};
+// TYPE_BASE lives in the economy constants table
 /** Size multipliers */
-const SIZE_MULT = {
-  none: 0,
-
-  outpost: 0.5,
-  village: 0.75,
-  town: 1,
-  city: 1.5,
-  metropolis: 2,
-  megalopolis: 3
-};
+// SIZE_MULT lives in the economy constants table
 
 /** Compute EFFECTIVE resources: base → +sephirot → ×modifiers */
 function computeEffectiveResources(base, sephirotName, modifiers){
@@ -1751,7 +1723,7 @@ function computeEffectiveResources(base, sephirotName, modifiers){
  * counted from stored edges only. Published as game.bbttcc.facts.hex / facts.routes at ready;
  * bin/ft-lint-facts fails any other file that reads the raw fields for a computation.
  * ═════════════════════════════════════════════════════════════════════════════ */
-const HEX_MOD_LOYALTY = { "loyal population": 2, "hostile population": -2, "well-maintained": 1, "well maintained": 1, "damaged infrastructure": -1 };
+// HEX_MOD_LOYALTY lives in the economy constants table
 const _tfOf = (x) => (x && x.flags) ? (x.flags[MOD] || {}) : (x?.document?.flags?.[MOD] || x || {});
 export function hexType(tfLike) { return String(_tfOf(tfLike).type || "settlement").toLowerCase(); }
 export function hexSize(tfLike) { return String(_tfOf(tfLike).size || "none").toLowerCase(); }
@@ -1900,30 +1872,9 @@ async function alignHexToSephirot(hexDocOrUuid, sephirahKey, { source = "ritual"
 }
 
 /* Optional: OP cache from resources (unchanged; harmless for UI) */
-const RES_TO_OP = {
-  economy:{food:0.5, materials:0.8, trade:1.0, military:0.1, knowledge:0.25},
-  violence:{food:0.1, materials:0.2, trade:0.2, military:0.8, knowledge:0.0},
-  nonLethal:{food:0.2, materials:0.1, trade:0.2, military:0.5, knowledge:0.3},
-  intrigue:{food:0.0, materials:0.1, trade:0.5, military:0.1, knowledge:1.0},
-  diplomacy:{food:0.2, materials:0.0, trade:0.6, military:0.0, knowledge:0.4},
-  softPower:{food:0.2, materials:0.0, trade:0.5, military:0.0, knowledge:0.3},
-  // Culture + faith lanes (owner ruling 2026-09-12): until now neither channel had ANY territory
-  // income — recipes that spend them drained banks that never refilled. Resource weights here;
-  // the per-TYPE / per-SIZE / stationed-facility bonuses live in turn-driver LANE_HEX_BONUS
-  // (computeTerritoryMatrixIncome has the hex in scope). Priced in sim OP_ECONOMY_SIM_2026_09_11.md.
-  culture:{food:0.1, materials:0.0, trade:0.3, military:0.0, knowledge:0.5},
-  faith:{food:0.1, materials:0.0, trade:0.0, military:0.0, knowledge:0.5}
-};
+// RES_TO_OP lives in the economy constants table (item 5, 2026-09-12)
 /* ---------------- Leyline Flow Modifiers ---------------- */
-const LEY_FLOW_MULT = {
-  normal:     1.0,
-  turbulence: 0.9,
-  surge:      1.3,
-  stagnation: 0.6,
-  inversion:  1.0, // multiplier is applied after swaps
-  fracture:   0.8,
-  seal:       0.0
-};
+// LEY_FLOW_MULT lives in the economy constants table
 
 function resourcesToOP(res, flowState = "normal"){
   const out = { economy:0, violence:0, nonLethal:0, intrigue:0, diplomacy:0, softPower:0, culture:0, faith:0 };

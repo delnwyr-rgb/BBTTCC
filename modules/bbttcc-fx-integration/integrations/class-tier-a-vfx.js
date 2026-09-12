@@ -16,7 +16,7 @@ const TAG = "[bbttcc-fx:class-tier-a]";
 // ---- family recipes. Each lists preferred keys first; first one that exists in the world's
 //      Sequencer DB wins. `at` = where to anchor: "source" (caster) or "target" (first target,
 //      else caster). `scale` multiplies the grid size. ----
-const RECIPES = {
+const RECIPES = {   // facts-ok: VFX recipe list, not the economy table
   teleport:    { at:"source", scale:1.6, color:0x66ccff,
                  primary:["jb2a.misty_step.01.blue","jb2a.particle_burst.01.circle.bluepurple","jb2a.magic_signs.circle.02.conjuration.complete.blue"],
                  accent: ["jb2a.misty_step.02.blue","jb2a.explosion.01.blue","jb2a.explosion.01.purple"], accentDelay:350 },

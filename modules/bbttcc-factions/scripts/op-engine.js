@@ -1,3 +1,4 @@
+import { TIER_CAP_BAND_MARKS, LOGISTICS_CAPACITY_FLOOR_MARKS } from "/modules/bbttcc-core/scripts/economy.constants.js";
 /* REVIEW NOTE: OP Engine is core bank/cap logic and intentionally retained during faction-sheet layout cleanup. */
 // modules/bbttcc-factions/scripts/op-engine.js
 // Bad Eden — OP Engine v0.3 (marks)
@@ -91,8 +92,7 @@ function _normalizeDeltas(raw) {
 // at run time (or ES-imports the constants from this file); no other file may carry the
 // band literal or re-derive tier from flags. bin/ft-lint-facts enforces it.
 // ═════════════════════════════════════════════════════════════════════════════
-export const TIER_CAP_BAND_MARKS = [50, 70, 90, 110, 130];           // T0..T4, marks per bucket (1 OP = 10 marks)
-export const LOGISTICS_CAPACITY_FLOOR_MARKS = [70, 70, 90, 110, 130]; // owner ruling 2026-09-12: capacity never reads below the T1 band
+export { TIER_CAP_BAND_MARKS, LOGISTICS_CAPACITY_FLOOR_MARKS };   // numbers live in the economy constants table (item 5); this file is the ACCESSOR home
 export function factionTier(faction) {
   const f = faction?.flags?.[MOD_ID] || {};
   let tier = _safeNum(f.tier, -1);

@@ -1,3 +1,4 @@
+import { PRICE_MULT, RECIPES } from "/modules/bbttcc-core/scripts/economy.constants.js";
 // Bad Eden — Strategic Throughput Registry (Alpha Consolidated, beacon + watchdog, deduped)
 
 (() => {
@@ -900,42 +901,7 @@
   // darknessDelta} written directly, hex {loyaltyDelta,moraleDelta,darknessDelta,addModifiers,
   // removeModifiers} queued on the target's turn.pending; turn-driver applyRecipeSideEffects
   // lands them when the activity resolves. days = extra ledger days (slow fuels).
-  const PRICE_MULT = 0.75;
-  const RECIPES = {
-    establish_outpost: [
-      { label:"hired labour",       cost:{ economy:20, logistics:10 } },
-      { label:"work gang",          cost:{ violence:20, logistics:10 },   note:"pressed labour under guard",     fx:{ hex:{ loyaltyDelta:-2 }, faction:{ darknessDelta:1 } } },
-      { label:"pilgrim settlers",   cost:{ faith:15, softpower:10 },      note:"slower, but they came to stay", days:1, fx:{ hex:{ loyaltyDelta:1 }, faction:{ moraleDelta:1 } } },
-      { label:"surveyor's gambit",  cost:{ intrigue:15, logistics:10 },   note:"a claim nobody saw filed",       fx:{ hex:{ loyaltyDelta:-1, darknessDelta:1 } } }
-    ],
-    establish_trade_route: [
-      { label:"bought caravan",     cost:{ economy:30, diplomacy:10, logistics:10 } },
-      { label:"treaty road",        cost:{ diplomacy:30, culture:10, logistics:10 }, fx:{ hex:{ loyaltyDelta:1 } } },
-      { label:"smugglers' run",     cost:{ intrigue:25, economy:10, logistics:10 }, note:"quiet, and it knows it",     fx:{ hex:{ darknessDelta:1 }, faction:{ darknessDelta:1 } } },
-      { label:"festival circuit",   cost:{ culture:25, diplomacy:10, logistics:10 }, note:"the road follows the music", fx:{ hex:{ moraleDelta:1 }, faction:{ moraleDelta:1 } } }
-    ],
-    integration_framework: [
-      { label:"diplomatic envoys",  cost:{ diplomacy:10, softpower:10 } },
-      { label:"mission houses",     cost:{ faith:10, culture:10 },         fx:{ hex:{ loyaltyDelta:1 } } },
-      { label:"paid administrators",cost:{ economy:15, nonlethal:5 },      note:"bought loyalty is thin",         fx:{ hex:{ loyaltyDelta:-1 } } },
-      { label:"whisper network",    cost:{ intrigue:15, nonlethal:5 },    note:"everyone belongs, or else",      fx:{ hex:{ loyaltyDelta:1 }, faction:{ darknessDelta:1 } } }
-    ],
-    optact_integration_framework: [
-      { label:"diplomatic envoys",  cost:{ diplomacy:10, softpower:10 } },
-      { label:"mission houses",     cost:{ faith:10, culture:10 },         fx:{ hex:{ loyaltyDelta:1 } } },
-      { label:"paid administrators",cost:{ economy:15, nonlethal:5 },      note:"bought loyalty is thin",         fx:{ hex:{ loyaltyDelta:-1 } } },
-      { label:"whisper network",    cost:{ intrigue:15, nonlethal:5 },    note:"everyone belongs, or else",      fx:{ hex:{ loyaltyDelta:1 }, faction:{ darknessDelta:1 } } }
-    ],
-    develop_outpost_stability: [
-      { label:"garrison & grants",  cost:{ diplomacy:20, economy:10 } },
-      { label:"show of force",      cost:{ violence:20, nonlethal:10 },    note:"quiet, not calm",               fx:{ hex:{ loyaltyDelta:-2 }, faction:{ darknessDelta:1 } } },
-      { label:"festival of belonging", cost:{ culture:20, softpower:10 }, fx:{ hex:{ moraleDelta:2, loyaltyDelta:1 } } }
-    ],
-    upgrade_outpost_settlement: [
-      { label:"charter & works",    cost:{ economy:30, softpower:20, logistics:20 } },
-      { label:"festival founding",  cost:{ culture:30, faith:20, logistics:20 }, fx:{ hex:{ loyaltyDelta:1 }, faction:{ moraleDelta:2 } } }
-    ]
-  };
+  // PRICE_MULT + RECIPES live in the economy constants table (item 5, 2026-09-12)
   const _PRICED = "__bbttccPriced";
   function scaleCost(cost){
     const out = {};

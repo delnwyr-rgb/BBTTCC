@@ -1,3 +1,4 @@
+import { LOGI, LEDGER_DAY_COST, LANE_HEX_BONUS } from "/modules/bbttcc-core/scripts/economy.constants.js";
 // Bad Eden Territory — Turn Driver
 // Pipeline: (0) Promote post.pending → turn.pending (Apply only)
 // → (1) Planned Raids (Dry=preview, Apply=commit per faction via compat)
@@ -598,33 +599,7 @@ function computeOpsFromStockpile(stockpile, regenMap, factors){
  * Alpha-friendly: visible + legible, does NOT apply harsh penalties yet.
  * This sprint: Overextension signal only.
  * ------------------------------------------------------------------------ */
-const LOGI = Object.freeze({
-  DEMAND_TERRITORY_PER_HEX: 1.0,
-  DEMAND_SHORT_PER_HEX: 1.0,
-  DEMAND_OCCUPATION_PER_HEX: 2.0,
-  DEMAND_DISTANCE_PER_STEP: 0.5, // floor(avgDist) * 0.5
-  DEMAND_CITY_PER_HEX: 1.0,
-  DEMAND_SPECIAL_PER_HEX: 0.5,
-  DEMAND_RIG_PER_ACTIVE: 0.5,
-
-  // Sprawl surcharge: max(0, hexes-4)^2 * 0.25
-  SPRAWL_THRESHOLD: 4,
-  SPRAWL_EXP: 2,
-  SPRAWL_MULT: 0.25,
-
-  CAPACITY_PER_LOGISTICS_OP: 1.0,
-  CAPACITY_PER_TRADEPAIR: 1.0,
-  CAPACITY_PER_TRADEROUTE: 0.5,   // owner ruling 2026-09-10: every route counts, half a point each (pairs rounded a lone route to 0)
-  CAPACITY_FULL_INTEG_PER_HEX: 0.5,
-  CAPACITY_INFRA_DEPOT: 1.0,
-  CAPACITY_INFRA_MAJORPORT: 1.0,
-  CAPACITY_INFRA_ROADNET: 0.5,
-  // SIM-BADEDEN tuning 2026-06-05: Supply Lines are logistics infrastructure —
-  // they now grant capacity like roads do. (Previously 0.95× upkeep only: the
-  // exact infra the supply-chain arc builds did nothing against overextension.)
-  CAPACITY_INFRA_SUPPLYLINE: 0.5,
-  CAPACITY_LOGI_RIG: 0.5
-});
+// LOGI lives in the economy constants table (item 5, 2026-09-12)
 
 function classifyOverextension(ratio){
   if (!Number.isFinite(ratio)) return "critical";
@@ -1013,10 +988,7 @@ async function computeLogisticsPressureForAllFactions({ apply=false } = {}){
 // and per stationed FACILITY — a facility is a stationary `rig` actor in the hex's holdings, keyed
 // by name the same way the holdings DC bonus is (garrison/forge/cannon/trade). A dedicated temple
 // facility earns faith on any hex; St Gilliam's is a B&B, so no bonus unless someone builds one.
-const LANE_HEX_BONUS = {
-  culture: { byType: { research:1, city:2, port:1, settlement:1, temple:1 }, bySize: { outpost:0, village:0.5, town:1, city:2, metropolis:3, megalopolis:4 }, byFacility: { theatre:2, theater:2, library:2, hall:1, festival:1 } },
-  faith:   { byType: { temple:3, ruins:1 },                                    bySize: { outpost:0, village:0.5, town:1, city:1.5, metropolis:2, megalopolis:3 }, byFacility: { temple:3, shrine:2, chapel:2, church:2 } }
-};
+// LANE_HEX_BONUS lives in the economy constants table
 function laneHexBonus(tf){
   const type = String(tf?.type || "").toLowerCase(), size = String(tf?.size || "").toLowerCase();
   const out = { culture:0, faith:0 };
@@ -1295,15 +1267,7 @@ async function promotePostToTurn(){
 // next turn — the crew visibly waits) and only funded entries reach
 // consumePlanned. Funded days are debited to the world clock as
 // source:"development". Worlds without the ledger API degrade to old behavior.
-const LEDGER_DAY_COST = {
-  develop_infrastructure_std: 3,
-  infrastructure_expansion: 3,
-  establish_outpost: 3,
-  upgrade_outpost_settlement: 3,
-  develop_outpost_stability: 2,
-  establish_supply_line: 2,
-  establish_trade_route: 2
-};
+// LEDGER_DAY_COST lives in the economy constants table
 function ledgerDayCostFor(key){
   const k = String(key || "").toLowerCase();
   if (LEDGER_DAY_COST[k] != null) return LEDGER_DAY_COST[k];

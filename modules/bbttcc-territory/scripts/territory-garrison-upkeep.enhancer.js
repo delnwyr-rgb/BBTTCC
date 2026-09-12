@@ -1,3 +1,4 @@
+import { UPKEEP } from "/modules/bbttcc-core/scripts/economy.constants.js";
 // modules/bbttcc-territory/scripts/territory-garrison-upkeep.enhancer.js
 // Bad Eden — Garrison & Upkeep Engine (Phase-based, type-aware)
 //
@@ -35,85 +36,8 @@
   // Base upkeep vectors per hex "type", in MARKS (1 OP = 10 marks).
   // These are BEFORE phase/outcome/hostility/size multipliers.
   // Half-OP values become 5 marks to preserve granular semantics.
-  const BASE_BY_TYPE = {
-    fortress:   { military: 10, logistics: 10 },
-    port:       { logistics: 10, diplomacy: 5 },
-    temple:     { faith: 10, diplomacy: 5 },
-    farm:       { logistics: 5, economy: 5 },
-    mine:       { economy: 10 },
-    research:   { economy: 5, intrigue: 5 },
-    settlement: { logistics: 5, diplomacy: 5, economy: 5 },
-    city:       { logistics: 10, diplomacy: 10, economy: 10 },
-    ruins:      { intrigue: 10, nonlethal: 5, economy: 5 },
-    // SIM-BADEDEN tuning 2026-06-05 (owner call): nonlethal has NO income source —
-    // the old {economy:5, nonlethal:5} default made every wilderness claim a
-    // permanently unpayable bleed (Run I: perma-arrears, claiming frozen).
-    // Re-denominated toward diplomacy (the bucket trade keeps filling); a token
-    // nonlethal cost remains while unintegrated — pacification still draws on
-    // the peace-keepers, but it's survivable until the hex settles.
-    default:    { economy: 5, diplomacy: 3, nonlethal: 2 } // fallback
-  };
-
-  // Size multipliers.
-  const SIZE_MULT = {
-    outpost:     0.5,
-    village:     0.75,
-    town:        1.0,
-    city:        1.5,
-    metropolis:  2.0,
-    megalopolis: 3.0
-  };
-
-  const STATUS_MULT = {
-    unclaimed: 0,
-    contested: 0.75,
-    occupied:  1.0,
-    claimed:   1.0,
-    scorched:  1.0,
-    triumphant:1.1
-  };
-
-  // Outcome multipliers. Salt-the-earth = 0 upkeep.
-  const OUTCOME_MULT = {
-    justice_reformation:       0.7,
-    liberation:                0.8,
-    best_friends_integration:  0.5,
-    retribution_subjugation:   1.3,
-    salt_the_earth:            0.0
-  };
-
-  // Ease multipliers from integration.spec.garrisonEase
-  const EASE_MULT = {
-    very_easy: 0.7,
-    easy:      0.85,
-    normal:    1.0,
-    hard:      1.2
-  };
-
-  // Modifiers → upkeep multipliers
-  const MOD_MULT = {
-    "Well-Maintained":        0.9,
-    "Well Maintained":        0.9,   // tolerate both spellings
-    "Fortified":              1.1,
-    "Trade Hub":              1.05,
-    "Damaged Infrastructure": 1.2,
-    "Radiation Zone":         1.3,
-    "Cultural Festival":      0.9,
-    "Supply Line":            0.95,
-    "Logistics Hub":          1.05,
-    "Diplomatic Ties":        0.95
-  };
-
-  // Conditions → upkeep multipliers
-  const COND_MULT = {
-    "Radiated":    1.3,
-    "Purified":    0.9,
-    "Unstable":    1.1,
-    "Sanctified":  0.9
-  };
-
-  const HOSTILITY_MULT = 1.25;
-  const LOYALTY_MULT   = 0.85;
+  // Every table below lives in the economy constants table (item 5, 2026-09-12).
+  const { BASE_BY_TYPE, SIZE_MULT, STATUS_MULT, OUTCOME_MULT, EASE_MULT, MOD_MULT, COND_MULT, HOSTILITY_MULT, LOYALTY_MULT, PHASE_MULT } = UPKEEP;
 
   // Legacy/resource-style buckets → canonical faction OP bank keys
   const OP_BUCKET_ALIAS = {
@@ -261,9 +185,7 @@
     // 2) Phase multiplier
     const phase = inferPhaseFromIntegration(integ);
     let phaseMult = 1.0;
-    if (phase === "occupation")             phaseMult = 0.75;   // was 1.5 — OP economy ruling B (owner 2026-09-11): occupation upkeep × 0.5; sim OP_ECONOMY_SIM_2026_09_11.md
-    else if (phase === "short_integration") phaseMult = 1.0;
-    else if (phase === "full_integration")  phaseMult = 0.3; // baseline; outcome will zero for "good" results
+    phaseMult = PHASE_MULT[phase] ?? 1.0;   // economy constants UPKEEP.PHASE_MULT (occupation 0.75 = ruling B)
 
     vec = scaleVector(vec, phaseMult);
 

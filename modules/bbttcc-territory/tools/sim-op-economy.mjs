@@ -48,7 +48,8 @@ const SRC = {
   tradeRoute:    path.join(REPO, "modules/bbttcc-raid/scripts/effects-establish-trade-route.enhancer.js"),
   throughput:    path.join(REPO, "modules/bbttcc-raid/scripts/strategic-throughput.js"),
   travel:        path.join(REPO, "modules/bbttcc-travel/scripts/hex-travel.js"),
-  pricing:       path.join(REPO, "systems/fourththing/rfi-pricing.js")
+  pricing:       path.join(REPO, "systems/fourththing/rfi-pricing.js"),
+  econ:          path.join(REPO, "modules/bbttcc-core/scripts/economy.constants.js")   // item 5: THE table
 };
 
 /* ───────────────────────── CLI ───────────────────────── */
@@ -120,41 +121,42 @@ function parseCost(src, key, fallback) {
 const S = Object.fromEntries(Object.entries(SRC).map(([k, p]) => [k, readSrc(p)]));
 // Engine price policy + recipes (ruling B, 2026-09-11) — the engine scales prices at run time, so the
 // literals in the source are BASE prices; the sim applies the same multiplier by default.
-const ENGINE_PRICE_MULT = (() => { const m = /const\s+PRICE_MULT\s*=\s*([\d.]+)/.exec(S.throughput || ""); if (!m) { DRIFT.push("PRICE_MULT: not found in strategic-throughput — using 1.0"); return 1.0; } return Number(m[1]); })();
-const ENGINE_OCCUPATION_MULT = (() => { const m = /if \(phase === "occupation"\)\s*phaseMult = ([\d.]+)/.exec(S.upkeep || ""); if (!m) { DRIFT.push("occupation phaseMult: not found in upkeep enhancer — using 1.5"); return 1.5; } return Number(m[1]); })();
+const ENGINE_PRICE_MULT = (() => { const m = /export const PRICE_MULT\s*=\s*([\d.]+)/.exec(S.econ || ""); if (!m) { DRIFT.push("PRICE_MULT: not found in strategic-throughput — using 1.0"); return 1.0; } return Number(m[1]); })();
+const ENGINE_OCCUPATION_MULT = (() => { const m = /occupation:\s*([\d.]+)/.exec((/PHASE_MULT:\s*\{[^}]*\}/.exec(S.econ || "") || [""])[0]); if (!m) { DRIFT.push("occupation phaseMult: not found in upkeep enhancer — using 1.5"); return 1.5; } return Number(m[1]); })();
+const UPK = parseConst(S.econ, "UPKEEP", null, "UPKEEP (economy.constants)");   // item 5: every upkeep table from the one file
 const E = {
-  RES_TO_OP: parseConst(S.territoryMain, "RES_TO_OP", {
+  RES_TO_OP: parseConst(S.econ, "RES_TO_OP", {
     economy:{food:0.5, materials:0.8, trade:1.0, military:0.1, knowledge:0.25},
     violence:{food:0.1, materials:0.2, trade:0.2, military:0.8, knowledge:0.0},
     nonLethal:{food:0.2, materials:0.1, trade:0.2, military:0.5, knowledge:0.3},
     intrigue:{food:0.0, materials:0.1, trade:0.5, military:0.1, knowledge:1.0},
     diplomacy:{food:0.2, materials:0.0, trade:0.6, military:0.0, knowledge:0.4},
     softPower:{food:0.2, materials:0.0, trade:0.5, military:0.0, knowledge:0.3} }),
-  LEY_FLOW_MULT: parseConst(S.territoryMain, "LEY_FLOW_MULT", { normal:1.0, turbulence:0.9, surge:1.3, stagnation:0.6, inversion:1.0 }),
-  TYPE_BASE: parseConst(S.territoryMain, "TYPE_BASE", {
+  LEY_FLOW_MULT: parseConst(S.econ, "LEY_FLOW_MULT", { normal:1.0, turbulence:0.9, surge:1.3, stagnation:0.6, inversion:1.0 }),
+  TYPE_BASE: parseConst(S.econ, "TYPE_BASE", {
     settlement:{food:2, materials:1, trade:3, military:0, knowledge:0}, fortress:{food:0, materials:3, trade:1, military:4, knowledge:0},
     mine:{food:0, materials:5, trade:2, military:0, knowledge:0}, farm:{food:5, materials:1, trade:2, military:0, knowledge:0},
     port:{food:2, materials:2, trade:4, military:0, knowledge:0}, factory:{food:0, materials:4, trade:3, military:0, knowledge:0},
     research:{food:0, materials:1, trade:1, military:0, knowledge:4}, temple:{food:1, materials:1, trade:1, military:0, knowledge:2},
     wasteland:{food:0, materials:1, trade:0, military:0, knowledge:0}, ruins:{food:0, materials:2, trade:0, military:0, knowledge:1} }),
-  SIZE_MULT: parseConst(S.territoryMain, "SIZE_MULT", { none:0, outpost:0.5, village:0.75, town:1, city:1.5, metropolis:2, megalopolis:3 }, "territory SIZE_MULT"),
-  LOGI: parseConst(S.turnDriver, "LOGI", { DEMAND_TERRITORY_PER_HEX:1, DEMAND_SHORT_PER_HEX:1, DEMAND_OCCUPATION_PER_HEX:2, DEMAND_DISTANCE_PER_STEP:0.5, DEMAND_CITY_PER_HEX:1, DEMAND_SPECIAL_PER_HEX:0.5, DEMAND_RIG_PER_ACTIVE:0.5, SPRAWL_THRESHOLD:4, SPRAWL_EXP:2, SPRAWL_MULT:0.25, CAPACITY_PER_LOGISTICS_OP:1, CAPACITY_PER_TRADEPAIR:1, CAPACITY_PER_TRADEROUTE:0.5, CAPACITY_FULL_INTEG_PER_HEX:0.5, CAPACITY_INFRA_DEPOT:1, CAPACITY_INFRA_MAJORPORT:1, CAPACITY_INFRA_ROADNET:0.5, CAPACITY_INFRA_SUPPLYLINE:0.5, CAPACITY_LOGI_RIG:0.5 }),
-  UP_BASE: parseConst(S.upkeep, "BASE_BY_TYPE", { fortress:{military:10, logistics:10}, port:{logistics:10, diplomacy:5}, temple:{faith:10, diplomacy:5}, farm:{logistics:5, economy:5}, mine:{economy:10}, research:{economy:5, intrigue:5}, settlement:{logistics:5, diplomacy:5, economy:5}, city:{logistics:10, diplomacy:10, economy:10}, ruins:{intrigue:10, nonlethal:5, economy:5}, default:{economy:5, diplomacy:3, nonlethal:2} }, "upkeep BASE_BY_TYPE"),
-  UP_SIZE: parseConst(S.upkeep, "SIZE_MULT", { outpost:0.5, village:0.75, town:1, city:1.5, metropolis:2, megalopolis:3 }, "upkeep SIZE_MULT"),
-  UP_STATUS: parseConst(S.upkeep, "STATUS_MULT", { unclaimed:0, contested:0.75, occupied:1, claimed:1, scorched:1, triumphant:1.1 }),
-  UP_OUTCOME: parseConst(S.upkeep, "OUTCOME_MULT", { justice_reformation:0.7, liberation:0.8, best_friends_integration:0.5, retribution_subjugation:1.3, salt_the_earth:0 }),
-  UP_EASE: parseConst(S.upkeep, "EASE_MULT", { very_easy:0.7, easy:0.85, normal:1, hard:1.2 }),
-  UP_MOD: parseConst(S.upkeep, "MOD_MULT", { "Well-Maintained":0.9, "Fortified":1.1, "Trade Hub":1.05, "Damaged Infrastructure":1.2, "Radiation Zone":1.3, "Cultural Festival":0.9, "Supply Line":0.95, "Logistics Hub":1.05, "Diplomatic Ties":0.95 }),
+  SIZE_MULT: parseConst(S.econ, "SIZE_MULT", { none:0, outpost:0.5, village:0.75, town:1, city:1.5, metropolis:2, megalopolis:3 }, "territory SIZE_MULT"),
+  LOGI: parseConst(S.econ, "LOGI", { DEMAND_TERRITORY_PER_HEX:1, DEMAND_SHORT_PER_HEX:1, DEMAND_OCCUPATION_PER_HEX:2, DEMAND_DISTANCE_PER_STEP:0.5, DEMAND_CITY_PER_HEX:1, DEMAND_SPECIAL_PER_HEX:0.5, DEMAND_RIG_PER_ACTIVE:0.5, SPRAWL_THRESHOLD:4, SPRAWL_EXP:2, SPRAWL_MULT:0.25, CAPACITY_PER_LOGISTICS_OP:1, CAPACITY_PER_TRADEPAIR:1, CAPACITY_PER_TRADEROUTE:0.5, CAPACITY_FULL_INTEG_PER_HEX:0.5, CAPACITY_INFRA_DEPOT:1, CAPACITY_INFRA_MAJORPORT:1, CAPACITY_INFRA_ROADNET:0.5, CAPACITY_INFRA_SUPPLYLINE:0.5, CAPACITY_LOGI_RIG:0.5 }),
+  UP_BASE: (UPK && UPK.BASE_BY_TYPE) || { fortress:{military:10, logistics:10}, port:{logistics:10, diplomacy:5}, temple:{faith:10, diplomacy:5}, farm:{logistics:5, economy:5}, mine:{economy:10}, research:{economy:5, intrigue:5}, settlement:{logistics:5, diplomacy:5, economy:5}, city:{logistics:10, diplomacy:10, economy:10}, ruins:{intrigue:10, nonlethal:5, economy:5}, default:{economy:5, diplomacy:3, nonlethal:2} },
+  UP_SIZE: (UPK && UPK.SIZE_MULT) || { outpost:0.5, village:0.75, town:1, city:1.5, metropolis:2, megalopolis:3 },
+  UP_STATUS: (UPK && UPK.STATUS_MULT) || { unclaimed:0, contested:0.75, occupied:1, claimed:1, scorched:1, triumphant:1.1 },
+  UP_OUTCOME: (UPK && UPK.OUTCOME_MULT) || { justice_reformation:0.7, liberation:0.8, best_friends_integration:0.5, retribution_subjugation:1.3, salt_the_earth:0 },
+  UP_EASE: (UPK && UPK.EASE_MULT) || { very_easy:0.7, easy:0.85, normal:1, hard:1.2 },
+  UP_MOD: (UPK && UPK.MOD_MULT) || { "Well-Maintained":0.9, "Fortified":1.1, "Trade Hub":1.05, "Damaged Infrastructure":1.2, "Radiation Zone":1.3, "Cultural Festival":0.9, "Supply Line":0.95, "Logistics Hub":1.05, "Diplomatic Ties":0.95 },
   TIER_BASE_MARKS: parseConst(S.pricing, "TIER_BASE_MARKS", { 1:50, 2:150, 3:450, 4:1350 }),
   TIER_FEE_MARKS: parseConst(S.pricing, "TIER_FEE_MARKS", { I:10, II:30, III:90, IV:270 }),
   CATEGORY_MULT: parseConst(S.pricing, "CATEGORY_MULT_BY_FRAME", { weapon:1, armor:1.5, tool:0.6, sigil:1.2, vehicle:5, consumable:0.2 }),
   CREATURE_TIER_BASE: parseConst(S.pricing, "CREATURE_TIER_BASE", { 1:5, 2:10, 3:20, 4:40 }),
-  TERRAIN_TABLE: parseConst(S.travel, "TERRAIN_TABLE", { plains:{ cost:{ economy:10 } }, forest:{ cost:{ economy:10, intrigue:10 } }, mountains:{ cost:{ economy:20, logistics:10 } }, sea:{ cost:{ economy:30, logistics:20 } } }),
-  LEDGER_DAY_COST: parseConst(S.turnDriver, "LEDGER_DAY_COST", { develop_infrastructure_std:3, infrastructure_expansion:3, establish_outpost:3, upgrade_outpost_settlement:3, develop_outpost_stability:2, establish_supply_line:2, establish_trade_route:2 })
+  TERRAIN_TABLE: parseConst(S.econ, "TERRAIN_TABLE", { plains:{ cost:{ economy:10 } }, forest:{ cost:{ economy:10, intrigue:10 } }, mountains:{ cost:{ economy:20, logistics:10 } }, sea:{ cost:{ economy:30, logistics:20 } } }),
+  LEDGER_DAY_COST: parseConst(S.econ, "LEDGER_DAY_COST", { develop_infrastructure_std:3, infrastructure_expansion:3, establish_outpost:3, upgrade_outpost_settlement:3, develop_outpost_stability:2, establish_supply_line:2, establish_trade_route:2 })
 };
 // Hand-mirrored scalars (turn-driver / upkeep / tracks / op-engine) — line refs in comments.
 const M = {
-  CAP_BAND: (() => { const m = /export const TIER_CAP_BAND_MARKS\s*=\s*\[([^\]]*)\]/.exec(S.opEngine || ""); if (!m) { DRIFT.push("TIER_CAP_BAND_MARKS: not found in op-engine"); return [50,70,90,110,130]; } return m[1].split(",").map(x => Number(x.trim())); })(),   // facts.faction (op-engine) is the one home
+  CAP_BAND: (() => { const m = /export const TIER_CAP_BAND_MARKS\s*=\s*\[([^\]]*)\]/.exec(S.econ || ""); if (!m) { DRIFT.push("TIER_CAP_BAND_MARKS: not found in op-engine"); return [50,70,90,110,130]; } return m[1].split(",").map(x => Number(x.trim())); })(),   // facts.faction (op-engine) is the one home
   OVEREXT_LOGI_MULT: { overextended:0.90, strained:0.80, critical:0.65 },   // turn-driver advanceOPRegen 4.1
   PHASE_MULT: { occupation:1.5, short_integration:1.0, full_integration:0.3 }, // upkeep computeHexUpkeep 2)
   HOSTILITY_MULT: 1.25, LOYALTY_MULT: 0.85,             // upkeep 7)
@@ -165,8 +167,8 @@ const M = {
   MOD_TRADE: { "trade hub":0.5 }                        // territory getModifierEffects (mTrade)
 };
 if (KNOBS.priceMult == null) KNOBS.priceMult = ENGINE_PRICE_MULT;
-const LOGI_CAP_FLOOR = (() => { const m = /export const LOGISTICS_CAPACITY_FLOOR_MARKS\s*=\s*\[([^\]]*)\]/.exec(S.opEngine || ""); if (!m) { DRIFT.push("LOGISTICS_CAPACITY_FLOOR_MARKS: not found in op-engine — using [0,0,0,0,0]"); return [0,0,0,0,0]; } return m[1].split(",").map(x => Number(x.trim()) || 0); })();
-M.PHASE_MULT.occupation = ENGINE_OCCUPATION_MULT;   // parsed from the upkeep enhancer (ruling B halved it)
+const LOGI_CAP_FLOOR = (() => { const m = /export const LOGISTICS_CAPACITY_FLOOR_MARKS\s*=\s*\[([^\]]*)\]/.exec(S.econ || ""); if (!m) { DRIFT.push("LOGISTICS_CAPACITY_FLOOR_MARKS: not found in op-engine — using [0,0,0,0,0]"); return [0,0,0,0,0]; } return m[1].split(",").map(x => Number(x.trim()) || 0); })();
+if (UPK?.PHASE_MULT) M.PHASE_MULT = Object.assign({}, M.PHASE_MULT, UPK.PHASE_MULT); else M.PHASE_MULT.occupation = ENGINE_OCCUPATION_MULT;
 if (KNOBS.sprawlExp != null) E.LOGI.SPRAWL_EXP = KNOBS.sprawlExp;
 if (KNOBS.sprawlThreshold != null) E.LOGI.SPRAWL_THRESHOLD = KNOBS.sprawlThreshold;
 
@@ -180,7 +182,7 @@ const enginePrice = {
   integration_framework:      parseCost(S.compat, "integration_framework", { diplomacy:10, softpower:10 })
 };
 // Alternate fuel recipes (T2): parsed from strategic-throughput RECIPES (ruling B shipped 2026-09-11); this literal is the fallback.
-const RECIPES = parseConst(S.throughput, "RECIPES", null, "RECIPES (strategic-throughput)") || {
+const RECIPES = parseConst(S.econ, "RECIPES", null, "RECIPES (strategic-throughput)") || {
   establish_outpost: [
     { label:"hired labour",     cost:{ economy:20, logistics:10 } },
     { label:"work gang",        cost:{ violence:20, logistics:10 }, note:"loyalty knock on the hex" },
@@ -232,7 +234,7 @@ const GEAR_MARKS = KNOBS.gearMarks ?? Math.round(E.TIER_BASE_MARKS[1] * (E.CATEG
  * NOT in the engine yet. If ruled, the weights join RES_TO_OP in territory main.js and the type/size
  * bonus lands in turn-driver computeTerritoryMatrixIncome (which has the hex in scope). */
 // Engine tables (ruling 2026-09-12): RES_TO_OP.culture/faith (territory main.js) + LANE_HEX_BONUS (turn-driver).
-const LANE_HEX_BONUS = parseConst(S.turnDriver, "LANE_HEX_BONUS", { culture:{ byType:{ research:1, city:2, port:1, settlement:1, temple:1 }, bySize:{ outpost:0, village:0.5, town:1, city:2, metropolis:3, megalopolis:4 }, byFacility:{ theatre:2, theater:2, library:2, hall:1, festival:1 } }, faith:{ byType:{ temple:3, ruins:1 }, bySize:{ outpost:0, village:0.5, town:1, city:1.5, metropolis:2, megalopolis:3 }, byFacility:{ temple:3, shrine:2, chapel:2, church:2 } } }, "LANE_HEX_BONUS (turn-driver)");
+const LANE_HEX_BONUS = parseConst(S.econ, "LANE_HEX_BONUS", { culture:{ byType:{ research:1, city:2, port:1, settlement:1, temple:1 }, bySize:{ outpost:0, village:0.5, town:1, city:2, metropolis:3, megalopolis:4 }, byFacility:{ theatre:2, theater:2, library:2, hall:1, festival:1 } }, faith:{ byType:{ temple:3, ruins:1 }, bySize:{ outpost:0, village:0.5, town:1, city:1.5, metropolis:2, megalopolis:3 }, byFacility:{ temple:3, shrine:2, chapel:2, church:2 } } }, "LANE_HEX_BONUS (turn-driver)");
 const LANES = { culture: { res: E.RES_TO_OP.culture || {}, ...LANE_HEX_BONUS.culture }, faith: { res: E.RES_TO_OP.faith || {}, ...LANE_HEX_BONUS.faith } };
 function laneIncome(h, res) {
   const out = { culture:0, faith:0 };
@@ -371,7 +373,7 @@ function runTurn(F, policy, t, rand) {
   for (const k of OPK) F.bank[k] = Math.min(caps(F), F.bank[k]);   // cap clamp after planned spend
   if (t >= KNOBS.tierFloorTurn && F.tier < 1) F.tier = 1;   // Director tier floor (Act 2)
   // tracks: hex loyalty pull (2026-09-12) → drift → stability penalty for NEXT turn
-  { const HEX_MOD_LOYALTY = parseConst(S.territoryMain, "HEX_MOD_LOYALTY", { "loyal population":2, "hostile population":-2, "well-maintained":1, "damaged infrastructure":-1 }, "HEX_MOD_LOYALTY (territory main.js facts)");
+  { const HEX_MOD_LOYALTY = parseConst(S.econ, "HEX_MOD_LOYALTY", { "loyal population":2, "hostile population":-2, "well-maintained":1, "damaged infrastructure":-1 }, "HEX_MOD_LOYALTY (territory main.js facts)");
     const score = h => (h.loyaltyMods || 0) + h.modifiers.reduce((a, m) => a + (HEX_MOD_LOYALTY[String(m).toLowerCase()] || 0), 0);
     const mean = F.hexes.length ? F.hexes.reduce((a, h) => a + score(h), 0) / F.hexes.length : 0; const pull = Math.max(-3, Math.min(3, Math.round(mean)));
     if (pull) { F.loyalty = Math.max(0, Math.min(100, F.loyalty + pull)); row.notes.push(`territory pull ${pull > 0 ? "+" : ""}${pull}`); } }

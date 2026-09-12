@@ -113,19 +113,9 @@ function _registerFoundingOp() {
     const ownership = { default: 0 };
     if (userId) ownership[userId] = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
 
-    // Parity seed (2026-09-10). The wizard's standard package gives every
-    // faction explicit opCaps and morale/loyalty 25; onboarding founded with
-    // none. Consequences seen in the Act 2 playtest (Errata vs Sweet Release,
-    // identical moves): the turn driver sized Errata's logistics off its BANK
-    // (capacity 3, STRAINED at 1.33 vs 0.67), and the sheet's first save wrote
-    // morale/loyalty 0. Seed the tier-0 cap band (what a tier reset would
-    // produce; the Director's tier floor lifts it to T1 = 70) plus the
-    // package's track values. opBank / doctrine / rigs keep their own seeders.
-    const OP_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
-    const T0_CAP_MARKS = 50;
-    let pkgTracks = null;
-    try { pkgTracks = game.bbttcc?.api?.factions?.getStartingPackage?.("standard")?.tracks || null; } catch (_e) {}
-    const seedTrack = (k) => { const v = Number(pkgTracks?.[k]); return Number.isFinite(v) && v > 0 ? v : 25; };
+    // ONE FOUNDING PIPELINE (fix-the-boat item 6, 2026-09-12): the faction is born the way the wizard
+    // births one — api.factions.applyStartingPackage("standard") right after create (caps, bank seed,
+    // tracks, stockpile, doctrine, starter rig). Onboarding beats still claim the home hex.
 
     const faction = await Actor.create({
       name,
@@ -137,15 +127,17 @@ function _registerFoundingOp() {
           roster: [steward.uuid],
           foundedBy: steward.name,
           creed: String(creed || "").trim(),
-          tier: 0,
-          opCaps: Object.fromEntries(OP_KEYS.map(k => [k, T0_CAP_MARKS])),
-          morale: seedTrack("morale"),
-          loyalty: seedTrack("loyalty")
+          tier: 0
         },
         [MODULE_ID]: { foundedViaOnboarding: true, foundedTs: Date.now() }
       }
     });
     if (!faction) throw new Error("faction creation failed");
+    try {
+      const apply = game.bbttcc?.api?.factions?.applyStartingPackage;
+      if (typeof apply === "function") await apply({ actor: faction, packageKey: "standard", starterRig: "hexmobile" });
+      else console.warn(TAG, "applyStartingPackage missing — faction founded without the standard package (run repair-onboarded-faction-parity)");
+    } catch (e) { console.warn(TAG, "standard package apply failed", e); }
     await steward.setFlag(FMOD, "factionId", faction.id);
     return { factionId: faction.id };
   });
