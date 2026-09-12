@@ -47,6 +47,7 @@ const SRC = {
   wilderness:    path.join(REPO, "modules/bbttcc-raid/scripts/effects-wilderness.enhancer.js"),
   tradeRoute:    path.join(REPO, "modules/bbttcc-raid/scripts/effects-establish-trade-route.enhancer.js"),
   throughput:    path.join(REPO, "modules/bbttcc-raid/scripts/strategic-throughput.js"),
+  travel:        path.join(REPO, "modules/bbttcc-travel/scripts/hex-travel.js"),
   pricing:       path.join(REPO, "systems/fourththing/rfi-pricing.js")
 };
 
@@ -68,7 +69,13 @@ const KNOBS = {
   gearEvery:        num("gear-every", 3),            // gear policy: buy every N turns
   gearMarks:        num("gear-marks", null),         // default = tier-1 weapon + fee from rfi-pricing
   tierFloorTurn:    num("tier-floor-turn", 2),       // Director lifts coalition to T1 at this turn (Act 2)
-  maxHexes:         num("max-hexes", 8),             // map reality: the River Heart has ~8 reachable claims per faction; expand stops here
+  maxHexes:         num("max-hexes", 8),
+  travelLegs:       num("travel-legs", 0),           // legs/turn into hexes that are NOT free passage (own/allied dev-6 hexes are free)
+  travelTerrain:    String(flag("travel-terrain", "plains")),   // TERRAIN_TABLE key (hex-travel.js) — plains 10e · forest 10e+10i · mountains 20e+10l · sea 30e+20l
+  raidRounds:       num("raid-rounds", 0),           // raid rounds/turn: 10 marks in the primary pool to authorise each (module.raid-console _mpo gate)
+  raidPool:         String(flag("raid-pool", "violence")),
+  raidStaged:       num("raid-staged", 0),           // extra marks staged per round for +bonus (1 per 20 marks)
+  courtlyRounds:    num("courtly-rounds", 0),        // courtly intrigue rounds/turn: 20 diplomacy each (war-log "Courtly Intrigue: diplomacy -20")             // map reality: the River Heart has ~8 reachable claims per faction; expand stops here
   loyaltyPenalty:   !flag("no-loyalty-penalty", false),
   policy:           flag("policy", null),
   verbose:          !!flag("verbose", false),
@@ -141,6 +148,7 @@ const E = {
   TIER_FEE_MARKS: parseConst(S.pricing, "TIER_FEE_MARKS", { I:10, II:30, III:90, IV:270 }),
   CATEGORY_MULT: parseConst(S.pricing, "CATEGORY_MULT_BY_FRAME", { weapon:1, armor:1.5, tool:0.6, sigil:1.2, vehicle:5, consumable:0.2 }),
   CREATURE_TIER_BASE: parseConst(S.pricing, "CREATURE_TIER_BASE", { 1:5, 2:10, 3:20, 4:40 }),
+  TERRAIN_TABLE: parseConst(S.travel, "TERRAIN_TABLE", { plains:{ cost:{ economy:10 } }, forest:{ cost:{ economy:10, intrigue:10 } }, mountains:{ cost:{ economy:20, logistics:10 } }, sea:{ cost:{ economy:30, logistics:20 } } }),
   LEDGER_DAY_COST: parseConst(S.turnDriver, "LEDGER_DAY_COST", { develop_infrastructure_std:3, infrastructure_expansion:3, establish_outpost:3, upgrade_outpost_settlement:3, develop_outpost_stability:2, establish_supply_line:2, establish_trade_route:2 })
 };
 // Hand-mirrored scalars (turn-driver / upkeep / tracks / op-engine) — line refs in comments.
@@ -353,6 +361,21 @@ function runTurn(F, policy, t, rand) {
   }
   if (unpaid) F.unpaidTurns++;
   F.morale = Math.max(0, Math.min(100, F.morale + bonusM)); F.loyalty = Math.max(0, Math.min(100, F.loyalty + bonusL));
+  // travel / raid / courtly drains (2026-09-12): player actions during the turn, paid as they happen
+  if (KNOBS.travelLegs > 0) {
+    const tc = E.TERRAIN_TABLE[KNOBS.travelTerrain]?.cost || E.TERRAIN_TABLE.plains?.cost || { economy:10 };
+    for (let i = 0; i < KNOBS.travelLegs; i++) { for (const [k0, v] of Object.entries(tc)) { const k = k0 === "nonLethal" ? "nonlethal" : k0; if ((F.bank[k] || 0) >= v) { F.bank[k] -= v; F.spentChannels.add(k); } else { row.notes.push(`travel leg ${i + 1} SHORT (${k})`); } } }
+    row.notes.push(`travel ×${KNOBS.travelLegs} ${KNOBS.travelTerrain}`);
+  }
+  if (KNOBS.raidRounds > 0) {
+    const pool = KNOBS.raidPool; let done = 0;
+    for (let i = 0; i < KNOBS.raidRounds; i++) { const need = 10 + Math.max(0, KNOBS.raidStaged); if ((F.bank[pool] || 0) >= need) { F.bank[pool] -= need; F.spentChannels.add(pool); done++; } }
+    row.notes.push(`raid rounds ${done}/${KNOBS.raidRounds} (${pool})`); if (done < KNOBS.raidRounds) row.notes.push(`raid SHORT (${pool})`);
+  }
+  if (KNOBS.courtlyRounds > 0) {
+    let done = 0; for (let i = 0; i < KNOBS.courtlyRounds; i++) { if ((F.bank.diplomacy || 0) >= 20) { F.bank.diplomacy -= 20; F.spentChannels.add("diplomacy"); done++; } }
+    row.notes.push(`courtly ${done}/${KNOBS.courtlyRounds}`); if (done < KNOBS.courtlyRounds) row.notes.push("courtly SHORT (diplomacy)");
+  }
   // gear policy: a Steward buys from the faction bank (economy first, then any pool at cross-pool friction)
   if (policy.gear && t % KNOBS.gearEvery === 0) {
     if (F.bank.economy >= GEAR_MARKS) { F.bank.economy -= GEAR_MARKS; F.spentChannels.add("economy"); row.notes.push(`gear −${GEAR_MARKS} economy`); F.gearBought = (F.gearBought || 0) + 1; }
@@ -386,7 +409,7 @@ function parity(savePath, factionName) {
 
 /* ───────────────────── run ───────────────────── */
 function header() {
-  console.log(`sim-op-economy — ${KNOBS.turns} turns · max hexes ${KNOBS.maxHexes} · price×${KNOBS.priceMult} (engine ${ENGINE_PRICE_MULT}) (economy×${KNOBS.econPriceMult}) · occupation×${KNOBS.occupationMult} (engine phase ${ENGINE_OCCUPATION_MULT}) · spend ${KNOBS.spendOrder} regen · sprawl ^${E.LOGI.SPRAWL_EXP} over ${E.LOGI.SPRAWL_THRESHOLD} · recipes ${KNOBS.recipes ? "ON" : "off"} · tier floor T1 @ turn ${KNOBS.tierFloorTurn} · gear ${GEAR_MARKS} marks`);
+  console.log(`sim-op-economy — ${KNOBS.turns} turns · max hexes ${KNOBS.maxHexes} · price×${KNOBS.priceMult} (engine ${ENGINE_PRICE_MULT}) (economy×${KNOBS.econPriceMult}) · occupation×${KNOBS.occupationMult} (engine phase ${ENGINE_OCCUPATION_MULT}) · spend ${KNOBS.spendOrder} regen · sprawl ^${E.LOGI.SPRAWL_EXP} over ${E.LOGI.SPRAWL_THRESHOLD} · recipes ${KNOBS.recipes ? "ON" : "off"} · tier floor T1 @ turn ${KNOBS.tierFloorTurn} · gear ${GEAR_MARKS} marks${KNOBS.travelLegs ? ` · travel ${KNOBS.travelLegs}×${KNOBS.travelTerrain}/turn` : ""}${KNOBS.raidRounds ? ` · raid ${KNOBS.raidRounds} rounds/turn` : ""}${KNOBS.courtlyRounds ? ` · courtly ${KNOBS.courtlyRounds}/turn` : ""}`);
   if (DRIFT.length) { console.log("DRIFT? engine constants not parsed (fallbacks in use):"); for (const d of DRIFT) console.log("  · " + d); }
   else console.log("engine constants: all parsed from source ✓");
 }
@@ -395,7 +418,8 @@ function summarize(name, rows, F) {
   const avgOpt = rows.reduce((a, r) => a + r.optionsAtPlan, 0) / T; const oneOrNone = rows.filter(r => r.optionsAtPlan <= 1).length;
   const firstStrain = rows.find(r => /strained|critical|overextended/.test(r.band))?.turn ?? null; const firstExpand = rows.find(r => r.notes.some(n => /establish_outpost/.test(n)))?.turn ?? null;
   const idleChannels = OPK.filter(k => !F.spentChannels.has(k)); const loanTurns = rows.filter(r => Math.min(...Object.values(r.bank)) < 0 || r.unpaid).length;
-  return { policy: name, turnsActed: acted, turnsIdle: idle, plansHeld: held, avgOptions: round(avgOpt * 10) / 10, turnsOneOrNone: oneOrNone, firstStrainTurn: firstStrain, firstExpandTurn: firstExpand, hexes: F.hexes.length, routes: F.routes, unpaidTurns: F.unpaidTurns, loanTurns, gearBought: F.gearBought || 0, idleChannels: idleChannels.join(",") || "none", endBank: F.bank, endBand: rows[rows.length - 1].band };
+  const shortTurns = rows.filter(r => r.notes.some(n => /SHORT/.test(n))).length;
+  return { policy: name, turnsActed: acted, turnsIdle: idle, plansHeld: held, avgOptions: round(avgOpt * 10) / 10, turnsOneOrNone: oneOrNone, firstStrainTurn: firstStrain, firstExpandTurn: firstExpand, hexes: F.hexes.length, routes: F.routes, unpaidTurns: F.unpaidTurns, loanTurns, gearBought: F.gearBought || 0, shortTurns, idleChannels: idleChannels.join(",") || "none", endBank: F.bank, endBand: rows[rows.length - 1].band };
 }
 function main() {
   if (KNOBS.parity) { header(); parity(String(KNOBS.parity), KNOBS.parityFaction); return; }
@@ -413,8 +437,8 @@ function main() {
     console.log(`── acted ${s.turnsActed}/${KNOBS.turns} · idle ${s.turnsIdle} · held ${s.plansHeld} · avg options at plan ${s.avgOptions} · one-or-nothing turns ${s.turnsOneOrNone} · first strain T${s.firstStrainTurn ?? "—"} · hexes ${s.hexes} · routes ${s.routes} · unpaid ${s.unpaidTurns} · gear ${s.gearBought} · idle channels: ${s.idleChannels}`);
   }
   console.log("\n═══ TARGET SCORECARD");
-  console.log("policy     | T1 acted/turns | T3 one-or-nothing | T4 first strain | T2 idle channels                      | T6 gear | unpaid");
-  for (const [n, o] of Object.entries(out)) { const s = o.summary; console.log(`${n.padEnd(10)} | ${String(s.turnsActed + "/" + KNOBS.turns).padEnd(14)} | ${String(s.turnsOneOrNone).padEnd(17)} | ${String("T" + (s.firstStrainTurn ?? "—")).padEnd(15)} | ${s.idleChannels.padEnd(37)} | ${String(s.gearBought).padEnd(7)} | ${s.unpaidTurns}`); }
+  console.log("policy     | T1 acted/turns | T3 one-or-nothing | T4 first strain | T2 idle channels                      | T6 gear | unpaid | short");
+  for (const [n, o] of Object.entries(out)) { const s = o.summary; console.log(`${n.padEnd(10)} | ${String(s.turnsActed + "/" + KNOBS.turns).padEnd(14)} | ${String(s.turnsOneOrNone).padEnd(17)} | ${String("T" + (s.firstStrainTurn ?? "—")).padEnd(15)} | ${s.idleChannels.padEnd(37)} | ${String(s.gearBought).padEnd(7)} | ${String(s.unpaidTurns).padEnd(6)} | ${s.shortTurns}`); }
   if (KNOBS.json) { fs.writeFileSync(String(KNOBS.json), JSON.stringify({ knobs: KNOBS, engine: E, drift: DRIFT, results: out }, null, 1)); console.log(`\nwrote ${KNOBS.json}`); }
 }
 main();
