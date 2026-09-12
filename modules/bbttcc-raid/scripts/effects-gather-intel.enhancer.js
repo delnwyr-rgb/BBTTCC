@@ -45,8 +45,7 @@
     // slot the tick / regen / raid console read is bonuses.nextTurn.
     const bonuses = foundry.utils.duplicate(A.flags?.[MOD_F]?.bonuses || {});
     bonuses.nextTurn = Object.assign({}, bonuses.nextTurn, {
-      intelAdvantage: true,  // visible semantic flag
-      dcIntelBonus:   -2     // future DC logic can read this; harmless if ignored
+      attackDC: Number(bonuses?.nextTurn?.attackDC || 0) - 2   // attacker-side DC shift, read by the raid console (2026-09-12); the intelAdvantage flag is gone
     });
     await A.update({ [`flags.${MOD_F}.bonuses`]: bonuses }, { diff:true, recursive:true });
     return `Queued: next-turn intel advantage (DC -2)`;

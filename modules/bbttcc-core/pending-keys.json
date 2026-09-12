@@ -1,44 +1,152 @@
 {
   "_doc": "Pending-key registry (fix-the-boat item 3, 2026-09-12). Every queued key an engine may WRITE must be declared here with the code that CONSUMES it. bin/ft-lint-pending fails the repo on an undeclared writer and on a declared consumer whose file/symbol no longer exists. status: live = consumed each Advance · retired = no writer may remain (lint fails on one) · unwired = declared, has no consumer yet — visible debt, reported as a warning, owner ruling owed.",
   "hex.turn.pending": {
-    "defenseDelta":            { "status": "live",    "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep", "lands": "mods.defense" },
-    "loyaltyDelta":            { "status": "live",    "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep", "lands": "mods.loyalty (facts.hex.loyalty)" },
-    "moraleDelta":             { "status": "live",    "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep", "lands": "mods.morale" },
-    "darknessDelta":           { "status": "live",    "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep", "lands": "mods.darkness" },
-    "radiationRisk":           { "status": "live",    "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep", "lands": "mods.radiation" },
-    "enemyLoyaltyDelta":       { "status": "unwired", "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep", "lands": "mods.enemyLoyalty — nothing reads it; ruling owed" },
-    "tradeYieldDelta":         { "status": "retired", "consumer": "", "note": "Trade Yield retired 2026-09-10 — the Trade Hub tag is the bonus; two retired activity rows still mention it" },
-    "logisticsDelta":          { "status": "retired", "consumer": "", "note": "supply cache wrote it with no reader; the Supply Cache tag already grants logistics capacity (2026-09-12)" },
-    "repairs.addModifiers":    { "status": "live",    "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep", "lands": "modifiers (+ recomputeHexResources)" },
-    "repairs.removeModifiers": { "status": "live",    "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep", "lands": "modifiers" },
-    "repairs.requests":        { "status": "live",    "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep", "lands": "modifiers (legacy remove shape)" },
-    "routes":                  { "status": "live",    "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep", "lands": "routes (facts.routes)" },
-    "worldEffects":            { "status": "unwired", "consumer": "", "note": "writer only; owner ruling owed" }
+    "defenseDelta": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep",
+      "lands": "mods.defense"
+    },
+    "loyaltyDelta": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep",
+      "lands": "mods.loyalty (facts.hex.loyalty)"
+    },
+    "moraleDelta": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep",
+      "lands": "mods.morale"
+    },
+    "darknessDelta": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep",
+      "lands": "mods.darkness"
+    },
+    "radiationRisk": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep",
+      "lands": "mods.radiation"
+    },
+    "enemyLoyaltyDelta": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/main.js#hexLoyaltyScore",
+      "lands": "mods.enemyLoyalty — subtracts from facts.hex.loyaltyScore, so a rival's loyalty_program raises your unrest odds and drags the territory pull (2026-09-12)"
+    },
+    "tradeYieldDelta": {
+      "status": "retired",
+      "consumer": "",
+      "note": "Trade Yield retired 2026-09-10 — the Trade Hub tag is the bonus; two retired activity rows still mention it"
+    },
+    "logisticsDelta": {
+      "status": "retired",
+      "consumer": "",
+      "note": "supply cache wrote it with no reader; the Supply Cache tag already grants logistics capacity (2026-09-12)"
+    },
+    "repairs.addModifiers": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep",
+      "lands": "modifiers (+ recomputeHexResources)"
+    },
+    "repairs.removeModifiers": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep",
+      "lands": "modifiers"
+    },
+    "repairs.requests": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep",
+      "lands": "modifiers (legacy remove shape)"
+    },
+    "routes": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyHexPendingSweep",
+      "lands": "routes (facts.routes)"
+    }
   },
   "faction.turn.pending": {
-    "moraleDelta":  { "status": "retired", "consumer": "", "note": "garrison upkeep applies morale directly since 2026-09-10" },
-    "loyaltyDelta": { "status": "retired", "consumer": "", "note": "garrison upkeep applies loyalty directly since 2026-09-10" },
-    "nextTurn":     { "status": "retired", "consumer": "", "note": "only reader was raid-roundflags (dead code); writers redirected to bonuses.nextTurn 2026-09-12" }
+    "moraleDelta": {
+      "status": "retired",
+      "consumer": "",
+      "note": "garrison upkeep applies morale directly since 2026-09-10"
+    },
+    "loyaltyDelta": {
+      "status": "retired",
+      "consumer": "",
+      "note": "garrison upkeep applies loyalty directly since 2026-09-10"
+    },
+    "nextTurn": {
+      "status": "retired",
+      "consumer": "",
+      "note": "only reader was raid-roundflags (dead code); writers redirected to bonuses.nextTurn 2026-09-12"
+    }
   },
   "faction.bonuses.nextTurn": {
-    "opGainPct":      { "status": "live", "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#advanceOPRegen",          "expires": "tickFactionBonuses" },
-    "defenseDC":      { "status": "live", "consumer": "modules/bbttcc-raid/scripts/module.raid-console.js#_rcDefenderNextBonus", "expires": "tickFactionBonuses" },
-    "moraleBonus":    { "status": "live", "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#tickFactionBonuses",      "note": "Training Drills: +N morale, applied at the tick (2026-09-12)" },
-    "noMoraleLoss":   { "status": "live", "consumer": "modules/bbttcc-territory/scripts/advance-turn.tracks.js#doDarknessMorale", "expires": "tickFactionBonuses" },
-    "borderPatrol":   { "status": "live", "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#raidRefusalFor",          "expires": "tickFactionBonuses" },
-    "spyInsertion":   { "status": "live", "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#tickFactionBonuses" },
-    "initiativeAdv":  { "status": "live", "consumer": "modules/bbttcc-raid/scripts/module.raid-console.js#_b3ReadStrategicBoons" },
-    "freeManeuver":   { "status": "live", "consumer": "modules/bbttcc-raid/scripts/module.raid-console.js#_b3ReadStrategicBoons" },
-    "policyReform":   { "status": "unwired", "consumer": "", "note": "semantic flag from Policy Reforms; nothing reads it" },
-    "dcPolicyBonus":  { "status": "unwired", "consumer": "", "note": "attacker-side DC bonus from Policy Reforms; no reader — ruling owed (attacker analogue of defenseDC)" },
-    "intelAdvantage": { "status": "unwired", "consumer": "", "note": "semantic flag from Gather Intel; nothing reads it" },
-    "dcIntelBonus":   { "status": "unwired", "consumer": "", "note": "attacker-side DC bonus from Gather Intel; no reader — ruling owed" }
+    "opGainPct": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#advanceOPRegen",
+      "expires": "tickFactionBonuses"
+    },
+    "defenseDC": {
+      "status": "live",
+      "consumer": "modules/bbttcc-raid/scripts/module.raid-console.js#_rcDefenderNextBonus",
+      "expires": "tickFactionBonuses"
+    },
+    "moraleBonus": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#tickFactionBonuses",
+      "note": "Training Drills: +N morale, applied at the tick (2026-09-12)"
+    },
+    "noMoraleLoss": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/advance-turn.tracks.js#doDarknessMorale",
+      "expires": "tickFactionBonuses"
+    },
+    "borderPatrol": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#raidRefusalFor",
+      "expires": "tickFactionBonuses"
+    },
+    "spyInsertion": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#tickFactionBonuses"
+    },
+    "initiativeAdv": {
+      "status": "live",
+      "consumer": "modules/bbttcc-raid/scripts/module.raid-console.js#_b3ReadStrategicBoons"
+    },
+    "freeManeuver": {
+      "status": "live",
+      "consumer": "modules/bbttcc-raid/scripts/module.raid-console.js#_b3ReadStrategicBoons"
+    },
+    "attackDC": {
+      "status": "live",
+      "consumer": "modules/bbttcc-raid/scripts/module.raid-console.js#_rcAttackerNextBonus",
+      "expires": "tickFactionBonuses",
+      "note": "attacker-side next-raid DC shift: Policy Reforms −1, Gather Intel −2 (2026-09-12)"
+    }
   },
   "faction.bonuses": {
-    "regenPlan":            { "status": "live", "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#advanceOPRegen",          "expires": "tickFactionBonuses" },
-    "capBump":              { "status": "live", "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#capBumpFor",              "expires": "tickFactionBonuses" },
-    "truce":                { "status": "live", "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#raidRefusalFor",          "expires": "tickFactionBonuses" },
-    "scheduled":            { "status": "live", "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyScheduledOPBonuses" },
-    "nextRaid.defenseBonus":{ "status": "live", "consumer": "modules/bbttcc-raid/scripts/module.raid-console.js#_rcDefenderNextBonus" }
+    "regenPlan": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#advanceOPRegen",
+      "expires": "tickFactionBonuses"
+    },
+    "capBump": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#capBumpFor",
+      "expires": "tickFactionBonuses"
+    },
+    "truce": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#raidRefusalFor",
+      "expires": "tickFactionBonuses"
+    },
+    "scheduled": {
+      "status": "live",
+      "consumer": "modules/bbttcc-territory/scripts/turn-driver.js#applyScheduledOPBonuses"
+    },
+    "nextRaid.defenseBonus": {
+      "status": "live",
+      "consumer": "modules/bbttcc-raid/scripts/module.raid-console.js#_rcDefenderNextBonus"
+    }
   }
 }

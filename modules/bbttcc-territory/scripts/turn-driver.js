@@ -1619,6 +1619,7 @@ async function tickFactionBonuses(){
       // clear so tracks' loyalty phases write a fresh value, never a running sum.
       if (nt.opGainPct !== undefined) { delete nt.opGainPct; dirty = true; }
       if (nt.defenseDC !== undefined) { delete nt.defenseDC; dirty = true; }
+      if (nt.attackDC !== undefined) { delete nt.attackDC; dirty = true; }   // attacker-side next-raid shift, consumed at Add Round (2026-09-12)
       if (nt.spyInsertion) { const due = safeNum(nt.spyInsertion.due, 1) - 1; if (due <= 0) { await spyReport(F, nt.spyInsertion); delete nt.spyInsertion; } else nt.spyInsertion = Object.assign({}, nt.spyInsertion, { due }); dirty = true; }
       if (dirty) {
         const upd = { [`flags.${MOD_FACTIONS}.bonuses`]: b };

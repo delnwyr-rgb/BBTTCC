@@ -2099,6 +2099,13 @@ function _mansForTypeDefense(typeKey){
 // band, expired each Advance by tickFactionBonuses). The latter had no reader
 // anywhere until now. Read by the projection, per-round view, Add Round and
 // the contested re-computation — one helper so they never disagree.
+// Attacker one-shot DC shift (owner ruling 2026-09-12): bonuses.nextTurn.attackDC on the ATTACKING
+// faction — negative makes the attempt easier (Policy Reforms −1, Gather Intel −2). Read at Add Round
+// (folded into baseDC so every round path sees it) and in the projection; expired by tickFactionBonuses.
+function _rcAttackerNextBonus(aflags) {
+  const raw = Number(aflags?.bonuses?.nextTurn?.attackDC || 0);
+  return Number.isFinite(raw) ? Math.max(-5, Math.min(5, raw)) : 0;
+}
 function _rcDefenderNextBonus(dflags) {
   const nr = Number(dflags?.bonuses?.nextRaid?.defenseBonus || 0);
   const ldRaw = Number(dflags?.bonuses?.nextTurn?.defenseDC || 0);
@@ -3833,7 +3840,8 @@ _renderScenarioHUD(host, round){
         facDefTop += rigDefBonus;
       }
 
-      projTop = baseTop + bonusTop + diffTop + facDefTop + nextBTop;
+      const atkNextTop = _rcAttackerNextBonus(attacker?.flags?.[FCT_ID]);   // attacker-side shift (2026-09-12)
+      projTop = Math.max(0, baseTop + bonusTop + diffTop + facDefTop + nextBTop + atkNextTop);
     }
 
     const coalitionTop = _rcCoalitionBonus(attacker, this.vm.supportFactionIds || [], catTop);
@@ -3891,7 +3899,7 @@ _renderScenarioHUD(host, round){
         holdingsBreak,
         nextB: nextBTop,
         projected: projTop,
-        breakdown: `Base ${baseTop} + Staged/2 ${bonusTop}${diffTop?` + Diff ${diffTop}`:""}${facDefTop?` + Defense ${facDefTop}`:""}${holdingsTop?` (incl. Holdings +${holdingsTop})`:""}${nextBTop?` + Next-Raid/Loyalty ${nextBTop}`:""} = ${projTop}`
+        breakdown: `Base ${baseTop} + Staged/2 ${bonusTop}${diffTop?` + Diff ${diffTop}`:""}${facDefTop?` + Defense ${facDefTop}`:""}${holdingsTop?` (incl. Holdings +${holdingsTop})`:""}${nextBTop?` + Next-Raid/Loyalty ${nextBTop}`:""}${(typeof atkNextTop === "number" && atkNextTop)?` + Attacker ${atkNextTop}`:""} = ${projTop}`
       } : null
     };
 
@@ -4246,6 +4254,9 @@ r.view = {
         defender = defId ? game.actors.get(defId) : null;
       }
 
+      // Attacker-side next-raid DC shift (2026-09-12) — folded into the base so dry-run, contested and chat all agree.
+      const __atkNext = _rcAttackerNextBonus(attacker?.flags?.[FCT_ID]);
+      if (__atkNext) { baseDC = Math.max(0, Number(baseDC || 0) + __atkNext); this.__pendingAttackDC = __atkNext; } else this.__pendingAttackDC = 0;
       const act    = this._activityFor(this.vm.activityKey);
       const supportFactionIds = _rcNormFactionIds(this.vm.supportFactionIds || []);
       const coalition = _rcCoalitionBonus(attacker, supportFactionIds, act.primaryKey || primaryKeyFor(this.vm.activityKey));

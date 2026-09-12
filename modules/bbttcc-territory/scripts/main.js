@@ -1730,8 +1730,10 @@ export function hexSize(tfLike) { return String(_tfOf(tfLike).size || "none").to
 export function hexIntegration(tfLike) { const tf = _tfOf(tfLike); return Math.max(0, Math.min(6, Number(tf.integration?.progress ?? tf.development?.stage ?? 0) || 0)); }
 export function hexLoyalty(tfLike) { return Number(_tfOf(tfLike).mods?.loyalty || 0) || 0; }
 export function hexMorale(tfLike) { return Number(_tfOf(tfLike).mods?.morale || 0) || 0; }
+/** A rival's grip on the population (mods.enemyLoyalty, fed by loyalty_program on a hex you don't hold). Subtracts from the loyalty score (owner ruling 2026-09-12). */
+export function hexEnemyLoyalty(tfLike) { return Number(_tfOf(tfLike).mods?.enemyLoyalty || 0) || 0; }
 export function hexLoyaltyScore(tfLike) {
-  const tf = _tfOf(tfLike); let v = hexLoyalty(tf);
+  const tf = _tfOf(tfLike); let v = hexLoyalty(tf) - hexEnemyLoyalty(tf);   // a rival's influence counts against you (2026-09-12)
   for (const m of (Array.isArray(tf.modifiers) ? tf.modifiers : [])) { const k = String(m || "").toLowerCase(); if (HEX_MOD_LOYALTY[k] != null) v += HEX_MOD_LOYALTY[k]; }
   return v;
 }
@@ -1767,7 +1769,7 @@ export function factionSupplyLines(factionId) {
 function _publishHexFacts() {
   try {
     game.bbttcc ??= { api:{} }; game.bbttcc.facts ??= {};
-    game.bbttcc.facts.hex = { type: hexType, size: hexSize, integration: hexIntegration, loyalty: hexLoyalty, morale: hexMorale, loyaltyScore: hexLoyaltyScore, baseVector: hexBaseVector, resources: hexResources, HEX_MOD_LOYALTY: Object.assign({}, HEX_MOD_LOYALTY), TYPE_BASE, SIZE_MULT };
+    game.bbttcc.facts.hex = { type: hexType, size: hexSize, integration: hexIntegration, loyalty: hexLoyalty, enemyLoyalty: hexEnemyLoyalty, morale: hexMorale, loyaltyScore: hexLoyaltyScore, baseVector: hexBaseVector, resources: hexResources, HEX_MOD_LOYALTY: Object.assign({}, HEX_MOD_LOYALTY), TYPE_BASE, SIZE_MULT };
     game.bbttcc.facts.routes = { trade: factionTradeRoutes, supply: factionSupplyLines };
   } catch (e) { console.warn(`[${MOD}] facts publish failed`, e); }
 }

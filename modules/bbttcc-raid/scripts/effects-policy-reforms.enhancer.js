@@ -24,8 +24,7 @@
     // slot the tick / regen / raid console read is bonuses.nextTurn.
     const bonuses = foundry.utils.duplicate(A.flags?.[MOD_F]?.bonuses || {});
     bonuses.nextTurn = Object.assign({}, bonuses.nextTurn, {
-      policyReform: true,
-      dcPolicyBonus: dcBonus,
+      attackDC:  Number(bonuses?.nextTurn?.attackDC || 0) + Number(dcBonus),   // attacker-side DC shift (2026-09-12); the policyReform flag is gone
       opGainPct: Number(bonuses?.nextTurn?.opGainPct || 0) + Number(opPct)
     });
     await A.update({ [`flags.${MOD_F}.bonuses`]: bonuses }, { diff:true, recursive:true });
