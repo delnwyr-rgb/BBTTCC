@@ -1519,7 +1519,11 @@ if ((this._lockedFactionId || this._lockFaction) && !game.user.isGM) {
       const wantsRecipe = recipesForSelected.length >= 2;
       if (wantsRecipe) {
         const fmtCost = (c) => Object.entries(c || {}).filter(([, v]) => Number(v) > 0).map(([k, v]) => `${v} ${k}`).join(" + ");
-        for (const r of recipesForSelected) { const o = document.createElement("option"); o.value = r.label; o.textContent = `${r.label} — ${fmtCost(r.cost)}${r.note ? ` · ${r.note}` : ""}`; recipeSel.appendChild(o); }
+        const fmtFx = (r) => { const parts = []; const fac = r.fx?.faction || {}, hx = r.fx?.hex || {}; const sg = (v) => (v > 0 ? "+" : "") + v;
+          for (const [k, v] of Object.entries(fac)) if (Number(v)) parts.push(`faction ${k.replace(/Delta$/, "")} ${sg(v)}`);
+          for (const [k, v] of Object.entries(hx)) { if (Array.isArray(v)) { if (v.length) parts.push(`${k === "addModifiers" ? "+" : "−"}${v.join("/")}`); } else if (Number(v)) parts.push(`hex ${k.replace(/Delta$/, "")} ${sg(v)}`); }
+          if (Number(r.days)) parts.push(`+${r.days} day${r.days === 1 ? "" : "s"}`); return parts.join(", "); };
+        for (const r of recipesForSelected) { const o = document.createElement("option"); o.value = r.label; const fxT = fmtFx(r); o.textContent = `${r.label} — ${fmtCost(r.cost)}${fxT ? ` · ${fxT}` : ""}${r.note ? ` · ${r.note}` : ""}`; recipeSel.appendChild(o); }
         const want = String(this._plannerState.recipe || "");
         if (want && recipesForSelected.some(r => r.label === want)) recipeSel.value = want; else this._plannerState.recipe = recipeSel.value || "";
         recipeSel.addEventListener("change", () => { this._plannerState.recipe = recipeSel.value || ""; });
@@ -2266,7 +2270,7 @@ Hooks.once("init",()=>{
       try {
         const rs = game.bbttcc?.api?.raid?.EFFECTS?.[String(activityKey)]?.recipes;
         const r = (recipe && Array.isArray(rs)) ? rs.find(x => x && x.label === String(recipe)) : null;
-        if (r) { entry.recipe = { label: r.label, cost: foundry.utils.duplicate(r.cost || {}), note: r.note || "" }; entry.summary += ` via ${r.label}`; }
+        if (r) { entry.recipe = { label: r.label, cost: foundry.utils.duplicate(r.cost || {}), note: r.note || "", days: Number(r.days) || 0, fx: r.fx ? foundry.utils.duplicate(r.fx) : null }; entry.summary += ` via ${r.label}`; }
       } catch (_eR) {}
     }
 

@@ -896,41 +896,44 @@
   // ⚗ Fuel select when a row has ≥2; planActivity stores the chosen {label,cost}
   // on the planned entry and turn-driver payActivityCost bills THAT instead of the
   // row's default. Same multiplier applies. `note` is flavour the planner shows;
-  // side effects per recipe are a later ruling.
+  // fx (owner ruling 2026-09-12): narrative side effects — faction {moraleDelta,loyaltyDelta,
+  // darknessDelta} written directly, hex {loyaltyDelta,moraleDelta,darknessDelta,addModifiers,
+  // removeModifiers} queued on the target's turn.pending; turn-driver applyRecipeSideEffects
+  // lands them when the activity resolves. days = extra ledger days (slow fuels).
   const PRICE_MULT = 0.75;
   const RECIPES = {
     establish_outpost: [
       { label:"hired labour",       cost:{ economy:20, logistics:10 } },
-      { label:"work gang",          cost:{ violence:20, logistics:10 },   note:"pressed labour under guard" },
-      { label:"pilgrim settlers",   cost:{ faith:15, softpower:10 },      note:"slower, but they came to stay" },
-      { label:"surveyor's gambit",  cost:{ intrigue:15, logistics:10 },   note:"a claim nobody saw filed" }
+      { label:"work gang",          cost:{ violence:20, logistics:10 },   note:"pressed labour under guard",     fx:{ hex:{ loyaltyDelta:-2 }, faction:{ darknessDelta:1 } } },
+      { label:"pilgrim settlers",   cost:{ faith:15, softpower:10 },      note:"slower, but they came to stay", days:1, fx:{ hex:{ loyaltyDelta:1 }, faction:{ moraleDelta:1 } } },
+      { label:"surveyor's gambit",  cost:{ intrigue:15, logistics:10 },   note:"a claim nobody saw filed",       fx:{ hex:{ loyaltyDelta:-1, darknessDelta:1 } } }
     ],
     establish_trade_route: [
       { label:"bought caravan",     cost:{ economy:30, diplomacy:10, logistics:10 } },
-      { label:"treaty road",        cost:{ diplomacy:30, culture:10, logistics:10 } },
-      { label:"smugglers' run",     cost:{ intrigue:25, economy:10, logistics:10 }, note:"quiet, and it knows it" },
-      { label:"festival circuit",   cost:{ culture:25, diplomacy:10, logistics:10 }, note:"the road follows the music" }
+      { label:"treaty road",        cost:{ diplomacy:30, culture:10, logistics:10 }, fx:{ hex:{ loyaltyDelta:1 } } },
+      { label:"smugglers' run",     cost:{ intrigue:25, economy:10, logistics:10 }, note:"quiet, and it knows it",     fx:{ hex:{ darknessDelta:1 }, faction:{ darknessDelta:1 } } },
+      { label:"festival circuit",   cost:{ culture:25, diplomacy:10, logistics:10 }, note:"the road follows the music", fx:{ hex:{ moraleDelta:1 }, faction:{ moraleDelta:1 } } }
     ],
     integration_framework: [
       { label:"diplomatic envoys",  cost:{ diplomacy:10, softpower:10 } },
-      { label:"mission houses",     cost:{ faith:10, culture:10 } },
-      { label:"paid administrators",cost:{ economy:15, nonlethal:5 } },
-      { label:"whisper network",    cost:{ intrigue:15, nonlethal:5 },    note:"everyone belongs, or else" }
+      { label:"mission houses",     cost:{ faith:10, culture:10 },         fx:{ hex:{ loyaltyDelta:1 } } },
+      { label:"paid administrators",cost:{ economy:15, nonlethal:5 },      note:"bought loyalty is thin",         fx:{ hex:{ loyaltyDelta:-1 } } },
+      { label:"whisper network",    cost:{ intrigue:15, nonlethal:5 },    note:"everyone belongs, or else",      fx:{ hex:{ loyaltyDelta:1 }, faction:{ darknessDelta:1 } } }
     ],
     optact_integration_framework: [
       { label:"diplomatic envoys",  cost:{ diplomacy:10, softpower:10 } },
-      { label:"mission houses",     cost:{ faith:10, culture:10 } },
-      { label:"paid administrators",cost:{ economy:15, nonlethal:5 } },
-      { label:"whisper network",    cost:{ intrigue:15, nonlethal:5 },    note:"everyone belongs, or else" }
+      { label:"mission houses",     cost:{ faith:10, culture:10 },         fx:{ hex:{ loyaltyDelta:1 } } },
+      { label:"paid administrators",cost:{ economy:15, nonlethal:5 },      note:"bought loyalty is thin",         fx:{ hex:{ loyaltyDelta:-1 } } },
+      { label:"whisper network",    cost:{ intrigue:15, nonlethal:5 },    note:"everyone belongs, or else",      fx:{ hex:{ loyaltyDelta:1 }, faction:{ darknessDelta:1 } } }
     ],
     develop_outpost_stability: [
       { label:"garrison & grants",  cost:{ diplomacy:20, economy:10 } },
-      { label:"show of force",      cost:{ violence:20, nonlethal:10 } },
-      { label:"festival of belonging", cost:{ culture:20, softpower:10 } }
+      { label:"show of force",      cost:{ violence:20, nonlethal:10 },    note:"quiet, not calm",               fx:{ hex:{ loyaltyDelta:-2 }, faction:{ darknessDelta:1 } } },
+      { label:"festival of belonging", cost:{ culture:20, softpower:10 }, fx:{ hex:{ moraleDelta:2, loyaltyDelta:1 } } }
     ],
     upgrade_outpost_settlement: [
       { label:"charter & works",    cost:{ economy:30, softpower:20, logistics:20 } },
-      { label:"festival founding",  cost:{ culture:30, faith:20, logistics:20 } }
+      { label:"festival founding",  cost:{ culture:30, faith:20, logistics:20 }, fx:{ hex:{ loyaltyDelta:1 }, faction:{ moraleDelta:2 } } }
     ]
   };
   const _PRICED = "__bbttccPriced";
@@ -949,7 +952,7 @@
           const c = e[field]; if (!c || typeof c !== "object" || c[_PRICED]) continue;
           e[field] = scaleCost(c); n++;
         }
-        if (RECIPES[k] && !e.recipes) e.recipes = RECIPES[k].map(r => ({ label:r.label, note:r.note || "", cost: scaleCost(r.cost) }));
+        if (RECIPES[k] && !e.recipes) e.recipes = RECIPES[k].map(r => ({ label:r.label, note:r.note || "", cost: scaleCost(r.cost), days: Number(r.days) || 0, fx: r.fx ? foundry.utils.duplicate(r.fx) : null }));
       }
       return n;
     } catch (_e) { return 0; }

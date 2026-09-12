@@ -59,7 +59,7 @@ const KNOBS = {
   priceMult:        num("price-mult", null),         // every activity price × this (default = the engine's PRICE_MULT)
   econPriceMult:    num("econ-price-mult", 1.0),     // the ECONOMY part of every price × this (on top)
   occupationMult:   num("occupation-mult", 1.0),     // occupation-phase upkeep × this (engine 1.5 phase mult stays)
-  spendOrder:       String(flag("spend-order", "before")),  // before = engine (plans paid before regen) | after
+  spendOrder:       String(flag("spend-order", "after")),   // after = engine since 2026-09-12 (regen lands, THEN plans are paid); before = the old order
   sprawlExp:        num("sprawl-exp", null),         // override LOGI.SPRAWL_EXP
   sprawlThreshold:  num("sprawl-threshold", null),
   recipes:          !flag("no-recipes", false),      // alternate fuel recipes (engine RECIPES table; --no-recipes for the single-price world)

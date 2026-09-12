@@ -252,6 +252,42 @@ function ensureConsumePlannedShim(){
     return { ok:true, paid: cost };
   }
 
+  // ⚗ Fuel side effects (owner ruling 2026-09-12): each recipe may carry
+  // fx = { faction:{moraleDelta,loyaltyDelta,darknessDelta}, hex:{darknessDelta,loyaltyDelta,moraleDelta,addModifiers,removeModifiers} }.
+  // Faction tracks are written directly (darkness is the {global,[hexId]} BOX — never a bare
+  // number). Hex effects are QUEUED on the target hex's turn.pending, which applyHexPendingSweep
+  // lands later this same Advance (modifiers → recompute; numeric deltas → mods.*).
+  async function applyRecipeSideEffects({ factionActor, entry }){
+    const fx = entry?.recipe?.fx || {}; const notes = [];
+    const fac = fx.faction || {};
+    const upd = {};
+    const f = factionActor.flags?.[MOD_FACTIONS] || {};
+    for (const [k, flagKey] of [["moraleDelta","morale"],["loyaltyDelta","loyalty"]]) {
+      const d = safeNum(fac[k]); if (!d) continue;
+      const before = safeNum(f[flagKey], 50); const after = Math.max(0, Math.min(100, before + d));
+      upd[`flags.${MOD_FACTIONS}.${flagKey}`] = after; notes.push(`${flagKey} ${before}→${after}`);
+    }
+    if (safeNum(fac.darknessDelta)) {
+      const box = (f.darkness && typeof f.darkness === "object" && !Array.isArray(f.darkness)) ? clone(f.darkness) : { global: safeNum(f.darkness) };
+      const before = safeNum(box.global); box.global = Math.max(0, before + safeNum(fac.darknessDelta));
+      upd[`flags.${MOD_FACTIONS}.darkness`] = box; notes.push(`darkness ${before}→${box.global}`);
+    }
+    if (Object.keys(upd).length) await factionActor.update(upd);
+    const hx = fx.hex || {};
+    if (entry?.targetUuid && Object.keys(hx).length) {
+      try {
+        const t = await fromUuid(entry.targetUuid); const d = t?.document ?? t;
+        if (d?.update) {
+          const tf = clone(d.flags?.[MOD_TERRITORY] || {}); const pend = clone(tf.turn?.pending || {});
+          for (const k of ["darknessDelta","loyaltyDelta","moraleDelta"]) { const v = safeNum(hx[k]); if (v) { pend[k] = safeNum(pend[k]) + v; notes.push(`hex ${k.replace(/Delta$/,"")} ${v > 0 ? "+" : ""}${v}`); } }
+          const add = Array.isArray(hx.addModifiers) ? hx.addModifiers.filter(Boolean) : []; const rm = Array.isArray(hx.removeModifiers) ? hx.removeModifiers.filter(Boolean) : [];
+          if (add.length || rm.length) { pend.repairs = pend.repairs || {}; if (add.length) { pend.repairs.addModifiers = [...new Set([...(pend.repairs.addModifiers || []), ...add])]; notes.push(`hex +${add.join("/")}`); } if (rm.length) { pend.repairs.removeModifiers = [...new Set([...(pend.repairs.removeModifiers || []), ...rm])]; notes.push(`hex −${rm.join("/")}`); } }
+          await d.update({ [`flags.${MOD_TERRITORY}.turn.pending`]: pend });
+        }
+      } catch (e) { warn("recipe hex fx failed", entry?.targetUuid, e); }
+    }
+    return { notes };
+  }
   async function runEffectBestEffort({ effect, entry, factionActor, apply }){
     if (!effect) return { ok:true, skipped:true };
 
@@ -309,7 +345,7 @@ function ensureConsumePlannedShim(){
       ...(entry.recipe ? { recipe: entry.recipe } : {}),
       spendResult: spendResult || null,
       effectResult: effectResult || null,
-      summary: `${factionActor.name} executed ${entry.activityKey} on ${entry.targetName || entry.targetType || "target"}${entry.recipe?.label ? ` via ${entry.recipe.label}` : ""}`
+      summary: `${factionActor.name} executed ${entry.activityKey} on ${entry.targetName || entry.targetType || "target"}${entry.recipe?.label ? ` via ${entry.recipe.label}` : ""}${Array.isArray(effectResult?.recipeFx) && effectResult.recipeFx.length ? ` — ${effectResult.recipeFx.join(", ")}` : ""}`
     };
   }
 
@@ -390,6 +426,11 @@ function ensureConsumePlannedShim(){
         effectResult = await runEffectBestEffort({ effect, entry, factionActor, apply });
       }
 
+      // ⚗ Fuel side effects land only when the activity itself resolved (2026-09-12).
+      if (apply && effectResult?.ok && entry?.recipe?.fx) {
+        try { const r = await applyRecipeSideEffects({ factionActor, entry }); if (r?.notes?.length) effectResult = Object.assign({}, effectResult, { recipeFx: r.notes }); }
+        catch (eFx) { warn("recipe side effects failed", entry?.activityKey, eFx); }
+      }
       finalizedEntries.push(finalizeEntry({ entry, factionActor, effect, effectResult, spendResult }));
     }
 
@@ -1323,7 +1364,7 @@ async function plannedRaidsStep({ apply=false } = {}){
         for (const e of logs) {
           if (String(e?.type).toLowerCase() !== "planned") continue;
           const key = String(e.activity || e.activityKey || "").toLowerCase();
-          const price = ledgerDayCostFor(key);
+          const price = ledgerDayCostFor(key) + (Number(e?.recipe?.days) || 0);   // slow fuels cost days (2026-09-12)
           if (price <= daysLeft) {
             daysLeft = Math.round((daysLeft - price) * 100) / 100;
             funded.push({ faction: F.name, key, price });
@@ -1393,7 +1434,10 @@ async function plannedRaidsStep({ apply=false } = {}){
 
   for (const F of FXS) {
     const flags = F.flags?.[MOD_FACTIONS] || {};
-    const bank  = flags.opBank || {};
+    const bank0 = flags.opBank || {};
+    // Regen lands before plans are paid (2026-09-12): preview affordability against bank + this turn's income.
+    const bank = foundry.utils.duplicate(bank0);
+    try { const inc = computeTerritoryMatrixIncome(F)?.delta; if (inc) for (const k of OP_KEYS) bank[k] = safeNum(bank[k]) + safeNum(inc[k]); } catch (_eInc) {}
     const logs  = Array.isArray(flags.warLogs) ? flags.warLogs : [];
     const planned = logs.filter(e => String(e?.type).toLowerCase() === "planned");
     if (!planned.length) continue;
@@ -1422,7 +1466,7 @@ async function plannedRaidsStep({ apply=false } = {}){
   const fmt = (c)=>OP_KEYS.filter(k=>safeNum(c[k])>0).map(k=>`${c[k]} ${k}`).join(", ")||"—";
   await ChatMessage.create({
     content: any
-      ? `<p><i>Planned Activities (Dry Preview)</i>${previewBudget != null ? ` — <i class="fas fa-hourglass-half"></i> ${previewBudget} day(s) available to fund them` : ""}</p><ul>${rows.map(r => `<li><b>${foundry.utils.escapeHTML(r.faction)}</b>: ${foundry.utils.escapeHTML(r.label)} — ${fmt(r.cost)}${r.days ? ` · ${r.days}d` : ""} ${r.canAfford?"":"<em>(cannot afford)</em>"}${r.fundable === false ? " <em>(would HOLD — out of days)</em>" : ""}</li>`).join("")}</ul>`
+      ? `<p><i>Planned Activities (Dry Preview)</i>${previewBudget != null ? ` — <i class="fas fa-hourglass-half"></i> ${previewBudget} day(s) available to fund them` : ""}</p><ul>${rows.map(r => `<li><b>${foundry.utils.escapeHTML(r.faction)}</b>: ${foundry.utils.escapeHTML(r.label)} — ${fmt(r.cost)}${r.days ? ` · ${r.days}d` : ""} ${r.canAfford?"":"<em>(cannot afford, even after this turn\u2019s income)</em>"}${r.fundable === false ? " <em>(would HOLD — out of days)</em>" : ""}</li>`).join("")}</ul>`
       : `<p><i>Planned Activities (Dry Preview)</i>: none queued.</p>`,
     whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
     speaker: { alias: "Bad Eden Turn Driver" }
@@ -1498,9 +1542,9 @@ async function applyHexPendingSweep(){
         }
         actionable = true;
       }
-      // numeric deltas → mods
+      // numeric deltas → mods (darknessDelta → mods.darkness, the field setHexDarkness writes — 2026-09-12)
       const mods = dup(f.mods || {});
-      for (const [pk, mk] of [["defenseDelta","defense"],["tradeYieldDelta","tradeYield"],["loyaltyDelta","loyalty"],["enemyLoyaltyDelta","enemyLoyalty"],["moraleDelta","morale"],["radiationRisk","radiation"]]) {
+      for (const [pk, mk] of [["defenseDelta","defense"],["tradeYieldDelta","tradeYield"],["loyaltyDelta","loyalty"],["enemyLoyaltyDelta","enemyLoyalty"],["moraleDelta","morale"],["radiationRisk","radiation"],["darknessDelta","darkness"]]) {
         const v = safeNum(pend[pk]);
         if (v) { mods[mk] = safeNum(mods[mk]) + v; actionable = true; }
       }
@@ -1766,9 +1810,6 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     let promoted = { changed:false };
     if (apply) promoted = await promotePostToTurn();
 
-    if (apply) ensureConsumePlannedShim();
-    const planned = await plannedRaidsStep({ apply });
-
     let base = { changed:false, rows:[] };
     if (typeof terr._delegateAdvanceTurn === "function") {
       base = (await terr._delegateAdvanceTurn({ apply, sceneId })) ?? base;
@@ -1781,6 +1822,14 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
 
     let regen = { changed:false, rows:[] };
     if (apply) regen = await advanceOPRegen({ apply:true });
+
+    // REGEN BEFORE SPEND (owner ruling 2026-09-12, sim OP_ECONOMY_SIM_2026_09_11.md set C):
+    // planned activities are paid from the bank AFTER this turn's income lands, so a
+    // faction plans against what it will have, not what it had — "Turn 0 less punitive".
+    // Still BEFORE tickFactionBonuses: truces / Border Patrol read by raidRefusalFor
+    // must hold for this Advance's raids before they expire.
+    if (apply) ensureConsumePlannedShim();
+    const planned = await plannedRaidsStep({ apply });
     if (apply) await tickFactionBonuses();   // expire regenPlan / capBump / truce / nextTurn boons (2026-09-09)
 
     let logistics = { changed:false, rows:[] };
