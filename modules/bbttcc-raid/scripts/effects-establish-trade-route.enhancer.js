@@ -1,4 +1,5 @@
-// v1.0.1 — Establish Trade Route: "Trade Hub" tag + bigger trade yield, safe boot guard
+// v1.1.0 — Establish Trade Route: "Trade Hub" tag (+50% trade output via the hex recompute) + stored route edge, safe boot guard
+// 2026-09-10 (owner ruling): the "+20 Trade Yield" line retired — mods.tradeYield had no reader anywhere; the tag IS the bonus.
 
 (() => {
   const MOD_R="bbttcc-raid", MOD_T="bbttcc-territory";
@@ -25,7 +26,7 @@
       await d.update({ [`flags.${MOD_T}.turn.pending`]: pend0 });
     }
   }
-  async function queueTradeRoute({ targetUuid, toHexUuid = null, tradeYieldDelta=20 }){
+  async function queueTradeRoute({ targetUuid, toHexUuid = null }){
     const hex=await fromUuid(targetUuid); const doc=hex?.document ?? hex;
     if (!doc) return "Bad target UUID";
     let edgeMsg = "";
@@ -34,9 +35,8 @@
     pend.repairs = pend.repairs || {};
     pend.repairs.addModifiers = Array.isArray(pend.repairs.addModifiers) ? pend.repairs.addModifiers.slice() : [];
     if (!pend.repairs.addModifiers.includes("Trade Hub")) pend.repairs.addModifiers.push("Trade Hub");
-    pend.tradeYieldDelta = Number(pend.tradeYieldDelta||0) + Number(tradeYieldDelta||0);
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pend });
-    return `Queued: add "Trade Hub" • +${tradeYieldDelta} Trade Yield${edgeMsg}`;
+    return `Queued: add "Trade Hub" (+50% trade output)${edgeMsg}`;
   }
 
   whenRaidReady((api)=>{
@@ -45,7 +45,7 @@
       kind:"strategic", band:"standard", label:E.establish_trade_route?.label||"Establish Trade Route", cost:E.establish_trade_route?.cost||{ economy:30, diplomacy:10, logistics:10 },
       async apply({ entry }) {
         let msg=""; if (typeof base==="function") try{ msg=String(await base({ entry }))||""; }catch(e){ console.warn(TAG,"base apply error",e); }
-        const extra = await queueTradeRoute({ targetUuid: entry?.targetUuid, toHexUuid: entry?.toHexUuid || null, tradeYieldDelta:20 });
+        const extra = await queueTradeRoute({ targetUuid: entry?.targetUuid, toHexUuid: entry?.toHexUuid || null });
         return [msg, extra].filter(Boolean).join(" • ") || "Trade Route queued.";
       }
     });

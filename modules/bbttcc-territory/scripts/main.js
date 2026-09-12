@@ -1742,6 +1742,45 @@ function computeEffectiveResources(base, sephirotName, modifiers){
   return { effective, added:add, multipliers:{mAll,mTrade} };
 }
 
+/* ---------------- Modifier → resource recompute (owner ruling 2026-09-10) ----------------
+ * The +50% trade of "Trade Hub" (and every other production modifier) only reaches
+ * flags.resources — the field OP regen reads — when the Hex Config save or an
+ * alignment re-runs computeEffectiveResources. The pending sweep and the raid
+ * adapters wrote modifiers without that, so a bought Trade Hub did nothing until
+ * someone happened to save the hex sheet. This is the same calc as the save,
+ * callable from any modifier writer. Manual-override hexes keep their hand-set
+ * resources (the save's rule); only calc/effectiveCached refresh for them.
+ * -------------------------------------------------------------------------------------- */
+async function recomputeHexResources(hexDocOrUuid, { source = "recompute" } = {}) {
+  const doc = (typeof hexDocOrUuid === "string") ? await fromUuid(hexDocOrUuid) : (hexDocOrUuid?.document ?? hexDocOrUuid);
+  if (!doc?.update) return { ok:false, error:"hex not found" };
+  const tf = foundry.utils.getProperty(doc, `flags.${MOD}`) ?? {};
+  if (!(tf.isHex === true || tf.kind === "territory-hex" || tf.hexId)) return { ok:false, error:"not a hex" };
+  const selName = String(tf.sephirotName || "");
+  const typeKey = String(tf.type||"settlement").toLowerCase(), sizeKey = String(tf.size||"none").toLowerCase();
+  const typedBase = TYPE_BASE[typeKey] || TYPE_BASE.settlement, sizeMult = SIZE_MULT[sizeKey] ?? 0;
+  const sized = Object.fromEntries(["food","materials","trade","military","knowledge"].map(k => [k, Math.round((typedBase[k]||0) * sizeMult)]));
+  const manual = !!tf.manualOverride && Object.values(tf.calc?.base || tf.resources || {}).some(n => Number(n) > 0);
+  const vector = manual ? (tf.calc?.base || tf.resources) : sized;
+  const mods = Array.isArray(tf.modifiers) ? tf.modifiers : [];
+  const calc = computeEffectiveResources(vector, selName, mods);
+  const resources = manual ? (tf.resources || vector) : calc.effective;
+  const flowState = String(tf.leylines?.flowState || "normal");
+  let effectiveCached = tf.effectiveCached; try { effectiveCached = resourcesToOP(resources, flowState); } catch (_e) {}
+  const same = JSON.stringify(resources) === JSON.stringify(tf.resources || {})
+    && JSON.stringify(calc.multipliers) === JSON.stringify(tf.calc?.multipliers || {});
+  if (same) return { ok:true, changed:false, resources };
+  await doc.update({
+    [`flags.${MOD}.resources`]: resources,
+    [`flags.${MOD}.sephirotBonus`]: calc.added,
+    [`flags.${MOD}.calc`]: { base: vector, sephirotName: selName, multipliers: calc.multipliers, modifiers: mods, effective: calc.effective },
+    [`flags.${MOD}.effectiveCached`]: effectiveCached,
+    [`flags.${MOD}.effectiveAt`]: Date.now()
+  }, { parent: doc.parent });
+  console.log(`[${MOD}] hex "${tf.name || doc.id}" resources recomputed (${source})`, { multipliers: calc.multipliers, resources });
+  return { ok:true, changed:true, resources, multipliers: calc.multipliers };
+}
+
 /* ---------------- Ritual → alignment coupling (owner ruling 2026-09-07) ----------------
  * "Aligning a hex takes a ritual." The in-play ritual is a Tikkun spark integrated on the
  * hex (bbttcc:spark:hexIntegrated). Until now that only wrote the spark state; the
@@ -3268,6 +3307,7 @@ Hooks.once("ready", ()=>{
   // Phase 1.5: GM write adapter for hex direct edits
   game.bbttcc.api.territory.gmSetHex = gmSetHex;
   game.bbttcc.api.territory.alignHexToSephirot = alignHexToSephirot;
+  game.bbttcc.api.territory.recomputeHexResources = recomputeHexResources;   // 2026-09-10: modifier writers call this so Trade Hub etc. reach income
   // Ritual → alignment: an integrated spark aligns an UNaligned hex (primary GM seat writes; Drawings are GM-owned).
   Hooks.on("bbttcc:spark:hexIntegrated", async ({ hexUuid, sephirah, actorId } = {}) => {
     try {

@@ -124,6 +124,8 @@
     next = next.concat(added);
     if (added.length || removed.length) {
       await doc.update({ [`flags.${MODT}.modifiers`]: next }, { parent: doc.parent });
+      // Production modifiers reach flags.resources (what regen reads) only via the recompute (2026-09-10).
+      try { const rc = game.bbttcc?.api?.territory?.recomputeHexResources; if (typeof rc === "function") await rc(doc, { source: meta.activity || "strategic" }); } catch (_eRc) {}
       const rec = game.bbttcc?.api?.territory?.recordHexModifierTransition;
       if (typeof rec === "function") {
         for (const m of added)   { try { await rec(doc, m, "added",   meta, `${meta.activity || "strategic"}:${doc.id}:${m}:add`); } catch (_e) {} }

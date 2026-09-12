@@ -1460,6 +1460,7 @@ async function applyHexPendingSweep(){
   let appliedHexes = 0;
   for (const sc of game.scenes ?? []) {
     const patches = [];
+    const modifierChanged = [];   // 2026-09-10: hexes whose modifier list changed → recompute resources after the write
     for (const d of sc.drawings ?? []) {
       const tf = d.flags?.[MOD_TERRITORY];
       if (!tf || !(tf.isHex === true || tf.kind === "territory-hex")) continue;
@@ -1502,6 +1503,7 @@ async function applyHexPendingSweep(){
       }
 
       if (!actionable) continue;
+      if (JSON.stringify(f.modifiers) !== JSON.stringify(Array.isArray(tf.modifiers) ? tf.modifiers : [])) modifierChanged.push(d);
       const applied = Array.isArray(f.turn?.applied) ? f.turn.applied.slice() : [];
       applied.push({ ts: Date.now(), data: pend });
       patches.push({
@@ -1516,6 +1518,12 @@ async function applyHexPendingSweep(){
     if (patches.length) {
       await sc.updateEmbeddedDocuments("Drawing", patches);
       appliedHexes += patches.length;
+      // Production modifiers (Trade Hub +50% trade, Well-Maintained, …) only reach
+      // flags.resources — what regen reads — through the recompute (2026-09-10).
+      const recompute = game.bbttcc?.api?.territory?.recomputeHexResources;
+      if (typeof recompute === "function") for (const d of modifierChanged) {
+        try { await recompute(d, { source: "pending-sweep" }); } catch (e) { warn("hex resource recompute failed for", d?.id, e); }
+      }
     }
   }
   if (appliedHexes) log(`Hex pending sweep: applied queued strategic effects on ${appliedHexes} hex(es).`);
