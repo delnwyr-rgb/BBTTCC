@@ -159,13 +159,14 @@
   const sameJson = (a, b) => { try { return JSON.stringify(a) === JSON.stringify(b); } catch (_e) { return false; } };
   const folderOk = (folderId) => !folderId || !!game.folders.get(folderId);
 
+  async function load(id, opts = {}) { try { return await _loadInner(id, opts); } finally { try { game.bbttcc.restoring = false; Hooks.callAll("bbttcc:restore:end", { id }); } catch (_e) {} } }
   async function replaceEmbedded(parent, type, savedArr) {
     const coll = parent.getEmbeddedCollection(type);
     const cur = coll.map(d => d.toObject());
     if (sameJson(cur, savedArr)) return 0;
     const ids = coll.map(d => d.id);
     if (ids.length) await parent.deleteEmbeddedDocuments(type, ids);
-    if (savedArr?.length) await parent.createEmbeddedDocuments(type, savedArr, { keepId: true });
+    if (savedArr?.length) await parent.createEmbeddedDocuments(type, savedArr, { keepId: true, bbttccRestore: true });   // restore mode: creation hooks stand down (2026-09-12)
     return 1;
   }
 
@@ -186,7 +187,7 @@
     return { actorsUpdate, actorsCreate, actorsDelete, scenesKnown, scenesMissing, scenesExtra, settingsChange, settingsUnknown, journal: snap.journal.length, others };
   }
 
-  async function load(id, opts = {}) {
+  async function _loadInner(id, opts = {}) {
     if (!isGM()) throw new Error("GM only");
     const row = readIndex().slots.find(s => s.id === id);
     if (!row) throw new Error("save not found in index");
@@ -197,6 +198,10 @@
     const report = { settings: 0, actorsUpdated: 0, actorsCreated: 0, actorsDeleted: 0, itemsReplaced: 0, scenes: 0, drawings: 0, tokens: 0, journal: 0, errors: [] };
     game.bbttcc = game.bbttcc || {};
     game.bbttcc.saveRestoreActive = true;
+    // RESTORE MODE (fix-the-boat item 4, 2026-09-12): a restore recreates every document; hooks that
+    // treat 'created' as 'new' (territory's pristine-hex defaults, raid's post→turn normalizer) must
+    // stand down. game.bbttcc.restoring + bbttccRestore create option + bbttcc:restore:begin/end.
+    game.bbttcc ??= {}; game.bbttcc.restoring = true; try { Hooks.callAll("bbttcc:restore:begin", { id }); } catch (_e) {}
     try {
       // 1. settings (world state, campaigns, director ledgers…)
       progress("settings", 0, snap.settings.length);

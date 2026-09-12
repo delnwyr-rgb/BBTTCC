@@ -124,14 +124,16 @@ async function _bbttccApplyPristineWildernessDefaultsToDoc(doc){
 
 // 1) preCreate (mutate incoming data when possible)
 Hooks.off?.("preCreateDrawing", _bbttccApplyPristineWildernessDefaultsToData);
-Hooks.on?.("preCreateDrawing", (doc, data) => {
+Hooks.on?.("preCreateDrawing", (doc, data, options) => {
+  if (game.bbttcc?.restoring || options?.bbttccRestore) return;   // restore mode (2026-09-12): a restored hex is not a new one
   if (!game.user?.isGM) return;
   _bbttccApplyPristineWildernessDefaultsToData(data);
 });
 
 // 2) post-create correction (covers Create Hex flows that stamp settlement/town/medium)
 Hooks.off?.("createDrawing", _bbttccApplyPristineWildernessDefaultsToDoc);
-Hooks.on?.("createDrawing", async (doc) => {
+Hooks.on?.("createDrawing", async (doc, options) => {
+  if (game.bbttcc?.restoring || options?.bbttccRestore) return;   // restore mode (2026-09-12)
   if (!game.user?.isGM) return;
   await _bbttccApplyPristineWildernessDefaultsToDoc(doc);
 });

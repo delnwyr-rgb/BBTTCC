@@ -41,13 +41,14 @@
   async function queueOneTurnFactionBonus({ actor }) {
     // Write to faction pending so compat/Turn pipeline applies it on Advance Turn
     const A = actor;
-    const F = foundry.utils.duplicate(A.flags?.[MOD_F] || {});
-    const pend = F.turn?.pending || {};
-    pend.nextTurn = Object.assign({}, pend.nextTurn, {
+    // 2026-09-12 (pending-key registry): faction turn.pending.nextTurn fed only dead code — the live
+    // slot the tick / regen / raid console read is bonuses.nextTurn.
+    const bonuses = foundry.utils.duplicate(A.flags?.[MOD_F]?.bonuses || {});
+    bonuses.nextTurn = Object.assign({}, bonuses.nextTurn, {
       intelAdvantage: true,  // visible semantic flag
       dcIntelBonus:   -2     // future DC logic can read this; harmless if ignored
     });
-    await A.update({ [`flags.${MOD_F}.turn.pending`]: pend }, { diff:true, recursive:true });
+    await A.update({ [`flags.${MOD_F}.bonuses`]: bonuses }, { diff:true, recursive:true });
     return `Queued: next-turn intel advantage (DC -2)`;
   }
 

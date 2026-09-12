@@ -134,8 +134,32 @@ function _installGMApi() {
   }
 }
 
+// ═══ LIFECYCLE CONTRACT (fix-the-boat item 4, 2026-09-12) ═══
+// Replaces ready-polling and retry timers. A provider calls provide(cap, value) when a capability is
+// FINAL for this session and rebuilt(cap) whenever it re-normalizes/replaces it; a consumer awaits
+// need(cap) once and registers onRebuild(cap, fn) to re-apply its extension. Capabilities are plain
+// strings ("raid.EFFECTS"). Nothing here depends on module load order.
+function _installLifecycle() {
+  const root = (game.bbttcc ??= {});
+  if (root.lifecycle?.__v) return root.lifecycle;
+  const provided = new Map(), waiters = new Map(), rebuilders = new Map();
+  const lc = {
+    __v: 1,
+    has: (cap) => provided.has(String(cap)),
+    get: (cap) => provided.get(String(cap)),
+    provide(cap, value) { cap = String(cap); provided.set(cap, value); for (const r of (waiters.get(cap) || [])) { try { r(value); } catch (_e) {} } waiters.delete(cap); try { Hooks.callAll(`bbttcc:lifecycle:${cap}`, value); } catch (_e) {} return value; },
+    need(cap) { cap = String(cap); if (provided.has(cap)) return Promise.resolve(provided.get(cap)); return new Promise((res) => { (waiters.get(cap) || waiters.set(cap, []).get(cap)).push(res); }); },
+    onRebuild(cap, fn) { cap = String(cap); (rebuilders.get(cap) || rebuilders.set(cap, []).get(cap)).push(fn); },
+    rebuilt(cap, value) { cap = String(cap); if (value !== undefined) provided.set(cap, value); for (const fn of (rebuilders.get(cap) || [])) { try { fn(provided.get(cap)); } catch (e) { console.warn("[bbttcc-core] lifecycle rebuild handler failed", cap, e); } } },
+    caps: () => [...provided.keys()]
+  };
+  root.lifecycle = lc; return lc;
+}
+_installLifecycle();   // at script load, so any module's ready handler can use it regardless of order
+
 Hooks.once("init", function () {
   _ensureRoot();
+  _installLifecycle();
   _registerSettings();
   _log(`[${CORE_ID}] init`);
 });

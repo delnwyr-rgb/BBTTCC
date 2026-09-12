@@ -23,7 +23,7 @@
     pend.repairs.addModifiers = Array.isArray(pend.repairs.addModifiers) ? pend.repairs.addModifiers.slice() : [];
     if (!pend.repairs.addModifiers.includes("Well-Maintained")) pend.repairs.addModifiers.push("Well-Maintained");
     pend.defenseDelta    = Number(pend.defenseDelta||0) + Number(defenseDelta||0);
-    pend.tradeYieldDelta = Number(pend.tradeYieldDelta||0) + Number(tradeYieldDelta||0);
+    // tradeYieldDelta retired 2026-09-12 (pending-key registry): mods.tradeYield had no reader
     // Folded in from the retired T2 "Reconstruction Drive" row (2026-09-09):
     // "Upgrade Hex status to 'Claimed'" — an occupied/contested hex settles.
     const status = String(f.status || "").toLowerCase();

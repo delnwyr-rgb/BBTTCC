@@ -36,7 +36,7 @@
 
     // Small bumps
     pend.defenseDelta    = Number(pend.defenseDelta || 0) + Number(defenseDelta || 0);
-    pend.tradeYieldDelta = Number(pend.tradeYieldDelta || 0) + Number(tradeYieldDelta || 0);
+    // tradeYieldDelta retired 2026-09-12 (pending-key registry): mods.tradeYield had no reader
 
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pend });
     return `Queued: add "Logistics Hub" • +${defenseDelta} Defense • +${tradeYieldDelta} Trade Yield`;

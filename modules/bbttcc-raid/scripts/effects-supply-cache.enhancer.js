@@ -36,10 +36,9 @@
 
     // Small bumps
     pend.defenseDelta   = Number(pend.defenseDelta   || 0) + Number(defenseDelta   || 0);
-    pend.logisticsDelta = Number(pend.logisticsDelta || 0) + Number(logisticsDelta || 0);
 
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pend });
-    return `Queued: add "Supply Cache" • +${defenseDelta} Defense • +${logisticsDelta} Logistics`;
+    return `Queued: add "Supply Cache" • +${defenseDelta} Defense` /* logisticsDelta retired 2026-09-12: the Supply Cache tag already grants logistics capacity */;
   }
 
   whenRaidReady((api)=>{

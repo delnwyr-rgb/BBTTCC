@@ -169,7 +169,7 @@ function __bbttccInstallStrategicThroughputIfMissing(){
       bonuses.nextTurn = bonuses.nextTurn || {};
       bonuses.nextTurn.moraleBonus = Number(bonuses.nextTurn.moraleBonus || 0) + 1;
       await A.update({ [`flags.${MODF}.bonuses`]: bonuses });
-      await pushWarLog(A, "Training Drills: +1 Morale next raid.");
+      await pushWarLog(A, "Training Drills: +1 Morale next turn.");
     };
 
     raid.STRATEGIC_THROUGHPUT = T;
@@ -1648,6 +1648,8 @@ async function tickFactionBonuses(){
       const nt = b.nextTurn || {};
       if (nt.borderPatrol) { const t = safeNum(nt.borderPatrol) - 1; if (t <= 0) { delete nt.borderPatrol; notes.push("Border Patrol stood down"); } else nt.borderPatrol = t; dirty = true; }
       if (nt.noMoraleLoss) { delete nt.noMoraleLoss; dirty = true; }
+      // Training Drills (registry 2026-09-12): +N morale, applied here and cleared — it had no reader.
+      if (safeNum(nt.moraleBonus)) { const before = safeNum(F.getFlag(MOD_FACTIONS, "morale"), 50); const after = Math.max(0, Math.min(100, before + safeNum(nt.moraleBonus))); await F.update({ [`flags.${MOD_FACTIONS}.morale`]: after }); notes.push(`Training Drills: morale ${before}→${after}`); delete nt.moraleBonus; dirty = true; }
       // Loyalty stability one-turn effects (2026-09-10): consumed this Advance
       // (opGainPct in advanceOPRegen, defenseDC by raid defense DC readers) —
       // clear so tracks' loyalty phases write a fresh value, never a running sum.

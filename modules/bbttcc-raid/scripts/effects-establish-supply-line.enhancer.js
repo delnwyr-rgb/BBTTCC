@@ -34,7 +34,7 @@
     pend.repairs = pend.repairs || {};
     pend.repairs.addModifiers = Array.isArray(pend.repairs.addModifiers) ? pend.repairs.addModifiers.slice() : [];
     if (!pend.repairs.addModifiers.includes("Supply Line")) pend.repairs.addModifiers.push("Supply Line");
-    pend.tradeYieldDelta = Number(pend.tradeYieldDelta||0) + Number(tradeYieldDelta||0);
+    // tradeYieldDelta retired 2026-09-12 (pending-key registry): mods.tradeYield had no reader; the tag/route is the bonus
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pend });
     return `Queued: add "Supply Line" • +${tradeYieldDelta} Trade Yield${edgeMsg}`;
   }
@@ -61,10 +61,9 @@
     console.log(TAG,"installed");
     return true;
   }
-  whenRaidReady((api)=>{
-    install(api);
-    const again = () => { try { install(game?.bbttcc?.api?.raid || game?.modules?.get?.(MOD_R)?.api?.raid); } catch (_e) {} };
-    for (const ms of [600, 2000, 5000, 9000]) setTimeout(again, ms);
-    if (globalThis.Hooks) Hooks.on("bbttcc:raid:maneuversLoaded", again);
-  });
+  // Lifecycle contract (2026-09-12): install once when the registry is final, re-install after every
+  // rebuild. Falls back to the old ready-poll only if bbttcc-core's lifecycle is absent.
+  const lc = globalThis.game?.bbttcc?.lifecycle;
+  if (lc?.need) { lc.need("raid.EFFECTS").then(() => install(game.bbttcc.api.raid)); lc.onRebuild("raid.EFFECTS", () => install(game.bbttcc.api.raid)); }
+  else whenRaidReady((api)=>{ install(api); });
 })();

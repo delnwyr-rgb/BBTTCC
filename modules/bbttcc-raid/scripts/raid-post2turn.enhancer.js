@@ -125,6 +125,7 @@
 
     Hooks.on("updateDrawing", (drawing, changed)=>{
       try {
+        if (game.bbttcc?.restoring) return;   // restore mode (2026-09-12)
         if (!drawing?.flags?.[MOD_TERRITORY]) return;
         if (SELF.has(drawing)) { SELF.delete(drawing); return; }
         const wrotePost = foundry.utils.getProperty(changed, `flags.${MOD_TERRITORY}.post.pending`);

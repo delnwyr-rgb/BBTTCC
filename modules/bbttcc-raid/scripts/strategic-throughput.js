@@ -983,7 +983,13 @@
     attachCanPlan();
     applyPricePolicy();
   }
-  Hooks.once("ready", () => { for (const ms of [0, 600, 2000, 5000, 9000]) setTimeout(() => { attachCanPlan(); applyPricePolicy(); }, ms); });   // price policy + recipes ride the same retries: enhancers re-wrap defs with fresh cost literals up to a few seconds after ready
+  // Lifecycle contract (2026-09-12): price policy + CAN_PLAN attach once the registry is final and
+  // re-attach after every rebuild — no timers. (Ready-poll fallback only without bbttcc-core.)
+  Hooks.once("ready", () => {
+    const lc = game.bbttcc?.lifecycle;
+    if (lc?.need) { lc.need("raid.EFFECTS").then(() => { attachCanPlan(); applyPricePolicy(); }); lc.onRebuild("raid.EFFECTS", () => { attachCanPlan(); applyPricePolicy(); }); }
+    else for (const ms of [0, 600, 2000, 5000, 9000]) setTimeout(() => { attachCanPlan(); applyPricePolicy(); }, ms);
+  });
 
   function boot(){
     attach();

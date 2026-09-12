@@ -786,6 +786,7 @@ function publishCompat(){
     } catch (e) {
       warn("EFFECTS normalization failed (non-fatal)", e);
     }
+    try { game.bbttcc?.lifecycle?.rebuilt?.("raid.EFFECTS"); } catch (_e) {}   // lifecycle contract: extensions re-apply after every normalize
   }
 
   // Run normalization after injections (option maneuvers/strategics may add metadata).
@@ -804,6 +805,7 @@ function publishCompat(){
   };
 
   Object.assign(game.bbttcc.api.raid, api);
+  try { game.bbttcc.lifecycle?.provide?.("raid.EFFECTS", game.bbttcc.api.raid.EFFECTS); } catch (_e) {}   // lifecycle contract (2026-09-12): the registry is final for this session
   const mod = game.modules.get(MOD_ID);
   mod.api ??= {};
   mod.api.raid = game.bbttcc.api.raid;

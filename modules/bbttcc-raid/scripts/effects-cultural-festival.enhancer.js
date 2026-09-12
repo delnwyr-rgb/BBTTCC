@@ -36,7 +36,7 @@
 
     // Bumps
     pending.moraleDelta      = Number(pending.moraleDelta      || 0) + Number(morale || 0);
-    pending.tradeYieldDelta  = Number(pending.tradeYieldDelta  || 0) + Number(trade  || 0);
+    // tradeYieldDelta retired 2026-09-12 (pending-key registry): mods.tradeYield had no reader; the tag/route is the bonus
 
     await doc.update({ [`flags.${MOD_T}.turn.pending`]: pending });
     return `Queued: add "Cultural Festival" • +${morale} Morale • +${trade} Trade`;

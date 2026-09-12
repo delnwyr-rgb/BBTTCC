@@ -20,14 +20,15 @@
   async function queueFactionPolicyBonus(actor, { dcBonus = -1, opPct = 5 } = {}) {
     const A = actor;
     if (!A) return "No faction actor";
-    const flags = foundry.utils.duplicate(A.flags?.[MOD_F] || {});
-    const pend  = flags.turn?.pending || {};
-    pend.nextTurn = Object.assign({}, pend.nextTurn, {
+    // 2026-09-12 (pending-key registry): faction turn.pending.nextTurn fed only dead code — the live
+    // slot the tick / regen / raid console read is bonuses.nextTurn.
+    const bonuses = foundry.utils.duplicate(A.flags?.[MOD_F]?.bonuses || {});
+    bonuses.nextTurn = Object.assign({}, bonuses.nextTurn, {
       policyReform: true,
       dcPolicyBonus: dcBonus,
-      opGainPct: Number(pend?.nextTurn?.opGainPct || 0) + Number(opPct)
+      opGainPct: Number(bonuses?.nextTurn?.opGainPct || 0) + Number(opPct)
     });
-    await A.update({ [`flags.${MOD_F}.turn.pending`]: pend }, { diff:true, recursive:true });
+    await A.update({ [`flags.${MOD_F}.bonuses`]: bonuses }, { diff:true, recursive:true });
     return `Queued: next-turn policy reform (DC ${dcBonus}, OP +${opPct}%)`;
   }
 
