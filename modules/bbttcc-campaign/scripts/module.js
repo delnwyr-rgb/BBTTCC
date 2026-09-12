@@ -8128,6 +8128,9 @@ Hooks.once("ready", () => {
   // the advanceTurn driver fires this hook locally on the advancing GM client,
   // and the world clock is already bumped when it arrives. Reconcile runs each
   // turn too, so late joiners / reincarnated stewards snap back onto the curve.
+  // 2026-09-12: the turn driver awaits this BEFORE regen so a cadence tier floor raises caps before
+  // income lands (the end-of-turn reconcile alone let turn-1 income clamp against the old tier's caps).
+  try { game.bbttcc.api ??= {}; game.bbttcc.api.campaign ??= {}; game.bbttcc.api.campaign.director ??= {}; game.bbttcc.api.campaign.director.reconcileLevels = (opts = {}) => directorReconcileLevels(opts || {}); } catch (_e) {}
   Hooks.on("bbttcc:advanceTurn:end", (tctx) => {
     try {
       if (!tctx || tctx.apply !== true) return;

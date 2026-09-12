@@ -132,8 +132,16 @@
         f.isHex      = true;
         f.kind       = "territory-hex";
         f.status     = "occupied";
-        f.size       = f.size || "outpost";
+        // 2026-09-12: "none" is a truthy string, so `f.size || "outpost"` kept every new outpost at
+        // size none (zero yield, and the audit's MIS-SIZED row). A founded hex IS an outpost.
+        if (!f.size || String(f.size).toLowerCase() === "none") f.size = "outpost";
         f.type       = f.type || "wilderness";
+        // Settlers bring their own mood (owner ruling 2026-09-12): a wild hex can carry a loyalty
+        // score from years of unrest history; founding starts the ledger clean instead of rolling
+        // the old grudges into the first unrest check (Odaroloc River.c rioted twice on a −2 it
+        // inherited from June).
+        f.mods = (f.mods && typeof f.mods === "object") ? Object.assign({}, f.mods) : {};
+        f.mods.loyalty = 0; f.mods.morale = 0;
         f.modifiers  = Array.isArray(f.modifiers) ? f.modifiers.slice() : [];
         f.conditions = Array.isArray(f.conditions) ? f.conditions.slice() : [];
         f.population = f.population || "small";

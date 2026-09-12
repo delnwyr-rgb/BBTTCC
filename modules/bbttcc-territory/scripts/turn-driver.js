@@ -1885,6 +1885,11 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     let scheduledOP = { changed:false, rows:[] };
     if (apply) scheduledOP = await applyScheduledOPBonuses();
 
+    // Cadence tier floor BEFORE regen (2026-09-12): the Director's end-of-turn reconcile lifted the
+    // coalition to T1 only after income had already clamped against T0 caps — turn 1 of an act
+    // threw away every full channel's income. Awaited here so caps are right when income lands.
+    if (apply) { try { const rc = game.bbttcc?.api?.campaign?.director?.reconcileLevels; if (typeof rc === "function") await rc({ reason: "pre-regen" }); } catch (e) { warn("pre-regen tier reconcile failed (non-fatal)", e); } }
+
     let regen = { changed:false, rows:[] };
     if (apply) regen = await advanceOPRegen({ apply:true, deferCapClamp:true });
 

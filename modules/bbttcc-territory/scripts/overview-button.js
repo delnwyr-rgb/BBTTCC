@@ -62,14 +62,18 @@ function _bbttccApplyPristineWildernessDefaultsToData(data){
     if (f.isHex !== true) foundry.utils.setProperty(data, `flags.${MOD}.isHex`, true);
     if (!f.kind)          foundry.utils.setProperty(data, `flags.${MOD}.kind`, "territory-hex");
 
-    // Enforce pristine defaults (only if missing or legacy-stamped)
-    const curType = f.type;
-    const curSize = f.size;
-    const curPop  = f.population;
-
-    if (curType == null || curType === "settlement") foundry.utils.setProperty(data, `flags.${MOD}.type`, "wilderness");
-    if (curSize == null || curSize === "town")       foundry.utils.setProperty(data, `flags.${MOD}.size`, "outpost");
-    if (curPop  == null || curPop  === "medium")     foundry.utils.setProperty(data, `flags.${MOD}.population`, "uninhabited");
+    // Pristine defaults FILL BLANKS ONLY (owner ruling 2026-09-12). The old rule also rewrote
+    // "legacy-stamped" values — type settlement → wilderness, size TOWN → outpost, population
+    // medium → uninhabited — and a save RESTORE recreates every hex drawing, so every restore
+    // demoted every town on the map to an outpost with no ledger entry (the recurring "why are
+    // all my hexes Outposts again"). A drawing that already carries a territory flag block is
+    // an existing hex: leave its identity alone.
+    if (f.isHex === true || f.type != null || f.size != null) { /* existing hex — identity untouched */ }
+    else {
+      if (f.type == null)       foundry.utils.setProperty(data, `flags.${MOD}.type`, "wilderness");
+      if (f.size == null)       foundry.utils.setProperty(data, `flags.${MOD}.size`, "outpost");
+      if (f.population == null) foundry.utils.setProperty(data, `flags.${MOD}.population`, "uninhabited");
+    }
 
     if (f.status == null)  foundry.utils.setProperty(data, `flags.${MOD}.status`, "unclaimed");
     if (f.capital == null) foundry.utils.setProperty(data, `flags.${MOD}.capital`, false);
@@ -96,9 +100,13 @@ async function _bbttccApplyPristineWildernessDefaultsToDoc(doc){
     if (f.isHex !== true) updates[`flags.${MOD}.isHex`] = true;
     if (!f.kind)          updates[`flags.${MOD}.kind`]  = "territory-hex";
 
-    if (f.type == null || f.type === "settlement") updates[`flags.${MOD}.type`] = "wilderness";
-    if (f.size == null || f.size === "town")       updates[`flags.${MOD}.size`] = "outpost";
-    if (f.population == null || f.population === "medium") updates[`flags.${MOD}.population`] = "uninhabited";
+    // Fill blanks only — never rewrite an existing hex's identity (2026-09-12; see the preCreate note).
+    const existing = (f.isHex === true || f.type != null || f.size != null);
+    if (!existing) {
+      if (f.type == null)       updates[`flags.${MOD}.type`] = "wilderness";
+      if (f.size == null)       updates[`flags.${MOD}.size`] = "outpost";
+      if (f.population == null) updates[`flags.${MOD}.population`] = "uninhabited";
+    }
 
     if (f.status == null)  updates[`flags.${MOD}.status`]  = "unclaimed";
     if (f.capital == null) updates[`flags.${MOD}.capital`] = false;
