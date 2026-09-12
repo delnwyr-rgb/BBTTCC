@@ -75,7 +75,8 @@ const KNOBS = {
   raidRounds:       num("raid-rounds", 0),           // raid rounds/turn: needs 10 marks in the primary pool to authorise each (GATE, not a charge)
   raidPool:         String(flag("raid-pool", "violence")),
   raidStaged:       num("raid-staged", 0),           // marks staged per round (the real raid spend; +1 bonus per 20 × price-mult marks)
-  courtlyRounds:    num("courtly-rounds", 0),        // courtly intrigue rounds/turn: 20 diplomacy each (war-log "Courtly Intrigue: diplomacy -20")             // map reality: the River Heart has ~8 reachable claims per faction; expand stops here
+  courtlyRounds:    num("courtly-rounds", 0),        // courtly intrigue rounds/turn: 20 diplomacy each (war-log "Courtly Intrigue: diplomacy -20")
+  lanes:            !flag("no-lanes", false),         // PROPOSED culture + faith income lanes (see LANES below); --no-lanes = today's engine             // map reality: the River Heart has ~8 reachable claims per faction; expand stops here
   loyaltyPenalty:   !flag("no-loyalty-penalty", false),
   policy:           flag("policy", null),
   verbose:          !!flag("verbose", false),
@@ -222,6 +223,29 @@ function recipesFor(key) {
 }
 const GEAR_MARKS = KNOBS.gearMarks ?? Math.round(E.TIER_BASE_MARKS[1] * (E.CATEGORY_MULT.weapon ?? 1) + (E.TIER_FEE_MARKS.I ?? 10));  // T1 weapon + tier fee
 
+/* ───────────────────── PROPOSED: culture + faith income lanes (2026-09-12) ─────────────────────
+ * Today's matrix (RES_TO_OP) has six channels + food→logistics; culture and faith have NO territory
+ * income, so any recipe that spends them drains a bank that never refills. Proposal — three parts,
+ * each a small table, all in marks/turn/hex before rounding:
+ *   resource weights (like RES_TO_OP rows)  · a per-TYPE bonus (temples pray, research studies,
+ *   ports mix)  · a per-SIZE baseline ("people pray and sing": a town is +1 of each).
+ * NOT in the engine yet. If ruled, the weights join RES_TO_OP in territory main.js and the type/size
+ * bonus lands in turn-driver computeTerritoryMatrixIncome (which has the hex in scope). */
+const LANES = {
+  culture: { res: { knowledge:0.5, trade:0.3, food:0.1 }, byType: { research:1, city:2, port:1, settlement:1, temple:1 }, bySize: { outpost:0, village:0.5, town:1, city:2, metropolis:3, megalopolis:4 } },
+  faith:   { res: { knowledge:0.5, food:0.1 },            byType: { temple:3, ruins:1, settlement:0 },                          bySize: { outpost:0, village:0.5, town:1, city:1.5, metropolis:2, megalopolis:3 } }
+};
+function laneIncome(h, res) {
+  const out = { culture:0, faith:0 };
+  if (!KNOBS.lanes) return out;
+  for (const [lane, L] of Object.entries(LANES)) {
+    let v = 0; for (const [rk, w] of Object.entries(L.res)) v += (res[rk] || 0) * w;
+    v += L.byType[h.type] || 0; v += L.bySize[h.size] || 0;
+    out[lane] = Math.max(0, round(v));
+  }
+  return out;
+}
+
 /* ───────────────────── engine formula mirrors ───────────────────── */
 const round = Math.round;
 function hexBaseVector(h) { const tb = E.TYPE_BASE[h.type] || E.TYPE_BASE.settlement; const sm = E.SIZE_MULT[h.size] ?? 0; return Object.fromEntries(["food","materials","trade","military","knowledge"].map(k => [k, round((tb[k] || 0) * sm)])); }
@@ -239,7 +263,7 @@ function resourcesToOP(res, flow = "normal") {   // territory resourcesToOP
 function factionIncome(F) {   // turn-driver computeTerritoryMatrixIncome
   const KEYMAP = { economy:"economy", violence:"violence", nonLethal:"nonlethal", intrigue:"intrigue", diplomacy:"diplomacy", softPower:"softpower" };
   const out = Object.fromEntries(OPK.map(k => [k, 0]));
-  for (const h of F.hexes) { const res = hexResources(h); const v = resourcesToOP(res, h.flow || "normal"); for (const [mk, ck] of Object.entries(KEYMAP)) out[ck] += v[mk] || 0; out.logistics += res.food || 0; }
+  for (const h of F.hexes) { const res = hexResources(h); const v = resourcesToOP(res, h.flow || "normal"); for (const [mk, ck] of Object.entries(KEYMAP)) out[ck] += v[mk] || 0; out.logistics += res.food || 0; const ln = laneIncome(h, res); out.culture += ln.culture; out.faith += ln.faith; }
   for (const k of OPK) out[k] = Math.max(0, round(out[k]));
   return out;
 }
@@ -401,7 +425,8 @@ function parity(savePath, factionName) {
   const tot = Object.fromEntries(OPK.map(k => [k, 0]));
   for (const h of hexes) { const v = resourcesToOP(h.resources, h.flow); const inc = { economy:v.economy, violence:v.violence, nonlethal:v.nonLethal, intrigue:v.intrigue, diplomacy:v.diplomacy, softpower:v.softPower, logistics: h.resources.food || 0 }; for (const k of Object.keys(inc)) tot[k] += inc[k]; const u = hexUpkeep(h);
     console.log(`${h.name.padEnd(18)} | ${(h.type + "/" + h.size).padEnd(14)} | ${String(h.progress).padEnd(4)} | ${JSON.stringify(inc).padEnd(45)} | ${u.phase} ${JSON.stringify(u.vec)}`); }
-  console.log("\nsim regen (pre-penalty):", JSON.stringify(tot));
+  const laneTot = { culture:0, faith:0 }; for (const h of hexes) { const ln = laneIncome({ type:h.type, size:h.size }, h.resources); laneTot.culture += ln.culture; laneTot.faith += ln.faith; }
+  console.log("\nsim regen (pre-penalty):", JSON.stringify(tot), KNOBS.lanes ? `+ PROPOSED lanes ${JSON.stringify(laneTot)}` : "");
   console.log("engine regen line     :", String(regen?.summary || "(none)").replace(/<[^>]+>/g, ""));
   console.log("engine upkeep line    :", String(up?.summary || "(none)").split(" | ").slice(0, hexes.length).join(" | "));
   const Fm = { hexes, tier: Number(F.tier ?? 0), routes: hexes.reduce((a, h) => a + 0, 0), supplyLines: 0, distSteps: F.logistics?.breakdown?.counts?.distSteps || 0 };
@@ -412,7 +437,7 @@ function parity(savePath, factionName) {
 
 /* ───────────────────── run ───────────────────── */
 function header() {
-  console.log(`sim-op-economy — ${KNOBS.turns} turns · max hexes ${KNOBS.maxHexes} · price×${KNOBS.priceMult} (engine ${ENGINE_PRICE_MULT}) (economy×${KNOBS.econPriceMult}) · occupation×${KNOBS.occupationMult} (engine phase ${ENGINE_OCCUPATION_MULT}) · spend ${KNOBS.spendOrder} regen · sprawl ^${E.LOGI.SPRAWL_EXP} over ${E.LOGI.SPRAWL_THRESHOLD} · recipes ${KNOBS.recipes ? "ON" : "off"} · tier floor T1 @ turn ${KNOBS.tierFloorTurn} · gear ${GEAR_MARKS} marks${KNOBS.travelLegs ? ` · travel ${KNOBS.travelLegs}×${KNOBS.travelTerrain}/turn` : ""}${KNOBS.raidRounds ? ` · raid ${KNOBS.raidRounds} rounds/turn` : ""}${KNOBS.courtlyRounds ? ` · courtly ${KNOBS.courtlyRounds}/turn` : ""}`);
+  console.log(`sim-op-economy — ${KNOBS.turns} turns · max hexes ${KNOBS.maxHexes} · price×${KNOBS.priceMult} (engine ${ENGINE_PRICE_MULT}) (economy×${KNOBS.econPriceMult}) · occupation×${KNOBS.occupationMult} (engine phase ${ENGINE_OCCUPATION_MULT}) · spend ${KNOBS.spendOrder} regen · sprawl ^${E.LOGI.SPRAWL_EXP} over ${E.LOGI.SPRAWL_THRESHOLD} · recipes ${KNOBS.recipes ? "ON" : "off"} · tier floor T1 @ turn ${KNOBS.tierFloorTurn} · gear ${GEAR_MARKS} marks · lanes ${KNOBS.lanes ? "PROPOSED ON" : "off"}${KNOBS.travelLegs ? ` · travel ${KNOBS.travelLegs}×${KNOBS.travelTerrain}/turn` : ""}${KNOBS.raidRounds ? ` · raid ${KNOBS.raidRounds} rounds/turn` : ""}${KNOBS.courtlyRounds ? ` · courtly ${KNOBS.courtlyRounds}/turn` : ""}`);
   if (DRIFT.length) { console.log("DRIFT? engine constants not parsed (fallbacks in use):"); for (const d of DRIFT) console.log("  · " + d); }
   else console.log("engine constants: all parsed from source ✓");
 }
@@ -422,7 +447,8 @@ function summarize(name, rows, F) {
   const firstStrain = rows.find(r => /strained|critical|overextended/.test(r.band))?.turn ?? null; const firstExpand = rows.find(r => r.notes.some(n => /establish_outpost/.test(n)))?.turn ?? null;
   const idleChannels = OPK.filter(k => !F.spentChannels.has(k)); const loanTurns = rows.filter(r => Math.min(...Object.values(r.bank)) < 0 || r.unpaid).length;
   const shortTurns = rows.filter(r => r.notes.some(n => /SHORT/.test(n))).length;
-  return { policy: name, turnsActed: acted, turnsIdle: idle, plansHeld: held, avgOptions: round(avgOpt * 10) / 10, turnsOneOrNone: oneOrNone, firstStrainTurn: firstStrain, firstExpandTurn: firstExpand, hexes: F.hexes.length, routes: F.routes, unpaidTurns: F.unpaidTurns, loanTurns, gearBought: F.gearBought || 0, shortTurns, idleChannels: idleChannels.join(",") || "none", endBank: F.bank, endBand: rows[rows.length - 1].band };
+  const avgIncome = Object.fromEntries(OPK.map(k => [k, round(rows.reduce((a, r) => a + (r.income?.[k] || 0), 0) / T * 10) / 10]));
+  return { policy: name, turnsActed: acted, turnsIdle: idle, plansHeld: held, avgOptions: round(avgOpt * 10) / 10, turnsOneOrNone: oneOrNone, firstStrainTurn: firstStrain, firstExpandTurn: firstExpand, hexes: F.hexes.length, routes: F.routes, unpaidTurns: F.unpaidTurns, loanTurns, gearBought: F.gearBought || 0, shortTurns, avgIncome, idleChannels: idleChannels.join(",") || "none", endBank: F.bank, endBand: rows[rows.length - 1].band };
 }
 function main() {
   if (KNOBS.parity) { header(); parity(String(KNOBS.parity), KNOBS.parityFaction); return; }
@@ -437,6 +463,7 @@ function main() {
     console.log("turn | econ viol  dipl  logi  soft  faith | band         | opts | did");
     for (const r of rows) if (KNOBS.verbose || r.turn <= 12 || r.turn % 5 === 0 || r.held || r.unpaid) console.log(`${String(r.turn).padStart(4)} | ${String(r.bank.economy).padStart(4)} ${String(r.bank.violence).padStart(4)} ${String(r.bank.diplomacy).padStart(5)} ${String(r.bank.logistics).padStart(5)} ${String(r.bank.softpower).padStart(5)} ${String(r.bank.faith).padStart(5)} | ${r.band.padEnd(12)} | ${String(r.optionsAtPlan).padStart(4)} | ${r.notes.join("; ") || "—"}${r.unpaid ? "  ⚠ unpaid upkeep" : ""}`);
     const s = out[name].summary;
+    console.log(`── avg income/turn: ${OPK.map(k => `${k.slice(0,4)} ${s.avgIncome[k]}`).join(" · ")}`);
     console.log(`── acted ${s.turnsActed}/${KNOBS.turns} · idle ${s.turnsIdle} · held ${s.plansHeld} · avg options at plan ${s.avgOptions} · one-or-nothing turns ${s.turnsOneOrNone} · first strain T${s.firstStrainTurn ?? "—"} · hexes ${s.hexes} · routes ${s.routes} · unpaid ${s.unpaidTurns} · gear ${s.gearBought} · idle channels: ${s.idleChannels}`);
   }
   console.log("\n═══ TARGET SCORECARD");
