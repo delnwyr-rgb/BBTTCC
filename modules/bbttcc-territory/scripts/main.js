@@ -1846,7 +1846,13 @@ const RES_TO_OP = {
   nonLethal:{food:0.2, materials:0.1, trade:0.2, military:0.5, knowledge:0.3},
   intrigue:{food:0.0, materials:0.1, trade:0.5, military:0.1, knowledge:1.0},
   diplomacy:{food:0.2, materials:0.0, trade:0.6, military:0.0, knowledge:0.4},
-  softPower:{food:0.2, materials:0.0, trade:0.5, military:0.0, knowledge:0.3}
+  softPower:{food:0.2, materials:0.0, trade:0.5, military:0.0, knowledge:0.3},
+  // Culture + faith lanes (owner ruling 2026-09-12): until now neither channel had ANY territory
+  // income — recipes that spend them drained banks that never refilled. Resource weights here;
+  // the per-TYPE / per-SIZE / stationed-facility bonuses live in turn-driver LANE_HEX_BONUS
+  // (computeTerritoryMatrixIncome has the hex in scope). Priced in sim OP_ECONOMY_SIM_2026_09_11.md.
+  culture:{food:0.1, materials:0.0, trade:0.3, military:0.0, knowledge:0.5},
+  faith:{food:0.1, materials:0.0, trade:0.0, military:0.0, knowledge:0.5}
 };
 /* ---------------- Leyline Flow Modifiers ---------------- */
 const LEY_FLOW_MULT = {
@@ -1860,7 +1866,7 @@ const LEY_FLOW_MULT = {
 };
 
 function resourcesToOP(res, flowState = "normal"){
-  const out = { economy:0, violence:0, nonLethal:0, intrigue:0, diplomacy:0, softPower:0 };
+  const out = { economy:0, violence:0, nonLethal:0, intrigue:0, diplomacy:0, softPower:0, culture:0, faith:0 };
 
   for (const [op,weights] of Object.entries(RES_TO_OP)) {
     let v = 0;

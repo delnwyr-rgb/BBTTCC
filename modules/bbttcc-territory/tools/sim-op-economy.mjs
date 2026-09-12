@@ -76,7 +76,7 @@ const KNOBS = {
   raidPool:         String(flag("raid-pool", "violence")),
   raidStaged:       num("raid-staged", 0),           // marks staged per round (the real raid spend; +1 bonus per 20 × price-mult marks)
   courtlyRounds:    num("courtly-rounds", 0),        // courtly intrigue rounds/turn: 20 diplomacy each (war-log "Courtly Intrigue: diplomacy -20")
-  lanes:            !flag("no-lanes", false),         // PROPOSED culture + faith income lanes (see LANES below); --no-lanes = today's engine             // map reality: the River Heart has ~8 reachable claims per faction; expand stops here
+  lanes:            !flag("no-lanes", false),         // culture + faith income lanes (engine ruling 2026-09-12); --no-lanes = the pre-ruling engine             // map reality: the River Heart has ~8 reachable claims per faction; expand stops here
   loyaltyPenalty:   !flag("no-loyalty-penalty", false),
   policy:           flag("policy", null),
   verbose:          !!flag("verbose", false),
@@ -231,10 +231,9 @@ const GEAR_MARKS = KNOBS.gearMarks ?? Math.round(E.TIER_BASE_MARKS[1] * (E.CATEG
  *   ports mix)  · a per-SIZE baseline ("people pray and sing": a town is +1 of each).
  * NOT in the engine yet. If ruled, the weights join RES_TO_OP in territory main.js and the type/size
  * bonus lands in turn-driver computeTerritoryMatrixIncome (which has the hex in scope). */
-const LANES = {
-  culture: { res: { knowledge:0.5, trade:0.3, food:0.1 }, byType: { research:1, city:2, port:1, settlement:1, temple:1 }, bySize: { outpost:0, village:0.5, town:1, city:2, metropolis:3, megalopolis:4 } },
-  faith:   { res: { knowledge:0.5, food:0.1 },            byType: { temple:3, ruins:1, settlement:0 },                          bySize: { outpost:0, village:0.5, town:1, city:1.5, metropolis:2, megalopolis:3 } }
-};
+// Engine tables (ruling 2026-09-12): RES_TO_OP.culture/faith (territory main.js) + LANE_HEX_BONUS (turn-driver).
+const LANE_HEX_BONUS = parseConst(S.turnDriver, "LANE_HEX_BONUS", { culture:{ byType:{ research:1, city:2, port:1, settlement:1, temple:1 }, bySize:{ outpost:0, village:0.5, town:1, city:2, metropolis:3, megalopolis:4 }, byFacility:{ theatre:2, theater:2, library:2, hall:1, festival:1 } }, faith:{ byType:{ temple:3, ruins:1 }, bySize:{ outpost:0, village:0.5, town:1, city:1.5, metropolis:2, megalopolis:3 }, byFacility:{ temple:3, shrine:2, chapel:2, church:2 } } }, "LANE_HEX_BONUS (turn-driver)");
+const LANES = { culture: { res: E.RES_TO_OP.culture || {}, ...LANE_HEX_BONUS.culture }, faith: { res: E.RES_TO_OP.faith || {}, ...LANE_HEX_BONUS.faith } };
 function laneIncome(h, res) {
   const out = { culture:0, faith:0 };
   if (!KNOBS.lanes) return out;
@@ -426,7 +425,7 @@ function parity(savePath, factionName) {
   for (const h of hexes) { const v = resourcesToOP(h.resources, h.flow); const inc = { economy:v.economy, violence:v.violence, nonlethal:v.nonLethal, intrigue:v.intrigue, diplomacy:v.diplomacy, softpower:v.softPower, logistics: h.resources.food || 0 }; for (const k of Object.keys(inc)) tot[k] += inc[k]; const u = hexUpkeep(h);
     console.log(`${h.name.padEnd(18)} | ${(h.type + "/" + h.size).padEnd(14)} | ${String(h.progress).padEnd(4)} | ${JSON.stringify(inc).padEnd(45)} | ${u.phase} ${JSON.stringify(u.vec)}`); }
   const laneTot = { culture:0, faith:0 }; for (const h of hexes) { const ln = laneIncome({ type:h.type, size:h.size }, h.resources); laneTot.culture += ln.culture; laneTot.faith += ln.faith; }
-  console.log("\nsim regen (pre-penalty):", JSON.stringify(tot), KNOBS.lanes ? `+ PROPOSED lanes ${JSON.stringify(laneTot)}` : "");
+  console.log("\nsim regen (pre-penalty):", JSON.stringify(tot), KNOBS.lanes ? `(lanes: ${JSON.stringify(laneTot)})` : "");
   console.log("engine regen line     :", String(regen?.summary || "(none)").replace(/<[^>]+>/g, ""));
   console.log("engine upkeep line    :", String(up?.summary || "(none)").split(" | ").slice(0, hexes.length).join(" | "));
   const Fm = { hexes, tier: Number(F.tier ?? 0), routes: hexes.reduce((a, h) => a + 0, 0), supplyLines: 0, distSteps: F.logistics?.breakdown?.counts?.distSteps || 0 };
@@ -437,7 +436,7 @@ function parity(savePath, factionName) {
 
 /* ───────────────────── run ───────────────────── */
 function header() {
-  console.log(`sim-op-economy — ${KNOBS.turns} turns · max hexes ${KNOBS.maxHexes} · price×${KNOBS.priceMult} (engine ${ENGINE_PRICE_MULT}) (economy×${KNOBS.econPriceMult}) · occupation×${KNOBS.occupationMult} (engine phase ${ENGINE_OCCUPATION_MULT}) · spend ${KNOBS.spendOrder} regen · sprawl ^${E.LOGI.SPRAWL_EXP} over ${E.LOGI.SPRAWL_THRESHOLD} · recipes ${KNOBS.recipes ? "ON" : "off"} · tier floor T1 @ turn ${KNOBS.tierFloorTurn} · gear ${GEAR_MARKS} marks · lanes ${KNOBS.lanes ? "PROPOSED ON" : "off"}${KNOBS.travelLegs ? ` · travel ${KNOBS.travelLegs}×${KNOBS.travelTerrain}/turn` : ""}${KNOBS.raidRounds ? ` · raid ${KNOBS.raidRounds} rounds/turn` : ""}${KNOBS.courtlyRounds ? ` · courtly ${KNOBS.courtlyRounds}/turn` : ""}`);
+  console.log(`sim-op-economy — ${KNOBS.turns} turns · max hexes ${KNOBS.maxHexes} · price×${KNOBS.priceMult} (engine ${ENGINE_PRICE_MULT}) (economy×${KNOBS.econPriceMult}) · occupation×${KNOBS.occupationMult} (engine phase ${ENGINE_OCCUPATION_MULT}) · spend ${KNOBS.spendOrder} regen · sprawl ^${E.LOGI.SPRAWL_EXP} over ${E.LOGI.SPRAWL_THRESHOLD} · recipes ${KNOBS.recipes ? "ON" : "off"} · tier floor T1 @ turn ${KNOBS.tierFloorTurn} · gear ${GEAR_MARKS} marks · lanes ${KNOBS.lanes ? "on" : "OFF"}${KNOBS.travelLegs ? ` · travel ${KNOBS.travelLegs}×${KNOBS.travelTerrain}/turn` : ""}${KNOBS.raidRounds ? ` · raid ${KNOBS.raidRounds} rounds/turn` : ""}${KNOBS.courtlyRounds ? ` · courtly ${KNOBS.courtlyRounds}/turn` : ""}`);
   if (DRIFT.length) { console.log("DRIFT? engine constants not parsed (fallbacks in use):"); for (const d of DRIFT) console.log("  · " + d); }
   else console.log("engine constants: all parsed from source ✓");
 }

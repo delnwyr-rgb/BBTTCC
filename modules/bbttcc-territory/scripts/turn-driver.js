@@ -1070,13 +1070,40 @@ async function computeLogisticsPressureForAllFactions({ apply=false } = {}){
  * lane (it predates food→logistics), so food keeps feeding logistics 1:1.
  * Falls back to the legacy stockpile map when the API/hexes are unavailable.
  * -------------------------------------------------------------------------- */
+// Culture + faith lane bonuses (owner ruling 2026-09-12; resource weights are RES_TO_OP rows in
+// territory main.js). Per hex TYPE (temples pray, cities mix), per SIZE ("people pray and sing"),
+// and per stationed FACILITY — a facility is a stationary `rig` actor in the hex's holdings, keyed
+// by name the same way the holdings DC bonus is (garrison/forge/cannon/trade). A dedicated temple
+// facility earns faith on any hex; St Gilliam's is a B&B, so no bonus unless someone builds one.
+const LANE_HEX_BONUS = {
+  culture: { byType: { research:1, city:2, port:1, settlement:1, temple:1 }, bySize: { outpost:0, village:0.5, town:1, city:2, metropolis:3, megalopolis:4 }, byFacility: { theatre:2, theater:2, library:2, hall:1, festival:1 } },
+  faith:   { byType: { temple:3, ruins:1 },                                    bySize: { outpost:0, village:0.5, town:1, city:1.5, metropolis:2, megalopolis:3 }, byFacility: { temple:3, shrine:2, chapel:2, church:2 } }
+};
+function laneHexBonus(tf){
+  const type = String(tf?.type || "").toLowerCase(), size = String(tf?.size || "").toLowerCase();
+  const out = { culture:0, faith:0 };
+  const facNames = [];
+  try {
+    for (const id of (Array.isArray(tf?.holdings?.rigIds) ? tf.holdings.rigIds : [])) {
+      const a = game.actors?.get(String(id)); if (!a || a.type !== "rig") continue;
+      if (String(a.system?.identity?.mobility || "mobile").toLowerCase() === "mobile") continue;   // mobile rigs are rigs, not facilities
+      facNames.push(String(a.name || "").toLowerCase());
+    }
+  } catch (_e) {}
+  for (const [lane, L] of Object.entries(LANE_HEX_BONUS)) {
+    let v = (L.byType[type] || 0) + (L.bySize[size] || 0);
+    for (const n of facNames) for (const [key, b] of Object.entries(L.byFacility)) if (n.includes(key)) { v += b; break; }
+    out[lane] = v;
+  }
+  return out;
+}
 function computeTerritoryMatrixIncome(factionActor){
   try {
     const convert = game.bbttcc?.api?.territory?.resourcesToOP;
     if (typeof convert !== "function") return null;
     const owned = getAllOwnedHexDocs(factionActor.id);
     if (!owned.length) return null;
-    const KEYMAP = { economy:"economy", violence:"violence", nonLethal:"nonlethal", intrigue:"intrigue", diplomacy:"diplomacy", softPower:"softpower" };
+    const KEYMAP = { economy:"economy", violence:"violence", nonLethal:"nonlethal", intrigue:"intrigue", diplomacy:"diplomacy", softPower:"softpower", culture:"culture", faith:"faith" };   // culture/faith lanes 2026-09-12
     const out = zeroOps();
     const flows = {};
     for (const h of owned) {
@@ -1087,6 +1114,7 @@ function computeTerritoryMatrixIncome(factionActor){
       const v = convert(res, flow) || {};
       for (const [mk, canon] of Object.entries(KEYMAP)) out[canon] += safeNum(v[mk]);
       out.logistics += safeNum(res.food); // preserved legacy logistics lane
+      const lb = laneHexBonus(tf); out.culture += lb.culture; out.faith += lb.faith;   // type / size / facility bonus (2026-09-12)
     }
     for (const k of Object.keys(out)) out[k] = Math.max(0, Math.round(safeNum(out[k])));
     return { delta: out, flows };
