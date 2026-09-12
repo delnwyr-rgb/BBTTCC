@@ -72,9 +72,9 @@ const KNOBS = {
   maxHexes:         num("max-hexes", 8),
   travelLegs:       num("travel-legs", 0),           // legs/turn into hexes that are NOT free passage (own/allied dev-6 hexes are free)
   travelTerrain:    String(flag("travel-terrain", "plains")),   // TERRAIN_TABLE key (hex-travel.js) — plains 10e · forest 10e+10i · mountains 20e+10l · sea 30e+20l
-  raidRounds:       num("raid-rounds", 0),           // raid rounds/turn: 10 marks in the primary pool to authorise each (module.raid-console _mpo gate)
+  raidRounds:       num("raid-rounds", 0),           // raid rounds/turn: needs 10 marks in the primary pool to authorise each (GATE, not a charge)
   raidPool:         String(flag("raid-pool", "violence")),
-  raidStaged:       num("raid-staged", 0),           // extra marks staged per round for +bonus (1 per 20 marks)
+  raidStaged:       num("raid-staged", 0),           // marks staged per round (the real raid spend; +1 bonus per 20 × price-mult marks)
   courtlyRounds:    num("courtly-rounds", 0),        // courtly intrigue rounds/turn: 20 diplomacy each (war-log "Courtly Intrigue: diplomacy -20")             // map reality: the River Heart has ~8 reachable claims per faction; expand stops here
   loyaltyPenalty:   !flag("no-loyalty-penalty", false),
   policy:           flag("policy", null),
@@ -363,14 +363,17 @@ function runTurn(F, policy, t, rand) {
   F.morale = Math.max(0, Math.min(100, F.morale + bonusM)); F.loyalty = Math.max(0, Math.min(100, F.loyalty + bonusL));
   // travel / raid / courtly drains (2026-09-12): player actions during the turn, paid as they happen
   if (KNOBS.travelLegs > 0) {
-    const tc = E.TERRAIN_TABLE[KNOBS.travelTerrain]?.cost || E.TERRAIN_TABLE.plains?.cost || { economy:10 };
+    const tc0 = E.TERRAIN_TABLE[KNOBS.travelTerrain]?.cost || E.TERRAIN_TABLE.plains?.cost || { economy:10 };
+    const tc = Object.fromEntries(Object.entries(tc0).map(([k, v]) => [k, Math.max(1, Math.round(Number(v) * KNOBS.priceMult))]));   // hex-travel _applyPricePolicy (2026-09-12)
     for (let i = 0; i < KNOBS.travelLegs; i++) { for (const [k0, v] of Object.entries(tc)) { const k = k0 === "nonLethal" ? "nonlethal" : k0; if ((F.bank[k] || 0) >= v) { F.bank[k] -= v; F.spentChannels.add(k); } else { row.notes.push(`travel leg ${i + 1} SHORT (${k})`); } } }
     row.notes.push(`travel ×${KNOBS.travelLegs} ${KNOBS.travelTerrain}`);
   }
   if (KNOBS.raidRounds > 0) {
-    const pool = KNOBS.raidPool; let done = 0;
-    for (let i = 0; i < KNOBS.raidRounds; i++) { const need = 10 + Math.max(0, KNOBS.raidStaged); if ((F.bank[pool] || 0) >= need) { F.bank[pool] -= need; F.spentChannels.add(pool); done++; } }
-    row.notes.push(`raid rounds ${done}/${KNOBS.raidRounds} (${pool})`); if (done < KNOBS.raidRounds) row.notes.push(`raid SHORT (${pool})`);
+    // Engine truth (2026-09-12): a raid round needs 10 marks in the primary pool as a GATE (not a charge);
+    // what a round actually spends is the STAGED marks (+1 bonus per 2 OP × PRICE_MULT = 15 marks).
+    const pool = KNOBS.raidPool; let done = 0; const perBonus = Math.max(1, Math.round(20 * KNOBS.priceMult));
+    for (let i = 0; i < KNOBS.raidRounds; i++) { const stake = Math.max(0, KNOBS.raidStaged); if ((F.bank[pool] || 0) >= Math.max(10, stake)) { F.bank[pool] -= stake; if (stake) F.spentChannels.add(pool); done++; } }
+    row.notes.push(`raid rounds ${done}/${KNOBS.raidRounds} (${pool}${KNOBS.raidStaged ? `, staged ${KNOBS.raidStaged} → +${Math.ceil(KNOBS.raidStaged / perBonus)}` : ""})`); if (done < KNOBS.raidRounds) row.notes.push(`raid SHORT (${pool})`);
   }
   if (KNOBS.courtlyRounds > 0) {
     let done = 0; for (let i = 0; i < KNOBS.courtlyRounds; i++) { if ((F.bank.diplomacy || 0) >= 20) { F.bank.diplomacy -= 20; F.spentChannels.add("diplomacy"); done++; } }

@@ -368,8 +368,13 @@ function _mpo() { return game.bbttcc?.api?.op?.OP_TO_MARKS ?? game.fourththing?.
 // are STORED in marks, but the roll/DC bonus is ceil(staged OP / 2). Halving
 // raw marks handed +25 to a 5-OP stage — 10× the intended weight — on BOTH
 // the attacker bonus and the defender DC.
+// Staged-OP bonus price (OP economy ruling 2026-09-12): the design weight is "+1 per 2 OP staged"
+// (20 marks); the same ×0.75 the strategic rows and travel legs take makes it +1 per 15 marks.
+// api.raid.PRICE_MULT is the one policy; 0.75 is the fallback if throughput hasn't attached yet.
+function _rcPriceMult() { const m = Number(game?.bbttcc?.api?.raid?.PRICE_MULT); return (Number.isFinite(m) && m > 0) ? m : 0.75; }
 function stagedOpBonus(marks) {
-  return Math.ceil((Number(marks || 0) / _mpo()) / 2);
+  const per = Math.max(1, Math.round(_mpo() * 2 * _rcPriceMult()));   // marks per +1 (15 at ×0.75)
+  return Math.ceil(Number(marks || 0) / per);
 }
 // Marks are the unit everywhere (owner ruling 2026-09-06) — renders whole marks.
 function _rcOP(marks) {

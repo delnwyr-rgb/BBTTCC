@@ -145,7 +145,8 @@
     const room = Math.max(0, p.effectiveCap - p.size);
     if (room <= 0) return { ok: false, reason: `${f.name} is at capacity (${p.size}/${p.effectiveCap}${p.effectiveCap < p.cap ? ` — overextension caps the host at ${p.effectiveCap} of ${p.cap}` : ""}).`, band: b, pool: p };
     const t = Math.min(troops || room, room);
-    const costMarks = Math.ceil(t * MARKS_PER_TROOP * mult);
+    const priceMult = (() => { const m = Number(game?.bbttcc?.api?.raid?.PRICE_MULT); return (Number.isFinite(m) && m > 0) ? m : 0.75; })();   // OP economy ruling 2026-09-12
+    const costMarks = Math.max(t > 0 ? 1 : 0, Math.ceil(t * MARKS_PER_TROOP * mult * priceMult));
     const { split, shortfall } = _autoSplit(f, costMarks);
     return { ok: shortfall <= 0, troops: t, room, costMarks, band: b, mult, split, shortfall, pool: p,
              reason: shortfall > 0 ? `${f.name} can't pay ${costMarks} marks — short ${shortfall} marks across all banks.` : undefined };

@@ -19,6 +19,12 @@
 
   // --- Config ----------------------------------------------------------------
   // Costs are MARKS (1 OP = 10 marks). Per-step terrain cost = N OP × 10.
+// OP economy price policy (owner ruling 2026-09-12): the multiplier strategic-throughput publishes
+// as api.raid.PRICE_MULT (0.75) applies to travel leg costs too. TERRAIN_TABLE stays in BASE
+// marks (the preview + sim read it); the multiplier lands once when a leg's ctx.cost is built,
+// before Ley Gate discount, free passage and costSet overrides.
+function _pricePolicyMult() { const m = Number(game?.bbttcc?.api?.raid?.PRICE_MULT); return (Number.isFinite(m) && m > 0) ? m : 0.75; }
+function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {}; for (const [k, v] of Object.entries(cost || {})) { const n = Number(v) || 0; out[k] = n > 0 ? Math.max(1, Math.round(n * m)) : 0; } return out; }
 const TERRAIN_TABLE = {
     "plains":        { cost: { economy:10 }, tier:1, bias:"balanced" },
     "grasslands":    { cost: { economy:10 }, tier:1, bias:"balanced" },
@@ -917,7 +923,7 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
       factionId, actor, from, to,
       terrainKey: key,
       terrainTier: _resolveTerrainTierFromCampaign(key, spec.tier),
-      cost: clone(spec.cost),
+      cost: _applyPricePolicy(clone(spec.cost)),   // OP economy ruling 2026-09-12: travel legs take the same ×0.75 as strategic rows
       crew: actor.getFlag(MOD_FCT, "crew") || [],
       preventHazard: false,
       dcMod: Number(dcModOverride) || 0,
