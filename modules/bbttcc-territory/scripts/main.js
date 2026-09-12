@@ -1751,7 +1751,7 @@ function computeEffectiveResources(base, sephirotName, modifiers){
  * callable from any modifier writer. Manual-override hexes keep their hand-set
  * resources (the save's rule); only calc/effectiveCached refresh for them.
  * -------------------------------------------------------------------------------------- */
-async function recomputeHexResources(hexDocOrUuid, { source = "recompute" } = {}) {
+async function recomputeHexResources(hexDocOrUuid, { source = "recompute", dryRun = false } = {}) {
   const doc = (typeof hexDocOrUuid === "string") ? await fromUuid(hexDocOrUuid) : (hexDocOrUuid?.document ?? hexDocOrUuid);
   if (!doc?.update) return { ok:false, error:"hex not found" };
   const tf = foundry.utils.getProperty(doc, `flags.${MOD}`) ?? {};
@@ -1769,7 +1769,9 @@ async function recomputeHexResources(hexDocOrUuid, { source = "recompute" } = {}
   let effectiveCached = tf.effectiveCached; try { effectiveCached = resourcesToOP(resources, flowState); } catch (_e) {}
   const same = JSON.stringify(resources) === JSON.stringify(tf.resources || {})
     && JSON.stringify(calc.multipliers) === JSON.stringify(tf.calc?.multipliers || {});
-  if (same) return { ok:true, changed:false, resources };
+  const report = { ok:true, changed:!same, manual, resources, before: tf.resources || {}, base: vector, multipliers: calc.multipliers, storedMultipliers: tf.calc?.multipliers || null, type: typeKey, size: sizeKey, sephirot: selName || null };
+  if (same) return Object.assign(report, { changed:false });
+  if (dryRun) return report;   // audit-hex-resources.macro.js: compute only, write nothing
   await doc.update({
     [`flags.${MOD}.resources`]: resources,
     [`flags.${MOD}.sephirotBonus`]: calc.added,
@@ -1778,7 +1780,7 @@ async function recomputeHexResources(hexDocOrUuid, { source = "recompute" } = {}
     [`flags.${MOD}.effectiveAt`]: Date.now()
   }, { parent: doc.parent });
   console.log(`[${MOD}] hex "${tf.name || doc.id}" resources recomputed (${source})`, { multipliers: calc.multipliers, resources });
-  return { ok:true, changed:true, resources, multipliers: calc.multipliers };
+  return report;
 }
 
 /* ---------------- Ritual → alignment coupling (owner ruling 2026-09-07) ----------------
