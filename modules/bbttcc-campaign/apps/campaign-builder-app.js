@@ -540,6 +540,25 @@ function _buildFlowGraph(campaign, opts) {
     }
   }
 
+  // Director CHAINS (2026-09-13, live-caught on The Valhaulan Spine): chain beats route by
+  // storyChain order, not by choices, so a chain quest charted as six disconnected roots (and
+  // the followed view sat off-screen). Link consecutive beats of each chain, in quest order —
+  // the order the Story Director fires them — so the chain reads as the rail it is.
+  {
+    const chains = {};
+    for (const b of beats) { const ch = String(b?.storyChain || b?.inject?.storyChain || "").trim(); if (ch) (chains[ch] = chains[ch] || []).push(b); }
+    for (const [ch, list] of Object.entries(chains)) {
+      list.sort((a, b) => seqOf(a) - seqOf(b));
+      for (let i = 0; i + 1 < list.length; i++) {
+        const from = String(list[i].id), to = String(list[i + 1].id);
+        if ((adj[from] || []).includes(to)) continue;
+        edges.push({ from, to, kind: "chain", label: ch.replace(/_/g, " ") });
+        (adj[from] = adj[from] || []).push(to);
+        inDeg[to] = (inDeg[to] || 0) + 1;
+      }
+    }
+  }
+
   // Root: the campaign's opening beat if it belongs here; else the earliest
   // beat (quest order) nothing inside the quest routes INTO; else the earliest.
   let rootId = null;
@@ -1505,6 +1524,29 @@ const activeCampaignId = _getActiveCampaignId();
               [run(qGated, "Run it anyway (override the gate)")],
               `next in the quest's canonical order after “${lastName}” waits for: <b>${whyOf(qGated)}</b> — usually that's the design doing its job`);
           }
+        } else if ((() => {
+          // The Director's next word (2026-09-13): when the story stands in a chain quest, the chain's
+          // next unfired beat IS what happens next — the Story Director offers it at the next turn tick
+          // or beat seam. The quest-order fallback never saw it (routing beats are dialogueOffer:false).
+          try {
+            const lq2 = anchor ? String(anchor.questId || "").trim() : "";
+            const chainBeats = beats.filter(b => String(b.questId || "").trim() === lq2 && String(b?.storyChain || b?.inject?.storyChain || "").trim());
+            if (!chainBeats.length) return false;
+            chainBeats.sort((a, b) => seqOf(a) - seqOf(b));
+            const nextC = chainBeats.find(b => !firedSet.has(String(b.id)));
+            if (!nextC) return false;
+            const ready = runtime.byId[String(nextC.id)]?.state === "ready";
+            const chainName = String(nextC.storyChain || nextC.inject?.storyChain || "").replace(/_/g, " ");
+            let press = null, thr = null;
+            try { press = Number(game.settings.get("bbttcc-campaign", "directorState")?.pressure); thr = Number(game.settings.get("bbttcc-campaign", "director.pressureThreshold")); } catch (_eP) {}
+            const pressTxt = (Number.isFinite(press) && Number.isFinite(thr)) ? ` (pressure ${press}/${thr}${press >= thr ? " — due" : ""})` : "";
+            hero = card(ready ? "🎙 THE DIRECTOR'S NEXT WORD" : "🎙 THE DIRECTOR'S NEXT WORD — waiting at its gate", nextC.label || nextC.id, nextC,
+              [run(nextC, ready ? "Run it now (the Director would offer it at the next tick)" : "Run it anyway (override the gate)")],
+              `next on the <b>${esc(chainName)}</b> chain${lastName ? ` after “${lastName}”` : ""} — the Story Director offers it at the next turn tick or beat seam${esc(pressTxt)}.` + (ready ? "" : ` Waits for: <b>${whyOf(nextC)}</b>`));
+            return true;
+          } catch (_eC) { return false; }
+        })()) {
+          // hero set above
         } else if (revisits.length) {
           const r0 = revisits[0];
           hero = card("↺ THE DOOR'S STILL OPEN", r0.label || r0.id, r0, [run(r0, "Return there")],
@@ -1654,7 +1696,9 @@ const activeCampaignId = _getActiveCampaignId();
         const qd = sit.questDefs[qid] || null; const name = e.questName || sit.questNames[qid] || qid;
         const qBeats = beatsArr.filter(b => _flowQuestIdOf(b) === qid).sort((a, b) => { const A = ordKey(a), B = ordKey(b); return A[0] - B[0] || A[1] - B[1]; });
         const fired = qBeats.filter(b => sit.firedSet.has(String(b.id))).length;
-        const unfired = qBeats.filter(b => !sit.firedSet.has(String(b.id)) && b.dialogueOffer !== false && !b.pacing?.ambient);
+        const isChainBeat = b => !!String(b?.storyChain || b?.inject?.storyChain || "").trim();
+        // dialogueOffer:false means "never OFFERED in conversation" — a Director chain beat is still the quest's next step (2026-09-13)
+        const unfired = qBeats.filter(b => !sit.firedSet.has(String(b.id)) && (b.dialogueOffer !== false || isChainBeat(b)) && !b.pacing?.ambient);
         const next = unfired.find(b => runtime.byId[String(b.id)]?.state === "ready") || unfired[0] || null;
         const eligible = next ? runtime.byId[String(next.id)]?.state === "ready" : false;
         const pct = qBeats.length ? Math.round((fired / qBeats.length) * 100) : 0;
@@ -1812,6 +1856,9 @@ const activeCampaignId = _getActiveCampaignId();
           : (questsWithBeats.keys().next().value || null);
       }
       const questId = this.flowQuestId;
+      // A different quest = a different graph: a pan/zoom kept from the last one leaves the new
+      // chart off-screen (2026-09-13: blank canvas after the story stepped into the Spine).
+      if (this._flowLastQuestId !== questId) { this._flowLastQuestId = questId; this._flowResetView(); }
 
       const graph = _buildFlowGraph(campaign, {
         questId,
@@ -2048,6 +2095,7 @@ const activeCampaignId = _getActiveCampaignId();
         else if (e.kind === "failure") { stroke = "rgba(239,68,68,0.45)"; marker = "url(#bbttcc-arrow-failure)"; }
         else if (e.kind === "choice_fail") { dash = "6 5"; stroke = "rgba(239,68,68,0.30)"; }
         else if (e.kind === "choice") { dash = "6 5"; stroke = "rgba(148,163,184,0.30)"; }
+        else if (e.kind === "chain") { dash = "2 6"; stroke = "rgba(77,184,176,0.55)"; }   // Director chain: fires in this order
         // Light the road actually travelled / offered.
         const litFrom = graphNodeById[e.from]?.rt?.fired;
         const litTo = graphNodeById[e.to]?.rt?.fired || nextSet.has(e.to);
