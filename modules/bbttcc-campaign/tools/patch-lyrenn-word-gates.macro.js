@@ -17,7 +17,7 @@
  * chat card. Idempotent. Backs up `campaigns` + `directorState` to downloads first.
  */
 (async () => {
-  const DRY_RUN = true;                          // ← set false to apply
+  const DRY_RUN = false;                          // ← set false to apply
   const NS = "bbttcc-campaign", MODF = "bbttcc-factions";
   const GATES = {
     lyrenn_word_treeline: "quest_feX6WHsBXuVbtjMM",   // Lyrenn - The Forest Will Not Be Fought
@@ -53,7 +53,7 @@
   }
 
   // 2) coalition tracks: the three Lyrenn quests are COMPLETED
-  const factionIds = [].concat(camp.factionIds || [], camp.factionId ? [camp.factionId] : []);
+  const factionIds = [...new Set([].concat(camp.factionIds || [], camp.factionId ? [camp.factionId] : []).map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean))];   // dedupe: factionId is also in factionIds
   const trackWrites = [];
   for (const fid of factionIds) {
     const F = game.actors.get(String(fid).replace(/^Actor\./, "")); if (!F) continue;

@@ -6214,6 +6214,14 @@ async function _postTalkInvitation(actor, beats = []) {
   try {
     const esc = foundry.utils.escapeHTML;
     const first = Array.isArray(beats) ? beats[0] : beats;
+    // One open card per moment (2026-09-13, live-caught: five Treeline cards from one town exit —
+    // several scans outran the first invited write). If an unaccepted card for this NPC already
+    // carries any of these beats, it IS the invitation.
+    try {
+      const ids = new Set((Array.isArray(beats) ? beats : [beats]).map(b => String(b?.id || "")).filter(Boolean));
+      const dup = (game.messages?.contents || []).find(m => { const f = m.getFlag?.(MOD_ID, "talkInvite"); return f && !f.accepted && String(f.actorId) === String(actor?.id) && (Array.isArray(f.beatIds) ? f.beatIds : []).some(id => ids.has(String(id))); });
+      if (dup) { log(`[dialogue] invitation for ${actor?.name} already open (card ${dup.id}) — not posting again.`); return; }
+    } catch (_eDup) {}
     const line = _inviteLine(actor, first?.inviteText);
     const inviteText = line.text;
     await ChatMessage.create({
