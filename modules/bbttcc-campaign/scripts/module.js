@@ -6330,14 +6330,7 @@ function _wordOnTrack(beatId, factionId = "") {
   if (factionId) return holds(game.actors?.get?.(String(factionId)));
   return (game.actors?.contents || []).some(a => a?.flags?.["bbttcc-factions"]?.quests && holds(a));
 }
-function _inviteBeatOpen(beatId, state, campaign, factionId = "") {
-  const beat = (campaign?.beats || []).find(b => String(b?.id) === String(beatId));
-  if (!beat) return null;
-  if (state?.firedStoryBeats?.[beatId] || state?.dialogueFired?.[beatId]) return null;
-  if (_wordOnTrack(beatId, factionId)) return null;   // answered — it is a quest on the track
-  return beat;
-}
-function _listOpenInvites({ factionId = "" } = {}) {
+async function _listOpenInvites({ factionId = "" } = {}) {
   const out = [];
   try {
     const campaignId = getActiveCampaignId();
@@ -6347,38 +6340,52 @@ function _listOpenInvites({ factionId = "" } = {}) {
     // ONE row per CARD — the chat card's shape (live-caught 2026-09-12/13: a per-beat walk listed
     // every moment of Rowan's chain; a per-NPC merge hid Elsin's second card). New entries carry
     // meta.card/anchor; legacy ones cluster by actor + via + 30 s window.
+    // A card is ANSWERED when any of its beats was played (fired / enacted in conversation) or
+    // its Word sits on the coalition track — the untaken sibling branches of a finished quest do
+    // not keep the card open (Post Lyrenn v2: Elsin ×2 and Rowan ×5 leftovers). What is still on
+    // offer within an open card is what the dialogue engine itself still offers.
     const order = new Map((campaign.beats || []).map((b, i) => [String(b?.id), i]));
-    const groups = new Map();   // cardKey → { actor, beats:[{beatId, beat, meta, idx}] }
+    const groups = new Map();   // cardKey → { actor, beats:[{beatId, beat, meta, idx, played}] }
     for (const [beatId, meta] of Object.entries(state.invited || {})) {
       const beat = (campaign.beats || []).find(b => String(b?.id) === String(beatId));
       if (!beat) continue;
-      if (state.firedStoryBeats?.[beatId] || state.dialogueFired?.[beatId]) continue;   // played — not an open moment
       const actorId = String(beat.speakerActorId || "").trim();
       const actor = game.actors?.get?.(actorId);
       if (!actor) continue;
       const key = String(meta?.card || `${actorId}:${meta?.via || "auto"}:${Math.floor((Number(meta?.ts) || 0) / 30000)}`);
       if (!groups.has(key)) groups.set(key, { actor, beats: [] });
-      groups.get(key).beats.push({ beatId, beat, meta, idx: order.get(String(beatId)) ?? 1e9 });
+      const played = !!(state.firedStoryBeats?.[beatId] || state.dialogueFired?.[beatId]);
+      groups.get(key).beats.push({ beatId, beat, meta, idx: order.get(String(beatId)) ?? 1e9, played });
     }
+    const offerableByActor = new Map();
     for (const [key, g] of groups) {
-      if (g.beats.some(x => _wordOnTrack(x.beatId, factionId))) continue;   // answered — a quest on the track
-      g.beats.sort((a, b) => a.idx - b.idx);
+      if (g.beats.some(x => x.played || _wordOnTrack(x.beatId, factionId))) continue;   // answered
+      const sid = String(g.actor.id);
+      if (!offerableByActor.has(sid)) {
+        let ids = null;
+        try { ids = new Set((await _dialogueOfferableBeats(sid, {})).map(r => String(r?.beat?.id || ""))); } catch (_eO) { ids = null; }
+        offerableByActor.set(sid, ids);
+      }
+      const offer = offerableByActor.get(sid);
+      const open = offer ? g.beats.filter(x => offer.has(x.beatId)) : g.beats.slice();
+      if (!open.length) continue;   // nothing the engine still offers — the moment moved on
+      open.sort((a, b) => a.idx - b.idx);
       // Anchor = the beat the card seals on: recorded meta.anchor, else the open card that carries
-      // this group's beats, else the earliest authored beat.
-      let anchor = g.beats.find(x => x.meta?.anchor && String(x.meta.anchor) === x.beatId) || null;
+      // this group's beats, else the earliest authored beat still on offer.
+      let anchor = open.find(x => x.meta?.anchor && String(x.meta.anchor) === x.beatId) || null;
       if (!anchor) {
         try {
           const ids = new Set(g.beats.map(x => x.beatId));
           const card = (game.messages?.contents || []).find(m => { const f = m.getFlag?.(MOD_ID, "talkInvite"); return f && !f.accepted && (Array.isArray(f.beatIds) ? f.beatIds : []).some(id => ids.has(String(id))); });
           const first = card ? String((card.getFlag(MOD_ID, "talkInvite").beatIds || [])[0] || "") : "";
-          if (first) anchor = g.beats.find(x => x.beatId === first) || null;
+          if (first) anchor = open.find(x => x.beatId === first) || null;
         } catch (_e) {}
       }
-      anchor = anchor || g.beats[0];
+      anchor = anchor || open[0];
       const { actor } = g; const beat = anchor.beat;
       const line = _inviteLine(actor, beat.inviteText);
-      const sid = String(beat.sceneId || "").replace(/^Scene\./, "").trim();
-      const sceneName = sid ? String(game.scenes?.get?.(sid)?.name || "").trim() : "";
+      const sid2 = String(beat.sceneId || "").replace(/^Scene\./, "").trim();
+      const sceneName = sid2 ? String(game.scenes?.get?.(sid2)?.name || "").trim() : "";
       const req = Array.isArray(beat.inject?.requires) ? beat.inject.requires : (beat.inject?.requires ? [beat.inject.requires] : []);
       const act = req.find(r => r && r.flag === "storyPhase" && Number.isFinite(Number(r.gte)))?.gte ?? null;
       out.push({
@@ -6387,7 +6394,7 @@ function _listOpenInvites({ factionId = "" } = {}) {
         lineHtml: line.html, linePlain: line.plain,
         where: sceneName || String(beat.label || "").split(/\s+[—–]\s+/)[0].trim() || "",
         regarding: String(beat.label || ""), act: act != null ? Number(act) : null,
-        moments: g.beats.map(x => ({ beatId: x.beatId, label: String(x.beat.label || x.beatId) })),
+        moments: open.map(x => ({ beatId: x.beatId, label: String(x.beat.label || x.beatId) })),
         invitedTs: Math.max(...g.beats.map(x => Number(x.meta?.ts) || 0)), via: String(anchor.meta?.via || "")
       });
     }
@@ -6416,14 +6423,10 @@ function _registerInviteGmExec() {
       if (!game.user?.isGM) throw new Error("not a GM seat");
       if (!meta?.local && !_invitesPlayerAcceptAllowed()) throw new Error("player acceptance is off (setting invites.playerAccept)");
       const beatId = String(payload?.beatId || "").trim();
-      const state = _readDirectorState();
-      if (!beatId || !state.invited?.[beatId]) throw new Error("that invitation is not open");
-      const campaignId = getActiveCampaignId();
-      const campaign = campaignId ? getCampaign(campaignId) : null;
-      const beat = _inviteBeatOpen(beatId, state, campaign);
-      if (!beat) throw new Error("that invitation has already been answered");
-      // The beat's own speaker is the authority — the payload's actorId is not trusted.
-      return (await _acceptInvite({ actorId: String(beat.speakerActorId || "").trim(), beatId, byName: meta?.fromUserName || "" })) || null;
+      const open = (await _listOpenInvites({})).find(i => String(i.beatId) === beatId || (i.moments || []).some(m => String(m.beatId) === beatId));
+      if (!beatId || !open) throw new Error("that invitation is not open (already answered, or the moment moved on)");
+      // The card's own speaker/anchor is the authority — the payload's actorId is not trusted.
+      return (await _acceptInvite({ actorId: String(open.actorId), beatId: String(open.beatId), byName: meta?.fromUserName || "" })) || null;
     });
   } catch (e) { warn("[invites] gmExec register failed:", e); }
 }
