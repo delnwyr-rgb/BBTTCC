@@ -1762,10 +1762,23 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     let scheduledOP = { changed:false, rows:[] };
     if (apply) scheduledOP = await applyScheduledOPBonuses();
 
-    // Cadence tier floor BEFORE regen (2026-09-12): the Director's end-of-turn reconcile lifted the
-    // coalition to T1 only after income had already clamped against T0 caps — turn 1 of an act
-    // threw away every full channel's income. Awaited here so caps are right when income lands.
-    if (apply) { try { const rc = game.bbttcc?.api?.campaign?.director?.reconcileLevels; if (typeof rc === "function") await rc({ reason: "pre-regen" }); } catch (e) { warn("pre-regen tier reconcile failed (non-fatal)", e); } }
+    // Phase door + cadence tier floor BEFORE regen (2026-09-12, owner ruling, sim'd first):
+    // the calendar hard doors are opened against the turn this Advance PRODUCES (cur + 1) —
+    // the Act's tier floor then raises opCaps before income lands. The old order (door at
+    // advanceTurn:end) let turn 1 of a new act clamp every full channel's income against the
+    // old tier's caps (Mark 5 cap_clamp). The end-of-turn door stays as a safety net.
+    if (apply) {
+      const director = game.bbttcc?.api?.campaign?.director;
+      try {
+        if (typeof director?.openCalendarDoors === "function") {
+          const cur = Math.max(0, Math.floor(Number(game.bbttcc?.api?.world?.getState?.()?.turn || 0) || 0));
+          const doors = await director.openCalendarDoors({ turn: cur + 1, via: "pre-regen" });
+          if (doors?.opened?.length) log(`pre-regen calendar door opened → phase ${doors.opened.join(",")} (turn ${cur} → ${cur + 1})`);
+        }
+      } catch (e) { warn("pre-regen calendar door failed (non-fatal)", e); }
+      try { if (typeof director?.reconcileLevels === "function") await director.reconcileLevels({ reason: "pre-regen" }); }
+      catch (e) { warn("pre-regen tier reconcile failed (non-fatal)", e); }
+    }
 
     let regen = { changed:false, rows:[] };
     if (apply) regen = await advanceOPRegen({ apply:true, deferCapClamp:true });

@@ -69,7 +69,9 @@ const KNOBS = {
   rewardEvery:      num("reward-every", 2),
   gearEvery:        num("gear-every", 3),            // gear policy: buy every N turns
   gearMarks:        num("gear-marks", null),         // default = tier-1 weapon + fee from rfi-pricing
-  tierFloorTurn:    num("tier-floor-turn", 2),       // Director lifts coalition to T1 at this turn (Act 2)
+  tierFloorTurn:    num("tier-floor-turn", 2),       // calendar hard door: WORLD turn at which the Director lifts the coalition to T1 (campaign PHASE_CALENDAR_DOORS [2,2])
+  startTurn:        num("start-turn", 1),            // world turn the sim starts on (the Act 2 golden save is turn 1); advance #t makes world turn startTurn + t
+  doorOrder:        String(flag("door-order", "pre")),   // pre = the door opens against the UPCOMING turn before regen (engine 2026-09-12); post = at advanceTurn:end (the old order — turn-1 income clamped at T0 caps)
   maxHexes:         num("max-hexes", 8),
   travelLegs:       num("travel-legs", 0),           // legs/turn into hexes that are NOT free passage (own/allied dev-6 hexes are free)
   travelTerrain:    String(flag("travel-terrain", "plains")),   // TERRAIN_TABLE key (hex-travel.js) — plains 10e · forest 10e+10i · mountains 20e+10l · sea 30e+20l
@@ -362,6 +364,11 @@ function runTurn(F, policy, t, rand) {
     }
   };
   row.optionsAtPlan = optionsCount(F, M.DAYS_PER_TURN);
+  // Calendar hard door (campaign _storyPhaseAdvance → PHASE_FLOORS → directorReconcileLevels → opCaps to the tier band).
+  // "pre": the turn driver opens the door against the turn this Advance produces, BEFORE income lands (2026-09-12).
+  const worldTurnNext = KNOBS.startTurn + t;
+  const openDoor = (when) => { if (worldTurnNext >= KNOBS.tierFloorTurn && F.tier < 1) { F.tier = 1; row.notes.push(`door → T1 (${when})`); } };
+  if (KNOBS.doorOrder === "pre") openDoor("pre-regen");
   if (KNOBS.spendOrder === "before") applyPlans();
   // regen (turn-driver advanceOPRegen): matrix income × loyalty pct (2026-09-10) × overextension logistics mult, clamp to caps
   const inc = factionIncome(F); const pct = KNOBS.loyaltyPenalty ? F.pendingPct : 0;
@@ -370,8 +377,9 @@ function runTurn(F, policy, t, rand) {
   if (policy.reward && KNOBS.rewardMarks > 0 && t % KNOBS.rewardEvery === 0) { const scarce = OPK.slice().sort((a, b) => F.bank[a] - F.bank[b])[0]; F.bank[scarce] = Math.min(caps(F), F.bank[scarce] + KNOBS.rewardMarks); row.notes.push(`reward +${KNOBS.rewardMarks} ${scarce}`); }
   F.pendingPct = 0;
   if (KNOBS.spendOrder === "after") applyPlans();
-  for (const k of OPK) F.bank[k] = Math.min(caps(F), F.bank[k]);   // cap clamp after planned spend
-  if (t >= KNOBS.tierFloorTurn && F.tier < 1) F.tier = 1;   // Director tier floor (Act 2)
+  { let lost = 0; for (const k of OPK) { const over = F.bank[k] - caps(F); if (over > 0) { lost += over; F.bank[k] = caps(F); } }   // cap clamp after planned spend (engine clampBanksToCaps)
+    row.clampLost = lost; if (lost) row.notes.push(`cap_clamp −${lost}`); }
+  if (KNOBS.doorOrder !== "pre") openDoor("advanceTurn:end");   // the old order: caps rise only after this Advance's clamp
   // tracks: hex loyalty pull (2026-09-12) → drift → stability penalty for NEXT turn
   { const HEX_MOD_LOYALTY = parseConst(S.econ, "HEX_MOD_LOYALTY", { "loyal population":2, "hostile population":-2, "well-maintained":1, "damaged infrastructure":-1 }, "HEX_MOD_LOYALTY (territory main.js facts)");
     const score = h => (h.loyaltyMods || 0) + h.modifiers.reduce((a, m) => a + (HEX_MOD_LOYALTY[String(m).toLowerCase()] || 0), 0);
@@ -439,7 +447,7 @@ function parity(savePath, factionName) {
 
 /* ───────────────────── run ───────────────────── */
 function header() {
-  console.log(`sim-op-economy — ${KNOBS.turns} turns · max hexes ${KNOBS.maxHexes} · price×${KNOBS.priceMult} (engine ${ENGINE_PRICE_MULT}) (economy×${KNOBS.econPriceMult}) · occupation×${KNOBS.occupationMult} (engine phase ${ENGINE_OCCUPATION_MULT}) · spend ${KNOBS.spendOrder} regen · sprawl ^${E.LOGI.SPRAWL_EXP} over ${E.LOGI.SPRAWL_THRESHOLD} · recipes ${KNOBS.recipes ? "ON" : "off"} · tier floor T1 @ turn ${KNOBS.tierFloorTurn} · gear ${GEAR_MARKS} marks · lanes ${KNOBS.lanes ? "on" : "OFF"}${KNOBS.travelLegs ? ` · travel ${KNOBS.travelLegs}×${KNOBS.travelTerrain}/turn` : ""}${KNOBS.raidRounds ? ` · raid ${KNOBS.raidRounds} rounds/turn` : ""}${KNOBS.courtlyRounds ? ` · courtly ${KNOBS.courtlyRounds}/turn` : ""}`);
+  console.log(`sim-op-economy — ${KNOBS.turns} turns · max hexes ${KNOBS.maxHexes} · price×${KNOBS.priceMult} (engine ${ENGINE_PRICE_MULT}) (economy×${KNOBS.econPriceMult}) · occupation×${KNOBS.occupationMult} (engine phase ${ENGINE_OCCUPATION_MULT}) · spend ${KNOBS.spendOrder} regen · sprawl ^${E.LOGI.SPRAWL_EXP} over ${E.LOGI.SPRAWL_THRESHOLD} · recipes ${KNOBS.recipes ? "ON" : "off"} · door T1 @ world turn ${KNOBS.tierFloorTurn} (${KNOBS.doorOrder}-regen, start turn ${KNOBS.startTurn}) · gear ${GEAR_MARKS} marks · lanes ${KNOBS.lanes ? "on" : "OFF"}${KNOBS.travelLegs ? ` · travel ${KNOBS.travelLegs}×${KNOBS.travelTerrain}/turn` : ""}${KNOBS.raidRounds ? ` · raid ${KNOBS.raidRounds} rounds/turn` : ""}${KNOBS.courtlyRounds ? ` · courtly ${KNOBS.courtlyRounds}/turn` : ""}`);
   if (DRIFT.length) { console.log("DRIFT? engine constants not parsed (fallbacks in use):"); for (const d of DRIFT) console.log("  · " + d); }
   else console.log("engine constants: all parsed from source ✓");
 }

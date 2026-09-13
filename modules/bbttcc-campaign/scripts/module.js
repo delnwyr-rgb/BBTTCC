@@ -4287,18 +4287,12 @@ async function _onAdvanceTurnEndLedger(tctx) {
   // every applied turn (atlas 🔴 #11, fixed 2026-08-28).
   if (!game.user?.isGM) return;
 
-  // Phase Charter calendar doors: the clock keeps its own promises. If the
-  // world turn has reached a hard-door threshold and the phase lags, advance
-  // it (the GM whisper names the door; the authored summons beat is the
-  // narrative face — run it from the console when it appears).
-  try {
-    const tNow = _getTurnNumberSafe();
-    for (const [turnGte, phaseMin] of PHASE_CALENDAR_DOORS) {
-      if (tNow >= turnGte) await _storyPhaseAdvance(phaseMin, { via: `calendar hard door (turn ${tNow})` });
-    }
-  } catch (ePhaseCal) {
-    warn("[phase] calendar door check failed:", ePhaseCal);
-  }
+  // Phase Charter calendar doors — safety net. Since 2026-09-12 the turn driver
+  // opens the doors BEFORE regen against the turn it is about to produce (see
+  // _openCalendarDoors); this end-of-turn pass only catches a driver that
+  // skipped the pre-regen call (older driver, direct world.turn edits).
+  try { await _openCalendarDoors({ turn: _getTurnNumberSafe(), via: "advanceTurn:end" }); }
+  catch (ePhaseCal) { warn("[phase] calendar door check failed:", ePhaseCal); }
   if (!game.user?.isGM) return;
   const w = game.bbttcc?.api?.world;
   if (!w?.getTimeBudget || !w?.getState || !w?.setState) return;
@@ -4549,6 +4543,26 @@ const PHASE_NAMES = ["THE OFFICES", "SETTLING", "SPARKS", "THE WIDENING TRAIL", 
 const PHASE_FLOORS = { 2: { steward: 2, faction: 1 }, 3: { steward: 4, faction: 2 }, 4: { steward: 6, faction: 3 }, 5: { steward: 8, faction: 4 }, 6: { steward: 9, faction: 4 } };
 // Calendar hard doors (charter §2): turn threshold → minimum phase.
 const PHASE_CALENDAR_DOORS = [[2, 2], [6, 3], [10, 4], [14, 5]];
+
+// Open every calendar door the given world turn has reached. The clock keeps
+// its own promises: if the phase lags a hard-door threshold, advance it (the
+// GM whisper names the door; the authored summons beat is the narrative face).
+// 2026-09-12 (owner ruling, sim'd first): the turn driver calls this BEFORE
+// regen with the turn this Advance PRODUCES (cur + 1), so an act's tier floor
+// raises opCaps before income lands — the old end-of-turn door let turn-1
+// income of a new act clamp against the old tier's caps (Mark 5 cap_clamp).
+// Idempotent: _storyPhaseAdvance is monotonic, so re-running is a no-op.
+async function _openCalendarDoors({ turn = null, via = "calendar" } = {}) {
+  const out = { opened: [] };
+  if (!game.user?.isGM) return out;
+  const tNow = Number.isFinite(Number(turn)) ? Number(turn) : _getTurnNumberSafe();
+  for (const [turnGte, phaseMin] of PHASE_CALENDAR_DOORS) {
+    if (tNow < turnGte) continue;
+    const opened = await _storyPhaseAdvance(phaseMin, { via: `calendar hard door (turn ${tNow}, ${via})` });
+    if (opened) out.opened.push(phaseMin);
+  }
+  return out;
+}
 
 function _storyPhaseGet() {
   try { return Number(game.settings.get(MOD_ID, SETTING_STORY_PHASE)) || 0; } catch (_e) { return 0; }
@@ -8131,7 +8145,12 @@ Hooks.once("ready", () => {
   // turn too, so late joiners / reincarnated stewards snap back onto the curve.
   // 2026-09-12: the turn driver awaits this BEFORE regen so a cadence tier floor raises caps before
   // income lands (the end-of-turn reconcile alone let turn-1 income clamp against the old tier's caps).
-  try { game.bbttcc.api ??= {}; game.bbttcc.api.campaign ??= {}; game.bbttcc.api.campaign.director ??= {}; game.bbttcc.api.campaign.director.reconcileLevels = (opts = {}) => directorReconcileLevels(opts || {}); } catch (_e) {}
+  try {
+    game.bbttcc.api ??= {}; game.bbttcc.api.campaign ??= {}; game.bbttcc.api.campaign.director ??= {};
+    game.bbttcc.api.campaign.director.reconcileLevels = (opts = {}) => directorReconcileLevels(opts || {});
+    // Calendar doors on demand (turn driver, pre-regen, with the turn the Advance produces).
+    game.bbttcc.api.campaign.director.openCalendarDoors = (opts = {}) => _openCalendarDoors(opts || {});
+  } catch (_e) {}
   Hooks.on("bbttcc:advanceTurn:end", (tctx) => {
     try {
       if (!tctx || tctx.apply !== true) return;
