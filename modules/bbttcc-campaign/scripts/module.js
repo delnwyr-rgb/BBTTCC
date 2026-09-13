@@ -5415,7 +5415,8 @@ async function directorTick(opts = {}) {
           return { fired: null, reason: "gm_declined", offered: pick.id, turn };
         }
         await _mutateDirectorState(s => {
-          s.invited[pick.id] = { turn, ts: Date.now(), via: "director" };
+          // card + anchor (2026-09-13): one Quest Log invitation row per CARD, sealed on its anchor beat.
+          s.invited[pick.id] = { turn, ts: Date.now(), via: "director", card: `${speaker.id}:${Date.now()}`, anchor: pick.id };
           s.lastStoryTurn = turn;     // an invitation IS this turn's story movement
           s.pressure = 0;
         });
@@ -6290,26 +6291,34 @@ async function _acceptTalkInvitation(message) { return _acceptInvite({ message, 
 // Invitations tab can list them with an Accept button on ANY seat: a GM seat
 // accepts locally; a player seat relays to the primary GM through bbttcc-core
 // gmExec (setting invites.playerAccept locks it to GM clicks).
-function _inviteBeatOpen(beatId, state, campaign) {
+// Answered = the coalition TRACK holds the Word (any faction track, or the given faction's).
+// NOT the registry: after a restore the registry keeps word_ quests from other timelines
+// (16 in the registry, 7 on a track — 2026-09-13), and those hid every open invitation.
+function _wordOnTrack(beatId, factionId = "") {
+  const qid = `word_${beatId}`;
+  const holds = (a) => { const q = a?.flags?.["bbttcc-factions"]?.quests; return !!(q && (q.active?.[qid] || q.completed?.[qid] || q.archived?.[qid])); };
+  if (factionId) return holds(game.actors?.get?.(String(factionId)));
+  return (game.actors?.contents || []).some(a => a?.flags?.["bbttcc-factions"]?.quests && holds(a));
+}
+function _inviteBeatOpen(beatId, state, campaign, factionId = "") {
   const beat = (campaign?.beats || []).find(b => String(b?.id) === String(beatId));
   if (!beat) return null;
   if (state?.firedStoryBeats?.[beatId] || state?.dialogueFired?.[beatId]) return null;
-  if (getQuest(`word_${beatId}`)) return null;   // answered — it is a quest now
+  if (_wordOnTrack(beatId, factionId)) return null;   // answered — it is a quest on the track
   return beat;
 }
-function _listOpenInvites() {
+function _listOpenInvites({ factionId = "" } = {}) {
   const out = [];
   try {
     const campaignId = getActiveCampaignId();
     const campaign = campaignId ? getCampaign(campaignId) : null;
     if (!campaign) return out;
     const state = _readDirectorState();
-    // ONE invitation per NPC — the chat card's shape (2026-09-12, live-caught: the
-    // per-beat walk listed every moment of a chain as its own invitation). The
-    // card seals on its FIRST beat (word_<beatId>), so the group is answered when
-    // any of its still-unplayed beats already has that quest.
-    const groups = new Map();   // actorId → { actor, beats:[{beatId, beat, meta, idx}] }
+    // ONE row per CARD — the chat card's shape (live-caught 2026-09-12/13: a per-beat walk listed
+    // every moment of Rowan's chain; a per-NPC merge hid Elsin's second card). New entries carry
+    // meta.card/anchor; legacy ones cluster by actor + via + 30 s window.
     const order = new Map((campaign.beats || []).map((b, i) => [String(b?.id), i]));
+    const groups = new Map();   // cardKey → { actor, beats:[{beatId, beat, meta, idx}] }
     for (const [beatId, meta] of Object.entries(state.invited || {})) {
       const beat = (campaign.beats || []).find(b => String(b?.id) === String(beatId));
       if (!beat) continue;
@@ -6317,20 +6326,25 @@ function _listOpenInvites() {
       const actorId = String(beat.speakerActorId || "").trim();
       const actor = game.actors?.get?.(actorId);
       if (!actor) continue;
-      if (!groups.has(actorId)) groups.set(actorId, { actor, beats: [] });
-      groups.get(actorId).beats.push({ beatId, beat, meta, idx: order.get(String(beatId)) ?? 1e9 });
+      const key = String(meta?.card || `${actorId}:${meta?.via || "auto"}:${Math.floor((Number(meta?.ts) || 0) / 30000)}`);
+      if (!groups.has(key)) groups.set(key, { actor, beats: [] });
+      groups.get(key).beats.push({ beatId, beat, meta, idx: order.get(String(beatId)) ?? 1e9 });
     }
-    for (const [actorId, g] of groups) {
-      if (g.beats.some(x => getQuest(`word_${x.beatId}`))) continue;   // answered — it is a quest now
+    for (const [key, g] of groups) {
+      if (g.beats.some(x => _wordOnTrack(x.beatId, factionId))) continue;   // answered — a quest on the track
       g.beats.sort((a, b) => a.idx - b.idx);
-      // Anchor = the chat card's first beat when an open card for this NPC still exists (same quest name
-      // whichever button is clicked); else the earliest authored beat of the group.
-      let anchor = g.beats[0];
-      try {
-        const card = (game.messages?.contents || []).find(m => { const f = m.getFlag?.(MOD_ID, "talkInvite"); return f && !f.accepted && String(f.actorId) === actorId; });
-        const first = card ? String((Array.isArray(card.getFlag(MOD_ID, "talkInvite").beatIds) ? card.getFlag(MOD_ID, "talkInvite").beatIds : [])[0] || "") : "";
-        if (first) anchor = g.beats.find(x => x.beatId === first) || anchor;
-      } catch (_e) {}
+      // Anchor = the beat the card seals on: recorded meta.anchor, else the open card that carries
+      // this group's beats, else the earliest authored beat.
+      let anchor = g.beats.find(x => x.meta?.anchor && String(x.meta.anchor) === x.beatId) || null;
+      if (!anchor) {
+        try {
+          const ids = new Set(g.beats.map(x => x.beatId));
+          const card = (game.messages?.contents || []).find(m => { const f = m.getFlag?.(MOD_ID, "talkInvite"); return f && !f.accepted && (Array.isArray(f.beatIds) ? f.beatIds : []).some(id => ids.has(String(id))); });
+          const first = card ? String((card.getFlag(MOD_ID, "talkInvite").beatIds || [])[0] || "") : "";
+          if (first) anchor = g.beats.find(x => x.beatId === first) || null;
+        } catch (_e) {}
+      }
+      anchor = anchor || g.beats[0];
       const { actor } = g; const beat = anchor.beat;
       const line = _inviteLine(actor, beat.inviteText);
       const sid = String(beat.sceneId || "").replace(/^Scene\./, "").trim();
@@ -6338,8 +6352,8 @@ function _listOpenInvites() {
       const req = Array.isArray(beat.inject?.requires) ? beat.inject.requires : (beat.inject?.requires ? [beat.inject.requires] : []);
       const act = req.find(r => r && r.flag === "storyPhase" && Number.isFinite(Number(r.gte)))?.gte ?? null;
       out.push({
-        beatId: anchor.beatId, actorId: actor.id, actorName: actor.name, actorImg: String(actor.img || ""),
-        questName: g.beats.length > 1 ? `A Word from ${actor.name}` : _inviteQuestName(actor, beat),
+        card: key, beatId: anchor.beatId, actorId: actor.id, actorName: actor.name, actorImg: String(actor.img || ""),
+        questName: _inviteQuestName(actor, beat),
         lineHtml: line.html, linePlain: line.plain,
         where: sceneName || String(beat.label || "").split(/\s+[—–]\s+/)[0].trim() || "",
         regarding: String(beat.label || ""), act: act != null ? Number(act) : null,
@@ -6762,7 +6776,9 @@ function _onBeatResolvedInviteScan({ beat } = {}) {
             && !state.firedStoryBeats[b.id] && !state.dialogueFired[b.id]);
         if (!offerable.length) continue;
         await _mutateDirectorState(s => {
-          for (const b of offerable) s.invited[b.id] = { ts: Date.now(), via: "auto" };
+          // card + anchor (2026-09-13): the Quest Log lists one invitation per CARD; the card seals on beats[0].
+          const cardId = `${actor.id}:${Date.now()}`;
+          for (const b of offerable) s.invited[b.id] = { ts: Date.now(), via: "auto", card: cardId, anchor: offerable[0].id };
         });
         await _postTalkInvitation(actor, offerable);
         log(`[dialogue] invitation posted: ${actor.name} (${offerable.map(b => b.id).join(", ")})`);
@@ -7481,7 +7497,7 @@ function buildCampaignAPI() {
     // Open "wants a word" invitations as a surface (2026-09-12): list() for the
     // Quest Log's Invitations tab; accept({beatId}) from ANY seat (player → GM relay).
     invites: {
-      list: () => _listOpenInvites(),
+      list: (opts = {}) => _listOpenInvites(opts || {}),
       accept: (opts = {}) => _acceptInviteAnySeat(opts || {}),
       playerAcceptAllowed: () => _invitesPlayerAcceptAllowed()
     },

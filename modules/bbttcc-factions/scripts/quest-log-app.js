@@ -85,13 +85,13 @@
   // enumerates them (api.campaign.invites.list); they render as rows in an
   // Invitations tab with an Accept button on any seat — no more accept → scroll
   // → accept through the turn-advance chat traffic.
-  function readInvites() {
+  function readInvites(factionId) {
     try {
       const api = game.bbttcc?.api?.campaign?.invites;
-      const list = (api?.list ? api.list() : []) || [];
+      const list = (api?.list ? api.list({ factionId: String(factionId || "") }) : []) || [];
       const esc = foundry.utils.escapeHTML;
       return list.map(i => ({
-        questId: `invite:${i.actorId}`, isInvite: true, beatId: String(i.beatId || ""), actorId: String(i.actorId || ""),
+        questId: `invite:${i.card || i.beatId}`, isInvite: true, beatId: String(i.beatId || ""), actorId: String(i.actorId || ""),
         actorName: String(i.actorName || ""), status: "invited",
         name: String(i.questName || `A Word from ${i.actorName || "Someone"}`),
         momentCount: Array.isArray(i.moments) ? i.moments.length : 1,
@@ -200,7 +200,7 @@
       const reg = readRegistry();
       const track = faction ? readTrack(faction) : { active:{}, completed:{}, archived:{} };
 
-      const invites = readInvites();
+      const invites = readInvites(this.factionId);
       const active = rowsFromMap(reg, track.active, "active");
       const completed = rowsFromMap(reg, track.completed, "completed");
       const archived = rowsFromMap(reg, track.archived, "archived");
