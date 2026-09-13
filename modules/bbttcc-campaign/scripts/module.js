@@ -2514,7 +2514,7 @@ ${
 
                   const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
                   try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
-                  if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
+                  if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
                   if (!ok) await _offerRetryInChain(campaign, beat, ctx);
 
                   finish({
@@ -2557,7 +2557,7 @@ ${
 
                   const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
                   try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
-                  if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
+                  if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
                   if (!ok) await _offerRetryInChain(campaign, beat, ctx);
 
                   finish({
@@ -2647,7 +2647,7 @@ ${
                   : (ch.failNext || beat.outcomes?.failure || "");
 
                 try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
-                if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
+                if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
                 if (!res.ok) await _offerRetryInChain(campaign, beat, ctx);
 
                 finish({
@@ -2663,7 +2663,7 @@ ${
 // No check: route to next
               const nextId = ch.next || "";
               try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
-              if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
+              if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
 
               finish({
                 acted: true,
@@ -3202,6 +3202,41 @@ async function _appendAAEDecisionHistory(factionId, record, cap = 50) {
 // ---------------------------------------------------------------------------
 // Runtime execution
 // ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// World mutation + quest effects, ONCE per beat execution (2026-09-13, live-caught
+// at Lyrenn). executeBeat used to apply them at its TAIL — after `_runBeatDialog`
+// returned, i.e. after the chosen next beat and every beat beneath it had
+// finished. Repeatable town hubs ("Leave" → hub → next quest → …) only return
+// when the party finally exits the town, so the whole chain unwound at once,
+// deepest first: a quest's closing beat wrote "complete", then its parent
+// acceptance beat wrote "accept" and flipped the finished quest back to ACTIVE
+// (three Lyrenn quests, 10:25:50, four seconds, quest-id order). Same disease
+// the phaseAdvance closers and "A Word from X" had; same cure: apply at the
+// reply pick, before routing. Memo on ctx — the same ctx object flows from
+// executeBeat into _runBeatDialog / _enactChoiceCore, so the tail call is a
+// no-op for a beat that already applied at its pick.
+// ---------------------------------------------------------------------------
+async function _applyBeatEffectsOnce(campaign, beat, ctx = {}, { skipOpenTravel = false, at = "tail" } = {}) {
+  try {
+    if (!campaign || !beat?.id) return false;
+    if (!ctx || typeof ctx !== "object") ctx = {};
+    ctx.__beatFxApplied = ctx.__beatFxApplied || new Set();
+    if (ctx.__beatFxApplied.has(beat.id)) return false;
+    ctx.__beatFxApplied.add(beat.id);
+    try {
+      const wm = game.bbttcc?.api?.worldMutation;
+      if (wm?.applyWorldEffects) {
+        await wm.applyWorldEffects(beat, { source: "bbttcc-campaign", campaignId: campaign.id, campaignTitle: campaign.label, beatId: beat.id, skipOpenTravel });
+      }
+    } catch (eWm) { warn("World effects failed:", eWm); }
+    // Quest effects (Beat Editor -> World Effects -> Quest Effects)
+    try { await _applyQuestEffects(campaign, beat, ctx); } catch (eQuestFx) { warn("Quest effects failed:", eQuestFx); }
+    if (at === "pick" && (Array.isArray(beat?.worldEffects?.questEffects) && beat.worldEffects.questEffects.length))
+      log(`[effects] '${beat.id}' quest effects applied at the reply pick (before routing).`);
+    return true;
+  } catch (e) { warn("beat effects failed:", beat?.id, e); return false; }
+}
 
 async function executeBeat(campaign, beat, ctx = {}) {
   if (!beat) return;
@@ -3764,23 +3799,10 @@ async function executeBeat(campaign, beat, ctx = {}) {
 
   // World mutation (unchanged)
   try {
-    const wm = game.bbttcc?.api?.worldMutation;
-    if (wm?.applyWorldEffects) {
-      await wm.applyWorldEffects(beat, {
-        source: "bbttcc-campaign",
-        campaignId: campaign.id,
-        campaignTitle: campaign.label,
-        beatId: beat.id,
-        skipOpenTravel: openTravelApplied
-      });
-    }
-
-    // Quest effects (Beat Editor -> World Effects -> Quest Effects)
-    try {
-      await _applyQuestEffects(campaign, beat, ctx);
-    } catch (eQuestFx) {
-      warn("Quest effects failed:", eQuestFx);
-    }
+    // World mutation + quest effects — ONCE per execution; a dialog beat already applied
+    // them at the reply pick (see _applyBeatEffectsOnce), this is the tail fallback for
+    // beats that route nowhere.
+    await _applyBeatEffectsOnce(campaign, beat, ctx, { skipOpenTravel: openTravelApplied, at: "tail" });
 
     // Phase Charter closers (worldEffects.phaseAdvance) now apply AT ENTRY
     // (top of executeBeat, beside the fire-mark) — a closer that routes into
@@ -5836,7 +5858,7 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
       const ok = await _gmAdjudicate(label, body);
       const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
       try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
-      if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
+      if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
       return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch,
                check: { stat: String(ch.checkStat || "gm").trim().toLowerCase(), dc: _num(ch.checkDC, 0), ok: !!ok, kind: "gm" } };
     }
@@ -5876,7 +5898,7 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
     } catch (_eN) {}
     const nextId = res.ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
     try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
-    if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
+    if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
     return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch,
              check: { stat: res.stat, dc: res.dc, total: res.total, ok: res.ok, kind: res.kind, bonus: (res.bonus != null ? res.bonus : null) } };
   }
@@ -5884,7 +5906,7 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
   // No check: route to next
   const nextId = ch.next || "";
   try { await _answerSpeakerWord(beat, ch); } catch (_eAW) {}   // the word is answered at the pick, not at chain settle
-  if (nextId) await runBeat(campaign.id, nextId, _chainCtxFrom(ctx));
+  if (nextId) { await _applyBeatEffectsOnce(campaign, beat, ctx, { at: "pick" }); await runBeat(campaign.id, nextId, _chainCtxFrom(ctx)); }
   return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch };
 }
 
