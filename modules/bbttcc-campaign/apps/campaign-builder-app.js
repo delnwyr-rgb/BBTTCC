@@ -1537,6 +1537,53 @@ const activeCampaignId = _getActiveCampaignId();
             if (!nextC) return false;
             const ready = runtime.byId[String(nextC.id)]?.state === "ready";
             const chainName = String(nextC.storyChain || nextC.inject?.storyChain || "").replace(/_/g, " ");
+            // THE ROAD (owner ruling 2026-09-13): a chain beat that waits on a QUEST is never to be
+            // overridden — the quest is the road, and the road starts with the Words the table already
+            // holds. Resolve each unmet quest gate to: the quest's next step if accepted, else its start
+            // beat, plus the open invitations for its town (the NPCs who will walk them there).
+            const roads = [];
+            try {
+              const reqs = Array.isArray(nextC.inject?.requires) ? nextC.inject.requires : (nextC.inject?.requires ? [nextC.inject.requires] : []);
+              const coalition = (() => { try { const ids = [].concat(campaign?.factionIds || [], campaign?.factionId ? [campaign.factionId] : []).map(x => String(x || "").replace(/^Actor\./, "")); return ids.map(id => game.actors?.get?.(id)).filter(Boolean); } catch (_e) { return []; } })();
+              const bucketOf = (qid) => { for (const F of coalition) { const q = F.flags?.["bbttcc-factions"]?.quests || {}; for (const k of ["active", "completed", "archived"]) if (q[k]?.[qid]) return k; } return null; };
+              const invited = ds.invited || {};
+              for (const c of reqs) {
+                if (!c || c.questBucket == null) continue;
+                const qid = String(c.questBucket); const cur = bucketOf(qid);
+                const wantIs = c.is != null ? String(c.is) : null, wantNot = c.isNot != null ? String(c.isNot) : null;
+                const met = wantIs != null ? cur === wantIs : (wantNot != null ? cur !== wantNot : true);
+                if (met) continue;
+                const qBeats = beats.filter(b => String(b.questId || "").trim() === qid).sort((a, b) => seqOf(a) - seqOf(b));
+                if (!qBeats.length) continue;
+                const qn = questNames[qid] || qid;
+                if (cur === "active") {
+                  const step = qBeats.find(b => !firedSet.has(String(b.id)) && b.dialogueOffer !== false && !isAmbientBeat(b)) || qBeats.find(b => !firedSet.has(String(b.id)));
+                  if (step) roads.push({ id: String(step.id), label: `${qn} — next: ${step.label || step.id}`, icon: runtime.byId[String(step.id)]?.state === "ready" ? "⚡" : "⛩" });
+                } else {
+                  const start = qBeats.find(b => String(b.questRole || "") === "start") || qBeats[0];
+                  roads.push({ id: String(start.id), label: `${qn} — begins: ${start.label || start.id}`, icon: runtime.byId[String(start.id)]?.state === "ready" ? "⚡" : "⛩" });
+                  // its town: the quest the start beat needs active → that town's open Words
+                  const sReqs = Array.isArray(start.inject?.requires) ? start.inject.requires : [];
+                  const townQ = sReqs.find(r => r && r.questBucket != null && String(r.is || "") === "active");
+                  if (townQ) {
+                    const tq = String(townQ.questBucket);
+                    for (const b of beats) {
+                      if (String(b.questId || "").trim() !== tq || !String(b.speakerActorId || "").trim()) continue;
+                      if (!invited[String(b.id)] || firedSet.has(String(b.id))) continue;
+                      const who = game.actors?.get?.(String(b.speakerActorId))?.name || "someone";
+                      if (roads.some(r => r.who === who)) continue;
+                      roads.push({ id: String(b.id), who, label: `answer ${who}'s word — ${questNames[tq] || tq}`, icon: "✉" });
+                    }
+                  }
+                }
+              }
+            } catch (_eRoad) {}
+            if (roads.length) {
+              hero = card("🎙 THE DIRECTOR'S NEXT WORD — down the road", nextC.label || nextC.id, nextC, [],
+                `next on the <b>${esc(chainName)}</b> chain${lastName ? ` after “${lastName}”` : ""} — it waits for <b>${whyOf(nextC)}</b>. No override: the quest is the road, and it starts with what the table already holds.`);
+              hero.roads = roads;
+              return true;
+            }
             let press = null, thr = null;
             try { press = Number(game.settings.get("bbttcc-campaign", "directorState")?.pressure); thr = Number(game.settings.get("bbttcc-campaign", "director.pressureThreshold")); } catch (_eP) {}
             const pressTxt = (Number.isFinite(press) && Number.isFinite(thr)) ? ` (pressure ${press}/${thr}${press >= thr ? " — due" : ""})` : "";
@@ -1625,6 +1672,7 @@ const activeCampaignId = _getActiveCampaignId();
       (h.quest ? `<div class="q">${esc(h.quest)}</div>` : "") +
       h.runs.map(r => `<button type="button" class="bbttcc-now-hero-run" data-run="${esc(r.id)}"${r.force ? ` data-force="1"` : ""}>▶ ${esc(r.text)}</button>`).join("") +
       (h.note ? `<div class="alt">${h.note}</div>` : "") +
+      (Array.isArray(h.roads) && h.roads.length ? `<div class="bbttcc-now-kv" style="margin-top:.4em"><span class="k">THE ROAD</span></div>` + h.roads.map(r => flyBtn(r.id, r.label, r.icon || "", false)).join("") : "") +
       `</div>`) : "";
     // Story chains ARE quest chains (2026-09-07 owner ruling): the old
     // campaign-wide chains section folds into the charted quest — each
