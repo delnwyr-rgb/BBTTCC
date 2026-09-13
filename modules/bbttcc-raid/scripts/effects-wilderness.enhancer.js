@@ -150,6 +150,12 @@
         bumpIntegrationProgress(f, 1);
 
         await doc.update({ [`flags.${MOD_T}`]: f }, parent ? { parent } : {});
+        // Refresh the yield display cache (flags.resources / calc) for the new size. Regen reads the
+        // facts layer (computed on read), so income was already right — but the hex sheet, the
+        // parity tool and the audit macro read the cache, which stayed at the pre-founding
+        // size-none zeros (Bedlam Barrens, Mark 6, 2026-09-12) unless the GM re-saved the hex.
+        try { const rc = game.bbttcc?.api?.territory?.recomputeHexResources; if (typeof rc === "function") await rc(doc, { source: "establish_outpost" }); }
+        catch (eRc) { console.warn(TAG, "post-founding resource recompute failed (non-fatal)", eRc); }
         const travelCost = getTerrainCostForHex(doc);
         const extraEcon = Number(travelCost.economy || 0);
         const extraNonL = Number(travelCost.nonlethal || 0);
