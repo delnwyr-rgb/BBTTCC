@@ -1,4 +1,4 @@
-import { RES_TO_OP, LEY_FLOW_MULT, TYPE_BASE, SIZE_MULT, HEX_MOD_LOYALTY, MOD_PRODUCTION, MOD_TRADE, MOD_RESOURCE } from "/modules/bbttcc-core/scripts/economy.constants.js";
+import { RES_TO_OP, LEY_FLOW_MULT, TYPE_BASE, SIZE_MULT, HEX_MOD_LOYALTY, MOD_PRODUCTION, MOD_TRADE, MOD_RESOURCE, HEX_MODIFIER_CATALOG, WORLD_MODIFIERS } from "/modules/bbttcc-core/scripts/economy.constants.js";
 /* ---------- bbttcc-territory / scripts/main.js (Auto-calc restored + Manual Override) ---------- */
 
 // BBTTCC_TERR_DASH_CLEANUP
@@ -1772,6 +1772,8 @@ export function factionSupplyLines(factionId) {
   return n;
 }
 function _publishHexFacts() {
+  // hex STATES for every surface that renders or applies them (Hex Config grid, Beat Editor, world-mutation engine)
+  try { game.bbttcc ??= {}; game.bbttcc.facts ??= {}; game.bbttcc.facts.hexStates = { catalog: HEX_MODIFIER_CATALOG, unique: WORLD_MODIFIERS }; } catch (_e) {}
   try {
     game.bbttcc ??= { api:{} }; game.bbttcc.facts ??= {};
     game.bbttcc.facts.hex = { type: hexType, size: hexSize, integration: hexIntegration, loyalty: hexLoyalty, enemyLoyalty: hexEnemyLoyalty, morale: hexMorale, loyaltyScore: hexLoyaltyScore, baseVector: hexBaseVector, resources: hexResources, HEX_MOD_LOYALTY: Object.assign({}, HEX_MOD_LOYALTY), TYPE_BASE, SIZE_MULT };
@@ -2327,6 +2329,8 @@ async function openHexEditorByUuid(uuid){
     sephirotUuid: f.sephirotUuid || "",
     sephirotList: await buildSephirotList(),
     modifiers: Array.isArray(f.modifiers) ? f.modifiers : [],
+    modifierCatalog: HEX_MODIFIER_CATALOG,
+    uniqueStates: Object.entries(WORLD_MODIFIERS).map(([key, v]) => ({ key, name: v.label, effect: v.description })),
     notes: f.notes ?? "",
     createdAt: f.createdAt ? new Date(f.createdAt).toLocaleString() : "",
 

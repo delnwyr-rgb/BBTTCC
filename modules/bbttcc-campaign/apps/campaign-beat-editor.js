@@ -510,7 +510,8 @@ function _listCurrentSceneHexes() {
   const out = [];
   try {
     const MOD_T = "bbttcc-territory";
-    const draws = (canvas && canvas.drawings && canvas.drawings.placeables) ? canvas.drawings.placeables : [];
+    // every scene's hexes (2026-09-13): a door beat marks towns the GM is nowhere near
+    const draws = []; for (const sc of (game.scenes || [])) for (const d of (sc.drawings || [])) draws.push({ document: d, sceneName: sc.name });
     for (let i = 0; i < draws.length; i++) {
       const p = draws[i];
       const doc = p ? p.document : null;
@@ -529,8 +530,9 @@ function _listCurrentSceneHexes() {
       if (type) bits.push(type);
       if (tKey) bits.push(tKey);
       const meta = bits.length ? (" — " + bits.join(" · ")) : "";
+      const sceneTag = (p && p.sceneName) ? (" [" + p.sceneName + "]") : "";
 
-      out.push({ uuid, label: name + meta });
+      out.push({ uuid, label: name + meta + sceneTag });
     }
   } catch (e) {
     // ignore
@@ -2121,7 +2123,7 @@ _ensureWorldModifiersUI(html) {
       wrap.appendChild(title);
 
       const hint = document.createElement("div");
-      hint.textContent = "Apply persistent GM-only map effects when this beat resolves (e.g., Harmonized Grove). Stored on the hex and visible as chips.";
+      hint.textContent = "Hex states this beat applies or lifts when it resolves: generic states (the Hex Config grid) and unique states (registry). A chip on the hex sheet AND the yield engine's modifier list; Remove or an expired duration lifts both.";
       hint.style.fontSize = "12px";
       hint.style.opacity = "0.8";
       hint.style.marginBottom = "10px";
@@ -2168,7 +2170,7 @@ _ensureWorldModifiersUI(html) {
       targetGroup.appendChild(sel);
 
       const h2 = document.createElement("div");
-      h2.textContent = "If set, world modifiers will apply to this hex even when you run the beat manually. (Current scene only.)";
+      h2.textContent = "If set, the states apply to this hex even when you run the beat manually. Hexes from every scene are listed.";
       h2.style.fontSize = "11px";
       h2.style.opacity = "0.75";
       h2.style.marginTop = "4px";
@@ -2176,142 +2178,53 @@ _ensureWorldModifiersUI(html) {
 
       wrap.appendChild(targetGroup);
 
-      // Only one starter modifier for now: Harmonized Grove
-      const row = document.createElement("div");
-      row.style.display = "grid";
-      row.style.gridTemplateColumns = "24px 1fr";
-      row.style.gap = "10px";
-      row.style.alignItems = "start";
-      row.style.padding = "8px";
-      row.style.border = "1px solid rgba(148,163,184,0.18)";
-      row.style.borderRadius = "12px";
-      row.style.background = "rgba(15,23,42,0.35)";
-
-      const cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.setAttribute("data-wm-key", "harmonized_grove");
-      cb.style.marginTop = "2px";
-
-      const body = document.createElement("div");
-      const name = document.createElement("div");
-      name.textContent = "Harmonized Grove";
-      name.dataset.help = "harmonizedGrove";
-      name.style.fontWeight = "800";
-      body.appendChild(name);
-
-      const desc = document.createElement("div");
-      desc.textContent = "Forest accepts you; hostility reduced in this hex; adjacency derived; Soft Power may pacify.";
-      desc.style.fontSize = "12px";
-      desc.style.opacity = "0.85";
-      desc.style.marginTop = "2px";
-      body.appendChild(desc);
-
-      const controls = document.createElement("div");
-      controls.style.display = "flex";
-      controls.style.gap = "10px";
-      controls.style.marginTop = "8px";
-      controls.style.alignItems = "center";
-
-      const durWrap = document.createElement("label");
-      durWrap.dataset.help = "wmDuration";
-      durWrap.style.display = "flex";
-      durWrap.style.gap = "6px";
-      durWrap.style.alignItems = "center";
-      durWrap.style.fontSize = "12px";
-      durWrap.style.opacity = "0.9";
-      durWrap.textContent = "Duration (turns)";
-
-      const dur = document.createElement("input");
-      dur.type = "number";
-      dur.min = "0";
-      dur.step = "1";
-      dur.name = "wm-harmonized-duration";
-      dur.style.width = "84px";
-      dur.style.borderRadius = "10px";
-      dur.style.border = "1px solid rgba(148,163,184,0.22)";
-      dur.style.background = "rgba(15,23,42,0.45)";
-      dur.style.color = "#e5e7eb";
-
-      // Enabled toggle
-      const enLab = document.createElement("label");
-      enLab.dataset.help = "wmEnabled";
-      enLab.style.display = "flex";
-      enLab.style.gap = "6px";
-      enLab.style.alignItems = "center";
-      enLab.style.fontSize = "12px";
-      enLab.style.opacity = "0.9";
-
-      const en = document.createElement("input");
-      en.type = "checkbox";
-      en.name = "wm-harmonized-enabled";
-      en.checked = true;
-      enLab.appendChild(en);
-      const enTxt = document.createElement("span");
-      enTxt.textContent = "Enabled";
-      enLab.appendChild(enTxt);
-
-      durWrap.appendChild(dur);
-      controls.appendChild(durWrap);
-      controls.appendChild(enLab);
-      body.appendChild(controls);
-
-      row.appendChild(cb);
-      row.appendChild(body);
-      wrap.appendChild(row);
-
-      // Seed from existing stored modifiers
-      let existing = null;
-      for (let i = 0; i < curMods.length; i++) {
-        const m = curMods[i];
-        if (m && String(m.key || "") === "harmonized_grove") { existing = m; break; }
+      // ── Hex STATES (2026-09-13, owner ask): generic states from the catalog + unique states from the
+      // registry, both published by territory at game.bbttcc.facts.hexStates. Each row: — / Add / Remove,
+      // duration (Add only), enabled. A row writes { key, label, op, modifiers:[names], durationTurns,
+      // enabled, targetHexUuid } — the engine puts the chip on the hex AND the named states into the
+      // yield engine's list (tf.modifiers), and lifts both on Remove or expiry.
+      const states = (game.bbttcc && game.bbttcc.facts && game.bbttcc.facts.hexStates) || { catalog: [], unique: {} };
+      const slug = (n) => String(n || "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+      const entries = []
+        .concat((states.catalog || []).map(c => ({ key: "state_" + slug(c.name), label: c.name, desc: c.effect || "", modifiers: [c.name], group: "Generic states" })))
+        .concat(Object.entries(states.unique || {}).map(([key, v]) => ({ key, label: v.label || key, desc: v.description || "", modifiers: Array.isArray(v.modifiers) ? v.modifiers : [v.label || key], group: "Unique states" })));
+      // legacy rows (harmonized_grove written before the registry) map onto the registry key
+      const byKey = new Map(curMods.filter(Boolean).map(m => [String(m.key || ""), m]));
+      const rows = [];
+      const mkSelect = (opts) => { const el = document.createElement("select"); for (const [v, t] of opts) { const o = document.createElement("option"); o.value = v; o.textContent = t; el.appendChild(o); } el.style.borderRadius = "10px"; el.style.border = "1px solid rgba(148,163,184,0.22)"; el.style.background = "rgba(15,23,42,0.45)"; el.style.color = "#e5e7eb"; el.style.padding = "3px 6px"; return el; };
+      let lastGroup = "";
+      const grid = document.createElement("div");
+      grid.style.display = "grid"; grid.style.gridTemplateColumns = "minmax(0,1fr) auto auto auto"; grid.style.gap = "6px 10px"; grid.style.alignItems = "center";
+      for (const e of entries) {
+        if (e.group !== lastGroup) { lastGroup = e.group; const gh = document.createElement("div"); gh.textContent = e.group; gh.style.gridColumn = "1 / -1"; gh.style.fontSize = "11px"; gh.style.opacity = "0.7"; gh.style.letterSpacing = "0.06em"; gh.style.textTransform = "uppercase"; gh.style.marginTop = "6px"; grid.appendChild(gh); }
+        const existing = byKey.get(e.key) || null;
+        const name = document.createElement("div"); name.innerHTML = `<b>${foundry.utils.escapeHTML(e.label)}</b><div style="font-size:11px;opacity:.75;white-space:normal;">${foundry.utils.escapeHTML(e.desc)}</div>`; name.style.minWidth = "0";
+        const op = mkSelect([["", "—"], ["add", "Add"], ["remove", "Remove"]]); op.value = existing ? (String(existing.op || "add") === "remove" ? "remove" : "add") : "";
+        const dur = document.createElement("input"); dur.type = "number"; dur.min = "0"; dur.step = "1"; dur.style.width = "64px"; dur.title = "Duration (turns, 0 = permanent)"; dur.style.borderRadius = "10px"; dur.style.border = "1px solid rgba(148,163,184,0.22)"; dur.style.background = "rgba(15,23,42,0.45)"; dur.style.color = "#e5e7eb"; dur.value = String(existing ? Math.max(0, Number(existing.durationTurns || 0) || 0) : 0);
+        const enLab = document.createElement("label"); enLab.style.display = "flex"; enLab.style.gap = "4px"; enLab.style.alignItems = "center"; enLab.style.fontSize = "11px"; const en = document.createElement("input"); en.type = "checkbox"; en.checked = existing ? existing.enabled !== false : true; enLab.appendChild(en); enLab.appendChild(document.createTextNode("on"));
+        const syncRow = () => { const isAdd = op.value === "add"; dur.disabled = !isAdd; enLab.style.opacity = op.value ? "1" : "0.4"; dur.style.opacity = isAdd ? "1" : "0.4"; };
+        syncRow();
+        grid.appendChild(name); grid.appendChild(op); grid.appendChild(dur); grid.appendChild(enLab);
+        rows.push({ e, op, dur, en, syncRow });
       }
-      if (existing) {
-        cb.checked = true;
-        en.checked = (existing.enabled !== false);
-        const d = Number(existing.durationTurns || 0);
-        dur.value = String((Number.isFinite(d) && d >= 0) ? d : 0);
-        // If existing specifies a target, prefer it
-        if (!curTarget && existing.targetHexUuid) {
-          try { sel.value = String(existing.targetHexUuid || ""); } catch (_eSel) {}
-        }
-      } else {
-        cb.checked = false;
-        dur.value = "0";
-      }
+      wrap.appendChild(grid);
 
       const syncWorldModifiers = () => {
-        // keep target in this.beat live
         const t = String(sel.value || "").trim();
         this.beat.targetHexUuid = t || null;
-
         const mods = [];
-        if (cb.checked) {
-          const d = Math.max(0, _safeNum(dur.value, 0));
-          mods.push({
-            key: "harmonized_grove",
-            label: "Harmonized Grove",
-            enabled: !!en.checked,
-            durationTurns: d,
-            targetHexUuid: (t || null),
-            channels: {
-              "forest.hostilityBias": -1,
-              "forest.allowSoftPowerPacify": true,
-              "social.nextHexDiplomacyBonus": 1
-            },
-            derived: { adjacency: true }
-          });
+        for (const r of rows) {
+          r.syncRow();
+          if (!r.op.value) continue;
+          mods.push({ key: r.e.key, label: r.e.label, op: r.op.value, enabled: !!r.en.checked,
+            durationTurns: r.op.value === "add" ? Math.max(0, _safeNum(r.dur.value, 0)) : 0,
+            targetHexUuid: (t || null), modifiers: r.e.modifiers.slice() });
         }
-
         this.beat.worldEffects = this.beat.worldEffects || {};
         this.beat.worldEffects.worldModifiers = mods;
       };
-
-      wrap.addEventListener("change", (ev) => {
-        const t = ev.target;
-        if (!t) return;
-        if (t === cb || t === en || t === dur || t === sel) syncWorldModifiers();
-      });
-      sel.addEventListener("change", syncWorldModifiers);
+      wrap.addEventListener("change", () => syncWorldModifiers());
+      wrap.addEventListener("input", () => syncWorldModifiers());
       syncWorldModifiers();
 
       // Insert in DOM

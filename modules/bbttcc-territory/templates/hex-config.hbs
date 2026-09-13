@@ -270,18 +270,25 @@
     <div class="col ft-hexcfg-panel" data-ft-tab-panel="resources">
       <fieldset class="form-group" data-bbttcc="modifiers" style="margin-bottom:.75rem;">
         <legend>Modifiers</legend>
-        <label class="checkbox"><input type="checkbox" name="modifiers" value="Well-Maintained" {{#if (bbttcc_contains modifiers "Well-Maintained")}}checked{{/if}}> <span>Well-Maintained</span></label>
-        <label class="checkbox"><input type="checkbox" name="modifiers" value="Fortified" {{#if (bbttcc_contains modifiers "Fortified")}}checked{{/if}}> <span>Fortified</span></label>
-        <label class="checkbox"><input type="checkbox" name="modifiers" value="Strategic Position" {{#if (bbttcc_contains modifiers "Strategic Position")}}checked{{/if}}> <span>Strategic Position</span></label>
-        <label class="checkbox"><input type="checkbox" name="modifiers" value="Hidden Resources" {{#if (bbttcc_contains modifiers "Hidden Resources")}}checked{{/if}}> <span>Hidden Resources</span></label>
-        <label class="checkbox"><input type="checkbox" name="modifiers" value="Loyal Population" {{#if (bbttcc_contains modifiers "Loyal Population")}}checked{{/if}}> <span>Loyal Population</span></label>
-        <label class="checkbox"><input type="checkbox" name="modifiers" value="Trade Hub" {{#if (bbttcc_contains modifiers "Trade Hub")}}checked{{/if}}> <span>Trade Hub</span></label>
-        <label class="checkbox"><input type="checkbox" name="modifiers" value="Contaminated" {{#if (bbttcc_contains modifiers "Contaminated")}}checked{{/if}}> <span>Contaminated</span></label>
-        <label class="checkbox"><input type="checkbox" name="modifiers" value="Damaged Infrastructure" {{#if (bbttcc_contains modifiers "Damaged Infrastructure")}}checked{{/if}}> <span>Damaged Infrastructure</span></label>
-        <label class="checkbox"><input type="checkbox" name="modifiers" value="Hostile Population" {{#if (bbttcc_contains modifiers "Hostile Population")}}checked{{/if}}> <span>Hostile Population</span></label>
-        <label class="checkbox"><input type="checkbox" name="modifiers" value="Supply Line Vulnerable" {{#if (bbttcc_contains modifiers "Supply Line Vulnerable")}}checked{{/if}}> <span>Supply Line Vulnerable</span></label>
-        <label class="checkbox"><input type="checkbox" name="modifiers" value="Difficult Terrain" {{#if (bbttcc_contains modifiers "Difficult Terrain")}}checked{{/if}}> <span>Difficult Terrain</span></label>
-        <label class="checkbox"><input type="checkbox" name="modifiers" value="Radiation Zone" {{#if (bbttcc_contains modifiers "Radiation Zone")}}checked{{/if}}> <span>Radiation Zone</span></label>
+        <style>
+          .bbttcc-modgrid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:.3rem .9rem; align-items:center; }
+          .bbttcc-modgrid label.checkbox { display:flex; align-items:center; gap:.4rem; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+          .bbttcc-modgrid label.checkbox input { flex:0 0 auto; margin:0; }
+          .bbttcc-modgrid label.checkbox span { overflow:hidden; text-overflow:ellipsis; }
+          .bbttcc-modgrid__legend { grid-column:1 / -1; font-size:.8em; opacity:.75; letter-spacing:.04em; text-transform:uppercase; margin-top:.35rem; }
+        </style>
+        <div class="bbttcc-modgrid">
+          <div class="bbttcc-modgrid__legend">Generic states</div>
+          {{#each modifierCatalog}}
+            <label class="checkbox" title="{{effect}}"><input type="checkbox" name="modifiers" value="{{name}}" {{#if (bbttcc_contains ../modifiers name)}}checked{{/if}}> <span>{{name}}</span></label>
+          {{/each}}
+          {{#if uniqueStates.length}}
+            <div class="bbttcc-modgrid__legend">Unique states</div>
+            {{#each uniqueStates}}
+              <label class="checkbox" title="{{effect}}"><input type="checkbox" name="modifiers" value="{{name}}" {{#if (bbttcc_contains ../modifiers name)}}checked{{/if}}> <span>{{name}}</span></label>
+            {{/each}}
+          {{/if}}
+        </div>
         <p class="hint">These affect yields (and sometimes Defense/flags). They match the math used by Campaign Overview and the Turn Driver.</p>
       </fieldset>
 

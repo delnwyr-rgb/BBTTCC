@@ -16,8 +16,8 @@
  *      Choir inspect; Seed Vault gated on the Gentle Pest completed (R7).
  *   5. Red Thread planting: +Red Thread Field, −Fallout Bloom; Hex Aligns: −Fallout Bloom (safety);
  *      East Wall Success: −Damaged Infrastructure.
- * Needs the engine of the same day: worldEffects.hexModifiers / hexReading, MOD_RESOURCE,
- * LANE_HEX_BONUS.byModifier, PHASE_DOOR_BEATS.
+ * Needs the engine of the same day: World Modifier rows with op/modifiers/hexName (editor-visible),
+ * worldEffects.hexReading, MOD_RESOURCE, LANE_HEX_BONUS.byModifier, PHASE_DOOR_BEATS.
  */
 (async () => {
   const DRY_RUN = true;                  // <-- set false to apply
@@ -79,9 +79,9 @@
     worldEffects: {
       questEffects: [{ action: "accept", questId: SPINE, beatId: "a2_that_one_night", state: "active", text: "That one night. Everyone felt it; nobody can name it." }],
       factionEffects: factionIds.map(fid => ({ factionId: fid, moraleDelta: 0, loyaltyDelta: 0, unityDelta: 0, darknessDelta: 1, opDeltas: {} })),
-      hexModifiers: [
-        { add: ["Fallout Bloom"], remove: [], hexName: "Lyrenn" },                 // the rows went wild (R2)
-        { add: ["Damaged Infrastructure"], remove: [], hexName: "Allesh-Gilliam" } // the East Wall's lean (R4)
+      worldModifiers: [   // editor-visible rows (Beat Editor → World Effects → Hex states); hexName targets a town the GM is nowhere near
+        { key: "fallout_bloom", label: "Fallout Bloom", op: "add", enabled: true, durationTurns: 0, hexName: "Lyrenn", modifiers: ["Fallout Bloom"] },                          // the rows went wild (R2)
+        { key: "state_damaged_infrastructure", label: "Damaged Infrastructure", op: "add", enabled: true, durationTurns: 0, hexName: "Allesh-Gilliam", modifiers: ["Damaged Infrastructure"] }   // the East Wall's lean (R4)
       ]
     }
   }));
@@ -125,9 +125,10 @@
   addGate("lyrenn_seed_vault", { questBucket: Q.pest, is: "completed" });
 
   // ── 5) modifiers land and lift ──
-  setFx("lyrenn_red_thread_planting", "hexModifiers", { add: ["Red Thread Field"], remove: ["Fallout Bloom"], hexName: "Lyrenn" });
-  setFx("lyrenn_hex_settles", "hexModifiers", { add: [], remove: ["Fallout Bloom"], hexName: "Lyrenn" });
-  setFx("allesh_gilliam_east_wall_success", "hexModifiers", { add: [], remove: ["Damaged Infrastructure"], hexName: "Allesh-Gilliam" });
+  const WM = (key, label, op, hexName, modifiers) => ({ key, label, op, enabled: true, durationTurns: 0, hexName, modifiers });
+  setFx("lyrenn_red_thread_planting", "worldModifiers", [WM("red_thread_field", "Red Thread Field", "add", "Lyrenn", ["Red Thread Field"]), WM("fallout_bloom", "Fallout Bloom", "remove", "Lyrenn", ["Fallout Bloom"])]);
+  setFx("lyrenn_hex_settles", "worldModifiers", [WM("fallout_bloom", "Fallout Bloom", "remove", "Lyrenn", ["Fallout Bloom"])]);
+  setFx("allesh_gilliam_east_wall_success", "worldModifiers", [WM("state_damaged_infrastructure", "Damaged Infrastructure", "remove", "Allesh-Gilliam", ["Damaged Infrastructure"])]);
 
   console.group(`[seed-lyrenn-blast] ${DRY_RUN ? "DRY RUN — " : ""}${changes} change(s) · spine quest ${SPINE} · coalition ${factionIds.length}`); report.forEach(r => console.log(" ", r)); console.groupEnd();
   if (!elsin || !rowan) report.push("⚠ Elsin/Rowan actor not found by name — invites still patched by beat id.");

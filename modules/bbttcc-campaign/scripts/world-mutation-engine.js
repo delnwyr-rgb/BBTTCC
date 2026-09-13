@@ -971,6 +971,62 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     }
   }
 
+  // ── named hex states (2026-09-13) — the yield engine's list, tf.modifiers ─────────────────────
+  // One writer for beats: add/remove names, recompute the yield cache, ledger, GM whisper.
+  function _normName(x) { return String(x || "").replace(/[\s\u00A0]+/g, " ").trim().toLowerCase(); }
+  function _findHexByName(name) {
+    const want = _normName(name); if (!want) return null;
+    for (const sc of (game.scenes || [])) for (const d of (sc.drawings || [])) {
+      const tf = d.flags && d.flags["bbttcc-territory"]; if (!tf || !(tf.isHex === true || tf.kind === "territory-hex")) continue;
+      if (_normName(tf.name || d.text) === want) return d;
+    }
+    return null;
+  }
+  async function _applyNamedModifiers(doc, add, remove, { beat = null, beatId = "", via = "beat" } = {}) {
+    const MOD_T = "bbttcc-territory";
+    const tf = (doc.flags && doc.flags[MOD_T]) ? clone(doc.flags[MOD_T]) : {};
+    const cur = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];
+    const before = cur.slice();
+    const has = (n) => cur.some(m => _normName(m) === _normName(n));
+    const added = [], removed = [];
+    for (const n of (Array.isArray(add) ? add : [])) { if (n && !has(n)) { cur.push(String(n).trim()); added.push(String(n).trim()); } }
+    for (const n of (Array.isArray(remove) ? remove : [])) { const i = cur.findIndex(m => _normName(m) === _normName(n)); if (i >= 0) { removed.push(cur[i]); cur.splice(i, 1); } }
+    if (!added.length && !removed.length) return { added, removed };
+    await doc.update({ ["flags." + MOD_T + ".modifiers"]: cur }, { parent: doc.parent });
+    try { const rc = get(game, "bbttcc.api.territory.recomputeHexResources", null); if (typeof rc === "function") await rc(doc, { source: via + ":" + (beatId || "?") }); } catch (eRc) { console.warn(TAG, "named modifiers recompute failed", eRc); }
+    const label = added.map(a => "+" + a).concat(removed.map(r => "−" + r)).join(", ");
+    try { const rec = get(game, "bbttcc.api.territory.recordHexImprovement", null); if (typeof rec === "function") await rec(doc, { kind: "modifiers_changed", label: `Modifiers: ${label}`, description: beat ? `By beat “${beat.label || beat.id}”.` : `By ${via}.`, source: via, before: { modifiers: before }, after: { modifiers: cur }, reversible: true }); } catch (_eRec) {}
+    try {
+      const esc = foundry.utils.escapeHTML;
+      await ChatMessage.create({ whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id), speaker: { alias: "Bad Eden" },
+        content: `<div style="border-left:3px solid #c9a227;padding:.35em .6em;background:rgba(201,162,39,.08);">🗺️ <b>${esc(String(tf.name || doc.id))}</b>: ${esc(label)} <span style="opacity:.7">(${beat ? `beat “${esc(String(beat.label || beat.id))}”` : esc(via)})</span></div>` });
+    } catch (_eMsg) {}
+    return { added, removed };
+  }
+  // Duration: World Modifier rows carry expiresTurn; at every applied Advance, expired rows come off
+  // the hex together with the named states they brought (the old rows never expired — 2026-09-13).
+  async function sweepExpiredWorldModifiers({ turn = null } = {}) {
+    const out = { expired: 0 };
+    try {
+      if (!game.user?.isGM) return out;
+      const now = Number.isFinite(Number(turn)) ? Number(turn) : _readWorldTurn();
+      if (!(now > 0)) return out;
+      const MOD_T = "bbttcc-territory";
+      for (const sc of (game.scenes || [])) for (const d of (sc.drawings || [])) {
+        const tf = d.flags && d.flags[MOD_T]; if (!tf || !Array.isArray(tf.worldModifiers) || !tf.worldModifiers.length) continue;
+        const keep = [], gone = [];
+        for (const row of tf.worldModifiers) { const exp = Number(row && row.expiresTurn || 0); if (exp > 0 && now >= exp) gone.push(row); else keep.push(row); }
+        if (!gone.length) continue;
+        await d.update({ ["flags." + MOD_T + ".worldModifiers"]: keep }, { parent: d.parent });
+        const names = []; for (const row of gone) for (const n of (Array.isArray(row.modifiers) ? row.modifiers : _registryModifiers(row.key))) names.push(n);
+        await _applyNamedModifiers(d, [], names, { via: "expired (turn " + now + ")" });
+        out.expired += gone.length;
+      }
+    } catch (e) { console.warn(TAG, "sweepExpiredWorldModifiers failed", e); }
+    return out;
+  }
+  function _registryModifiers(key) { try { const reg = get(game, "bbttcc.facts.hexStates.unique", null); const e = reg && reg[String(key || "")]; return e && Array.isArray(e.modifiers) ? e.modifiers.slice() : []; } catch (_e) { return []; } }
+
   async function applyWorldEffects(input, ctx) {
     ensureNS();
     ensureFactionAPI();
@@ -1212,13 +1268,16 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           if (!key) continue;
 
           const mHex = String(m.targetHexUuid || "").trim();
-          const targetHexUuid = ctxHex || beatHex || mHex;
-          if (!targetHexUuid) {
+          const op = String(m.op || "add").toLowerCase() === "remove" ? "remove" : "add";
+          const names = Array.isArray(m.modifiers) && m.modifiers.length ? m.modifiers.slice() : _registryModifiers(key);   // the named states this row carries
+          // target: an explicit hexName on the row wins (a door beat marks towns it is nowhere near), else the row's uuid, else the run context / beat hex
+          let doc = m.hexName ? _findHexByName(m.hexName) : null;
+          const targetHexUuid = doc ? "" : (mHex || ctxHex || beatHex);
+          if (!doc && !targetHexUuid) {
             console.warn(TAG, "worldModifier has no target hex", { key: key, beatId: beatCtx.beatId });
             continue;
           }
-
-          const doc = await resolveHexDoc(targetHexUuid);
+          if (!doc) doc = await resolveHexDoc(targetHexUuid);
           if (!doc || !doc.update) {
             console.warn(TAG, "worldModifier target hex could not be resolved", { key: key, targetHexUuid: targetHexUuid });
             continue;
@@ -1227,6 +1286,14 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           const MOD_T = "bbttcc-territory";
           const tf = (doc.flags && doc.flags[MOD_T]) ? clone(doc.flags[MOD_T]) : {};
           const arr = Array.isArray(tf.worldModifiers) ? tf.worldModifiers.slice() : [];
+
+          if (op === "remove") {   // lift the chip and the named states it brought
+            const rest = arr.filter(cur => !(cur && String(cur.key || "") === key));
+            if (rest.length !== arr.length) { tf.worldModifiers = rest; await doc.update({ ["flags." + MOD_T]: tf }, { parent: doc.parent }); }
+            await _applyNamedModifiers(doc, [], names, { beat, beatId: beatCtx.beatId || beat.id });
+            appliedCount++;
+            continue;
+          }
 
           const now = Date.now();
           const durationTurns = Math.max(0, Math.floor(Number(m.durationTurns || 0) || 0));
@@ -1242,7 +1309,8 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
             ts: now,
             via: String(beatCtx.beatId || beat.id || "beat"),
             channels: (m.channels && typeof m.channels === "object") ? m.channels : {},
-            derived: (m.derived && typeof m.derived === "object") ? m.derived : null
+            derived: (m.derived && typeof m.derived === "object") ? m.derived : null,
+            modifiers: names
           };
 
           let replaced = false;
@@ -1259,6 +1327,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
 
           tf.worldModifiers = arr;
           await doc.update({ ["flags." + MOD_T]: tf }, { parent: doc.parent });
+          await _applyNamedModifiers(doc, names, [], { beat, beatId: beatCtx.beatId || beat.id });   // the chip's teeth (2026-09-13)
           appliedCount++;
         }
 
@@ -1271,57 +1340,18 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       console.warn(TAG, "worldModifiers apply failed", eWM);
     }
 
-    // 2e) Hex MODIFIERS — the yield engine's list (2026-09-13, Lyrenn Act 2 reframe).
-    // `worldModifiers` above lands in tf.worldModifiers, which only the hex sheet reads; production,
-    // lanes and loyalty read tf.modifiers (the named list: Loyal Population, Trade Hub, Contaminated,
-    // Fallout Bloom, Red Thread Field…), which until now only the strategic sweep and the Hex Config
-    // form could write. worldEffects.hexModifiers = { add:[…], remove:[…], hexName?|targetHexUuid? }
-    // applies IMMEDIATELY (the story says the crops went wild NOW), recomputes the yield cache, and
-    // writes the hex ledger. Target: explicit hexName → ctx/beat hex → nothing (warn).
+    // 2e) Hex MODIFIERS — the primitive (2026-09-13): worldEffects.hexModifiers = {add,remove,hexName?|targetHexUuid?}
+    // or a list of such blocks. World Modifier rows above are the editor-facing way; this is the seeder/API way.
     try {
-      // one block or a list of blocks (a door beat marks several towns at once)
       const hmList = Array.isArray(we.hexModifiers) ? we.hexModifiers : (we.hexModifiers && typeof we.hexModifiers === "object" ? [we.hexModifiers] : []);
       for (const hm of hmList) {
-      if (hm && ((Array.isArray(hm.add) && hm.add.length) || (Array.isArray(hm.remove) && hm.remove.length))) {
-        const norm = (x) => String(x || "").replace(/[\s\u00A0]+/g, " ").trim().toLowerCase();
-        const findByName = (name) => {
-          const want = norm(name); if (!want) return null;
-          for (const sc of (game.scenes || [])) for (const d of (sc.drawings || [])) {
-            const tf = d.flags && d.flags["bbttcc-territory"]; if (!tf || !(tf.isHex === true || tf.kind === "territory-hex")) continue;
-            if (norm(tf.name || d.text) === want) return d;
-          }
-          return null;
-        };
+        if (!hm || !((Array.isArray(hm.add) && hm.add.length) || (Array.isArray(hm.remove) && hm.remove.length))) continue;
         const ctxHex = String((ctx && ctx.hexUuid) ? ctx.hexUuid : "").trim();
         const beatHex = String((beat && beat.targetHexUuid) ? beat.targetHexUuid : "").trim();
-        const doc = hm.hexName ? findByName(hm.hexName) : (hm.targetHexUuid ? await resolveHexDoc(hm.targetHexUuid) : (ctxHex || beatHex ? await resolveHexDoc(ctxHex || beatHex) : null));
-        if (!doc || !doc.update) {
-          console.warn(TAG, "hexModifiers: target hex not found", { hexName: hm.hexName, targetHexUuid: hm.targetHexUuid, beatId: beatCtx.beatId });
-        } else {
-          const MOD_T = "bbttcc-territory";
-          const tf = (doc.flags && doc.flags[MOD_T]) ? clone(doc.flags[MOD_T]) : {};
-          const cur = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];
-          const before = cur.slice();
-          const has = (n) => cur.some(m => norm(m) === norm(n));
-          const added = [], removed = [];
-          for (const n of (Array.isArray(hm.add) ? hm.add : [])) { if (!has(n)) { cur.push(String(n).trim()); added.push(String(n).trim()); } }
-          for (const n of (Array.isArray(hm.remove) ? hm.remove : [])) { const i = cur.findIndex(m => norm(m) === norm(n)); if (i >= 0) { removed.push(cur[i]); cur.splice(i, 1); } }
-          if (added.length || removed.length) {
-            await doc.update({ ["flags." + MOD_T + ".modifiers"]: cur }, { parent: doc.parent });
-            try { const rc = get(game, "bbttcc.api.territory.recomputeHexResources", null); if (typeof rc === "function") await rc(doc, { source: "beat:" + (beatCtx.beatId || beat.id || "?") }); } catch (eRc) { console.warn(TAG, "hexModifiers recompute failed", eRc); }
-            try {
-              const rec = get(game, "bbttcc.api.territory.recordHexImprovement", null);
-              if (typeof rec === "function") await rec(doc, { kind: "modifiers_changed", label: `Modifiers: ${added.map(a => "+" + a).concat(removed.map(r => "−" + r)).join(", ")}`, description: `By beat “${beat.label || beat.id}”.`, source: "beat", before: { modifiers: before }, after: { modifiers: cur }, reversible: true });
-            } catch (_eRec) {}
-            try {
-              await ChatMessage.create({ whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id), speaker: { alias: "Bad Eden" },
-                content: `<div style="border-left:3px solid #c9a227;padding:.35em .6em;background:rgba(201,162,39,.08);">🗺️ <b>${foundry.utils.escapeHTML(String(tf.name || doc.id))}</b>: ${added.map(a => "+" + foundry.utils.escapeHTML(a)).concat(removed.map(r => "−" + foundry.utils.escapeHTML(r))).join(", ")} <span style="opacity:.7">(beat “${foundry.utils.escapeHTML(String(beat.label || beat.id))}”)</span></div>` });
-            } catch (_eMsg) {}
-            changed = true;
-            notes.push("hexModifiers:" + (added.length + removed.length));
-          }
-        }
-      }
+        const doc = hm.hexName ? _findHexByName(hm.hexName) : (hm.targetHexUuid ? await resolveHexDoc(hm.targetHexUuid) : (ctxHex || beatHex ? await resolveHexDoc(ctxHex || beatHex) : null));
+        if (!doc || !doc.update) { console.warn(TAG, "hexModifiers: target hex not found", { hexName: hm.hexName, targetHexUuid: hm.targetHexUuid, beatId: beatCtx.beatId }); continue; }
+        const r = await _applyNamedModifiers(doc, hm.add, hm.remove, { beat, beatId: beatCtx.beatId || beat.id });
+        if (r.added.length || r.removed.length) { changed = true; notes.push("hexModifiers:" + (r.added.length + r.removed.length)); }
       }
     } catch (eHM) {
       console.warn(TAG, "hexModifiers apply failed", eHM);
@@ -1604,6 +1634,12 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       ensureFactionAPI();
       game.bbttcc.api.worldMutation.applyWorldEffects = applyWorldEffects;
       game.bbttcc.api.worldMutation.pullTableToScene = pullTableToScene;
+      game.bbttcc.api.worldMutation.sweepExpiredWorldModifiers = sweepExpiredWorldModifiers;
+      game.bbttcc.api.worldMutation.applyNamedHexModifiers = (doc, add, remove, opts) => _applyNamedModifiers(doc, add, remove, opts || {});
+      if (!globalThis.__bbttccWorldModExpiryHooked) {
+        globalThis.__bbttccWorldModExpiryHooked = true;
+        Hooks.on("bbttcc:advanceTurn:end", (tctx) => { try { if (!tctx || tctx.apply !== true || !game.user?.isGM) return; sweepExpiredWorldModifiers({}).then(r => { if (r.expired) console.log(TAG, "world modifiers expired:", r.expired); }).catch(() => {}); } catch (_e) {} });
+      }
       installOpScheduleAPI();
       installOpScheduleTickHook();
       _installOpenTravelSocket();

@@ -78,7 +78,8 @@ export const MOD_PRODUCTION = {
   "well-maintained": 0.25, "strategic position": 0.10, "loyal population": 0.15, "contaminated": -0.50,
   "damaged infrastructure": -0.25, "hostile population": -0.25, "difficult terrain": -0.10, "radiation zone": -0.75,
   "supply line vulnerable": -0.15,
-  "red thread field": 0.10               // Lyrenn Act 2 reframe (owner ruling 2026-09-13): specialty crop, a holding
+  "red thread field": 0.10,              // Lyrenn Act 2 reframe (owner ruling 2026-09-13): specialty crop, a holding
+  "harmonized grove": 0.05               // The Forest of Early Tiphareth accepts you (owner ruling 2026-09-13)
 };
 export const MOD_TRADE = { "trade hub": 0.50 };
 /** per-RESOURCE production modifiers (fractions, ×(1+v) on that resource only) — 2026-09-13 */
@@ -88,7 +89,30 @@ export const MOD_RESOURCE = {
 /** lane bonus by hex MODIFIER (LANE_HEX_BONUS.<lane>.byModifier) is DOUBLED on a hex whose leyline flow is `surge` */
 export const LANE_BY_MODIFIER_SURGE_MULT = 2;
 /** hex loyalty score contributions by modifier (facts.hex.loyaltyScore) */
-export const HEX_MOD_LOYALTY = { "loyal population": 2, "hostile population": -2, "well-maintained": 1, "well maintained": 1, "damaged infrastructure": -1 };
+export const HEX_MOD_LOYALTY = { "loyal population": 2, "hostile population": -2, "well-maintained": 1, "well maintained": 1, "damaged infrastructure": -1, "harmonized grove": 1 };
+
+// ── hex STATES (2026-09-13, owner ask: "a place in the beat to apply generic states, and unique states") ──
+/** Generic states — THE list the Hex Config grid and the Beat Editor render (was twelve hand-typed labels in the template). */
+export const HEX_MODIFIER_CATALOG = [
+  { name:"Well-Maintained",        effect:"+25% production, +1 loyalty" },
+  { name:"Fortified",              effect:"+3 defense" },
+  { name:"Strategic Position",     effect:"+10% production; adjacency anchor" },
+  { name:"Hidden Resources",       effect:"stable bonus to one resource" },
+  { name:"Loyal Population",       effect:"+15% production, +2 loyalty" },
+  { name:"Trade Hub",              effect:"+50% trade" },
+  { name:"Contaminated",           effect:"−50% production" },
+  { name:"Damaged Infrastructure", effect:"−25% production, −1 loyalty" },
+  { name:"Hostile Population",     effect:"−25% production, −2 loyalty" },
+  { name:"Supply Line Vulnerable", effect:"−15% production" },
+  { name:"Difficult Terrain",      effect:"−10% production" },
+  { name:"Radiation Zone",         effect:"−75% production" }
+];
+/** Unique states — a World Modifier row (the chip on the hex sheet) carries these named modifiers into the yield engine's list. */
+export const WORLD_MODIFIERS = {
+  harmonized_grove: { label:"Harmonized Grove",  description:"The Forest of Early Tiphareth accepts you: +5% production, +1 loyalty on this hex. Adjacency bonus reserved for the adjacency engine.", modifiers:["Harmonized Grove"], adjacency:true },
+  fallout_bloom:    { label:"Fallout Bloom",     description:"The rows went wild after that one night: food ×0.5, nothing else touched. Lifts when the Red Thread is planted.", modifiers:["Fallout Bloom"] },
+  red_thread_field: { label:"Red Thread Field",  description:"A stand of red-thread crop, awake: +10% production, +1 faith/turn (×2 on a leyline surge).", modifiers:["Red Thread Field"] }
+};
 
 // ── resources → OP income (per hex per turn; culture + faith lanes ruled 2026-09-12) ──────────
 export const RES_TO_OP = {
