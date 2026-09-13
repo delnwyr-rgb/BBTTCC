@@ -110,8 +110,15 @@
   // AG: off the Mountain
   replaceIn("allesh_gilliam_the_east_wall_intro", /the Night the Mountain Coughed\.\s*Nobody's found daylight between the two\./i, "that one night. The one everyone felt and nobody can name. Nobody's found daylight between the two.");
   replaceIn("allesh_gilliam_the_east_wall_intro", /the Night the Mountain Coughed/gi, "that one night");
-  // sweep: who else names the Mountain outside the Seal chain?
-  for (const b of camp.beats) { if (/^vs_|^khezek_tor_.*seal/.test(String(b.id))) continue; if (/mountain coughed/i.test(stripTags(b.description) + " " + String(b.label || "") + " " + String(b.inviteText || ""))) report.push(`⚠ names the Mountain: ${b.id} — ${b.label}`); }
+  // Two more pre-reveal mentions (dry run 2026-09-13). The Plumb Office is ACT 1 content (storyPhase ≥ 1) —
+  // it must not reference a night that hasn't happened yet, so the joke stands on its own; the leygate
+  // delivery can land before Khezek-Tor, so it says "that one night". "The Wall Stands Straight" is gated on
+  // the Seal quest COMPLETED — by then the Mountain is known, and it keeps its line.
+  replaceIn("allesh_gilliam_plumb_office_intro", /three days before the Night the Mountain Coughed, and he will not re-survey it/i, "once, and he will not re-survey it");
+  replaceIn("ag_leygate_delivery", /since the Night the Mountain Coughed/i, "since that one night");
+  // sweep: who else names the Mountain outside the Seal chain? (post-reveal beats are allowed to)
+  const MAY_NAME_IT = new Set(["allesh_gilliam_wall_stands_straight"]);
+  for (const b of camp.beats) { if (/^vs_|^khezek_tor_.*seal/.test(String(b.id)) || MAY_NAME_IT.has(String(b.id))) continue; if (/mountain coughed/i.test(stripTags(b.description) + " " + String(b.label || "") + " " + String(b.inviteText || ""))) report.push(`⚠ names the Mountain: ${b.id} — ${b.label}`); }
 
   // ── 4) the Choir reads; the Vault waits ──
   addBeat(mkBeat({
