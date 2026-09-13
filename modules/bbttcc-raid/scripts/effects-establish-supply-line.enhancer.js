@@ -62,8 +62,13 @@
     return true;
   }
   // Lifecycle contract (2026-09-12): install once when the registry is final, re-install after every
-  // rebuild. Falls back to the old ready-poll only if bbttcc-core's lifecycle is absent.
-  const lc = globalThis.game?.bbttcc?.lifecycle;
-  if (lc?.need) { lc.need("raid.EFFECTS").then(() => install(game.bbttcc.api.raid)); lc.onRebuild("raid.EFFECTS", () => install(game.bbttcc.api.raid)); }
-  else whenRaidReady((api)=>{ install(api); });
+  // rebuild. The lifecycle object is looked up at READY (module esmodules evaluate in fetch order, so
+  // bbttcc-core may not have run yet at script load); if ready has already fired we run at once.
+  console.log(TAG, "loaded");
+  const _arm = () => {
+    const lc = game?.bbttcc?.lifecycle;
+    if (lc?.need) { lc.need("raid.EFFECTS").then(() => install(game.bbttcc.api.raid)).catch(e => console.warn(TAG, "install failed", e)); lc.onRebuild("raid.EFFECTS", () => { try { install(game.bbttcc.api.raid); } catch (e) { console.warn(TAG, "reinstall failed", e); } }); }
+    else whenRaidReady((api)=>{ install(api); });
+  };
+  if (globalThis.game?.ready) _arm(); else Hooks.once("ready", _arm);
 })();

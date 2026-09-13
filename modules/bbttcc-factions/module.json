@@ -42,7 +42,8 @@
     "scripts/pending-trades.js",
     "scripts/diplomacy-apps.js",
     "scripts/relationship-nudge.js",
-    "scripts/quest-log-app.js"
+    "scripts/quest-log-app.js",
+    "scripts/faction-tier-advance-button.enhancer.js"
   ],
   "scripts": [
     "scripts/inbox-card.enhancer.js",
@@ -60,7 +61,6 @@
     "scripts/faction-tier-victorygate.enhancer.js",
     "scripts/faction-tier-stability.enhancer.js",
     "scripts/faction-tier-advancement-api.enhancer.js",
-    "scripts/faction-tier-advance-button.enhancer.js",
     "scripts/turn-extensions.enhancer.js"
   ],
   "styles": [

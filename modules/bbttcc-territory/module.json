@@ -42,7 +42,8 @@
     "scripts/territory-unitybonus.enhancer.js",
     "scripts/bbttcc-toolbar-augment.enhancer.js",
     "scripts/player-hud.enhancer.js",
-    "scripts/zz-click-to-edit.js"
+    "scripts/zz-click-to-edit.js",
+    "scripts/territory-garrison-upkeep.enhancer.js"
   ],
   "scripts": [
     "scripts/encounters.js",
@@ -52,7 +53,6 @@
     "scripts/advance-turn.tracks.js",
     "scripts/resolutions.js",
     "scripts/resolution-engine.js",
-    "scripts/territory-garrison-upkeep.enhancer.js",
     "scripts/territory-integration.enhancer.js",
     "scripts/territory-build-units.enhancer.js",
     "scripts/townbuilder.js",
