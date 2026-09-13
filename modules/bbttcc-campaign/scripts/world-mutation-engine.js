@@ -1271,6 +1271,124 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       console.warn(TAG, "worldModifiers apply failed", eWM);
     }
 
+    // 2e) Hex MODIFIERS — the yield engine's list (2026-09-13, Lyrenn Act 2 reframe).
+    // `worldModifiers` above lands in tf.worldModifiers, which only the hex sheet reads; production,
+    // lanes and loyalty read tf.modifiers (the named list: Loyal Population, Trade Hub, Contaminated,
+    // Fallout Bloom, Red Thread Field…), which until now only the strategic sweep and the Hex Config
+    // form could write. worldEffects.hexModifiers = { add:[…], remove:[…], hexName?|targetHexUuid? }
+    // applies IMMEDIATELY (the story says the crops went wild NOW), recomputes the yield cache, and
+    // writes the hex ledger. Target: explicit hexName → ctx/beat hex → nothing (warn).
+    try {
+      // one block or a list of blocks (a door beat marks several towns at once)
+      const hmList = Array.isArray(we.hexModifiers) ? we.hexModifiers : (we.hexModifiers && typeof we.hexModifiers === "object" ? [we.hexModifiers] : []);
+      for (const hm of hmList) {
+      if (hm && ((Array.isArray(hm.add) && hm.add.length) || (Array.isArray(hm.remove) && hm.remove.length))) {
+        const norm = (x) => String(x || "").replace(/[\s\u00A0]+/g, " ").trim().toLowerCase();
+        const findByName = (name) => {
+          const want = norm(name); if (!want) return null;
+          for (const sc of (game.scenes || [])) for (const d of (sc.drawings || [])) {
+            const tf = d.flags && d.flags["bbttcc-territory"]; if (!tf || !(tf.isHex === true || tf.kind === "territory-hex")) continue;
+            if (norm(tf.name || d.text) === want) return d;
+          }
+          return null;
+        };
+        const ctxHex = String((ctx && ctx.hexUuid) ? ctx.hexUuid : "").trim();
+        const beatHex = String((beat && beat.targetHexUuid) ? beat.targetHexUuid : "").trim();
+        const doc = hm.hexName ? findByName(hm.hexName) : (hm.targetHexUuid ? await resolveHexDoc(hm.targetHexUuid) : (ctxHex || beatHex ? await resolveHexDoc(ctxHex || beatHex) : null));
+        if (!doc || !doc.update) {
+          console.warn(TAG, "hexModifiers: target hex not found", { hexName: hm.hexName, targetHexUuid: hm.targetHexUuid, beatId: beatCtx.beatId });
+        } else {
+          const MOD_T = "bbttcc-territory";
+          const tf = (doc.flags && doc.flags[MOD_T]) ? clone(doc.flags[MOD_T]) : {};
+          const cur = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];
+          const before = cur.slice();
+          const has = (n) => cur.some(m => norm(m) === norm(n));
+          const added = [], removed = [];
+          for (const n of (Array.isArray(hm.add) ? hm.add : [])) { if (!has(n)) { cur.push(String(n).trim()); added.push(String(n).trim()); } }
+          for (const n of (Array.isArray(hm.remove) ? hm.remove : [])) { const i = cur.findIndex(m => norm(m) === norm(n)); if (i >= 0) { removed.push(cur[i]); cur.splice(i, 1); } }
+          if (added.length || removed.length) {
+            await doc.update({ ["flags." + MOD_T + ".modifiers"]: cur }, { parent: doc.parent });
+            try { const rc = get(game, "bbttcc.api.territory.recomputeHexResources", null); if (typeof rc === "function") await rc(doc, { source: "beat:" + (beatCtx.beatId || beat.id || "?") }); } catch (eRc) { console.warn(TAG, "hexModifiers recompute failed", eRc); }
+            try {
+              const rec = get(game, "bbttcc.api.territory.recordHexImprovement", null);
+              if (typeof rec === "function") await rec(doc, { kind: "modifiers_changed", label: `Modifiers: ${added.map(a => "+" + a).concat(removed.map(r => "−" + r)).join(", ")}`, description: `By beat “${beat.label || beat.id}”.`, source: "beat", before: { modifiers: before }, after: { modifiers: cur }, reversible: true });
+            } catch (_eRec) {}
+            try {
+              await ChatMessage.create({ whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id), speaker: { alias: "Bad Eden" },
+                content: `<div style="border-left:3px solid #c9a227;padding:.35em .6em;background:rgba(201,162,39,.08);">🗺️ <b>${foundry.utils.escapeHTML(String(tf.name || doc.id))}</b>: ${added.map(a => "+" + foundry.utils.escapeHTML(a)).concat(removed.map(r => "−" + foundry.utils.escapeHTML(r))).join(", ")} <span style="opacity:.7">(beat “${foundry.utils.escapeHTML(String(beat.label || beat.id))}”)</span></div>` });
+            } catch (_eMsg) {}
+            changed = true;
+            notes.push("hexModifiers:" + (added.length + removed.length));
+          }
+        }
+      }
+      }
+    } catch (eHM) {
+      console.warn(TAG, "hexModifiers apply failed", eHM);
+    }
+
+    // 2f) Hex READING — the Water Choir as an instrument (owner ruling 2026-09-13, R5).
+    // worldEffects.hexReading = { hexName, voice? } → a player-facing card in the Choir's language,
+    // in BANDS never numbers, reading three things: the tenders' mood (coalition morale/loyalty),
+    // the land's hurt (this hex's darkness + Fallout Bloom + how many coalition hexes carry a blast
+    // mark), and the lean (leyline flow/purity, and the Red Thread once planted). The GM gets the same
+    // card with the raw facts under it. Never names the source — the Choir knows toward, not what.
+    try {
+      const hr = we.hexReading && typeof we.hexReading === "object" ? we.hexReading : null;
+      if (hr && hr.hexName) {
+        const norm = (x) => String(x || "").replace(/[\s\u00A0]+/g, " ").trim().toLowerCase();
+        let doc = null; const want = norm(hr.hexName);
+        for (const sc of (game.scenes || [])) { for (const d of (sc.drawings || [])) { const tf = d.flags && d.flags["bbttcc-territory"]; if (tf && (tf.isHex === true || tf.kind === "territory-hex") && norm(tf.name || d.text) === want) { doc = d; break; } } if (doc) break; }
+        if (!doc) console.warn(TAG, "hexReading: hex not found", hr.hexName);
+        else {
+          const tf = doc.flags["bbttcc-territory"] || {};
+          const mods = (Array.isArray(tf.modifiers) ? tf.modifiers : []).map(norm);
+          const darkness = Number(tf.mods && tf.mods.darkness || 0) || 0;
+          const flow = String((tf.leylines && tf.leylines.flowState) || "normal").toLowerCase();
+          const purity = Number((tf.leylines && tf.leylines.purity) || 0) || 0;
+          const bloom = mods.includes("fallout bloom"), thread = mods.includes("red thread field");
+          // coalition: the active campaign's roster, else the hex's owner
+          let fids = [];
+          try { const capi = get(game, "bbttcc.api.campaign", null); const cid = capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null; const camp = cid && capi.getCampaign ? capi.getCampaign(cid) : null; fids = [].concat((camp && camp.factionIds) || [], (camp && camp.factionId) ? [camp.factionId] : []); } catch (_eC) {}
+          if (!fids.length && tf.factionId) fids = [tf.factionId];
+          const fset = new Set(fids.map(x => String(x || "").replace(/^Actor\./, "")));
+          const facs = [...fset].map(id => game.actors.get(id)).filter(Boolean);
+          const num = (v) => (v && typeof v === "object") ? Number(v.value || 0) : Number(v || 0);
+          const morale = facs.length ? Math.round(facs.reduce((a, f) => a + num(get(f, "flags.bbttcc-factions.morale", 0)), 0) / facs.length) : null;
+          const loyalty = facs.length ? Math.round(facs.reduce((a, f) => a + num(get(f, "flags.bbttcc-factions.loyalty", 0)), 0) / facs.length) : null;
+          let footprint = 0;
+          for (const sc of (game.scenes || [])) for (const d of (sc.drawings || [])) { const t2 = d.flags && d.flags["bbttcc-territory"]; if (!t2 || !fset.has(String(t2.factionId || ""))) continue; const m2 = (Array.isArray(t2.modifiers) ? t2.modifiers : []).map(norm); if (m2.includes("fallout bloom") || m2.includes("damaged infrastructure") || m2.includes("contaminated")) footprint++; }
+          const band = (v, hi, mid) => v == null ? "unknown" : v >= hi ? "steady" : v >= mid ? "uneasy" : "strained";
+          const moodM = band(morale, 60, 30), moodL = band(loyalty, 60, 30);
+          const mood = (moodM === "steady" && moodL === "steady") ? "The wide basin settles when you stand in it. Whoever tends this water is sleeping through the night."
+            : (moodM === "strained" || moodL === "strained") ? "It tunes and re-tunes and cannot find you. The people who tend this water are holding something in."
+            : "It finds you, loses you, finds you again. The tenders are steady on the surface and not underneath.";
+          const hurt = bloom ? `One basin is playing flat on purpose, a held finger on a string.${footprint > 1 ? ` The flat note has spread — ${footprint} of your places carry it now.` : ""}`
+            : darkness >= 3 ? "Every basin has gone a quarter-tone dark, and none of them will say why."
+            : darkness >= 1 ? "There is a low note under the song that was not there last season."
+            : (footprint > 0 ? `This water is clean. ${footprint} of your places ${footprint === 1 ? "is" : "are"} not.` : "The water is clean. It says so, at length.");
+          const lean = flow === "surge" ? "The water wants to run uphill. It is very sure about the direction and will not say the name."
+            : flow === "stagnation" ? "It has stopped arguing. A basin that stops arguing is a basin that has given up on something."
+            : flow === "turbulence" ? "It stutters in the narrow channels — something upstream is deciding."
+            : flow === "inversion" ? "It runs the wrong way for one breath in ten, and pretends it didn't."
+            : "It runs the way it always has. Whatever leaned on the land that night, this water has not leaned with it.";
+          const threadLine = thread ? " The red-thread stand at the low field leans, all together, the same way the water wants to go." : "";
+          const pur = purity >= 3 ? " There is a clarity in the low tones that reads as intent." : purity <= -3 ? " The low tones have silt in them." : "";
+          const esc = foundry.utils.escapeHTML;
+          const voice = esc(String(hr.voice || "The Water Choir"));
+          const content = `<div class="bbttcc-hex-reading" style="border-left:3px solid #4db8b0;padding:.45em .7em;background:rgba(77,184,176,.08);">
+            <div style="opacity:.75;font-size:.85em;margin-bottom:.25em;">🎶 ${voice} — ${esc(String(tf.name || hr.hexName))}</div>
+            <p><b>The tenders.</b> ${esc(mood)}</p><p><b>The hurt.</b> ${esc(hurt)}</p><p><b>The lean.</b> ${esc(lean)}${esc(threadLine)}${esc(pur)}</p></div>`;
+          await ChatMessage.create({ speaker: { alias: voice }, content });
+          try { await ChatMessage.create({ whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id), speaker: { alias: "Bad Eden" }, content: `<div style="opacity:.85;font-size:.9em;">🎶 <b>Choir raw</b> — ${esc(String(tf.name || hr.hexName))}: morale ${morale ?? "—"} · loyalty ${loyalty ?? "—"} · darkness ${darkness} · flow ${esc(flow)} · purity ${purity} · bloom ${bloom ? "yes" : "no"} · red thread ${thread ? "yes" : "no"} · blast-marked hexes ${footprint}</div>` }); } catch (_eRaw) {}
+          changed = true;
+          notes.push("hexReading:" + String(tf.name || hr.hexName));
+        }
+      }
+    } catch (eHR) {
+      console.warn(TAG, "hexReading failed", eHR);
+    }
+
     // 3) Radiation
     if (we.radiationDelta && Number(we.radiationDelta) !== 0) {
       const delta = Number(we.radiationDelta || 0);

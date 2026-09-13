@@ -238,12 +238,15 @@ const GEAR_MARKS = KNOBS.gearMarks ?? Math.round(E.TIER_BASE_MARKS[1] * (E.CATEG
 // Engine tables (ruling 2026-09-12): RES_TO_OP.culture/faith (territory main.js) + LANE_HEX_BONUS (turn-driver).
 const LANE_HEX_BONUS = parseConst(S.econ, "LANE_HEX_BONUS", { culture:{ byType:{ research:1, city:2, port:1, settlement:1, temple:1 }, bySize:{ outpost:0, village:0.5, town:1, city:2, metropolis:3, megalopolis:4 }, byFacility:{ theatre:2, theater:2, library:2, hall:1, festival:1 } }, faith:{ byType:{ temple:3, ruins:1 }, bySize:{ outpost:0, village:0.5, town:1, city:1.5, metropolis:2, megalopolis:3 }, byFacility:{ temple:3, shrine:2, chapel:2, church:2 } } }, "LANE_HEX_BONUS (turn-driver)");
 const LANES = { culture: { res: E.RES_TO_OP.culture || {}, ...LANE_HEX_BONUS.culture }, faith: { res: E.RES_TO_OP.faith || {}, ...LANE_HEX_BONUS.faith } };
+const LANE_SURGE_MULT = (() => { const m = /export const LANE_BY_MODIFIER_SURGE_MULT\s*=\s*([\d.]+)/.exec(S.econ || ""); if (!m) { DRIFT.push("LANE_BY_MODIFIER_SURGE_MULT: not found — using 2"); return 2; } return Number(m[1]); })();
 function laneIncome(h, res) {
   const out = { culture:0, faith:0 };
   if (!KNOBS.lanes) return out;
   for (const [lane, L] of Object.entries(LANES)) {
     let v = 0; for (const [rk, w] of Object.entries(L.res)) v += (res[rk] || 0) * w;
     v += L.byType[h.type] || 0; v += L.bySize[h.size] || 0;
+    const surge = String(h.leyFlow || "normal") === "surge";   // turn-driver laneHexBonus byModifier (2026-09-13)
+    for (const [key, b] of Object.entries(L.byModifier || {})) if ((h.modifiers || []).some(m => String(m).toLowerCase() === key)) v += b * (surge ? LANE_SURGE_MULT : 1);
     out[lane] = Math.max(0, round(v));
   }
   return out;
@@ -252,11 +255,19 @@ function laneIncome(h, res) {
 /* ───────────────────── engine formula mirrors ───────────────────── */
 const round = Math.round;
 function hexBaseVector(h) { const tb = E.TYPE_BASE[h.type] || E.TYPE_BASE.settlement; const sm = E.SIZE_MULT[h.size] ?? 0; return Object.fromEntries(["food","materials","trade","military","knowledge"].map(k => [k, round((tb[k] || 0) * sm)])); }
-function modifierEffects(mods) { let mAll = 1, mTrade = 1; for (const m of mods) { const k = String(m).toLowerCase(); if (M.MOD_PROD[k] != null) mAll *= 1 + M.MOD_PROD[k]; if (M.MOD_TRADE[k] != null) mTrade *= 1 + M.MOD_TRADE[k]; } return { mAll, mTrade }; }
+// Modifier tables parsed FROM SOURCE (2026-09-13; the hardcoded M.MOD_PROD/MOD_TRADE are the fallbacks)
+const MOD_PROD_SRC = parseConst(S.econ, "MOD_PRODUCTION", M.MOD_PROD, "MOD_PRODUCTION (economy constants)");
+const MOD_TRADE_SRC = parseConst(S.econ, "MOD_TRADE", M.MOD_TRADE, "MOD_TRADE (economy constants)");
+const MOD_RES_SRC = parseConst(S.econ, "MOD_RESOURCE", { "fallout bloom": { food: -0.5 } }, "MOD_RESOURCE (economy constants)");
+function modifierEffects(mods) {
+  let mAll = 1, mTrade = 1; const mRes = { food:1, materials:1, trade:1, military:1, knowledge:1 };
+  for (const m of mods) { const k = String(m).toLowerCase(); if (MOD_PROD_SRC[k] != null) mAll *= 1 + MOD_PROD_SRC[k]; if (MOD_TRADE_SRC[k] != null) mTrade *= 1 + MOD_TRADE_SRC[k]; if (MOD_RES_SRC[k]) for (const [r, v] of Object.entries(MOD_RES_SRC[k])) if (r in mRes) mRes[r] *= 1 + Number(v || 0); }
+  return { mAll, mTrade, mRes };
+}
 function hexResources(h) {   // territory computeEffectiveResources (no sephirah adds in the sim)
-  const base = hexBaseVector(h); const { mAll, mTrade } = modifierEffects(h.modifiers);
+  const base = hexBaseVector(h); const { mAll, mTrade, mRes } = modifierEffects(h.modifiers);
   const mul = (v, m) => Math.max(0, round(v * m));
-  return { food:mul(base.food, mAll), materials:mul(base.materials, mAll), trade:mul(base.trade, mAll * mTrade), military:mul(base.military, mAll), knowledge:mul(base.knowledge, mAll) };
+  return { food:mul(base.food, mAll * mRes.food), materials:mul(base.materials, mAll * mRes.materials), trade:mul(base.trade, mAll * mTrade * mRes.trade), military:mul(base.military, mAll * mRes.military), knowledge:mul(base.knowledge, mAll * mRes.knowledge) };
 }
 function resourcesToOP(res, flow = "normal") {   // territory resourcesToOP
   const out = {}; for (const [op, w] of Object.entries(E.RES_TO_OP)) { let v = 0; for (const [rk, x] of Object.entries(w)) v += (res[rk] || 0) * x; out[op] = Math.max(0, round(v)); }

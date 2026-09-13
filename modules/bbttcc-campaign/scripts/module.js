@@ -4566,6 +4566,10 @@ const PHASE_NAMES = ["THE OFFICES", "SETTLING", "SPARKS", "THE WIDENING TRAIL", 
 const PHASE_FLOORS = { 2: { steward: 2, faction: 1 }, 3: { steward: 4, faction: 2 }, 4: { steward: 6, faction: 3 }, 5: { steward: 8, faction: 4 }, 6: { steward: 9, faction: 4 } };
 // Calendar hard doors (charter §2): turn threshold → minimum phase.
 const PHASE_CALENDAR_DOORS = [[2, 2], [6, 3], [10, 4], [14, 5]];
+// Door beats (owner ruling 2026-09-13, R1/R6): the act's opening card fires FROM the phase
+// advance itself — "That One Night" happens ON the Advance, before the invitations. Fire-and-
+// forget so a card with a dialog can never park the turn pipeline (the door opens pre-regen).
+const PHASE_DOOR_BEATS = { 2: "a2_that_one_night" };
 
 // Open every calendar door the given world turn has reached. The clock keeps
 // its own promises: if the phase lags a hard-door threshold, advance it (the
@@ -4614,6 +4618,15 @@ async function _storyPhaseAdvance(target, { via = "beat" } = {}) {
         `</p></div>`
     });
   } catch (_e) {}
+  // The act's door beat (2026-09-13): the opening card, before the invitations.
+  try {
+    const doorBeat = PHASE_DOOR_BEATS[next];
+    const cidD = getActiveCampaignId(); const cD = cidD ? getCampaign(cidD) : null;
+    if (doorBeat && cD && (cD.beats || []).some(b => String(b?.id) === doorBeat)) {
+      log(`[phase] door beat '${doorBeat}' for phase ${next}.`);
+      runBeat(cD.id, doorBeat, { source: "phase-door", phase: next }).catch(eDB => warn("[phase] door beat failed:", eDB));
+    }
+  } catch (eDoor) { warn("[phase] door beat failed:", eDoor); }
   // A new act announces its own moments (2026-09-04, owner expectation): the
   // speaker beats the phase just unlocked post their "wants a word" cards NOW,
   // with the act banner — not after the first beat of the new act resolves.

@@ -1,4 +1,4 @@
-import { RES_TO_OP, LEY_FLOW_MULT, TYPE_BASE, SIZE_MULT, HEX_MOD_LOYALTY, MOD_PRODUCTION, MOD_TRADE } from "/modules/bbttcc-core/scripts/economy.constants.js";
+import { RES_TO_OP, LEY_FLOW_MULT, TYPE_BASE, SIZE_MULT, HEX_MOD_LOYALTY, MOD_PRODUCTION, MOD_TRADE, MOD_RESOURCE } from "/modules/bbttcc-core/scripts/economy.constants.js";
 /* ---------- bbttcc-territory / scripts/main.js (Auto-calc restored + Manual Override) ---------- */
 
 // BBTTCC_TERR_DASH_CLEANUP
@@ -1682,7 +1682,10 @@ function getModifierEffects(modifiers=[]){
 
   for (const [k, v] of Object.entries(MOD_PRODUCTION)) if (set.has(k)) bump(v);   // tables: economy constants (item 5)
   for (const [k, v] of Object.entries(MOD_TRADE)) if (set.has(k)) bumpTrade(v);
-  return { mAll, mTrade };
+  // per-resource modifiers (2026-09-13): Fallout Bloom halves FOOD and nothing else
+  const mRes = { food:1, materials:1, trade:1, military:1, knowledge:1 };
+  for (const [k, per] of Object.entries(MOD_RESOURCE)) if (set.has(k)) for (const [r, v] of Object.entries(per || {})) if (r in mRes) mRes[r] *= (1 + Number(v || 0));
+  return { mAll, mTrade, mRes };
 }
 /** Type→base pips */
 // TYPE_BASE lives in the economy constants table
@@ -1692,7 +1695,7 @@ function getModifierEffects(modifiers=[]){
 /** Compute EFFECTIVE resources: base → +sephirot → ×modifiers */
 function computeEffectiveResources(base, sephirotName, modifiers){
   const add = sephirotResourceBonus(sephirotName);
-  const { mAll, mTrade } = getModifierEffects(modifiers);
+  const { mAll, mTrade, mRes } = getModifierEffects(modifiers);
 
   const afterAdd = {
     food:      Number(base.food||0)      + add.food,
@@ -1704,14 +1707,16 @@ function computeEffectiveResources(base, sephirotName, modifiers){
 
   const mul = (v,m)=> Math.max(0, Math.round(v*m));
   const effective = {
-    food:      mul(afterAdd.food,      mAll),
-    materials: mul(afterAdd.materials, mAll),
-    trade:     mul(afterAdd.trade,     mAll * mTrade),
-    military:  mul(afterAdd.military,  mAll),
-    knowledge: mul(afterAdd.knowledge, mAll)
+    food:      mul(afterAdd.food,      mAll * mRes.food),
+    materials: mul(afterAdd.materials, mAll * mRes.materials),
+    trade:     mul(afterAdd.trade,     mAll * mTrade * mRes.trade),
+    military:  mul(afterAdd.military,  mAll * mRes.military),
+    knowledge: mul(afterAdd.knowledge, mAll * mRes.knowledge)
   };
 
-  return { effective, added:add, multipliers:{mAll,mTrade} };
+  const multipliers = { mAll, mTrade };
+  for (const [r, v] of Object.entries(mRes)) if (v !== 1) (multipliers.mRes ||= {})[r] = v;   // only when a per-resource modifier is in play (keeps calc shapes stable)
+  return { effective, added:add, multipliers };
 }
 
 /* ═════════════════════════════════════════════════════════════════════════════

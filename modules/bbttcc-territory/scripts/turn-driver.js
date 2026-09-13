@@ -1,4 +1,4 @@
-import { LOGI, LEDGER_DAY_COST, LANE_HEX_BONUS } from "/modules/bbttcc-core/scripts/economy.constants.js";
+import { LOGI, LEDGER_DAY_COST, LANE_HEX_BONUS, LANE_BY_MODIFIER_SURGE_MULT } from "/modules/bbttcc-core/scripts/economy.constants.js";
 // Bad Eden Territory — Turn Driver
 // Pipeline: (0) Promote post.pending → turn.pending (Apply only)
 // → (1) Planned Raids (Dry=preview, Apply=commit per faction via compat)
@@ -1000,9 +1000,13 @@ function laneHexBonus(tf){
       facNames.push(String(a.name || "").toLowerCase());
     }
   } catch (_e) {}
+  // by hex MODIFIER (2026-09-13, Red Thread Field): a named holding pays a lane, doubled on a leyline surge
+  const modNames = (Array.isArray(tf?.modifiers) ? tf.modifiers : []).map(m => String(m || "").trim().toLowerCase());
+  const surge = String(tf?.leylines?.flowState || "normal").toLowerCase() === "surge";
   for (const [lane, L] of Object.entries(LANE_HEX_BONUS)) {
     let v = (L.byType[type] || 0) + (L.bySize[size] || 0);
     for (const n of facNames) for (const [key, b] of Object.entries(L.byFacility)) if (n.includes(key)) { v += b; break; }
+    for (const [key, b] of Object.entries(L.byModifier || {})) if (modNames.includes(key)) v += b * (surge ? LANE_BY_MODIFIER_SURGE_MULT : 1);
     out[lane] = v;
   }
   return out;

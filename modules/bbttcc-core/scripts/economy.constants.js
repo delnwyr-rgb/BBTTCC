@@ -77,9 +77,16 @@ export const SIZE_MULT = { none: 0, outpost: 0.5, village: 0.75, town: 1, city: 
 export const MOD_PRODUCTION = {
   "well-maintained": 0.25, "strategic position": 0.10, "loyal population": 0.15, "contaminated": -0.50,
   "damaged infrastructure": -0.25, "hostile population": -0.25, "difficult terrain": -0.10, "radiation zone": -0.75,
-  "supply line vulnerable": -0.15
+  "supply line vulnerable": -0.15,
+  "red thread field": 0.10               // Lyrenn Act 2 reframe (owner ruling 2026-09-13): specialty crop, a holding
 };
 export const MOD_TRADE = { "trade hub": 0.50 };
+/** per-RESOURCE production modifiers (fractions, ×(1+v) on that resource only) — 2026-09-13 */
+export const MOD_RESOURCE = {
+  "fallout bloom": { food: -0.50 }        // "That One Night": the rows went wild — wild isn't yield. Lifts at Red Thread planting.
+};
+/** lane bonus by hex MODIFIER (LANE_HEX_BONUS.<lane>.byModifier) is DOUBLED on a hex whose leyline flow is `surge` */
+export const LANE_BY_MODIFIER_SURGE_MULT = 2;
 /** hex loyalty score contributions by modifier (facts.hex.loyaltyScore) */
 export const HEX_MOD_LOYALTY = { "loyal population": 2, "hostile population": -2, "well-maintained": 1, "well maintained": 1, "damaged infrastructure": -1 };
 
@@ -96,8 +103,8 @@ export const RES_TO_OP = {
 };
 export const LEY_FLOW_MULT = { normal: 1.0, turbulence: 0.9, surge: 1.3, stagnation: 0.6, inversion: 1.0 };
 export const LANE_HEX_BONUS = {   // per-type / per-size / per-stationed-facility (name-keyed) bonuses for the two lanes
-  culture: { byType: { research:1, city:2, port:1, settlement:1, temple:1 }, bySize: { outpost:0, village:0.5, town:1, city:2, metropolis:3, megalopolis:4 }, byFacility: { theatre:2, theater:2, library:2, hall:1, festival:1 } },
-  faith:   { byType: { temple:3, ruins:1 },                                    bySize: { outpost:0, village:0.5, town:1, city:1.5, metropolis:2, megalopolis:3 }, byFacility: { temple:3, shrine:2, chapel:2, church:2 } }
+  culture: { byType: { research:1, city:2, port:1, settlement:1, temple:1 }, bySize: { outpost:0, village:0.5, town:1, city:2, metropolis:3, megalopolis:4 }, byFacility: { theatre:2, theater:2, library:2, hall:1, festival:1 }, byModifier: {} },
+  faith:   { byType: { temple:3, ruins:1 },                                    bySize: { outpost:0, village:0.5, town:1, city:1.5, metropolis:2, megalopolis:3 }, byFacility: { temple:3, shrine:2, chapel:2, church:2 }, byModifier: { "red thread field": 1 } }
 };
 
 // ── logistics pressure (turn-driver computeLogisticsPressureForFaction) ─────────────────────────
