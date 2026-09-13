@@ -25,6 +25,7 @@ const SETTING_DIRECTOR_ENABLED = "director.enabled";     // Story Director: Worl
 const SETTING_DIRECTOR_STATE = "directorState";          // Story Director runtime state (budget, fired beats, level floors, pressure)
 const SETTING_DIRECTOR_PRESSURE_THRESHOLD = "director.pressureThreshold"; // pressure needed for a MID-TURN director look
 const SETTING_DIRECTOR_AUTOINVITE = "director.autoInvite";
+const SETTING_INVITES_PLAYER_ACCEPT = "invites.playerAccept";   // 2026-09-12: players may accept "wants a word" invitations (relayed to the GM seat)
 const SETTING_SEAL_QUESTS = "director.sealCompletedQuests"; // 2026-09-07 ruling: a completed quest's beats never fire again
 const SETTING_SEAL_ACTS   = "director.sealDoneActs";        // 2026-09-07 ruling: a finished act's content is done in its entirety // auto-post "NPC wants a word" cards when speaker moments open
 const SETTING_DIRECTOR_TTONLY_CHAINS = "director.turnTickOnlyChains"; // CSV of storyChains that only fire on the world-turn tick (seam-excluded)
@@ -6210,14 +6211,16 @@ async function _postTalkInvitation(actor, beats = []) {
 // (name + who/where/why description) and the coalition faction track (the
 // Quest Log surface) — the latter through the same questEffects engine the
 // authored offer-quest beats use, so display/history behave identically.
-async function _acceptTalkInvitation(message) {
+// 2026-09-12: keyed on (actorId, beatId) so the Quest Log's Invitations tab and the
+// GM relay can accept without a chat message in hand; the card, when present, is sealed too.
+async function _acceptInvite({ actorId = "", beatId: beatIdIn = "", message = null, byName = "" } = {}) {
   const inv = message?.getFlag?.(MOD_ID, "talkInvite") || {};
-  const actor = game.actors?.get?.(inv.actorId);
+  const actor = game.actors?.get?.(String(actorId || inv.actorId || "").trim());
   if (!actor) { ui.notifications?.warn?.("That person is nowhere to be found."); return; }
   const campaignId = getActiveCampaignId();
   const campaign = campaignId ? getCampaign(campaignId) : null;
   if (!campaign) { ui.notifications?.warn?.("No active campaign — the invitation has nowhere to land."); return; }
-  const beatId = (Array.isArray(inv.beatIds) ? inv.beatIds : []).map(s => String(s || "").trim()).filter(Boolean)[0] || "";
+  const beatId = String(beatIdIn || "").trim() || (Array.isArray(inv.beatIds) ? inv.beatIds : []).map(s => String(s || "").trim()).filter(Boolean)[0] || "";
   const beat = (campaign.beats || []).find(b => String(b?.id) === beatId) || null;
   const inviteText = String(beat?.inviteText || "").trim() || "wants a word.";
   const sid = String(beat?.sceneId || "").replace(/^Scene\./, "").trim();
@@ -6265,12 +6268,95 @@ async function _acceptTalkInvitation(message) {
       ui.notifications?.error?.(`⚠ "${actor.name}" was logged in the registry but NOT on the coalition quest track — run tools/repair-quest-track-from-registry.`);
     }
   } catch (_eV) {}
-  try { await message.setFlag(MOD_ID, "talkInvite", Object.assign({}, inv, { accepted: true, questId: qid })); } catch (_e) {}
+  // Seal the chat card (the one handed in, or the open card carrying this beat) so it renders "accepted".
+  try {
+    const msg = message || (game.messages?.contents || []).find(m => { const f = m.getFlag?.(MOD_ID, "talkInvite"); return f && !f.accepted && (Array.isArray(f.beatIds) ? f.beatIds : []).map(String).includes(beatId); }) || null;
+    if (msg) await msg.setFlag(MOD_ID, "talkInvite", Object.assign({}, msg.getFlag(MOD_ID, "talkInvite") || {}, { accepted: true, questId: qid, by: byName || game.user?.name || "" }));
+  } catch (_e) {}
   await ChatMessage.create({
     speaker: { alias: "Bad Eden" },
     content: `<div style="border-left:3px solid #4db8b0;padding:.35em .6em;background:rgba(77,184,176,.06);">
-      📜 <b>${esc(questName)}</b> — logged in the Quest Log. Find them ${sceneName ? `at <b>${esc(sceneName)}</b>` : "in town"}.</div>`
+      📜 <b>${esc(questName)}</b> — logged in the Quest Log. Find them ${sceneName ? `at <b>${esc(sceneName)}</b>` : "in town"}.${byName ? ` <span style="opacity:.7">(accepted by ${esc(byName)})</span>` : ""}</div>`
   });
+  try { Hooks.callAll("bbttcc:invite:accepted", { actorId: actor.id, beatId, questId: qid, questName, by: byName }); } catch (_e) {}
+  return { questId: qid, questName };
+}
+async function _acceptTalkInvitation(message) { return _acceptInvite({ message, byName: game.user?.name || "" }); }
+
+// ─── Invitations as a SURFACE (owner ask 2026-09-12) ─────────────────────────
+// "wants a word" cards scroll away under turn-advance traffic, and accepting
+// from chat is accept → scroll → accept. Open invitations are enumerable here
+// (directorState.invited minus the ones already answered) so the Quest Log's
+// Invitations tab can list them with an Accept button on ANY seat: a GM seat
+// accepts locally; a player seat relays to the primary GM through bbttcc-core
+// gmExec (setting invites.playerAccept locks it to GM clicks).
+function _inviteBeatOpen(beatId, state, campaign) {
+  const beat = (campaign?.beats || []).find(b => String(b?.id) === String(beatId));
+  if (!beat) return null;
+  if (state?.firedStoryBeats?.[beatId] || state?.dialogueFired?.[beatId]) return null;
+  if (getQuest(`word_${beatId}`)) return null;   // answered — it is a quest now
+  return beat;
+}
+function _listOpenInvites() {
+  const out = [];
+  try {
+    const campaignId = getActiveCampaignId();
+    const campaign = campaignId ? getCampaign(campaignId) : null;
+    if (!campaign) return out;
+    const state = _readDirectorState();
+    for (const [beatId, meta] of Object.entries(state.invited || {})) {
+      const beat = _inviteBeatOpen(beatId, state, campaign);
+      if (!beat) continue;
+      const actor = game.actors?.get?.(String(beat.speakerActorId || "").trim());
+      if (!actor) continue;
+      const line = _inviteLine(actor, beat.inviteText);
+      const sid = String(beat.sceneId || "").replace(/^Scene\./, "").trim();
+      const sceneName = sid ? String(game.scenes?.get?.(sid)?.name || "").trim() : "";
+      const req = Array.isArray(beat.inject?.requires) ? beat.inject.requires : (beat.inject?.requires ? [beat.inject.requires] : []);
+      const act = req.find(r => r && r.flag === "storyPhase" && Number.isFinite(Number(r.gte)))?.gte ?? null;
+      out.push({
+        beatId, actorId: actor.id, actorName: actor.name, actorImg: String(actor.img || ""),
+        questName: _inviteQuestName(actor, beat), lineHtml: line.html, linePlain: line.plain,
+        where: sceneName || String(beat.label || "").split(/\s+[—–]\s+/)[0].trim() || "",
+        regarding: String(beat.label || ""), act: act != null ? Number(act) : null,
+        invitedTs: Number(meta?.ts) || 0, via: String(meta?.via || "")
+      });
+    }
+    out.sort((a, b) => b.invitedTs - a.invitedTs);
+  } catch (e) { warn("[invites] list failed:", e); }
+  return out;
+}
+function _invitesPlayerAcceptAllowed() { try { return !!game.settings.get(MOD_ID, SETTING_INVITES_PLAYER_ACCEPT); } catch (_e) { return true; } }
+const GMEXEC_INVITE_ACCEPT = "bbttcc-campaign:invite.accept";
+async function _acceptInviteAnySeat({ actorId = "", beatId = "", message = null } = {}) {
+  if (game.user?.isGM) return _acceptInvite({ actorId, beatId, message, byName: game.user?.name || "" });
+  if (!_invitesPlayerAcceptAllowed()) { ui.notifications?.info?.("Invitation noted — your GM's click seals it into the Quest Log."); return null; }
+  const gx = game.bbttcc?.api?.gmExec;
+  if (!gx?.call) { ui.notifications?.warn?.("No GM relay available — ask your GM to accept the invitation."); return null; }
+  try {
+    const r = await gx.call(GMEXEC_INVITE_ACCEPT, { actorId: String(actorId || ""), beatId: String(beatId || "") });
+    if (r?.questId) ui.notifications?.info?.(`📜 ${r.questName || "Invitation"} — logged in the Quest Log.`);
+    return r || null;
+  } catch (e) { warn("[invites] relay failed:", e); ui.notifications?.error?.(`The invitation slipped — ${e?.message || e}`); return null; }
+}
+function _registerInviteGmExec() {
+  try {
+    const gx = game.bbttcc?.api?.gmExec;
+    if (!gx?.register) return;
+    gx.register(GMEXEC_INVITE_ACCEPT, async (payload = {}, meta = {}) => {
+      if (!game.user?.isGM) throw new Error("not a GM seat");
+      if (!meta?.local && !_invitesPlayerAcceptAllowed()) throw new Error("player acceptance is off (setting invites.playerAccept)");
+      const beatId = String(payload?.beatId || "").trim();
+      const state = _readDirectorState();
+      if (!beatId || !state.invited?.[beatId]) throw new Error("that invitation is not open");
+      const campaignId = getActiveCampaignId();
+      const campaign = campaignId ? getCampaign(campaignId) : null;
+      const beat = _inviteBeatOpen(beatId, state, campaign);
+      if (!beat) throw new Error("that invitation has already been answered");
+      // The beat's own speaker is the authority — the payload's actorId is not trusted.
+      return (await _acceptInvite({ actorId: String(beat.speakerActorId || "").trim(), beatId, byName: meta?.fromUserName || "" })) || null;
+    });
+  } catch (e) { warn("[invites] gmExec register failed:", e); }
 }
 // exposed for the rename tool (tools/patch-invite-names.macro.js)
 try { globalThis.__bbttccInviteQuestName = _inviteQuestName; globalThis.__bbttccInviteLine = _inviteLine; } catch (_e) {}
@@ -6297,9 +6383,8 @@ function _bindTalkInviteButtons(message, root) {
       btn.addEventListener("click", async (ev) => {
         ev.preventDefault();
         // Quest writes touch world settings + faction flags — GM seals it.
-        if (!game.user?.isGM)
-          return ui.notifications?.info?.("Invitation noted — your GM's click seals it into the Quest Log.");
-        try { await _acceptTalkInvitation(message); }
+        // Any seat (2026-09-12): a GM seals it here; a player click relays to the GM (setting-gated).
+        try { await _acceptInviteAnySeat({ actorId: inv.actorId, beatId: (Array.isArray(inv.beatIds) ? inv.beatIds : []).map(String)[0] || "", message }); }
         catch (e) { warn("[dialogue] invite accept failed:", e); ui.notifications?.error?.("The invitation slipped — see console."); }
       });
     }
@@ -7368,6 +7453,13 @@ function buildCampaignAPI() {
     // Tikkun Dividend — cross-module readers (epic repair, territory turn
     // engine, garrison upkeep) come through here; falls back to 0 if absent.
     tikkun: { get: _tikkunGet, max: TIKKUN_MAX },
+    // Open "wants a word" invitations as a surface (2026-09-12): list() for the
+    // Quest Log's Invitations tab; accept({beatId}) from ANY seat (player → GM relay).
+    invites: {
+      list: () => _listOpenInvites(),
+      accept: (opts = {}) => _acceptInviteAnySeat(opts || {}),
+      playerAcceptAllowed: () => _invitesPlayerAcceptAllowed()
+    },
     director: {
       tick: directorTick,
       chains: directorChains,
@@ -8028,6 +8120,15 @@ Hooks.once("init", () => {
     default: {}
   });
 
+  game.settings.register(MOD_ID, SETTING_INVITES_PLAYER_ACCEPT, {
+    name: "Invitations — players may accept",
+    hint: "Players can accept an NPC's 'wants a word' invitation themselves, from the chat card or the Quest Log's Invitations tab. The write runs on the GM's seat through the bbttcc-core relay and the confirmation names who accepted. Off = only a GM click seals an invitation.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+
   game.settings.register(MOD_ID, SETTING_DIRECTOR_AUTOINVITE, {
     name: "Story Director — auto-invite to conversations",
     hint: "When a story moment carried by an NPC (a beat with a speaker) becomes available, post a public '<NPC> wants a word' chat card with a Talk button — the narration→conversation handoff. Each moment invites once. Off = moments stay quietly available in dialogue and via the director's turn-tick prompt.",
@@ -8091,6 +8192,7 @@ Hooks.once("init", () => {
 
 // READY
 Hooks.once("ready", () => {
+  _registerInviteGmExec();   // player-seat invitation accepts land here (bbttcc-core gmExec)
   game.bbttcc ??= { api: {} };
   game.bbttcc.api ??= {};
   game.bbttcc.api.campaign = buildCampaignAPI();

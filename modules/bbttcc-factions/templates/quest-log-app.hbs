@@ -7,6 +7,7 @@
       </div>
 
       <div class="bbttcc-quest-log__meta">
+        {{#if counts.invites}}<span class="bbttcc-pill bbttcc-pill-invite">Invitations {{counts.invites}}</span>{{/if}}
         <span class="bbttcc-pill bbttcc-pill-primary">Active {{counts.active}}</span>
         <span class="bbttcc-pill">Completed {{counts.completed}}</span>
         <span class="bbttcc-pill">Archived {{counts.archived}}</span>
@@ -30,13 +31,18 @@
       <aside class="bbttcc-quest-log__list">
         {{#if rows.length}}
           {{#each rows}}
-            <div class="bbttcc-quest-row {{#if (bbttcc_eq ../selected.questId questId)}}is-selected{{/if}}"
+            <div class="bbttcc-quest-row {{#if (bbttcc_eq ../selected.questId questId)}}is-selected{{/if}} {{#if isInvite}}is-invite{{/if}}"
                  data-ql-select="{{questId}}">
               <div class="bbttcc-quest-row__top">
                 <div class="bbttcc-quest-row__name">{{name}}</div>
                 <div class="bbttcc-quest-row__badges">
-                  <span class="bbttcc-pill mini">{{status}}</span>
-                  <span class="bbttcc-pill mini">Step {{questStep}}</span>
+                  {{#if isInvite}}
+                    <span class="bbttcc-pill mini bbttcc-pill-invite">invited</span>
+                    {{#if actLabel}}<span class="bbttcc-pill mini">{{actLabel}}</span>{{/if}}
+                  {{else}}
+                    <span class="bbttcc-pill mini">{{status}}</span>
+                    <span class="bbttcc-pill mini">Step {{questStep}}</span>
+                  {{/if}}
                 </div>
               </div>
               <div class="bbttcc-quest-row__sub">
@@ -53,6 +59,37 @@
 
       <main class="bbttcc-quest-log__detail">
         {{#if selected}}
+          {{#if selected.isInvite}}
+            {{#if selected.image}}
+              <div class="bbttcc-quest-detail__art"><img src="{{selected.image}}" alt="{{selected.name}}"/></div>
+            {{/if}}
+            <div class="bbttcc-quest-detail__head">
+              <div>
+                <div class="bbttcc-quest-detail__name">{{selected.name}}</div>
+                <div class="bbttcc-muted">
+                  <span class="bbttcc-pill mini bbttcc-pill-invite">invitation</span>
+                  {{#if selected.actLabel}} · <span class="bbttcc-pill mini">{{selected.actLabel}}</span>{{/if}}
+                  · invited {{tsLabel selected.invitedTs}}
+                </div>
+              </div>
+              <div class="bbttcc-quest-detail__actions">
+                {{#if canAcceptInvites}}
+                  <button type="button" class="button bbttcc-invite-accept" data-ql-act="accept-invite"
+                          data-beat-id="{{selected.beatId}}" data-actor-id="{{selected.actorId}}">
+                    <i class="fa-solid fa-envelope-open-text"></i> Accept the invitation
+                  </button>
+                {{else}}
+                  <span class="bbttcc-muted">Your GM seals invitations.</span>
+                {{/if}}
+              </div>
+            </div>
+            <div class="bbttcc-quest-detail__desc">
+              {{{selected.description}}}
+            </div>
+            <div class="bbttcc-muted" style="margin-top:.6rem;">
+              Accepting logs who wants you, where, and why as an Active quest — the same seal as the chat card's button.
+            </div>
+          {{else}}
           {{#if selected.image}}
             <div class="bbttcc-quest-detail__art">
               <img src="{{selected.image}}" alt="{{selected.name}}"/>
@@ -152,6 +189,7 @@
             <div class="bbttcc-muted" style="margin-top:.6rem;">
               No notes yet.
             </div>
+          {{/if}}
           {{/if}}
         {{else}}
           <div class="bbttcc-muted">Select a quest.</div>

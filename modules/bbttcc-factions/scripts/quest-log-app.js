@@ -81,6 +81,30 @@
     return { seenCount: seen, completedCount: done };
   }
 
+  // Open "wants a word" invitations (2026-09-12, owner ask): the campaign module
+  // enumerates them (api.campaign.invites.list); they render as rows in an
+  // Invitations tab with an Accept button on any seat — no more accept → scroll
+  // → accept through the turn-advance chat traffic.
+  function readInvites() {
+    try {
+      const api = game.bbttcc?.api?.campaign?.invites;
+      const list = (api?.list ? api.list() : []) || [];
+      const esc = foundry.utils.escapeHTML;
+      return list.map(i => ({
+        questId: `invite:${i.beatId}`, isInvite: true, beatId: String(i.beatId || ""), actorId: String(i.actorId || ""),
+        actorName: String(i.actorName || ""), status: "invited",
+        name: String(i.questName || `A Word from ${i.actorName || "Someone"}`),
+        description: `<p>${i.lineHtml || ""}</p>` + (i.where ? `<p><b>Where:</b> ${esc(i.where)}</p>` : "") + (i.regarding ? `<p><b>Regarding:</b> ${esc(i.regarding)}</p>` : ""),
+        image: String(i.actorImg || ""), notes: "", actLabel: (i.act != null) ? `Act ${i.act}` : "",
+        acceptedTs: null, completedTs: null, archivedTs: null, invitedTs: Number(i.invitedTs) || 0, lastTouchedTs: Number(i.invitedTs) || 0,
+        seenCount: 0, completedCount: 0
+      }));
+    } catch (_e) { return []; }
+  }
+  function canAcceptInvites() {
+    try { return !!game.user?.isGM || !!game.bbttcc?.api?.campaign?.invites?.playerAcceptAllowed?.(); } catch (_e) { return !!game.user?.isGM; }
+  }
+
   function rowsFromMap(reg, mapObj, status) {
     const rows = [];
     const keys = mapObj ? Object.keys(mapObj) : [];
@@ -156,7 +180,7 @@
     constructor({ factionId, factionActor } = {}, options = {}) {
       super(options);
       this.factionId = String(factionId || factionActor?.id || "").trim();
-      this.__state = this.__state || { tab: "active", search: "", selected: "" };
+      this.__state = this.__state || { tab: null, search: "", selected: "" };   // tab null = Invitations when any are open, else Active
       this._abort = null;
       this.__updateHook = null;
     }
@@ -172,15 +196,17 @@
       const reg = readRegistry();
       const track = faction ? readTrack(faction) : { active:{}, completed:{}, archived:{} };
 
+      const invites = readInvites();
       const active = rowsFromMap(reg, track.active, "active");
       const completed = rowsFromMap(reg, track.completed, "completed");
       const archived = rowsFromMap(reg, track.archived, "archived");
-      const all = [...active, ...completed, ...archived];
+      const all = [...invites, ...active, ...completed, ...archived];
 
-      const tab = this.__state.tab || "active";
+      const tab = this.__state.tab || (invites.length ? "invites" : "active");
       const search = String(this.__state.search || "").trim().toLowerCase();
 
       const tabRows =
+        (tab === "invites") ? invites :
         (tab === "active") ? active :
         (tab === "completed") ? completed :
         (tab === "archived") ? archived :
@@ -201,8 +227,10 @@
         faction,
         tab,
         search,
-        counts: { active: active.length, completed: completed.length, archived: archived.length, all: all.length },
+        counts: { invites: invites.length, active: active.length, completed: completed.length, archived: archived.length, all: all.length },
+        canAcceptInvites: canAcceptInvites(),
         tabs: [
+          { key:"invites", label:`Invitations (${invites.length})` },
           { key:"active", label:`Active (${active.length})` },
           { key:"completed", label:`Completed (${completed.length})` },
           { key:"archived", label:`Archived (${archived.length})` },
@@ -258,6 +286,21 @@
 
         ev.preventDefault(); ev.stopPropagation();
         const act = String(btn.dataset.qlAct || "");
+
+        // Accept an invitation from ANY seat — the campaign module relays player clicks to the GM.
+        if (act === "accept-invite") {
+          const beatId = String(btn.dataset.beatId || ""); const actorId = String(btn.dataset.actorId || "");
+          const api = game.bbttcc?.api?.campaign?.invites;
+          if (!api?.accept) return ui.notifications?.warn?.("Quest Log: the campaign module is not loaded.");
+          btn.disabled = true;
+          try {
+            const r = await api.accept({ actorId, beatId });
+            if (r?.questId) { this.__state.tab = "active"; this.__state.selected = String(r.questId); }
+          } catch (e) { warn("accept-invite failed", e); }
+          this.render(false);
+          return;
+        }
+
         const qid = String(btn.dataset.questId || this.__state.selected || "").trim();
         if (!qid) return;
 
@@ -413,12 +456,24 @@
         };
         Hooks.on("updateActor", this.__updateHook);
       }
+      // Invitations live in campaign world settings (directorState.invited + the quest
+      // registry) — those updates reach every client, so the tab refreshes for players too.
+      if (!this.__settingHook) {
+        this.__settingHook = (setting) => {
+          try {
+            const k = String(setting?.key || "");
+            if (k === `${MOD_CAM}.quests` || k === `${MOD_CAM}.directorState`) this.render(false);
+          } catch (_e) {}
+        };
+        Hooks.on("updateSetting", this.__settingHook);
+      }
     }
 
     async close(options) {
       try {
         if (this._abort) { try { this._abort.abort(); } catch {} }
         if (this.__updateHook) { try { Hooks.off("updateActor", this.__updateHook); } catch {} }
+        if (this.__settingHook) { try { Hooks.off("updateSetting", this.__settingHook); } catch {} }
       } catch (_e) {}
       return super.close(options);
     }

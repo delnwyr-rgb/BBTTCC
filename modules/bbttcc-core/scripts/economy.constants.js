@@ -64,6 +64,11 @@ export const TYPE_BASE = {
   factory:   {food:0, materials:4, trade:3, military:0, knowledge:0},
   research:  {food:0, materials:1, trade:1, military:0, knowledge:4},
   temple:    {food:1, materials:1, trade:1, military:0, knowledge:2},
+  // wilderness (owner ruling 2026-09-12): a wild claim yields LESS than a settlement — before this
+  // row the lookup fell through to `settlement`, so a wild outpost paid 1/1/2 like a planned one.
+  // At outpost ×0.5 → 1 food / 1 materials / 1 trade (Math.round); upgrade_outpost_settlement is the
+  // road to the settlement ladder.
+  wilderness:{food:1, materials:1, trade:1, military:0, knowledge:0},
   wasteland: {food:0, materials:1, trade:0, military:0, knowledge:0},
   ruins:     {food:0, materials:2, trade:0, military:0, knowledge:1}
 };
