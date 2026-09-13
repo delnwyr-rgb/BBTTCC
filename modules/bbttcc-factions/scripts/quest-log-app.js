@@ -91,10 +91,14 @@
       const list = (api?.list ? api.list() : []) || [];
       const esc = foundry.utils.escapeHTML;
       return list.map(i => ({
-        questId: `invite:${i.beatId}`, isInvite: true, beatId: String(i.beatId || ""), actorId: String(i.actorId || ""),
+        questId: `invite:${i.actorId}`, isInvite: true, beatId: String(i.beatId || ""), actorId: String(i.actorId || ""),
         actorName: String(i.actorName || ""), status: "invited",
         name: String(i.questName || `A Word from ${i.actorName || "Someone"}`),
-        description: `<p>${i.lineHtml || ""}</p>` + (i.where ? `<p><b>Where:</b> ${esc(i.where)}</p>` : "") + (i.regarding ? `<p><b>Regarding:</b> ${esc(i.regarding)}</p>` : ""),
+        momentCount: Array.isArray(i.moments) ? i.moments.length : 1,
+        description: `<p>${i.lineHtml || ""}</p>` + (i.where ? `<p><b>Where:</b> ${esc(i.where)}</p>` : "")
+          + ((Array.isArray(i.moments) && i.moments.length > 1)
+              ? `<p><b>On offer:</b></p><ul>${i.moments.map(m => `<li>${esc(m.label)}</li>`).join("")}</ul>`
+              : (i.regarding ? `<p><b>Regarding:</b> ${esc(i.regarding)}</p>` : "")),
         image: String(i.actorImg || ""), notes: "", actLabel: (i.act != null) ? `Act ${i.act}` : "",
         acceptedTs: null, completedTs: null, archivedTs: null, invitedTs: Number(i.invitedTs) || 0, lastTouchedTs: Number(i.invitedTs) || 0,
         seenCount: 0, completedCount: 0

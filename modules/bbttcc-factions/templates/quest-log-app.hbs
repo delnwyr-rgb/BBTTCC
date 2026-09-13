@@ -46,7 +46,11 @@
                 </div>
               </div>
               <div class="bbttcc-quest-row__sub">
-                <code class="bbttcc-muted">{{questId}}</code>
+                {{#if isInvite}}
+                  <span class="bbttcc-muted">{{momentCount}} moment{{#unless (bbttcc_eq momentCount 1)}}s{{/unless}} on offer</span>
+                {{else}}
+                  <code class="bbttcc-muted">{{questId}}</code>
+                {{/if}}
               </div>
             </div>
           {{/each}}

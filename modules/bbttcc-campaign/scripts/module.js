@@ -6304,22 +6304,47 @@ function _listOpenInvites() {
     const campaign = campaignId ? getCampaign(campaignId) : null;
     if (!campaign) return out;
     const state = _readDirectorState();
+    // ONE invitation per NPC — the chat card's shape (2026-09-12, live-caught: the
+    // per-beat walk listed every moment of a chain as its own invitation). The
+    // card seals on its FIRST beat (word_<beatId>), so the group is answered when
+    // any of its still-unplayed beats already has that quest.
+    const groups = new Map();   // actorId → { actor, beats:[{beatId, beat, meta, idx}] }
+    const order = new Map((campaign.beats || []).map((b, i) => [String(b?.id), i]));
     for (const [beatId, meta] of Object.entries(state.invited || {})) {
-      const beat = _inviteBeatOpen(beatId, state, campaign);
+      const beat = (campaign.beats || []).find(b => String(b?.id) === String(beatId));
       if (!beat) continue;
-      const actor = game.actors?.get?.(String(beat.speakerActorId || "").trim());
+      if (state.firedStoryBeats?.[beatId] || state.dialogueFired?.[beatId]) continue;   // played — not an open moment
+      const actorId = String(beat.speakerActorId || "").trim();
+      const actor = game.actors?.get?.(actorId);
       if (!actor) continue;
+      if (!groups.has(actorId)) groups.set(actorId, { actor, beats: [] });
+      groups.get(actorId).beats.push({ beatId, beat, meta, idx: order.get(String(beatId)) ?? 1e9 });
+    }
+    for (const [actorId, g] of groups) {
+      if (g.beats.some(x => getQuest(`word_${x.beatId}`))) continue;   // answered — it is a quest now
+      g.beats.sort((a, b) => a.idx - b.idx);
+      // Anchor = the chat card's first beat when an open card for this NPC still exists (same quest name
+      // whichever button is clicked); else the earliest authored beat of the group.
+      let anchor = g.beats[0];
+      try {
+        const card = (game.messages?.contents || []).find(m => { const f = m.getFlag?.(MOD_ID, "talkInvite"); return f && !f.accepted && String(f.actorId) === actorId; });
+        const first = card ? String((Array.isArray(card.getFlag(MOD_ID, "talkInvite").beatIds) ? card.getFlag(MOD_ID, "talkInvite").beatIds : [])[0] || "") : "";
+        if (first) anchor = g.beats.find(x => x.beatId === first) || anchor;
+      } catch (_e) {}
+      const { actor } = g; const beat = anchor.beat;
       const line = _inviteLine(actor, beat.inviteText);
       const sid = String(beat.sceneId || "").replace(/^Scene\./, "").trim();
       const sceneName = sid ? String(game.scenes?.get?.(sid)?.name || "").trim() : "";
       const req = Array.isArray(beat.inject?.requires) ? beat.inject.requires : (beat.inject?.requires ? [beat.inject.requires] : []);
       const act = req.find(r => r && r.flag === "storyPhase" && Number.isFinite(Number(r.gte)))?.gte ?? null;
       out.push({
-        beatId, actorId: actor.id, actorName: actor.name, actorImg: String(actor.img || ""),
-        questName: _inviteQuestName(actor, beat), lineHtml: line.html, linePlain: line.plain,
+        beatId: anchor.beatId, actorId: actor.id, actorName: actor.name, actorImg: String(actor.img || ""),
+        questName: g.beats.length > 1 ? `A Word from ${actor.name}` : _inviteQuestName(actor, beat),
+        lineHtml: line.html, linePlain: line.plain,
         where: sceneName || String(beat.label || "").split(/\s+[—–]\s+/)[0].trim() || "",
         regarding: String(beat.label || ""), act: act != null ? Number(act) : null,
-        invitedTs: Number(meta?.ts) || 0, via: String(meta?.via || "")
+        moments: g.beats.map(x => ({ beatId: x.beatId, label: String(x.beat.label || x.beatId) })),
+        invitedTs: Math.max(...g.beats.map(x => Number(x.meta?.ts) || 0)), via: String(anchor.meta?.via || "")
       });
     }
     out.sort((a, b) => b.invitedTs - a.invitedTs);
