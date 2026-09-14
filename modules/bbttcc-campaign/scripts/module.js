@@ -8,6 +8,7 @@
 import "../apps/campaign-tag-picker.js";
 import "../scripts/casualties-engine.js";
 import "../apps/player-beat-mirror-app.js";
+import { deriveSituation, QUEST_MAP, registryOf } from "./story-model.js";
 // bbttcc-rolls-api.js removed 2026-08-28 (atlas cleanup) — game.bbttcc.api.rolls
 // had zero consumers; the beat Choice/Check UI resolves bonuses via its own
 // _rollChoiceCheck / _computeFactionOpRollBonusMap stack.
@@ -7526,6 +7527,8 @@ function buildCampaignAPI() {
     injector: { fire: injectorFire },
     // Gate introspection for GM consoles: report(beat, campaign?, ctx?) gives
     // per-condition met/unmet; requiresMet is the boolean the engine itself uses.
+    // STORY MODEL (Phase 1, 2026-09-13): quest · chapter · ending, derived — see scripts/story-model.js
+    story: { QUEST_MAP, registryOf, deriveSituation },
     gates: {
       report: async (beat, campaign, ctx = {}) => {
         const c = campaign || getCampaign(getActiveCampaignId());

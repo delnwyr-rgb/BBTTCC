@@ -1,3 +1,4 @@
+import { deriveSituation } from "../scripts/story-model.js";
 // modules/bbttcc-campaign/apps/campaign-builder-app.js
 //
 // FULL REPLACEMENT (RESTORE BEAT EDITING + ACTION HANDLERS)
@@ -1343,6 +1344,49 @@ const activeCampaignId = _getActiveCampaignId();
   // The hero's decision ladder carries a year of live-caught lessons (dated
   // inline) — port them, don't "simplify" them.
   // -----------------------------------------------------------------------
+  // Phase 1 (2026-09-13): the hero card as a RENDER of the story model (scripts/story-model.js).
+  // Returns null when the model has no anchor yet, so the opening / BEGIN path still runs.
+  _heroFromStory(story, h) {
+    if (!story || !story.now) return null;
+    const { card, run, esc, whyOf, sealOf, sealCard } = h;
+    const n = story.now, q = n.quest, ch = n.chapter;
+    const chapTxt = ch ? ` · ${esc(ch.name)}` : "";
+    const done = q.chapters.filter(c => c.state === "done");
+    const endName = (c) => esc(String(c.ending?.label || "done").replace(/^.*?\s[-—]\s*/, ""));
+    const endingsTxt = done.length ? ` Endings so far: ${done.map(c => `${esc(c.name)} → ${endName(c)}`).join(" · ")}.` : "";
+    const progress = q.chapters.length ? ` Chapter ${Math.min(done.length + 1, q.chapters.length)} of ${q.chapters.length}.` : "";
+    const roadsOf = () => (n.roads || []).map(r => {
+      const st = r.chapter ? r.chapter.state : r.quest.state;
+      const verb = (st === "dormant" || st === "offered") ? "begins" : "next";
+      return { id: r.beat ? String(r.beat.id) : "", label: `${r.quest.name}${r.chapter ? " · " + r.chapter.name : ""} — ${verb}: ${r.beat ? (r.beat.label || r.beat.id) : "(no beat)"}`, icon: r.ready ? "⚡" : "⛩" };
+    }).filter(r => r.id);
+    if (n.why === "complete") {
+      const doors = story.doors.slice(0, 4).map(d => ({ id: String(d.next.beat.id), label: `${d.name} — begins: ${d.next.beat.label || d.next.beat.id}`, icon: "⚡" }));
+      const c = card(`✓ QUEST COMPLETE — ${esc(q.name)}`, "", null, [],
+        `${esc(q.name)} is finished.${endingsTxt}${story.inPlay.length ? ` In play: ${story.inPlay.map(x => esc(x.name)).join(" · ")}.` : ""}${doors.length ? " Doors open this act:" : " Nothing else is open this act — advance the turn, or pick a quest from the list."}`);
+      c.quest = q.name; if (doors.length) c.roads = doors; return c;
+    }
+    if (!n.next) {
+      const c = card(`🧭 ${esc(q.name)} — in the table's hands`, "", null, [],
+        `no unfired beat is left in ${ch ? "this chapter" : "this quest"}${q.closers.length ? "" : ", and it has no closing beat"}.${endingsTxt}`);
+      c.quest = q.name; return c;
+    }
+    const b = n.next.beat;
+    if (n.next.ready) {
+      const closing = n.why === "closer";
+      const c = card(closing ? `🏁 CLOSE — ${esc(q.name)}` : `⏭ NEXT — ${esc(q.name)}${chapTxt}`, b.label || b.id, b,
+        [run(b, closing ? "Run the closing beat" : "Run the next beat")],
+        `${closing ? "every chapter has its ending." : ""}${progress}${endingsTxt}`.trim());
+      c.quest = q.name; return c;
+    }
+    if (sealOf(b)) { const c = sealCard(b, `NEXT — ${esc(q.name)}`, ""); c.quest = q.name; return c; }
+    const roads = roadsOf();
+    const c = card(`⏳ NEXT — ${esc(q.name)}${chapTxt} — waiting`, b.label || b.id, b,
+      roads.length ? [] : [run(b, "Run it anyway (override the gate)")],
+      `waits for <b>${whyOf(b)}</b>.${roads.length ? " The way there:" : ""}${progress}${endingsTxt}`);
+    c.quest = q.name; if (roads.length) c.roads = roads; return c;
+  }
+
   _computeSituation(campaign, runtime) {
     const NS = "bbttcc-campaign";
     const api = game.bbttcc?.api?.campaign;
@@ -1426,11 +1470,27 @@ const activeCampaignId = _getActiveCampaignId();
         : "its own conditions");
     };
 
+    // ── STORY MODEL (Phase 1, 2026-09-13): the NOW card is a RENDER of the derived situation ──
+    // quest · chapter · ending, derived from the beats' own start/ending rows, the coalition quest
+    // buckets and the fired ledgers. The inference ladder below stays only as the fallback.
+    let story = null, storyHero = null;
+    try {
+      const coalition = [].concat(campaign?.factionIds || [], campaign?.factionId ? [campaign.factionId] : []).map(x => String(x || "").replace(/^Actor\./, "")).map(id => game.actors?.get?.(id)).filter(Boolean);
+      const bucketOf = (qid) => { for (const F of coalition) { const q = F.flags?.["bbttcc-factions"]?.quests || {}; for (const k of ["active", "completed", "archived"]) if (q[k]?.[qid]) return k; } return null; };
+      const invitedIds = new Set(Object.keys(ds.invited || {}).filter(id => !firedSet.has(id)));
+      story = deriveSituation({ beats, firedSet, firedTs: id => byBeat.get(id)?.ts || 0,
+        readyOf: id => { const r = runtime.byId[id]; return r ? { ready: r.state === "ready", reasons: r.reasons || [] } : null; },
+        bucketOf, invitedIds, phase: curPhase, turn: Number(runtime?.turn) || 0, anchorId, seqOf, questNames });
+      storyHero = this._heroFromStory(story, { card, run, esc, whyOf, sealOf, sealCard });
+    } catch (eStory) { console.warn("[bbttcc-campaign] story model failed — falling back to the ladder", eStory); }
+
     // State zero (2026-08-24): an OPEN beat dialog IS what's next.
     const openDlg = (() => { try { return api?.openBeatDialog?.() || null; } catch (_e) { return null; } })();
     if (openDlg) {
       hero = card("🎭 PLAYER CHOICE IN PROGRESS", openDlg.label, null, [],
         `the table is deciding${openDlg.choices?.length ? ` — ${openDlg.choices.slice(0, 6).map(c => esc(c)).join(" · ")}${openDlg.choices.length > 6 ? " · …" : ""}` : ""}. The story continues from their pick.`);
+    } else if (storyHero) {
+      hero = storyHero;
     } else if (histCount === 0 && readyStory.length) {
       const openId = String(campaign?.openingBeatId || "").trim();
       const opening = openId ? beats.find(b => String(b.id) === openId && runtime.byId[openId]?.state === "ready") : null;
@@ -1632,7 +1692,7 @@ const activeCampaignId = _getActiveCampaignId();
       .sort((a, b) => (Number(b.completedTs) || 0) - (Number(a.completedTs) || 0))
       .slice(0, 6);
 
-    return { beatById, questDefs, questNames, questOf, curPhase, anchor, anchorId, anchorQuestId, hero, nextIds, recent, choices, completed, firedSet, histCount };
+    return { beatById, questDefs, questNames, questOf, curPhase, anchor, anchorId, anchorQuestId, hero, nextIds, recent, choices, completed, firedSet, histCount, story };
   }
 
   // -----------------------------------------------------------------------
