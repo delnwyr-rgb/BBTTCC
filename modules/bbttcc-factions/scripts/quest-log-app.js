@@ -224,6 +224,19 @@
       this.__state.selected = sel;
 
       const selected = sel ? (all.find(r => r.questId === sel) || null) : null;
+      // 📍 Where (2026-09-14): town-hub doors this quest points at — derived from the
+      // quest's un-completed beats' sceneId (api.travel.doors.forQuest). No new schema.
+      if (selected && !selected.isInvite) {
+        try {
+          const doors = game.bbttcc?.api?.travel?.doors;
+          const hits = doors?.forQuest ? doors.forQuest(selected.questId) : [];
+          selected.locations = hits.map(h => ({
+            drawingUuid: h.drawingUuid, label: h.label, hubLabel: h.hubLabel,
+            here: !!(canvas?.scene?.uuid && canvas.scene.uuid === h.hubSceneUuid),
+            beatLabels: h.beats.map(b => b.label).join(" · ")
+          }));
+        } catch (_e) { selected.locations = []; }
+      }
 
       return {
         ...ctx,
@@ -302,6 +315,15 @@
             if (r?.questId) { this.__state.tab = "active"; this.__state.selected = String(r.questId); }
           } catch (e) { warn("accept-invite failed", e); }
           this.render(false);
+          return;
+        }
+
+        // 📍 Go to a location door on its town hub map (any seat — pans this client, pulses the door).
+        if (act === "goto-door") {
+          const doors = game.bbttcc?.api?.travel?.doors;
+          const uuid = String(btn.dataset.drawingUuid || "");
+          if (!doors?.goto || !uuid) return ui.notifications?.warn?.("Quest Log: the travel module's doors are not loaded.");
+          try { await doors.goto(uuid); } catch (e) { warn("goto-door failed", e); }
           return;
         }
 

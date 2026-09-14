@@ -150,6 +150,19 @@
             </div>
           </div>
 
+          {{#if selected.locations.length}}
+            <div class="bbttcc-quest-detail__where" style="margin:.35rem 0 .5rem; display:flex; flex-wrap:wrap; gap:.35rem; align-items:center;">
+              <span class="bbttcc-quest-detail__label" style="margin-right:.25rem;">Where</span>
+              {{#each selected.locations}}
+                <button type="button" class="button bbttcc-pill bbttcc-pill-where" data-ql-act="goto-door"
+                        data-drawing-uuid="{{drawingUuid}}"
+                        title="{{beatLabels}}{{#unless here}} — opens the {{hubLabel}} map{{/unless}}">
+                  📍 {{label}} <span class="bbttcc-muted">· {{hubLabel}}</span>
+                </button>
+              {{/each}}
+            </div>
+          {{/if}}
+
           {{#if selected.description}}
             {{! triple-stache: descriptions are GM-authored HTML — escaping
                 them printed raw tags in the log (2026-08-24) }}

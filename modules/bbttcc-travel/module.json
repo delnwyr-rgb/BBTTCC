@@ -32,6 +32,7 @@
     "scripts/hex-travel-mode.js",
     "scripts/scene-transition.js",
     "scripts/world-overview.js",
+    "scripts/location-doors.js",
     "scripts/travel-mitigation.bridge.js",
     "scripts/chase.js"
   ],
