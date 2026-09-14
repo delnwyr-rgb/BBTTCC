@@ -6920,46 +6920,141 @@ async function _gmPromptTalkInvite(beat, speaker, turn) {
 // per NPC, marked in directorState.invited so it never repeats. Chained onto
 // _speakerMemoryChain so the just-resolved beat's own consumption mark is
 // written before we compute offerability. Setting-gated (director.autoInvite).
+// ═════════════════════════════════════════════════════════════════════════════
+// THE SLATE — Phase 3 of the Director rebuild (2026-09-13). The Director no longer picks beats on a
+// pressure meter; it composes the situation at the chapter break (every applied Advance) and hands
+// the GM ONE card: where the story stands, what is in play, which doors are open this act, and when
+// the calendar will open the next act by itself. Invitations are issued deterministically for quest
+// and chapter START beats that carry an invite line (owner ruling R4: starts fire whenever eligible;
+// Words are just start beats with a card). No pressure, no seams, no candidate scans.
+// ═════════════════════════════════════════════════════════════════════════════
+const _isAmbientBeat = (b) => !!b?.pacing?.ambient || String(b?.timeScale) === "leg" || !!b?.targetHexUuid || /\bdiscovery\b/i.test(String(b?.tags || ""));
+
+// Two passes: structural first (no gates) to find each quest's candidate next, then real gate
+// evaluation for just those candidates — cheap enough to run after every resolved beat.
+async function _storySituation(campaign, { full = false } = {}) {
+  if (!campaign) return null;
+  const beats = Array.isArray(campaign.beats) ? campaign.beats : [];
+  const byId = new Map(beats.map(b => [String(b.id), b]));
+  const store = _storyStateFor(campaign.id);
+  const ds = _readDirectorState();
+  const firedSet = new Set([...Object.keys(store.played || {}), ...Object.keys(ds.firedStoryBeats || {}), ...Object.keys(ds.dialogueFired || {})]);
+  const ts = {};
+  for (const src of [store.played || {}, ds.firedStoryBeats || {}, ds.dialogueFired || {}]) for (const [id, m] of Object.entries(src)) ts[id] = Math.max(ts[id] || 0, Number(m?.ts) || 0);
+  const anchorId = [...firedSet].filter(id => byId.has(id) && !_isAmbientBeat(byId.get(id))).sort((a, b) => (ts[b] || 0) - (ts[a] || 0))[0] || null;
+  const track = (await _coalitionQuestTrack(campaign, {})) || {};
+  const bucketOf = (qid) => { for (const k of ["active", "completed", "archived"]) if (track[k]?.[qid]) return k; return null; };
+  const invitedIds = new Set(Object.keys(ds.invited || {}).filter(id => !firedSet.has(id)));
+  const idx = new Map(beats.map((b, i) => [String(b.id), i]));
+  const seqOf = (b) => { const n = Number(b?.questStep); return (b?.questStep != null && Number.isFinite(n)) ? n : 1e6 + (idx.get(String(b?.id)) ?? 0); };
+  const base = { beats, firedSet, firedTs: id => ts[id] || 0, bucketOf, invitedIds, phase: _storyPhaseGet(), turn: _getTurnNumberSafe(), anchorId, seqOf, questNames: {}, state: store };
+  const memo = new Map();
+  const evalReady = async (b) => { if (!b) return; const id = String(b.id); if (memo.has(id)) return; const ok = await _beatRequiresMet(b, campaign, {}); memo.set(id, { ready: !!ok, reasons: [] }); };
+  if (full) { for (const b of beats) if (!firedSet.has(String(b.id)) && !_isAmbientBeat(b)) await evalReady(b); }
+  else {
+    const pass1 = deriveSituation({ ...base, readyOf: () => null });
+    for (const q of pass1.quests) { if (q.next?.beat) await evalReady(q.next.beat); for (const c of q.chapters) if (c.next?.beat) await evalReady(c.next.beat); for (const b of q.starts) await evalReady(b); }
+  }
+  const story = deriveSituation({ ...base, readyOf: id => memo.get(String(id)) || null });
+  story.readiness = memo;
+  return story;
+}
+
+let __bbttccSlateDelegationInstalled = false;
+function _installSlateDelegation() {
+  if (__bbttccSlateDelegationInstalled) return; __bbttccSlateDelegationInstalled = true;
+  document.addEventListener("click", async (ev) => {
+    const btn = ev.target?.closest?.("[data-bbttcc-slate-run]"); if (!btn) return;
+    ev.preventDefault(); ev.stopPropagation();
+    if (!game.user?.isGM) return void ui.notifications?.warn("The GM runs the slate.");
+    const beatId = String(btn.dataset.bbttccSlateRun || ""); const cid = getActiveCampaignId();
+    if (!beatId || !cid) return;
+    try { await runBeat(cid, beatId, { source: "slate" }); } catch (e) { warn("[slate] run failed:", e); ui.notifications?.error(`Slate: ${e?.message || e}`); }
+  });
+}
+
+function _slateWhere(beat, q) {
+  const sid = String(beat?.sceneId || "").replace(/^Scene\./, "");
+  const sc = sid ? game.scenes?.get?.(sid) : null;
+  const name = sc ? String(sc.name || "").replace(/(?:_(?:pov|battlemap|scene|map|intro|us|tr|v\d+))+$/i, "").replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()) : "";
+  return name || q?.hex || (beat?.targetHexUuid ? "on arrival" : "");
+}
+
+async function directorSlate({ via = "manual" } = {}) {
+  if (!game.user?.isGM) return { ok: false, reason: "not_gm" };
+  const campaignId = getActiveCampaignId(); const campaign = campaignId ? getCampaign(campaignId) : null;
+  if (!campaign) return { ok: false, reason: "no_campaign" };
+  const story = await _storySituation(campaign, { full: false });
+  const esc = foundry.utils.escapeHTML;
+  const phase = story.act, turn = story.turn;
+  const nm = (q) => esc(q.name);
+  const runBtn = (b, ready) => ready ? `<button type="button" data-bbttcc-slate-run="${esc(String(b.id))}" style="width:auto;padding:.1em .5em;margin-left:.3em;">▶</button>` : `<span style="opacity:.6;margin-left:.3em;">⛩</span>`;
+  const waitsTxt = (n, q) => { const roads = story.roadsFor ? story.roadsFor(n.beat) : []; return roads.length ? ` — waits for ${roads.map(r => `<b>${esc(r.quest.name)}${r.chapter ? " · " + esc(r.chapter.name) : ""}</b>${r.beat ? ` (${r.beat.ready ? "ready" : "gated"}: ${esc(r.beat.label || r.beat.id)})` : ""}`).join(", ")}` : " — waits at its gate"; };
+  const rowQ = (q, star) => { const n = q.next; const where = n ? _slateWhere(n.beat, q) : ""; return `<li>${star ? "★ " : ""}<b>${nm(q)}</b>${q.currentChapter ? ` · ${esc(q.currentChapter.name)}` : ""}${n ? ` → ${esc(n.beat.label || n.beat.id)}${where ? ` <i style="opacity:.7">(${esc(where)})</i>` : ""}${n.ready ? runBtn(n.beat, true) : waitsTxt(n, q)}` : ` — ${esc(q.why)}`}</li>`; };
+  const nowQ = story.now?.quest || null;
+  const inPlay = [...(nowQ && nowQ.state === "active" ? [nowQ] : []), ...story.inPlay];
+  const doors = story.doors;
+  const nextDoor = PHASE_CALENDAR_DOORS.find(([t, p]) => p > phase) || null;
+  const keystone = story.quests.find(q => q.keystone && q.act === phase && q.state !== "completed") || null;
+  const cal = nextDoor ? `Act ${nextDoor[1]} opens by itself at turn ${nextDoor[0]}${nextDoor[0] > turn ? ` (${nextDoor[0] - turn} turn${nextDoor[0] - turn === 1 ? "" : "s"} from now)` : " (overdue)"}${keystone ? `; or sooner, when <b>${nm(keystone)}</b> closes` : ""}.` : "No calendar door ahead.";
+  const html = `<div class="bbttcc-slate" style="border-left:3px solid #d9a441;padding:.45em .6em;background:rgba(217,164,65,.08);font-size:12px">
+    <div style="font-weight:700;letter-spacing:.04em">🎙 THE SLATE — Act ${phase} · Turn ${turn}</div>
+    ${nowQ ? `<div style="margin-top:.3em"><b>NOW</b> — ${nm(nowQ)}${story.now.chapter ? ` · ${esc(story.now.chapter.name)}` : ""}: ${story.now.next ? `${esc(story.now.next.beat.label || story.now.next.beat.id)}${story.now.next.ready ? runBtn(story.now.next.beat, true) : waitsTxt(story.now.next, nowQ)}` : esc(story.now.why)}</div>` : ""}
+    <div style="margin-top:.3em"><b>IN PLAY</b> (any order)</div><ul style="margin:.1em 0 0 1em">${inPlay.map(q => rowQ(q, q.key === nowQ?.key)).join("") || "<li><i>nothing in play</i></li>"}</ul>
+    <div style="margin-top:.3em"><b>DOORS</b> open this act</div><ul style="margin:.1em 0 0 1em">${doors.map(q => { const b = q.next.beat; const inv = !!(_readDirectorState().invited || {})[String(b.id)]; return `<li>${q.keystone ? "★ " : ""}<b>${nm(q)}</b> — ${esc(b.label || b.id)}${_slateWhere(b, q) ? ` <i style="opacity:.7">(${esc(_slateWhere(b, q))})</i>` : ""}${inv ? " ✉" : ""}${runBtn(b, true)}</li>`; }).join("") || "<li><i>nothing else opens this act</i></li>"}</ul>
+    <div style="margin-top:.3em"><b>CALENDAR</b> — ${cal}</div>
+    <div style="opacity:.6;margin-top:.3em">▶ runs the beat now · ✉ an invitation card is out · the Visualizer shows the same slate live</div>
+  </div>`;
+  await ChatMessage.create({ content: html, whisper: game.users.filter(u => u.isGM).map(u => u.id), speaker: { alias: "Bad Eden" }, flags: { [MOD_ID]: { slate: { turn, phase, via, ts: Date.now() } } } });
+  try { await _directorIssueInvites(story); } catch (e) { warn("[slate] invitations failed:", e); }
+  try { Hooks.callAll("bbttcc:director:slate", { campaignId, turn, phase, via, inPlay: inPlay.map(q => q.key), doors: doors.map(q => q.key) }); } catch (_e) {}
+  log(`[slate] posted (${via}) — in play ${inPlay.length}, doors ${doors.length}`);
+  return { ok: true, inPlay: inPlay.length, doors: doors.length };
+}
+
+// Invitations = quest/chapter START beats that carry an invite line and a speaker, ready now, not yet
+// invited, not yet played. One card per beat, once. Serialized on the speaker chain.
+async function _directorIssueInvites(story) {
+  if (!game.user?.isGM || !story) return 0;
+  let auto = true; try { auto = !!game.settings.get(MOD_ID, SETTING_DIRECTOR_AUTOINVITE); } catch (_e) {}
+  if (!auto) return 0;
+  const cands = [];
+  for (const q of story.quests) {
+    if (q.state === "completed" || q.state === "closed") continue;
+    const push = (n) => { if (n?.beat && n.ready) cands.push(n.beat); };
+    if (q.state === "dormant" || q.state === "offered") push(q.next);
+    for (const c of q.chapters) if (c.state === "dormant") push(c.next);
+  }
+  const state = _readDirectorState();
+  const store = _storyStateFor(getActiveCampaignId());
+  const todo = cands.filter(b => String(b.inviteText || "").trim() && String(b.speakerActorId || "").trim() && !state.invited?.[b.id] && !store.played?.[b.id] && !state.firedStoryBeats?.[b.id] && !state.dialogueFired?.[b.id]);
+  if (!todo.length) return 0;
+  let n = 0;
+  await (_speakerMemoryChain = _speakerMemoryChain.then(async () => {
+    for (const b of todo) {
+      const actor = game.actors?.get?.(String(b.speakerActorId)); if (!actor) continue;
+      if (game.bbttcc?.mal?.npc?._apps?.has?.(actor.id)) continue;   // mid-conversation: the moment is already live
+      await _mutateDirectorState(s => { s.invited = s.invited || {}; if (!s.invited[b.id]) s.invited[b.id] = { ts: Date.now(), turn: _getTurnNumberSafe(), via: "slate", card: `${actor.id}:${Date.now()}`, anchor: b.id }; });
+      await _postTalkInvitation(actor, [b]); n++;
+      log(`[slate] invitation: ${actor.name} — ${b.id}`);
+    }
+  }).catch(e => warn("[slate] invite chain failed:", e)));
+  return n;
+}
+
 function _onBeatResolvedInviteScan({ beat } = {}) {
+  // Phase 3 (2026-09-13): no more speaker-wide offer scans (the ten-cards flood, the Treeline race).
+  // After a beat resolves, the story model says which quest/chapter STARTS are ready; those with an
+  // invite line get a card, once. Runs on the speaker chain so the resolved beat's marks land first.
   try {
     if (!game.user?.isGM) return;
-    let auto = true;
-    try { auto = !!game.settings.get(MOD_ID, SETTING_DIRECTOR_AUTOINVITE); } catch (_e) {}
-    if (!auto) return;
-    const resolvedId = beat?.id || null;
     _speakerMemoryChain = _speakerMemoryChain.then(async () => {
-      const campaignId = getActiveCampaignId();
-      const campaign = campaignId ? getCampaign(campaignId) : null;
+      const campaignId = getActiveCampaignId(); const campaign = campaignId ? getCampaign(campaignId) : null;
       if (!campaign) return;
-      const state = _readDirectorState();
-      const sids = new Set((campaign.beats || [])
-        .filter(b => b && String(b.speakerActorId || "").trim())
-        .map(b => String(b.speakerActorId).trim()));
-      for (const sid of sids) {
-        const actor = game.actors?.get?.(sid);
-        if (!actor) continue;
-        // Mid-conversation: the moment is already live in that window.
-        if (game.bbttcc?.mal?.npc?._apps?.has?.(sid)) continue;
-        const offerable = (await _dialogueOfferableBeats(sid, {}))
-          .map(r => r.beat)
-          // Announcements are for NEW moments only (2026-09-04, live-caught:
-          // Pike/Etta "wants a word" cards arrived AFTER the table had already
-          // played their welcomes through the town-walk hub — repeatable
-          // beats stay offerable IN conversation forever, but a moment the
-          // table has already played never earns an invitation card).
-          .filter(b => b.id !== resolvedId && !state.invited[b.id]
-            && !state.firedStoryBeats[b.id] && !state.dialogueFired[b.id]);
-        if (!offerable.length) continue;
-        await _mutateDirectorState(s => {
-          // card + anchor (2026-09-13): the Quest Log lists one invitation per CARD; the card seals on beats[0].
-          const cardId = `${actor.id}:${Date.now()}`;
-          for (const b of offerable) s.invited[b.id] = { ts: Date.now(), via: "auto", card: cardId, anchor: offerable[0].id };
-        });
-        await _postTalkInvitation(actor, offerable);
-        log(`[dialogue] invitation posted: ${actor.name} (${offerable.map(b => b.id).join(", ")})`);
-      }
-    }).catch(e => warn("[dialogue] invite scan failed:", e));
-  } catch (e) { warn("[dialogue] invite-scan listener failed:", e); }
+      const story = await _storySituation(campaign, { full: false });
+      await _directorIssueInvites(story);
+    }).catch(e => warn("[dialogue] invite issue failed:", e));
+  } catch (e) { warn("[dialogue] invite listener failed:", e); }
 }
 
 // ─── Reality Tear → Adversary draws a Beat ───────────────────────────────────
@@ -8479,18 +8574,20 @@ Hooks.once("ready", () => {
     // Calendar doors on demand (turn driver, pre-regen, with the turn the Advance produces).
     game.bbttcc.api.campaign.director.openCalendarDoors = (opts = {}) => _openCalendarDoors(opts || {});
   } catch (_e) {}
+  // Phase 3 (2026-09-13): the turn is a chapter break. The Director composes THE SLATE and hands it
+  // to the GM; nothing fires on its own (door beats still fire from _storyPhaseAdvance).
   Hooks.on("bbttcc:advanceTurn:end", (tctx) => {
     try {
       if (!tctx || tctx.apply !== true) return;
       if (!game.user?.isGM) return;
-      _directorAddPressure(DIRECTOR_PRESSURE.turn, "turn")
-        .then(() => directorTick({}))
-        .catch(e => warn("[director] turn tick failed:", e));
+      setTimeout(() => { directorSlate({ via: "turn" }).catch(e => warn("[director] slate failed:", e)); }, 250);   // after the ledger/settle whispers
       directorReconcileLevels({}).catch(e => warn("[director] turn reconcile failed:", e));
     } catch (e) {
       warn("[director] advanceTurn listener failed:", e);
     }
   });
+  _installSlateDelegation();
+  try { game.bbttcc.api.campaign.director.slate = (opts = {}) => directorSlate(opts || {}); game.bbttcc.api.campaign.director.situation = async (opts = {}) => { const c = getCampaign(getActiveCampaignId()); return c ? _storySituation(c, opts || {}) : null; }; } catch (_e) {}
   // Turn Ledger (2026-07-08): record every accrual, convert travel legs to
   // days, settle the month on each applied turn advance. The beat debit path
   // (_applyBeatTimePoints → world.addTime) lights up on its own now that the
@@ -8501,36 +8598,10 @@ Hooks.once("ready", () => {
     _onAdvanceTurnEndLedger(tctx).catch(e => warn("[ledger] turn-end listener failed:", e));
   });
   if (game.user?.isGM) _ledgerSyncBudget();
-  // Story Director (Phase 4): mid-turn seams. Each accrues pressure; the
-  // director only actually looks once pressure crosses the threshold (see
-  // _directorSeamLook — budget + gates + GM veto still apply).
-  Hooks.on("bbttcc:afterTravel", (tctx) => {
-    try {
-      if (!game.user?.isGM) return;
-      _directorAddPressure(DIRECTOR_PRESSURE.leg, "travel")
-        .then(() => _directorSeamLook("travel"))
-        .catch(e => warn("[director] travel seam failed:", e));
-    } catch (e) { warn("[director] afterTravel listener failed:", e); }
-  });
-  Hooks.on("bbttcc:raid:roundCommit", (rctx) => {
-    try {
-      if (!game.user?.isGM) return;
-      _directorAddPressure(DIRECTOR_PRESSURE.raidRound, "raid")
-        .then(() => _directorSeamLook("raid"))
-        .catch(e => warn("[director] raid seam failed:", e));
-    } catch (e) { warn("[director] roundCommit listener failed:", e); }
-  });
-  Hooks.on("bbttcc:beat:resolved", (bctx) => {
-    try {
-      if (!game.user?.isGM) return;
-      // Story beats don't build story pressure (no feedback loop): the beat
-      // the director just fired must not immediately re-arm the director.
-      if (bctx?.beat && _storyChainOf(bctx.beat)) return;
-      _directorAddPressure(DIRECTOR_PRESSURE.beat, "beat")
-        .then(() => _directorSeamLook("beat"))
-        .catch(e => warn("[director] beat seam failed:", e));
-    } catch (e) { warn("[director] beat-resolved seam listener failed:", e); }
-  });
+  // Phase 3 (2026-09-13): the mid-turn seam looks (travel leg / raid round / resolved beat → pressure →
+  // candidate scan → GM prompt) are RETIRED. Pressure is no longer accrued anywhere; directorTick stays
+  // reachable at api.campaign.director.tick for a deliberate manual pick and nothing else.
+  log("[director] seams retired — the Director composes the slate at the chapter break (Phase 3)");
   // Story Director: Level-Up chat-card button (runs on every client — players
   // click their own steward's card).
   _installDirectorLevelupDelegation();

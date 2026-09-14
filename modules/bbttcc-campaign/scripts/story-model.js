@@ -854,6 +854,7 @@ export function declarationsFor(beats) {
     }
     const d = { quest: m.quest }; if (m.chapter) d.chapter = m.chapter;
     const own = regIdFor(m);
+    const ownStart = String(b?.questRole || "") === "start" || rows.some(e => e && e.action === "accept" && String(e.questId) === String(own));
     for (const e of rows) {
       if (!e || !e.questId) continue;
       const tgt = registryOf(e.questId);
@@ -862,6 +863,11 @@ export function declarationsFor(beats) {
         else if (tgt) { (d.alsoStarts = d.alsoStarts || []).push(tgt.chapter ? { quest: tgt.quest, chapter: tgt.chapter } : { quest: tgt.quest }); report.also++; }
       } else if (e.action === "complete" || e.action === "completed") {
         if (String(e.questId) === String(own)) { d.role = m.chapter ? "ending" : "closer"; d.ending = nameIn(String(own), id); }
+        else if (tgt && tgt.quest === m.quest && tgt.chapter && !m.chapter && !ownStart && !d.role) {
+          // a consequence beat filed under the town that ENDS one of the town's chapters (Red Thread sprouted,
+          // the soil keeps books, the sink widens…): it IS that chapter's ending — move it in, name it
+          d.chapter = tgt.chapter; d.role = "ending"; d.ending = nameIn(String(e.questId), id); report.also++;
+        }
         else if (tgt) { (d.alsoEnds = d.alsoEnds || []).push(tgt.chapter ? { quest: tgt.quest, chapter: tgt.chapter, ending: "passed" } : { quest: tgt.quest, ending: "passed" }); report.also++; report.dropped.push({ beat: id, completes: String(e.questId), as: `${tgt.quest}${tgt.chapter ? "·" + tgt.chapter : ""} (carried as alsoEnds:passed)` }); }
         else report.dropped.push({ beat: id, completes: String(e.questId), as: "? (unknown quest — dropped)" });
       }
