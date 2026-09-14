@@ -46,10 +46,28 @@
   };
   const YIELD_MARKS_PER_TURN = 10; // integrated spark hex → +10 marks/turn (owner ruling; marks are the unit 2026-09-06)
 
-  function parseKey(key) {
-    const m = /^spark_([a-z]+)_([a-z]+)$/.exec(String(key || "").trim());
+  // Spelling fork (2026-09-13): the pack says gevurah/tiferet, the campaign says geburah/tifaret.
+  // Every entry point canonicalizes, so a beat, a seeder or a GM may use either.
+  const SEPHIRAH_ALIASES = {
+    kether: "keter",
+    chochmah: "chokmah", hokhmah: "chokmah", chokhmah: "chokmah",
+    chessed: "chesed", hesed: "chesed",
+    geburah: "gevurah", gevura: "gevurah", gevurah: "gevurah",
+    tifaret: "tiferet", tipharet: "tiferet", tiphereth: "tiferet", tifereth: "tiferet",
+    netzah: "netzach",
+    malchut: "malkuth", malkhut: "malkuth"
+  };
+  function canonicalKey(key) {
+    const m = /^spark_([a-z]+)_([a-z]+)$/.exec(String(key || "").trim().toLowerCase());
     if (!m) return null;
-    return { sephirah: m[1], kind: m[2] };
+    const sephirah = SEPHIRAH_ALIASES[m[1]] || m[1];
+    return `spark_${sephirah}_${m[2]}`;
+  }
+  function parseKey(key) {
+    const k = canonicalKey(key);
+    if (!k) return null;
+    const m = /^spark_([a-z]+)_([a-z]+)$/.exec(k);
+    return { sephirah: m[1], kind: m[2], key: k };
   }
 
   function isHexDoc(d) {
@@ -75,9 +93,10 @@
     if (!game.user?.isGM) throw new Error("GM only");
     const parsed = parseKey(key);
     if (!parsed) throw new Error(`Bad spark key: ${key} (expected spark_<sephirah>_<kind>)`);
+    key = parsed.key;   // canonical spelling is what gets stored
     const doc = await resolveHex(hexUuid);
     const existing = sparkInfo(doc);
-    if (existing && existing.key !== key) {
+    if (existing && canonicalKey(existing.key) !== key) {
       warn(`hex already holds ${existing.key}; unseat first`, hexUuid);
       return { ok: false, error: "occupied", existing };
     }
@@ -239,7 +258,7 @@
       game.bbttcc ??= { api: {} };
       game.bbttcc.api ??= {};
       game.bbttcc.api.tikkun ??= {};
-      game.bbttcc.api.tikkun.hex = { seat, unseat, integrate, corrupt, repair, at, all, SEPHIRAH_CHANNEL };
+      game.bbttcc.api.tikkun.hex = { seat, unseat, integrate, corrupt, repair, at, all, canonicalKey, parseKey, SEPHIRAH_CHANNEL, SEPHIRAH_ALIASES };
       log("hex-spark API ready → game.bbttcc.api.tikkun.hex.{seat, unseat, integrate, corrupt, repair, at, all}");
     } catch (e) { warn("API wiring failed", e); }
   });

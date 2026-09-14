@@ -139,7 +139,7 @@
   };
 
   // ── Clone + sanitize ─────────────────────────────────────────────────────────
-  const STRIP = ["purifyHexes","openTravel","radiationDelta","territoryOutcome","turnRequests","relationshipEffects"];
+  const STRIP = ["purifyHexes","openTravel","radiationDelta","territoryOutcome","turnRequests","relationshipEffects","hexSpark","hexModifiers","worldModifiers","hexReading"];   // hexSpark/hexModifiers/worldModifiers/hexReading write REAL hexes (2026-09-13) — never let the walk light a Lamp
   const declared = {};             // beatId → [stripped effect keys]
   const clones = [];
   for (const b of liveBeats) {

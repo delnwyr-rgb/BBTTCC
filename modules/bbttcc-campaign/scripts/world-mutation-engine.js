@@ -1357,6 +1357,63 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       console.warn(TAG, "hexModifiers apply failed", eHM);
     }
 
+    // 2g) Hex SPARK — sparks live in the world (owner ruling 2026-09-13: "a quest's closing ending
+    // integrates its hex's spark"). worldEffects.hexSpark = {action, key?, state?, hexName?|targetHexUuid?}
+    // or a LIST of such blocks. action: seat (key required; state dormant|corrupted|integrated) ·
+    // integrate · corrupt · repair · unseat. Routes to game.bbttcc.api.tikkun.hex (GM verbs; integrate
+    // debits Reach and lights a Lamp; corrupt refuses temples; integrate refuses corrupted until repaired).
+    // Hex resolves like hexModifiers: hexName → targetHexUuid → ctx/beat hex.
+    try {
+      const hsList = Array.isArray(we.hexSpark) ? we.hexSpark : (we.hexSpark && typeof we.hexSpark === "object" ? [we.hexSpark] : []);
+      const hexApi = get(game, "bbttcc.api.tikkun.hex", null);
+      if (hsList.length && !hexApi) console.warn(TAG, "hexSpark: bbttcc-tikkun hex API not available — nothing applied", { beatId: beatCtx.beatId });
+      const sparkLines = [];
+      for (const hs of hsList) {
+        if (!hexApi || !hs || typeof hs !== "object") continue;
+        const action = String(hs.action || "").trim().toLowerCase();
+        if (!["seat", "integrate", "corrupt", "repair", "unseat"].includes(action)) { console.warn(TAG, "hexSpark: unknown action", hs); continue; }
+        const ctxHex = String((ctx && ctx.hexUuid) ? ctx.hexUuid : "").trim();
+        const beatHex = String((beat && beat.targetHexUuid) ? beat.targetHexUuid : "").trim();
+        const doc = hs.hexName ? _findHexByName(hs.hexName) : (hs.targetHexUuid ? await resolveHexDoc(hs.targetHexUuid) : (ctxHex || beatHex ? await resolveHexDoc(ctxHex || beatHex) : null));
+        if (!doc || !doc.uuid) { console.warn(TAG, "hexSpark: target hex not found", { hexName: hs.hexName, targetHexUuid: hs.targetHexUuid, beatId: beatCtx.beatId }); continue; }
+        const hexLabel = String(get(doc, "flags.bbttcc-territory.name", "") || get(doc, "flags.bbttcc-territory.hexName", "") || doc.text || hs.hexName || doc.uuid).replace(/[\s ]+/g, " ").trim();
+        let r = null;
+        try {
+          if (action === "seat") {
+            const key = typeof hexApi.canonicalKey === "function" ? (hexApi.canonicalKey(hs.key) || hs.key) : hs.key;
+            const wantState = String(hs.state || "dormant").toLowerCase();
+            r = await hexApi.seat(doc.uuid, key, { state: wantState === "integrated" ? "integrated" : "dormant" });
+            if (r && r.ok && wantState === "corrupted") r = await hexApi.corrupt(doc.uuid);
+          } else if (action === "integrate") {
+            r = await hexApi.integrate(doc.uuid, { actorId: (ctx && ctx.actorId) || null });
+          } else {
+            r = await hexApi[action](doc.uuid);
+          }
+        } catch (eCall) {
+          console.warn(TAG, "hexSpark: API call failed", action, eCall);
+          continue;
+        }
+        const ok = !!(r && r.ok);
+        const keyTxt = String((r && r.key) || hs.key || "").replace(/^spark_/, "").replace(/_/g, " ");
+        sparkLines.push(ok
+          ? `${action === "integrate" ? "✦ lit" : action === "corrupt" ? "🜏 corrupted" : action === "repair" ? "⚒ repaired" : action === "seat" ? "◈ seated" : "○ unseated"} — ${keyTxt} at ${hexLabel}${r && r.already ? " (already)" : ""}`
+          : `⚠ ${action} refused at ${hexLabel}: ${(r && r.error) || "unknown"}`);
+        if (ok && !(r && r.already)) { changed = true; notes.push(`hexSpark:${action}`); }
+      }
+      if (sparkLines.length) {
+        try {
+          const gmIds = (game.users || []).filter(u => u.isGM).map(u => u.id);
+          await ChatMessage.create({
+            content: `<div class="bbttcc-hex-spark"><b>Sparks in the world</b> — <i>${String(beat?.label || beat?.id || "beat").replace(/</g, "&lt;")}</i><ul style="margin:.3em 0 0 1em">${sparkLines.map(l => `<li>${l}</li>`).join("")}</ul></div>`,
+            whisper: gmIds,
+            speaker: { alias: "Bad Eden" }
+          });
+        } catch (_eMsg) {}
+      }
+    } catch (eHS) {
+      console.warn(TAG, "hexSpark apply failed", eHS);
+    }
+
     // 2f) Hex READING — the Water Choir as an instrument (owner ruling 2026-09-13, R5).
     // worldEffects.hexReading = { hexName, voice? } → a player-facing card in the Choir's language,
     // in BANDS never numbers, reading three things: the tenders' mood (coalition morale/loyalty),
