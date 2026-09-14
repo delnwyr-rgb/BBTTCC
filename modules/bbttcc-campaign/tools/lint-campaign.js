@@ -52,7 +52,7 @@ const QUEST_BUCKETS = new Set(["active","completed","archived"]);
 const QUEST_ACTIONS = new Set(["accept","complete","completed","archive","archived","activate","reopen","beat"]);
 const SPARK_ACTIONS = new Set(["acquire","gather","integrate"]);
 const TIME_SCALES = new Set(["moment","scene","leg","turn","arc","campaign",""]);
-const TABLE_COND_KEYS = new Set(["hexWhitelist","hexBlacklist","tagsAll","tagsAny"]);
+const TABLE_COND_KEYS = new Set(["hexWhitelist","hexBlacklist","tagsAll","tagsAny", "phaseGte", "phaseLte"]);   // phaseGte/phaseLte evaluated since 2026-09-14 (entry `once` honored via the story store)
 const PHASE_MAX = 6;
 // Ids the ENGINE holds as string constants (module.js) — must exist in the data.
 const ENGINE_IDS = {
@@ -554,7 +554,8 @@ if (quests) for (const [q, qd] of Object.entries(quests)) if (!questBeats.has(q)
       for (const [key, q] of Object.entries(QM.quests)) {
         const has = [...declared.values()].some(d => d.quest === key);
         if (!has) continue;
-        if (!starts[key] && !Object.keys(starts).some(k => k.startsWith(key + "·"))) F("D03", "WARN", null, `quest ${q.name}: no start beat declared (role start or an alsoStarts pointing at it)`, { quest: key });
+        const NO_START_OK = new Set(["sarmoung_hum"]);   // a rails/ambient ladder — its first rung plays on the road, it is never "started" by acceptance
+        if (!NO_START_OK.has(key) && !starts[key] && !Object.keys(starts).some(k => k.startsWith(key + "·"))) F("D03", "WARN", null, `quest ${q.name}: no start beat declared (role start or an alsoStarts pointing at it)`, { quest: key });
         if (!closers[key] && !NO_CLOSER_OK.has(key)) F("D03", "WARN", null, `quest ${q.name}: no closing beat declared (role closer) — it can never complete`, { quest: key });
         for (const [chKey, ch] of Object.entries(q.chapters || {})) {
           const k = `${key}·${chKey}`;

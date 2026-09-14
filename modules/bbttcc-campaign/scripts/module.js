@@ -969,6 +969,14 @@ function _passesEntryConditions(entry, { hexUuid = null, tags = "" } = {}) {
     if (c.hexBlacklist.includes(hexUuid)) return false;
   }
 
+  // act window (2026-09-14, "travel tables per act"): conditions.phaseGte / phaseLte against storyPhase.
+  // One terrain table per terrain; each entry says which acts it may appear in.
+  try {
+    const ph = _storyPhaseGet();
+    if (c.phaseGte != null && c.phaseGte !== "" && Number(ph) < Number(c.phaseGte)) return false;
+    if (c.phaseLte != null && c.phaseLte !== "" && Number(ph) > Number(c.phaseLte)) return false;
+  } catch (_ePh) {}
+
   // tag matching
   if (Array.isArray(c.tagsAll) && c.tagsAll.length) {
     const want = new Set(c.tagsAll);
@@ -1018,7 +1026,22 @@ async function runRandomTable({ tableId, hexUuid = null, tags = "", ctx = {}, dr
   }
 
   const entries = Array.isArray(table.entries) ? table.entries : [];
-  const filtered = entries.filter(ent => _passesEntryConditions(ent, { hexUuid, tags }));
+  const prefiltered = entries.filter(ent => _passesEntryConditions(ent, { hexUuid, tags }));
+  // (2026-09-14) a drawn beat must also pass its OWN gates and seals, and an entry marked `once`
+  // is spent once the story store has the beat as played — a rung of a ladder is drawn once, in its act.
+  const filtered = [];
+  for (const ent of prefiltered) {
+    try {
+      const cid = String(ent?.campaignId || "").trim(), bid = String(ent?.beatId || "").trim();
+      const camp = cid ? getCampaign(cid) : null;
+      const beat = camp ? (camp.beats || []).find(b => String(b?.id) === bid) : null;
+      if (beat) {
+        if (ent?.once === true && _storyStateFor(cid).played?.[bid]) continue;
+        if (!(await _beatRequiresMet(beat, camp, {}))) continue;
+      }
+    } catch (_eGate) {}
+    filtered.push(ent);
+  }
 
   if (!filtered.length) {
     warn("runRandomTable: no eligible entries after filtering", { tableId, hexUuid, tags });
