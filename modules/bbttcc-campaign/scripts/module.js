@@ -3288,25 +3288,8 @@ async function executeBeat(campaign, beat, ctx = {}) {
   // (Teaching Slide 10's endless "run it again?" loop) never registered and
   // the Visualizer's hero re-offered it forever. A beat that STARTED counts
   // as fired for the driving layer. GM-side only (world-state write).
-  try {
-    if (game.user?.isGM && beat?.id) {
-      await _mutateDirectorState(async (st) => {
-        st.firedStoryBeats = st.firedStoryBeats || {};
-        // 2026-08-29 owner ruling "Arrival Steers the Story": ts refreshes on
-        // EVERY fire (was first-fire-only). The hero anchor's freshest-fired
-        // fallback should follow the table's present, not build-session
-        // archaeology — re-arriving at Khezek Tor kept its stale ts and lost
-        // the anchor to older Crossroads beats. firstTs preserves the
-        // original for history.
-        const prev = st.firedStoryBeats[beat.id];
-        st.firedStoryBeats[beat.id] = {
-          turn: Number(campaign?.turn) || 0,
-          ts: Date.now(),
-          ...(prev?.firstTs ? { firstTs: prev.firstTs } : (prev?.ts ? { firstTs: prev.ts } : {}))
-        };
-      });
-    }
-  } catch (e) { warn("fired-history record failed:", e); }
+  // Phase 4 (2026-09-13): the fired-history write is retired — the story store (below) IS the record,
+  // and _readDirectorState overlays it onto firedStoryBeats/dialogueFired for every legacy reader.
   // Phase 2 (2026-09-13): THE story store records the play — starts, chapter endings, closers —
   // and projects the coalition buckets. One writer.
   try { if (game.user?.isGM && beat?.id) await _storyRecord(campaign, beat, ctx); } catch (e) { warn("story record failed:", e); }
@@ -4204,6 +4187,10 @@ function _timePointsForBeat(beat, ctx = {}) {
 }
 
 async function _applyBeatTimePoints(campaign, beat, ctx = {}) {
+  // Owner ruling R2 (2026-09-13): beats no longer spend days. Time just passes; travel legs still
+  // move the "Day X of 30" chip, which is a prompt to turn the chapter, not a budget.
+  return false;
+  // eslint-disable-next-line no-unreachable
   try {
     const w = game.bbttcc?.api?.world;
     if (!w?.addTime) return false;
@@ -4345,11 +4332,9 @@ async function _onAdvanceTurnEndLedger(tctx) {
   const detailRows = entries.slice(-40)
     .map(e => `<tr><td style="opacity:.8">${esc(String(e?.source || ""))}</td><td style="text-align:right">${Number(e?.points) || 0}</td><td>${esc(String(e?.note || ""))}</td></tr>`).join("");
 
-  const banked = before.remaining;
-  const debt = before.debt;
-  const verdict = debt > 0
-    ? `<p>⚠ The month ran <b>${debt} day(s) over</b> — the debt carries: the new month starts on Day ${debt}.</p>`
-    : `<p><b>${banked} day(s) unspent</b> bank into development.</p>`;
+  // Owner rulings R1/R7 (2026-09-13): the turn is a chapter break; days are a prompt, not a budget.
+  // No banking, no debt — the whisper only says where the chapter's days went.
+  const verdict = `<p>The chapter turns. Day count resets.</p>`;
 
   try {
     await ChatMessage.create({
@@ -4369,16 +4354,11 @@ async function _onAdvanceTurnEndLedger(tctx) {
   try {
     const budget = _ledgerBudgetSetting();
     const s = w.getState();
-    const carried = Math.max(0, Math.round((s.time.progress - s.time.turnLength) * 100) / 100);
+    const carried = 0;   // Phase 4: no debt carry (owner ruling R7)
     s.time.turnLength = budget;
     s.time.progress = carried;
     await w.setState(s);
-    await game.settings.set(MOD_ID, SETTING_LEDGER_ENTRIES, {
-      turn: _getTurnNumberSafe(),
-      entries: carried > 0
-        ? [{ at: Date.now(), points: carried, source: "debt", note: `Carried from last turn — the month starts ${carried} day(s) in the hole` }]
-        : []
-    });
+    await game.settings.set(MOD_ID, SETTING_LEDGER_ENTRIES, { turn: _getTurnNumberSafe(), entries: [] });
   } catch (e) { warn("[ledger] turn-end reset failed:", e); }
 }
 
@@ -5387,6 +5367,17 @@ function _readDirectorState() {
     const o = (s && typeof s === "object") ? foundry.utils.deepClone(s) : {};
     o.firedStoryBeats = (o.firedStoryBeats && typeof o.firedStoryBeats === "object") ? o.firedStoryBeats : {};
     o.dialogueFired = (o.dialogueFired && typeof o.dialogueFired === "object") ? o.dialogueFired : {};
+    // Phase 4 (2026-09-13): the fired ledgers are VIEWS of the story store now. Nothing writes them
+    // any more; every reader (dialogue offers, chains-in-motion, the Visualizer, the invite issuer)
+    // sees the store's `played` overlaid here. Overlay rows carry via:"story" and are stripped on write.
+    try {
+      const st = _storyStateFor(getActiveCampaignId());
+      for (const [id, m] of Object.entries(st.played || {})) {
+        if (!o.firedStoryBeats[id]) o.firedStoryBeats[id] = { turn: Number(m.turn) || 0, ts: Number(m.ts) || 0, firstTs: m.firstTs || m.ts, via: "story" };
+        else if ((Number(m.ts) || 0) > (Number(o.firedStoryBeats[id].ts) || 0)) o.firedStoryBeats[id].ts = Number(m.ts) || 0;
+        if (!o.dialogueFired[id]) o.dialogueFired[id] = { ts: Number(m.ts) || 0, via: "story" };
+      }
+    } catch (_eOverlay) {}
     o.invited = (o.invited && typeof o.invited === "object") ? o.invited : {};
     o.levelPrompts = (o.levelPrompts && typeof o.levelPrompts === "object") ? o.levelPrompts : {};
     o.declinedStory = (o.declinedStory && typeof o.declinedStory === "object") ? o.declinedStory : {};
@@ -5405,8 +5396,12 @@ function _readDirectorState() {
   }
 }
 async function _writeDirectorState(state) {
-  await game.settings.set(MOD_ID, SETTING_DIRECTOR_STATE, state || {});
-  return state || {};
+  const out = state || {};
+  try {   // strip the store overlay (Phase 4) — the store is the record, directorState only keeps its own history
+    for (const k of ["firedStoryBeats", "dialogueFired"]) if (out[k] && typeof out[k] === "object") for (const [id, m] of Object.entries(out[k])) if (m && m.via === "story") delete out[k][id];
+  } catch (_e) {}
+  await game.settings.set(MOD_ID, SETTING_DIRECTOR_STATE, out);
+  return out;
 }
 
 // ALL directorState mutations flow through this serialized queue. Multiple
@@ -6221,12 +6216,8 @@ async function _answerSpeakerWord(beat, choice = null) {
     if (!game.user?.isGM) return false;
     const sid = String(beat?.speakerActorId || "").trim();
     if (!sid || !beat?.id) return false;
-    // Consume the moment (unless the beat is authored repeatable).
-    try {
-      await _mutateDirectorState(s => {
-        if (!s.dialogueFired[beat.id]) s.dialogueFired[beat.id] = { ts: Date.now() };
-      });
-    } catch (_eS) {}
+    // Phase 4 (2026-09-13): the moment's consumption is the story store's `played` mark (executeBeat
+    // entry), overlaid onto dialogueFired for the offer surfaces — no separate write here.
     // Close the invitation quest, if one was accepted for this moment:
     // the word was answered in person, so "A Word from X" completes.
     const qid = `word_${beat.id}`;
@@ -6300,14 +6291,7 @@ function _beatFiredInfo(state, beatId) {
 // firedStoryBeats, whichever surface ran it. Idempotent — the director tick
 // pre-marks its own fires before runBeat and this skips existing entries.
 function _onBeatResolvedStoryMark({ beat } = {}) {
-  try {
-    if (!game.user?.isGM) return;
-    if (!beat?.id || !_storyChainOf(beat)) return;
-    _mutateDirectorState(s => {
-      if (!s.firedStoryBeats[beat.id])
-        s.firedStoryBeats[beat.id] = { turn: _getTurnNumberSafe(), ts: Date.now(), via: "resolved" };
-    }).catch(e => warn("[director] story-mark failed:", e));
-  } catch (e) { warn("[director] story-mark listener failed:", e); }
+  // Phase 4 (2026-09-13): retired — the story store records every played beat at executeBeat entry.
 }
 
 // (3) The invitation card — the narration→conversation handoff. Public,

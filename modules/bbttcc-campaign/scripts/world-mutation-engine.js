@@ -775,7 +775,8 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       // -------------------------------------------------------------
       try {
         const worldApi = game?.bbttcc?.api?.world;
-        if (worldApi && typeof worldApi.addTime === "function") {
+        // Owner ruling R2 (2026-09-13): beats no longer spend days — this second debit path is off.
+        if (false && worldApi && typeof worldApi.addTime === "function") {
           let tp = null;
 
           if (ctx && typeof ctx.timePoints === "number" && Number.isFinite(ctx.timePoints)) {

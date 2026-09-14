@@ -121,9 +121,8 @@
               try {
                 const lg = game.bbttcc?.api?.campaign?.ledger?.get?.();
                 if (lg && lg.budget > 0) {
-                  ledgerLine = lg.debt > 0
-                    ? `<p><i class="fas fa-hourglass-half"></i> <b>Turn Ledger:</b> Day ${lg.spent} of ${lg.budget} — the month is overdrawn by <b>${lg.debt} day(s)</b>; the debt carries into the new month.</p>`
-                    : `<p><i class="fas fa-hourglass-half"></i> <b>Turn Ledger:</b> Day ${lg.spent} of ${lg.budget} — <b>${lg.remaining} day(s)</b> unspent will bank into development.</p>`;
+                  // Phase 4 (2026-09-13): the turn is a chapter break; days are a prompt, not a budget.
+                  ledgerLine = `<p><i class="fas fa-hourglass-half"></i> <b>Day ${lg.spent} of ${lg.budget}</b> — the chapter turns; the day count resets.</p>`;
                 }
               } catch (_eLg) {}
 

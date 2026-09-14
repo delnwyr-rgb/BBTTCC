@@ -1295,7 +1295,9 @@ async function plannedRaidsStep({ apply=false } = {}){
 
   if (apply && typeof raid.consumePlanned === "function") {
     // ── Turn Ledger funding pass: hold what the month can't pay for ────────
-    const budgeted = ledgerRemainingDays();
+    // Owner ruling R7 (2026-09-13): the day-funding gate is retired — a planned activity costs
+    // marks and one turn, never days. (ledgerRemainingDays stays for display.)
+    const budgeted = null;
     let daysLeft = budgeted == null ? Infinity : budgeted;
     const funded = [];
     const held = [];

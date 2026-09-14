@@ -518,6 +518,63 @@ if (quests) for (const [q, qd] of Object.entries(quests)) if (!questBeats.has(q)
   }
 }
 
+// ── declarations: D01–D05 (Phase 2/4, 2026-09-13) — quest · chapter · ending ──────────────────
+// Mirrors scripts/story-model.js: every quest-bearing beat declares {quest, chapter?, role, ending?};
+// the store derives state from those declarations. The lint checks INTENT, not shapes.
+{
+  let SM = null;
+  try { SM = require(path.join(__dirname, "..", "scripts", "story-model.js")); } catch (e) { console.error("note: story-model.js not loadable (" + (e && e.message) + ") — D-rules skipped"); }
+  if (SM && SM.QUEST_MAP) {
+    const QM = SM.QUEST_MAP;
+    const poolId = QM.pool;
+    const declared = new Map();
+    for (const b of beats) {
+      const d = b?.story && typeof b.story === "object" ? b.story : null;
+      const mapped = /^hum_/.test(s(b.id)) ? { quest: "sarmoung_hum" } : SM.registryOf(b.questId);
+      if (d && d.quest) {
+        if (!QM.quests[d.quest]) { F("D02", "ERROR", b.id, `story.quest '${d.quest}' is not a quest in QUEST_MAP`); continue; }
+        if (d.chapter && !QM.quests[d.quest].chapters?.[d.chapter]) F("D02", "ERROR", b.id, `story.chapter '${d.chapter}' is not a chapter of ${QM.quests[d.quest].name}`);
+        if (d.role && !["start", "ending", "closer"].includes(d.role)) F("D02", "ERROR", b.id, `story.role '${d.role}' unknown (start|ending|closer)`);
+        if (d.role === "ending" && !d.chapter) F("D02", "ERROR", b.id, `story.role 'ending' needs a chapter (a quest closes with role 'closer')`);
+        declared.set(s(b.id), d);
+      } else if (mapped && s(b.questId) !== s(poolId)) {
+        F("D01", "WARN", b.id, `no story declaration — run tools/migrate-story-declarations (maps to ${mapped.quest}${mapped.chapter ? "·" + mapped.chapter : ""})`);
+      }
+    }
+    if (declared.size) {
+      const starts = {}, closers = {}, endings = {};
+      for (const [id, d] of declared) {
+        if (d.role === "start") (starts[d.chapter ? `${d.quest}·${d.chapter}` : d.quest] = starts[d.chapter ? `${d.quest}·${d.chapter}` : d.quest] || []).push(id);
+        if (d.role === "closer") (closers[d.quest] = closers[d.quest] || []).push(id);
+        if (d.role === "ending") (endings[`${d.quest}·${d.chapter}`] = endings[`${d.quest}·${d.chapter}`] || []).push(id);
+        for (const a of (Array.isArray(d.alsoStarts) ? d.alsoStarts : [])) if (a?.quest) (starts[a.chapter ? `${a.quest}·${a.chapter}` : a.quest] = starts[a.chapter ? `${a.quest}·${a.chapter}` : a.quest] || []).push(id);
+        for (const e of (Array.isArray(d.alsoEnds) ? d.alsoEnds : [])) if (e?.quest) { if (e.chapter) (endings[`${e.quest}·${e.chapter}`] = endings[`${e.quest}·${e.chapter}`] || []).push(id); else (closers[e.quest] = closers[e.quest] || []).push(id); }
+      }
+      const NO_CLOSER_OK = new Set(["ninth_guest", "sarmoung_hum", "offices"]);   // by design: never resolves / a ladder / closes on incarnation
+      for (const [key, q] of Object.entries(QM.quests)) {
+        const has = [...declared.values()].some(d => d.quest === key);
+        if (!has) continue;
+        if (!starts[key] && !Object.keys(starts).some(k => k.startsWith(key + "·"))) F("D03", "WARN", null, `quest ${q.name}: no start beat declared (role start or an alsoStarts pointing at it)`, { quest: key });
+        if (!closers[key] && !NO_CLOSER_OK.has(key)) F("D03", "WARN", null, `quest ${q.name}: no closing beat declared (role closer) — it can never complete`, { quest: key });
+        for (const [chKey, ch] of Object.entries(q.chapters || {})) {
+          const k = `${key}·${chKey}`;
+          const inCh = [...declared.values()].some(d => d.quest === key && d.chapter === chKey);
+          if (!inCh && !endings[k] && !starts[k]) continue;   // chapter with no beats at all (a folded flag) — nothing to check
+          if (!endings[k]) F("D04", "WARN", null, `chapter ${q.name} · ${ch.name}: no ending beat declared — it can never be done`, { quest: key, chapter: chKey });
+        }
+      }
+    }
+    // D05: a questBucket gate on a registry id that no quest/chapter maps to
+    const reqArr = (b) => { const r = b?.inject?.requires; return Array.isArray(r) ? r : (r && typeof r === "object" ? [r] : []); };
+    for (const b of beats) for (const c of reqArr(b)) {
+      const rid = c && c.questBucket != null ? s(c.questBucket) : "";
+      if (!rid) continue;
+      if (/^word_/.test(rid)) { F("D05", "ERROR", b.id, `gate on invitation ticket '${rid}' — Words are start beats now (owner ruling R4); gate on the quest instead`); continue; }
+      if (!SM.registryOf(rid)) F("D05", "ERROR", b.id, `gate questBucket '${rid}' maps to no quest or chapter in QUEST_MAP`);
+    }
+  }
+}
+
 // ── effects: E02–E14 ────────────────────────────────────────────────────────
 const arrayKeys = ["factionEffects", "relationshipEffects", "worldModifiers", "turnRequests", "purifyHexes"];
 const ladder = [];
