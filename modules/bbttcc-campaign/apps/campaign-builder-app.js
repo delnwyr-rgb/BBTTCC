@@ -1,4 +1,4 @@
-import { deriveSituation } from "../scripts/story-model.js";
+import { deriveSituation, registryOf } from "../scripts/story-model.js";
 // modules/bbttcc-campaign/apps/campaign-builder-app.js
 //
 // FULL REPLACEMENT (RESTORE BEAT EDITING + ACTION HANDLERS)
@@ -1734,38 +1734,27 @@ const activeCampaignId = _getActiveCampaignId();
       (h.note ? `<div class="alt">${h.note}</div>` : "") +
       (Array.isArray(h.roads) && h.roads.length ? `<div class="bbttcc-now-kv" style="margin-top:.4em"><span class="k">THE ROAD</span></div>` + h.roads.map(r => flyBtn(r.id, r.label, r.icon || "", false)).join("") : "") +
       `</div>`) : "";
-    // Story chains ARE quest chains (2026-09-07 owner ruling): the old
-    // campaign-wide chains section folds into the charted quest — each
-    // Director chain with beats in this quest shows its progress and the
-    // next chain beat (⚡ eligible now / ⛩ gated). Computed locally from
-    // THIS campaign (api.director.chains() reads the ACTIVE campaign, which
-    // need not be the one the Builder has open).
+    // ── CHAPTERS (Phase 1, 2026-09-13): the charted quest as the story model sees it —
+    //    quest · chapter · ending, each chapter with its own next. Replaces the chain rows
+    //    (chains are consequence beats now, gated on endings; they show up as a chapter's next).
     let chainsHtml = "";
     try {
+      const story = sit.story;
       const chartQ = String(sit.chartQuestId || "");
-      const chainMap = {};
-      for (const b of (Array.isArray(campaign.beats) ? campaign.beats : [])) {
-        const ch = String(b?.storyChain || b?.inject?.storyChain || "").trim();
-        if (!ch || !b?.id) continue;
-        (chainMap[ch] = chainMap[ch] || []).push(b);
+      const m = chartQ ? registryOf(chartQ) : null;
+      const sq = story ? ((m && story.byKey[m.quest]) || story.now?.quest || null) : null;
+      if (sq) {
+        const icon = c => c.state === "done" ? "✓" : c.state === "open" ? "▷" : "◇";
+        const endOf = c => c.ending ? ` <em>${esc(String(c.ending.label || "").replace(/^.*?\s[-—]\s*/, ""))}</em>` : "";
+        const nextBtn = nx => nx ? flyBtn(String(nx.beat.id), "→ " + (nx.beat.label || nx.beat.id), nx.ready ? "⚡" : "⛩", nx.ready) : "";
+        const isCur = c => story.now?.quest?.key === sq.key && story.now?.chapter?.key === c.key;
+        const pct = sq.progress.total ? Math.round((sq.progress.fired / sq.progress.total) * 100) : 0;
+        const head = `<div class="bbttcc-now-chain" data-tooltip="The quest as the story model sees it: state · fired/total"><div class="hd"><span class="nm">${sq.keystone ? "★ " : ""}${esc(sq.name)}</span><span class="ct">${sq.progress.fired}/${sq.progress.total} · ${esc(sq.state)}</span></div><div class="bar"><i style="width:${pct}%"></i></div>${!sq.chapters.length && sq.state !== "completed" ? (sq.next ? nextBtn(sq.next) : `<div class="done">${esc(sq.why)}</div>`) : ""}</div>`;
+        const rows = sq.chapters.map(c =>
+          `<div class="bbttcc-now-chain${isCur(c) ? " rec" : ""}" data-tooltip="${c.state === "done" ? "Chapter done — its ending is recorded" : c.state === "open" ? "Chapter open" : "Chapter not started"}"><div class="hd"><span class="nm">${icon(c)} ${esc(c.name)}</span><span class="ct">${esc(c.state)}${endOf(c)}</span></div>${c.state === "done" ? "" : nextBtn(c.next)}</div>`);
+        chainsHtml = `<div class="bbttcc-now-kv"><span class="k">${sq.chapters.length ? "CHAPTERS" : "QUEST"}</span></div>` + head + rows.join("");
       }
-      const rows = [];
-      for (const [name, list] of Object.entries(chainMap)) {
-        if (!list.some(b => _flowQuestIdOf(b) === chartQ)) continue;
-        const fired = list.filter(b => sit.firedSet.has(String(b.id))).length;
-        const next = list.find(b => !sit.firedSet.has(String(b.id)));
-        const pct = Math.round((fired / list.length) * 100);
-        const eligible = next ? runtime.byId[String(next.id)]?.state === "ready" : false;
-        const pretty = name.replace(/_/g, " ");
-        rows.push(
-          `<div class="bbttcc-now-chain" data-tooltip="Director chain “${esc(name)}” — the Story Director fires these in order as pressure and gates allow">` +
-          `<div class="hd"><span class="nm">⚙ ${esc(pretty)}</span><span class="ct">${fired}/${list.length}</span></div>` +
-          `<div class="bar"><i style="width:${pct}%"></i></div>` +
-          (next ? flyBtn(next.id, "→ " + (next.label || next.id), eligible ? "⚡" : "⛩", eligible) : `<div class="done">chain complete</div>`) +
-          `</div>`);
-      }
-      if (rows.length) chainsHtml = `<div class="bbttcc-now-kv"><span class="k">CHAIN${rows.length === 1 ? "" : "S"}</span></div>` + rows.join("");
-    } catch (_eCh) {}
+    } catch (eCh) { console.warn(TAG, "chapters block failed", eCh); }
 
     const nowHtml =
       `<div class="bbttcc-now-kv"><span class="k">QUEST</span><span class="v">${esc(qName)}${qStatus && qStatus !== "active" ? ` <i class="st ${esc(qStatus)}">${esc(qStatus)}</i>` : ""}</span></div>` +
@@ -1776,8 +1765,30 @@ const activeCampaignId = _getActiveCampaignId();
     // ── IN PLAY (owner ruling 2026-09-09: Act 2 is open-world — the story
     //    order is a RECOMMENDATION; accepted-but-unfinished quests are the
     //    real menu, any order, drop one and come back) ───────────────────
-    let inPlayHtml = "";
-    try {
+    let inPlayHtml = "", doorsHtml = "";
+    if (sit.story) {
+      // Phase 1 (2026-09-13): IN PLAY and DOORS are renders of the story model.
+      try {
+        const story = sit.story;
+        const recKey = story.now?.quest?.key || null;
+        const list = [...(story.now?.quest && story.now.quest.state === "active" ? [story.now.quest] : []), ...story.inPlay];
+        const nextBtn = nx => nx ? flyBtn(String(nx.beat.id), "→ " + (nx.beat.label || nx.beat.id), nx.ready ? "⚡" : "⛩", nx.ready) : "";
+        const row = (q, rec) => {
+          const pct = q.progress.total ? Math.round((q.progress.fired / q.progress.total) * 100) : 0;
+          return `<div class="bbttcc-now-chain${rec ? " rec" : ""}" data-tooltip="${rec ? "Where the story stands. " : ""}Started, not finished. Any order is fine.">` +
+            `<div class="hd"><span class="nm">${rec ? "★ " : "◇ "}${q.keystone ? "★" : ""}${esc(q.name)}${q.currentChapter ? ` <em>· ${esc(q.currentChapter.name)}</em>` : ""}</span><span class="ct">${q.progress.fired}/${q.progress.total}${q.hex ? ` · ${esc(q.hex)}` : ""}</span></div>` +
+            `<div class="bar"><i style="width:${pct}%"></i></div>` +
+            (q.next ? nextBtn(q.next) : `<div class="done">${esc(q.why === "complete" ? "complete" : "no unfired step")}</div>`) + `</div>`;
+        };
+        inPlayHtml = list.map(q => row(q, q.key === recKey)).join("") || `<div class="bbttcc-now-empty">no quests in play</div>`;
+        let invited = {};
+        try { invited = game.bbttcc?.api?.campaign?.director?.state?.()?.invited || {}; } catch (_eInv) {}
+        doorsHtml = story.doors.map(d => {
+          const b = d.next.beat; const inv = !!invited[String(b.id)];
+          return flyBtn(String(b.id), `${d.keystone ? "★ " : ""}${d.name} — ${b.label || b.id}`, inv ? "✉" : "⚡", true);
+        }).join("") || `<div class="bbttcc-now-empty">nothing else opens this act</div>`;
+      } catch (eIP) { console.warn(TAG, "in-play (story) block failed", eIP); }
+    } else try {
       const facRef = String(campaign.factionId || (campaign.factionIds || [])[0] || "").replace(/^Actor\./, "");
       const fac = facRef ? game.actors.get(facRef) : null;
       const track = fac?.getFlag?.("bbttcc-factions", "quests") || {};
@@ -1859,6 +1870,7 @@ const activeCampaignId = _getActiveCampaignId();
       `</div>` +
       block("▶ NOW", nowHtml) +
       (inPlayHtml ? block("🧭 IN PLAY — any order", inPlayHtml) : "") +
+      (doorsHtml ? block("🚪 DOORS — open this act", doorsHtml) : "") +
       block("✓ RECENT", recentHtml) +
       block("🔒 LOCKED", lockedHtml);
 
