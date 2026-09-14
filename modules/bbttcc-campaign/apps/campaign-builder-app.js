@@ -1480,7 +1480,8 @@ const activeCampaignId = _getActiveCampaignId();
       const invitedIds = new Set(Object.keys(ds.invited || {}).filter(id => !firedSet.has(id)));
       story = deriveSituation({ beats, firedSet, firedTs: id => byBeat.get(id)?.ts || 0,
         readyOf: id => { const r = runtime.byId[id]; return r ? { ready: r.state === "ready", reasons: r.reasons || [] } : null; },
-        bucketOf, invitedIds, phase: curPhase, turn: Number(runtime?.turn) || 0, anchorId, seqOf, questNames });
+        bucketOf, invitedIds, phase: curPhase, turn: Number(runtime?.turn) || 0, anchorId, seqOf, questNames,
+        state: (() => { try { return game.bbttcc?.api?.campaign?.story?.state?.(campaign?.id) || null; } catch (_e) { return null; } })() });
       storyHero = this._heroFromStory(story, { card, run, esc, whyOf, sealOf, sealCard });
     } catch (eStory) { console.warn("[bbttcc-campaign] story model failed — falling back to the ladder", eStory); }
 

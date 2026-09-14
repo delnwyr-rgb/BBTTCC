@@ -8,7 +8,7 @@
 import "../apps/campaign-tag-picker.js";
 import "../scripts/casualties-engine.js";
 import "../apps/player-beat-mirror-app.js";
-import { deriveSituation, QUEST_MAP, registryOf } from "./story-model.js";
+import { deriveSituation, QUEST_MAP, registryOf, emptyState, declOf, applyRecord, projection, sealOfDecl } from "./story-model.js";
 // bbttcc-rolls-api.js removed 2026-08-28 (atlas cleanup) — game.bbttcc.api.rolls
 // had zero consumers; the beat Choice/Check UI resolves bonuses via its own
 // _rollChoiceCheck / _computeFactionOpRollBonusMap stack.
@@ -23,7 +23,8 @@ const SETTING_ACTIVE_CAMPAIGN = "activeCampaignId";
 const SETTING_LAST_TURN_ANNOUNCED = "lastTurnAnnounced"; // Campaign Turn Flow announcements
 const SETTING_OVERSHOOT_BEATS = "overshoot.drawsBeats";  // Reality-Tear → Adversary beat draw
 const SETTING_DIRECTOR_ENABLED = "director.enabled";     // Story Director: World-Turn tick on/off
-const SETTING_DIRECTOR_STATE = "directorState";          // Story Director runtime state (budget, fired beats, level floors, pressure)
+const SETTING_DIRECTOR_STATE = "directorState";
+const SETTING_STORY_STATE = "storyState";                // Phase 2 (2026-09-13): THE one story store — played beats, starts, chapter endings, closers, per campaign          // Story Director runtime state (budget, fired beats, level floors, pressure)
 const SETTING_DIRECTOR_PRESSURE_THRESHOLD = "director.pressureThreshold"; // pressure needed for a MID-TURN director look
 const SETTING_DIRECTOR_AUTOINVITE = "director.autoInvite";
 const SETTING_INVITES_PLAYER_ACCEPT = "invites.playerAccept";   // 2026-09-12: players may accept "wants a word" invitations (relayed to the GM seat)
@@ -3019,7 +3020,13 @@ async function _applyQuestEffects(campaign, beat, ctx) {
 
       let entry = null;
 
-      if (action === "accept") {
+      // Phase 2 (2026-09-13): for a beat that carries a story declaration, the STORE decides the
+      // bucket (projection); the row keeps its record-keeping (notes, progress, history) only.
+      const declared = !!(beat?.story && beat.story.quest);
+      if (declared && (action === "accept" || action === "complete" || action === "completed" || action === "activate" || action === "reopen")) {
+        entry = ensureEntry(getBucketNameForQuest(questId) || (action === "accept" ? "active" : "completed"), questId);
+      }
+      else if (action === "accept") {
         if (!getBucketNameForQuest(questId)) {
           entry = ensureEntry("active", questId);
           entry.status = "active";
@@ -3300,6 +3307,9 @@ async function executeBeat(campaign, beat, ctx = {}) {
       });
     }
   } catch (e) { warn("fired-history record failed:", e); }
+  // Phase 2 (2026-09-13): THE story store records the play — starts, chapter endings, closers —
+  // and projects the coalition buckets. One writer.
+  try { if (game.user?.isGM && beat?.id) await _storyRecord(campaign, beat, ctx); } catch (e) { warn("story record failed:", e); }
 
   // Phase Charter closers apply AT ENTRY (2026-08-30) — same lesson as the
   // fire-mark above: a closer whose choice routes into a long awaited chain
@@ -4760,6 +4770,117 @@ const QUEST_GATE_BUCKETS = ["active", "completed", "archived"];
 // _beatRequiresMet's outer catch, and fails OPEN. Memoized per campaign object
 // (listCampaigns builds fresh objects each injectorFire, so the WeakMap acts as
 // a per-fire cache) so many quest-gated beats resolve the roster once.
+// ═════════════════════════════════════════════════════════════════════════════
+// STORY STATE — Phase 2 of the Director rebuild (2026-09-13). ONE writer: _storyRecord at
+// executeBeat entry. Everything else derives (scripts/story-model.js): quest/chapter state,
+// endings, seals (sealOfDecl), and the coalition quest buckets — which _storyProject rewrites
+// as a PROJECTION so the Quest Log and questBucket gates keep working. worldEffects.questEffects
+// accept/complete rows no longer move buckets for a beat that carries `beat.story`.
+// ═════════════════════════════════════════════════════════════════════════════
+function _storyStateAll() {
+  try { const v = game.settings.get(MOD_ID, SETTING_STORY_STATE); return (v && typeof v === "object") ? v : {}; } catch (_e) { return {}; }
+}
+function _storyStateFor(campaignId) {
+  const all = _storyStateAll(); const cid = String(campaignId || "");
+  const st = all[cid]; return (st && typeof st === "object") ? st : emptyState();
+}
+let _storyQueue = Promise.resolve();
+function _storyMutate(campaignId, fn) {
+  const cid = String(campaignId || "");
+  const job = _storyQueue.then(async () => {
+    const all = foundry.utils.deepClone(_storyStateAll());
+    const st = (all[cid] && typeof all[cid] === "object") ? all[cid] : emptyState();
+    const out = await fn(st);
+    all[cid] = st;
+    await game.settings.set(MOD_ID, SETTING_STORY_STATE, all);
+    return out;
+  });
+  _storyQueue = job.catch(() => {});
+  return job;
+}
+async function _storyProject(campaign, ctx = {}) {
+  if (!game.user?.isGM || !campaign?.id) return { ok: false };
+  const MOD = "bbttcc-factions";
+  const proj = projection(_storyStateFor(campaign.id));
+  const factions = await _resolveCampaignFactions(campaign, ctx);
+  let moved = 0;
+  for (const faction of factions) {
+    if (!faction?.getFlag) continue;
+    const cur = faction.getFlag(MOD, "quests") || {};
+    const next = foundry.utils.deepClone(cur);
+    next.schemaVersion = next.schemaVersion || 1; next.active = next.active || {}; next.completed = next.completed || {}; next.archived = next.archived || {};
+    let changed = false;
+    for (const [qid, want] of Object.entries(proj)) {
+      const have = next.active[qid] ? "active" : next.completed[qid] ? "completed" : next.archived[qid] ? "archived" : null;
+      if (have === want) continue;
+      if (have === "archived") continue;                       // an archived quest is the GM's call, not the projection's
+      if (!want) continue;                                     // the projection never un-starts a quest (the GM's cleanup macros do)
+      const entry = next[have]?.[qid] || { v: 1, questId: qid, questName: String(game.bbttcc?.api?.campaign?.quests?.getQuest?.(qid)?.name || qid), status: want, acceptedTs: Date.now(), lastTouchedTs: Date.now(), state: "", notes: "", progress: { beats: {} }, history: [] };
+      if (have) delete next[have][qid];
+      entry.status = want; entry.lastTouchedTs = Date.now();
+      if (want === "completed") entry.completedTs = entry.completedTs || Date.now();
+      entry.history = Array.isArray(entry.history) ? entry.history : [];
+      entry.history.push({ ts: Date.now(), type: "projection", to: want, by: game.user?.id || null });
+      next[want][qid] = entry; changed = true; moved++;
+    }
+    if (!changed) continue;
+    try { await faction.unsetFlag(MOD, "quests"); } catch (_e) {}
+    await faction.setFlag(MOD, "quests", next);
+    try { if (faction.sheet?.rendered) faction.sheet.render(false); } catch (_e) {}
+  }
+  _questTrackMemo.delete(campaign);
+  return { ok: true, moved };
+}
+async function _storyRecord(campaign, beat, ctx = {}) {
+  if (!game.user?.isGM || !campaign?.id || !beat?.id) return { changes: [] };
+  const turn = _getTurnNumberSafe();
+  const changes = await _storyMutate(campaign.id, (st) => applyRecord(st, beat, { ts: Date.now(), turn }));
+  if (changes.length) {
+    try { await _storyProject(campaign, ctx); } catch (e) { warn("story projection failed:", e); }
+    try { Hooks.callAll("bbttcc:story:changed", { campaignId: campaign.id, beatId: beat.id, changes }); } catch (_e) {}
+    try {
+      const nm = (q) => QUEST_MAP.quests[q]?.name || q, cn = (q, c) => QUEST_MAP.quests[q]?.chapters?.[c]?.name || c;
+      const lines = changes.map(c => c.kind === "quest-started" ? `▷ ${nm(c.quest)} begins` : c.kind === "chapter-started" ? `▷ ${nm(c.quest)} · ${cn(c.quest, c.chapter)} opens` : c.kind === "chapter-ended" ? `✓ ${nm(c.quest)} · ${cn(c.quest, c.chapter)} — ${c.ending}` : c.kind === "quest-closed" ? `🏁 ${nm(c.quest)} — ${c.ending}` : JSON.stringify(c));
+      await ChatMessage.create({ content: `<div class="bbttcc-story-ledger"><b>Story</b><ul style="margin:.3em 0 0 1em">${lines.map(l => `<li>${l.replace(/</g, "&lt;")}</li>`).join("")}</ul></div>`, whisper: game.users.filter(u => u.isGM).map(u => u.id), speaker: { alias: "Bad Eden" } });
+    } catch (_eMsg) {}
+  }
+  return { changes };
+}
+// Bootstrap the store from the pre-Phase-2 world: the fired ledgers say what was played, the
+// coalition buckets say what is active/completed. Idempotent: never downgrades a recorded fact.
+async function _storyBootstrap(campaign, ctx = {}) {
+  if (!game.user?.isGM || !campaign?.id) return { ok: false };
+  const ds = _readDirectorState();
+  const track = (await _coalitionQuestTrack(campaign, ctx)) || {};
+  const beats = Array.isArray(campaign.beats) ? campaign.beats : [];
+  const byId = new Map(beats.map(b => [String(b.id), b]));
+  const played = {};
+  for (const src of [ds.firedStoryBeats || {}, ds.dialogueFired || {}]) for (const [id, m] of Object.entries(src)) { if (!byId.has(id)) continue; const ts = Number(m?.ts) || 0; played[id] = { ts: Math.max(played[id]?.ts || 0, ts), turn: Number(m?.turn) || 0 }; }
+  const changes = await _storyMutate(campaign.id, (st) => {
+    const all = [];
+    const ordered = Object.entries(played).sort((a, b) => (a[1].ts || 0) - (b[1].ts || 0));
+    for (const [id, m] of ordered) { if (st.played[id]) continue; all.push(...applyRecord(st, byId.get(id), { ts: m.ts || Date.now(), turn: m.turn })); }
+    // buckets: facts the ledgers can't see (repairs, cleanup macros, hand edits)
+    for (const [key, def] of Object.entries(QUEST_MAP.quests)) {
+      const stamp = { ts: Date.now(), turn: _getTurnNumberSafe(), beatId: null, via: "bootstrap" };
+      if (def.registryId) {
+        if ((track.completed?.[def.registryId] || track.archived?.[def.registryId]) && !st.closed[key]) { st.closed[key] = { name: "(recorded)", ...stamp }; st.started[key] = st.started[key] || stamp; all.push({ kind: "quest-closed", quest: key, ending: "(recorded)" }); }
+        else if (track.active?.[def.registryId] && !st.started[key]) { st.started[key] = stamp; all.push({ kind: "quest-started", quest: key }); }
+      }
+      for (const [chKey, ch] of Object.entries(def.chapters || {})) {
+        if (!ch.registryId) continue;
+        st.chapters[key] = st.chapters[key] || {}; st.chapters[key][chKey] = st.chapters[key][chKey] || {};
+        const c = st.chapters[key][chKey];
+        if ((track.completed?.[ch.registryId] || track.archived?.[ch.registryId]) && !c.ending) { c.ending = { name: "(recorded)", ...stamp }; c.started = c.started || stamp; st.started[key] = st.started[key] || stamp; all.push({ kind: "chapter-ended", quest: key, chapter: chKey, ending: "(recorded)" }); }
+        else if (track.active?.[ch.registryId] && !c.started) { c.started = stamp; st.started[key] = st.started[key] || stamp; all.push({ kind: "chapter-started", quest: key, chapter: chKey }); }
+      }
+    }
+    return all;
+  });
+  const proj = await _storyProject(campaign, ctx);
+  return { ok: true, changes, projected: proj.moved };
+}
+
 const _questTrackMemo = new WeakMap();
 function _coalitionQuestTrack(campaign, ctx) {
   if (!campaign || typeof campaign !== "object") return Promise.resolve(null);
@@ -4796,6 +4917,13 @@ async function _beatSealed(beat, campaign, ctx = {}) {
   const no = { sealed: false, why: null };
   try {
     if (!beat || beat.inject?.evergreen === true) return no;
+    // Phase 2 (2026-09-13): a declared beat's seal comes from the story store alone —
+    // keystones never seal, a started quest stays open across acts, a never-started quest
+    // closes with its act (owner ruling R3).
+    if (beat.story && beat.story.quest && campaign?.id) {
+      const v = sealOfDecl(beat, _storyStateFor(campaign.id), _storyPhaseGet());
+      if (v) return v.sealed ? { sealed: true, why: v.why, kind: v.kind, questId: beat.questId || null, act: v.act, phase: v.phase } : no;
+    }
     let sealQ = true, sealA = true;
     try { sealQ = game.settings.get(MOD_ID, SETTING_SEAL_QUESTS) !== false; } catch (_e) {}
     try { sealA = game.settings.get(MOD_ID, SETTING_SEAL_ACTS) !== false; } catch (_e) {}
@@ -7528,7 +7656,14 @@ function buildCampaignAPI() {
     // Gate introspection for GM consoles: report(beat, campaign?, ctx?) gives
     // per-condition met/unmet; requiresMet is the boolean the engine itself uses.
     // STORY MODEL (Phase 1, 2026-09-13): quest · chapter · ending, derived — see scripts/story-model.js
-    story: { QUEST_MAP, registryOf, deriveSituation },
+    story: {
+      QUEST_MAP, registryOf, deriveSituation, declOf, emptyState, applyRecord, projection, sealOfDecl,
+      state: (campaignId) => _storyStateFor(campaignId || getActiveCampaignId()),
+      record: (beatId, campaignId) => { const c = getCampaign(campaignId || getActiveCampaignId()); const b = (c?.beats || []).find(x => String(x.id) === String(beatId)); return b ? _storyRecord(c, b, {}) : Promise.resolve({ changes: [] }); },
+      project: (campaignId) => _storyProject(getCampaign(campaignId || getActiveCampaignId()), {}),
+      bootstrap: (campaignId) => _storyBootstrap(getCampaign(campaignId || getActiveCampaignId()), {}),
+      reset: async (campaignId) => { const all = foundry.utils.deepClone(_storyStateAll()); delete all[String(campaignId || getActiveCampaignId())]; await game.settings.set(MOD_ID, SETTING_STORY_STATE, all); }
+    },
     gates: {
       report: async (beat, campaign, ctx = {}) => {
         const c = campaign || getCampaign(getActiveCampaignId());
@@ -8209,6 +8344,7 @@ Hooks.once("init", () => {
     type: Object,
     default: {}
   });
+  game.settings.register(MOD_ID, SETTING_STORY_STATE, { scope: "world", config: false, type: Object, default: {} });
 
   game.settings.register(MOD_ID, SETTING_INVITES_PLAYER_ACCEPT, {
     name: "Invitations — players may accept",

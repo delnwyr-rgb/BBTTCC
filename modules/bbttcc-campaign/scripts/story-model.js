@@ -627,16 +627,21 @@ export function deriveSituation(ctx) {
     return gated ? { beat: gated, ready: false, reasons: unmet(gated) } : null;
   };
 
-  // membership
+  // membership — declarations first (Phase 2), the registry map as fallback
+  const store = ctx.state && typeof ctx.state === "object" ? ctx.state : null;
   const questBeats = {}; for (const k of Object.keys(QUEST_MAP.quests)) questBeats[k] = { main: [], chapters: {} };
   for (const b of beats) {
-    if (/^hum_/.test(String(b.id))) { questBeats.sarmoung_hum.main.push(b); continue; }
-    const m = registryOf(b.questId); if (!m) continue;
-    if (m.chapter) (questBeats[m.quest].chapters[m.chapter] = questBeats[m.quest].chapters[m.chapter] || []).push(b);
-    else questBeats[m.quest].main.push(b);
+    const d = declOf(b); if (!d || !questBeats[d.quest]) continue;
+    if (d.chapter) (questBeats[d.quest].chapters[d.chapter] = questBeats[d.quest].chapters[d.chapter] || []).push(b);
+    else questBeats[d.quest].main.push(b);
+    // declared roles feed the writers table too
+    const def = QUEST_MAP.quests[d.quest];
+    const regId = d.chapter ? def.chapters?.[d.chapter]?.registryId : def.registryId;
+    if (regId && d.role === "start") (starts[regId] = starts[regId] || []).push(b);
+    if (regId && (d.role === "ending" || d.role === "closer")) (endings[regId] = endings[regId] || []).push(b);
   }
   const anchorBeat = anchorId ? byId.get(anchorId) : null;
-  const anchorLoc = (() => { if (!anchorBeat) return null; if (/^hum_/.test(anchorId)) return { quest: "sarmoung_hum", chapter: null }; return registryOf(anchorBeat.questId); })();
+  const anchorLoc = (() => { if (!anchorBeat) return null; const d = declOf(anchorBeat); return d ? { quest: d.quest, chapter: d.chapter || null } : null; })();
   const routedFrom = (b, within) => !b ? [] : uniq((b.choices || []).flatMap(c => [c?.next, c?.failNext]).map(x => byId.get(String(x || ""))).filter(t => t && within.has(String(t.id)) && !fired.has(String(t.id))));
 
   const quests = [];
@@ -651,20 +656,22 @@ export function deriveSituation(ctx) {
       const ends = uniq(endings[ch.registryId] || []);
       const sts = uniq(starts[ch.registryId] || []);
       const bucket = bucketOf(ch.registryId);
-      const firedEnd = ends.filter(b => fired.has(String(b.id))).sort((a, b) => firedTs(String(b.id)) - firedTs(String(a.id)))[0] || null;
+      const rec = store?.chapters?.[key]?.[chKey] || null;
+      const firedEnd = (rec?.ending?.beatId && byId.get(rec.ending.beatId)) || ends.filter(b => fired.has(String(b.id))).sort((a, b) => firedTs(String(b.id)) - firedTs(String(a.id)))[0] || null;
       const anyFired = cb.some(b => fired.has(String(b.id))) || sts.some(b => fired.has(String(b.id)));
-      const state = (bucket === "completed" || bucket === "archived" || firedEnd) ? "done" : (bucket === "active" || anyFired) ? "open" : "dormant";
+      const state = (rec?.ending || bucket === "completed" || bucket === "archived" || firedEnd) ? "done" : (rec?.started || bucket === "active" || anyFired) ? "open" : "dormant";
       const routed = anchorLoc && anchorLoc.quest === key && anchorLoc.chapter === chKey ? routedFrom(anchorBeat, cIds) : [];
       const next = state === "done" ? null : (state === "dormant" && sts.length ? pickNext(sts, [], true) : (pickNext(cb, routed) || (sts.length ? pickNext(sts, [], true) : null)));
-      chapters.push({ key: chKey, name: ch.name, registryId: ch.registryId, state, ending: firedEnd ? { beatId: String(firedEnd.id), label: firedEnd.label || firedEnd.id } : null, next, beats: cb, starts: sts, endings: ends });
+      chapters.push({ key: chKey, name: ch.name, registryId: ch.registryId, state, ending: firedEnd ? { beatId: String(firedEnd.id), label: firedEnd.label || firedEnd.id, name: rec?.ending?.name || null } : (rec?.ending ? { beatId: rec.ending.beatId || null, label: rec.ending.name, name: rec.ending.name } : null), next, beats: cb, starts: sts, endings: ends });
     }
     const mainEnds = uniq(endings[reg] || []).filter(b => !allIds.size || true);
     const mainStarts = uniq(starts[reg] || []);
     const bucket = reg ? bucketOf(reg) : null;
     const anyFired = all.some(b => fired.has(String(b.id)));
     const closerFired = mainEnds.some(b => fired.has(String(b.id)));
-    let state = (bucket === "completed" || bucket === "archived" || closerFired) ? "completed"
-      : (bucket === "active" || anyFired) ? "active"
+    const qrec = store ? { closed: store.closed?.[key] || null, started: store.started?.[key] || null } : null;
+    let state = (qrec?.closed || bucket === "completed" || bucket === "archived" || closerFired) ? "completed"
+      : (qrec?.started || bucket === "active" || anyFired) ? "active"
       : mainStarts.some(b => invited.has(String(b.id))) ? "offered" : "dormant";
     if (state === "dormant" && !def.keystone && def.act >= 1 && phase > def.act) state = "closed";
     // next — one ladder, in order of signal strength:
@@ -729,4 +736,140 @@ export function deriveSituation(ctx) {
   const inPlay = quests.filter(q => q.state === "active" && !(anchorQuest && q.key === anchorQuest.key));
   const doors = quests.filter(q => (q.state === "dormant" || q.state === "offered") && q.act <= phase && q.next && q.next.ready);
   return { act: phase, turn, quests, byKey: qByKey, anchor: anchorBeat ? { beatId: anchorId, quest: anchorLoc?.quest || null, chapter: anchorLoc?.chapter || null } : null, now, inPlay, doors, roadsFor };
+}
+
+
+// ═════════════════════════════════════════════════════════════════════════════
+// PHASE 2 — THE ONE STORE (2026-09-13). Beats declare `beat.story = {quest, chapter?, role?, ending?,
+// alsoStarts?[]}`; the engine records what was played into ONE world setting (bbttcc-campaign.storyState,
+// per campaign) and everything else derives from it: quest/chapter state, endings, seals, and the
+// coalition quest buckets (a PROJECTION for the Quest Log and questBucket gates — no longer a writer).
+// These functions are pure; module.js owns the I/O.
+// ═════════════════════════════════════════════════════════════════════════════
+
+export function emptyState() {
+  return { v: 1, played: {}, started: {}, chapters: {}, closed: {} };
+}
+
+export function declOf(beat) {
+  const d = beat?.story;
+  if (d && typeof d === "object" && d.quest) return d;
+  if (d && typeof d === "object" && (Array.isArray(d.alsoStarts) || Array.isArray(d.alsoEnds))) return d;   // a pool beat that starts/ends a quest elsewhere
+  if (/^hum_/.test(String(beat?.id || ""))) return { quest: "sarmoung_hum" };
+  const m = registryOf(beat?.questId);
+  return m ? { quest: m.quest, chapter: m.chapter || undefined } : null;
+}
+
+// Record one played beat. Returns the list of state changes (for the ledger/whisper).
+export function applyRecord(state, beat, meta = {}) {
+  const st = state && typeof state === "object" ? state : emptyState();
+  st.played = st.played || {}; st.started = st.started || {}; st.chapters = st.chapters || {}; st.closed = st.closed || {};
+  const id = String(beat?.id || ""); if (!id) return [];
+  const ts = Number(meta.ts) || Date.now(), turn = Number(meta.turn) || 0;
+  const changes = [];
+  const prev = st.played[id];
+  st.played[id] = { ts, turn, n: (prev?.n || 0) + 1, firstTs: prev?.firstTs || prev?.ts || ts, firstTurn: prev?.firstTurn ?? prev?.turn ?? turn };
+  const d = declOf(beat); if (!d) return changes;
+  const stamp = { ts, turn, beatId: id };
+  const endChapter = (q, ch, name, why) => { if (!QUEST_MAP.quests[q]?.chapters?.[ch]) return; st.chapters[q] = st.chapters[q] || {}; st.chapters[q][ch] = st.chapters[q][ch] || {}; const c = st.chapters[q][ch]; if (c.ending) return; c.started = c.started || { ...stamp, via: why }; st.started[q] = st.started[q] || { ...stamp, via: why }; c.ending = { name: String(name || "passed"), ...stamp }; changes.push({ kind: "chapter-ended", quest: q, chapter: ch, ending: c.ending.name }); };
+  const closeQuest = (q, name, why) => { if (!QUEST_MAP.quests[q] || st.closed[q]) return; st.started[q] = st.started[q] || { ...stamp, via: why }; st.closed[q] = { name: String(name || "passed"), ...stamp }; changes.push({ kind: "quest-closed", quest: q, ending: st.closed[q].name }); };
+  if (!d.quest) {
+    for (const a of (Array.isArray(d.alsoStarts) ? d.alsoStarts : [])) { if (!a?.quest || !QUEST_MAP.quests[a.quest]) continue; if (!st.started[a.quest]) { st.started[a.quest] = { ...stamp, via: "also:" + id }; changes.push({ kind: "quest-started", quest: a.quest }); } if (a.chapter) { st.chapters[a.quest] = st.chapters[a.quest] || {}; st.chapters[a.quest][a.chapter] = st.chapters[a.quest][a.chapter] || {}; if (!st.chapters[a.quest][a.chapter].started) { st.chapters[a.quest][a.chapter].started = { ...stamp, via: "also:" + id }; changes.push({ kind: "chapter-started", quest: a.quest, chapter: a.chapter }); } } }
+    for (const e of (Array.isArray(d.alsoEnds) ? d.alsoEnds : [])) { if (!e?.quest) continue; if (e.chapter) endChapter(e.quest, e.chapter, e.ending, "also:" + id); else closeQuest(e.quest, e.ending, "also:" + id); }
+    return changes;
+  }
+  const startQuest = (q, why) => { if (!st.started[q]) { st.started[q] = { ...stamp, via: why }; changes.push({ kind: "quest-started", quest: q }); } };
+  const startChapter = (q, ch, why) => { st.chapters[q] = st.chapters[q] || {}; st.chapters[q][ch] = st.chapters[q][ch] || {}; if (!st.chapters[q][ch].started) { st.chapters[q][ch].started = { ...stamp, via: why }; changes.push({ kind: "chapter-started", quest: q, chapter: ch }); } };
+  // playing any beat of a quest means the quest is in play (a town walk starts the town)
+  startQuest(d.quest, d.role === "start" ? "start" : "played");
+  if (d.chapter) startChapter(d.quest, d.chapter, d.role === "start" ? "start" : "played");
+  if (d.role === "ending" && d.chapter) {
+    st.chapters[d.quest][d.chapter].ending = { name: String(d.ending || id.split("_").slice(-1)[0]), ...stamp };
+    changes.push({ kind: "chapter-ended", quest: d.quest, chapter: d.chapter, ending: st.chapters[d.quest][d.chapter].ending.name });
+  }
+  if (d.role === "closer") {
+    st.closed[d.quest] = { name: String(d.ending || id.split("_").slice(-1)[0]), ...stamp };
+    changes.push({ kind: "quest-closed", quest: d.quest, ending: st.closed[d.quest].name });
+  }
+  for (const a of (Array.isArray(d.alsoStarts) ? d.alsoStarts : [])) {
+    if (!a || !a.quest || !QUEST_MAP.quests[a.quest]) continue;
+    startQuest(a.quest, "also:" + id);
+    if (a.chapter) startChapter(a.quest, a.chapter, "also:" + id);
+  }
+  for (const e of (Array.isArray(d.alsoEnds) ? d.alsoEnds : [])) {
+    if (!e || !e.quest) continue;
+    if (e.chapter) endChapter(e.quest, e.chapter, e.ending, "also:" + id); else closeQuest(e.quest, e.ending, "also:" + id);
+  }
+  return changes;
+}
+
+// Quest-bucket projection: registryId → "active" | "completed" | null, for every registry row in QUEST_MAP.
+export function projection(state) {
+  const st = state || emptyState(); const out = {};
+  for (const [key, def] of Object.entries(QUEST_MAP.quests)) {
+    if (def.registryId) out[def.registryId] = st.closed?.[key] ? "completed" : (st.started?.[key] ? "active" : null);
+    for (const [chKey, ch] of Object.entries(def.chapters || {})) {
+      const c = st.chapters?.[key]?.[chKey];
+      if (ch.registryId) out[ch.registryId] = c?.ending ? "completed" : (c?.started ? "active" : null);
+    }
+  }
+  return out;
+}
+
+// Seal verdict for a declared beat, from state alone (owner ruling R3, 2026-09-13):
+// a keystone never seals · a started quest stays open across acts · a never-started quest closes with its act.
+export function sealOfDecl(beat, state, phase) {
+  const d = declOf(beat); if (!d || !d.quest || !QUEST_MAP.quests[d.quest]) return null;
+  if (beat?.inject?.evergreen === true) return { sealed: false };
+  const def = QUEST_MAP.quests[d.quest];
+  if (def.keystone) return { sealed: false };
+  if (def.act === 0) return { sealed: false };
+  const st = state || emptyState();
+  if (st.closed?.[d.quest]) return { sealed: true, kind: "quest", why: `its quest "${def.name}" is complete (${st.closed[d.quest].name})`, quest: d.quest };
+  if (!st.started?.[d.quest] && def.act >= 1 && Number(phase) > def.act) return { sealed: true, kind: "act", why: `"${def.name}" was never started and Act ${def.act} is over (the story is in Act ${phase})`, quest: d.quest, act: def.act, phase: Number(phase) };
+  return { sealed: false };
+}
+
+
+// Declarations for every beat, derived once from the pre-Phase-2 data (the migration seeder
+// stamps these onto beat.story; the offline lint replays it). Pure.
+export function declarationsFor(beats) {
+  const out = {}; const report = { starts: 0, endings: 0, closers: 0, also: 0, dropped: [], unmapped: [] };
+  const regOfBeat = (b) => /^hum_/.test(String(b?.id || "")) ? { quest: "sarmoung_hum", chapter: null } : registryOf(b?.questId);
+  const regIdFor = (m) => { const def = QUEST_MAP.quests[m.quest]; return m.chapter ? (def?.chapters?.[m.chapter]?.registryId || null) : (def?.registryId || null); };
+  // ending-name inference: strip the common prefix among a chapter's (or quest's) closer ids
+  const groups = {};
+  for (const b of beats) { for (const e of (b?.worldEffects?.questEffects || [])) if (e?.action === "complete" && e.questId) (groups[e.questId] = groups[e.questId] || []).push(String(b.id)); }
+  const nameIn = (regId, id) => { const ids = groups[regId] || [id]; if (ids.length < 2) return id.split("_").slice(-1)[0]; let p = ids[0]; for (const i of ids) while (!i.startsWith(p)) p = p.slice(0, -1); p = p.replace(/[^_]*$/, ""); return id.slice(p.length) || id.split("_").slice(-1)[0]; };
+  for (const b of beats) {
+    const id = String(b?.id || ""); if (!id) continue;
+    const m = regOfBeat(b);
+    const rows = b?.worldEffects?.questEffects || [];
+    if (!m) {
+      // a pool beat (travel encounter) may still start or end a quest elsewhere — keep only that
+      const d = {};
+      for (const e of rows) { const tgt = e?.questId ? registryOf(e.questId) : null; if (!tgt) continue; if (e.action === "accept") { (d.alsoStarts = d.alsoStarts || []).push(tgt.chapter ? { quest: tgt.quest, chapter: tgt.chapter } : { quest: tgt.quest }); report.also++; } else if (e.action === "complete" || e.action === "completed") { (d.alsoEnds = d.alsoEnds || []).push(tgt.chapter ? { quest: tgt.quest, chapter: tgt.chapter, ending: "passed" } : { quest: tgt.quest, ending: "passed" }); report.also++; } }
+      if (d.alsoStarts || d.alsoEnds) out[id] = d; else if (b?.questId && !/^word_/.test(String(b.questId))) report.unmapped.push(id);
+      continue;
+    }
+    const d = { quest: m.quest }; if (m.chapter) d.chapter = m.chapter;
+    const own = regIdFor(m);
+    for (const e of rows) {
+      if (!e || !e.questId) continue;
+      const tgt = registryOf(e.questId);
+      if (e.action === "accept") {
+        if (String(e.questId) === String(own)) d.role = d.role || "start";
+        else if (tgt) { (d.alsoStarts = d.alsoStarts || []).push(tgt.chapter ? { quest: tgt.quest, chapter: tgt.chapter } : { quest: tgt.quest }); report.also++; }
+      } else if (e.action === "complete" || e.action === "completed") {
+        if (String(e.questId) === String(own)) { d.role = m.chapter ? "ending" : "closer"; d.ending = nameIn(String(own), id); }
+        else if (tgt) { (d.alsoEnds = d.alsoEnds || []).push(tgt.chapter ? { quest: tgt.quest, chapter: tgt.chapter, ending: "passed" } : { quest: tgt.quest, ending: "passed" }); report.also++; report.dropped.push({ beat: id, completes: String(e.questId), as: `${tgt.quest}${tgt.chapter ? "·" + tgt.chapter : ""} (carried as alsoEnds:passed)` }); }
+        else report.dropped.push({ beat: id, completes: String(e.questId), as: "? (unknown quest — dropped)" });
+      }
+    }
+    if (!d.role && String(b?.questRole || "") === "start") d.role = "start";
+    if (id === "vs_bridge_muster" && !d.role) { d.role = "closer"; d.ending = "muster"; }   // owner ruling R6: the Spine completes at the muster
+    if (d.role === "start") report.starts++; else if (d.role === "ending") report.endings++; else if (d.role === "closer") report.closers++;
+    out[id] = d;
+  }
+  return { decls: out, report };
 }
