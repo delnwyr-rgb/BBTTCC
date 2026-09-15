@@ -3301,7 +3301,10 @@ async function executeBeat(campaign, beat, ctx = {}) {
   try {
     if (ctx?.force !== true && ctx?.source !== "phase-door") {
       const act = _beatActOf(beat), phase = _storyPhaseGet();
-      if (act !== null && act > phase) {
+      // an act-OPENER (a beat that SETS phase N) may step up from N−1 — mirror of the self-gate rule in _beatRequiresMet
+      const opener = Number(beat?.worldEffects?.phaseAdvance?.set);
+      const steps = Number.isFinite(opener) && act !== null && opener === act && phase === act - 1;
+      if (act !== null && act > phase && !steps) {
         const lbl = beat.label || beat.id || "(unnamed)";
         log(`[act] '${beat.id}' refused — Act ${act} content, the story is in Act ${phase}`);
         if (ctx?.__chain) return { ok: false, sealed: true, notYet: true, why: `Act ${act} content`, routed: true };
