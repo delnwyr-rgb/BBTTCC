@@ -8,7 +8,7 @@
 import "../apps/campaign-tag-picker.js";
 import "../scripts/casualties-engine.js";
 import "../apps/player-beat-mirror-app.js";
-import { deriveSituation, QUEST_MAP, registryOf, emptyState, declOf, applyRecord, projection, sealOfDecl, isAnchorable } from "./story-model.js";
+import { deriveSituation, QUEST_MAP, registryOf, emptyState, declOf, applyRecord, projection, sealOfDecl, isAnchorable, placeOf, hexKey } from "./story-model.js";
 // bbttcc-rolls-api.js removed 2026-08-28 (atlas cleanup) — game.bbttcc.api.rolls
 // had zero consumers; the beat Choice/Check UI resolves bonuses via its own
 // _rollChoiceCheck / _computeFactionOpRollBonusMap stack.
@@ -3334,6 +3334,27 @@ async function executeBeat(campaign, beat, ctx = {}) {
       }
     }
   } catch (eHG) { warn("[gate] hard-gate check failed (fail-open):", eHG); }
+
+  // Location guard (2026-09-15, owner ruling: the story knows where the party is — a market is only open in
+  // its hex; a GM cannot play a town's beat from another town and then undo the backtrack). A beat played at a
+  // hex the party is not standing on is refused with the ride named. Never on: a forced run, arrival/travel
+  // paths (the party IS arriving), the phase door, a conversation answer, or a chain (a hub's own routes),
+  // and never when the party's position or the place is unknown (fail-open: unknown is not "not here").
+  try {
+    const src = String(ctx?.source || "");
+    if (ctx?.force !== true && !ctx?.__chain && !/^(phase-door|travel|hex_entry|travel-console-relay|dialogue)$/.test(src)) {
+      const pw = _partyWhere(campaign); const place = placeOf(beat, null);
+      if (pw?.hex && place && place !== "anywhere") {
+        const want = hexKey(place), here = hexKey(pw.hex);
+        if (want !== here && _knownHexKeys().has(want)) {
+          const lbl = beat.label || beat.id || "(unnamed)";
+          log(`[where] '${beat.id}' refused — it is at ${place}, the party is at ${pw.hex}`);
+          if (game.user?.isGM) ChatMessage.create({ whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id), speaker: { alias: "Bad Eden" }, content: `<div style="border-left:3px solid #8a6d3b;padding:.35em .6em;background:rgba(138,109,59,.08);">🐎 <b>${foundry.utils.escapeHTML(String(lbl))}</b> is at <b>${foundry.utils.escapeHTML(String(place))}</b> — the party is at <b>${foundry.utils.escapeHTML(String(pw.hex))}</b>. Plot the ride on the Travel Console; arrival opens the town. (A forced run overrides this.)</div>` }).catch(() => {});
+          return { ok: false, sealed: true, notHere: true, why: `at ${place}`, place, where: pw.hex };
+        }
+      }
+    }
+  } catch (eLoc) { warn("[where] location check failed (fail-open):", eLoc); }
 
   await logBeatToGottgait(campaign, beat);
 
@@ -7030,6 +7051,22 @@ const _isAmbientBeat = (b) => !!b?.pacing?.ambient || String(b?.timeScale) === "
 
 // Two passes: structural first (no gates) to find each quest's candidate next, then real gate
 // evaluation for just those candidates — cheap enough to run after every resolved beat.
+// ── WHERE the party is (2026-09-15) — ONE reader over the travel module's position fact (ride session →
+// recorded arrival → the party's token on a hex map). Null when unknown; unknown never refuses anything.
+function _partyWhere(campaign) {
+  try {
+    const w = game.bbttcc?.api?.travel?.whereIs; if (typeof w !== "function") return null;
+    const ids = [].concat(campaign?.factionId ? [campaign.factionId] : [], campaign?.factionIds || []).map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean);
+    for (const id of new Set(ids)) { const r = w(id); if (r && (r.name || r.hexUuid)) return { hex: String(r.name || ""), hexUuid: r.hexUuid || null, via: String(r.via || ""), factionId: id }; }
+  } catch (_e) {}
+  return null;
+}
+function _knownHexKeys() {
+  const out = new Set();
+  try { for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) { const tf = d.flags?.["bbttcc-territory"]; if (tf && (tf.isHex === true || tf.kind === "territory-hex" || tf.hexId || tf.name)) { const k = hexKey(tf.name || d.text); if (k) out.add(k); } } } catch (_e) {}
+  return out;
+}
+
 async function _storySituation(campaign, { full = false } = {}) {
   if (!campaign) return null;
   const beats = Array.isArray(campaign.beats) ? campaign.beats : [];
@@ -7045,7 +7082,7 @@ async function _storySituation(campaign, { full = false } = {}) {
   const invitedIds = new Set(Object.keys(ds.invited || {}).filter(id => !firedSet.has(id)));
   const idx = new Map(beats.map((b, i) => [String(b.id), i]));
   const seqOf = (b) => { const n = Number(b?.questStep); return (b?.questStep != null && Number.isFinite(n)) ? n : 1e6 + (idx.get(String(b?.id)) ?? 0); };
-  const base = { beats, firedSet, firedTs: id => ts[id] || 0, bucketOf, invitedIds, phase: _storyPhaseGet(), turn: _getTurnNumberSafe(), anchorId, seqOf, questNames: {}, state: store };
+  const base = { beats, firedSet, firedTs: id => ts[id] || 0, bucketOf, invitedIds, phase: _storyPhaseGet(), turn: _getTurnNumberSafe(), anchorId, seqOf, questNames: {}, state: store, where: _partyWhere(campaign)?.hex || null, knownHexes: _knownHexKeys() };
   const memo = new Map();
   const evalReady = async (b) => { if (!b) return false; const id = String(b.id); if (memo.has(id)) return false; const ok = await _beatRequiresMet(b, campaign, {}); memo.set(id, { ready: !!ok, reasons: [] }); return true; };
   if (full) { for (const b of beats) if (!firedSet.has(String(b.id)) && !_isAmbientBeat(b)) await evalReady(b); }
@@ -7100,7 +7137,8 @@ async function directorSlate({ via = "manual" } = {}) {
   const nm = (q) => esc(q.name);
   const runBtn = (b, ready) => ready ? `<button type="button" data-bbttcc-slate-run="${esc(String(b.id))}" style="width:auto;padding:.1em .5em;margin-left:.3em;">▶</button>` : `<span style="opacity:.6;margin-left:.3em;">⛩</span>`;
   const waitsTxt = (n, q) => { const roads = story.roadsFor ? story.roadsFor(n.beat) : []; return roads.length ? ` — waits for ${roads.map(r => `<b>${esc(r.quest.name)}${r.chapter ? " · " + esc(r.chapter.name) : ""}</b>${r.beat ? ` (${r.beat.ready ? "ready" : "gated"}: ${esc(r.beat.label || r.beat.id)})` : ""}`).join(", ")}` : " — waits at its gate"; };
-  const rowQ = (q, star) => { const n = q.next; const where = n ? _slateWhere(n.beat, q) : ""; return `<li>${star ? "★ " : ""}<b>${nm(q)}</b>${q.currentChapter ? ` · ${esc(q.currentChapter.name)}` : ""}${n ? ` → ${esc(n.beat.label || n.beat.id)}${where ? ` <i style="opacity:.7">(${esc(where)})</i>` : ""}${n.ready ? runBtn(n.beat, true) : waitsTxt(n, q)}` : ` — ${esc(q.why)}`}</li>`; };
+  const mark = (n) => n ? (n.here === true ? "📍 " : n.here === false ? "🐎 " : "") : "";
+  const rowQ = (q, star) => { const n = q.next; const where = n ? _slateWhere(n.beat, q) : ""; return `<li>${mark(n)}${star ? "★ " : ""}<b>${nm(q)}</b>${q.currentChapter ? ` · ${esc(q.currentChapter.name)}` : ""}${n ? ` → ${esc(n.beat.label || n.beat.id)}${where ? ` <i style="opacity:.7">(${esc(where)})</i>` : ""}${n.ready ? runBtn(n.beat, true) : waitsTxt(n, q)}` : ` — ${esc(q.why)}`}</li>`; };
   const nowQ = story.now?.quest || null;
   const inPlay = [...(nowQ && nowQ.state === "active" ? [nowQ] : []), ...story.inPlay];
   const doors = story.doors;
@@ -7108,12 +7146,12 @@ async function directorSlate({ via = "manual" } = {}) {
   const keystone = story.quests.find(q => q.keystone && q.act === phase && q.state !== "completed") || null;
   const cal = nextDoor ? `Act ${nextDoor[1]} opens by itself at turn ${nextDoor[0]}${nextDoor[0] > turn ? ` (${nextDoor[0] - turn} turn${nextDoor[0] - turn === 1 ? "" : "s"} from now)` : " (overdue)"}${keystone ? `; or sooner, when <b>${nm(keystone)}</b> closes` : ""}.` : "No calendar door ahead.";
   const html = `<div class="bbttcc-slate" style="border-left:3px solid #d9a441;padding:.45em .6em;background:rgba(217,164,65,.08);font-size:12px">
-    <div style="font-weight:700;letter-spacing:.04em">🎙 THE SLATE — Act ${phase} · Turn ${turn}</div>
+    <div style="font-weight:700;letter-spacing:.04em">🎙 THE SLATE — Act ${phase} · Turn ${turn}${story.where ? ` · 📍 ${esc(String(story.where))}` : ""}</div>
     ${nowQ ? `<div style="margin-top:.3em"><b>NOW</b> — ${nm(nowQ)}${story.now.chapter ? ` · ${esc(story.now.chapter.name)}` : ""}: ${story.now.next ? `${esc(story.now.next.beat.label || story.now.next.beat.id)}${story.now.next.ready ? runBtn(story.now.next.beat, true) : waitsTxt(story.now.next, nowQ)}` : esc(story.now.why)}</div>` : ""}
     <div style="margin-top:.3em"><b>IN PLAY</b> (any order)</div><ul style="margin:.1em 0 0 1em">${inPlay.map(q => rowQ(q, q.key === nowQ?.key)).join("") || "<li><i>nothing in play</i></li>"}</ul>
-    <div style="margin-top:.3em"><b>DOORS</b> open this act</div><ul style="margin:.1em 0 0 1em">${doors.map(q => { const b = q.next.beat; const inv = !!(_readDirectorState().invited || {})[String(b.id)]; return `<li>${q.keystone ? "★ " : ""}<b>${nm(q)}</b> — ${esc(b.label || b.id)}${_slateWhere(b, q) ? ` <i style="opacity:.7">(${esc(_slateWhere(b, q))})</i>` : ""}${inv ? " ✉" : ""}${runBtn(b, true)}</li>`; }).join("") || "<li><i>nothing else opens this act</i></li>"}</ul>
+    <div style="margin-top:.3em"><b>DOORS</b> open this act</div><ul style="margin:.1em 0 0 1em">${doors.map(q => { const b = q.next.beat; const inv = !!(_readDirectorState().invited || {})[String(b.id)]; return `<li>${mark(q.next)}${q.keystone ? "★ " : ""}<b>${nm(q)}</b> — ${esc(b.label || b.id)}${_slateWhere(b, q) ? ` <i style="opacity:.7">(${esc(_slateWhere(b, q))})</i>` : ""}${inv ? " ✉" : ""}${runBtn(b, true)}</li>`; }).join("") || "<li><i>nothing else opens this act</i></li>"}</ul>
     <div style="margin-top:.3em"><b>CALENDAR</b> — ${cal}</div>
-    <div style="opacity:.6;margin-top:.3em">▶ runs the beat now · ✉ an invitation card is out · the Visualizer shows the same slate live</div>
+    <div style="opacity:.6;margin-top:.3em">▶ runs the beat now · ✉ an invitation card is out · 📍 here · 🐎 a ride away (the engine refuses it until you arrive) · the Visualizer shows the same slate live</div>
   </div>`;
   await ChatMessage.create({ content: html, whisper: game.users.filter(u => u.isGM).map(u => u.id), speaker: { alias: "Bad Eden" }, flags: { [MOD_ID]: { slate: { turn, phase, via, ts: Date.now() } } } });
   try { await _directorIssueInvites(story); } catch (e) { warn("[slate] invitations failed:", e); }
@@ -7867,7 +7905,9 @@ function buildCampaignAPI() {
     // per-condition met/unmet; requiresMet is the boolean the engine itself uses.
     // STORY MODEL (Phase 1, 2026-09-13): quest · chapter · ending, derived — see scripts/story-model.js
     story: {
-      QUEST_MAP, registryOf, deriveSituation, declOf, emptyState, applyRecord, projection, sealOfDecl,
+      QUEST_MAP, registryOf, deriveSituation, declOf, emptyState, applyRecord, projection, sealOfDecl, placeOf, hexKey,
+      where: (campaignId) => _partyWhere(getCampaign(campaignId || getActiveCampaignId())),   // { hex, hexUuid, via, factionId } | null
+      knownHexes: () => _knownHexKeys(),
       state: (campaignId) => foundry.utils.deepClone(_storyStateFor(campaignId || getActiveCampaignId())),   // a copy — the live settings object is never handed out
       record: (beatId, campaignId) => { const c = getCampaign(campaignId || getActiveCampaignId()); const b = (c?.beats || []).find(x => String(x.id) === String(beatId)); return b ? _storyRecord(c, b, {}) : Promise.resolve({ changes: [] }); },
       project: (campaignId) => _storyProject(getCampaign(campaignId || getActiveCampaignId()), {}),

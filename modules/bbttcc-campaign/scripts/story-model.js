@@ -154,7 +154,7 @@ export const QUEST_MAP = {
    "name": "The Forgotten Cause",
    "act": 2,
    "keystone": false,
-   "hex": "Gullywasher",
+   "hex": "Furrier's Fixit-Farm",
    "registryId": "fc_wendigo_confluence",
    "chapters": {
     "close_the_ledger": {
@@ -575,6 +575,29 @@ export const QUEST_MAP = {
 };
 
 const isAmbient = b => !!b?.pacing?.ambient || String(b?.timeScale) === "leg" || !!b?.targetHexUuid || /\bdiscovery\b/i.test(String(b?.tags || ""));
+
+// ── WHERE (2026-09-15, owner ruling: "story-based location awareness") ──────────────────────────────
+// hexKey: hex names carry NBSP, band suffixes ("Name.c" and "Name c"), and a claimed-mark decoration.
+export const hexKey = (s) => String(s || "").replace(/[\s\u00a0]+/g, " ").trim().replace(/^[^\p{L}\p{N}]+/u, "").replace(/\.(?=[a-z]$)/i, " ").trim().toLowerCase();
+// placeOf: the hex a beat is played at — "anywhere" | a hex name | null (unknown; on-arrival beats are the
+// injector's business). Letters reach you wherever you stand; rides start where you stand; act openers fire
+// from the calendar; pool draws and ambient beats happen on the road. Everything else is at its quest's hex.
+// `beat.where` (a hex name or "anywhere") overrides the rule by hand.
+export function placeOf(beat, questDef) {
+  if (!beat) return null;
+  const w = String(beat.where || "").trim();
+  if (w) return /^anywhere$/i.test(w) ? "anywhere" : w;
+  if (beat.hexName) return String(beat.hexName);
+  if (beat.targetHexUuid) return null;
+  const id = String(beat.id || ""), label = String(beat.label || "");
+  const qk = String(beat.story?.quest || "");
+  if (isAmbient(beat) || (qk && qk === String(QUEST_MAP.pool))) return "anywhere";
+  if (/(^|_)words?(_|$)/i.test(id) || /^word from\b/i.test(label)) return "anywhere";
+  if (/(^|_)ride(_|$)/i.test(id) || /^the road\b/i.test(label)) return "anywhere";
+  if (Number.isFinite(Number(beat.worldEffects?.phaseAdvance?.set))) return "anywhere";
+  const q = questDef || (qk ? QUEST_MAP.quests[qk] : null);
+  return q && q.hex ? String(q.hex) : "anywhere";
+}
 // The story's ANCHOR is the freshest played beat that can carry it: never a travel leg, a discovery or a
 // leaf sighting — but an ambient beat that ROUTES onward (the Tent on rails) stands in the story and anchors.
 export const isAnchorable = b => !!b && (!isAmbient(b) || (Array.isArray(b.choices) && b.choices.some(c => c && c.next)));
@@ -595,6 +618,11 @@ export function deriveSituation(ctx) {
   const phase = Number(ctx.phase) || 0, turn = Number(ctx.turn) || 0;
   const anchorId = ctx.anchorId ? String(ctx.anchorId) : null;
   const byId = new Map(beats.map(b => [String(b.id), b]));
+  // where the party stands (a hex name) and which hex names exist — a place the map does not know is "unknown", never "not here"
+  const where = ctx.where ? hexKey(ctx.where) : null;
+  const known = ctx.knownHexes instanceof Set ? ctx.knownHexes : null;
+  const hereOf = (beat, def) => { if (!where || !beat) return null; const p = placeOf(beat, def); if (!p || p === "anywhere") return null; const k = hexKey(p); if (known && !known.has(k)) return null; return k === where; };
+  const stamp = (n, def) => { if (n && n.beat) { n.place = placeOf(n.beat, def); n.here = hereOf(n.beat, def); } return n; };
   // routes in (for orphan detection and hub finding)
   const routesIn = new Map();
   for (const b of beats) for (const c of (b?.choices || [])) for (const t of [c?.next, c?.failNext]) { const id = String(t || "").trim(); if (id) routesIn.set(id, (routesIn.get(id) || 0) + 1); }
@@ -754,6 +782,7 @@ export function deriveSituation(ctx) {
       else if (why === "next" && !next) why = chaptersLeft ? "chapter-empty" : (mainEnds.length ? "done-no-closer" : "empty");
     }
     const firedCount = all.filter(b => fired.has(String(b.id))).length;
+    stamp(next, def); for (const c of chapters) stamp(c.next, def);
     quests.push({ key, name: def.name, act: def.act, keystone: !!def.keystone, hex: def.hex || "", registryId: reg, state, chapters, next, why, currentChapter: chapter, starts: mainStarts, closers: mainEnds, progress: { fired: firedCount, total: all.length }, beats: all });
   }
   const qByKey = Object.fromEntries(quests.map(q => [q.key, q]));
@@ -769,7 +798,7 @@ export function deriveSituation(ctx) {
       const met = g.is != null ? cur === g.is : (g.isNot != null ? cur !== g.isNot : true);
       if (met) continue;
       const target = ch ? ch.next : q.next;
-      out.push({ quest: q, chapter: ch, need: g.is || ("not " + g.isNot), beat: target ? target.beat : null, ready: !!(target && target.ready) });
+      out.push({ quest: q, chapter: ch, need: g.is || ("not " + g.isNot), beat: target ? target.beat : null, ready: !!(target && target.ready), place: target ? target.place ?? null : null, here: target ? target.here ?? null : null });
     }
     return out;
   };
@@ -782,16 +811,22 @@ export function deriveSituation(ctx) {
   const anyFresh = quests.some(q => (q.state === "active") && fresh(q));
   // ELSEWHERE: when the story's own quest has only a stale hub to offer but another quest in play has
   // something fresh, that is what happens next (the fiddle in Khezek-Tor while you stand at the Crossroads)
-  const elsewhere = (anchorQuest && !fresh(anchorQuest)) ? inPlay.find(fresh) || null : null;
+  // HERE (2026-09-15): what the party can reach from where it stands comes first — a fresh next in another quest
+  // AT THIS HEX beats the anchor's fresh next in a town a ride away (the ride is still offered, as the ride).
+  const reachable = (q) => fresh(q) && q.next.here !== false;
+  const elsewhere = anchorQuest && !reachable(anchorQuest) ? (inPlay.find(reachable) || (!fresh(anchorQuest) ? (inPlay.find(fresh) || null) : null)) : null;
+  const elsewhereWhy = elsewhere ? (fresh(anchorQuest) ? "here" : "elsewhere") : null;
+  inPlay.sort((a, b) => Number(b.next?.here === true) - Number(a.next?.here === true));
   const now = anchorQuest ? ((!anyFresh && !quests.some(q => (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready))
     ? { quest: anchorQuest, chapter: anchorQuest.currentChapter, next: null, why: "turn", roads: [] }
     : elsewhere
-      ? { quest: elsewhere, chapter: elsewhere.currentChapter, next: elsewhere.next, why: "elsewhere", roads: [] }
+      ? { quest: elsewhere, chapter: elsewhere.currentChapter, next: elsewhere.next, why: elsewhereWhy, roads: [] }
       : { quest: anchorQuest, chapter: anchorQuest.currentChapter, next: anchorQuest.next, why: anchorQuest.why, roads: anchorQuest.next && !anchorQuest.next.ready ? roadsFor(anchorQuest.next.beat) : [] }) : null;
   // a door is a quest not yet started whose START is ready NOW — readiness already carries the start beat's own
   // act gate, so the quest's nominal act is not consulted (towns span acts 1–2; Allesh-Gilliam's opening is Act 1)
-  const doors = quests.filter(q => (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready);
-  return { act: phase, turn, quests, byKey: qByKey, anchor: anchorBeat ? { beatId: anchorId, quest: anchorLoc?.quest || null, chapter: anchorLoc?.chapter || null } : null, now, inPlay, doors, roadsFor };
+  const doors = quests.filter(q => (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready)
+    .sort((a, b) => Number(b.next.here === true) - Number(a.next.here === true));
+  return { act: phase, turn, quests, byKey: qByKey, anchor: anchorBeat ? { beatId: anchorId, quest: anchorLoc?.quest || null, chapter: anchorLoc?.chapter || null } : null, now, inPlay, doors, roadsFor, where: ctx.where || null };
 }
 
 

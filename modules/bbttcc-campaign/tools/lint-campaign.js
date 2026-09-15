@@ -9,6 +9,7 @@
  *
  *   gates      _beatRequiresMet — inject.requires[] of {flag,gte|lte|eq} |
  *              {questBucket,is|isNot} | {beatMark,quest,state} | {relation,is|atLeast}; unknown flag = unmet
+ *   where      executeBeat refuses a beat whose placeOf() hex ≠ the party's hex (travel.whereIs); beat.where overrides (W01)
  *   routing    runBeat/executeBeat NEVER consult gates — only the director,
  *              injector and dialogue surfaces do (choice.next fires regardless)
  *   checks     op.<key> pays 1 OP from the faction bank (unknown key = phantom
@@ -303,6 +304,7 @@ for (const b of beats) {
   const conds = condsOf(b);
   const raw = b.inject?.requires;
   if (raw && !Array.isArray(raw) && typeof raw !== "object") F("P01", "ERROR", b.id, `inject.requires is ${typeof raw}, not an array of conditions`);
+  if (b.where != null && (typeof b.where !== "string" || !b.where.trim())) F("W01", "ERROR", b.id, `beat.where must be a hex name or "anywhere" (got ${JSON.stringify(b.where)}) — placeOf() falls back to the quest's hex`);
   for (const c of conds) {
     if (c.questBucket != null) {
       const negated = c.is == null && c.isNot != null;

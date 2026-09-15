@@ -48,9 +48,16 @@ function guards(b, source) {   // executeBeat entry refusals
   const act = actOf(b); const own = Number(b?.worldEffects?.phaseAdvance?.set); const steps = Number.isFinite(own) && act !== null && own === act && phase === act - 1;
   if (source !== "phase-door" && act !== null && act > phase && !steps) return `FUTURE-ACT (act ${act} > phase ${phase})`;
   if (b.inject?.hardGate === true) { const g = gateOK(b); if (!g.ok) return "HARD-GATE " + g.why; }
+  if (where && source !== "phase-door" && source !== "hex") { const p = m.placeOf(b, null); if (p && p !== "anywhere" && knownHexes.has(m.hexKey(p)) && m.hexKey(p) !== m.hexKey(where)) return `NOT HERE (at ${p}; the party is at ${where})`; }
   return null;
 }
-const ARRIVE = { ag_ride_khezek_tor: "khezek_tor_main_scene", ag_ride_lyrenn: "lyrenn_opening_scene", lyrenn_word_ride: "lyrenn_opening_scene", ride_back_home: "allesh_gilliam_introduction_to_hq" };
+const ARRIVE = { ag_ride_khezek_tor: "khezek_tor_main_scene", ag_ride_lyrenn: "lyrenn_opening_scene", lyrenn_word_ride: "lyrenn_opening_scene", ride_back_home: "allesh_gilliam_introduction_to_hq", ag_ride_fixit: "fixit_cinematic_intro" };
+const ARRIVE_AT = { "allesh-gilliam": "allesh_gilliam_introduction_to_hq", "lyrenn": "lyrenn_opening_scene", "khezek-tor": "khezek_tor_main_scene", "furrier's fixit-farm": "fixit_cinematic_intro" };   // hexKey → the town's on-enter opener
+const RIDE_TO = { ag_ride_khezek_tor: "Khezek-Tor", ag_ride_lyrenn: "Lyrenn", lyrenn_word_ride: "Lyrenn", ride_back_home: "Allesh-Gilliam", ag_ride_fixit: "Furrier's Fixit-Farm" };
+// WHERE (2026-09-15): the party's hex — from the save's recorded arrival, moved by rides; every hex name on the save's maps is "known"
+const knownHexes = new Set(); (function walk(o, d) { if (d > 12) return; if (Array.isArray(o)) { for (const v of o) walk(v, d + 1); } else if (o && typeof o === "object") { const tf = o.flags?.["bbttcc-territory"]; if (tf && (tf.isHex === true || tf.kind === "territory-hex" || tf.hexId || tf.name)) { const k = m.hexKey(tf.name || o.text); if (k) knownHexes.add(k); } for (const v of Object.values(o)) if (v && typeof v === "object") walk(v, d + 1); } })(j, 0);
+let where = (() => { try { const fid = String(c.factionId || (c.factionIds || [])[0] || "").replace(/^Actor\./, ""); const a = (j.actors || []).find(x => x._id === fid); return a?.flags?.["bbttcc-factions"]?.travel?.atHexName || null; } catch (_e) { return null; } })();
+if (where) log.push(`  📍 the party stands at ${where} (${knownHexes.size} hexes known)`);
 function play(id, source = "gm") {
   const b = byId.get(id); if (!b) { log.push(`  ✗ missing beat ${id}`); return false; }
   const why = guards(b, source); if (why) { refusals.push({ id, why, phase, turn }); log.push(`  ⛔ ${id} REFUSED: ${why}`); return false; }
@@ -65,7 +72,7 @@ function situation() {
   const played = new Set(Object.keys(st.played)); const ts = Object.fromEntries(Object.entries(st.played).map(([k, v]) => [k, v.ts]));
   const isAmb = b => !!b?.pacing?.ambient || b?.timeScale === "leg" || !!b?.targetHexUuid || /\bdiscovery\b/i.test(String(b?.tags || ""));
   const anchorId = [...played].filter(id => m.isAnchorable(byId.get(id))).sort((a, b) => ts[b] - ts[a])[0] || null;
-  return m.deriveSituation({ beats: c.beats, firedSet: played, firedTs: id => ts[id] || 0, readyOf: id => { const b = byId.get(id); if (!b) return null; const g = gateOK(b); return { ready: g.ok, reasons: g.ok ? [] : [{ met: false, text: g.why }] }; }, bucketOf: bucketOf(), invitedIds: new Set(), phase, turn, anchorId, seqOf, questNames: {}, state: st, openingBeatId: c.openingBeatId });
+  return m.deriveSituation({ where, knownHexes, beats: c.beats, firedSet: played, firedTs: id => ts[id] || 0, readyOf: id => { const b = byId.get(id); if (!b) return null; const g = gateOK(b); return { ready: g.ok, reasons: g.ok ? [] : [{ met: false, text: g.why }] }; }, bucketOf: bucketOf(), invitedIds: new Set(), phase, turn, anchorId, seqOf, questNames: {}, state: st, openingBeatId: c.openingBeatId });
 }
 // ── the walk: do what the NOW card says; inside a beat, take the first unplayed route (player pick) ──
 if (!resume) play(c.openingBeatId, "opening");
@@ -87,9 +94,12 @@ for (let step = 0; step < MAX; step++) {
     const r = (n.roads || []).find(r => r.beat && r.ready); const d = s.doors[0]; const ip = s.inPlay.find(q => q.next?.beat && q.next.ready && q.next.beat.id !== next.id);
     if (r) next = r.beat; else if (d) { next = d.next.beat; why = "DOOR:" + d.name; log.push(`  🚪 open a door instead: ${d.name}`); } else if (ip) { next = ip.next.beat; why = "IN PLAY:" + ip.name; log.push(`  ↪ in play instead: ${ip.name}`); }
     else { if (turn >= STOP_TURN) break; turn++; log.push(`  ⏩ ADVANCE → turn ${turn} (everything waits)`); const DOORS = [[2, 2], [6, 3], [10, 4], [14, 5]]; for (const [tg, ph] of DOORS) if (turn >= tg && phase < ph) { phase = ph; log.push(`  ⏩ calendar door → ACT ${phase}`); if (ph === 2) play("a2_that_one_night", "phase-door"); } continue; } }
+  // the Travel Console (2026-09-15): whatever the walker picked (NOW, a road, a door, IN PLAY) is a ride away → the GM plots
+  // the ride first; arrival opens the town, then the situation is recomputed with the party standing there
+  { const p = m.placeOf(next, null); if (where && p && p !== "anywhere" && knownHexes.has(m.hexKey(p)) && m.hexKey(p) !== m.hexKey(where)) { const dest = String(p); where = dest; log.push(`  🐎 Travel Console → ${dest} (📍 ${dest})`); const opener = ARRIVE_AT[m.hexKey(dest)]; if (opener && byId.get(opener) && !st.played[opener]) play(opener, "hex"); continue; } }
   const last3 = log.slice(-3).map(l => l.trim().split(/\s+/)[1]); if (last3.length === 3 && last3.every(x => x === next.id)) { log.push(`  ■ LOOP on ${next.id} — the model keeps offering the same beat; stopping`); break; }
   if (!play(next.id, why.startsWith("DOOR") ? "door" : "gm")) { if (refusals.length > 6) break; }
-  if (ARRIVE[next.id]) { log.push(`  🐎 ride → arrive ${ARRIVE[next.id]}`); play(ARRIVE[next.id], "hex"); }
+  if (ARRIVE[next.id] && byId.get(ARRIVE[next.id])) { if (RIDE_TO[next.id]) where = RIDE_TO[next.id]; log.push(`  🐎 ride → arrive ${ARRIVE[next.id]}${where ? ` (📍 ${where})` : ""}`); play(ARRIVE[next.id], "hex"); }
   if (phase >= STOP_ACT && turn >= 2 && step > 40) break;
 }
 console.log(log.join("\n"));

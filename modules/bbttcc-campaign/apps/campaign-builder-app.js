@@ -1382,9 +1382,14 @@ const activeCampaignId = _getActiveCampaignId();
         `nothing fresh is routed from where the story stands${ch ? ` in ${esc(ch.name)}` : ""} — the hub is still open; the table can go back and pick another door.${progress}${endingsTxt}`);
       c.quest = q.name; return c;
     }
+    if (n.next.ready && n.next.here === false) {
+      const c = card(`🐎 RIDE — ${esc(q.name)}${chapTxt}`, b.label || b.id, b, [run(b, `Run it anyway (the party is at ${story.where || "?"})`)],
+        `<b>${esc(b.label || b.id)}</b> is at <b>${esc(String(n.next.place || q.hex || "?"))}</b>; the party is at <b>${esc(String(story.where || "?"))}</b>. Plot the ride on the Travel Console — arrival opens the town, and this beat is waiting there.${progress}${endingsTxt}`);
+      c.quest = q.name; return c;
+    }
     if (n.next.ready) {
       const closing = n.why === "closer";
-      const c = card(closing ? `🏁 CLOSE — ${esc(q.name)}` : `⏭ NEXT — ${esc(q.name)}${chapTxt}${n.why === "elsewhere" ? " (elsewhere)" : ""}`, b.label || b.id, b,
+      const c = card(closing ? `🏁 CLOSE — ${esc(q.name)}` : `⏭ NEXT — ${esc(q.name)}${chapTxt}${n.why === "elsewhere" ? " (elsewhere)" : n.why === "here" ? " (here)" : ""}`, b.label || b.id, b,
         [run(b, closing ? "Run the closing beat" : "Run the next beat")],
         `${closing ? "every chapter has its ending." : ""}${progress}${endingsTxt}`.trim());
       c.quest = q.name; return c;
@@ -1488,7 +1493,9 @@ const activeCampaignId = _getActiveCampaignId();
       story = deriveSituation({ beats, firedSet, firedTs: id => byBeat.get(id)?.ts || 0,
         readyOf: id => { const r = runtime.byId[id]; return r ? { ready: r.state === "ready", reasons: r.reasons || [] } : null; },
         bucketOf, invitedIds, phase: curPhase, turn: Number(runtime?.turn) || 0, anchorId, seqOf, questNames,
-        state: (() => { try { return game.bbttcc?.api?.campaign?.story?.state?.(campaign?.id) || null; } catch (_e) { return null; } })() });
+        state: (() => { try { return game.bbttcc?.api?.campaign?.story?.state?.(campaign?.id) || null; } catch (_e) { return null; } })(),
+        where: (() => { try { return game.bbttcc?.api?.campaign?.story?.where?.(campaign?.id)?.hex || null; } catch (_e) { return null; } })(),
+        knownHexes: (() => { try { return game.bbttcc?.api?.campaign?.story?.knownHexes?.() || null; } catch (_e) { return null; } })() });
       storyHero = this._heroFromStory(story, { card, run, esc, whyOf, sealOf, sealCard });
     } catch (eStory) { console.warn("[bbttcc-campaign] story model failed — falling back to the ladder", eStory); }
 
@@ -1754,7 +1761,7 @@ const activeCampaignId = _getActiveCampaignId();
       if (sq) {
         const icon = c => c.state === "done" ? "✓" : c.state === "open" ? "▷" : "◇";
         const endOf = c => c.ending ? ` <em>${esc(String(c.ending.label || "").replace(/^.*?\s[-—]\s*/, ""))}</em>` : "";
-        const nextBtn = nx => nx ? flyBtn(String(nx.beat.id), "→ " + (nx.beat.label || nx.beat.id), nx.ready ? "⚡" : "⛩", nx.ready) : "";
+        const nextBtn = nx => nx ? flyBtn(String(nx.beat.id), "→ " + (nx.beat.label || nx.beat.id), nx.here === false ? "🐎" : nx.here === true ? "📍" : nx.ready ? "⚡" : "⛩", nx.ready) : "";
         const isCur = c => story.now?.quest?.key === sq.key && story.now?.chapter?.key === c.key;
         const pct = sq.progress.total ? Math.round((sq.progress.fired / sq.progress.total) * 100) : 0;
         const head = `<div class="bbttcc-now-chain" data-tooltip="The quest as the story model sees it: state · fired/total"><div class="hd"><span class="nm">${sq.keystone ? "★ " : ""}${esc(sq.name)}</span><span class="ct">${sq.progress.fired}/${sq.progress.total} · ${esc(sq.state)}</span></div><div class="bar"><i style="width:${pct}%"></i></div>${!sq.chapters.length && sq.state !== "completed" ? (sq.next ? nextBtn(sq.next) : `<div class="done">${esc(sq.why)}</div>`) : ""}</div>`;
@@ -1781,7 +1788,7 @@ const activeCampaignId = _getActiveCampaignId();
         const recKey = story.now?.quest?.key || null;
         const seenQ = new Set();
         const list = [...(story.now?.quest && story.now.quest.state === "active" ? [story.now.quest] : []), ...story.inPlay].filter(q => { if (seenQ.has(q.key)) return false; seenQ.add(q.key); return true; });   // ELSEWHERE can put the same quest in both lists
-        const nextBtn = nx => nx ? flyBtn(String(nx.beat.id), "→ " + (nx.beat.label || nx.beat.id), nx.ready ? "⚡" : "⛩", nx.ready) : "";
+        const nextBtn = nx => nx ? flyBtn(String(nx.beat.id), "→ " + (nx.beat.label || nx.beat.id), nx.here === false ? "🐎" : nx.here === true ? "📍" : nx.ready ? "⚡" : "⛩", nx.ready) : "";
         const row = (q, rec) => {
           const pct = q.progress.total ? Math.round((q.progress.fired / q.progress.total) * 100) : 0;
           return `<div class="bbttcc-now-chain${rec ? " rec" : ""}" data-tooltip="${rec ? "Where the story stands. " : ""}Started, not finished. Any order is fine.">` +
@@ -1794,7 +1801,7 @@ const activeCampaignId = _getActiveCampaignId();
         try { invited = game.bbttcc?.api?.campaign?.director?.state?.()?.invited || {}; } catch (_eInv) {}
         doorsHtml = story.doors.map(d => {
           const b = d.next.beat; const inv = !!invited[String(b.id)];
-          return flyBtn(String(b.id), `${d.keystone ? "★ " : ""}${d.name} — ${b.label || b.id}`, inv ? "✉" : "⚡", true);
+          return flyBtn(String(b.id), `${d.keystone ? "★ " : ""}${d.name} — ${b.label || b.id}`, inv ? "✉" : d.next.here === false ? "🐎" : d.next.here === true ? "📍" : "⚡", true);
         }).join("") || `<div class="bbttcc-now-empty">nothing else opens this act</div>`;
       } catch (eIP) { console.warn(TAG, "in-play (story) block failed", eIP); }
     } else try {
@@ -1878,7 +1885,7 @@ const activeCampaignId = _getActiveCampaignId();
       (runtime.ledger ? `<span>${esc(String(runtime.ledger.spent))}/${esc(String(runtime.ledger.budget))} days${Number(runtime.ledger.debt) ? ` · debt ${esc(String(runtime.ledger.debt))}` : ""}</span>` : "") +
       `</div>` +
       block("▶ NOW", nowHtml) +
-      (inPlayHtml ? block("🧭 IN PLAY — any order", inPlayHtml) : "") +
+      (inPlayHtml ? block(`🧭 IN PLAY — any order${sit.story?.where ? ` · 📍 ${esc(String(sit.story.where))}` : ""}`, inPlayHtml) : "") +
       (doorsHtml ? block("🚪 DOORS — open this act", doorsHtml) : "") +
       block("✓ RECENT", recentHtml) +
       block("🔒 LOCKED", lockedHtml);
