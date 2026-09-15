@@ -628,7 +628,8 @@ export function deriveSituation(ctx) {
   const readiness = (b) => {
     const r = b ? readyOf(String(b.id)) : null;
     if (r && typeof r.ready === "boolean") return r;
-    return { ready: reqsOf(b).length === 0, reasons: [], unknown: true };
+    // unknown readiness: optimistic (ctx.optimistic — the slate's evaluation rounds) or "ready iff ungated"
+    return { ready: ctx.optimistic ? true : reqsOf(b).length === 0, reasons: [], unknown: true };
   };
   const unmet = (b) => (readiness(b).reasons || []).filter(r => r && r.met === false);
   const questGatesOf = (b) => {
@@ -717,7 +718,7 @@ export function deriveSituation(ctx) {
     else if (state === "dormant" || state === "offered" || state === "closed") {
       // a quest not yet started: its start beat (explicit start rows first, then a dormant chapter's start, then its first body beat)
       const dormantCh = chapters.find(c => c.state === "dormant" && c.next);
-      next = (mainStarts.length ? pickNext(mainStarts, [], true) : null) || (dormantCh ? dormantCh.next : null) || pickNext(body, [], true);
+      next = (mainStarts.length ? pickNext(mainStarts, [], true) : null) || (dormantCh ? dormantCh.next : null) || pickNext(body, [], false);   // an ambient body beat (the Tent on rails) is never a door
       if (dormantCh && next === dormantCh.next) chapter = dormantCh;
       why = next ? (next.ready ? "begin" : "begin-waiting") : "empty";
     } else {
@@ -737,7 +738,8 @@ export function deriveSituation(ctx) {
       // the hub above the anchor: walk the routes upward (welcome → answer sits two levels under the town walk);
       // an EXHAUSTED hub (nothing unfired behind any of its doors) is not offered again — the story moves on
       const parentsOf = (id) => beats.filter(h => (h.choices || []).some(c => String(c?.next) === String(id)));
-      const hubAbove = (b, depth = 0) => { if (!b || depth > 3) return null; if (isHub(b) && allIds.has(String(b.id))) return b; for (const p of parentsOf(b.id)) { const h = hubAbove(p, depth + 1); if (h) return h; } return null; };
+      // prefer a hub that is READY (an Act-1 hub and an Act-2 hub may both route to the same welcome)
+      const hubAbove = (b, depth = 0) => { if (!b || depth > 3) return null; if (isHub(b) && allIds.has(String(b.id))) return b; const ps = parentsOf(b.id); const found = ps.map(p => hubAbove(p, depth + 1)).filter(Boolean); return found.find(h => readiness(h).ready) || found[0] || null; };
       const hub = inQuest ? hubAbove(anchorBeat) : null;
       const hubFresh = hub ? routedFrom(hub, allBeatIds).some(t => !fired.has(String(t.id)) || (isHub(t) && String(t.id) !== String(hub.id))) : false;
       const hubNext = hub && hubFresh ? { beat: hub, ready: readiness(hub).ready, reasons: unmet(hub), revisit: true } : null;
@@ -876,15 +878,15 @@ export function projection(state) {
 
 // Seal verdict for a declared beat, from state alone (owner ruling R3, 2026-09-13):
 // a keystone never seals · a started quest stays open across acts · a never-started quest closes with its act.
-export function sealOfDecl(beat, state, phase) {
+export function sealOfDecl(beat, state, phase, { sealQuests = true, sealActs = true } = {}) {
   const d = declOf(beat); if (!d || !d.quest || !QUEST_MAP.quests[d.quest]) return null;
   if (beat?.inject?.evergreen === true) return { sealed: false };
   const def = QUEST_MAP.quests[d.quest];
   if (def.keystone) return { sealed: false };
   if (def.act === 0) return { sealed: false };
   const st = state || emptyState();
-  if (st.closed?.[d.quest]) return { sealed: true, kind: "quest", why: `its quest "${def.name}" is complete (${st.closed[d.quest].name})`, quest: d.quest };
-  if (!st.started?.[d.quest] && def.act >= 1 && Number(phase) > def.act) return { sealed: true, kind: "act", why: `"${def.name}" was never started and Act ${def.act} is over (the story is in Act ${phase})`, quest: d.quest, act: def.act, phase: Number(phase) };
+  if (sealQuests && st.closed?.[d.quest]) return { sealed: true, kind: "quest", why: `its quest "${def.name}" is complete (${st.closed[d.quest].name})`, quest: d.quest };
+  if (sealActs && !st.started?.[d.quest] && def.act >= 1 && Number(phase) > def.act) return { sealed: true, kind: "act", why: `"${def.name}" was never started and Act ${def.act} is over (the story is in Act ${phase})`, quest: d.quest, act: def.act, phase: Number(phase) };
   return { sealed: false };
 }
 
@@ -898,7 +900,7 @@ export function declarationsFor(beats) {
   // ending-name inference: strip the common prefix among a chapter's (or quest's) closer ids
   const groups = {};
   for (const b of beats) { for (const e of (b?.worldEffects?.questEffects || [])) if (e?.action === "complete" && e.questId) (groups[e.questId] = groups[e.questId] || []).push(String(b.id)); }
-  const nameIn = (regId, id) => { const ids = groups[regId] || [id]; if (ids.length < 2) return id.split("_").slice(-1)[0]; let p = ids[0]; for (const i of ids) while (!i.startsWith(p)) p = p.slice(0, -1); p = p.replace(/[^_]*$/, ""); return id.slice(p.length) || id.split("_").slice(-1)[0]; };
+  const nameIn = (regId, id) => { const ids = groups[regId] || [id]; if (ids.length < 2) return id.split("_").slice(-1)[0]; let p = ids[0]; for (const i of ids) while (!i.startsWith(p)) p = p.slice(0, -1); p = p.replace(/[^_]*$/, ""); if (p.length < 4) return id.split("_").slice(-1)[0]; /* one outlier closer (gilbert_theater_resolution) must not turn every ending into its full id */ return id.slice(p.length) || id.split("_").slice(-1)[0]; };
   for (const b of beats) {
     const id = String(b?.id || ""); if (!id) continue;
     const m = regOfBeat(b);

@@ -3133,7 +3133,7 @@ async function _applyQuestEffects(campaign, beat, ctx) {
       // If any row's quest is not where we just put it, rewrite the whole box
       // once (unset + set), then shout if it still is not there.
       try {
-        const expect = []; for (const row of rows) { const q = String(row?.questId || "").trim(); if (!q) continue; const a = String(row.action || "accept").toLowerCase(); expect.push([q, a === "complete" || a === "completed" ? "completed" : (a === "archive" || a === "archived") ? "archived" : "active"]); }
+        const expect = []; for (const row of rows) { if (beat?.story && beat.story.quest) continue;   /* declared beats: the STORE owns the bucket (2026-09-14) */ const q = String(row?.questId || "").trim(); if (!q) continue; const a = String(row.action || "accept").toLowerCase(); expect.push([q, a === "complete" || a === "completed" ? "completed" : (a === "archive" || a === "archived") ? "archived" : "active"]); }
         const has = (t) => expect.every(([q, b]) => !!(t?.[b]?.[q]));
         let t = faction.getFlag(MOD, "quests");
         if (!has(t)) { await faction.unsetFlag(MOD, "quests"); await faction.setFlag(MOD, "quests", next); t = faction.getFlag(MOD, "quests"); }
@@ -4867,7 +4867,13 @@ async function _storyProject(campaign, ctx = {}) {
       next[want][qid] = entry; changed = true; moved++;
     }
     if (!changed) continue;
-    try { await faction.unsetFlag(MOD, "quests"); } catch (_e) {}
+    // Review 2026-09-14: never unset the whole flag (a window where every gate reads "no quests", and a lost
+    // track if setFlag throws). Delete moved keys with ForcedDeletion, then merge — same as _applyQuestEffects.
+    try {
+      const FD = foundry.data?.operators?.ForcedDeletion || null; const del = {};
+      for (const bucket of ["active", "completed", "archived"]) for (const qid of Object.keys(cur?.[bucket] || {})) if (!next[bucket]?.[qid]) { if (FD) del[`flags.${MOD}.quests.${bucket}.${qid}`] = new FD(); else del[`flags.${MOD}.quests.${bucket}.-=${qid}`] = null; }
+      if (Object.keys(del).length) await faction.update(del, { render: false });
+    } catch (eDel) { warn("[story] projection deletion sync failed", eDel); }
     await faction.setFlag(MOD, "quests", next);
     try { if (faction.sheet?.rendered) faction.sheet.render(false); } catch (_e) {}
   }
@@ -4964,7 +4970,10 @@ async function _beatSealed(beat, campaign, ctx = {}) {
     // keystones never seal, a started quest stays open across acts, a never-started quest
     // closes with its act (owner ruling R3).
     if (beat.story && beat.story.quest && campaign?.id) {
-      const v = sealOfDecl(beat, _storyStateFor(campaign.id), _storyPhaseGet());
+      let sealQ = true, sealA = true;
+      try { sealQ = game.settings.get(MOD_ID, SETTING_SEAL_QUESTS) !== false; } catch (_e) {}
+      try { sealA = game.settings.get(MOD_ID, SETTING_SEAL_ACTS) !== false; } catch (_e) {}
+      const v = sealOfDecl(beat, _storyStateFor(campaign.id), _storyPhaseGet(), { sealQuests: sealQ, sealActs: sealA });
       if (v) return v.sealed ? { sealed: true, why: v.why, kind: v.kind, questId: beat.questId || null, act: v.act, phase: v.phase } : no;
     }
     let sealQ = true, sealA = true;
@@ -6996,11 +7005,23 @@ async function _storySituation(campaign, { full = false } = {}) {
   const seqOf = (b) => { const n = Number(b?.questStep); return (b?.questStep != null && Number.isFinite(n)) ? n : 1e6 + (idx.get(String(b?.id)) ?? 0); };
   const base = { beats, firedSet, firedTs: id => ts[id] || 0, bucketOf, invitedIds, phase: _storyPhaseGet(), turn: _getTurnNumberSafe(), anchorId, seqOf, questNames: {}, state: store };
   const memo = new Map();
-  const evalReady = async (b) => { if (!b) return; const id = String(b.id); if (memo.has(id)) return; const ok = await _beatRequiresMet(b, campaign, {}); memo.set(id, { ready: !!ok, reasons: [] }); };
+  const evalReady = async (b) => { if (!b) return false; const id = String(b.id); if (memo.has(id)) return false; const ok = await _beatRequiresMet(b, campaign, {}); memo.set(id, { ready: !!ok, reasons: [] }); return true; };
   if (full) { for (const b of beats) if (!firedSet.has(String(b.id)) && !_isAmbientBeat(b)) await evalReady(b); }
   else {
-    const pass1 = deriveSituation({ ...base, readyOf: () => null });
-    for (const q of pass1.quests) { if (q.next?.beat) await evalReady(q.next.beat); for (const c of q.chapters) if (c.next?.beat) await evalReady(c.next.beat); for (const b of q.starts) await evalReady(b); }
+    // Review 2026-09-14: unknown readiness is OPTIMISTIC (the model picks the first candidate in story order),
+    // the picks get real gate evaluation, and we re-derive until no new beat needs evaluating — so a gated-
+    // but-met beat is never skipped for an ungated one further down.
+    for (let round = 0; round < 8; round++) {
+      const pass = deriveSituation({ ...base, optimistic: true, readyOf: id => memo.get(String(id)) || null });
+      let fresh = 0;
+      for (const q of pass.quests) {
+        if (q.next?.beat && await evalReady(q.next.beat)) fresh++;
+        for (const c of q.chapters) if (c.next?.beat && await evalReady(c.next.beat)) fresh++;
+        for (const b of q.starts) if (await evalReady(b)) fresh++;
+      }
+      if (pass.now?.roads) for (const r of pass.now.roads) if (r.beat && await evalReady(r.beat)) fresh++;
+      if (!fresh) break;
+    }
   }
   const story = deriveSituation({ ...base, readyOf: id => memo.get(String(id)) || null });
   story.readiness = memo;
@@ -7061,7 +7082,7 @@ async function directorSlate({ via = "manual" } = {}) {
 
 // Invitations = quest/chapter START beats that carry an invite line and a speaker, ready now, not yet
 // invited, not yet played. One card per beat, once. Serialized on the speaker chain.
-async function _directorIssueInvites(story) {
+async function _directorIssueInvites(story, { onChain = false } = {}) {
   if (!game.user?.isGM || !story) return 0;
   let auto = true; try { auto = !!game.settings.get(MOD_ID, SETTING_DIRECTOR_AUTOINVITE); } catch (_e) {}
   if (!auto) return 0;
@@ -7074,10 +7095,13 @@ async function _directorIssueInvites(story) {
   }
   const state = _readDirectorState();
   const store = _storyStateFor(getActiveCampaignId());
-  const todo = cands.filter(b => String(b.inviteText || "").trim() && String(b.speakerActorId || "").trim() && !state.invited?.[b.id] && !store.played?.[b.id] && !state.firedStoryBeats?.[b.id] && !state.dialogueFired?.[b.id]);
+  const seen = new Set();
+  const todo = cands.filter(b => { const id = String(b.id); if (seen.has(id)) return false; seen.add(id); return String(b.inviteText || "").trim() && String(b.speakerActorId || "").trim() && !state.invited?.[b.id] && !store.played?.[b.id] && !state.firedStoryBeats?.[b.id] && !state.dialogueFired?.[b.id]; });
   if (!todo.length) return 0;
   let n = 0;
-  await (_speakerMemoryChain = _speakerMemoryChain.then(async () => {
+  // Review 2026-09-14: awaiting a promise appended to the chain we are already running ON is a deadlock
+  // (P1's callback waits for P2 = P1.then(...)). Callers already on the chain pass onChain:true.
+  const work = async () => {
     for (const b of todo) {
       const actor = game.actors?.get?.(String(b.speakerActorId)); if (!actor) continue;
       if (game.bbttcc?.mal?.npc?._apps?.has?.(actor.id)) continue;   // mid-conversation: the moment is already live
@@ -7085,7 +7109,9 @@ async function _directorIssueInvites(story) {
       await _postTalkInvitation(actor, [b]); n++;
       log(`[slate] invitation: ${actor.name} — ${b.id}`);
     }
-  }).catch(e => warn("[slate] invite chain failed:", e)));
+  };
+  if (onChain) { try { await work(); } catch (e) { warn("[slate] invites failed:", e); } }
+  else await (_speakerMemoryChain = _speakerMemoryChain.then(work).catch(e => warn("[slate] invite chain failed:", e)));
   return n;
 }
 
@@ -7099,7 +7125,7 @@ function _onBeatResolvedInviteScan({ beat } = {}) {
       const campaignId = getActiveCampaignId(); const campaign = campaignId ? getCampaign(campaignId) : null;
       if (!campaign) return;
       const story = await _storySituation(campaign, { full: false });
-      await _directorIssueInvites(story);
+      await _directorIssueInvites(story, { onChain: true });
     }).catch(e => warn("[dialogue] invite issue failed:", e));
   } catch (e) { warn("[dialogue] invite listener failed:", e); }
 }
@@ -7800,7 +7826,7 @@ function buildCampaignAPI() {
     // STORY MODEL (Phase 1, 2026-09-13): quest · chapter · ending, derived — see scripts/story-model.js
     story: {
       QUEST_MAP, registryOf, deriveSituation, declOf, emptyState, applyRecord, projection, sealOfDecl,
-      state: (campaignId) => _storyStateFor(campaignId || getActiveCampaignId()),
+      state: (campaignId) => foundry.utils.deepClone(_storyStateFor(campaignId || getActiveCampaignId())),   // a copy — the live settings object is never handed out
       record: (beatId, campaignId) => { const c = getCampaign(campaignId || getActiveCampaignId()); const b = (c?.beats || []).find(x => String(x.id) === String(beatId)); return b ? _storyRecord(c, b, {}) : Promise.resolve({ changes: [] }); },
       project: (campaignId) => _storyProject(getCampaign(campaignId || getActiveCampaignId()), {}),
       bootstrap: (campaignId) => _storyBootstrap(getCampaign(campaignId || getActiveCampaignId()), {}),
