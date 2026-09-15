@@ -12,7 +12,8 @@
 //      `trojan_tour` gains "Someone finally keeps it" → `trojan_tour_kept` (chapter ending "kept").
 //   4. Lars von Replicator's +1 economy OP offer stays prose (owner reminded; not built here).
 //   5. The Sarmoung Hum gets a quest registry row (quest_sarmoung_hum) so the Quest Log shows what the store knows.
-//   6. The Valhaulan Spine's registry description becomes player-facing (it was Director dev text).
+//   6. The Spine's registry row becomes player-facing: name "That One Night" (the title named the villains), description
+//      without the dev text or the bridge count. The model key stays valhaulan_spine (internal).
 // Idempotent. Backs up `campaigns` before writing. The story-model's QUEST_MAP dropped the siege_week chapter
 // in the same commit (story-model.js), so the Quest Log / Visualizer never show it again.
 
@@ -121,10 +122,13 @@ function patch(camp, registry) {
 
   // ── 6. the Valhaulan Spine's registry description was dev text ("The Story Director's main-arc chain…") and the
   //       Quest Log is player-facing (owner, 2026-09-15) ─────────────────────────────────────────────────────
-  const SPINE_DESC = "Something moved under Khezek Tor the night everyone felt it. The Seal on the mine was a signature, and somebody is trying to read it from the sky. Five bridges stand between the mountain and the answer — and the Stewards are standing on the first one.";
+  //       …and its NAME gave the villains away in the title (owner, 2026-09-15): players know it as "That One Night".
+  const SPINE_NAME = "That One Night";
+  const SPINE_DESC = "Everyone felt it. Nobody can name it. Something under Khezek Tor moved that night, and the Stewards are the ones who are going to have to find out what.";
   if (registry && registry[SPINE_Q]) {
-    if (/Story Director|Container quest|quest-mode tools/i.test(String(registry[SPINE_Q].description || ""))) { registry[SPINE_Q].description = SPINE_DESC; addedRegistry = true; report.push(`✚ registry ${SPINE_Q}: player-facing description (dev text removed)`); }
-    else report.push(`· ok (already) ${SPINE_Q} description is player-facing`);
+    if (String(registry[SPINE_Q].name || "") !== SPINE_NAME) { registry[SPINE_Q].name = SPINE_NAME; addedRegistry = true; report.push(`✚ registry ${SPINE_Q}: name → "${SPINE_NAME}" (no Valhaulan in the title)`); }
+    if (String(registry[SPINE_Q].description || "") !== SPINE_DESC) { registry[SPINE_Q].description = SPINE_DESC; addedRegistry = true; report.push(`✚ registry ${SPINE_Q}: player-facing description (no dev text, no bridge count)`); }
+    else report.push(`· ok (already) ${SPINE_Q} is player-facing`);
   }
 
   if (toDelete.length) { camp.beats = camp.beats.filter(b => !toDelete.includes(String(b.id))); changed += toDelete.length; }

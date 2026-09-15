@@ -204,7 +204,7 @@ export const QUEST_MAP = {
    "chapters": {}
   },
   "valhaulan_spine": {
-   "name": "The Valhaulan Spine",
+   "name": "That One Night",
    "act": 2,
    "keystone": true,
    "hex": "",
