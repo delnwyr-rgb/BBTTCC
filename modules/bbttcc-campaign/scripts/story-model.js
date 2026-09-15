@@ -605,6 +605,9 @@ export function deriveSituation(ctx) {
   for (const b of beats) for (const c of (b?.choices || [])) for (const t of [c?.next, c?.failNext]) { const id = String(t || "").trim(); if (id) routesIn.set(id, (routesIn.get(id) || 0) + 1); }
   const openingId = String(ctx.openingBeatId || "").trim();
   const isHub = (b) => !!b && b.inject?.repeatable !== false && Array.isArray(b.choices) && b.choices.filter(c => c && c.next).length >= 3 && (routesIn.get(String(b.id)) || 0) >= 3;
+  // a beat "leads somewhere" if it is unplayed, or it is a hub with an unplayed door behind it (one hop —
+  // two hubs pointing at each other with nothing behind either do NOT lead anywhere, 2026-09-14)
+  const leadsSomewhere = (b) => !!b && (!fired.has(String(b.id)) || (isHub(b) && (b.choices || []).some(c => { const t = byId.get(String(c?.next || "")); return t && !fired.has(String(t.id)); })));
   // (2026-09-14, evening) The "orphan" heuristic is GONE. Dead beats are a DATA fact, removed by
   // tools/scrub-orphan-beats; authored order (questStep) is the fallback the authors wrote, and linear
   // ladders with no routes between rungs (the Offices' Sayings) depend on it. The model guesses nothing.
@@ -641,7 +644,7 @@ export function deriveSituation(ctx) {
     // routed from where the story stands: unplayed targets first, then any HUB the route leads back to (a
     // route to a repeatable hub is never consumed — "Call it a day → the Crossroads" is always open)
     const routed = (routedFirst || []).filter(Boolean);
-    const cands = uniq([...routed.filter(b => !fired.has(String(b.id))), ...routed.filter(b => fired.has(String(b.id)) && isHub(b) && String(b.id) !== String(ctx.anchorId || "")), ...list.filter(b => (allowAmbient || !isAmbient(b)) && !fired.has(String(b.id)))].filter(Boolean));
+    const cands = uniq([...routed.filter(b => !fired.has(String(b.id))), ...routed.filter(b => fired.has(String(b.id)) && isHub(b) && String(b.id) !== String(ctx.anchorId || "") && leadsSomewhere(b)), ...list.filter(b => (allowAmbient || !isAmbient(b)) && !fired.has(String(b.id)))].filter(Boolean));
     const ready = cands.find(b => readiness(b).ready);
     if (ready) return { beat: ready, ready: true, reasons: [] };
     const gated = cands[0] || null;
@@ -741,7 +744,7 @@ export function deriveSituation(ctx) {
       // prefer a hub that is READY (an Act-1 hub and an Act-2 hub may both route to the same welcome)
       const hubAbove = (b, depth = 0) => { if (!b || depth > 3) return null; if (isHub(b) && allIds.has(String(b.id))) return b; const ps = parentsOf(b.id); const found = ps.map(p => hubAbove(p, depth + 1)).filter(Boolean); return found.find(h => readiness(h).ready) || found[0] || null; };
       const hub = inQuest ? hubAbove(anchorBeat) : null;
-      const hubFresh = hub ? routedFrom(hub, allBeatIds).some(t => !fired.has(String(t.id)) || (isHub(t) && String(t.id) !== String(hub.id))) : false;
+      const hubFresh = hub ? routedFrom(hub, allBeatIds).some(t => !fired.has(String(t.id)) || (isHub(t) && String(t.id) !== String(hub.id) && leadsSomewhere(t))) : false;
       const hubNext = hub && hubFresh ? { beat: hub, ready: readiness(hub).ready, reasons: unmet(hub), revisit: true } : null;
       if (anchorCh && anchorCh.state !== "done" && anchorCh.next) { chapter = anchorCh; next = anchorCh.next; }
       else if (routedAny.length && bodyNext && routedAny.includes(bodyNext.beat)) { next = bodyNext; }
@@ -780,8 +783,6 @@ export function deriveSituation(ctx) {
   const inPlay = quests.filter(q => q.state === "active" && !(anchorQuest && q.key === anchorQuest.key));
   // THE TURN (2026-09-14): when nothing fresh is left anywhere this turn — every quest's next is a hub
   // revisit or gated, and no door is open — the story's next is the Turn Driver, not a hub to ping-pong.
-  // "fresh" = this next leads somewhere unplayed: an unplayed beat, or a hub with unplayed doors behind it
-  const leadsSomewhere = (b) => !!b && (!fired.has(String(b.id)) || (isHub(b) && (b.choices || []).some(c => { const t = byId.get(String(c?.next || "")); return t && !fired.has(String(t.id)); })));
   const fresh = (q) => !!(q && q.next && q.next.ready && leadsSomewhere(q.next.beat));
   const anyFresh = quests.some(q => (q.state === "active") && fresh(q));
   // ELSEWHERE: when the story's own quest has only a stale hub to offer but another quest in play has

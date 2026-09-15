@@ -17,9 +17,14 @@
   const b = camp.beats.find(x => String(x.id) === "thatwards_ho_opening_scene");
   if (!b) return ui.notifications?.error("thatwards_ho_opening_scene not found");
   const report = []; let changed = 0;
+  // the Act-2 door beat is Act 2 content: gate it ≥2 so it is never a DOOR in Act 1 (the phase door fires it
+  // after the phase is set, and that source bypasses the guard) — replay-caught 2026-09-14
+  const night = camp.beats.find(x => String(x.id) === "a2_that_one_night");
+  if (night) { const reqs = Array.isArray(night.inject?.requires) ? night.inject.requires : []; if (!reqs.some(r => r && r.flag === "storyPhase" && Number(r.gte) >= 2)) { night.inject = Object.assign({}, night.inject || {}, { requires: [...reqs, { flag: "storyPhase", gte: 2 }] }); changed++; report.push("✚ a2_that_one_night: gate storyPhase ≥ 2 (never a door in Act 1)"); } else report.push("· ok (already) a2_that_one_night gated ≥ 2"); }
+  else report.push("⚠ a2_that_one_night not found — run seed-lyrenn-blast-treatment first");
   b.worldEffects = b.worldEffects || {};
   if (Number(b.worldEffects.phaseAdvance?.set) !== 1) { b.worldEffects.phaseAdvance = { set: 1 }; changed++; report.push("✚ thatwards_ho_opening_scene: phaseAdvance {set: 1} — the Opening closes Act 0"); } else report.push("· ok (already) phaseAdvance 1");
-  const wantStory = { quest: "offices", chapter: "opening", role: "ending", ending: "opened" };   // ENDING of the Opening chapter — "closer" would close the whole Offices quest (caught by the offline replay 2026-09-14)
+  const wantStory = { quest: "offices", chapter: "opening", role: "ending", ending: "opened", __hand: true };   // __hand: the migration never re-derives this one   // ENDING of the Opening chapter — "closer" would close the whole Offices quest (caught by the offline replay 2026-09-14)
   if (JSON.stringify(b.story) !== JSON.stringify(wantStory)) { b.story = wantStory; changed++; report.push("✚ thatwards_ho_opening_scene: ending of the Opening chapter (role ending)"); } else report.push("· ok (already) story closer");
   if (!DRY_RUN && changed) {
     const raw = game.settings.get(NS, "campaigns");

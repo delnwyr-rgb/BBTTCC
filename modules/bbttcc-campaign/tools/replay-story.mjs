@@ -13,7 +13,7 @@ import path from "path"; import { fileURLToPath } from "url";
 const __dir = path.dirname(fileURLToPath(import.meta.url));
 const m = await import(path.join(__dir, "..", "scripts", "story-model.js"));
 const argv = process.argv.slice(2); const file = argv.find(a => !a.startsWith("--")); if (!file) { console.error("usage: ft-replay-story <save.json|bundle.json> [--max N] [--act N]"); process.exit(2); }
-const MAX = Number((argv.find(a => a.startsWith("--max=")) || "--max=160").slice(6)); const STOP_ACT = Number((argv.find(a => a.startsWith("--act=")) || "--act=2").slice(6));
+const MAX = Number((argv.find(a => a.startsWith("--max=")) || "--max=160").slice(6)); const TRACE = argv.includes("--trace"); const STOP_ACT = Number((argv.find(a => a.startsWith("--act=")) || "--act=2").slice(6));
 const raw = JSON.parse(fs.readFileSync(file, "utf8")); const j = raw.kind === "bbttcc-campaign-bundle" ? { settings: [{ ns: "bbttcc-campaign", key: "campaigns", value: { [raw.campaignId]: raw.campaign } }, { ns: "bbttcc-campaign", key: "activeCampaignId", value: raw.campaignId }], scenes: [] } : raw;
 const settings = j.settings || []; const get = (ns, k) => { const r = settings.find(s => s.ns === ns && s.key === k); let v = r?.value; if (typeof v === "string") { try { v = JSON.parse(v) } catch { } } return v; };
 const cid = get("bbttcc-campaign", "activeCampaignId"); const c = get("bbttcc-campaign", "campaigns")[cid];
@@ -63,6 +63,7 @@ function situation() {
 play(c.openingBeatId, "opening");
 for (let step = 0; step < MAX; step++) {
   const s = situation(); const n = s.now;
+  if (TRACE) log.push(`     ↳ now=${n?.quest?.name || "-"}/${n?.why || "-"} → ${n?.next?.beat?.id || "-"}${n?.next?.revisit ? " (revisit)" : ""} | in play: ${s.inPlay.map(q => `${q.name}→${q.next?.beat?.id || "-"}${q.next?.ready ? "" : "⛩"}`).join(", ") || "-"} | doors: ${s.doors.map(q => q.name).join(", ") || "-"}`);
   let next = n?.next?.beat || null; let why = n?.why || "-";
   if (n?.why === "turn") { log.push(`  🔁 THE TURN — nothing more opens this turn`); if (turn === 1) { turn = 2; if (phase < 2) { phase = 2; log.push(`  ⏩ ADVANCE → turn 2, calendar door → ACT 2`); play("a2_that_one_night", "phase-door"); } continue; } break; }
   if (!next || n?.why === "complete" || n?.why === "empty" || n?.why === "done-no-closer") {

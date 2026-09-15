@@ -31,6 +31,8 @@
   for (const b of camp.beats) {
     const d = decls[String(b.id)]; if (!d) continue;
     if (b.story && b.story.quest && b.story.__hand === true) { kept++; continue; }
+    // an authored role/ending survives re-derivation (patch-opening-closer's ending on the Opening Scene, 2026-09-14)
+    if (b.story && b.story.role && !d.role) { d.role = b.story.role; if (b.story.ending) d.ending = b.story.ending; if (b.story.chapter && !d.chapter) d.chapter = b.story.chapter; }
     if (JSON.stringify(b.story) === JSON.stringify(d)) continue;
     b.story = d; stamped++;
   }
