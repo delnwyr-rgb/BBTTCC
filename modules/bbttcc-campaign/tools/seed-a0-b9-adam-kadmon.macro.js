@@ -16,7 +16,7 @@
  * DRY_RUN default true. Idempotent (skips if the beat exists). Backs up `campaigns`.
  */
 (async () => {
-  const DRY_RUN = false;                       // <-- set false to apply
+  const DRY_RUN = true;                       // <-- set false to apply
   const NS = "bbttcc-campaign", ONB = "bbttcc-onboarding";
   const ID = "fates_and_destinies_adam_kadmon", AFTER = "fates_and_destinies_incarnate";
   const VO = "art/bbttcc/GOTTGAIT/Tunes/Mal%20Voice%20Acting/bbttcc_gottgait_voice_track_fates_destinies_adam_kadmon.mp3";

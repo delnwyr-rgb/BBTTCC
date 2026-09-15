@@ -33,7 +33,7 @@
  * ========================================================================= */
 (async () => {
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
-  const DRY_RUN = false; // <-- set false to apply
+  const DRY_RUN = true; // <-- set false to apply
   const NS = "bbttcc-campaign";
   const QID = "quest_circuit_riders_parley";
   const FLAGGED_ID = "enc_circuit_riders_parley_flagged";

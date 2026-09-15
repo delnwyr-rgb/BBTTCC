@@ -23,7 +23,7 @@
  * Marker: [SOMA-BREAK-2026-08-30]
  */
 (async () => {
-  const DRY_RUN = false;                 // <-- set false to apply
+  const DRY_RUN = true;                 // <-- set false to apply
   const NS = "bbttcc-campaign";
   const MARKER = "[SOMA-BREAK-2026-08-30]";
   if (!game.user?.isGM) return ui.notifications.error("GM only.");

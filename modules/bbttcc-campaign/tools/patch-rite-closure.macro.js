@@ -10,7 +10,7 @@
  * DRY_RUN default true; idempotent. Run as GM with "Thatward's Ho!" active.
  */
 (async () => {
-  const DRY_RUN = false;
+  const DRY_RUN = true;
   const NS = "bbttcc-campaign";
   const BEAT_ID = "fixit_weeping_prisoner";
   const REQUIRES = [

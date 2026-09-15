@@ -25,7 +25,7 @@
  * per-world).
  */
 (async () => {
-  const DRY_RUN = false;                 // <-- set false to apply
+  const DRY_RUN = true;                 // <-- set false to apply
   const NS = "bbttcc-campaign";
 
   // Census item 4 — the broken on-enter link. Set `to: null` to skip.

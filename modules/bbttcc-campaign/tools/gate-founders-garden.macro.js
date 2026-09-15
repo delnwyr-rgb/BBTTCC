@@ -23,7 +23,7 @@
  * tab stands. DRY by default; writes a campaigns backup before applying.
  */
 (async () => {
-  const DRY_RUN = false;                  // <-- set false to apply
+  const DRY_RUN = true;                  // <-- set false to apply
   const NS = "bbttcc-campaign";
   const PHASE = 4;                       // ACT 4 — THE VAULT & THE SKY
   const BEAT_IDS = [

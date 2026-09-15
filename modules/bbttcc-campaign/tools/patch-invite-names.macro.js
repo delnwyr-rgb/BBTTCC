@@ -10,7 +10,7 @@
  * a hard reload (the rename helper ships in module.js).
  */
 (async () => {
-  const DRY_RUN = false;                 // <-- set false to apply
+  const DRY_RUN = true;                 // <-- set false to apply
   const NS = "bbttcc-campaign", MODF = "bbttcc-factions";
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
   const nameFor = globalThis.__bbttccInviteQuestName; if (typeof nameFor !== "function") return ui.notifications.error("Reload first — the rename helper is not loaded.");

@@ -18,7 +18,7 @@
  * re-marking dialogueOffer is harmless. Run as GM with "Thatward's Ho!" active.
  */
 (async () => {
-  const DRY_RUN = false;
+  const DRY_RUN = true;
 
   const NS = "bbttcc-campaign";
   const NO_OFFER = ["fixit_leyline_stabilizer_no_deal", "gullywasher_cultural_summit_success", "gullywasher_cultural_summit_failure"];

@@ -11,7 +11,7 @@
  * Run as GM on the world with the active "Thatward's Ho!" campaign.
  */
 (async () => {
-  const DRY_RUN = false;
+  const DRY_RUN = true;
   const OVERWRITE_DIFFERENT = false;
 
   const LINES = {

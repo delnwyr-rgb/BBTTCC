@@ -31,7 +31,7 @@
  * Idempotent: re-running after apply reports 0 changes.
  */
 (async () => {
-  const DRY_RUN = false;                        // <-- set false to apply
+  const DRY_RUN = true;                        // <-- set false to apply
   const DEDUPE_FACTION_ROWS = true;
   const NS = "bbttcc-campaign";
   // Proposed check stats for the fail-route choices (edit freely). beatId → { choiceIndex: [checkStat, checkDC] }

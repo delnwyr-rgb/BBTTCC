@@ -20,7 +20,7 @@
  * Run as GM with "Thatward's Ho!" active.
  */
 (async () => {
-  const DRY_RUN = false;                 // <-- set false to apply
+  const DRY_RUN = true;                 // <-- set false to apply
   const NS = "bbttcc-campaign", TERR = "bbttcc-territory";
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
   const api = game.bbttcc?.api?.campaign; const cid = api?.getActiveCampaignId?.();

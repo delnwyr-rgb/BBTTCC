@@ -11,7 +11,7 @@
  * DRY_RUN default true. Run as GM.
  */
 (async () => {
-  const DRY_RUN = false;
+  const DRY_RUN = true;
   const MOD = "bbttcc-factions";
   const BUCKETS = ["active", "completed", "archived"];
 

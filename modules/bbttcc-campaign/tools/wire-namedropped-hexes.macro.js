@@ -22,7 +22,7 @@
  *    run on EACH instance.
  */
 (async () => {
-  const DRY_RUN = false;                 // <-- set false to apply
+  const DRY_RUN = true;                 // <-- set false to apply
   const NS = "bbttcc-campaign";
 
   // hexName (drawing text / territory flag name) → beat id

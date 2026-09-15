@@ -21,7 +21,7 @@
  *     (bandit ambush ×3, apex predator ×2, mutant wildlife ×2).
  */
 (async () => {
-  const DRY_RUN = false;
+  const DRY_RUN = true;
   const NS = "bbttcc-campaign";
   if (!game.user.isGM) return ui.notifications.error("GM only.");
 

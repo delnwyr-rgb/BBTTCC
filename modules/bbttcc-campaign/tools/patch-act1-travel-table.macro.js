@@ -27,7 +27,7 @@
  * Marker: [ACT1-ROADS-2026-09-03]
  */
 (async () => {
-  const DRY_RUN = false;                 // <-- set false to apply
+  const DRY_RUN = true;                 // <-- set false to apply
   const NS = "bbttcc-campaign";
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
 

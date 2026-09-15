@@ -17,7 +17,7 @@
  * HOW TO RUN: paste into a Foundry Script Macro (GM), or the dev console.
  */
 (async () => {
-  const DRY_RUN   = false;    // <-- set false to actually write (repair mode only)
+  const DRY_RUN = true;    // <-- set false to actually write (repair mode only)
   const NEW_SCENE = "Adversary Beat";      // <-- scene NAME, id, or uuid to relink; "" = diagnose only
 
   const NS = "bbttcc-campaign", KEY = "campaigns";

@@ -9,7 +9,7 @@
  * DRY_RUN default true; idempotent. Run as GM with "Thatward's Ho!" active.
  */
 (async () => {
-  const DRY_RUN = false;                 // <-- set false to apply
+  const DRY_RUN = true;                 // <-- set false to apply
   const NS = "bbttcc-campaign", FROM = "allesh_gilliam_town_walk", TO = "allesh_gilliam_introduction_to_hq";
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
   const cid = game.bbttcc?.api?.campaign?.getActiveCampaignId?.();

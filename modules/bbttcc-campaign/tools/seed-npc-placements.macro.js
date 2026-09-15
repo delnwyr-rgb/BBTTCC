@@ -19,7 +19,7 @@
  * DRY_RUN default true. Run as GM with "Thatward's Ho!" active.
  */
 (async () => {
-  const DRY_RUN = false;
+  const DRY_RUN = true;
 
   // ── EDIT ME: your scene anchors ──────────────────────────────────────────
   const SCENES = {

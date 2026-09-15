@@ -13,7 +13,7 @@
 // Idempotent (one entry per beat per table); backs up `encounterTables`.
 
 (async () => {
-  const DRY_RUN = false;
+  const DRY_RUN = true;
   const NS = "bbttcc-campaign";
   if (!game.user?.isGM) return ui.notifications?.error("GM only");
   const cid = game.bbttcc?.api?.campaign?.getActiveCampaignId?.();

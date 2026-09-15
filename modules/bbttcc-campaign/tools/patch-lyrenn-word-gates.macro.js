@@ -17,7 +17,7 @@
  * chat card. Idempotent. Backs up `campaigns` + `directorState` to downloads first.
  */
 (async () => {
-  const DRY_RUN = false;                          // ← set false to apply
+  const DRY_RUN = true;                          // ← set false to apply
   const NS = "bbttcc-campaign", MODF = "bbttcc-factions";
   const GATES = {
     lyrenn_word_treeline: "quest_feX6WHsBXuVbtjMM",   // Lyrenn - The Forest Will Not Be Fought

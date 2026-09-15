@@ -11,7 +11,7 @@
  * hand-authored handoffs. Run as GM with "Thatward's Ho!" active.
  */
 (async () => {
-  const DRY_RUN = false;
+  const DRY_RUN = true;
   const OVERWRITE_DIFFERENT = false;
 
   const HANDOFFS = {

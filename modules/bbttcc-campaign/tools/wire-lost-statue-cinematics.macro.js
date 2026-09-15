@@ -24,7 +24,7 @@
  * DRY_RUN default true. Idempotent. Backs up campaigns before writing. GM only.
  */
 (async () => {
-  const DRY_RUN = false;                 // <-- set false to apply
+  const DRY_RUN = true;                 // <-- set false to apply
   const NS = "bbttcc-campaign";
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
 
