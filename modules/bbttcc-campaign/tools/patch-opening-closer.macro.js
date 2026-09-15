@@ -24,8 +24,14 @@
   else report.push("⚠ a2_that_one_night not found — run seed-lyrenn-blast-treatment first");
   b.worldEffects = b.worldEffects || {};
   if (Number(b.worldEffects.phaseAdvance?.set) !== 1) { b.worldEffects.phaseAdvance = { set: 1 }; changed++; report.push("✚ thatwards_ho_opening_scene: phaseAdvance {set: 1} — the Opening closes Act 0"); } else report.push("· ok (already) phaseAdvance 1");
-  const wantStory = { quest: "offices", chapter: "opening", role: "ending", ending: "opened", __hand: true };   // __hand: the migration never re-derives this one   // ENDING of the Opening chapter — "closer" would close the whole Offices quest (caught by the offline replay 2026-09-14)
-  if (JSON.stringify(b.story) !== JSON.stringify(wantStory)) { b.story = wantStory; changed++; report.push("✚ thatwards_ho_opening_scene: ending of the Opening chapter (role ending)"); } else report.push("· ok (already) story closer");
+  const wantStory = { quest: "offices", chapter: "opening", role: "closer", ending: "opened", __hand: true };   // the Opening Scene CLOSES the Offices (Charter: incarnation → Cold Open + Opening → Act 1); a closer also ends its chapter   // ENDING of the Opening chapter — "closer" would close the whole Offices quest (caught by the offline replay 2026-09-14)
+  if (JSON.stringify(b.story) !== JSON.stringify(wantStory)) { b.story = wantStory; changed++; report.push("✚ thatwards_ho_opening_scene: CLOSER of the Offices (and the Opening chapter's ending)"); } else report.push("· ok (already) story closer");
+  // "Wake up" (fates_and_destinies_incarnate, step 70) carries the Offices' old `complete` row, so the migration
+  // declared it the closer — but the ONBOARDING ENGINE owns the incarnation and never fires this beat; the model
+  // then offered "run the closing beat" at the end of Act 0 and re-ran the incarnation (live-caught 2026-09-14).
+  // It is a ladder beat, nothing more.
+  const wake = camp.beats.find(x => String(x.id) === "fates_and_destinies_incarnate");
+  if (wake) { const want = { quest: "offices", __hand: true }; if (JSON.stringify(wake.story) !== JSON.stringify(want)) { wake.story = want; changed++; report.push("✚ fates_and_destinies_incarnate: no role (engine-run incarnation, not the closer)"); } else report.push("· ok (already) Wake up has no role"); }
   if (!DRY_RUN && changed) {
     const raw = game.settings.get(NS, "campaigns");
     (foundry.utils.saveDataToFile || saveDataToFile)(typeof raw === "string" ? raw : JSON.stringify(raw), "application/json", `backup-campaigns-before-opening-closer-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);

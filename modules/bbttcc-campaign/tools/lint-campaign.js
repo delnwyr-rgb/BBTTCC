@@ -565,6 +565,18 @@ if (quests) for (const [q, qd] of Object.entries(quests)) if (!questBeats.has(q)
         }
       }
     }
+    // D06: a CLOSER that sits mid-ladder (quest beats follow it by step) with nothing routing to it — the model
+    // will offer "run the closing beat" for a beat the engine owns or the story never reaches (Wake Up, 2026-09-14)
+    {
+      const byQ = {}; for (const b of beats) { const d = b?.story; if (d?.quest) (byQ[d.quest] = byQ[d.quest] || []).push(b); }
+      const stepOf = (b) => { const n = Number(b?.questStep); return Number.isFinite(n) ? n : 1e9; };
+      for (const [qk, list] of Object.entries(byQ)) for (const b of list) {
+        if (b.story?.role !== "closer") continue;
+        const later = list.filter(o => o !== b && stepOf(o) > stepOf(b) && stepOf(b) < 1e9).length;
+        const rin = beats.some(o => (o.choices || []).some(c => s(c?.next) === s(b.id) || s(c?.failNext) === s(b.id)));
+        if (later && !rin) F("D06", "WARN", b.id, `declared CLOSER of ${QM.quests[qk]?.name || qk} but ${later} quest beat(s) follow it by step and nothing routes to it — an engine-run or mid-ladder beat, not the closer?`);
+      }
+    }
     // D05: a questBucket gate on a registry id that no quest/chapter maps to
     const reqArr = (b) => { const r = b?.inject?.requires; return Array.isArray(r) ? r : (r && typeof r === "object" ? [r] : []); };
     for (const b of beats) for (const c of reqArr(b)) {

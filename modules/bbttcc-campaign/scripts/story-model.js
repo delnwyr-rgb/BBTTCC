@@ -849,6 +849,10 @@ export function applyRecord(state, beat, meta = {}) {
     changes.push({ kind: "chapter-ended", quest: d.quest, chapter: d.chapter, ending: st.chapters[d.quest][d.chapter].ending.name });
   }
   if (d.role === "closer") {
+    if (d.chapter && !st.chapters[d.quest][d.chapter].ending) {   // closing the quest closes the chapter it stands in
+      st.chapters[d.quest][d.chapter].ending = { name: String(d.ending || id.split("_").slice(-1)[0]), ...stamp };
+      changes.push({ kind: "chapter-ended", quest: d.quest, chapter: d.chapter, ending: st.chapters[d.quest][d.chapter].ending.name });
+    }
     st.closed[d.quest] = { name: String(d.ending || id.split("_").slice(-1)[0]), ...stamp };
     changes.push({ kind: "quest-closed", quest: d.quest, ending: st.closed[d.quest].name });
   }
