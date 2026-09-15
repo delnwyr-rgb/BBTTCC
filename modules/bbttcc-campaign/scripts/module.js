@@ -3316,6 +3316,22 @@ async function executeBeat(campaign, beat, ctx = {}) {
     }
   } catch (eAct) { warn("[act] entry check failed (fail-open):", eAct); }
 
+  // Hard gate (2026-09-14): a beat authored `inject.hardGate: true` checks its own inject.requires on EVERY
+  // path — a hub choice may point at it, but the door stays shut until the gate is earned (the Fixit
+  // back stairs and generator: "predicated on achieving something with the Jackalopes").
+  try {
+    if (ctx?.force !== true && beat?.inject?.hardGate === true) {
+      const ok = await _beatRequiresMet(beat, campaign, ctx);
+      if (!ok) {
+        const lbl = beat.label || beat.id || "(unnamed)";
+        log(`[gate] '${beat.id}' refused — hard gate not met`);
+        if (ctx?.__chain) return { ok: false, sealed: true, gated: true, why: "hard gate", routed: true };
+        if (game.user?.isGM) ChatMessage.create({ whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id), speaker: { alias: "Bad Eden" }, content: `<div style="border-left:3px solid #8a6d3b;padding:.35em .6em;background:rgba(138,109,59,.08);">⛩ <b>${foundry.utils.escapeHTML(String(lbl))}</b> — not yet. Its conditions aren't met (see the beat's gate in the Builder). Run with force to override.</div>` }).catch(() => {});
+        return { ok: false, sealed: true, gated: true, why: "hard gate" };
+      }
+    }
+  } catch (eHG) { warn("[gate] hard-gate check failed (fail-open):", eHG); }
+
   await logBeatToGottgait(campaign, beat);
 
   const type  = beat.type || "unknown";
