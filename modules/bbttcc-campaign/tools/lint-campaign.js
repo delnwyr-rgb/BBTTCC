@@ -546,7 +546,7 @@ if (quests) for (const [q, qd] of Object.entries(quests)) if (!questBeats.has(q)
       for (const [id, d] of declared) {
         if (d.role === "start") (starts[d.chapter ? `${d.quest}·${d.chapter}` : d.quest] = starts[d.chapter ? `${d.quest}·${d.chapter}` : d.quest] || []).push(id);
         if (d.role === "closer") (closers[d.quest] = closers[d.quest] || []).push(id);
-        if (d.role === "ending") (endings[`${d.quest}·${d.chapter}`] = endings[`${d.quest}·${d.chapter}`] || []).push(id);
+        if (d.role === "ending" || (d.role === "closer" && d.chapter)) (endings[`${d.quest}·${d.chapter}`] = endings[`${d.quest}·${d.chapter}`] || []).push(id);   // a closer on a chapter beat also ends the chapter
         for (const a of (Array.isArray(d.alsoStarts) ? d.alsoStarts : [])) if (a?.quest) (starts[a.chapter ? `${a.quest}·${a.chapter}` : a.quest] = starts[a.chapter ? `${a.quest}·${a.chapter}` : a.quest] || []).push(id);
         for (const e of (Array.isArray(d.alsoEnds) ? d.alsoEnds : [])) if (e?.quest) { if (e.chapter) (endings[`${e.quest}·${e.chapter}`] = endings[`${e.quest}·${e.chapter}`] || []).push(id); else (closers[e.quest] = closers[e.quest] || []).push(id); }
       }
@@ -571,7 +571,7 @@ if (quests) for (const [q, qd] of Object.entries(quests)) if (!questBeats.has(q)
       const byQ = {}; for (const b of beats) { const d = b?.story; if (d?.quest) (byQ[d.quest] = byQ[d.quest] || []).push(b); }
       const stepOf = (b) => { const n = Number(b?.questStep); return Number.isFinite(n) ? n : 1e9; };
       for (const [qk, list] of Object.entries(byQ)) for (const b of list) {
-        if (b.story?.role !== "closer") continue;
+        if (b.story?.role !== "closer" || b.story.__hand === true) continue;   // an authored (hand) closer is intent, not a derivation to second-guess
         const later = list.filter(o => o !== b && stepOf(o) > stepOf(b) && stepOf(b) < 1e9).length;
         const rin = beats.some(o => (o.choices || []).some(c => s(c?.next) === s(b.id) || s(c?.failNext) === s(b.id)));
         const gated = (Array.isArray(b.inject?.requires) ? b.inject.requires : []).some(r => r && r.flag !== "storyPhase");   // a settle/closer that WAITS on its chapters is legitimately unrouted
