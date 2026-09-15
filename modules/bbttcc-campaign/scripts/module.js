@@ -4604,6 +4604,8 @@ async function _gmPromptDebtBeat({ campaignId, beatId, beatLabel, hexUuid }) {
 //                                       active|completed|archived bucket
 //   { beatMark, quest, state }        — beat is marked "seen"|"completed" in that
 //                                       quest's progress ("completed" satisfies "seen")
+//   { relation, is|atLeast }          — the coalition's standing with a faction actor
+//                                       (at_war…allied; either side's relations flag)
 // Quest state = the coalition's shared per-faction quests flag (fan-out keeps all
 // campaign.factionIds members identical → read one; see _coalitionQuestTrack).
 // Fail-OPEN on a thrown error (never hide a beat because the evaluator broke);
@@ -5004,6 +5006,31 @@ async function _beatSealed(beat, campaign, ctx = {}) {
   return no;
 }
 
+// ---------------------------------------------------------------------------
+// { relation: "<factionId>", is: "allied" } | { relation, atLeast: "friendly" } (2026-09-15, owner
+// ruling: the Back Stairs and the Generator Hall open once the Stewards are ALLIES of the Jackalopes).
+// The coalition's standing with a faction, read from the relations flag on EITHER side (the higher
+// record wins — the effect that sets it writes both). Ladder = the WME's: at_war … allied.
+// ---------------------------------------------------------------------------
+const REL_ORDER = ["at_war", "hostile", "unfriendly", "neutral", "friendly", "allied"];
+const _normRel = (v) => { const s = String(v ?? "").trim().toLowerCase().replace(/\s+/g, "_"); if (!s) return "neutral"; if (s === "ally") return "allied"; if (s === "atwar" || s === "war") return "at_war"; return s; };
+const _relOf = (actor, tid) => { let rel = null; try { rel = actor?.getFlag?.("bbttcc-factions", "relations") || null; } catch (_e) {} const e = rel ? rel[tid] : null; return _normRel((e && typeof e === "object") ? (e.status ?? e.state ?? e.relation ?? e.value) : e); };
+async function _relationGate(campaign, ctx, c) {
+  const tid = String(c?.relation || "").replace(/^Actor\./, "").trim();
+  const exact = c?.is != null; const want = _normRel(exact ? c.is : c?.atLeast);
+  const target = (tid && game.actors?.get) ? (game.actors.get(tid) || null) : null;
+  const name = target?.name || tid || "?";
+  if (!tid || !REL_ORDER.includes(want) || (c?.is == null && c?.atLeast == null)) return { ok: false, current: null, text: `standing with ${name} ${exact ? "is" : "at least"} ${want || "?"} (malformed)` };
+  const members = await _resolveCampaignFactions(campaign, ctx);
+  let best = -1, cur = "neutral";
+  for (const F of members) {
+    const mid = String(F?.id || ""); if (!mid) continue;
+    for (const st of [_relOf(F, tid), _relOf(target, mid)]) { const i = REL_ORDER.indexOf(st); if (i > best) { best = i; cur = st; } }
+  }
+  const ok = exact ? (cur === want) : (best >= REL_ORDER.indexOf(want));
+  return { ok, current: cur, text: `standing with ${name} ${exact ? "is" : "at least"} ${want}` };
+}
+
 async function _beatRequiresMet(beat, campaign, ctx) {
   try {
     if ((await _beatSealed(beat, campaign, ctx)).sealed) return false;   // sealed beats are never eligible
@@ -5058,6 +5085,14 @@ async function _beatRequiresMet(beat, campaign, ctx) {
         const got = String(entry?.progress?.beats?.[String(c.beatMark)]?.state || "");
         const ok = (want === "seen") ? (got === "seen" || got === "completed") : (got === "completed");
         if (!ok) return false;
+        continue;
+      }
+
+      // { relation, is|atLeast } — the coalition's standing with a faction
+      if (c.relation != null) {
+        const r = await _relationGate(campaign, ctx, c);
+        if (r.current === null) warn(`[inject.requires] relation gate on beat '${beat?.id}' is malformed (${r.text}) — treating as unmet.`);
+        if (!r.ok) return false;
         continue;
       }
 
@@ -5157,6 +5192,13 @@ async function _beatGateReport(beat, campaign, ctx = {}) {
         const ok = (want === "seen") ? (got === "seen" || got === "completed") : (got === "completed");
         out.conditions.push({ text, met: ok, kind: "beatMark", current: got || "(unseen)" });
         if (!ok) out.met = false;
+        continue;
+      }
+
+      if (c.relation != null) {
+        const r = await _relationGate(campaign, ctx, c);
+        out.conditions.push({ text: r.text, met: r.ok, kind: "relation", current: r.current || "(none)" });
+        if (!r.ok) out.met = false;
         continue;
       }
 

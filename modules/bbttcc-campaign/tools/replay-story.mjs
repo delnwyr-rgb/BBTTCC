@@ -6,7 +6,7 @@
 // Director rebuild lacked: every seam bug on 2026-09-14 (Act 0→1, the hub loop, step-order fallback, pool
 // beats as doors) was found by it in seconds instead of at the table.
 //   bin/ft-replay-story <save.json|bundle.json> [--max=160] [--act=2]
-// Gates evaluated offline: storyPhase / turn / questBucket (via the store projection) / beatMark; other
+// Gates evaluated offline: storyPhase / turn / questBucket (via the store projection) / beatMark / relation (as beats set it); other
 // meters read as unmet. Arrivals: a ride beat "arrives" at its town's on-enter opener (ARRIVE table).
 import fs from "fs";
 import path from "path"; import { fileURLToPath } from "url";
@@ -29,6 +29,7 @@ const idx = new Map(c.beats.map((b, i) => [b.id, i])); const seqOf = b => { cons
 const actOf = b => { const rs = reqs(b); let a = null; for (const x of rs) if (x?.flag === "storyPhase" && Number.isFinite(Number(x.gte))) a = Math.max(a ?? -Infinity, Number(x.gte)); return a; };
 const reqs = b => { const r = b?.inject?.requires; return Array.isArray(r) ? r.filter(Boolean) : (r && typeof r === "object" ? [r] : []); };
 const bucketOf = () => { const p = m.projection(st); return (rid) => p[rid] || null; };
+const REL = ["at_war", "hostile", "unfriendly", "neutral", "friendly", "allied"]; const rel = {};   // faction id → the coalition's standing, as beats set it (relationshipEffects with @coalition on the other side)
 function gateOK(b) {   // mirror of _beatRequiresMet (approx.)
   const bo = bucketOf(); const own = Number(b?.worldEffects?.phaseAdvance?.set);
   for (const x of reqs(b)) {
@@ -36,6 +37,7 @@ function gateOK(b) {   // mirror of _beatRequiresMet (approx.)
     if (x.flag === "turn") { if (x.gte != null && turn < Number(x.gte)) return { ok: false, why: `turn ≥ ${x.gte}` }; continue; }
     if (x.questBucket) { const cur = bo(String(x.questBucket)); const met = x.is != null ? cur === x.is : (x.isNot != null ? cur !== x.isNot : true); if (!met) return { ok: false, why: `quest ${String(x.questBucket).slice(-6)} ${x.is ? "is " + x.is : "isNot " + x.isNot} (now ${cur})` }; continue; }
     if (x.beatMark) { if (!st.played[x.beatMark]) return { ok: false, why: `beatMark ${x.beatMark}` }; continue; }
+    if (x.relation) { const tid = String(x.relation).replace(/^Actor\./, ""); const cur = rel[tid] || "neutral"; const want = String(x.is ?? x.atLeast ?? "").toLowerCase(); const ok = x.is != null ? cur === want : REL.indexOf(cur) >= REL.indexOf(want); if (!ok) return { ok: false, why: `standing with ${tid.slice(-6)} ${x.is != null ? "is" : "≥"} ${want} (now ${cur})` }; continue; }
     if (x.flag) { return { ok: false, why: `meter ${x.flag} (unknown offline)` }; }
   }
   const seal = m.sealOfDecl(b, st, phase); if (seal && seal.sealed) return { ok: false, why: "SEAL: " + seal.why };
@@ -53,6 +55,7 @@ function play(id, source = "gm") {
   const b = byId.get(id); if (!b) { log.push(`  ✗ missing beat ${id}`); return false; }
   const why = guards(b, source); if (why) { refusals.push({ id, why, phase, turn }); log.push(`  ⛔ ${id} REFUSED: ${why}`); return false; }
   const ch = m.applyRecord(st, b, { ts: t++, turn }); const setP = Number(b.worldEffects?.phaseAdvance?.set);
+  for (const r of (Array.isArray(b.worldEffects?.relationshipEffects) ? b.worldEffects.relationshipEffects : [])) { if (!r?.setStatus) continue; for (const side of [r.sourceFactionId, r.targetFactionId]) { const id = String(side || "").replace(/^Actor\./, ""); if (id && !/^@/.test(id)) rel[id] = String(r.setStatus).toLowerCase(); } }
   let note = ch.map(x => x.kind.replace("quest-", "Q:").replace("chapter-", "C:") + ":" + (x.quest || "") + (x.chapter ? "·" + x.chapter : "") + (x.ending ? "=" + x.ending : "")).join(" ");
   if (Number.isFinite(setP) && setP > phase) { phase = setP; note += ` ▶ ACT ${phase}`; }
   log.push(`${String(turn).padStart(2)}/A${phase} ${id}${note ? "  [" + note + "]" : ""}`);
@@ -81,7 +84,9 @@ for (let step = 0; step < MAX; step++) {
       turn = 2; if (phase < 2) { phase = 2; log.push(`  ⏩ ADVANCE → turn 2, calendar door → ACT 2`); play("a2_that_one_night", "phase-door"); } continue; }
     break; }
   if (!n?.next?.ready && !why.startsWith("DOOR") && !why.startsWith("IN PLAY")) { log.push(`  ⏳ NOW waits: ${next.id} — ${(n.next.reasons || []).map(r => r.text).join(", ")}; roads: ${(n.roads || []).map(r => r.quest.name + "→" + (r.beat?.id || "-") + (r.ready ? "⚡" : "⛩")).join(" | ") || "-"}`); 
-    const r = (n.roads || []).find(r => r.beat && r.ready); if (r) next = r.beat; else { if (turn === 1) { turn = 2; if (phase < 2) { phase = 2; log.push(`  ⏩ ADVANCE → turn 2, calendar door → ACT 2`); play("a2_that_one_night", "phase-door"); } continue; } break; } }
+    const r = (n.roads || []).find(r => r.beat && r.ready); const d = s.doors[0]; const ip = s.inPlay.find(q => q.next?.beat && q.next.ready && q.next.beat.id !== next.id);
+    if (r) next = r.beat; else if (d) { next = d.next.beat; why = "DOOR:" + d.name; log.push(`  🚪 open a door instead: ${d.name}`); } else if (ip) { next = ip.next.beat; why = "IN PLAY:" + ip.name; log.push(`  ↪ in play instead: ${ip.name}`); }
+    else { if (turn >= STOP_TURN) break; turn++; log.push(`  ⏩ ADVANCE → turn ${turn} (everything waits)`); const DOORS = [[2, 2], [6, 3], [10, 4], [14, 5]]; for (const [tg, ph] of DOORS) if (turn >= tg && phase < ph) { phase = ph; log.push(`  ⏩ calendar door → ACT ${phase}`); if (ph === 2) play("a2_that_one_night", "phase-door"); } continue; } }
   const last3 = log.slice(-3).map(l => l.trim().split(/\s+/)[1]); if (last3.length === 3 && last3.every(x => x === next.id)) { log.push(`  ■ LOOP on ${next.id} — the model keeps offering the same beat; stopping`); break; }
   if (!play(next.id, why.startsWith("DOOR") ? "door" : "gm")) { if (refusals.length > 6) break; }
   if (ARRIVE[next.id]) { log.push(`  🐎 ride → arrive ${ARRIVE[next.id]}`); play(ARRIVE[next.id], "hex"); }

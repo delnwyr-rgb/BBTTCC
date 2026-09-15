@@ -8,7 +8,7 @@
  * module.js / world-mutation-engine.js ACTUALLY evaluate (surveyed 2026-09-05):
  *
  *   gates      _beatRequiresMet — inject.requires[] of {flag,gte|lte|eq} |
- *              {questBucket,is|isNot} | {beatMark,quest,state}; unknown flag = unmet
+ *              {questBucket,is|isNot} | {beatMark,quest,state} | {relation,is|atLeast}; unknown flag = unmet
  *   routing    runBeat/executeBeat NEVER consult gates — only the director,
  *              injector and dialogue surfaces do (choice.next fires regardless)
  *   checks     op.<key> pays 1 OP from the faction bank (unknown key = phantom
@@ -49,6 +49,7 @@ const GATE_FLAGS = {              // name → [min, max] sanity band (null = unb
 };
 const GM_DRIVEN_FLAGS = new Set(["chucklecreekSeen","stillwaterCrack","softlandingGive"]); // raised by GM today
 const QUEST_BUCKETS = new Set(["active","completed","archived"]);
+const REL_STATES = new Set(["at_war","hostile","unfriendly","neutral","friendly","allied"]);   // { relation, is|atLeast } (2026-09-15)
 const QUEST_ACTIONS = new Set(["accept","complete","completed","archive","archived","activate","reopen","beat"]);
 const SPARK_ACTIONS = new Set(["acquire","gather","integrate"]);
 const TIME_SCALES = new Set(["moment","scene","leg","turn","arc","campaign",""]);
@@ -203,6 +204,9 @@ for (const pl of (Array.isArray(campaign.npcPlacements) ? campaign.npcPlacements
         const bucket = s(c.is == null && c.isNot != null ? c.isNot : c.is);
         if (!QUEST_BUCKETS.has(bucket)) F("P05", "ERROR", null, `${tag}: questBucket bucket '${bucket || "(missing)"}' unknown — rule never matches`);
         if (quests && !quests[s(c.questBucket)]) F("P05", "ERROR", null, `${tag}: quest '${c.questBucket}' not in registry`);
+      } else if (c.relation != null) {
+        const want = s(c.is ?? c.atLeast).toLowerCase().replace(/\s+/g, "_");
+        if (!REL_STATES.has(want)) F("P07", "ERROR", null, `${tag}: relation gate wants '${want || "(missing is/atLeast)"}' — not a standing (${[...REL_STATES].join("/")})`);
       } else if (c.beatMark == null && !(s(c.flag) in GATE_FLAGS)) F("P01", "ERROR", null, `${tag}: unknown gate flag '${c.flag}' — rule never matches`);
     }
     if (!s(rule?.sceneId) && !s(rule?.sceneName)) F("E06", "WARN", null, `placement ${pl.actorId} rule[${ri}] has neither sceneId nor sceneName`);
@@ -305,6 +309,15 @@ for (const b of beats) {
       const bucket = s(negated ? c.isNot : c.is);
       if (!QUEST_BUCKETS.has(bucket)) F("P05", "ERROR", b.id, `questBucket gate bucket '${bucket || "(missing is/isNot)"}' unknown — treated as unmet forever`);
       if (quests && !quests[s(c.questBucket)]) F("P05", "ERROR", b.id, `questBucket gate names quest '${c.questBucket}' which is not in the quest registry`);
+      continue;
+    }
+    if (c.relation != null) {   // { relation: "<factionId>", is|atLeast } — standing read live; offline we check the shape and that SOME beat can set it
+      const want = s(c.is ?? c.atLeast).toLowerCase().replace(/\s+/g, "_");
+      if (!s(c.relation)) F("P07", "ERROR", b.id, `relation gate missing 'relation' (a faction actor id)`);
+      if (!REL_STATES.has(want)) F("P07", "ERROR", b.id, `relation gate wants '${want || "(missing is/atLeast)"}' — not a standing (${[...REL_STATES].join("/")})`);
+      const tid = s(c.relation).replace(/^Actor\./, "");
+      const setters = beats.filter(w => (Array.isArray(w.worldEffects?.relationshipEffects) ? w.worldEffects.relationshipEffects : []).some(r => r && [s(r.sourceFactionId), s(r.targetFactionId)].map(x => x.replace(/^Actor\./, "")).includes(tid) && (r.setStatus != null || Number(r.step ?? r.delta) )));
+      if (!setters.length) F("P07", "WARN", b.id, `relation gate on faction '${tid}' — no beat carries a relationshipEffects row touching that faction (only GM hand-edits or other systems can open it)`);
       continue;
     }
     if (c.beatMark != null) {
@@ -618,7 +631,8 @@ for (const b of beats) {
     if (!anyDelta) F("E02", "INFO", b.id, `factionEffects[${i}] is all zeros (editor default noise)`);
   }
   for (const [i, r] of (Array.isArray(we.relationshipEffects) ? we.relationshipEffects : []).entries())
-    if (!s(r?.target) || (r?.step == null && r?.setStatus == null)) F("E10", "WARN", b.id, `relationshipEffects[${i}] needs target + (step | setStatus)`);
+    if (!(s(r?.targetFactionId) || s(r?.target)) || (r?.step == null && r?.delta == null && r?.setStatus == null)) F("E10", "WARN", b.id, `relationshipEffects[${i}] needs sourceFactionId + targetFactionId (or "@coalition") + (step | delta | setStatus)`);   // WME keys (checked 2026-09-15)
+    else if (!s(r?.sourceFactionId)) F("E10", "WARN", b.id, `relationshipEffects[${i}] has no sourceFactionId — the WME skips rows without both sides`);
   for (const [i, m] of (Array.isArray(we.worldModifiers) ? we.worldModifiers : []).entries())
     if (!s(m?.key)) F("E11", "WARN", b.id, `worldModifiers[${i}] has no key`);
   for (const [i, r] of (Array.isArray(we.turnRequests) ? we.turnRequests : []).entries())

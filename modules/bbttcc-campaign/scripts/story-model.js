@@ -216,7 +216,7 @@ export const QUEST_MAP = {
    "act": 0,
    "keystone": false,
    "hex": "",
-   "registryId": null,
+   "registryId": "quest_sarmoung_hum",
    "chapters": {}
   },
   "widening_trail": {
@@ -286,12 +286,7 @@ export const QUEST_MAP = {
    "keystone": false,
    "hex": "",
    "registryId": "quest_fifteen_year_siege",
-   "chapters": {
-    "siege_week": {
-     "name": "Siege Week",
-     "registryId": "quest_siege_festival"
-    }
-   }
+   "chapters": {}
   },
   "trojan_gift": {
    "name": "A Gift. (Not a Trojan.)",
@@ -517,10 +512,6 @@ export const QUEST_MAP = {
    "quest": "lost_statues",
    "chapter": null
   },
-  "quest_siege_festival": {
-   "quest": "fifteen_year_siege",
-   "chapter": "siege_week"
-  },
   "quest_fifteen_year_siege": {
    "quest": "fifteen_year_siege",
    "chapter": null
@@ -531,6 +522,10 @@ export const QUEST_MAP = {
   },
   "quest_trojan_gift": {
    "quest": "trojan_gift",
+   "chapter": null
+  },
+  "quest_sarmoung_hum": {
+   "quest": "sarmoung_hum",
    "chapter": null
   },
   "quest_forgotten_yesterdays": {

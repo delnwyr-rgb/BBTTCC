@@ -27,7 +27,8 @@
     "scrub-orphan-beats",              // 09-14  14 dead beats removed
     "patch-review-beats",              // 09-14  stubs deleted, back stairs/generator hard-gated, Fixit ride to Act 2, Vault colour folded
     "patch-opening-closer",            // 09-14  the Opening Scene ends the Opening and sets Act 1
-    "migrate-story-declarations"       // LAST   declares every beat (quest · chapter · ending), bootstraps + projects the store
+    "patch-vault-allies",              // 09-15  Vault rescue → Allies; Back Stairs/Generator gated on it; Siege Week gone; Touring Gift ends "kept"
+    "migrate-story-declarations"       // LAST   declares every beat (quest · chapter · ending), bootstraps + projects the store,
   ];
 
   const NS = "bbttcc-campaign";

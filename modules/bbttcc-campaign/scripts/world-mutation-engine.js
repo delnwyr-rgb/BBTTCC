@@ -871,8 +871,28 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       const bySource = new Map();
       const lines = [];
 
-      for (let i = 0; i < relFx.length; i++) {
-        const row = relFx[i];
+      // "@coalition" on either side (2026-09-15) = the active campaign's roster (factionIds + factionId),
+      // so a beat can set the Stewards' standing without hardcoding whichever actors founded this world.
+      const coalitionIds = () => {
+        try {
+          const capi = get(game, "bbttcc.api.campaign", null); const cid = capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null;
+          const camp = cid && capi.getCampaign ? capi.getCampaign(cid) : null;
+          const ids = [].concat((camp && camp.factionIds) || [], (camp && camp.factionId) ? [camp.factionId] : []).map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean);
+          return Array.from(new Set(ids));
+        } catch (_e) { return []; }
+      };
+      const expandSide = (v) => /^@(coalition|campaign|stewards)$/i.test(String(v || "").trim()) ? coalitionIds() : [String(v || "").trim()];
+      const rows = [];
+      for (const row of relFx) {
+        if (!row) continue;
+        for (const sId of expandSide(row.sourceFactionId)) for (const tId of expandSide(row.targetFactionId)) {
+          if (!sId || !tId || sId === tId) continue;
+          rows.push(Object.assign({}, row, { sourceFactionId: sId, targetFactionId: tId }));
+        }
+      }
+
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
         if (!row) continue;
 
         const srcIdRaw = String(row.sourceFactionId || "").trim();
