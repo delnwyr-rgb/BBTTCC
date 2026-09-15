@@ -574,7 +574,8 @@ if (quests) for (const [q, qd] of Object.entries(quests)) if (!questBeats.has(q)
         if (b.story?.role !== "closer") continue;
         const later = list.filter(o => o !== b && stepOf(o) > stepOf(b) && stepOf(b) < 1e9).length;
         const rin = beats.some(o => (o.choices || []).some(c => s(c?.next) === s(b.id) || s(c?.failNext) === s(b.id)));
-        if (later && !rin) F("D06", "WARN", b.id, `declared CLOSER of ${QM.quests[qk]?.name || qk} but ${later} quest beat(s) follow it by step and nothing routes to it — an engine-run or mid-ladder beat, not the closer?`);
+        const gated = (Array.isArray(b.inject?.requires) ? b.inject.requires : []).some(r => r && r.flag !== "storyPhase");   // a settle/closer that WAITS on its chapters is legitimately unrouted
+        if (later && !rin && !gated) F("D06", "WARN", b.id, `declared CLOSER of ${QM.quests[qk]?.name || qk} but ${later} quest beat(s) follow it by step and nothing routes to it — an engine-run or mid-ladder beat, not the closer?`);
       }
     }
     // D05: a questBucket gate on a registry id that no quest/chapter maps to
