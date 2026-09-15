@@ -604,7 +604,11 @@ export function deriveSituation(ctx) {
   const isHub = (b) => !!b && b.inject?.repeatable !== false && Array.isArray(b.choices) && b.choices.filter(c => c && c.next).length >= 3 && (routesIn.get(String(b.id)) || 0) >= 3;
   // an orphan is a beat nothing routes to, that is not a start/closer/opening — old content the
   // authored story never reaches; the quest-body fallback must not offer it (2026-09-14)
-  const isOrphan = (b) => !b || ((routesIn.get(String(b.id)) || 0) === 0 && String(b.questRole || "") !== "start" && !(b.story && (b.story.role === "start" || b.story.role === "closer")) && String(b.id) !== openingId && !b.targetHexUuid);
+  // Exempt from "orphan": starts/closers, the opening, hex arrivals, phase setters, beats with a handoff,
+  // and beats with a gate beyond storyPhase (something WAITS for them — they are GM-run content when
+  // their gate opens, not abandoned stubs). Linear ladders (Offices, opening scenes) survive via those.
+  const hasRealGate = (b) => { const r = b?.inject?.requires; const rs = Array.isArray(r) ? r : (r ? [r] : []); return rs.some(x => x && x.flag !== "storyPhase"); };
+  const isOrphan = (b) => !b || ((routesIn.get(String(b.id)) || 0) === 0 && String(b.questRole || "") !== "start" && !(b.story && (b.story.role === "start" || b.story.role === "closer")) && String(b.id) !== openingId && !b.targetHexUuid && b.worldEffects?.phaseAdvance?.set == null && !(b.handoff || b.inject?.handoff) && !hasRealGate(b));
 
   // writers, from the beats themselves
   const starts = {}, endings = {};
