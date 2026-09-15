@@ -1372,6 +1372,11 @@ const activeCampaignId = _getActiveCampaignId();
       c.quest = q.name; return c;
     }
     const b = n.next.beat;
+    if (n.why === "hub" || n.next.revisit) {
+      const c = card(`↺ BACK TO — ${esc(b.label || b.id)}`, "", b, [run(b, "Return there")],
+        `nothing fresh is routed from where the story stands${ch ? ` in ${esc(ch.name)}` : ""} — the hub is still open; the table can go back and pick another door.${progress}${endingsTxt}`);
+      c.quest = q.name; return c;
+    }
     if (n.next.ready) {
       const closing = n.why === "closer";
       const c = card(closing ? `🏁 CLOSE — ${esc(q.name)}` : `⏭ NEXT — ${esc(q.name)}${chapTxt}`, b.label || b.id, b,

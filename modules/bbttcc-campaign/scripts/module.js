@@ -3295,6 +3295,27 @@ async function executeBeat(campaign, beat, ctx = {}) {
     }
   } catch (eSeal) { warn("[seal] entry check failed (fail-open):", eSeal); }
 
+  // Future-act guard (2026-09-14, live-caught: an orphaned Act-1 church intro routed the table into the
+  // Father's Act-2 Echo on day one). Gates carry order (Charter Law 2): a beat whose act is AHEAD of the
+  // story is refused on every path except a forced run or the phase door that opens it — "not yet".
+  try {
+    if (ctx?.force !== true && ctx?.source !== "phase-door") {
+      const act = _beatActOf(beat), phase = _storyPhaseGet();
+      if (act !== null && act > phase) {
+        const lbl = beat.label || beat.id || "(unnamed)";
+        log(`[act] '${beat.id}' refused — Act ${act} content, the story is in Act ${phase}`);
+        if (ctx?.__chain) return { ok: false, sealed: true, notYet: true, why: `Act ${act} content`, routed: true };
+        if (game.user?.isGM) {
+          ChatMessage.create({
+            whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id), speaker: { alias: "Bad Eden" },
+            content: `<div style="border-left:3px solid #8a6d3b;padding:.35em .6em;background:rgba(138,109,59,.08);">⏳ <b>${foundry.utils.escapeHTML(String(lbl))}</b> — not yet. It belongs to Act ${act}; the story is in Act ${phase}. (Run it with force to override.)</div>`
+          }).catch(() => {});
+        }
+        return { ok: false, sealed: true, notYet: true, why: `Act ${act} content` };
+      }
+    }
+  } catch (eAct) { warn("[act] entry check failed (fail-open):", eAct); }
+
   await logBeatToGottgait(campaign, beat);
 
   const type  = beat.type || "unknown";
@@ -7764,6 +7785,18 @@ function buildCampaignAPI() {
       record: (beatId, campaignId) => { const c = getCampaign(campaignId || getActiveCampaignId()); const b = (c?.beats || []).find(x => String(x.id) === String(beatId)); return b ? _storyRecord(c, b, {}) : Promise.resolve({ changes: [] }); },
       project: (campaignId) => _storyProject(getCampaign(campaignId || getActiveCampaignId()), {}),
       bootstrap: (campaignId) => _storyBootstrap(getCampaign(campaignId || getActiveCampaignId()), {}),
+      forget: async (beatIds, campaignId) => {   // strike played marks (a misroute) — starts/endings they caused are recomputed by bootstrap semantics: removed only if no other played beat carries them
+        const cid = String(campaignId || getActiveCampaignId()); const ids = [].concat(beatIds || []).map(String);
+        const c = getCampaign(cid); if (!c) return { ok: false };
+        await _storyMutate(cid, (st) => { for (const id of ids) delete st.played[id];
+          // rebuild derived facts from what remains played
+          const keep = { played: st.played }; const fresh = emptyState(); fresh.played = {};
+          const byId = new Map((c.beats || []).map(b => [String(b.id), b]));
+          for (const [id, m] of Object.entries(keep.played).sort((a, b) => (a[1].ts || 0) - (b[1].ts || 0))) applyRecord(fresh, byId.get(id), { ts: m.ts, turn: m.turn });
+          st.started = fresh.started; st.chapters = fresh.chapters; st.closed = fresh.closed; });
+        await _storyProject(c, {});
+        return { ok: true, forgot: ids };
+      },
       reset: async (campaignId) => { const all = foundry.utils.deepClone(_storyStateAll()); delete all[String(campaignId || getActiveCampaignId())]; await game.settings.set(MOD_ID, SETTING_STORY_STATE, all); }
     },
     gates: {

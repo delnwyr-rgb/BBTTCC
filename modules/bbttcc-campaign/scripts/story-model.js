@@ -597,6 +597,14 @@ export function deriveSituation(ctx) {
   const phase = Number(ctx.phase) || 0, turn = Number(ctx.turn) || 0;
   const anchorId = ctx.anchorId ? String(ctx.anchorId) : null;
   const byId = new Map(beats.map(b => [String(b.id), b]));
+  // routes in (for orphan detection and hub finding)
+  const routesIn = new Map();
+  for (const b of beats) for (const c of (b?.choices || [])) for (const t of [c?.next, c?.failNext]) { const id = String(t || "").trim(); if (id) routesIn.set(id, (routesIn.get(id) || 0) + 1); }
+  const openingId = String(ctx.openingBeatId || "").trim();
+  const isHub = (b) => !!b && b.inject?.repeatable !== false && Array.isArray(b.choices) && b.choices.filter(c => c && c.next).length >= 3 && (routesIn.get(String(b.id)) || 0) >= 3;
+  // an orphan is a beat nothing routes to, that is not a start/closer/opening — old content the
+  // authored story never reaches; the quest-body fallback must not offer it (2026-09-14)
+  const isOrphan = (b) => !b || ((routesIn.get(String(b.id)) || 0) === 0 && String(b.questRole || "") !== "start" && !(b.story && (b.story.role === "start" || b.story.role === "closer")) && String(b.id) !== openingId && !b.targetHexUuid);
 
   // writers, from the beats themselves
   const starts = {}, endings = {};
@@ -661,7 +669,7 @@ export function deriveSituation(ctx) {
       const anyFired = cb.some(b => fired.has(String(b.id))) || sts.some(b => fired.has(String(b.id)));
       const state = (rec?.ending || bucket === "completed" || bucket === "archived" || firedEnd) ? "done" : (rec?.started || bucket === "active" || anyFired) ? "open" : "dormant";
       const routed = anchorLoc && anchorLoc.quest === key && anchorLoc.chapter === chKey ? routedFrom(anchorBeat, cIds) : [];
-      const next = state === "done" ? null : (state === "dormant" && sts.length ? pickNext(sts, [], true) : (pickNext(cb, routed) || (sts.length ? pickNext(sts, [], true) : null)));
+      const next = state === "done" ? null : (state === "dormant" && sts.length ? pickNext(sts, [], true) : (pickNext(cb.filter(b => !isOrphan(b)), routed) || (sts.length ? pickNext(sts, [], true) : null)));
       chapters.push({ key: chKey, name: ch.name, registryId: ch.registryId, state, ending: firedEnd ? { beatId: String(firedEnd.id), label: firedEnd.label || firedEnd.id, name: rec?.ending?.name || null } : (rec?.ending ? { beatId: rec.ending.beatId || null, label: rec.ending.name, name: rec.ending.name } : null), next, beats: cb, starts: sts, endings: ends });
     }
     const mainEnds = uniq(endings[reg] || []).filter(b => !allIds.size || true);
@@ -680,7 +688,7 @@ export function deriveSituation(ctx) {
     //  · (e) a dormant chapter's start · (f) the closer once every chapter has its ending.
     let next = null, why = "next", chapter = null;
     const closerIds = new Set(mainEnds.map(b => String(b.id)));
-    const body = qb.main.filter(b => !closerIds.has(String(b.id)));
+    const body = qb.main.filter(b => !closerIds.has(String(b.id)) && !isOrphan(b));
     if (state === "completed") { why = "complete"; }
     else if (state === "dormant" || state === "offered" || state === "closed") {
       // a quest not yet started: its start beat (explicit start rows first, then a dormant chapter's start, then its first body beat)
@@ -697,14 +705,20 @@ export function deriveSituation(ctx) {
       const chaptersLeft = chapters.some(c => c.state !== "done");
       const bodyNext = pickNext(body, routedAny);
       const readyFirst = (arr) => arr.find(x => x && x.next && x.next.ready) || arr[0] || null;
+      // the door's still open (2026-09-14): when the anchor is a hub (or sits under one) and nothing fresh
+      // is routed from it, the story's next is to RETURN to the hub — never a body-order orphan
+      const hub = inQuest ? (isHub(anchorBeat) ? anchorBeat : beats.find(h => h !== anchorBeat && isHub(h) && allIds.has(String(h.id)) && (h.choices || []).some(c => String(c?.next) === String(anchorBeat?.id))) || null) : null;
+      const hubNext = hub ? { beat: hub, ready: readiness(hub).ready, reasons: unmet(hub), revisit: true } : null;
       if (anchorCh && anchorCh.state !== "done" && anchorCh.next) { chapter = anchorCh; next = anchorCh.next; }
       else if (routedAny.length && bodyNext && routedAny.includes(bodyNext.beat)) { next = bodyNext; }
+      else if (hubNext && hubNext.ready) { next = hubNext; why = "hub"; }
       else if (openCh.length) { chapter = readyFirst(openCh); next = chapter.next; }
       else if (bodyNext && bodyNext.ready) { next = bodyNext; }
       else if (dormantCh.length) { chapter = readyFirst(dormantCh); next = chapter.next; }
       else if (bodyNext) { next = bodyNext; }
       else if (!chaptersLeft && mainEnds.length && !closerFired) { next = pickNext(mainEnds, routedAny, true); why = next ? (next.ready ? "closer" : "closer-waiting") : "closer-empty"; }
-      if (why === "next" && next) why = next.ready ? "next" : "waiting";
+      if (why === "hub") { /* set above */ }
+      else if (why === "next" && next) why = next.ready ? "next" : "waiting";
       else if (why === "next" && !next) why = chaptersLeft ? "chapter-empty" : (mainEnds.length ? "done-no-closer" : "empty");
     }
     const firedCount = all.filter(b => fired.has(String(b.id))).length;
