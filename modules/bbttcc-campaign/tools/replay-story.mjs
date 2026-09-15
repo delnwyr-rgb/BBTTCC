@@ -13,13 +13,18 @@ import path from "path"; import { fileURLToPath } from "url";
 const __dir = path.dirname(fileURLToPath(import.meta.url));
 const m = await import(path.join(__dir, "..", "scripts", "story-model.js"));
 const argv = process.argv.slice(2); const file = argv.find(a => !a.startsWith("--")); if (!file) { console.error("usage: ft-replay-story <save.json|bundle.json> [--max N] [--act N]"); process.exit(2); }
-const MAX = Number((argv.find(a => a.startsWith("--max=")) || "--max=160").slice(6)); const TRACE = argv.includes("--trace"); const STOP_ACT = Number((argv.find(a => a.startsWith("--act=")) || "--act=2").slice(6));
+const MAX = Number((argv.find(a => a.startsWith("--max=")) || "--max=160").slice(6)); const TRACE = argv.includes("--trace"); const STOP_TURN = Number((argv.find(a => a.startsWith("--turns=")) || "--turns=3").slice(8)); const STOP_ACT = Number((argv.find(a => a.startsWith("--act=")) || "--act=2").slice(6));
 const raw = JSON.parse(fs.readFileSync(file, "utf8")); const j = raw.kind === "bbttcc-campaign-bundle" ? { settings: [{ ns: "bbttcc-campaign", key: "campaigns", value: { [raw.campaignId]: raw.campaign } }, { ns: "bbttcc-campaign", key: "activeCampaignId", value: raw.campaignId }], scenes: [] } : raw;
 const settings = j.settings || []; const get = (ns, k) => { const r = settings.find(s => s.ns === ns && s.key === k); let v = r?.value; if (typeof v === "string") { try { v = JSON.parse(v) } catch { } } return v; };
 const cid = get("bbttcc-campaign", "activeCampaignId"); const c = get("bbttcc-campaign", "campaigns")[cid];
 const byId = new Map(c.beats.map(b => [b.id, b]));
 // ── world state ──
-let phase = 0, turn = 1; const st = m.emptyState(); let t = 1; const log = []; const refusals = [];
+// start FROM the save's own state when it has one (a mid-game save replays forward, not from the top)
+const savedStore = (() => { try { const r = (j.settings || []).find(s => s.ns === "bbttcc-campaign" && s.key === "storyState"); let v = r?.value; if (typeof v === "string") v = JSON.parse(v); return v?.[cid] || null; } catch (_e) { return null; } })();
+const resume = !!(savedStore && Object.keys(savedStore.played || {}).length);
+let phase = resume ? Number(j.storyPhase) || 0 : 0, turn = resume ? Number(j.turn) || 1 : 1;
+const st = resume ? JSON.parse(JSON.stringify(savedStore)) : m.emptyState(); let t = resume ? Math.max(1, ...Object.values(st.played).map(p => Number(p.ts) || 0)) + 1 : 1; const log = []; const refusals = [];
+if (resume) log.push(`  ▶ resuming from the save: turn ${turn}, act ${phase}, ${Object.keys(st.played).length} beats played`);
 const idx = new Map(c.beats.map((b, i) => [b.id, i])); const seqOf = b => { const n = Number(b?.questStep); return (b?.questStep != null && Number.isFinite(n)) ? n : 1e6 + (idx.get(b?.id) ?? 0); };
 const actOf = b => { const rs = reqs(b); let a = null; for (const x of rs) if (x?.flag === "storyPhase" && Number.isFinite(Number(x.gte))) a = Math.max(a ?? -Infinity, Number(x.gte)); return a; };
 const reqs = b => { const r = b?.inject?.requires; return Array.isArray(r) ? r.filter(Boolean) : (r && typeof r === "object" ? [r] : []); };
@@ -60,12 +65,12 @@ function situation() {
   return m.deriveSituation({ beats: c.beats, firedSet: played, firedTs: id => ts[id] || 0, readyOf: id => { const b = byId.get(id); if (!b) return null; const g = gateOK(b); return { ready: g.ok, reasons: g.ok ? [] : [{ met: false, text: g.why }] }; }, bucketOf: bucketOf(), invitedIds: new Set(), phase, turn, anchorId, seqOf, questNames: {}, state: st, openingBeatId: c.openingBeatId });
 }
 // ── the walk: do what the NOW card says; inside a beat, take the first unplayed route (player pick) ──
-play(c.openingBeatId, "opening");
+if (!resume) play(c.openingBeatId, "opening");
 for (let step = 0; step < MAX; step++) {
   const s = situation(); const n = s.now;
   if (TRACE) log.push(`     ↳ now=${n?.quest?.name || "-"}/${n?.why || "-"} → ${n?.next?.beat?.id || "-"}${n?.next?.revisit ? " (revisit)" : ""} | in play: ${s.inPlay.map(q => `${q.name}→${q.next?.beat?.id || "-"}${q.next?.ready ? "" : "⛩"}`).join(", ") || "-"} | doors: ${s.doors.map(q => q.name).join(", ") || "-"}`);
   let next = n?.next?.beat || null; let why = n?.why || "-";
-  if (n?.why === "turn") { log.push(`  🔁 THE TURN — nothing more opens this turn`); if (turn === 1) { turn = 2; if (phase < 2) { phase = 2; log.push(`  ⏩ ADVANCE → turn 2, calendar door → ACT 2`); play("a2_that_one_night", "phase-door"); } continue; } break; }
+  if (n?.why === "turn") { log.push(`  🔁 THE TURN — nothing more opens this turn`); if (turn >= STOP_TURN) break; turn++; const DOORS = [[2, 2], [6, 3], [10, 4], [14, 5]]; for (const [tg, ph] of DOORS) if (turn >= tg && phase < ph) { phase = ph; log.push(`  ⏩ ADVANCE → turn ${turn}, calendar door → ACT ${phase}`); if (ph === 2) play("a2_that_one_night", "phase-door"); } if (!log[log.length - 1].includes("ADVANCE")) log.push(`  ⏩ ADVANCE → turn ${turn}`); continue; }
   if (!next || n?.why === "complete" || n?.why === "empty" || n?.why === "done-no-closer") {
     // nothing in the story's quest → a door (dormant quest with ready start), then IN PLAY
     const d = s.doors[0]; const ip = s.inPlay.find(q => q.next?.beat);

@@ -1779,7 +1779,8 @@ const activeCampaignId = _getActiveCampaignId();
       try {
         const story = sit.story;
         const recKey = story.now?.quest?.key || null;
-        const list = [...(story.now?.quest && story.now.quest.state === "active" ? [story.now.quest] : []), ...story.inPlay];
+        const seenQ = new Set();
+        const list = [...(story.now?.quest && story.now.quest.state === "active" ? [story.now.quest] : []), ...story.inPlay].filter(q => { if (seenQ.has(q.key)) return false; seenQ.add(q.key); return true; });   // ELSEWHERE can put the same quest in both lists
         const nextBtn = nx => nx ? flyBtn(String(nx.beat.id), "→ " + (nx.beat.label || nx.beat.id), nx.ready ? "⚡" : "⛩", nx.ready) : "";
         const row = (q, rec) => {
           const pct = q.progress.total ? Math.round((q.progress.fired / q.progress.total) * 100) : 0;
