@@ -1,4 +1,4 @@
-import { deriveSituation, registryOf } from "../scripts/story-model.js";
+import { deriveSituation, registryOf, isAnchorable } from "../scripts/story-model.js";
 // modules/bbttcc-campaign/apps/campaign-builder-app.js
 //
 // FULL REPLACEMENT (RESTORE BEAT EDITING + ACTION HANDLERS)
@@ -1366,6 +1366,11 @@ const activeCampaignId = _getActiveCampaignId();
         `${esc(q.name)} is finished.${endingsTxt}${story.inPlay.length ? ` In play: ${story.inPlay.map(x => esc(x.name)).join(" · ")}.` : ""}${doors.length ? " Doors open this act:" : " Nothing else is open this act — advance the turn, or pick a quest from the list."}`);
       c.quest = q.name; if (doors.length) c.roads = doors; return c;
     }
+    if (n.why === "turn") {
+      const c = card("🔁 THE TURN — nothing more opens this turn", "", null, [],
+        `every open door has been walked and the rest waits on the world moving. Set each faction's plans, then run the <b>Turn Driver</b> (toolbar). The slate arrives on the other side.${story.inPlay.length ? ` In play: ${story.inPlay.map(x => esc(x.name)).join(" · ")}.` : ""}`);
+      c.quest = q.name; return c;
+    }
     if (!n.next) {
       const c = card(`🧭 ${esc(q.name)} — in the table's hands`, "", null, [],
         `no unfired beat is left in ${ch ? "this chapter" : "this quest"}${q.closers.length ? "" : ", and it has no closing beat"}.${endingsTxt}`);
@@ -1379,7 +1384,7 @@ const activeCampaignId = _getActiveCampaignId();
     }
     if (n.next.ready) {
       const closing = n.why === "closer";
-      const c = card(closing ? `🏁 CLOSE — ${esc(q.name)}` : `⏭ NEXT — ${esc(q.name)}${chapTxt}`, b.label || b.id, b,
+      const c = card(closing ? `🏁 CLOSE — ${esc(q.name)}` : `⏭ NEXT — ${esc(q.name)}${chapTxt}${n.why === "elsewhere" ? " (elsewhere)" : ""}`, b.label || b.id, b,
         [run(b, closing ? "Run the closing beat" : "Run the next beat")],
         `${closing ? "every chapter has its ending." : ""}${progress}${endingsTxt}`.trim());
       c.quest = q.name; return c;
@@ -1434,10 +1439,7 @@ const activeCampaignId = _getActiveCampaignId();
     }
     const hist = [...byBeat.values()].filter(h => beatById[h.id]).sort((a, b) => b.ts - a.ts);
     const histCount = hist.length;
-    const anchorId = hist.find(h => {
-      const b = beatById[h.id];
-      return b && !isAmbientBeat(b) && !isDiscoveryBeat(b) && !isTravelBeat(b);
-    })?.id ?? null;
+    const anchorId = hist.find(h => isAnchorable(beatById[h.id]))?.id ?? null;   // one rule, shared with the slate (story-model)
     const anchor = anchorId ? beatById[anchorId] : null;
 
     const _authIdx = new Map(beats.map((b, i) => [String(b.id), i]));

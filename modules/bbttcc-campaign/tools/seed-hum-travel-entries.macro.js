@@ -13,7 +13,7 @@
 // Idempotent (one entry per beat per table); backs up `encounterTables`.
 
 (async () => {
-  const DRY_RUN = true;
+  const DRY_RUN = false;
   const NS = "bbttcc-campaign";
   if (!game.user?.isGM) return ui.notifications?.error("GM only");
   const cid = game.bbttcc?.api?.campaign?.getActiveCampaignId?.();
@@ -44,6 +44,11 @@
       Object.assign(cur, want); added++; report.push(`~ ${tid} ← ${r.beat} (act ${r.act}, once)`);
     } else { t.entries.push(want); added++; report.push(`✚ ${tid} ← ${r.beat} (act ${r.act}, once, w${r.weight})`); }
   }
+  // the rungs arrive by draw, never as a quest's "next": mark them ambient on the beats themselves
+  let camps = game.settings.get(NS, "campaigns"); if (typeof camps === "string") { try { camps = JSON.parse(camps); } catch (_e) {} }
+  camps = foundry.utils.deepClone(camps || {}); const camp = camps[cid]; let ambientStamped = 0;
+  for (const r of RUNGS) { const b = (camp?.beats || []).find(x => String(x.id) === r.beat); if (b && !b.pacing?.ambient) { b.pacing = Object.assign({}, b.pacing || {}, { ambient: true }); ambientStamped++; report.push(`✚ ${r.beat}: pacing.ambient (arrives by draw, never offered as next)`); } }
+  if (!DRY_RUN && ambientStamped) await game.settings.set(NS, "campaigns", camps);
   if (!DRY_RUN && added) {
     const raw = game.settings.get(NS, "encounterTables");
     (foundry.utils.saveDataToFile || saveDataToFile)(typeof raw === "string" ? raw : JSON.stringify(raw), "application/json", `backup-encounterTables-before-hum-entries-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);

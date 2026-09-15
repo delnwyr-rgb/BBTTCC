@@ -580,6 +580,9 @@ export const QUEST_MAP = {
 };
 
 const isAmbient = b => !!b?.pacing?.ambient || String(b?.timeScale) === "leg" || !!b?.targetHexUuid || /\bdiscovery\b/i.test(String(b?.tags || ""));
+// The story's ANCHOR is the freshest played beat that can carry it: never a travel leg, a discovery or a
+// leaf sighting — but an ambient beat that ROUTES onward (the Tent on rails) stands in the story and anchors.
+export const isAnchorable = b => !!b && (!isAmbient(b) || (Array.isArray(b.choices) && b.choices.some(c => c && c.next)));
 const norm = s => String(s || "").trim();
 
 export function registryOf(registryId) {
@@ -610,6 +613,9 @@ export function deriveSituation(ctx) {
   // writers, from the beats themselves
   const starts = {}, endings = {};
   for (const b of beats) {
+    // a POOL beat (travel encounter) may start or end a quest elsewhere, but it arrives by draw — it is never
+    // a quest's door or its "next" (2026-09-14: the bandit ambush's free-them outcome was offered as AG's next)
+    const dq = declOf(b); if (!dq || !dq.quest) continue;
     if (String(b?.questRole || "") === "start") (starts[norm(b.questId)] = starts[norm(b.questId)] || []).push(b);
     for (const e of (b?.worldEffects?.questEffects || [])) {
       if (!e || !e.questId) continue;
@@ -629,7 +635,12 @@ export function deriveSituation(ctx) {
     return reqsOf(b).filter(r => r && r.questBucket != null).map(r => ({ registryId: String(r.questBucket), is: r.is != null ? String(r.is) : null, isNot: r.isNot != null ? String(r.isNot) : null }));
   };
   const pickNext = (list, routedFirst, allowAmbient = false) => {
-    const cands = uniq([...(routedFirst || []), ...list.filter(b => (allowAmbient || !isAmbient(b)) && !fired.has(String(b.id)))].filter(Boolean));
+    // a route authored FROM where the story stands is explicit intent — it counts even when the target is
+    // ambient (the Tent on rails out of the First Night, 2026-09-14); the ambient filter applies to the pool only
+    // routed from where the story stands: unplayed targets first, then any HUB the route leads back to (a
+    // route to a repeatable hub is never consumed — "Call it a day → the Crossroads" is always open)
+    const routed = (routedFirst || []).filter(Boolean);
+    const cands = uniq([...routed.filter(b => !fired.has(String(b.id))), ...routed.filter(b => fired.has(String(b.id)) && isHub(b) && String(b.id) !== String(ctx.anchorId || "")), ...list.filter(b => (allowAmbient || !isAmbient(b)) && !fired.has(String(b.id)))].filter(Boolean));
     const ready = cands.find(b => readiness(b).ready);
     if (ready) return { beat: ready, ready: true, reasons: [] };
     const gated = cands[0] || null;
@@ -651,7 +662,7 @@ export function deriveSituation(ctx) {
   }
   const anchorBeat = anchorId ? byId.get(anchorId) : null;
   const anchorLoc = (() => { if (!anchorBeat) return null; const d = declOf(anchorBeat); return d ? { quest: d.quest, chapter: d.chapter || null } : null; })();
-  const routedFrom = (b, within) => !b ? [] : uniq((b.choices || []).flatMap(c => [c?.next, c?.failNext]).map(x => byId.get(String(x || ""))).filter(t => t && within.has(String(t.id)) && !fired.has(String(t.id))));
+  const routedFrom = (b, within) => !b ? [] : uniq((b.choices || []).flatMap(c => [c?.next, c?.failNext]).map(x => byId.get(String(x || ""))).filter(t => t && within.has(String(t.id)) && String(t.id) !== String(b.id) && (!fired.has(String(t.id)) || isHub(t))));
 
   const quests = [];
   for (const [key, def] of Object.entries(QUEST_MAP.quests)) {
@@ -670,7 +681,10 @@ export function deriveSituation(ctx) {
       const anyFired = cb.some(b => fired.has(String(b.id))) || sts.some(b => fired.has(String(b.id)));
       const state = (rec?.ending || bucket === "completed" || bucket === "archived" || firedEnd) ? "done" : (rec?.started || bucket === "active" || anyFired) ? "open" : "dormant";
       const routed = anchorLoc && anchorLoc.quest === key && anchorLoc.chapter === chKey ? routedFrom(anchorBeat, cIds) : [];
-      const next = state === "done" ? null : (state === "dormant" && sts.length ? pickNext(sts, [], true) : (pickNext(cb.filter(b => !isOrphan(b)), routed) || (sts.length ? pickNext(sts, [], true) : null)));
+      const cPlayed = cb.filter(b => fired.has(String(b.id))).sort((a, b) => firedTs(String(b.id)) - firedTs(String(a.id)));
+      const cFront = uniq(cPlayed.flatMap(pb => (pb.choices || []).flatMap(c => [c?.next, c?.failNext]).map(x => byId.get(String(x || ""))).filter(t => t && cIds.has(String(t.id)) && !fired.has(String(t.id)))));
+      const cLadder = cb.filter(b => (routesIn.get(String(b.id)) || 0) === 0 && !fired.has(String(b.id)));
+      const next = state === "done" ? null : (state === "dormant" && sts.length ? pickNext(sts, [], true) : (pickNext([...cFront, ...cLadder], routed) || (sts.length ? pickNext(sts, [], true) : null)));
       chapters.push({ key: chKey, name: ch.name, registryId: ch.registryId, state, ending: firedEnd ? { beatId: String(firedEnd.id), label: firedEnd.label || firedEnd.id, name: rec?.ending?.name || null } : (rec?.ending ? { beatId: rec.ending.beatId || null, label: rec.ending.name, name: rec.ending.name } : null), next, beats: cb, starts: sts, endings: ends });
     }
     const mainEnds = uniq(endings[reg] || []).filter(b => !allIds.size || true);
@@ -689,7 +703,16 @@ export function deriveSituation(ctx) {
     //  · (e) a dormant chapter's start · (f) the closer once every chapter has its ending.
     let next = null, why = "next", chapter = null;
     const closerIds = new Set(mainEnds.map(b => String(b.id)));
-    const body = qb.main.filter(b => !closerIds.has(String(b.id)) && !isOrphan(b));
+    // THE FRONTIER (2026-09-14): a quest's body is offered as (1) beats one route away from anything already
+    // played in it — most recently played source first, choices in authored order — then (2) the LADDER: beats
+    // nothing routes to, in questStep order (the Offices' Sayings, opening scenes). Step order is never the
+    // story's intent for routed content; the routes are.
+    const bodyAll = qb.main.filter(b => !closerIds.has(String(b.id)));
+    const bodyIds = new Set(bodyAll.map(b => String(b.id)));
+    const playedHere = all.filter(b => fired.has(String(b.id))).sort((a, b) => firedTs(String(b.id)) - firedTs(String(a.id)));
+    const frontier = uniq(playedHere.flatMap(pb => (pb.choices || []).flatMap(c => [c?.next, c?.failNext]).map(x => byId.get(String(x || ""))).filter(t => t && bodyIds.has(String(t.id)) && !fired.has(String(t.id)))));
+    const ladder = bodyAll.filter(b => (routesIn.get(String(b.id)) || 0) === 0 && !fired.has(String(b.id)));
+    const body = [...frontier, ...ladder];
     if (state === "completed") { why = "complete"; }
     else if (state === "dormant" || state === "offered" || state === "closed") {
       // a quest not yet started: its start beat (explicit start rows first, then a dormant chapter's start, then its first body beat)
@@ -700,7 +723,10 @@ export function deriveSituation(ctx) {
     } else {
       const inQuest = anchorLoc && anchorLoc.quest === key;
       const anchorCh = inQuest && anchorLoc.chapter ? chapters.find(c => c.key === anchorLoc.chapter) : null;
-      const routedAny = inQuest ? routedFrom(anchorBeat, allIds) : [];
+      // a route authored from where the story stands wins even across quests (First Night → the Tent → the
+      // Crossroads); the target's own quest is irrelevant to "what happens next"
+      const allBeatIds = new Set(beats.map(b => String(b.id)));
+      const routedAny = inQuest ? routedFrom(anchorBeat, allBeatIds) : [];
       const openCh = chapters.filter(c => c.state === "open" && c.next);
       const dormantCh = chapters.filter(c => c.state === "dormant" && c.next);
       const chaptersLeft = chapters.some(c => c.state !== "done");
@@ -708,8 +734,13 @@ export function deriveSituation(ctx) {
       const readyFirst = (arr) => arr.find(x => x && x.next && x.next.ready) || arr[0] || null;
       // the door's still open (2026-09-14): when the anchor is a hub (or sits under one) and nothing fresh
       // is routed from it, the story's next is to RETURN to the hub — never a body-order orphan
-      const hub = inQuest ? (isHub(anchorBeat) ? anchorBeat : beats.find(h => h !== anchorBeat && isHub(h) && allIds.has(String(h.id)) && (h.choices || []).some(c => String(c?.next) === String(anchorBeat?.id))) || null) : null;
-      const hubNext = hub ? { beat: hub, ready: readiness(hub).ready, reasons: unmet(hub), revisit: true } : null;
+      // the hub above the anchor: walk the routes upward (welcome → answer sits two levels under the town walk);
+      // an EXHAUSTED hub (nothing unfired behind any of its doors) is not offered again — the story moves on
+      const parentsOf = (id) => beats.filter(h => (h.choices || []).some(c => String(c?.next) === String(id)));
+      const hubAbove = (b, depth = 0) => { if (!b || depth > 3) return null; if (isHub(b) && allIds.has(String(b.id))) return b; for (const p of parentsOf(b.id)) { const h = hubAbove(p, depth + 1); if (h) return h; } return null; };
+      const hub = inQuest ? hubAbove(anchorBeat) : null;
+      const hubFresh = hub ? routedFrom(hub, allBeatIds).some(t => !fired.has(String(t.id)) || (isHub(t) && String(t.id) !== String(hub.id))) : false;
+      const hubNext = hub && hubFresh ? { beat: hub, ready: readiness(hub).ready, reasons: unmet(hub), revisit: true } : null;
       if (anchorCh && anchorCh.state !== "done" && anchorCh.next) { chapter = anchorCh; next = anchorCh.next; }
       else if (routedAny.length && bodyNext && routedAny.includes(bodyNext.beat)) { next = bodyNext; }
       else if (hubNext && hubNext.ready) { next = hubNext; why = "hub"; }
@@ -744,12 +775,24 @@ export function deriveSituation(ctx) {
   };
 
   const anchorQuest = anchorLoc ? qByKey[anchorLoc.quest] : null;
-  const now = anchorQuest ? {
-    quest: anchorQuest, chapter: anchorQuest.currentChapter, next: anchorQuest.next, why: anchorQuest.why,
-    roads: anchorQuest.next && !anchorQuest.next.ready ? roadsFor(anchorQuest.next.beat) : []
-  } : null;
   const inPlay = quests.filter(q => q.state === "active" && !(anchorQuest && q.key === anchorQuest.key));
-  const doors = quests.filter(q => (q.state === "dormant" || q.state === "offered") && q.act <= phase && q.next && q.next.ready);
+  // THE TURN (2026-09-14): when nothing fresh is left anywhere this turn — every quest's next is a hub
+  // revisit or gated, and no door is open — the story's next is the Turn Driver, not a hub to ping-pong.
+  // "fresh" = this next leads somewhere unplayed: an unplayed beat, or a hub with unplayed doors behind it
+  const leadsSomewhere = (b) => !!b && (!fired.has(String(b.id)) || (isHub(b) && (b.choices || []).some(c => { const t = byId.get(String(c?.next || "")); return t && !fired.has(String(t.id)); })));
+  const fresh = (q) => !!(q && q.next && q.next.ready && leadsSomewhere(q.next.beat));
+  const anyFresh = quests.some(q => (q.state === "active") && fresh(q));
+  // ELSEWHERE: when the story's own quest has only a stale hub to offer but another quest in play has
+  // something fresh, that is what happens next (the fiddle in Khezek-Tor while you stand at the Crossroads)
+  const elsewhere = (anchorQuest && !fresh(anchorQuest)) ? inPlay.find(fresh) || null : null;
+  const now = anchorQuest ? ((!anyFresh && !quests.some(q => (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready))
+    ? { quest: anchorQuest, chapter: anchorQuest.currentChapter, next: null, why: "turn", roads: [] }
+    : elsewhere
+      ? { quest: elsewhere, chapter: elsewhere.currentChapter, next: elsewhere.next, why: "elsewhere", roads: [] }
+      : { quest: anchorQuest, chapter: anchorQuest.currentChapter, next: anchorQuest.next, why: anchorQuest.why, roads: anchorQuest.next && !anchorQuest.next.ready ? roadsFor(anchorQuest.next.beat) : [] }) : null;
+  // a door is a quest not yet started whose START is ready NOW — readiness already carries the start beat's own
+  // act gate, so the quest's nominal act is not consulted (towns span acts 1–2; Allesh-Gilliam's opening is Act 1)
+  const doors = quests.filter(q => (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready);
   return { act: phase, turn, quests, byKey: qByKey, anchor: anchorBeat ? { beatId: anchorId, quest: anchorLoc?.quest || null, chapter: anchorLoc?.chapter || null } : null, now, inPlay, doors, roadsFor };
 }
 

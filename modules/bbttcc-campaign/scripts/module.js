@@ -8,7 +8,7 @@
 import "../apps/campaign-tag-picker.js";
 import "../scripts/casualties-engine.js";
 import "../apps/player-beat-mirror-app.js";
-import { deriveSituation, QUEST_MAP, registryOf, emptyState, declOf, applyRecord, projection, sealOfDecl } from "./story-model.js";
+import { deriveSituation, QUEST_MAP, registryOf, emptyState, declOf, applyRecord, projection, sealOfDecl, isAnchorable } from "./story-model.js";
 // bbttcc-rolls-api.js removed 2026-08-28 (atlas cleanup) — game.bbttcc.api.rolls
 // had zero consumers; the beat Choice/Check UI resolves bonuses via its own
 // _rollChoiceCheck / _computeFactionOpRollBonusMap stack.
@@ -6988,7 +6988,7 @@ async function _storySituation(campaign, { full = false } = {}) {
   const firedSet = new Set([...Object.keys(store.played || {}), ...Object.keys(ds.firedStoryBeats || {}), ...Object.keys(ds.dialogueFired || {})]);
   const ts = {};
   for (const src of [store.played || {}, ds.firedStoryBeats || {}, ds.dialogueFired || {}]) for (const [id, m] of Object.entries(src)) ts[id] = Math.max(ts[id] || 0, Number(m?.ts) || 0);
-  const anchorId = [...firedSet].filter(id => byId.has(id) && !_isAmbientBeat(byId.get(id))).sort((a, b) => (ts[b] || 0) - (ts[a] || 0))[0] || null;
+  const anchorId = [...firedSet].filter(id => isAnchorable(byId.get(id))).sort((a, b) => (ts[b] || 0) - (ts[a] || 0))[0] || null;
   const track = (await _coalitionQuestTrack(campaign, {})) || {};
   const bucketOf = (qid) => { for (const k of ["active", "completed", "archived"]) if (track[k]?.[qid]) return k; return null; };
   const invitedIds = new Set(Object.keys(ds.invited || {}).filter(id => !firedSet.has(id)));

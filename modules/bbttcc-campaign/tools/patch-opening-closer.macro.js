@@ -19,8 +19,8 @@
   const report = []; let changed = 0;
   b.worldEffects = b.worldEffects || {};
   if (Number(b.worldEffects.phaseAdvance?.set) !== 1) { b.worldEffects.phaseAdvance = { set: 1 }; changed++; report.push("✚ thatwards_ho_opening_scene: phaseAdvance {set: 1} — the Opening closes Act 0"); } else report.push("· ok (already) phaseAdvance 1");
-  const wantStory = { quest: "offices", chapter: "opening", role: "closer", ending: "opened" };
-  if (JSON.stringify(b.story) !== JSON.stringify(wantStory)) { b.story = wantStory; changed++; report.push("✚ thatwards_ho_opening_scene: closer of the Opening chapter"); } else report.push("· ok (already) story closer");
+  const wantStory = { quest: "offices", chapter: "opening", role: "ending", ending: "opened" };   // ENDING of the Opening chapter — "closer" would close the whole Offices quest (caught by the offline replay 2026-09-14)
+  if (JSON.stringify(b.story) !== JSON.stringify(wantStory)) { b.story = wantStory; changed++; report.push("✚ thatwards_ho_opening_scene: ending of the Opening chapter (role ending)"); } else report.push("· ok (already) story closer");
   if (!DRY_RUN && changed) {
     const raw = game.settings.get(NS, "campaigns");
     (foundry.utils.saveDataToFile || saveDataToFile)(typeof raw === "string" ? raw : JSON.stringify(raw), "application/json", `backup-campaigns-before-opening-closer-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
