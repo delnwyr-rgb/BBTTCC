@@ -1104,5 +1104,23 @@
         "siegeTrojanHorse": true
       }
     }
+  },
+  {
+    "name": "Muster Drill [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "violence": 20
+        },
+        "effects": {
+          "text": "Drill the Town Militia at the Muster (needs a founded militia): the first drill makes it DRILLED — militia levies join your raids on the home hexes (+1 defense DC) and Violence income ticks up while drilled; the second makes it STANDING — the garrison absorbs the first unrest or infrastructure strike on a home hex each turn, and the home roads are escorted (free passage)."
+        },
+        "minFactionTier": 1
+      }
+    }
   }
 ]

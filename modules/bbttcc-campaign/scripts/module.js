@@ -1589,6 +1589,32 @@ async function _maybePlayBeatAudio(beat) {
   }
 }
 
+// ── CHOICE GATES + COOLDOWNS (STORY FLOW D-1 / D-2, 2026-09-17) ───────────────────────────────
+// A choice may carry `requires: [cond…]` (the beat gate grammar, incl. anyOf) and `cooldownTurns: N`.
+// A hidden choice is not rendered (GM dialog, player mirror, dialogue offers) and cannot be enacted.
+// Owner rulings: "make camp" hides until a ride has happened; the two forests' treaty choices hide
+// until the other forest was settled peacefully; Etta's Follow-up holds a turn after a brush-off.
+async function _choiceHidden(beat, ch, campaign, ctx = {}) {
+  try {
+    if (!ch) return true;
+    const reqs = Array.isArray(ch.requires) ? ch.requires : (ch.requires && typeof ch.requires === "object" ? [ch.requires] : []);
+    if (reqs.length) { const ok = await _beatRequiresMet({ id: String(beat?.id || "") + "#choice", inject: { requires: reqs } }, campaign, ctx); if (!ok) return true; }
+    const cd = Number(ch.cooldownTurns || 0);
+    if (cd > 0) {
+      const now = _getTurnNumberSafe(); const label = String(ch.label || "").trim();
+      const picks = (_readDirectorState()?.choices || []).filter(r => r && String(r.beatId) === String(beat?.id) && String(r.label || "").trim() === label);
+      const last = picks.length ? Math.max(...picks.map(r => Number(r.turn) || 0)) : null;
+      if (last != null && (now - last) < cd) return true;
+    }
+    return false;
+  } catch (_e) { return false; }   // fail-open: a broken gate never hides a choice
+}
+async function _visibleChoiceIndices(beat, campaign, ctx = {}) {
+  const cs = Array.isArray(beat?.choices) ? beat.choices : []; const out = [];
+  for (let i = 0; i < cs.length; i++) if (!(await _choiceHidden(beat, cs[i], campaign, ctx))) out.push(i);
+  return out;
+}
+
 function _choiceHasCheck(ch) {
   return !!(ch?.checkStat && String(ch.checkStat).trim());
 }
@@ -2267,8 +2293,14 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
   }
 
   const title = `${beat.label || beat.id || "Beat"}`;
-  const desc = String(beat.description || "").trim();
-  const choices = Array.isArray(beat.choices) ? beat.choices : [];
+  // "We haven't met" (STORY FLOW D-8, 2026-09-17): beat.unmet = { beatId, html } — when the Arrival-day door named by beatId
+  // was never played, the NPC's Act 2 opener leads with the unmet line (Pike / Tamsin / Etta remember who skipped them)
+  let unmetHtml = "";
+  try { const u = beat.unmet; if (u && u.beatId && u.html && !_storyStateFor(campaign?.id)?.played?.[String(u.beatId)]) unmetHtml = String(u.html); } catch (_eU) {}
+  const desc = (unmetHtml + String(beat.description || "")).trim();
+  const visible = await _visibleChoiceIndices(beat, campaign, ctx);   // D-1/D-2: gated / cooling choices are not shown
+  const choicesAll = Array.isArray(beat.choices) ? beat.choices : [];
+  const choices = visible.map(k => choicesAll[k]);
   const isPlayerFacing = !!(beat && (beat.playerFacing || beat.playerFacingDialog || beat.dialogPlayerFacing || beat.playerFacingContent || beat.showToPlayers));
 
   if (isPlayerFacing) {
@@ -2547,7 +2579,7 @@ ${
                   finish({
                     acted: true,
                     routed: !!nextId,
-                    choiceIndex: i,
+                    choiceIndex: visible[i],
                     choice: ch,
                     check: { stat: statTxt, dc: _num(ch.checkDC, 0), ok: !!ok, kind: "gm" }
                   });
@@ -2590,7 +2622,7 @@ ${
                   finish({
                     acted: true,
                     routed: !!nextId,
-                    choiceIndex: i,
+                    choiceIndex: visible[i],
                     choice: ch,
                     check: { stat: statTxt, dc: _num(ch.checkDC, 0), ok: !!ok, kind: "gm" }
                   });
@@ -2680,7 +2712,7 @@ ${
                 finish({
                   acted: true,
                   routed: !!nextId,
-                  choiceIndex: i,
+                  choiceIndex: visible[i],
                   choice: ch,
                   check: { stat: res.stat, dc: res.dc, total: res.total, ok: res.ok, kind: res.kind, bonus: (res.bonus != null ? res.bonus : null) }
                 });
@@ -2695,14 +2727,14 @@ ${
               finish({
                 acted: true,
                 routed: !!nextId,
-                choiceIndex: i,
+                choiceIndex: visible[i],
                 choice: ch,
                 check: null
               });
             } catch (e) {
               warn("Choice handling failed:", e);
               ui.notifications?.error?.("Error running choice; see console.");
-              finish({ acted: true, routed: false, error: true, choiceIndex: i, choice: ch, check: null });
+              finish({ acted: true, routed: false, error: true, choiceIndex: visible[i], choice: ch, check: null });
             }
           }
         };
@@ -5064,6 +5096,14 @@ async function _beatRequiresMet(beat, campaign, ctx) {
     for (const c of conds) {
       if (!c || typeof c !== "object") continue;
 
+      // { anyOf: [cond, cond, …] } — OR inside the AND list (STORY FLOW D-1, 2026-09-17: "make camp" waits for ANY ride)
+      if (Array.isArray(c.anyOf)) {
+        let any = false;
+        for (const sub of c.anyOf) { if (await _beatRequiresMet({ id: beat?.id, inject: { requires: [sub] } }, campaign, ctx)) { any = true; break; } }
+        if (!any) return false;
+        continue;
+      }
+
       // { questBucket: "<questId>", is: "active"|"completed"|"archived" }
       // or the negation { questBucket, isNot: "<bucket>" } — true when the quest
       // is NOT in that bucket (e.g. "offer this until the quest is underway").
@@ -6070,8 +6110,10 @@ async function dialogueChoicesFor(actorId, ctx = {}) {
     const stripHtml = (s) => String(s || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
     const rows = [];
     const invited = _readDirectorState()?.invited || {};
+    const campaignForGates = (() => { try { return getCampaign(getActiveCampaignId()); } catch (_e) { return null; } })();
     for (const { beat } of await _dialogueOfferableBeats(actorId, ctx)) {
       const choices = Array.isArray(beat.choices) ? beat.choices : [];
+      const shown = new Set(await _visibleChoiceIndices(beat, campaignForGates, ctx));   // D-1/D-2
       // The beat's description is the NPC's authored script for the scene —
       // the dialogue engine plays it in-voice when the conversation arrives.
       let beatDescription = stripHtml(beat.description);
@@ -6081,7 +6123,7 @@ async function dialogueChoicesFor(actorId, ctx = {}) {
         beatDescription += " (You sent word through town asking the Stewards to come speak with you — their being here is the answer. Open by acknowledging it: you're glad they got your message. Then play the scene.)";
       choices.forEach((ch, i) => {
         const label = String(ch?.label || "").trim();
-        if (!label) return;
+        if (!label || !shown.has(i)) return;
         rows.push({
           beatId: beat.id,
           beatLabel: beat.label || beat.id,
@@ -6110,6 +6152,7 @@ async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
   // e.g. a beat-entry redirect swapped in a beat whose choices don't line up —
   // fall out safely rather than firing an arbitrary choice.
   if (!ch) return { acted: false, error: "Choice " + i + " not found on beat '" + (beat?.id || "?") + "' (possibly redirected)." };
+  if (await _choiceHidden(beat, ch, campaign, ctx)) return { acted: false, error: "That choice is not open yet (gated or cooling down)." };   // D-1/D-2
   const label = String(ch.label || `Choice ${i + 1}`);
   const factionId = ctx.factionId || beat.factionId || campaign.factionId || null;
   let faction = null;

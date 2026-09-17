@@ -58,8 +58,9 @@ export const STORY_SCRIPTS = {
       ] },
     steps: [
       { id: "trouble", label: "The Trouble Starts", line: "Pike is waiting at the HQ. Hear the errands.", beats: ["allesh_gilliam_introduction_to_hq"] },
-      { id: "wall", label: "The East Wall", group: "errands", line: "Walk the East Wall. Find out what we're doing wrong, then tell Pike.",
-        beats: ["allesh_gilliam_the_east_wall_intro", "allesh_gilliam_east_wall_listen"], done: { anyOf: ["allesh_gilliam_east_wall_success", "allesh_gilliam_east_wall_failure"] } },   // TODO(seeder): three-check redesign → done = the graded outcome beats
+      { id: "wall", label: "The East Wall", group: "errands", line: "Walk the East Wall. Survey it, crew it, read it — three swings, any order — then tell Pike what we're doing wrong.",
+        beats: ["allesh_gilliam_the_east_wall_intro", "allesh_gilliam_east_wall_listen", "ag_east_wall_survey", "ag_east_wall_crew", "ag_east_wall_read", "ag_east_wall_tally"],
+        done: { anyOf: ["allesh_gilliam_east_wall_success", "ag_east_wall_holds", "ag_east_wall_patched", "allesh_gilliam_east_wall_failure"] } },   // three checks + graded outcomes (Phase D content patch d2)
       { id: "gate", label: "The Gate That Remembers Wrong", group: "errands", line: "Go and see the Leygate. Garren knows what it needs, and he has something for you to carry.", beats: ["ag_leygate_visit"] },
       { id: "fixit", label: "Ride for Furrier's Fixit", line: "Ride for Furrier's Fixit Farm with the spanner and bring back the stabilizer.",
         beats: ["ag_ride_fixit"], handoff: { quest: "fixit_farm", chapter: "the_leyline_stabilizer" }, done: { chapter: ["fixit_farm", "the_leyline_stabilizer"] } },

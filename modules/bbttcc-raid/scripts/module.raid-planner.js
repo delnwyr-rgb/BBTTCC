@@ -149,6 +149,7 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     alignment_shift: "Consecrate the hex to the Tree: +Sanctified, +Pilgrimage Site, Morale +1, Loyalty +1 next turn; +10 marks Faith next turn.",
     gather_intel: "Send scouts: the hex is revealed now, a dossier (holder, defense, loyalty, morale, integration, modifiers, alignment) is whispered to you, and it carries the Intel tag next turn.",
     policy_reforms: "Administrative reform: OP income ×1.05 this turn.",
+    muster_drill: "Drill the Town Militia at the Muster: first drill = DRILLED (+2 defense DC at home, Violence +5 marks/turn); second = STANDING (absorbs the first strike on a home hex each turn; home roads escorted).",
     mass_mobilization_std: "Call up the militia: your next raid gains initiative advantage and one free maneuver.",
     repair_fortifications: "Mend the walls: the hex's primary facility recovers one damage step.",
     repair_rig: "Field repairs on one of your rigs (pick the rig): recovers one damage step.",
@@ -911,6 +912,7 @@ function inferPackageGroup(activityOrKey){
     // Hold & Defend
     "fortify_hex": { groupKey:"hold_defend", groupLabel:"Hold & Defend", groupOrder: 1 },
     "border_patrol": { groupKey:"hold_defend", groupLabel:"Hold & Defend", groupOrder: 2 },
+    "muster_drill": { groupKey:"hold_defend", groupLabel:"Hold & Defend", groupOrder: 4 },
     "patrol_routes": { groupKey:"hold_defend", groupLabel:"Hold & Defend", groupOrder: 3 },
 
     // Wilderness Development

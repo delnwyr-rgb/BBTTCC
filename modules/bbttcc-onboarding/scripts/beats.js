@@ -2387,7 +2387,7 @@ const finalShowdown = {
     ctx.prompt({
       title: FALLBACK_TITLE,
       content:
-        `<p>Fight what's in the circle. When it starts losing, a <b>messenger</b> arrives with two <b>Courtly Secrets</b> and an offer.</p>` +
+        `<p>Fight what's in the circle. When it starts losing, a <b>messenger</b> arrives with two <b>Receipts</b> and an offer.</p>` +
         `<p><b>Finish it</b> — kill the thing on the lever — or <b>take the parley</b>, which your GM runs from the Raid Console on <b>presence</b>.</p>` +
         `<p><i>Either ending is real. Conclude when the table has settled it.</i></p>`,
       label: "This is settled"

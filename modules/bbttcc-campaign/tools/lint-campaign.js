@@ -223,6 +223,41 @@ for (const pl of (Array.isArray(campaign.npcPlacements) ? campaign.npcPlacements
   }
 }
 
+// ── choices: CG01–CG03 (STORY FLOW D-1/D-2/D-9, 2026-09-17) — choice.requires · choice.cooldownTurns · beat.pinLeg ──
+for (const b of beats) {
+  for (const [ci, c] of (Array.isArray(b.choices) ? b.choices : []).entries()) {
+    if (!c || typeof c !== "object") continue;
+    const rq = c.requires; if (rq != null) {
+      const list = Array.isArray(rq) ? rq : [rq];
+      const flat = []; for (const x of list) { if (x && Array.isArray(x.anyOf)) { for (const sub of x.anyOf) flat.push(sub); } else flat.push(x); }
+      for (const x of flat) {
+        if (!x || typeof x !== "object") { F("CG01", "ERROR", b.id, `choice[${ci}] "${s(c.label)}" requires: a condition is not an object`); continue; }
+        if (x.beatMark != null) { if (!exists(s(x.beatMark))) F("CG01", "ERROR", b.id, `choice[${ci}] "${s(c.label)}" requires beatMark '${x.beatMark}' — no such beat`); continue; }
+        if (x.questBucket != null) { if (quests && !quests[s(x.questBucket)]) F("CG01", "ERROR", b.id, `choice[${ci}] "${s(c.label)}" requires questBucket '${x.questBucket}' — not in the registry`); continue; }
+        if (x.relation != null) continue;
+        if (!(s(x.flag) in GATE_FLAGS)) F("CG01", "ERROR", b.id, `choice[${ci}] "${s(c.label)}" requires unknown gate flag '${x.flag}' — hidden forever`);
+      }
+    }
+    if (c.cooldownTurns != null && !(Number(c.cooldownTurns) >= 0)) F("CG02", "ERROR", b.id, `choice[${ci}] "${s(c.label)}" cooldownTurns must be a number ≥ 0 (got ${JSON.stringify(c.cooldownTurns)})`);
+  }
+  const pin = b.pinLeg; if (pin != null) {
+    if (typeof pin !== "object" || (!s(pin.to) && !s(pin.from))) F("CG03", "ERROR", b.id, `pinLeg must be an object with 'to' and/or 'from' hex names (got ${JSON.stringify(pin)})`);
+    else if (b.inject?.repeatable === true) F("CG03", "WARN", b.id, `pinLeg beat is repeatable — it will fire on EVERY matching leg`);
+  }
+}
+
+// ── receipts: E15 (STORY FLOW D-4, 2026-09-17) — worldEffects.receipts rows must name a label + a known effect key ──
+const RECEIPT_EFFECT_KEYS = new Set(["rollPlus2","forceReroll","influenceDmg2","clearScandal","favorPlus1","favorShift","rollPlus3","influenceDmg3","coverTracks","favorPlus2","doubleAgent","oppRollMinus2","stirThePot","discardStolen","freezePurse"]);
+for (const b of beats) {
+  const rows = b.worldEffects?.receipts; if (rows == null) continue;
+  if (!Array.isArray(rows)) { F("E15", "ERROR", b.id, `worldEffects.receipts must be an array of rows`); continue; }
+  for (const [i, r] of rows.entries()) {
+    if (!r || typeof r !== "object" || !s(r.label)) { F("E15", "ERROR", b.id, `receipts[${i}] has no label`); continue; }
+    for (const k of String(r.effectKey || "rollPlus2").split("+").map(x => x.trim()).filter(Boolean)) if (!RECEIPT_EFFECT_KEYS.has(k)) F("E15", "ERROR", b.id, `receipts[${i}] "${s(r.label)}" effectKey '${k}' is not a courtly effect key`);
+    if (r.acquisition != null && !["earned", "stolen"].includes(String(r.acquisition))) F("E15", "ERROR", b.id, `receipts[${i}] acquisition must be earned|stolen`);
+  }
+}
+
 // ── E01 engine-held ids ─────────────────────────────────────────────────────
 for (const [id, why] of Object.entries(ENGINE_IDS)) if (!exists(id)) F("E01", "ERROR", id, `engine-held id missing from data (${why}) — the engine's wiring points at nothing`);
 for (const [id, why] of Object.entries(ENGINE_SOFT_IDS)) if (!exists(id)) F("E01", "WARN", id, `engine hub/boundary id missing (${why}) — visualizer degrades`);
@@ -314,7 +349,9 @@ for (const b of beats) {
   const raw = b.inject?.requires;
   if (raw && !Array.isArray(raw) && typeof raw !== "object") F("P01", "ERROR", b.id, `inject.requires is ${typeof raw}, not an array of conditions`);
   if (b.where != null && (typeof b.where !== "string" || !b.where.trim())) F("W01", "ERROR", b.id, `beat.where must be a hex name or "anywhere" (got ${JSON.stringify(b.where)}) — placeOf() falls back to the quest's hex`);
-  for (const c of conds) {
+  // anyOf (STORY FLOW D-1, 2026-09-17): OR inside the AND list — its members are validated as ordinary conditions
+  const flatConds = []; for (const c of conds) { if (c && Array.isArray(c.anyOf)) { if (!c.anyOf.length) F("P01", "ERROR", b.id, `anyOf gate is empty — unmet forever`); for (const sub of c.anyOf) if (sub && typeof sub === "object") flatConds.push(sub); } else flatConds.push(c); }
+  for (const c of flatConds) {
     if (c.questBucket != null) {
       const negated = c.is == null && c.isNot != null;
       const bucket = s(negated ? c.isNot : c.is);

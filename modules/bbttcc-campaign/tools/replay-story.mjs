@@ -33,11 +33,13 @@ const REL = ["at_war", "hostile", "unfriendly", "neutral", "friendly", "allied"]
 function gateOK(b) {   // mirror of _beatRequiresMet (approx.)
   const bo = bucketOf(); const own = Number(b?.worldEffects?.phaseAdvance?.set);
   for (const x of reqs(b)) {
+    if (Array.isArray(x?.anyOf)) { const any = x.anyOf.some(sub => gateOK({ inject: { requires: [sub] }, worldEffects: b?.worldEffects }).ok); if (!any) return { ok: false, why: "anyOf" }; continue; }
     if (x.flag === "storyPhase") { let val = phase; if (Number.isFinite(own) && own === val + 1) val = own; if (x.gte != null && val < Number(x.gte)) return { ok: false, why: `storyPhase ≥ ${x.gte}` }; if (x.lte != null && val > Number(x.lte)) return { ok: false, why: `storyPhase ≤ ${x.lte}` }; continue; }
     if (x.flag === "turn") { if (x.gte != null && turn < Number(x.gte)) return { ok: false, why: `turn ≥ ${x.gte}` }; continue; }
     if (x.questBucket) { const cur = bo(String(x.questBucket)); const met = x.is != null ? cur === x.is : (x.isNot != null ? cur !== x.isNot : true); if (!met) return { ok: false, why: `quest ${String(x.questBucket).slice(-6)} ${x.is ? "is " + x.is : "isNot " + x.isNot} (now ${cur})` }; continue; }
     if (x.beatMark) { if (!st.played[x.beatMark]) return { ok: false, why: `beatMark ${x.beatMark}` }; continue; }
     if (x.relation) { const tid = String(x.relation).replace(/^Actor\./, ""); const cur = rel[tid] || "neutral"; const want = String(x.is ?? x.atLeast ?? "").toLowerCase(); const ok = x.is != null ? cur === want : REL.indexOf(cur) >= REL.indexOf(want); if (!ok) return { ok: false, why: `standing with ${tid.slice(-6)} ${x.is != null ? "is" : "≥"} ${want} (now ${cur})` }; continue; }
+    if (x.flag === "crVerify") { const D = { enc_circuit_riders_doctrine_good: 1, enc_circuit_riders_darkness_good: 1, enc_circuit_riders_witness_good: 1, enc_circuit_riders_witness_success: 1, enc_circuit_riders_doctrine_bad: -1, enc_circuit_riders_darkness_bad: -1, enc_circuit_riders_witness_bad: -1 }; const v = Object.keys(st.played).reduce((n, id) => n + (D[id] || 0), 0); if (x.gte != null && v < Number(x.gte)) return { ok: false, why: `crVerify ≥ ${x.gte} (is ${v})` }; continue; }   // the Riders' tally, mirrored from CR_VERIFY_DELTAS
     if (x.flag) { return { ok: false, why: `meter ${x.flag} (unknown offline)` }; }
   }
   const seal = m.sealOfDecl(b, st, phase); if (seal && seal.sealed) return { ok: false, why: "SEAL: " + seal.why };
@@ -59,6 +61,11 @@ const RIDE_TO = { ag_ride_khezek_tor: "Khezek-Tor", ag_ride_lyrenn: "Lyrenn", ly
 const knownHexes = new Set(); (function walk(o, d) { if (d > 12) return; if (Array.isArray(o)) { for (const v of o) walk(v, d + 1); } else if (o && typeof o === "object") { const tf = o.flags?.["bbttcc-territory"]; if (tf && (tf.isHex === true || tf.kind === "territory-hex" || tf.hexId || tf.name)) { const k = m.hexKey(tf.name || o.text); if (k) knownHexes.add(k); } for (const v of Object.values(o)) if (v && typeof v === "object") walk(v, d + 1); } })(j, 0);
 let where = (() => { try { const fid = String(c.factionId || (c.factionIds || [])[0] || "").replace(/^Actor\./, ""); const a = (j.actors || []).find(x => x._id === fid); return a?.flags?.["bbttcc-factions"]?.travel?.atHexName || null; } catch (_e) { return null; } })();
 if (where) log.push(`  📍 the party stands at ${where} (${knownHexes.size} hexes known)`);
+// PINNED LEGS (D-9, 2026-09-17): a beat with pinLeg.to matching the destination plays on the leg (once; gates apply)
+function playPinned(dest) {
+  const k = m.hexKey(dest);
+  for (const b of c.beats) { const pin = b?.pinLeg; if (!pin || typeof pin !== "object" || !pin.to) continue; if (m.hexKey(pin.to) !== k) continue; if (st.played[b.id] && b.inject?.repeatable !== true) continue; if (!gateOK(b).ok) continue; log.push(`  📌 pinned leg → ${b.id}`); play(b.id, "hex"); }
+}
 function play(id, source = "gm") {
   const b = byId.get(id); if (!b) { log.push(`  ✗ missing beat ${id}`); return false; }
   const why = guards(b, source); if (why) { refusals.push({ id, why, phase, turn }); log.push(`  ⛔ ${id} REFUSED: ${why}`); return false; }
@@ -97,10 +104,10 @@ for (let step = 0; step < MAX; step++) {
     else { if (turn >= STOP_TURN) break; turn++; log.push(`  ⏩ ADVANCE → turn ${turn} (everything waits)`); const DOORS = [[2, 2], [6, 3], [10, 4], [14, 5]]; for (const [tg, ph] of DOORS) if (turn >= tg && phase < ph) { phase = ph; log.push(`  ⏩ calendar door → ACT ${phase}`); if (ph === 2) play("a2_that_one_night", "phase-door"); } continue; } }
   // the Travel Console (2026-09-15): whatever the walker picked (NOW, a road, a door, IN PLAY) is a ride away → the GM plots
   // the ride first; arrival opens the town, then the situation is recomputed with the party standing there
-  { const p = m.placeOf(next, null); if (where && p && p !== "anywhere" && knownHexes.has(m.hexKey(p)) && m.hexKey(p) !== m.hexKey(where)) { const dest = String(p); where = dest; log.push(`  🐎 Travel Console → ${dest} (📍 ${dest})`); const opener = ((phase <= 1 && ARRIVE_AT_ACT1[m.hexKey(dest)]) || ARRIVE_AT[m.hexKey(dest)]); if (opener && byId.get(opener) && !st.played[opener]) play(opener, "hex"); continue; } }
+  { const p = m.placeOf(next, null); if (where && p && p !== "anywhere" && knownHexes.has(m.hexKey(p)) && m.hexKey(p) !== m.hexKey(where)) { const dest = String(p); where = dest; log.push(`  🐎 Travel Console → ${dest} (📍 ${dest})`); playPinned(dest); const opener = ((phase <= 1 && ARRIVE_AT_ACT1[m.hexKey(dest)]) || ARRIVE_AT[m.hexKey(dest)]); if (opener && byId.get(opener) && !st.played[opener]) play(opener, "hex"); continue; } }
   const last3 = log.slice(-3).map(l => l.trim().split(/\s+/)[1]); if (last3.length === 3 && last3.every(x => x === next.id)) { log.push(`  ■ LOOP on ${next.id} — the model keeps offering the same beat; stopping`); break; }
   if (!play(next.id, why.startsWith("DOOR") ? "door" : "gm")) { if (refusals.length > 6) break; }
-  if (ARRIVE[next.id] && byId.get(ARRIVE[next.id])) { if (RIDE_TO[next.id]) where = RIDE_TO[next.id]; log.push(`  🐎 ride → arrive ${ARRIVE[next.id]}${where ? ` (📍 ${where})` : ""}`); play(ARRIVE[next.id], "hex"); }
+  if (ARRIVE[next.id] && byId.get(ARRIVE[next.id])) { if (RIDE_TO[next.id]) where = RIDE_TO[next.id]; log.push(`  🐎 ride → arrive ${ARRIVE[next.id]}${where ? ` (📍 ${where})` : ""}`); playPinned(where); play(ARRIVE[next.id], "hex"); }
   if (phase >= STOP_ACT && turn >= 2 && step > 40) break;
 }
 console.log(log.join("\n"));

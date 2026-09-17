@@ -1435,6 +1435,75 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       console.warn(TAG, "hexSpark apply failed", eHS);
     }
 
+    // 2i) THE TOWN MILITIA (STORY FLOW D-3, 2026-09-17): worldEffects.militia = { rung: 1|2|3, factionId? } — a beat may
+    // raise the militia's rung (the Bandit Accord's absorption makes it STANDING). Never lowers it.
+    try {
+      const mr = we.militia && typeof we.militia === "object" ? we.militia : null;
+      const mapi = get(game, "bbttcc.api.raid.militia", null);
+      if (mr && mapi && typeof mapi.set === "function") {
+        const capi = get(game, "bbttcc.api.campaign", null); const cid = capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null;
+        let camp = (cid && capi && typeof capi.getCampaign === "function") ? capi.getCampaign(cid) : null;
+        const fid = String(mr.factionId || (ctx && ctx.factionId) || (camp && camp.factionId) || ((camp && camp.factionIds) || [])[0] || "").replace(/^Actor\./, "");
+        const A = fid ? game.actors.get(fid) : null;
+        const want = Number(mr.rung || 0) || 0;
+        if (A && want > 0) { const cur = mapi.state(A); if (want > cur.rung) { await mapi.set(A, { rung: want }); changed = true; notes.push("militia:rung" + want); } }
+      }
+    } catch (eMi) { console.warn(TAG, "militia apply failed", eMi); }
+
+    // 2h) RECEIPTS (STORY FLOW D-4, 2026-09-17 — owner ruling: "courtly secrets" are RECEIPTS: something you were told
+    // that you can produce later). worldEffects.receipts = [{ label, effectKey, truth?, acquisition?: "earned"|"stolen",
+    // source?: { name?, npcActorId? }, factionId? }] → one Receipt Item per row on the coalition faction, cloned from the
+    // courtly-secrets pack the way Mal-voice's _grantSecret does (api.raid.courtlySecrets.addSecret). A faction never
+    // holds two Receipts of the same name (repeatable beats, the persona route and the beat route can both grant one).
+    try {
+      const rows = Array.isArray(we.receipts) ? we.receipts.filter(r => r && typeof r === "object" && String(r.label || "").trim()) : [];
+      const api = get(game, "bbttcc.api.raid.courtlySecrets", null);
+      if (rows.length && !(api && typeof api.addSecret === "function")) console.warn(TAG, "receipts: courtly secrets API not available — nothing granted", { beatId: beatCtx.beatId });
+      if (rows.length && api && typeof api.addSecret === "function") {
+        const capi = get(game, "bbttcc.api.campaign", null); const cid = capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null;
+        let camp = (cid && capi && typeof capi.getCampaign === "function") ? capi.getCampaign(cid) : null;
+        if (!camp && cid) { try { let all = game.settings.get("bbttcc-campaign", "campaigns"); if (typeof all === "string") all = JSON.parse(all); camp = all ? all[cid] : null; } catch (_eC) {} }
+        const defaultFid = String((ctx && ctx.factionId) || (camp && camp.factionId) || ((camp && camp.factionIds) || [])[0] || "").replace(/^Actor\./, "");
+        const pack = game.packs ? game.packs.get("bbttcc-master-content.courtly-secrets") : null;
+        const docs = pack ? await pack.getDocuments() : [];
+        const norm = (v) => (api.normEffectKeys ? api.normEffectKeys(v) : [String(v || "")].filter(Boolean));
+        const docKeys = (d) => { const m = d.flags && d.flags["bbttcc-raid"] && d.flags["bbttcc-raid"].secret; return norm(m ? (m.effectKeys != null ? m.effectKeys : m.effectKey) : ""); };
+        const esc = (t) => String(t || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+        const lines = [];
+        for (const row of rows) {
+          const fid = String(row.factionId || defaultFid).replace(/^Actor\./, "");
+          const faction = fid ? game.actors.get(fid) : null;
+          if (!faction) { console.warn(TAG, "receipts: no faction to grant to", { beatId: beatCtx.beatId, row }); continue; }
+          const label = String(row.label).trim();
+          if ((faction.items || []).some(it => it && String(it.name || "").trim() === label && it.flags && it.flags["bbttcc-raid"] && it.flags["bbttcc-raid"].secret)) { lines.push(`· ${label} — already held by ${faction.name}`); continue; }
+          const wantKeys = norm(row.effectKey || "rollPlus2");
+          const template = docs.find(d => docKeys(d).join("+") === wantKeys.join("+")) || docs.find(d => docKeys(d)[0] === wantKeys[0]) || docs[0] || null;
+          if (!template) { console.warn(TAG, "receipts: courtly-secrets pack missing/empty"); break; }
+          const acquisition = String(row.acquisition || "earned") === "stolen" ? "stolen" : "earned";
+          const srcName = String((row.source && row.source.name) || beat?.label || beat?.id || "the story");
+          const source = template.clone({
+            name: label,
+            system: { description: { value: `<p><em>${esc(row.truth || "")}</em></p><p style="opacity:.75;font-size:.9em;">A Receipt from ${esc(srcName)} (${acquisition}). ${esc(api.describeEffect ? (api.describeEffect(wantKeys.join("+")) || "") : "")}</p>` } },
+            flags: { "bbttcc-raid": { secret: { effectKey: wantKeys.join("+"), effectKeys: wantKeys, acquisition, source: { npcActorId: String((row.source && row.source.npcActorId) || ""), npcName: srcName, beatId: String(beatCtx.beatId || ""), acquisition, ts: Date.now() } } } }
+          });
+          let created = null;
+          try { created = await api.addSecret(faction.id, source, { acquisition, effectKey: wantKeys.join("+") }); } catch (eAdd) { console.warn(TAG, "receipts: addSecret failed", eAdd); }
+          if (created) { changed = true; notes.push("receipt:" + label); lines.push(`🧾 ${label} → ${faction.name}${acquisition === "stolen" ? " (stolen — costs Suspicion when played)" : ""}`); }
+          else lines.push(`⚠ ${label} — refused (the faction may be at its Receipt cap)`);
+        }
+        if (lines.length) {
+          try {
+            await ChatMessage.create({
+              content: `<div class="bbttcc-receipts"><b>Receipts</b> — <i>${esc(beat?.label || beat?.id || "beat")}</i><ul style="margin:.3em 0 0 1em">${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul><div style="opacity:.7;font-size:.9em;margin-top:.3em">Produce a Receipt in a court from the faction's Assets.</div></div>`,
+              speaker: { alias: "Bad Eden" }
+            });
+          } catch (_eMsg) {}
+        }
+      }
+    } catch (eRc) {
+      console.warn(TAG, "receipts apply failed", eRc);
+    }
+
     // 2f) Hex READING — the Water Choir as an instrument (owner ruling 2026-09-13, R5).
     // worldEffects.hexReading = { hexName, voice? } → a player-facing card in the Choir's language,
     // in BANDS never numbers, reading three things: the tenders' mood (coalition morale/loyalty),

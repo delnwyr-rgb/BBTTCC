@@ -351,6 +351,13 @@
 
       let initInfluenceA = computeInfluenceHP({ baseCommitDip: atkInitDip, baseCommitSoft: atkInitSoft });
       let initInfluenceD = computeInfluenceHP({ baseCommitDip: defInitDip, baseCommitSoft: defInitSoft });
+      // Harmonized Grove (STORY FLOW D-5, 2026-09-17): "the next town you ride into will hear that a forest vouched for you" —
+      // a side that holds a hex carrying the Grove opens court with +1 Influence
+      try {
+        const holdsGrove = (F) => { for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) { const tf = d.flags?.["bbttcc-territory"]; if (!tf) continue; if (String(tf.factionId || tf.ownerId || "") !== String(F.id)) continue; if ((tf.modifiers || []).some(m => String(m || "").toLowerCase() === "harmonized grove")) return true; } return false; };
+        if (holdsGrove(A)) { initInfluenceA += 1; console.log(TAG, "Harmonized Grove: attacker opens with +1 Influence"); }
+        if (holdsGrove(D)) { initInfluenceD += 1; console.log(TAG, "Harmonized Grove: defender opens with +1 Influence"); }
+      } catch (_eG) {}
       // Phase E — Consume pending "Influence cap −N next courtly raid" mark
       // (left by a prior Clean Triumph against this faction). Flag deleted
       // after consume per [[foundry-setflag-recursive-merge]].
@@ -1050,9 +1057,9 @@
         const targetActor = s === "A" ? A : D;
         const PACK_ID = "bbttcc-master-content.courtly-secrets";
         const pack = game.packs?.get(PACK_ID);
-        if (!pack) { await sendChat([`Courtly secrets compendium not found (${PACK_ID}).`], { title: `${label}: Draw` }); return null; }
+        if (!pack) { await sendChat([`Receipts compendium not found (${PACK_ID}).`], { title: `${label}: Draw` }); return null; }
         const docs = await pack.getDocuments();
-        if (!docs.length) { await sendChat([`Courtly secrets compendium is empty — run the seeder macro first.`], { title: `${label}: Draw` }); return null; }
+        if (!docs.length) { await sendChat([`Receipts compendium is empty — run the seeder macro first.`], { title: `${label}: Draw` }); return null; }
         const pick = docs[Math.floor(Math.random() * docs.length)];
         const api = game.bbttcc?.api?.raid?.courtlySecrets;
         if (!api?.addSecret) { await sendChat([`Secrets API missing.`], { title: `${label}: Draw` }); return null; }

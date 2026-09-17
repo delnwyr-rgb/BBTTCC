@@ -131,20 +131,20 @@
 
   async function addSecret(actorId, sourceDocOrUuid, opts = {}) {
     const actor = game.actors?.get(String(actorId || "").replace(/^Actor\./, ""));
-    if (!actor) { ui.notifications?.error?.("Courtly secrets: actor not found."); return null; }
+    if (!actor) { ui.notifications?.error?.("Receipts: actor not found."); return null; }
 
     let source = sourceDocOrUuid;
     if (typeof source === "string") {
       try { source = await foundry.utils.fromUuid(source); }
       catch (e) { console.warn(TAG, "fromUuid failed", e); }
     }
-    if (!source) { ui.notifications?.error?.("Courtly secrets: source secret not found."); return null; }
+    if (!source) { ui.notifications?.error?.("Receipts: source Receipt not found."); return null; }
 
     const acquisition = (opts.acquisition === "stolen") ? "stolen" : "earned";
     const srcMeta = source.flags?.[MOD_R]?.secret || {};
     const effectKeys = normEffectKeys(srcMeta.effectKeys ?? srcMeta.effectKey ?? opts.effectKeys ?? opts.effectKey);
     if (!effectKeys.length) {
-      ui.notifications?.error?.(`Courtly secrets: no valid effectKey in "${srcMeta.effectKeys ?? srcMeta.effectKey ?? opts.effectKeys ?? opts.effectKey ?? ""}".`);
+      ui.notifications?.error?.(`Receipts: no valid effectKey in "${srcMeta.effectKeys ?? srcMeta.effectKey ?? opts.effectKeys ?? opts.effectKey ?? ""}".`);
       return null;
     }
     const effectKey = effectKeys.join("+");   // display/back-compat form
@@ -209,7 +209,7 @@
     const opts = tokens.map(t => `<option value="${esc(t.actor.id)}">${esc(t.actor.name)}</option>`).join("");
     return new Promise(resolve => {
       new Dialog({
-        title: "Courtly Secret",
+        title: "Receipt",
         content: `<form><p>${esc(prompt)}</p><div class="form-group"><label>Courtier</label><select name="cid">${opts}</select></div></form>`,
         buttons: {
           ok: { label: "Choose", callback: html => {
@@ -289,11 +289,11 @@
 
   async function playSecret(actorId, itemId, opts = {}) {
     const actor = game.actors?.get(String(actorId || "").replace(/^Actor\./, ""));
-    if (!actor) { ui.notifications?.error?.("Courtly secrets: actor not found."); return { ok: false, error: "no-actor" }; }
+    if (!actor) { ui.notifications?.error?.("Receipts: actor not found."); return { ok: false, error: "no-actor" }; }
     const item = actor.items?.get(itemId);
-    if (!item) { ui.notifications?.error?.("Courtly secrets: secret not found on holder."); return { ok: false, error: "no-item" }; }
+    if (!item) { ui.notifications?.error?.("Receipts: that Receipt is not on the holder."); return { ok: false, error: "no-item" }; }
     const secretMeta = item.flags?.[MOD_R]?.secret;
-    if (!secretMeta) { ui.notifications?.error?.("Courtly secrets: item is not a secret."); return { ok: false, error: "not-a-secret" }; }
+    if (!secretMeta) { ui.notifications?.error?.("Receipts: that item is not a Receipt."); return { ok: false, error: "not-a-secret" }; }
 
     const scenario = _scenario();
     if (!scenario) {
@@ -305,16 +305,16 @@
         ui.notifications?.info?.(`"${item.name}" sent to the GM's court — it plays from there.`);
         return { ok: true, relayed: true };
       }
-      ui.notifications?.error?.("Courtly secrets: no active courtly scenario.");
+      ui.notifications?.error?.("Receipts: no active court to produce it in.");
       return { ok: false, error: "no-scenario" };
     }
 
     const side = _holderSide(actor, scenario);
-    if (!side) { ui.notifications?.error?.("Courtly secrets: holder is not attacker or defender of the active scenario."); return { ok: false, error: "side-mismatch" }; }
+    if (!side) { ui.notifications?.error?.("Receipts: holder is not attacker or defender of the active scenario."); return { ok: false, error: "side-mismatch" }; }
 
     const effectKeys = normEffectKeys(secretMeta.effectKeys ?? secretMeta.effectKey);
     if (!effectKeys.length || effectKeys.some(k => !HANDLERS[k])) {
-      ui.notifications?.error?.(`Courtly secrets: unknown effectKey "${secretMeta.effectKeys ?? secretMeta.effectKey ?? ""}".`);
+      ui.notifications?.error?.(`Receipts: unknown effectKey "${secretMeta.effectKeys ?? secretMeta.effectKey ?? ""}".`);
       return { ok: false, error: "no-handler" };
     }
     const effectKey = effectKeys.join("+");
@@ -330,7 +330,7 @@
       try { r = await HANDLERS[k](actor, side, scenario); }
       catch (e) {
         console.warn(TAG, `handler "${k}" failed`, e);
-        ui.notifications?.error?.(`Courtly secrets: effect "${k}" errored — see console.`);
+        ui.notifications?.error?.(`Receipts: effect "${k}" errored — see console.`);
         if (applied === 0) return { ok: false, error: "handler-threw" };
         results.push({ effect: k, errored: true });
         continue;
@@ -415,6 +415,9 @@
     game.bbttcc.api.raid.courtlySecrets = {
       addSecret, playSecret, getSecrets, enforceCap, EFFECT_KEYS, EFFECT_INFO, describeEffect, normEffectKeys
     };
+    // RECEIPTS (owner ruling 2026-09-16): the table name for these items is "Receipts" — something you were told that
+    // you can produce later. Same object under the new name; `courtlySecrets` stays as the code-facing alias.
+    game.bbttcc.api.raid.receipts = game.bbttcc.api.raid.courtlySecrets;
   }
 
   // Dual install per [[bbttcc-api-exposure-pattern]] — script-load AND ready.

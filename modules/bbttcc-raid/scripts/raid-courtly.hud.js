@@ -234,7 +234,7 @@
     }).join('<div style="height:6px;"></div>');
 
     return `<div id="ft-courtly-secrets" class="ft-hud-panel ft-hud-acc-violet" style="position:fixed;left:12px;bottom:16px;width:300px;max-height:40vh;display:flex;flex-direction:column;padding:.5rem .55rem;">
-      <div style="margin-bottom:.35rem;color:${VIOLET};font-weight:600;letter-spacing:.04em;">⚜ Secrets &amp; Leverage</div>
+      <div style="margin-bottom:.35rem;color:${VIOLET};font-weight:600;letter-spacing:.04em;">🧾 Receipts &amp; Leverage</div>
       <div style="overflow-y:auto;display:flex;flex-direction:column;gap:4px;">${sectionHtml}</div>
     </div>`;
   }
@@ -298,7 +298,7 @@
         const itemId  = row?.dataset?.itemId;
         if (!actorId || !itemId) return;
         const api = game.bbttcc?.api?.raid?.courtlySecrets;
-        if (!api?.playSecret) { ui.notifications?.error?.("Courtly secrets API not loaded."); return; }
+        if (!api?.playSecret) { ui.notifications?.error?.("Receipts API not loaded."); return; }
         btn.disabled = true;
         try { await api.playSecret(actorId, itemId); }
         catch (err) { console.warn(TAG, "playSecret(click) failed", err); ui.notifications?.error?.("Play failed — see console."); }
@@ -329,7 +329,7 @@
       } catch (err) { return; }
       if (payload?.kind !== "courtly-secret" || !payload.actorId || !payload.itemId) return;
       const api = game.bbttcc?.api?.raid?.courtlySecrets;
-      if (!api?.playSecret) { ui.notifications?.error?.("Courtly secrets API not loaded."); return; }
+      if (!api?.playSecret) { ui.notifications?.error?.("Receipts API not loaded."); return; }
       try { await api.playSecret(payload.actorId, payload.itemId); }
       catch (err) { console.warn(TAG, "playSecret failed", err); ui.notifications?.error?.("Play failed — see console."); }
     });

@@ -1113,6 +1113,11 @@ async function advanceOPRegen({ apply=false, factionId=null, deferCapClamp=false
           regenNotes.push(`loyalty stability: all channels ${pct > 0 ? "+" : ""}${pct}%`);
         }
       } catch (e) { warn("loyalty opGainPct apply failed", e); }
+      // The Town Militia, DRILLED (STORY FLOW D-3, 2026-09-17): +5 marks Violence per Advance while drilled or standing
+      try {
+        const ms = game.bbttcc?.api?.raid?.militia?.state ? game.bbttcc.api.raid.militia.state(A) : null;
+        if (ms && ms.rung >= 2) { opsDelta.violence = safeNum(opsDelta.violence) + 5; regenNotes.push("the militia drills: Violence +5 marks"); }
+      } catch (e) { warn("militia regen apply failed", e); }
       const totalGained = Object.values(opsDelta).reduce((a,b)=>a+b,0);
 
       const row = { factionId: A.id, factionName: A.name, gained: totalGained, opsDelta, applied:false };

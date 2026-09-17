@@ -2110,7 +2110,11 @@ function _rcDefenderNextBonus(dflags) {
   const nr = Number(dflags?.bonuses?.nextRaid?.defenseBonus || 0);
   const ldRaw = Number(dflags?.bonuses?.nextTurn?.defenseDC || 0);
   const ld = Number.isFinite(ldRaw) ? Math.max(-5, Math.min(5, ldRaw)) : 0;
-  return (Number.isFinite(nr) ? nr : 0) + ld;
+  // The Town Militia (STORY FLOW D-3, 2026-09-17): FOUNDED +1, DRILLED/STANDING +2 on the defender's home hexes
+  // (first cut: any defense by the militia's faction — its holdings are the home hexes in Act 2)
+  let militia = 0;
+  try { const m = dflags?.militia || {}; const founded = !!(dflags?.quests?.active?.quest_ag_town_militia || dflags?.quests?.completed?.quest_ag_town_militia); const rung = Math.max(Number(m.rung || 0) || 0, founded ? 1 : 0); militia = rung >= 2 ? 2 : rung >= 1 ? 1 : 0; } catch (_e) {}
+  return (Number.isFinite(nr) ? nr : 0) + ld + militia;
 }
 
 async function computeDryRun(attacker, { activityKey="assault", difficulty="normal", rollMode="normal", extraBonus=0, attackerBaseOverride=null } = {}, baseDC) {

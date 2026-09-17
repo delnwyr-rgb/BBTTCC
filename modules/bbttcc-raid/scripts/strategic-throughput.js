@@ -338,7 +338,31 @@ import { PRICE_MULT, RECIPES } from "/modules/bbttcc-core/scripts/economy.consta
   // ----------------------------
   // Strategic Throughput (deduped)
   // ----------------------------
+  // ── THE TOWN MILITIA (STORY FLOW D-3, 2026-09-17 — owner ruling: three rungs with real effects) ─────────
+  // Rung 1 FOUNDED = the militia quest is active (the Stewards let bandits walk) → home-hex defense DC +1.
+  // Rung 2 DRILLED = one Muster Drill → defense DC +2, militia levies on home raids, Violence income +5 marks/turn.
+  // Rung 3 STANDING = a second drill (or the Bandit Accord's absorption) → the garrison absorbs the first unrest /
+  //   infrastructure strike on a home hex each turn, and the home roads are escorted (free passage while Standing).
+  // State = faction flag bbttcc-factions.militia { rung, drills, hexes[], absorbedTurn }. Readers: raid-console
+  // _rcDefenderNextBonus, turn-driver advanceOPRegen, advance-turn.tracks doLoyaltyPhase2, hex-travel passageFor.
+  const MILITIA_QUEST_ID = "quest_ag_town_militia";
+  const MILITIA_HOME_HEXES = ["Allesh-Gilliam", "Lyrenn", "Khezek-Tor"];
+  function militiaFounded(A){ try { const q = A?.getFlag(MODF, "quests") || {}; return !!(q.active?.[MILITIA_QUEST_ID] || q.completed?.[MILITIA_QUEST_ID]); } catch(_e){ return false; } }
+  function militiaState(A){ const m = (A?.getFlag(MODF, "militia") || {}); const rung = Math.max(Number(m.rung || 0) || 0, militiaFounded(A) ? 1 : 0); return { rung, drills: Number(m.drills || 0) || 0, hexes: Array.isArray(m.hexes) && m.hexes.length ? m.hexes : MILITIA_HOME_HEXES, absorbedTurn: Number(m.absorbedTurn || 0) || 0 }; }
+  async function militiaSet(A, patch){ const cur = A?.getFlag(MODF, "militia") || {}; await A.update({ [`flags.${MODF}.militia`]: { ...cur, hexes: MILITIA_HOME_HEXES, ...patch } }); }
+
   const STRATEGIC_THROUGHPUT = {
+    // Muster Drill — the Town Militia's rungs (see above)
+    async muster_drill(ctx){
+      const A = game.actors.get(ctx.factionId);
+      if (!A) return;
+      const st = militiaState(A);
+      if (st.rung < 1) { await pushWarLog(A, "Muster Drill: there is no militia to drill — the Muster opens when the Stewards let bandits walk."); return; }
+      const drills = st.drills + 1;
+      const rung = Math.max(st.rung, drills >= 2 ? 3 : 2);
+      await militiaSet(A, { drills, rung, lastDrillTurn: (() => { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch (_e) { return 0; } })() });
+      await pushWarLog(A, `Muster Drill: the Town Militia is ${rung >= 3 ? "STANDING — the garrison absorbs the first strike on a home hex each turn and escorts the home roads" : "DRILLED — levies join your home raids (+2 defense DC) and Violence income ticks up"} (drill ${drills}).`);
+    },
 
     // ═══════════════════════════ T1 ═══════════════════════════
     async harvest_season(ctx){
@@ -944,6 +968,7 @@ import { PRICE_MULT, RECIPES } from "/modules/bbttcc-core/scripts/economy.consta
     game.bbttcc.api.auditStrategicThroughput = auditThroughputWiring;
     game.bbttcc.api.turn.auditStrategicThroughput = auditThroughputWiring;
     game.bbttcc.api.raid.CAN_PLAN = CAN_PLAN;
+    game.bbttcc.api.raid.militia = { state: militiaState, set: militiaSet, founded: militiaFounded, HOME_HEXES: MILITIA_HOME_HEXES };   // D-3 (2026-09-17)
     game.bbttcc.api.raid.PRICE_MULT = PRICE_MULT;
     game.bbttcc.api.raid.RECIPES = RECIPES;
     attachCanPlan();

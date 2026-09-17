@@ -525,6 +525,11 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
       const fid = String(factionId || "").trim();
       out.devStage = Number(tf.development?.stage ?? tf.integration?.progress ?? 0) || 0;
       out.ownerId = String(tf.factionId || tf.ownerId || "").trim();
+      // The Town Militia, STANDING (STORY FLOW D-3, 2026-09-17): the home roads are escorted — free for the militia's faction
+      try {
+        const ms = (fid && game.bbttcc?.api?.raid?.militia?.state) ? game.bbttcc.api.raid.militia.state(game.actors.get(fid)) : null;
+        if (ms && ms.rung >= 3) { const hn = String(tf.name || tf.hexName || "").replace(/[\s\u00a0]+/g, " ").trim().toLowerCase(); if (hn && ms.hexes.some(h => String(h).toLowerCase() === hn)) { out.free = true; out.why = "militia escort"; return out; } }
+      } catch (_eM) {}
       if (!fid || !out.ownerId || out.devStage < 6) return out;
       if (out.ownerId === fid) { out.free = true; out.why = "owner"; return out; }
       const rel = game.bbttcc?.api?.factions?.relations;
@@ -1168,6 +1173,12 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     const intrigueMod = getFactionIntrigueMod(actor);
     const darknessBump = darknessEncounterBoost(actor, to);
     const dc = _encounterDc(ctx.terrainTier, ctx.dcMod, darknessBump);
+    // Harmonized Grove (STORY FLOW D-5, 2026-09-17): a destination hex the Forest of Early Tifaret accepted is safer to
+    // ride into — forest hostility bias −1 reads as +2 on the travel check (the named modifier is on tf.modifiers)
+    try {
+      const mods = (to?.document?.flags?.[MOD_TERR]?.modifiers || to?.flags?.[MOD_TERR]?.modifiers || []).map(m => String(m || "").toLowerCase());
+      if (mods.includes("harmonized grove")) { scoutRollMod += 2; ctx.harmonizedGrove = true; console.log(TAG, "Harmonized Grove: +2 on the travel check (the forest vouches for the road)"); }
+    } catch (_eG) {}
 
     // Owner ruling 2026-08-22: travel joins the tactical layer's 2d10 regime
     // (the d20 here was the last holdout of a separate math). Advantage rolls
@@ -1251,6 +1262,9 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
 
           factionId: ctx.factionId || actor?.id || null,
           hexUuid: to?.document?.uuid || to?.uuid || null,
+          // STORY FLOW D-9 (2026-09-17): the leg's endpoints by name, for PINNED beats (beat.pinLeg)
+          hexName: String(terrFlags.name || to?.document?.text || "").trim() || null,
+          fromHexName: String(from?.document?.flags?.[MOD_TERR]?.name || from?.flags?.[MOD_TERR]?.name || from?.document?.text || "").trim() || null,
 
           terrain: String(
             terrFlags.terrainType ||
@@ -1704,6 +1718,38 @@ async function _executeBeat(campaignId, beatId, triggerType, ctx, winner) {
   }
 }
 
+// Record injector state FIRST, then run the beat; roll back on failure. Shared by the pool draw and pinned legs (2026-09-17).
+async function _fireInjected(campaignId, beat, triggerType, ctx, state, nowTurn, winner) {
+  // Record state FIRST (2026-09-07) — same pre-commit as maybeRunBeatById: the runner's
+  // promise stays open for the whole awaited chain, so a post-execution write leaves the
+  // once gates open for the entire visit. Roll back only on runner failure.
+  const snapshot = foundry.utils.duplicate(_beatState(state, beat.id));
+  const rec = _beatState(state, beat.id);
+  rec.firedCount = Number(rec.firedCount || 0) + 1;
+  rec.lastFiredAt = Date.now();
+  rec.lastFiredTurn = nowTurn;
+  if (ctx?.hexUuid) {
+    rec.firedHexes ??= {};
+    rec.firedHexes[String(ctx.hexUuid)] = (rec.firedHexes[String(ctx.hexUuid)] || 0) + 1;
+  }
+  if (ctx?.factionId) {
+    rec.firedFactions ??= {};
+    rec.firedFactions[String(ctx.factionId)] = (rec.firedFactions[String(ctx.factionId)] || 0) + 1;
+  }
+  state.lastInjectedAt = Date.now();
+  state.lastInjectedTurn = nowTurn;
+  await _setInjectorState(state);
+
+  const execRes = await _executeBeat(campaignId, beat.id, triggerType, ctx, winner);
+  if (!execRes.ok) {
+    try { const st2 = _getInjectorState(); st2.beatHistory ??= {}; st2.beatHistory[beat.id] = snapshot; await _setInjectorState(st2); }
+    catch (eRB) { console.warn(TAG, "injector rollback failed", eRB); }
+    return execRes;
+  }
+
+  return { ok: true, fired: true, triggerType, campaignId, beatId: beat.id, winner: execRes.winner };
+}
+
 const CampaignBeatInjector = {
   getState: _getInjectorState,
   clearState: async () => _setInjectorState({ version: 1, lastInjectedAt: 0, lastInjectedTurn: 0, beatHistory: {} }),
@@ -1850,6 +1896,23 @@ const CampaignBeatInjector = {
     const nowTurn = _getTurnIndexFallback();
     const state = _getInjectorState();
 
+    // PINNED LEGS (STORY FLOW D-9, 2026-09-17): a beat may declare `pinLeg = { to?: hexName, from?: hexName }` — it wins the
+    // draw on a leg matching those endpoints, ahead of the pool and the global cooldown (its own gates + once rules still
+    // apply). Owner rulings: the Circuit Riders on the first leg to Lyrenn after the Act 2 Title Card; the Forest of Early
+    // Tifaret on the first ride to Furrier's Fixit. "Pinned, not a draw."
+    if (triggerType === "travel_threshold") {
+      const norm = (x) => String(x || "").replace(/[\s\u00a0]+/g, " ").trim().replace(/\.(?=[a-z]$)/i, " ").trim().toLowerCase();
+      const toN = norm(ctx?.hexName), fromN = norm(ctx?.fromHexName);
+      for (const beat of beats) {
+        const pin = beat?.pinLeg; if (!pin || typeof pin !== "object") continue;
+        if (pin.to && (!toN || norm(pin.to) !== toN)) continue;
+        if (pin.from && (!fromN || norm(pin.from) !== fromN)) continue;
+        const rule = _blockedByBeatRules(state, beat, ctx, nowTurn); if (rule.blocked) continue;
+        if (!(await _requiresMet(beat, campaign, ctx))) continue;
+        return _fireInjected(campaignId, beat, triggerType, ctx, state, nowTurn, { beatId: beat.id, score: 999, tagCount: 0, tags: ["pinLeg"] });
+      }
+    }
+
     if (_cooldownBlocked(state, nowTurn, 1, triggerType)) return { ok: false, triggerType, why: "global cooldown" };
 
     const ctxTags = _augmentTagsWithDebt(_ctxToTags(triggerType, ctx), ctx);
@@ -1897,36 +1960,7 @@ const CampaignBeatInjector = {
         candidates: matches.map(m => ({ beatId: m.beatId, score: m.score })),
         winner: null, why: "gm_declined_or_debt_skipped" };
     }
-    const beat = winner._beat;
-
-    // Record state FIRST (2026-09-07) — same pre-commit as maybeRunBeatById: the runner's
-    // promise stays open for the whole awaited chain, so a post-execution write leaves the
-    // once gates open for the entire visit. Roll back only on runner failure.
-    const snapshot = foundry.utils.duplicate(_beatState(state, beat.id));
-    const rec = _beatState(state, beat.id);
-    rec.firedCount = Number(rec.firedCount || 0) + 1;
-    rec.lastFiredAt = Date.now();
-    rec.lastFiredTurn = nowTurn;
-    if (ctx?.hexUuid) {
-      rec.firedHexes ??= {};
-      rec.firedHexes[String(ctx.hexUuid)] = (rec.firedHexes[String(ctx.hexUuid)] || 0) + 1;
-    }
-    if (ctx?.factionId) {
-      rec.firedFactions ??= {};
-      rec.firedFactions[String(ctx.factionId)] = (rec.firedFactions[String(ctx.factionId)] || 0) + 1;
-    }
-    state.lastInjectedAt = Date.now();
-    state.lastInjectedTurn = nowTurn;
-    await _setInjectorState(state);
-
-    const execRes = await _executeBeat(campaignId, beat.id, triggerType, ctx, { beatId: beat.id, score: winner.score, tagCount: winner.tagCount, tags: winner.tags });
-    if (!execRes.ok) {
-      try { const st2 = _getInjectorState(); st2.beatHistory ??= {}; st2.beatHistory[beat.id] = snapshot; await _setInjectorState(st2); }
-      catch (eRB) { console.warn(TAG, "injector rollback failed", eRB); }
-      return execRes;
-    }
-
-    return { ok: true, fired: true, triggerType, campaignId, beatId: beat.id, winner: execRes.winner };
+    return _fireInjected(campaignId, winner._beat, triggerType, ctx, state, nowTurn, { beatId: winner.beatId, score: winner.score, tagCount: winner.tagCount, tags: winner.tags });
   }
 };
 

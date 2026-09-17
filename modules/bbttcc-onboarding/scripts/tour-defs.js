@@ -236,7 +236,7 @@ const factionSheetTour = {
       text: "Your faction's open and completed quests — the story's ledger of what you've promised and delivered. Opens in its own window."
     },
     {
-      id: "secrets", title: "Courtly Secrets",
+      id: "secrets", title: "Receipts",
       selector: 'tr.bbttcc-doctrine-row[data-kind="secret"]',
       optional: true,
       text: "Leverage with a shelf life — you hold up to five Secrets, Stolen or Earned.\nThe Play button only lights up during an active Courtly/Presence raid: that's when a secret becomes a weapon."
@@ -317,7 +317,7 @@ const factionGmTour = {
       pre: 'nav.bbttcc-tabs a.item[data-tab="activities"]',
       selector: 'button[data-doctrine-act="add"]',
       optional: true,
-      text: "The Add buttons on Maneuvers, Strategic Activities and Courtly Secrets are GM-only — grant from the Doctrines catalog, or drag entries onto the dropzones.\nRemove links revoke. Players can open and read what they hold, not change it."
+      text: "The Add buttons on Maneuvers, Strategic Activities and Receipts are GM-only — grant from the Doctrines catalog, or drag entries onto the dropzones.\nRemove links revoke. Players can open and read what they hold, not change it."
     },
     {
       id: "advance", title: "Advance Tier",

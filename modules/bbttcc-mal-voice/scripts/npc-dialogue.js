@@ -1981,7 +1981,7 @@ function _definePersonaEditor() {
       scroll.appendChild(notes);
       this._els.notes = notes;
 
-      scroll.appendChild(this._hint(`<b>Extractable secrets</b> — when a conversation genuinely meets a secret's unlock condition, ${_esc(this.actor.name)} divulges it and the asking Steward's faction gains it as courtly leverage (player extractions pause on a GM approval card; yours confirm inline). A divulged secret is spent until you re-arm it below. <b>Drag any courtly secret</b> (compendium row or faction-held item) onto this window to arm it here — you only write the unlock condition.${api ? "" : " <b>⚠ Courtly secrets API not detected (bbttcc-raid) — secrets stay dormant.</b>"}`));
+      scroll.appendChild(this._hint(`<b>Extractable Receipts</b> — when a conversation genuinely meets a secret's unlock condition, ${_esc(this.actor.name)} divulges it and the asking Steward's faction gains it as courtly leverage (player extractions pause on a GM approval card; yours confirm inline). A divulged secret is spent until you re-arm it below. <b>Drag any courtly secret</b> (compendium row or faction-held item) onto this window to arm it here — you only write the unlock condition.${api ? "" : " <b>⚠ Courtly secrets API not detected (bbttcc-raid) — secrets stay dormant.</b>"}`));
 
       const rows = document.createElement("div");
       rows.style.cssText = "display:flex;flex-direction:column;";
@@ -1993,7 +1993,7 @@ function _definePersonaEditor() {
       addBtn.type = "button";
       addBtn.style.cssText = "width:auto;align-self:flex-start;padding:.25em .7em;";
       addBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Add secret`;
-      if (!api) { addBtn.disabled = true; addBtn.title = "bbttcc-raid courtly secrets API not detected"; }
+      if (!api) { addBtn.disabled = true; addBtn.title = "bbttcc-raid Receipts API not detected"; }
       addBtn.addEventListener("click", () => this._addSecretRow({}));
       scroll.appendChild(addBtn);
 
@@ -2267,7 +2267,7 @@ async function _editPersonaLegacy(actor) {
     <input type="text" name="topics" style="width:100%;margin-bottom:.6em;" placeholder="Dougan Marsh, The Gullywasher, Port Kudzu…" value="${_esc(cur.topics || "")}"/>
     <p style="font-size:.8em;opacity:.75;margin:0 0 .4em;"><b>Private GM truth</b> — knowledge, secrets, agenda, speech quirks. Shapes every reply; never quoted to players.</p>
     <textarea name="notes" rows="10" style="width:100%;">${_esc(cur.notes || "")}</textarea>
-    <p style="font-size:.8em;opacity:.75;margin:.6em 0 .4em;"><b>Extractable secrets</b> — one per line: <code>Label :: effectKey :: unlock condition :: the truth to reveal</code>.<br>When a conversation genuinely meets a secret's condition, ${_esc(actor.name)} divulges it and the asking Steward's faction gains it as courtly leverage (player extractions pause on a GM approval card; yours confirm inline). A divulged secret is spent — change its label to re-arm it.${secretsApi ? "" : " <b>⚠ Courtly secrets API not detected (bbttcc-raid) — this section stays dormant.</b>"}</p>
+    <p style="font-size:.8em;opacity:.75;margin:.6em 0 .4em;"><b>Extractable Receipts</b> — one per line: <code>Label :: effectKey :: unlock condition :: the truth to reveal</code>.<br>When a conversation genuinely meets a secret's condition, ${_esc(actor.name)} divulges it and the asking Steward's faction gains it as courtly leverage (player extractions pause on a GM approval card; yours confirm inline). A divulged secret is spent — change its label to re-arm it.${secretsApi ? "" : " <b>⚠ Courtly secrets API not detected (bbttcc-raid) — this section stays dormant.</b>"}</p>
     <textarea name="secretsRaw" rows="4" style="width:100%;" placeholder="The second ledger :: rollPlus2 :: they prove they already suspect the books are cooked :: The true tallies live under the third floorboard of the counting room.">${_esc(cur.secretsRaw || "")}</textarea>
     ${keysHint ? `<details style="font-size:.75em;opacity:.7;margin:.2em 0;"><summary>Valid effect keys</summary><pre style="white-space:pre-wrap;margin:.2em 0;">${_esc(keysHint)}</pre></details>` : ""}
     ${usedLines ? `<p style="font-size:.75em;opacity:.7;margin:.2em 0;">${usedLines}</p>` : ""}

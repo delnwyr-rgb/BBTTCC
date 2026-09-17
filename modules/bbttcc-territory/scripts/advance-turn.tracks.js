@@ -665,7 +665,22 @@
       const lowest = () => owned.slice().sort((a, b) => hexLoyaltyScore(a.flags?.[MODT] || {}) - hexLoyaltyScore(b.flags?.[MODT] || {}))[0];
       const lowScore = owned.length ? hexLoyaltyScore(lowest().flags?.[MODT] || {}) : 0;
       const unrestOdds = clamp(0.10 - 0.05 * lowScore, 0.02, 0.60);
-      if (owned.length > 0 && (L < 30 || lowScore <= -3) && Math.random() < unrestOdds) {
+      // The Town Militia, STANDING (STORY FLOW D-3, 2026-09-17): the garrison absorbs the FIRST unrest / infrastructure
+      // strike on a home hex each turn (once per Advance; recorded on the militia flag)
+      const militiaAbsorb = async (hex, what) => {
+        try {
+          const api = game.bbttcc?.api?.raid?.militia; if (!api?.state) return false;
+          const ms = api.state(A); if (ms.rung < 3) return false;
+          const nowTurn = (() => { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch (_e) { return 0; } })();   // the world clock (worldState.turn)
+          if (ms.absorbedTurn && ms.absorbedTurn === nowTurn) return false;
+          const hn = String(hex?.flags?.[MODT]?.name || hex?.text || "").replace(/[\s\u00a0]+/g, " ").trim().toLowerCase();
+          if (!ms.hexes.some(h => String(h).toLowerCase() === hn)) return false;
+          await api.set(A, { absorbedTurn: nowTurn });
+          lines.push(`• ${A.name}: the Town Militia (standing) absorbed the ${what} strike on ${hex.text || hex.name} this turn`);
+          return true;
+        } catch (_e) { return false; }
+      };
+      if (owned.length > 0 && (L < 30 || lowScore <= -3) && Math.random() < unrestOdds && !(await militiaAbsorb(lowest(), "unrest"))) {
         const hex = lowest();
         const tf  = foundry.utils.deepClone(hex.flags[MODT] || {});
         tf.modifiers = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];
@@ -687,7 +702,7 @@
 
       // Extra bad: infra damage — also the least loyal hex, odds base 25% ±5%/point, 5%–75% (2026-09-12)
       const infraOdds = clamp(0.25 - 0.05 * lowScore, 0.05, 0.75);
-      if (L < 15 && owned.length > 0 && Math.random() < infraOdds) {
+      if (L < 15 && owned.length > 0 && Math.random() < infraOdds && !(await militiaAbsorb(lowest(), "infrastructure"))) {
         const hex = lowest();
         const tf  = foundry.utils.deepClone(hex.flags[MODT] || {});
         tf.modifiers = Array.isArray(tf.modifiers) ? tf.modifiers.slice() : [];

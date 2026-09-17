@@ -79,7 +79,8 @@ export const MOD_PRODUCTION = {
   "damaged infrastructure": -0.25, "hostile population": -0.25, "difficult terrain": -0.10, "radiation zone": -0.75,
   "supply line vulnerable": -0.15,
   "red thread field": 0.10,              // Lyrenn Act 2 reframe (owner ruling 2026-09-13): specialty crop, a holding
-  "harmonized grove": 0.05               // The Forest of Early Tiphareth accepts you (owner ruling 2026-09-13)
+  "harmonized grove": 0.05,              // The Forest of Early Tiphareth accepts you (owner ruling 2026-09-13)
+  "out-danced": -0.05                    // The Cadence performs at your border until you answer the floor (STORY FLOW D-5, 2026-09-17): a face-tax on the hex's dealings
 };
 export const MOD_TRADE = { "trade hub": 0.50 };
 /** per-RESOURCE production modifiers (fractions, ×(1+v) on that resource only) — 2026-09-13 */
@@ -111,7 +112,8 @@ export const HEX_MODIFIER_CATALOG = [
 export const WORLD_MODIFIERS = {
   harmonized_grove: { label:"Harmonized Grove",  description:"The Forest of Early Tiphareth accepts you: +5% production, +1 loyalty on this hex. Adjacency bonus reserved for the adjacency engine.", modifiers:["Harmonized Grove"], adjacency:true },
   fallout_bloom:    { label:"Fallout Bloom",     description:"The rows went wild after that one night: food ×0.5, nothing else touched. Lifts when the Red Thread is planted.", modifiers:["Fallout Bloom"] },
-  red_thread_field: { label:"Red Thread Field",  description:"A stand of red-thread crop, awake: +10% production, +1 faith/turn (×2 on a leyline surge).", modifiers:["Red Thread Field"] }
+  red_thread_field: { label:"Red Thread Field",  description:"A stand of red-thread crop, awake: +10% production, +1 faith/turn (×2 on a leyline surge).", modifiers:["Red Thread Field"] },
+  out_danced:       { label:"Out-Danced (Uncontested)", description:"The Cadence performs one pace outside your border, at breakfast: −5% production on this hex until the challenge is answered on the floor.", modifiers:["Out-Danced"] }
 };
 
 // ── resources → OP income (per hex per turn; culture + faith lanes ruled 2026-09-12) ──────────

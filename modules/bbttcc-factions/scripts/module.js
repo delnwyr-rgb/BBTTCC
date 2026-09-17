@@ -3193,11 +3193,11 @@ try {
       const itemId = String(btn.getAttribute("data-item-id") || "").trim();
       if (!itemId) return;
       const api = game.bbttcc?.api?.raid?.courtlySecrets;
-      if (!api?.playSecret) return ui.notifications?.warn?.("Courtly secrets API not loaded.");
+      if (!api?.playSecret) return ui.notifications?.warn?.("Receipts API not loaded.");
       btn.disabled = true;
       try {
         const res = await api.playSecret(this.actor.id, itemId);
-        if (res?.ok) ui.notifications?.info?.("Courtly secret played.");
+        if (res?.ok) ui.notifications?.info?.("Receipt produced.");
         // else: playSecret already surfaced the reason (no scenario / side mismatch).
       } catch (e) {
         console.warn("[bbttcc-factions] play secret failed", e);
@@ -3361,7 +3361,7 @@ try {
       const secretEffectKey = String(doc.flags?.["bbttcc-raid"]?.secret?.effectKey || "").trim();
       if (secretEffectKey) {
         const secretsApi = game.bbttcc?.api?.raid?.courtlySecrets;
-        if (!secretsApi?.addSecret) return ui.notifications?.warn?.("Courtly secrets API missing.");
+        if (!secretsApi?.addSecret) return ui.notifications?.warn?.("Receipts API missing.");
         const created = await secretsApi.addSecret(this.actor.id, doc, { acquisition: "earned" });
         if (created) ui.notifications?.info?.(`Secret added to ${this.actor.name}: ${doc.name}`);
         this.render(false);
