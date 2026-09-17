@@ -1,0 +1,183 @@
+{
+  "_readme": "Town hub configs for tools/town-hubs/setup-town-hub.macro.js. Door x/y/w/h are RENDER pixels of the export at refWidth (the runner scales to the imported scene + padding). Scenes by name or 'Scene.<id>'. beatMap rows: [beatIdPrefix, doorKey, 'exterior'|'interior'] or [prefix, '@Scene name', '']. Beats whose ids are in hubBeats (or the hex's arrival beats) land on the hub map. Only empty/dangling sceneIds are written unless the beat is in overrideLiveBeats or the scene is in replaceSceneNames.",
+
+  "fixit": {
+    "town": "Furrier's Fixit Farm",
+    "hexAliases": ["furrier's fixit farm", "furrier's fixit-farm", "furriers fixit farm", "furriers fixit-farm", "farrier's fixit farm", "farrier's fixit-farm"],
+    "hubs": { "main": { "sceneName": "fixit_map", "label": "Furrier's Fixit Farm", "refWidth": 15300, "refHeight": 13950 } },
+    "townQuestFrom": ["fixit_intro_scene", "fixit_town_walk"],
+    "doors": [
+      { "hub": "main", "key": "gullywasher", "label": "The Gullywasher", "x": 3978, "y": 3948, "w": 1950, "h": 1950, "color": "#ffb347",
+        "exterior": "gullywasher_exterior_pov", "interior": "gullywasher_interior_pov", "extra": ["fixit_gulleywasher_dougan_pov", "gulley_washer hexchrome battlemap"], "beatId": "fixit_saloon_cinematic" },
+      { "hub": "main", "key": "generator", "label": "The Generator Hall", "x": 10442, "y": 2883, "w": 3150, "h": 3150, "color": "#7ff6ff",
+        "exterior": "fixit_generator_exterior", "interior": "fixit_generator_interior_pov", "extra": ["generator hexchrome battlemap"], "beatId": "fixit_power_station_exterior" },
+      { "hub": "main", "key": "counter", "label": "The Counter", "x": 3366, "y": 9786, "w": 3450, "h": 2475, "color": "#c9a0ff",
+        "exterior": "counter_exterior_pov", "interior": "counter_interior_pov", "extra": ["counter hexchrome battlemap"], "beatId": "fixit_general_store_exterior" },
+      { "hub": "main", "key": "arcbay", "label": "The Arc Bay", "x": 8798, "y": 9333, "w": 3825, "h": 3675, "color": "#9dff8a",
+        "exterior": "arc_bay_exterior", "interior": "arc_bay_interior_pov", "extra": ["arc_bay_back_room_pov", "arc_bay_hexchrome"], "beatId": "fixit_arc_bay_exterior" }
+    ],
+    "cross": [],
+    "beatMap": [
+      ["fixit_saloon_cinematic", "gullywasher", "exterior"], ["fixit_gullywasher_", "gullywasher", "interior"], ["fixit_gully_", "gullywasher", "interior"], ["gullywasher_", "gullywasher", "interior"],
+      ["fixit_power_station_exterior", "generator", "exterior"], ["fixit_power_station_", "generator", "interior"],
+      ["fixit_general_store_exterior", "counter", "exterior"], ["fixit_general_store_", "counter", "interior"],
+      ["fixit_arc_bay_exterior", "arcbay", "exterior"], ["fixit_arc_bay_", "arcbay", "interior"],
+      ["fixit_weeping_prisoner", "arcbay", "interior"], ["fixit_the_weeping_prisoner", "arcbay", "interior"], ["fixit_leyline_", "arcbay", "interior"]
+    ],
+    "hubBeats": { "main": ["fixit_cinematic_intro", "fixit_intro_scene", "fixit_town_walk", "fixit_quest_acceptance", "fixit_hex_settles", "fixit_pip_and_patter_convo", "fixit_pip_and_patter_convo_1", "fixit_pip_and_patter_convo_2"] },
+    "leave": { "fixit_backstairs_exterior": "no Back Stairs scene exists yet; candidate arc_bay_back_room_pov" },
+    "notes": []
+  },
+
+  "ag": {
+    "town": "Allesh-Gilliam",
+    "hexAliases": ["allesh-gilliam", "allesh gilliam", "allesh_gilliam"],
+    "hubs": {
+      "south": { "sceneName": "Allesh Gilliam Map, South", "label": "Allesh-Gilliam · South", "refWidth": 18000, "refHeight": 9600 },
+      "north": { "sceneName": "Allesh Gilliam Map, North", "label": "Allesh-Gilliam · North", "refWidth": 19200, "refHeight": 13500 }
+    },
+    "mainHub": "south",
+    "townQuestFrom": ["allesh_gilliam_introduction_to_hq", "allesh_gilliam_town_walk"],
+    "doors": [
+      { "hub": "south", "key": "vacancy", "label": "The Vacancy", "x": 2625, "y": 2625, "w": 4000, "h": 3700, "color": "#c9a0ff",
+        "exterior": "the_vacancy_exterior", "interior": "the_vacancy_interior", "extra": ["The Vacancy hexchrome battlemap"],
+        "beatId": "allesh_gilliam_vacancy_exterior", "intro": "allesh_gilliam_vacancy_intro", "blurb": "An L-shaped motel folded into the wall's elbow. VACANCY, says the sign, and it is not lying: it never is. Verna keeps the ledger; the ledger keeps everyone else." },
+      { "hub": "south", "key": "waiting", "label": "The Waiting Room", "x": 3150, "y": 7050, "w": 3300, "h": 2700, "color": "#ffb347",
+        "exterior": "the_waiting_room_exterior", "interior": "the_waiting_room_interior", "extra": ["the_waiting_room_hexchrome_battlemap"],
+        "beatId": "allesh_gilliam_waiting_room_exterior", "intro": "allesh_gilliam_waiting_room_intro", "blurb": "The door still says EMERGENCY. Inside it says WAITING ROOM, over the bar, and the triage chairs face the counter now. Doc Greeley pours. Nobody here has ever been told to take a number and liked it." },
+      { "hub": "south", "key": "market", "label": "The Long Market", "x": 8775, "y": 5325, "w": 4600, "h": 8500, "color": "#9dff8a",
+        "exterior": "long_market", "interior": null, "extra": ["The Long Market hexchrome battlemep", "The Long Market hexchrome battlemap"],
+        "beatId": "allesh_gilliam_long_market_exterior", "intro": "allesh_gilliam_the_long_market_intro", "blurb": "Old Main Street, roofed over in welded awnings and stubbornness. Everything is for sale down the row, including opinions. Etta Bloom is somewhere in the middle of it, which is where the middle is." },
+      { "hub": "south", "key": "leygate", "label": "The Leygate", "x": 15600, "y": 1500, "w": 3800, "h": 2400, "color": "#7fffd4",
+        "exterior": "allesh_gilliam_leygate_pov", "interior": "allesh gilliam leygate battlemap hexchrome", "extra": [],
+        "beatId": "allesh_gilliam_leygate_exterior", "intro": "ag_leygate_visit", "blurb": "EMERGENCIES ONLY, says the sign, and under it, in a different hand: AND EVEN THEN, ASK GARREN. The gate hums like someone pretending they aren't tired. Blue flickers yellow. Yellow flickers blue." },
+      { "hub": "south", "key": "hq", "label": "HQ — Snarky Burger", "x": 14625, "y": 7725, "w": 4300, "h": 2300, "color": "#7ff6ff",
+        "exterior": "snarky_burger_exterior", "interior": "allesh_gilliam_hq_pov", "extra": ["snarky burger hexchrome battlemap"], "beatId": "allesh_gilliam_hq_cinematics" },
+      { "hub": "north", "key": "stgilliams", "label": "St Gilliam's", "x": 4875, "y": 10200, "w": 8500, "h": 5400, "color": "#ffd166",
+        "exterior": "st_gilliams_exterior_pov", "interior": "st_gilliams_interior_pov", "extra": ["St Gilliam's Hexchrome", "Father Tamsin — The Dream"], "beatId": "allesh_gilliam_st_gilliams_cinematics" },
+      { "hub": "north", "key": "muster", "label": "The Muster", "x": 2625, "y": 3750, "w": 3400, "h": 2400, "color": "#ff8c8c",
+        "exterior": "the_muster", "interior": null, "extra": [],
+        "beatId": "allesh_gilliam_muster_exterior", "intro": "allesh_gilliam_muster_intro", "blurb": "The gutted fire station by the North Gate. A boot is nailed to the door. Over the arch somebody has painted GOOD VIBES ONLY! and somebody else has not painted over it, which tells you who runs the drills." },
+      { "hub": "north", "key": "northgate", "label": "The North Gate", "x": 9075, "y": 2700, "w": 7900, "h": 4800, "color": "#e0e0e0",
+        "exterior": "allesh_gilliam_north_gate_day", "interior": null, "extra": [],
+        "beatId": "allesh_gilliam_north_gate_exterior", "intro": null, "blurb": "The North Gate: Thatwards-by-North starts here, and so does everything that comes down that road at night. Rotations are checked. Rotations are checked again. The crane is not decorative." },
+      { "hub": "north", "key": "eastwall", "label": "The East Wall", "x": 16125, "y": 2700, "w": 5800, "h": 4800, "color": "#ffa07a",
+        "exterior": "east_wall", "interior": null, "extra": ["East Wall hexchrome battlemap"],
+        "beatId": "allesh_gilliam_east_wall_exterior", "intro": "allesh_gilliam_the_east_wall_intro", "blurb": "One section of wall leans inward like it is listening for something under the ground. Beyond it: scrub, wind, and things that do not respect fences. On this side: people who would like to sleep tonight." },
+      { "hub": "north", "key": "plumb", "label": "Plumb's Tower", "x": 16870, "y": 10360, "w": 4200, "h": 4600, "color": "#a0d8ff",
+        "exterior": "plumbs_tower", "interior": null, "extra": ["Plumbs Tower"],
+        "beatId": "allesh_gilliam_plumb_tower_exterior", "intro": "allesh_gilliam_plumb_office_intro", "blurb": "The base of the old water tower is an office now. The wall is visible through Aldous Plumb's window. It is leaning. He has arranged his desk so that his back is to it." }
+    ],
+    "cross": [
+      { "hub": "south", "key": "to_north", "label": "⇧ North of town", "to": "north", "x": 9000, "y": 350, "w": 7000, "h": 700, "color": "#ffffff" },
+      { "hub": "north", "key": "to_south", "label": "⇩ South of town", "to": "south", "x": 9600, "y": 13150, "w": 7000, "h": 700, "color": "#ffffff" }
+    ],
+    "beatMap": [
+      ["allesh_gilliam_hq_cinematics", "hq", "exterior"], ["allesh_gilliam_st_gilliams_cinematics", "stgilliams", "exterior"],
+      ["allesh_gilliam_vacancy_exterior", "vacancy", "exterior"], ["allesh_gilliam_waiting_room_exterior", "waiting", "exterior"], ["allesh_gilliam_long_market_exterior", "market", "exterior"],
+      ["allesh_gilliam_muster_exterior", "muster", "exterior"], ["allesh_gilliam_north_gate_exterior", "northgate", "exterior"], ["allesh_gilliam_east_wall_exterior", "eastwall", "exterior"], ["allesh_gilliam_plumb_tower_exterior", "plumb", "exterior"], ["allesh_gilliam_leygate_exterior", "leygate", "exterior"],
+      ["ag_leygate_", "leygate", "interior"], ["allesh_gilliam_leyline_", "leygate", "interior"],
+      ["allesh_gilliam_hq_", "hq", "interior"], ["allesh_gilliam_marshall_yarrow_", "hq", "interior"], ["allesh_gilliam_yarrow_welcome", "hq", "interior"], ["allesh_gilliam_pike_closure", "hq", "interior"],
+      ["allesh_gilliam_st_gilliams_", "stgilliams", "interior"], ["allesh_gilliam_father_tamsin_", "stgilliams", "interior"], ["ag_confessor_", "stgilliams", "interior"], ["ag_tamsin_confrontation", "stgilliams", "interior"],
+      ["allesh_gilliam_the_long_market_", "market", "interior"], ["allesh_gilliam_etta_", "market", "interior"],
+      ["allesh_gilliam_waiting_room_", "waiting", "interior"], ["allesh_gilliam_vacancy_", "vacancy", "interior"],
+      ["allesh_gilliam_plumb_", "plumb", "interior"], ["allesh_gilliam_muster_", "muster", "interior"],
+      ["allesh_gilliam_the_east_wall_", "eastwall", "interior"], ["allesh_gilliam_east_wall_", "eastwall", "interior"], ["allesh_gilliam_wall_stands_straight", "eastwall", "interior"]
+    ],
+    "hubBeats": { "south": ["allesh_gilliam_town_walk", "allesh_gilliam_quest_hub_1", "allesh_gilliam_introduction_to_hq"] },
+    "overrideLiveBeats": ["allesh_gilliam_introduction_to_hq"],
+    "replaceSceneNames": ["allesh_gilliam_map"],
+    "notes": ["The Crossroads has its own scene but no place on either map — reachable through Pike's HQ choices; add a door later if you site it."]
+  },
+
+  "lyrenn": {
+    "town": "Lyrenn",
+    "hexAliases": ["lyrenn"],
+    "hubs": {
+      "ring": { "sceneName": "Lyrenn Ring Map", "label": "Lyrenn · The Green Ring", "refWidth": 16800, "refHeight": 9900 },
+      "rows": { "sceneName": "Lyrenn Rows Map", "label": "Lyrenn · The Rows", "refWidth": 9600, "refHeight": 9300 }
+    },
+    "mainHub": "ring",
+    "townQuestFrom": ["lyrenn_main_scene", "lyrenn_opening_scene"],
+    "doors": [
+      { "hub": "ring", "key": "greenring", "label": "The Green Ring", "x": 9235, "y": 5104, "w": 3000, "h": 3000, "color": "#9dff8a",
+        "exterior": "lyrenn_green_ring_pov", "interior": "green_ring_hexchrome_battlemap", "extra": [], "beatId": "lyrenn_green_ring_cinematic" },
+      { "hub": "ring", "key": "seedvault", "label": "The Seed Vault", "x": 9235, "y": 7000, "w": 1600, "h": 700, "color": "#ffd166",
+        "exterior": "lyrenn_seed_bank", "interior": null, "extra": [], "beatId": "lyrenn_seed_vault", "direct": true },
+      { "hub": "ring", "key": "choir", "label": "The Water Choir", "x": 3000, "y": 7430, "w": 3200, "h": 2600, "color": "#7ff6ff",
+        "exterior": "lyrenn_water_choir", "interior": null, "extra": [],
+        "beatId": "lyrenn_water_choir_exterior", "intro": "lyrenn_water_choir", "blurb": "Stone-lined channels, hand-carved, gravity-fed. Notes rise where the channels narrow; low tones hum in the wide basins. The children who tune them are terrifying and correct. One basin never tunes. Nobody skips it by accident." },
+      { "hub": "ring", "key": "pest", "label": "The East Channels", "x": 14040, "y": 5150, "w": 3000, "h": 3000, "color": "#ffb347",
+        "exterior": "lyrenn_gentle_pest_hexchrome_pov", "interior": "lyren buggin hexhchrome battlemap", "extra": [],
+        "beatId": "lyrenn_gentle_pest_exterior", "intro": "lyrenn_the_gentle_pest_acceptance", "blurb": "The east irrigation channels, where the scrub starts. Something has been tearing them up at night, and every channel it touches points the same way: toward the Green Ring. It is not subtle. It may not be malicious. Elsin would like a second opinion." },
+      { "hub": "rows", "key": "forest", "label": "The Forest That Will Not Be Fought", "x": 890, "y": 5830, "w": 1700, "h": 5000, "color": "#a0d8ff",
+        "exterior": "lyrenn_forest_not_fought", "interior": null, "extra": ["Forest of Early Tipahret hexhchrome battlemap"],
+        "beatId": "lyrenn_forest_exterior", "intro": "lyrenn_forest_will_not_be_fought_quest_acceptance", "blurb": "The treeline outside Lyrenn has started editing the fence line, a stride closer every morning. Nobody has seen a tree move. Everybody has seen where it was yesterday. Rowan says it is not angry. Rowan says that like it matters." },
+      { "hub": "rows", "key": "coop", "label": "The Co-op", "x": 6200, "y": 2600, "w": 6000, "h": 4400, "color": "#c9a0ff",
+        "exterior": "lyrenn_day_3_pov", "interior": null, "extra": ["lyrenn_farms hexchrome battlemap", "lyrenn_day_1_pov"],
+        "beatId": "lyrenn_coop_exterior", "intro": "lyrenn_elsin_quade_convo", "blurb": "The reinforced shell of the old agricultural co-op: tanks, a windmill, solar cloth strung between poles like tired flags. Elsin's table is co-op plank, scrubbed pale. You sleep in the loft above it, when you sleep." },
+      { "hub": "rows", "key": "field", "label": "The Field That Remembers You", "x": 6170, "y": 7200, "w": 4300, "h": 3600, "color": "#ff8c8c",
+        "exterior": "lyrenn_field_remembers", "interior": "the field that remembers you hexchrome battlemap", "extra": [],
+        "beatId": "lyrenn_low_field_exterior", "intro": "lyrenn_the_field_that_remembers_you_intro", "blurb": "The low field, where the rows end. Unharvested, and not by neglect: the plants stand in postures. At the field's edge, half-buried where the furrows stop, a stone figure kneels. The furrows bend around it. They always have." }
+    ],
+    "cross": [
+      { "hub": "ring", "key": "to_rows", "label": "⇦ The Rows", "to": "rows", "x": 350, "y": 5000, "w": 500, "h": 6000, "color": "#ffffff" },
+      { "hub": "rows", "key": "to_ring", "label": "The Green Ring ⇨", "to": "ring", "x": 9350, "y": 4650, "w": 400, "h": 6000, "color": "#ffffff" }
+    ],
+    "beatMap": [
+      ["lyrenn_green_ring_cinematic", "greenring", "exterior"], ["lyrenn_water_choir_exterior", "choir", "exterior"], ["lyrenn_gentle_pest_exterior", "pest", "exterior"],
+      ["lyrenn_forest_exterior", "forest", "exterior"], ["lyrenn_coop_exterior", "coop", "exterior"], ["lyrenn_low_field_exterior", "field", "exterior"],
+      ["lyrenn_green_ring", "greenring", "interior"],
+      ["lyrenn_seed_vault", "seedvault", "exterior"],
+      ["lyrenn_water_choir", "choir", "exterior"],
+      ["lyrenn_the_gentle_pest", "pest", "interior"], ["lyrenn_gentle_pest", "pest", "interior"],
+      ["lyrenn_forest_will_not_be_fought", "forest", "exterior"],
+      ["lyrenn_the_field_that_remembers_you", "field", "exterior"], ["lyrenn_red_thread", "field", "exterior"],
+      ["lyrenn_elsin_", "coop", "exterior"], ["lyrenn_rowan_", "@lyrenn_day_1_pov", ""]
+    ],
+    "hubBeats": { "ring": ["lyrenn_opening_scene", "lyrenn_main_scene", "lyrenn_quest_scene", "lyrenn_town_walk", "lyrenn_quest_acceptance", "lyrenn_hex_settles"] },
+    "replaceSceneNames": ["lyrenn_map"],
+    "notes": ["Rowan has no door of his own — he is met where the rows end (the low Field) and in the co-op's extra scenes."]
+  },
+
+  "kt": {
+    "town": "Khezek-Tor",
+    "hexAliases": ["khezek-tor", "khezek tor", "khezek_tor"],
+    "hubs": { "main": { "sceneName": "Khezek Tor Map", "label": "Khezek-Tor", "refWidth": 8191, "refHeight": 6614 } },
+    "townQuestFrom": ["khezek_tor_main_scene"],
+    "doors": [
+      { "hub": "main", "key": "maw", "label": "The Maw", "x": 3900, "y": 4038, "w": 1800, "h": 3000, "color": "#ff8c8c",
+        "exterior": "maw_pov", "interior": "the maw hexchrome battlemap", "extra": [], "beatId": "khezek_tor_the_maw", "direct": true },
+      { "hub": "main", "key": "lifthall", "label": "The Lift Hall", "x": 5930, "y": 4038, "w": 1800, "h": 3000, "color": "#7ff6ff",
+        "exterior": "The Lift hexchrome", "interior": "khezek_tor_bad_lift_hall_pov", "extra": [], "beatId": "khezek_tor_the_lift_hall" },
+      { "hub": "main", "key": "brace", "label": "The Brace", "x": 4095, "y": 878, "w": 3000, "h": 1000, "color": "#ffb347",
+        "exterior": "khezek_tor_brace_pov", "interior": null, "extra": [],
+        "beatId": "khezek_tor_brace_exterior", "intro": "khezek_tor_the_brace", "blurb": "The Brace holds back a section that already fell once. Timber, iron, and arithmetic older than the coalition, chalked straight onto the beams. Calder works underneath it. He does not look up when it groans, which tells you how often it groans." },
+      { "hub": "main", "key": "yard", "label": "The Yard", "x": 1755, "y": 2692, "w": 1500, "h": 1700, "color": "#c9a0ff",
+        "exterior": "Scene.SQACQa2o9GEhOYHz", "interior": "khezek_tor_tainted_shipment_pov", "extra": [],
+        "beatId": "khezek_tor_yard_exterior", "intro": "khezek_tor_darkness_shipment_quest_acceptance", "blurb": "Ore carts in procession. Cranes frozen mid-lift like the skeletons of failed gods. Floodlights that burn all day, not for visibility. For warning. Something in the yard has a number, a label, and a destination, and it is not happy about any of the three." },
+      { "hub": "main", "key": "warehouse", "label": "The Warehouse", "x": 1697, "y": 4447, "w": 1500, "h": 1400, "color": "#e0e0e0",
+        "exterior": "khezek_tor_supply_shortage_pov_hexchrome", "interior": "khezek_tor_supply_shortage_hexchrome_battlemap", "extra": [],
+        "beatId": "khezek_tor_warehouse_exterior", "intro": null, "blurb": "Warehouses dominate the skyline. Everything here has a number, a label, or a destination, and the quartermasters would like it noted that the shelves are emptier than the ledgers say. Khezek-Tor keeps the warehouses and does the complaining." },
+      { "hub": "main", "key": "camp", "label": "The Forward Camp — the Cookline", "x": 6319, "y": 1258, "w": 1500, "h": 1300, "color": "#ffd166",
+        "exterior": "khezek_tor_arrival_scene", "interior": null, "extra": [], "beatId": "khezek_tor_town_walk", "direct": true }
+    ],
+    "cross": [],
+    "beatMap": [
+      ["khezek_tor_the_lift_hall", "lifthall", "exterior"], ["khezek_tor_the_maw", "maw", "exterior"],
+      ["khezek_tor_brace_exterior", "brace", "exterior"], ["khezek_tor_yard_exterior", "yard", "exterior"], ["khezek_tor_warehouse_exterior", "warehouse", "exterior"],
+      ["khezek_tor_town_walk", "camp", "exterior"],
+      ["khezek_tor_the_brace", "brace", "exterior"], ["khezek_tor_drax_", "brace", "exterior"], ["kt_drax_", "brace", "exterior"], ["khezek_brace_groans", "brace", "exterior"],
+      ["khezek_tor_sable_", "lifthall", "interior"], ["kt_sable_", "lifthall", "interior"],
+      ["khezek_tor_mine_that_answered_back", "maw", "exterior"], ["khezek_sink_widens", "maw", "exterior"],
+      ["khezek_tor_darkness_shipment", "yard", "interior"], ["khezek_tor_shipment_fail", "yard", "interior"],
+      ["khezek_upper_galleries", "@Valhaulan Barracks", ""],
+      ["khezek_tor_valhaulan_seal", "@khezek_tor_valhaulan_seal_pov", ""], ["khezek_tor_the_vaulhaulan_seal", "@khezek_tor_valhaulan_seal_pov", ""], ["khezek_tor_seal_fail", "@khezek_tor_valhaulan_seal_pov", ""]
+    ],
+    "hubBeats": { "main": ["khezek_tor_main_scene", "khezek_tor_quest_scene", "khezek_tor_quest_acceptance", "khezek_hex_settles", "khezek_compound_cough"] },
+    "replaceSceneNames": ["khezek_tor_map"],
+    "removeBeats": ["khezek_tor_camp_exterior"],
+    "removeDoors": ["cookline"],
+    "notes": ["The Seal, Level Four and the sink are underground — reached through the Lift Hall door, not a surface door. The Seal beats point at the Seal POV so the Quest Log lights the dome."]
+  }
+}
