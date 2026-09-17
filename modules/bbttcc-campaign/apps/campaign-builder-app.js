@@ -1377,6 +1377,7 @@ const activeCampaignId = _getActiveCampaignId();
       c.quest = q.name; return c;
     }
     const b = n.next.beat;
+    const scriptLine = n.next.line ? `<b>“${esc(n.next.line)}”</b> ` : "";   // scripted next-step line (Phase A, 2026-09-17): the Log's words, first
     if (n.why === "hub" || n.next.revisit) {
       const c = card(`↺ BACK TO — ${esc(b.label || b.id)}`, "", b, [run(b, "Return there")],
         `nothing fresh is routed from where the story stands${ch ? ` in ${esc(ch.name)}` : ""} — the hub is still open; the table can go back and pick another door.${progress}${endingsTxt}`);
@@ -1384,21 +1385,21 @@ const activeCampaignId = _getActiveCampaignId();
     }
     if (n.next.ready && n.next.here === false) {
       const c = card(`🐎 RIDE — ${esc(q.name)}${chapTxt}`, b.label || b.id, b, [run(b, `Run it anyway (the party is at ${story.where || "?"})`)],
-        `<b>${esc(b.label || b.id)}</b> is at <b>${esc(String(n.next.place || q.hex || "?"))}</b>; the party is at <b>${esc(String(story.where || "?"))}</b>. Plot the ride on the Travel Console — arrival opens the town, and this beat is waiting there.${progress}${endingsTxt}`);
+        `${scriptLine}<b>${esc(b.label || b.id)}</b> is at <b>${esc(String(n.next.place || q.hex || "?"))}</b>; the party is at <b>${esc(String(story.where || "?"))}</b>. Plot the ride on the Travel Console — arrival opens the town, and this beat is waiting there.${progress}${endingsTxt}`);
       c.quest = q.name; return c;
     }
     if (n.next.ready) {
       const closing = n.why === "closer";
       const c = card(closing ? `🏁 CLOSE — ${esc(q.name)}` : `⏭ NEXT — ${esc(q.name)}${chapTxt}${n.why === "elsewhere" ? " (elsewhere)" : n.why === "here" ? " (here)" : ""}`, b.label || b.id, b,
         [run(b, closing ? "Run the closing beat" : "Run the next beat")],
-        `${closing ? "every chapter has its ending." : ""}${progress}${endingsTxt}`.trim());
+        `${scriptLine}${closing ? "every chapter has its ending." : ""}${progress}${endingsTxt}`.trim());
       c.quest = q.name; return c;
     }
     if (sealOf(b)) { const c = sealCard(b, `NEXT — ${esc(q.name)}`, ""); c.quest = q.name; return c; }
     const roads = roadsOf();
     const c = card(`⏳ NEXT — ${esc(q.name)}${chapTxt} — waiting`, b.label || b.id, b,
       roads.length ? [] : [run(b, "Run it anyway (override the gate)")],
-      `waits for <b>${whyOf(b)}</b>.${roads.length ? " The way there:" : ""}${progress}${endingsTxt}`);
+      `${scriptLine}waits for <b>${whyOf(b)}</b>.${roads.length ? " The way there:" : ""}${progress}${endingsTxt}`);
     c.quest = q.name; if (roads.length) c.roads = roads; return c;
   }
 
@@ -1794,7 +1795,7 @@ const activeCampaignId = _getActiveCampaignId();
           return `<div class="bbttcc-now-chain${rec ? " rec" : ""}" data-tooltip="${rec ? "Where the story stands. " : ""}Started, not finished. Any order is fine.">` +
             `<div class="hd"><span class="nm">${rec ? "★ " : "◇ "}${q.keystone ? "★" : ""}${esc(q.name)}${q.currentChapter ? ` <em>· ${esc(q.currentChapter.name)}</em>` : ""}</span><span class="ct">${q.progress.fired}/${q.progress.total}${q.hex ? ` · ${esc(q.hex)}` : ""}</span></div>` +
             `<div class="bar"><i style="width:${pct}%"></i></div>` +
-            (q.next ? nextBtn(q.next) : `<div class="done">${esc(q.why === "complete" ? "complete" : "no unfired step")}</div>`) + `</div>`;
+            (q.next ? nextBtn(q.next) + (q.next.line ? `<div class="done" style="opacity:.85">“${esc(q.next.line)}”</div>` : "") : `<div class="done">${esc(q.why === "complete" ? "complete" : "no unfired step")}</div>`) + `</div>`;
         };
         inPlayHtml = list.map(q => row(q, q.key === recKey)).join("") || `<div class="bbttcc-now-empty">no quests in play</div>`;
         let invited = {};

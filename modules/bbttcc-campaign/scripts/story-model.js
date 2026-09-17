@@ -157,6 +157,10 @@ export const QUEST_MAP = {
    "hex": "Furrier's Fixit-Farm",
    "registryId": "fc_wendigo_confluence",
    "chapters": {
+    "the_long_table": {
+     "name": "The Long Table",
+     "registryId": "fc_long_table"
+    },
     "close_the_ledger": {
      "name": "Close the Ledger",
      "registryId": "fc_cultural_summit"
@@ -440,6 +444,10 @@ export const QUEST_MAP = {
    "quest": "tifaret",
    "chapter": null
   },
+  "fc_long_table": {
+   "quest": "forgotten_cause",
+   "chapter": "the_long_table"
+  },
   "fc_cultural_summit": {
    "quest": "forgotten_cause",
    "chapter": "close_the_ledger"
@@ -714,7 +722,10 @@ export function deriveSituation(ctx) {
       const next = state === "done" ? null : (state === "dormant" && sts.length ? pickNext(sts, [], true) : (pickNext([...cFront, ...cLadder], routed) || (sts.length ? pickNext(sts, [], true) : null)));
       chapters.push({ key: chKey, name: ch.name, registryId: ch.registryId, state, ending: firedEnd ? { beatId: String(firedEnd.id), label: firedEnd.label || firedEnd.id, name: rec?.ending?.name || null } : (rec?.ending ? { beatId: rec.ending.beatId || null, label: rec.ending.name, name: rec.ending.name } : null), next, beats: cb, starts: sts, endings: ends });
     }
-    const mainEnds = uniq(endings[reg] || []).filter(b => !allIds.size || true);
+    // a SCRIPTED quest closes only by a DECLARED closer (role) — legacy questEffects 'complete' rows are not consulted
+    // (the Offices' "Wake up" still carries one from the pre-onboarding order; the seeder removes it)
+    const scDecl = scriptOf(key);
+    const mainEnds = uniq(endings[reg] || []).filter(b => !scDecl || declOf(b)?.role === "closer");
     const mainStarts = uniq(starts[reg] || []);
     const bucket = reg ? bucketOf(reg) : null;
     const anyFired = all.some(b => fired.has(String(b.id)));
@@ -781,11 +792,27 @@ export function deriveSituation(ctx) {
       else if (why === "next" && next) why = next.ready ? "next" : "waiting";
       else if (why === "next" && !next) why = chaptersLeft ? "chapter-empty" : (mainEnds.length ? "done-no-closer" : "empty");
     }
+    // SCRIPTED (Phase A, 2026-09-17): a declared order replaces the inference — first unfinished step whose gate is met.
+    const sc = scriptOf(key);
+    const script = sc ? scriptView(sc, { fired, readiness, phase, byId, store, bucketOf, questKey: key }) : null;
+    if (script && state !== "completed") {
+      next = script.next; why = script.why;
+      chapter = script.chapter ? (chapters.find(c => c.key === script.chapter) || null) : null;
+    }
     const firedCount = all.filter(b => fired.has(String(b.id))).length;
     stamp(next, def); for (const c of chapters) stamp(c.next, def);
-    quests.push({ key, name: def.name, act: def.act, keystone: !!def.keystone, hex: def.hex || "", registryId: reg, state, chapters, next, why, currentChapter: chapter, starts: mainStarts, closers: mainEnds, progress: { fired: firedCount, total: all.length }, beats: all });
+    if (next && next.hereLine && next.here === true) next.line = next.hereLine;   // "go and see" when already there
+    quests.push({ key, name: def.name, act: def.act, keystone: !!def.keystone, hex: def.hex || "", registryId: reg, state, chapters, next, why, currentChapter: chapter, starts: mainStarts, closers: mainEnds, progress: { fired: firedCount, total: all.length }, beats: all, script });
   }
   const qByKey = Object.fromEntries(quests.map(q => [q.key, q]));
+  // scripted HANDOFF steps (ride for Fixit → the crate comes from the Fixit Farm's chapter): the beat to run is the
+  // target quest's own next; the line is still this quest's step
+  for (const q of quests) {
+    const h = q.next && q.next.handoff; if (!h) continue;
+    const t = qByKey[h.quest]; const target = t ? (h.chapter ? (t.chapters.find(c => c.key === h.chapter)?.next || t.next) : t.next) : null;
+    if (target && target.beat) { q.next = { ...q.next, beat: target.beat, ready: !!target.ready, reasons: target.reasons || [], place: target.place ?? null, here: target.here ?? null }; q.why = target.ready ? "next" : "waiting"; }
+    else { q.next = null; q.why = "handoff-waiting"; }
+  }
 
   // roads: a gate on quest X resolves to X's own next (one rule)
   const roadsFor = (beat) => {
@@ -837,6 +864,103 @@ export function deriveSituation(ctx) {
 // coalition quest buckets (a PROJECTION for the Quest Log and questBucket gates — no longer a writer).
 // These functions are pure; module.js owns the I/O.
 // ═════════════════════════════════════════════════════════════════════════════
+
+
+// ═════════════════════════════════════════════════════════════════════════════
+// SCRIPTS — Phase A of the STORY FLOW encode (2026-09-17, owner ruling 2026-09-15: "tell the system what we
+// expect, not have it guess"). A scripted quest declares its ORDER: giver, player-facing description, ordered
+// steps (each = the beats that play it + one next-step line), doors (open all act, never "next"), epilogues,
+// and an Arrival chapter (act 1) that seals when the act turns. For a scripted quest `next` is the first
+// unfinished step whose gate is met — FRONTIER/LADDER inference is bypassed. Unscripted quests keep the
+// inference byte-for-byte. Scripts are code (versioned, lint-able): Phase B fills QUEST_SCRIPTS.
+//   script = { giver, description, steps:[step], doors:[door], after:[beatId], arrival:{act:1, steps:[step]},
+//              chapters:{ chKey:{ giver?, line? } } }
+//   step   = { id, label, beats:[beatId], line, hereLine?, group?, chapter?, done?, handoff?:{quest, chapter?}, borrow?:true (a beat declared to another quest, used here on purpose) }
+//   done   = undefined (any beat played) | {anyOf:[ids]} | {allOf:[ids]} | {mark:id} | {chapter:[quest,ch]} | {quest:key}
+//   group  = steps sharing a group are ANY ORDER: every unfinished one is current at once
+// ═════════════════════════════════════════════════════════════════════════════
+import { STORY_SCRIPTS } from "./story-scripts.js";
+export const QUEST_SCRIPTS = {};
+export function scriptOf(key) { const s = QUEST_SCRIPTS[String(key || "")]; return s && typeof s === "object" ? s : null; }
+export function registerScripts(map) { for (const [k, v] of Object.entries(map || {})) if (v && typeof v === "object") QUEST_SCRIPTS[k] = v; return QUEST_SCRIPTS; }
+
+// Pure: the script's steps with a status each, the current step(s), the doors, and the declared next.
+// ctx = { fired:Set, readiness(beat)→{ready,reasons}, phase, byId:Map, store, bucketOf(registryId) }
+export function scriptView(sc, ctx) {
+  const fired = ctx.fired instanceof Set ? ctx.fired : new Set();
+  const readiness = typeof ctx.readiness === "function" ? ctx.readiness : () => ({ ready: true, reasons: [] });
+  const bucketOf = typeof ctx.bucketOf === "function" ? ctx.bucketOf : () => null;
+  const byId = ctx.byId instanceof Map ? ctx.byId : new Map();
+  const store = ctx.store && typeof ctx.store === "object" ? ctx.store : null;
+  const phase = Number(ctx.phase) || 0;
+  const played = id => fired.has(String(id));
+  const bucketDone = (rid) => { const b = rid ? bucketOf(rid) : null; return b === "completed" || b === "archived"; };
+  const chDone = (q, ch) => !!store?.chapters?.[q]?.[ch]?.ending || bucketDone(QUEST_MAP.quests[q]?.chapters?.[ch]?.registryId);
+  const qDone = (q) => !!store?.closed?.[q] || bucketDone(QUEST_MAP.quests[q]?.registryId);
+  const isDone = (st) => {
+    const d = st.done, beats = Array.isArray(st.beats) ? st.beats : [];
+    if (!d || typeof d !== "object") return beats.some(played);
+    if (Array.isArray(d.anyOf)) return d.anyOf.some(played);
+    if (Array.isArray(d.allOf)) return d.allOf.every(played);
+    if (d.mark) return played(d.mark);
+    if (Array.isArray(d.chapter)) return chDone(d.chapter[0], d.chapter[1]);
+    if (d.quest) return qDone(d.quest);
+    return beats.some(played);
+  };
+  const list = [
+    ...((sc.arrival && Array.isArray(sc.arrival.steps)) ? sc.arrival.steps.map(s => ({ ...s, act: Number(sc.arrival.act ?? 1), arrival: true })) : []),
+    ...(Array.isArray(sc.steps) ? sc.steps : [])
+  ];
+  const steps = []; let currentGroup = null, foundCurrent = false;
+  for (const st of list) {
+    const done = isDone(st);
+    let status;
+    if (done) status = "done";
+    else if (st.act != null && phase > Number(st.act)) status = "sealed";            // an Arrival step after its act
+    else if (!foundCurrent) { status = "current"; foundCurrent = true; currentGroup = st.group || null; }
+    else if (currentGroup && st.group === currentGroup) status = "current";
+    else status = "todo";
+    steps.push({ ...st, status });
+  }
+  const current = steps.filter(s => s.status === "current");
+  // a step's candidates: its unplayed listed beats first; when every listed beat has played and the step is not done
+  // (the outcome arrives by a CHOICE — the wall's success/failure, a chapter's ending), the beats routed from the
+  // step's played beats that are unplayed and belong to this quest (or to the step's done-list) — the frontier, scoped
+  // to the step, so the NOW card can still point at what the table is about to choose
+  const questKey = ctx.questKey ? String(ctx.questKey) : null;
+  const inQuest = (b) => { if (!questKey) return true; const d = declOf(b); return !!d && d.quest === questKey; };
+  const doneIds = (st) => new Set([...(st.done?.anyOf || []), ...(st.done?.allOf || []), ...(st.done?.mark ? [st.done.mark] : [])].map(String));
+  const cand = (st) => {
+    const listed = (Array.isArray(st.beats) ? st.beats : []).map(id => byId.get(String(id))).filter(Boolean);
+    const fresh = listed.filter(b => !played(b.id)); if (fresh.length) return fresh;
+    const dl = doneIds(st); const out = []; const seen = new Set();
+    for (const pb of listed.filter(b => played(b.id))) for (const c of (pb.choices || [])) for (const t of [c?.next, c?.failNext]) {
+      const b = byId.get(String(t || "")); if (!b || played(b.id) || seen.has(b.id)) continue;
+      if (dl.has(String(b.id)) || inQuest(b)) { seen.add(b.id); out.push(b); }
+    }
+    return out;
+  };
+  const mk = (st, b, ready, reasons) => ({ beat: b, ready, reasons, line: st.line || "", hereLine: st.hereLine || null, step: st.id, stepLabel: st.label || "", scripted: true });
+  let next = null, why = "next", stepOf = null;
+  for (const st of current) { const b = cand(st).find(x => readiness(x).ready); if (b) { next = mk(st, b, true, []); stepOf = st; break; } }
+  if (!next) for (const st of current) { const bs = cand(st); if (bs.length) { const r = readiness(bs[0]); next = mk(st, bs[0], false, (r.reasons || []).filter(x => x && x.met === false)); stepOf = st; why = "waiting"; break; } }
+  if (!next) {
+    const h = current.find(st => st.handoff || (st.done && (Array.isArray(st.done.chapter) || st.done.quest)));
+    if (h) { const handoff = h.handoff || (Array.isArray(h.done.chapter) ? { quest: h.done.chapter[0], chapter: h.done.chapter[1] } : { quest: h.done.quest }); next = { ...mk(h, null, false, []), handoff }; stepOf = h; why = "handoff"; }
+  }
+  if (!next && !current.length) why = steps.length && steps.every(s => s.status === "done" || s.status === "sealed") ? "complete" : "empty";
+  const doors = (Array.isArray(sc.doors) ? sc.doors : []).map(d => {
+    const bs = (Array.isArray(d.beats) ? d.beats : []).map(id => byId.get(String(id))).filter(Boolean);
+    const first = bs.find(b => !played(b.id)) || bs[0] || null;
+    return { id: d.id, label: d.label || "", line: d.line || "", beat: first, ready: first ? !!readiness(first).ready : false, played: bs.some(b => played(b.id)) };
+  });
+  return {
+    giver: String(sc.giver || ""), description: String(sc.description || ""),
+    steps: steps.map(s => ({ id: s.id, label: s.label || "", line: s.line || "", status: s.status, group: s.group || null, arrival: !!s.arrival, chapter: s.chapter || null })),
+    current: current.map(s => s.id), doors, after: Array.isArray(sc.after) ? sc.after.slice() : [], chapters: sc.chapters && typeof sc.chapters === "object" ? sc.chapters : {},
+    next, why, chapter: stepOf?.chapter || null
+  };
+}
 
 export function emptyState() {
   return { v: 1, played: {}, started: {}, chapters: {}, closed: {} };
@@ -974,3 +1098,6 @@ export function declarationsFor(beats) {
   }
   return { decls: out, report };
 }
+
+// Phase B (2026-09-17): the authored scripts for Acts 0–2 register at load.
+registerScripts(STORY_SCRIPTS);

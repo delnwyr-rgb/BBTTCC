@@ -44,7 +44,7 @@ const CHECK_STATS = new Set(["gm","str","dex","con","int","wis","cha","save.str"
 const GATE_FLAGS = {              // name → [min, max] sanity band (null = unbounded)
   storyPhase: [0, 6], wendigoRung: [0, 4], tikkunDividend: [0, 5], hexesClaimed: [0, null], turn: [0, null],
   banditMercy: [0, null], banditFear: [0, null],
-  cadenceRespect: [0, 1], cadenceTribute: [0, 1], cadenceUncontested: [0, 1],
+  cadenceRespect: [0, 1], cadenceTribute: [0, 1], cadenceUncontested: [0, 1], crVerify: [-3, 4],
   geburahEarned: [0, 3], geburahForced: [0, 3],
   chucklecreekSeen: [0, 4], stillwaterCrack: [0, 4], softlandingGive: [0, 4]
 };
@@ -108,6 +108,15 @@ const pickCampaign = (map, file) => {
 for (const f of opt.files) {
   let raw = JSON.parse(fs.readFileSync(f, "utf8"));
   if (typeof raw === "string") raw = JSON.parse(raw);
+  // a SAVE SLOT (api.world.saves, kind "bbttcc-savegame", 2026-09-17): its settings[] carry campaigns / quests / tables
+  if (raw?.kind === "bbttcc-savegame" && Array.isArray(raw.settings)) {
+    const get = (k) => { const r = raw.settings.find(x => x.ns === "bbttcc-campaign" && x.key === k); let v = r?.value; if (typeof v === "string") { try { v = JSON.parse(v); } catch (_e) { } } return v; };
+    const camps = get("campaigns"); const active = get("activeCampaignId");
+    if (camps && typeof camps === "object") { campaign = (active && looksLikeCampaign(camps[active])) ? camps[active] : pickCampaign(camps, f); sources.campaign = f; }
+    const q = get("quests"); if (q && typeof q === "object" && Object.keys(q).length) { quests = q; sources.quests = f; }
+    const t = get("encounterTables"); if (t && typeof t === "object" && Object.keys(t).length) { tables = t; sources.tables = f; }
+    continue;
+  }
   const bundle = raw?.flags?.["bbttcc-campaign"]?.export || (raw?.kind === "bbttcc-campaign-bundle" ? raw : null);
   if (bundle) {
     if (bundle.campaign) { campaign = bundle.campaign; sources.campaign = f; }
@@ -324,7 +333,7 @@ for (const b of beats) {
     }
     if (c.beatMark != null) {
       const q = s(c.quest), want = s(c.state) || "seen";
-      if (!q) { F("P06", "ERROR", b.id, `beatMark gate missing 'quest'`); continue; }
+      if (!q) { if (!byId.has(s(c.beatMark))) F("P06", "ERROR", b.id, `store-backed beatMark gate names unknown beat '${s(c.beatMark)}'`); continue; }   // no quest = the story store (met iff played; 2026-09-17)
       if (want !== "seen" && want !== "completed") { F("P06", "ERROR", b.id, `beatMark gate state '${c.state}' unknown (seen|completed)`); continue; }
       if (quests && !quests[q]) F("P06", "ERROR", b.id, `beatMark gate names quest '${q}' not in registry`);
       // a writer = any questEffects row for quest q carrying beatId == mark with sufficient state
@@ -600,6 +609,53 @@ if (quests) for (const [q, qd] of Object.entries(quests)) if (!questBeats.has(q)
       if (!rid) continue;
       if (/^word_/.test(rid)) { F("D05", "ERROR", b.id, `gate on invitation ticket '${rid}' — Words are start beats now (owner ruling R4); gate on the quest instead`); continue; }
       if (!SM.registryOf(rid)) F("D05", "ERROR", b.id, `gate questBucket '${rid}' maps to no quest or chapter in QUEST_MAP`);
+    }
+
+    // ── scripts: SC01–SC06 (STORY FLOW encode Phase B, 2026-09-17) — a scripted quest DECLARES its order ─────
+    // Mirrors story-model.js scriptView(): steps in order, groups any-order, done-rules, handoffs, doors, epilogues.
+    const SCRIPTS = SM.QUEST_SCRIPTS || {};
+    const scriptOwner = new Map();   // beat id → quest key (SC05: a beat plays in ONE quest's steps)
+    for (const [qk, sc] of Object.entries(SCRIPTS)) {
+      const qdef = QM.quests[qk];
+      if (!qdef) { F("SC04", "ERROR", null, `script '${qk}' names a quest that is not in QUEST_MAP`, { quest: qk }); continue; }
+      const stepsAll = [...((sc.arrival && Array.isArray(sc.arrival.steps)) ? sc.arrival.steps.map(x => ({ ...x, arrival: true })) : []), ...(Array.isArray(sc.steps) ? sc.steps : [])];
+      if (!stepsAll.length) F("SC03", "ERROR", null, `script ${qdef.name}: no steps`, { quest: qk });
+      const idsOf = (st) => [...(Array.isArray(st.beats) ? st.beats : []), ...(st.done?.anyOf || []), ...(st.done?.allOf || []), ...(st.done?.mark ? [st.done.mark] : [])].map(s);
+      let lastStep = null;
+      for (const st of stepsAll) {
+        if (!st || !st.id) { F("SC03", "ERROR", null, `script ${qdef.name}: a step has no id`, { quest: qk }); continue; }
+        if (!s(st.line)) F("SC03", "WARN", null, `script ${qdef.name} · step '${st.id}': no next-step line`, { quest: qk });
+        for (const id of idsOf(st)) if (!byId.has(id)) F("SC01", "ERROR", null, `script ${qdef.name} · step '${st.id}': beat '${id}' is not in the campaign`, { quest: qk });
+        for (const id of (Array.isArray(st.beats) ? st.beats : []).map(s)) {
+          const owner = scriptOwner.get(id);
+          if (owner && owner !== qk) F("SC05", "ERROR", id, `beat '${id}' plays in two scripts' steps: ${owner} and ${qk}`);
+          scriptOwner.set(id, qk);
+          const b = byId.get(id); const d = b ? SM.declOf(b) : null;
+          if (b && d && d.quest && d.quest !== qk) F("SC02", st.borrow ? "INFO" : "WARN", id, `script ${qdef.name} · step '${st.id}' names '${id}', which is declared to ${d.quest}${d.chapter ? "·" + d.chapter : ""}${st.borrow ? " (borrowed on purpose)" : " — a handoff, a re-declaration, or mark the step borrow:true?"}`);
+        }
+        if (st.done && Array.isArray(st.done.chapter) && !QM.quests[st.done.chapter[0]]?.chapters?.[st.done.chapter[1]]) F("SC04", "ERROR", null, `script ${qdef.name} · step '${st.id}': done.chapter names no chapter (${st.done.chapter.join("·")})`, { quest: qk });
+        if (st.done && st.done.quest && !QM.quests[st.done.quest]) F("SC04", "ERROR", null, `script ${qdef.name} · step '${st.id}': done.quest '${st.done.quest}' is not a quest`, { quest: qk });
+        if (st.handoff && !QM.quests[st.handoff.quest]) F("SC04", "ERROR", null, `script ${qdef.name} · step '${st.id}': handoff.quest '${st.handoff.quest}' is not a quest`, { quest: qk });
+        if (st.chapter && !qdef.chapters?.[st.chapter]) F("SC04", "ERROR", null, `script ${qdef.name} · step '${st.id}': chapter '${st.chapter}' is not a chapter of the quest`, { quest: qk });
+        if (!st.arrival) lastStep = st;
+      }
+      // SC06: the quest's declared closers are reached by the LAST step (its beats or its done-list) — a closer that
+      // sits mid-script completes the quest before the Log's later steps can show
+      const closers = beats.filter(b => { const d = SM.declOf(b); return d && d.quest === qk && !d.chapter && d.role === "closer"; }).map(b => s(b.id));
+      if (closers.length && lastStep) {
+        const reach = new Set(idsOf(lastStep));
+        const routedFromLast = new Set((Array.isArray(lastStep.beats) ? lastStep.beats : []).flatMap(id => (byId.get(s(id))?.choices || []).flatMap(c => [c?.next, c?.failNext]).map(s)));
+        for (const st of stepsAll) if (st !== lastStep && lastStep.group && st.group === lastStep.group) for (const id of idsOf(st)) reach.add(id);   // the last GROUP counts as the last step
+        const lastReaches = closers.some(c => reach.has(c) || routedFromLast.has(c));
+        if (!lastReaches) F("SC06", "WARN", null, `script ${qdef.name}: its last step '${lastStep.id}' does not reach a declared closer (${closers.join(", ")}) — the quest may complete mid-script or never`, { quest: qk });
+        // a step that reaches a closer before the last step: INFO when it shares the last step's group (any-order endings —
+        // Tifaret's three answers) or when the later steps are one optional group (the Cadence's rematch loop); WARN otherwise
+        const lastGroup = lastStep.group || null; const laterGroups = new Set();
+        for (const st of stepsAll) if (st !== lastStep && !st.arrival) { const ids = new Set(idsOf(st)); const hit = closers.find(c => ids.has(c)); if (!hit) continue; const after = stepsAll.slice(stepsAll.indexOf(st) + 1); const optionalTail = after.length && after.every(x => x.group && x.group === after[0].group); const sev = (lastGroup && st.group === lastGroup) || optionalTail ? "INFO" : "WARN"; F("SC06", sev, null, `script ${qdef.name} · step '${st.id}' reaches closer '${hit}' before the last step${sev === "INFO" ? " (the later steps are an any-order group — fine if they are alternatives)" : " — later steps can never show (re-declare the closer, or reorder)"}`, { quest: qk }); }
+      }
+      for (const d of (Array.isArray(sc.doors) ? sc.doors : [])) for (const id of (Array.isArray(d.beats) ? d.beats : []).map(s)) if (!byId.has(id)) F("SC01", "ERROR", null, `script ${qdef.name} · door '${d.id}': beat '${id}' is not in the campaign`, { quest: qk });
+      for (const id of (Array.isArray(sc.after) ? sc.after : []).map(s)) if (!byId.has(id)) F("SC01", "ERROR", null, `script ${qdef.name} · after: beat '${id}' is not in the campaign`, { quest: qk });
+      for (const ch of Object.keys(sc.chapters || {})) if (!qdef.chapters?.[ch]) F("SC04", "ERROR", null, `script ${qdef.name} · chapters: '${ch}' is not a chapter of the quest`, { quest: qk });
     }
   }
 }

@@ -8,7 +8,7 @@
 import "../apps/campaign-tag-picker.js";
 import "../scripts/casualties-engine.js";
 import "../apps/player-beat-mirror-app.js";
-import { deriveSituation, QUEST_MAP, registryOf, emptyState, declOf, applyRecord, projection, sealOfDecl, isAnchorable, placeOf, hexKey } from "./story-model.js";
+import { deriveSituation, QUEST_MAP, QUEST_SCRIPTS, scriptOf, registerScripts, scriptView, registryOf, emptyState, declOf, applyRecord, projection, sealOfDecl, isAnchorable, placeOf, hexKey } from "./story-model.js";
 // bbttcc-rolls-api.js removed 2026-08-28 (atlas cleanup) — game.bbttcc.api.rolls
 // had zero consumers; the beat Choice/Check UI resolves bonuses via its own
 // _rollChoiceCheck / _computeFactionOpRollBonusMap stack.
@@ -126,6 +126,8 @@ const BANDIT_RUNG_MAL = {
 //   cadenceTribute     1 = lost gracefully; standing rematch offer each turn
 //   cadenceUncontested 1 = refused; they perform AT your border until answered
 const SETTING_CADENCE_RESPECT     = "cadenceRespect";
+const SETTING_CR_VERIFY           = "crVerify";     // Circuit Riders: verification tally (+1 good / −1 bad answer; the closers gate on it — STORY FLOW 2026-09-17)
+const CR_VERIFY_DELTAS = { enc_circuit_riders_doctrine_good: 1, enc_circuit_riders_darkness_good: 1, enc_circuit_riders_witness_good: 1, enc_circuit_riders_witness_success: 1, enc_circuit_riders_doctrine_bad: -1, enc_circuit_riders_darkness_bad: -1, enc_circuit_riders_witness_bad: -1 };
 const SETTING_CADENCE_TRIBUTE     = "cadenceTribute";
 const SETTING_CADENCE_UNCONTESTED = "cadenceUncontested";
 
@@ -4815,6 +4817,7 @@ function _resolveGateValue(name) {
     case "turn": return _getTurnNumberSafe();      // world turn — e.g. { flag:"turn", gte:6 }
     case "banditMercy": return _banditMeterGet(SETTING_BANDIT_MERCY);   // Bandit Accord mercy count
     case "banditFear":  return _banditMeterGet(SETTING_BANDIT_FEAR);    // Bandit Accord fear count
+    case "crVerify":           return _banditMeterGet(SETTING_CR_VERIFY);           // Circuit Riders: verification tally
     case "cadenceRespect":     return _banditMeterGet(SETTING_CADENCE_RESPECT);     // Cadence: cameo owed
     case "cadenceTribute":     return _banditMeterGet(SETTING_CADENCE_TRIBUTE);     // Cadence: rematch standing
     case "cadenceUncontested": return _banditMeterGet(SETTING_CADENCE_UNCONTESTED); // Cadence: border show
@@ -5086,7 +5089,9 @@ async function _beatRequiresMet(beat, campaign, ctx) {
         const questId = String(c.quest || "").trim();
         const want = String(c.state || "seen").trim();
         if (!questId) {
-          warn(`[inject.requires] beatMark condition on beat '${beat?.id}' is missing 'quest' — treating as unmet.`);
+          // STORY FLOW (2026-09-17): a beatMark with no quest reads the ONE store — met iff the beat has been played
+          // (the Confessor's candle waits on the Upper Galleries + Etta's exit; the negotiation waits on Garren's spanner)
+          try { const st = _storyStateFor(campaign?.id); if (st?.played?.[String(c.beatMark)]) continue; } catch (_eSt) {}
           return false;
         }
         if (want !== "seen" && want !== "completed") {
@@ -5200,8 +5205,14 @@ async function _beatGateReport(beat, campaign, ctx = {}) {
       if (c.beatMark != null) {
         const questId = String(c.quest || "").trim();
         const want = String(c.state || "seen").trim();
-        const text = `beat “${String(c.beatMark)}” ${want}${questId ? ` (${qName(questId)})` : ""}`;
-        if (!questId || (want !== "seen" && want !== "completed")) {
+        const text = `beat “${String(c.beatMark)}” ${want}${questId ? ` (${qName(questId)})` : " (played)"}`;
+        if (!questId) {   // store-backed mark (2026-09-17): met iff played
+          let played = false; try { played = !!_storyStateFor(campaign?.id)?.played?.[String(c.beatMark)]; } catch (_eSt) {}
+          out.conditions.push({ text, met: played, kind: "beatMark", current: played ? "played" : "(unplayed)" });
+          if (!played) out.met = false;
+          continue;
+        }
+        if (want !== "seen" && want !== "completed") {
           out.conditions.push({ text: text + " (malformed)", met: false, kind: "beatMark" });
           out.met = false;
           continue;
@@ -7138,7 +7149,8 @@ async function directorSlate({ via = "manual" } = {}) {
   const runBtn = (b, ready) => ready ? `<button type="button" data-bbttcc-slate-run="${esc(String(b.id))}" style="width:auto;padding:.1em .5em;margin-left:.3em;">▶</button>` : `<span style="opacity:.6;margin-left:.3em;">⛩</span>`;
   const waitsTxt = (n, q) => { const roads = story.roadsFor ? story.roadsFor(n.beat) : []; return roads.length ? ` — waits for ${roads.map(r => `<b>${esc(r.quest.name)}${r.chapter ? " · " + esc(r.chapter.name) : ""}</b>${r.beat ? ` (${r.beat.ready ? "ready" : "gated"}: ${esc(r.beat.label || r.beat.id)})` : ""}`).join(", ")}` : " — waits at its gate"; };
   const mark = (n) => n ? (n.here === true ? "📍 " : n.here === false ? "🐎 " : "") : "";
-  const rowQ = (q, star) => { const n = q.next; const where = n ? _slateWhere(n.beat, q) : ""; return `<li>${mark(n)}${star ? "★ " : ""}<b>${nm(q)}</b>${q.currentChapter ? ` · ${esc(q.currentChapter.name)}` : ""}${n ? ` → ${esc(n.beat.label || n.beat.id)}${where ? ` <i style="opacity:.7">(${esc(where)})</i>` : ""}${n.ready ? runBtn(n.beat, true) : waitsTxt(n, q)}` : ` — ${esc(q.why)}`}</li>`; };
+  const lineTxt = (n) => (n && n.line) ? `<div style="margin-left:1.4em;opacity:.85">“${esc(n.line)}”</div>` : "";   // scripted next-step line (Phase A, 2026-09-17)
+  const rowQ = (q, star) => { const n = q.next; const where = n ? _slateWhere(n.beat, q) : ""; return `<li>${mark(n)}${star ? "★ " : ""}<b>${nm(q)}</b>${q.currentChapter ? ` · ${esc(q.currentChapter.name)}` : ""}${n ? ` → ${esc(n.beat.label || n.beat.id)}${where ? ` <i style="opacity:.7">(${esc(where)})</i>` : ""}${n.ready ? runBtn(n.beat, true) : waitsTxt(n, q)}` : ` — ${esc(q.why)}`}${lineTxt(n)}</li>`; };
   const nowQ = story.now?.quest || null;
   const inPlay = [...(nowQ && nowQ.state === "active" ? [nowQ] : []), ...story.inPlay];
   const doors = story.doors;
@@ -7147,7 +7159,7 @@ async function directorSlate({ via = "manual" } = {}) {
   const cal = nextDoor ? `Act ${nextDoor[1]} opens by itself at turn ${nextDoor[0]}${nextDoor[0] > turn ? ` (${nextDoor[0] - turn} turn${nextDoor[0] - turn === 1 ? "" : "s"} from now)` : " (overdue)"}${keystone ? `; or sooner, when <b>${nm(keystone)}</b> closes` : ""}.` : "No calendar door ahead.";
   const html = `<div class="bbttcc-slate" style="border-left:3px solid #d9a441;padding:.45em .6em;background:rgba(217,164,65,.08);font-size:12px">
     <div style="font-weight:700;letter-spacing:.04em">🎙 THE SLATE — Act ${phase} · Turn ${turn}${story.where ? ` · 📍 ${esc(String(story.where))}` : ""}</div>
-    ${nowQ ? `<div style="margin-top:.3em"><b>NOW</b> — ${nm(nowQ)}${story.now.chapter ? ` · ${esc(story.now.chapter.name)}` : ""}: ${story.now.next ? `${esc(story.now.next.beat.label || story.now.next.beat.id)}${story.now.next.ready ? runBtn(story.now.next.beat, true) : waitsTxt(story.now.next, nowQ)}` : esc(story.now.why)}</div>` : ""}
+    ${nowQ ? `<div style="margin-top:.3em"><b>NOW</b> — ${nm(nowQ)}${story.now.chapter ? ` · ${esc(story.now.chapter.name)}` : ""}: ${story.now.next ? `${esc(story.now.next.beat.label || story.now.next.beat.id)}${story.now.next.ready ? runBtn(story.now.next.beat, true) : waitsTxt(story.now.next, nowQ)}` : esc(story.now.why)}${lineTxt(story.now.next)}</div>` : ""}
     <div style="margin-top:.3em"><b>IN PLAY</b> (any order)</div><ul style="margin:.1em 0 0 1em">${inPlay.map(q => rowQ(q, q.key === nowQ?.key)).join("") || "<li><i>nothing in play</i></li>"}</ul>
     <div style="margin-top:.3em"><b>DOORS</b> open this act</div><ul style="margin:.1em 0 0 1em">${doors.map(q => { const b = q.next.beat; const inv = !!(_readDirectorState().invited || {})[String(b.id)]; return `<li>${mark(q.next)}${q.keystone ? "★ " : ""}<b>${nm(q)}</b> — ${esc(b.label || b.id)}${_slateWhere(b, q) ? ` <i style="opacity:.7">(${esc(_slateWhere(b, q))})</i>` : ""}${inv ? " ✉" : ""}${runBtn(b, true)}</li>`; }).join("") || "<li><i>nothing else opens this act</i></li>"}</ul>
     <div style="margin-top:.3em"><b>CALENDAR</b> — ${cal}</div>
@@ -7906,6 +7918,7 @@ function buildCampaignAPI() {
     // STORY MODEL (Phase 1, 2026-09-13): quest · chapter · ending, derived — see scripts/story-model.js
     story: {
       QUEST_MAP, registryOf, deriveSituation, declOf, emptyState, applyRecord, projection, sealOfDecl, placeOf, hexKey,
+      QUEST_SCRIPTS, scriptOf, registerScripts, scriptView,   // Phase A (2026-09-17): declared quest scripts — see story-model.js
       where: (campaignId) => _partyWhere(getCampaign(campaignId || getActiveCampaignId())),   // { hex, hexUuid, via, factionId } | null
       knownHexes: () => _knownHexKeys(),
       state: (campaignId) => foundry.utils.deepClone(_storyStateFor(campaignId || getActiveCampaignId())),   // a copy — the live settings object is never handed out
@@ -8045,6 +8058,16 @@ async function _onBeatResolvedGeburah({ beat } = {}) {
   } catch (e) {
     warn("[geburah] ledger increment failed:", e);
   }
+}
+
+async function _onBeatResolvedCrVerify({ beat } = {}) {
+  try {
+    if (!game.user?.isGM) return;
+    const d = CR_VERIFY_DELTAS[String(beat?.id || "")]; if (!d) return;
+    const cur = _banditMeterGet(SETTING_CR_VERIFY); const next = cur + d;
+    await game.settings.set(MOD_ID, SETTING_CR_VERIFY, next);
+    log(`[cr-verify] '${beat.id}' → ${cur} → ${next}.`);
+  } catch (e) { warn("[cr-verify] failed:", e); }
 }
 
 async function _onBeatResolvedWendigoRung({ beat } = {}) {
@@ -8554,6 +8577,8 @@ Hooks.once("init", () => {
     });
   }
 
+  // The Circuit Riders' verification tally (STORY FLOW 2026-09-17): +1 per good answer, −1 per bad; alliance needs ≥ 2.
+  game.settings.register(MOD_ID, SETTING_CR_VERIFY, { name: "Bad Eden Circuit Riders Verification", hint: "Internal: the parley's verification tally. Do not edit manually.", scope: "world", config: false, type: Number, default: 0 });
   // The Cadence: dance-battle standing-state flags (0/1), written by outcomes.
   for (const [key, name] of [
     [SETTING_CADENCE_RESPECT, "Bad Eden Cadence Respect"],
@@ -8706,6 +8731,7 @@ Hooks.once("ready", () => {
   // Forgotten-Cause arc (step 1): bump the per-world Wendigo rung when a Wendigo
   // travel beat resolves. Pure reactive subscriber — no behavior change to beats.
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedWendigoRung);
+  Hooks.on("bbttcc:beat:resolved", _onBeatResolvedCrVerify);
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedGeburah);
   // Forgotten-Cause arc (step 3): move feud state (causeRecovered / heat /
   // peace-by-deletion) when the Confluence + Cultural Summit beats resolve.

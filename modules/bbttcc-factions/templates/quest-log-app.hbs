@@ -41,7 +41,7 @@
                     {{#if actLabel}}<span class="bbttcc-pill mini">{{actLabel}}</span>{{/if}}
                   {{else}}
                     <span class="bbttcc-pill mini">{{status}}</span>
-                    <span class="bbttcc-pill mini">Step {{questStep}}</span>
+                    {{#if stepLabel}}<span class="bbttcc-pill mini">{{stepLabel}}</span>{{else}}<span class="bbttcc-pill mini">Step {{questStep}}</span>{{/if}}
                   {{/if}}
                 </div>
               </div>
@@ -105,7 +105,7 @@
               <div class="bbttcc-muted">
                 <code>{{selected.questId}}</code>
                 · <span class="bbttcc-pill mini">{{selected.status}}</span>
-                · <span class="bbttcc-pill mini">Step {{selected.questStep}}</span>
+                · {{#if selected.stepLabel}}<span class="bbttcc-pill mini">{{selected.stepLabel}}</span>{{else}}<span class="bbttcc-pill mini">Step {{selected.questStep}}</span>{{/if}}
               </div>
             </div>
             <div class="bbttcc-quest-detail__actions">

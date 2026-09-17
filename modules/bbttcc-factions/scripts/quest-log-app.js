@@ -109,11 +109,39 @@
     try { return !!game.user?.isGM || !!game.bbttcc?.api?.campaign?.invites?.playerAcceptAllowed?.(); } catch (_e) { return !!game.user?.isGM; }
   }
 
-  function rowsFromMap(reg, mapObj, status) {
+  // SCRIPTED QUESTS (Phase A, 2026-09-17): when the story model carries a script for the quest this registry
+  // row belongs to, the Log says what the quest is about, who gave it, and the next step — the authored words,
+  // not the registry's leftovers. Reads the situation once per render through the campaign API; fails soft.
+  async function readScriptInfo() {
+    try {
+      const api = game.bbttcc?.api?.campaign; if (!api?.director?.situation || !api?.story?.registryOf) return () => null;
+      const story = await api.director.situation({ full: false }); if (!story?.byKey) return () => null;
+      const esc = foundry.utils.escapeHTML;
+      return (qid) => {
+        const m = api.story.registryOf(qid); const q = m ? story.byKey[m.quest] : null; const sc = q?.script; if (!sc) return null;
+        if (m.chapter) {
+          const ch = sc.chapters?.[m.chapter] || {}; const cq = (q.chapters || []).find(c => c.key === m.chapter) || null;
+          const line = ch.line || (cq?.next?.line || ""); const giver = ch.giver || "";
+          return { giver, description: ch.description || "", stepLabel: cq ? (cq.state === "done" ? "done" : cq.state) : "", lines: line ? [line] : [], doors: [] };
+        }
+        const cur = (sc.steps || []).filter(st => st.status === "current");
+        const lines = cur.map(st => st.line).filter(Boolean); if (!lines.length && q.next?.line) lines.push(q.next.line);
+        const stepLabel = cur.map(st => st.label).filter(Boolean).join(" · ") || (q.state === "completed" ? "complete" : "");
+        const doors = (sc.doors || []).filter(d => d.line).map(d => ({ label: d.label, line: d.line, ready: d.ready }));
+        return { giver: sc.giver || "", description: sc.description || "", stepLabel, lines, doors,
+          html: `${sc.giver ? `<p class="bbttcc-muted"><b>From:</b> ${esc(sc.giver)}</p>` : ""}${sc.description ? `<p>${esc(sc.description)}</p>` : ""}` +
+            (lines.length ? `<p><b>Next:</b></p><ul>${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` : "") +
+            (doors.length ? `<p><b>Also open:</b></p><ul>${doors.map(d => `<li>${esc(d.line)}</li>`).join("")}</ul>` : "") };
+      };
+    } catch (_e) { return () => null; }
+  }
+
+  function rowsFromMap(reg, mapObj, status, scriptInfo = () => null) {
     const rows = [];
     const keys = mapObj ? Object.keys(mapObj) : [];
     for (const qid of keys) {
       const tr = mapObj[qid] || {};
+      const si = scriptInfo(qid);
       const { seenCount, completedCount } = beatProgress(tr);
       const acceptedTs = tr.acceptedTs || tr.accepted || null;
       const completedTs = tr.completedTs || tr.completed || null;
@@ -123,10 +151,11 @@
         questId: qid,
         status,
         name: qName(reg, qid),
-        description: qDesc(reg, qid),
+        description: si?.html || (si && (si.giver || si.lines?.length) ? `${si.giver ? `<p class="bbttcc-muted"><b>From:</b> ${foundry.utils.escapeHTML(si.giver)}</p>` : ""}${qDesc(reg, qid)}${si.lines?.length ? `<p><b>Next:</b> ${foundry.utils.escapeHTML(si.lines[0])}</p>` : ""}` : qDesc(reg, qid)),
         image: qImg(reg, qid),
         notes: String(tr.notes || "").trim(),
         questStep: Number(tr.questStep ?? tr.step ?? 1) || 1,
+        stepLabel: si?.stepLabel || "",
         acceptedTs,
         completedTs,
         archivedTs,
@@ -201,9 +230,10 @@
       const track = faction ? readTrack(faction) : { active:{}, completed:{}, archived:{} };
 
       const invites = await readInvites(this.factionId);
-      const active = rowsFromMap(reg, track.active, "active");
-      const completed = rowsFromMap(reg, track.completed, "completed");
-      const archived = rowsFromMap(reg, track.archived, "archived");
+      const scriptInfo = await readScriptInfo();
+      const active = rowsFromMap(reg, track.active, "active", scriptInfo);
+      const completed = rowsFromMap(reg, track.completed, "completed", scriptInfo);
+      const archived = rowsFromMap(reg, track.archived, "archived", scriptInfo);
       const all = [...invites, ...active, ...completed, ...archived];
 
       const tab = this.__state.tab || (invites.length ? "invites" : "active");
