@@ -1269,7 +1269,14 @@
     const fid = String(factionId || "").replace(/^Actor\./, "");
     try {
       const sess = fid ? rideGet(fid) : null;
-      const fromUuid = sess?.legs?.[0]?.fromUuid;
+      // mid-ride the party stands at the END of the last executed leg, not the ride's origin (2026-09-18, live-caught:
+      // the origin was reported for the whole session, so the day-one Khezek-Tor arrival read as "the party is at
+      // Allesh-Gilliam" and the opener was refused)
+      const k = Number(sess?.executed || 0) || 0;
+      let fromUuid = sess?.legs?.length ? (k > 0 ? (sess.legs[Math.min(k, sess.legs.length) - 1]?.toUuid || sess.legs[0]?.fromUuid) : sess.legs[0]?.fromUuid) : null;
+      // a recorded ARRIVAL newer than the session's last write wins over the session's guess — the session is retired only
+      // after the ride's visuals, and the arrival opener may be evaluated in between
+      try { const rec = fid ? game.actors.get(fid)?.getFlag?.("bbttcc-factions", "travel") : null; if (fromUuid && rec?.atHexUuid && Number(rec.ts || 0) > Number(sess?.updatedTs || 0)) fromUuid = null; } catch (_eR) {}
       if (fromUuid) { const d = fromUuidSync(fromUuid); const doc = d?.document ?? d; if (doc) return { hexUuid: doc.uuid, doc, name: String(doc.flags?.["bbttcc-territory"]?.name || ""), via: "ride" }; }
     } catch (_e) {}
     try {

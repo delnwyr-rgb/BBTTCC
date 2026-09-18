@@ -841,7 +841,10 @@ export function deriveSituation(ctx) {
   // HERE (2026-09-15): what the party can reach from where it stands comes first — a fresh next in another quest
   // AT THIS HEX beats the anchor's fresh next in a town a ride away (the ride is still offered, as the ride).
   const reachable = (q) => fresh(q) && q.next.here !== false;
-  const elsewhere = anchorQuest && !reachable(anchorQuest) ? (inPlay.find(reachable) || (!fresh(anchorQuest) ? (inPlay.find(fresh) || null) : null)) : null;
+  // A DOOR standing at the party's hex counts as reachable too (2026-09-18, live-caught: the party rode to Khezek-Tor on
+  // day one and NOW kept offering Allesh-Gilliam's Day's End, a ride away, while the cookline waited right here)
+  const doorHere = (q) => (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready && q.next.here === true && leadsSomewhere(q.next.beat);
+  const elsewhere = anchorQuest && !reachable(anchorQuest) ? (inPlay.find(reachable) || quests.find(doorHere) || (!fresh(anchorQuest) ? (inPlay.find(fresh) || null) : null)) : null;
   const elsewhereWhy = elsewhere ? (fresh(anchorQuest) ? "here" : "elsewhere") : null;
   inPlay.sort((a, b) => Number(b.next?.here === true) - Number(a.next?.here === true));
   const now = anchorQuest ? ((!anyFresh && !quests.some(q => (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready))

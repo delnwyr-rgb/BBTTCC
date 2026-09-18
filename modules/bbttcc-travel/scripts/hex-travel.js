@@ -1703,8 +1703,18 @@ async function _executeBeat(campaignId, beatId, triggerType, ctx, winner) {
   }
 
   try {
-    // Canonical signature confirmed: runBeat(campaignId, beatId)
-    await runBeat(campaignId, beatId);
+    // runBeat(campaignId, beatId, ctx) — the ctx MATTERS (2026-09-18, live-caught at Khezek-Tor on day one): without it the
+    // campaign runner's location guard treated the arrival as a hand-fired beat and refused it against a stale ride
+    // position, silently. Arrivals run as source "hex_entry", road draws as "travel" — the guard exempts both.
+    const runCtx = Object.assign({}, (ctx && typeof ctx === "object") ? ctx : {}, {
+      source: (ctx && ctx.source) || (triggerType === "hex_enter" ? "hex_entry" : "travel"),
+      trigger: triggerType, injected: true
+    });
+    const res = await runBeat(campaignId, beatId, runCtx);
+    // a refusal (seal / not-yet / hard gate / not-here) is NOT a fire — surface it so the injector rolls its record back
+    if (res && res.ok === false && (res.sealed || res.notYet || res.gated || res.notHere)) {
+      return { ok: false, fired: false, refused: true, why: String(res.why || "refused"), winner };
+    }
 
     await _logToStoryConsole(
       `Injected Campaign Beat: ${beatId}`,

@@ -52,7 +52,7 @@ export const STORY_SCRIPTS = {
         { id: "night", label: "First Night", line: "Take your Soma Break. Sleep behind the wall.", beats: ["ag_first_night_soma_break"] },
         { id: "tent", label: "The Tent at the Edge of Town", line: "There's a tent at the edge of town that wasn't there yesterday. Look in on your way out.", beats: ["hum_quiet_tent"], borrow: true },   // the Hum's rung 1, pinned here by ruling
         { id: "crossroads", label: "The Crossroads", line: "Ride out and see that over which you now have Stewardship, which sounds awesome and definitely something to brag about in postcards home.",
-          beats: ["ag_crossroads_first_rides"], done: { anyOf: ["ag_ride_khezek_tor", "ag_ride_lyrenn", "ag_days_end"] } },
+          beats: ["ag_crossroads_first_rides"], done: { mark: "ag_days_end" } },   // the hub stays current until the day ends (playtest 2026-09-18)
         { id: "daysend", label: "Day's End", line: "Divvy the hexes, set each faction's plans, then the GM runs the turn.", beats: ["ag_days_end"] },
         { id: "title", label: "Title Card", line: "The first turn is in the books. Roll problems.", beats: ["ag_title_card"] }
       ] },

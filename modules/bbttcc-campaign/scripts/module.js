@@ -2259,6 +2259,11 @@ function _chainCtxFrom(ctx) {
   if (!ctx) return {};
   const out = {};
   if (ctx.__chain) out.__chain = ctx.__chain;
+  // Playtest 2026-09-18: a beat's routes happen WHERE the beat happened. A travel- or hex-entry-fired encounter (the Tree's
+  // Session on the Fixit road, the Riders on the Lyrenn leg) chains into its session beats with the parent's source, so the
+  // location guard keeps treating the party as "arriving" through the whole chain instead of refusing the second beat as
+  // "at <the quest's home hex>". GM hub picks carry no source and stay guarded (a town's beat is only open in its town).
+  for (const k of ["source", "trigger", "injected"]) if (ctx[k] !== undefined) out[k] = ctx[k];
   for (const k of ["factionId", "actor", "joiningFactionIds", "participantFactionIds", "rosterActorId"]) {
     if (ctx[k] !== undefined) out[k] = ctx[k];
   }
