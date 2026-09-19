@@ -665,6 +665,7 @@ if (quests) for (const [q, qd] of Object.entries(quests)) if (!questBeats.has(q)
         for (const id of idsOf(st)) if (!byId.has(id)) F("SC01", "ERROR", null, `script ${qdef.name} · step '${st.id}': beat '${id}' is not in the campaign`, { quest: qk });
         for (const id of (Array.isArray(st.beats) ? st.beats : []).map(s)) {
           const owner = scriptOwner.get(id);
+          if (st.borrow === true) continue;   // a BORROWING step is not an owner (KT's word borrows the spine's overture, 2026-09-19)
           if (owner && owner !== qk) F("SC05", "ERROR", id, `beat '${id}' plays in two scripts' steps: ${owner} and ${qk}`);
           scriptOwner.set(id, qk);
           const b = byId.get(id); const d = b ? SM.declOf(b) : null;

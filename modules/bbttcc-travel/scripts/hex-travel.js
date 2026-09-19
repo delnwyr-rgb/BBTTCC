@@ -1750,7 +1750,19 @@ async function _fireInjected(campaignId, beat, triggerType, ctx, state, nowTurn,
   state.lastInjectedTurn = nowTurn;
   await _setInjectorState(state);
 
-  const execRes = await _executeBeat(campaignId, beat.id, triggerType, ctx, winner);
+  // IN-FLIGHT CHAIN (2026-09-18, live-caught: the Forest of Early Tifaret fired on the arrival leg and Fixit's intro opened
+  // 441 ms later, on top of it). A road-fired beat's chain is stamped here so the destination's hex-enter arrival
+  // (api.travel maybeRunHexEnterBeatDeferred) waits for it to unwind — the runner's promise stays open for the whole routed
+  // chain. Every seat gets the stamp (player-driven rides inject on the driver's seat; the arrival settles on the GM's).
+  const stampChain = (on, extra = {}) => {
+    try { game.bbttcc = game.bbttcc || {}; const rec = Object.assign({ beatId: beat.id, trigger: triggerType, startTs: Date.now(), settledTs: 0 }, game.bbttcc._injectedChain?.beatId === beat.id ? game.bbttcc._injectedChain : {}, extra);
+      game.bbttcc._injectedChain = rec; game.socket?.emit?.("module.bbttcc-campaign", { t: "bbttccInjectedChain", on, ...rec }); } catch (_eSC) {}
+  };
+  const stamps = triggerType !== "hex_enter";
+  if (stamps) stampChain(true, { startTs: Date.now(), settledTs: 0 });
+  let execRes;
+  try { execRes = await _executeBeat(campaignId, beat.id, triggerType, ctx, winner); }
+  finally { if (stamps) stampChain(false, { settledTs: Date.now() }); }
   if (!execRes.ok) {
     try { const st2 = _getInjectorState(); st2.beatHistory ??= {}; st2.beatHistory[beat.id] = snapshot; await _setInjectorState(st2); }
     catch (eRB) { console.warn(TAG, "injector rollback failed", eRB); }

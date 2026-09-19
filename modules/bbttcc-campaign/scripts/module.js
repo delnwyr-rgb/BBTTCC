@@ -2526,7 +2526,10 @@ ${
     if (choices.length) {
       for (let i = 0; i < choices.length; i++) {
         const ch = choices[i];
-        const label = ch.label || `Choice ${i + 1}`;
+        // the GM's button names the check it carries (2026-09-18, owner: three "Inspect the set up" buttons told the GM
+        // nothing) — players already see CHECK / DIFFICULTY on their mirror
+        const checkTag = _choiceHasCheck(ch) ? ` · ${_choiceCheckLabel(String(ch.checkStat || "").trim()) || String(ch.checkStat || "").trim()}${_num(ch.checkDC, 0) ? ` DC ${_num(ch.checkDC, 0)}` : ""}` : "";
+        const label = (ch.label || `Choice ${i + 1}`) + checkTag;
 
         buttons[`c${i}`] = {
           label,
@@ -3674,6 +3677,13 @@ async function executeBeat(campaign, beat, ctx = {}) {
   // type beats (whorl's checked choices never fired). Description-only
   // encounter beats stay suppressed (their scenario briefing covers it).
   const _hasChoices = Array.isArray(beat.choices) && beat.choices.length > 0;
+  // An OUTCOME's effects are the outcome (2026-09-18, owner: "the first time I listened, nothing happened"): the Water
+  // Choir's reading card waited for the GM to pick "Listen again" because effects apply at the pick / the tail. An
+  // outcome_trigger applies its world + quest effects when it OPENS, before its dialog; the pick and the tail then no-op
+  // through the once-guard. Dialog / skill_scene beats keep pick-time effects (their pick decides the outcome).
+  if (type === "outcome_trigger" && ctx?.force !== "preview") {
+    try { await _applyBeatEffectsOnce(campaign, beat, ctx, { skipOpenTravel: openTravelApplied, at: "open" }); } catch (_eOpen) {}
+  }
   if (hasDialogContent && (type !== "encounter" || !hasEncounterKey || _hasChoices) && !isCinematic) {
     dialogRes = await _runBeatDialog(campaign, beat, ctx);
     // After dialog resolves, we still apply world effects below (keeps pipeline).

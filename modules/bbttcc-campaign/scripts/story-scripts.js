@@ -147,7 +147,7 @@ export const STORY_SCRIPTS = {
       { id: "calder", label: "Calder at the Brace", line: "Calder talks while he works. Ask how deep it goes.", beats: ["khezek_tor_the_brace", "khezek_tor_drax_calder_convo"] },
       { id: "sable", label: "Sable Nine at the Maw", line: "Sable Nine has a point on the map that won't hold still. Bring your own chair.", beats: ["khezek_tor_the_maw", "khezek_tor_sable_nine_convo"] },
       { id: "lift", label: "The Lift Hall", line: "Brennig runs the crates from a desk built out of two pallets and a door.", beats: ["khezek_tor_the_lift_hall"] },
-      { id: "galleries", label: "The Upper Galleries", line: "The courier's route goes up past the numbered levels. Follow it, at a respectful distance.", beats: ["khezek_upper_galleries"] }   // TODO(seeder): re-declare into khezek_tor, gate on the Seal active
+      { id: "galleries", label: "The Upper Galleries", line: "Only once you know what you're looking at. Then the courier's route, at a respectful distance.", beats: ["khezek_upper_galleries"] }   // hard-gated on the realization (vs_bridge_seal), 2026-09-19
     ],
     after: ["khezek_sink_widens", "khezek_compound_cough", "khezek_brace_groans"],
     chapters: {
@@ -167,6 +167,24 @@ export const STORY_SCRIPTS = {
       { id: "cinematic", label: "The Seal", line: "It doesn't bind inward. Watch where it points.", beats: ["khezek_tor_valhaulan_seal_cinematic"] },
       { id: "decide", label: "Mend, Aim, or Open", line: "Restore the seal, redirect its energies, or break it. Read it properly before you touch it.",
         beats: ["khezek_tor_the_vaulhaulan_seal", "khezek_tor_seal_fail"], done: { anyOf: ["khezek_tor_the_vaulhaulan_seal_restore", "khezek_tor_the_vaulhaulan_seal_redirect", "khezek_tor_the_vaulhaulan_seal_break"] } }
+    ],
+    doors: [], after: [], chapters: {}
+  },
+
+  // ═══ THE SPINE · THAT ONE NIGHT (light script, 2026-09-19) ═══════════════════════════════════════════════════════
+  // The owner ruled the spine UNSCRIPTED across acts; this only names the Act 2 rungs so NOW stops stalling on the
+  // overture (dead once Khezek-Tor is active) and the REALIZATION is offered when its evidence is in.
+  valhaulan_spine: {
+    giver: "the night itself; then whoever signed the seal",
+    description: "That One Night the mountain didn't cough — it leaned. Since then every thread on the frontier bends the same way: new handwriting on a sealed shaft, a sigil in Etta's hand, a bunker that isn't a vault, a chapel on the coast that turns to look. The spine is the shape the threads make when you hold them up together.",
+    steps: [
+      { id: "word", label: "Someone Else's Handwriting", line: "Word from the mountain: the sealed shaft has new handwriting. Khezek Tor is the first thread.",
+        beats: ["vs_overture"], borrow: true, done: { anyOf: ["vs_overture", "khezek_word_ride", "khezek_tor_quest_scene"] } },
+      { id: "signature", label: "The Seal Was a Signature", line: "Decide the Seal, hear Etta out at the Long Market — then the threads tie themselves.",
+        beats: ["vs_bridge_seal"], done: { mark: "vs_bridge_seal" } },
+      { id: "triangle", label: "Three Points Make a Heading", line: "The coast, the statues, the chapel: three points, one heading.", beats: ["vs_bridge_triangle"], done: { mark: "vs_bridge_triangle" } },
+      { id: "corroboration", label: "Everyone Saw Something", line: "Corroborate what the towns saw that night.", beats: ["vs_bridge_corroboration"], done: { mark: "vs_bridge_corroboration" } },
+      { id: "muster", label: "The Sky Is Waiting", line: "Muster.", beats: ["vs_bridge_muster"], done: { mark: "vs_bridge_muster" } }
     ],
     doors: [], after: [], chapters: {}
   },

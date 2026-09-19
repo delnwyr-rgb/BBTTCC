@@ -190,6 +190,8 @@ class BeatAudioManager {
     this._gesturePrimed = false;
     this._gestureHandler = null;
     this._keepaliveHandle = null;
+    this._lockedLatest = null;        // the one broadcast one-shot parked behind this seat's gesture lock
+    this._lockedFlushArmed = false;
   }
 
   init() {
@@ -214,6 +216,49 @@ class BeatAudioManager {
     } catch (_e) {}
     this._installGesturePrime();
     this._installGlobalStopDelegation();
+    this._installLockedLatestOnly();
+  }
+
+  // LATEST-ONLY BEHIND THE LOCK (2026-09-18, owner report: "sometimes it plays TONS OF AUDIO at once"). Foundry's
+  // Sound#load awaits game.audio.unlock while the seat has seen no user gesture, so every narration the GM broadcast
+  // to a player who hadn't clicked yet (a fresh reload, a tabbed-away seat) queued up and ALL of them played on the
+  // first click ("Activating pending audio playback with user gesture"). The socket receiver is the static
+  // AudioHelper.play(data, false): while this seat is locked, a broadcast one-shot (loop: false) is parked instead of
+  // loaded, a newer one replaces it, and only the survivor plays once the unlock resolves. Looping sounds (music,
+  // ambience) and the GM's own pushes pass through untouched. Idempotent across init calls.
+  _installLockedLatestOnly() {
+    try {
+      if (globalThis.__bbttccBeatAudioLatestOnlyInstalled) return;
+      const AH = foundry?.audio?.AudioHelper || globalThis.AudioHelper || null;
+      if (!AH || typeof AH.play !== "function") return;
+      globalThis.__bbttccBeatAudioLatestOnlyInstalled = true;
+      const orig = AH.play;
+      const mgr = this;
+      AH.play = function (data, socketOptions) {
+        try {
+          const push = socketOptions && (socketOptions !== false);
+          const locked = !!game?.audio?.locked;
+          const oneShot = data && typeof data === "object" && data.src && !data.loop;
+          if (!push && locked && oneShot) {
+            const dropped = mgr._lockedLatest ? mgr._lockedLatest.data.src : null;
+            mgr._lockedLatest = { data: foundry.utils.deepClone(data) };
+            _audioDebug("manager:locked:parked", { src: data.src, dropped, ctx: _ctxStateSnapshot() });
+            if (!mgr._lockedFlushArmed) {
+              mgr._lockedFlushArmed = true;
+              Promise.resolve(game.audio.unlock).then(() => {
+                const keep = mgr._lockedLatest; mgr._lockedLatest = null; mgr._lockedFlushArmed = false;
+                if (!keep) return;
+                _audioDebug("manager:locked:flush", { src: keep.data.src });
+                try { orig.call(AH, keep.data, false); } catch (eF) { _warn("locked flush failed:", eF); }
+              }).catch(() => { mgr._lockedFlushArmed = false; });
+            }
+            return Promise.resolve(null);
+          }
+        } catch (_eL) {}
+        return orig.call(this, data, socketOptions);
+      };
+      _log("Locked-seat latest-only broadcast guard installed.");
+    } catch (_e) {}
   }
 
   // Install a single document-level click listener that catches any click

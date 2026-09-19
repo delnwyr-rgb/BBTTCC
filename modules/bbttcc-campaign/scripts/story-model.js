@@ -1048,6 +1048,12 @@ export function sealOfDecl(beat, state, phase, { sealQuests = true, sealActs = t
   if (def.act === 0) return { sealed: false };
   const st = state || emptyState();
   if (sealQuests && st.closed?.[d.quest]) return { sealed: true, kind: "quest", why: `its quest "${def.name}" is complete (${st.closed[d.quest].name})`, quest: d.quest };
+  // A chapter that has ENDED seals its own start and endings (2026-09-18, live-caught: the Weeping Prisoner re-offered from the
+  // Arc Bay after Justice). Other beats declared in the chapter (hubs, asides) stay open.
+  if (sealQuests && d.chapter && (d.role === "start" || d.role === "ending")) {
+    const ch = st.chapters?.[d.quest]?.[d.chapter];
+    if (ch?.ending) return { sealed: true, kind: "chapter", why: `its chapter "${def.chapters?.[d.chapter]?.name || d.chapter}" has ended (${ch.ending.name})`, quest: d.quest, chapter: d.chapter };
+  }
   if (sealActs && !st.started?.[d.quest] && def.act >= 1 && Number(phase) > def.act) return { sealed: true, kind: "act", why: `"${def.name}" was never started and Act ${def.act} is over (the story is in Act ${phase})`, quest: d.quest, act: def.act, phase: Number(phase) };
   return { sealed: false };
 }

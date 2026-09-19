@@ -488,6 +488,11 @@
     try {
       game.socket?.on?.("module.bbttcc-campaign", async (msg) => {
         try {
+          if (msg?.t === "bbttccInjectedChain") {   // a road-fired beat's chain, in flight or settled (2026-09-18)
+            game.bbttcc = game.bbttcc || {};
+            game.bbttcc._injectedChain = { beatId: msg.beatId || null, trigger: msg.trigger || null, startTs: Number(msg.startTs) || Date.now(), settledTs: Number(msg.settledTs) || 0 };
+            return;
+          }
           if (msg?.t === "bbttccPendingHexEnter") {
             game.bbttcc = game.bbttcc || {};
             if (msg.on) game.bbttcc._pendingHexEnter = { hexUuid: msg.hexUuid || null, beatId: msg.beatId || null, ts: Number(msg.ts) || Date.now() };
@@ -561,7 +566,8 @@
       const sel = [
         ".bbttcc-encounter",".bbttcc-encounter-dialog",
         ".bbttcc-scenario",".bbttcc-scenario-dialog",
-        ".bbttcc-outcome",".bbttcc-outcome-dialog"
+        ".bbttcc-outcome",".bbttcc-outcome-dialog",
+        ".bbttcc-campaign-dialog"   // a campaign beat's own dialog (the Tree's Session on the road, 2026-09-18)
       ].join(",");
       if (document.querySelector(sel)) return true;
 
@@ -792,7 +798,10 @@
 
   async function maybeRunHexEnterBeatDeferred(result, opts) {
     const homeSceneUuid = (canvas && canvas.scene) ? canvas.scene.uuid : null;
-    const hasEncounter = !!(result && result.encounter && result.encounter.triggered);
+    // A road-fired campaign beat (a pinned leg, a pool draw) whose chain is still unwinding counts as an encounter for the
+    // arrival (2026-09-18): the town opens AFTER the road's business, not on top of it.
+    const injectedInFlight = (() => { try { const c = game.bbttcc && game.bbttcc._injectedChain; return !!(c && !c.settledTs && (Date.now() - Number(c.startTs || 0)) < 2700000); } catch (_e) { return false; } })();
+    const hasEncounter = !!(result && result.encounter && result.encounter.triggered) || injectedInFlight;
 
     if (!hasEncounter) {
       setTimeout(() => { runHexEnterBeatNow(result, opts).catch(e => warn("Hex enter failed:", e)); }, 0);
@@ -850,7 +859,17 @@
       // never-launched. Hard stop 45 min. No scene sniffing, no 15-min polls.
       const waitForSettlement = async () => {
         const started = Date.now();
+        let quietSince = 0;
         while (true) {
+          if (injectedInFlight) {
+            // the injected lane: the chain's promise unwound, then 3 s of genuine quiet (no Bad Eden modal, no combat —
+            // the Obstructor's fight and a GM-fired tally both hold the arrival); hard stop 45 min
+            const c = game.bbttcc && game.bbttcc._injectedChain; const unwound = !!(c && c.settledTs);
+            const quiet = unwound && !hasBBTTCCModalOpen() && !isCombatActive();
+            if (quiet) { quietSince = quietSince || Date.now(); if ((Date.now() - quietSince) >= 3000) return { ok: true, via: "injected-chain" }; } else quietSince = 0;
+            if ((Date.now() - started) > 2700000) return { ok: false, why: "hard-stop" };
+            await new Promise(r => setTimeout(r, 500)); continue;
+          }
           const settled = Number((game.bbttcc && game.bbttcc._encounterChainSettledTs) || 0) > deferT0;
           if (settled) return { ok: true, via: "settled" };
           const launched = Number((game.bbttcc && game.bbttcc._encounterChainLaunchedTs) || 0) > deferT0;
