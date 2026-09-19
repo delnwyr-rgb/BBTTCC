@@ -1390,7 +1390,7 @@ const activeCampaignId = _getActiveCampaignId();
     }
     if (n.next.ready) {
       const closing = n.why === "closer";
-      const c = card(closing ? `🏁 CLOSE — ${esc(q.name)}` : `⏭ NEXT — ${esc(q.name)}${chapTxt}${n.why === "elsewhere" ? " (elsewhere)" : n.why === "here" ? " (here)" : ""}`, b.label || b.id, b,
+      const c = card(closing ? `🏁 CLOSE — ${esc(q.name)}` : `⏭ NEXT — ${esc(q.name)}${chapTxt}${n.next.here === true ? " (here)" : ""}`, b.label || b.id, b,
         [run(b, closing ? "Run the closing beat" : "Run the next beat")],
         `${scriptLine}${closing ? "every chapter has its ending." : ""}${progress}${endingsTxt}`.trim());
       c.quest = q.name; return c;

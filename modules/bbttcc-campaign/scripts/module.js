@@ -2259,11 +2259,9 @@ function _chainCtxFrom(ctx) {
   if (!ctx) return {};
   const out = {};
   if (ctx.__chain) out.__chain = ctx.__chain;
-  // Playtest 2026-09-18: a beat's routes happen WHERE the beat happened. A travel- or hex-entry-fired encounter (the Tree's
-  // Session on the Fixit road, the Riders on the Lyrenn leg) chains into its session beats with the parent's source, so the
-  // location guard keeps treating the party as "arriving" through the whole chain instead of refusing the second beat as
-  // "at <the quest's home hex>". GM hub picks carry no source and stay guarded (a town's beat is only open in its town).
-  for (const k of ["source", "trigger", "injected"]) if (ctx[k] !== undefined) out[k] = ctx[k];
+  // The parent's source does NOT ride along (tried 2026-09-18, reverted the same day): a hex-entry chain carried its
+  // exemption all the way to "Back to town" and fired Allesh-Gilliam's walk from Lyrenn. Road encounters declare
+  // `where: "anywhere"` instead; a town's beat is only open in its town, however the party got to the choice.
   for (const k of ["factionId", "actor", "joiningFactionIds", "participantFactionIds", "rosterActorId"]) {
     if (ctx[k] !== undefined) out[k] = ctx[k];
   }
@@ -5136,7 +5134,9 @@ async function _beatRequiresMet(beat, campaign, ctx) {
         if (!questId) {
           // STORY FLOW (2026-09-17): a beatMark with no quest reads the ONE store — met iff the beat has been played
           // (the Confessor's candle waits on the Upper Galleries + Etta's exit; the negotiation waits on Garren's spanner)
-          try { const st = _storyStateFor(campaign?.id); if (st?.played?.[String(c.beatMark)]) continue; } catch (_eSt) {}
+          // `not: true` (2026-09-18, the Day's End terminal): met iff the beat has NOT been played
+          let playedMark = false; try { playedMark = !!_storyStateFor(campaign?.id)?.played?.[String(c.beatMark)]; } catch (_eSt) {}
+          if (playedMark !== (c.not === true)) continue;
           return false;
         }
         if (want !== "seen" && want !== "completed") {
@@ -5250,11 +5250,13 @@ async function _beatGateReport(beat, campaign, ctx = {}) {
       if (c.beatMark != null) {
         const questId = String(c.quest || "").trim();
         const want = String(c.state || "seen").trim();
-        const text = `beat “${String(c.beatMark)}” ${want}${questId ? ` (${qName(questId)})` : " (played)"}`;
-        if (!questId) {   // store-backed mark (2026-09-17): met iff played
+        const neg = !questId && c.not === true;
+        const text = `beat “${String(c.beatMark)}” ${questId ? `${want} (${qName(questId)})` : (neg ? "(not yet played)" : "(played)")}`;
+        if (!questId) {   // store-backed mark (2026-09-17): met iff played; `not: true` flips it (2026-09-18)
           let played = false; try { played = !!_storyStateFor(campaign?.id)?.played?.[String(c.beatMark)]; } catch (_eSt) {}
-          out.conditions.push({ text, met: played, kind: "beatMark", current: played ? "played" : "(unplayed)" });
-          if (!played) out.met = false;
+          const metMark = played !== neg;
+          out.conditions.push({ text, met: metMark, kind: "beatMark", current: played ? "played" : "(unplayed)" });
+          if (!metMark) out.met = false;
           continue;
         }
         if (want !== "seen" && want !== "completed") {

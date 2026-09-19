@@ -8,7 +8,7 @@
  * module.js / world-mutation-engine.js ACTUALLY evaluate (surveyed 2026-09-05):
  *
  *   gates      _beatRequiresMet — inject.requires[] of {flag,gte|lte|eq} |
- *              {questBucket,is|isNot} | {beatMark,quest,state} | {relation,is|atLeast}; unknown flag = unmet
+ *              {questBucket,is|isNot} | {beatMark,quest,state} | {beatMark,not:true} (store-backed, unplayed) | {relation,is|atLeast}; unknown flag = unmet
  *   where      executeBeat refuses a beat whose placeOf() hex ≠ the party's hex (travel.whereIs); beat.where overrides (W01)
  *   routing    runBeat/executeBeat NEVER consult gates — only the director,
  *              injector and dialogue surfaces do (choice.next fires regardless)
