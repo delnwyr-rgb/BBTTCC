@@ -58,6 +58,15 @@
  *      coming down from the Upper Galleries — the courier at the toll post has a face, recognized if the party met him
  *      (choice gates), and the party earns the Receipt "The Courier's Route". Texts are drafts for the owner.
  *
+ *  P11. ACT 3 WAITS FOR ACT 2 (owner ruling 2026-09-19). The three Seal endings no longer advance the act. A new Act 3
+ *      title card (`a3_title_card`, the spine's) carries the advance and waits on Act 2's critical marks: Pike updates the
+ *      map (AG closed), Lyrenn settles, Khezek-Tor settles, the realization played. The calendar (turn 6) stays the safety
+ *      valve. Repair: a world sitting in Act 3 with no Act-3 beat played is set back to Act 2 (live, apply mode only).
+ *
+ *  P12. DAY'S END FOR ACT 2 ONWARD (owner ruling 2026-09-19: "we're not advancing turns often enough"). Act 1 had a terminal
+ *      and locked a turn per day; Act 2 had none and three towns went by on one turn. `days_end_thatwards` is a placeless,
+ *      evergreen terminal with generic text, reached from every Act 2+ town hub's "Call it a day"; "Run it" is always there.
+ *
  * Backup download before write; GM only.
  */
 (async () => {
@@ -182,6 +191,34 @@
       choices: [ch("You know this man — the pilgrim keeping vigil at the Vacancy", "khezek_tor_quest_scene", { description: "The guest in the corner. The bed he never slept in.", requires: [{ beatMark: "ag_vacancy_pilgrim_wick" }] }),
                 ch("You don't know him. Verna might.", "khezek_tor_quest_scene", { description: "A pilgrim has been keeping a room at the Vacancy for weeks, Verna says. Pays exact. Never sleeps.", requires: [{ beatMark: "ag_vacancy_pilgrim_wick", not: true }] })] }));
     { const g = byId.get("khezek_upper_galleries"); if (g) { const c0 = (g.choices || []).find(c => /withdraw quietly/i.test(String(c.label || ""))); if (c0 && c0.next !== "kt_courier_has_a_face") { c0.next = "kt_courier_has_a_face"; changes++; say("▸ khezek_upper_galleries: \"Withdraw quietly\" → kt_courier_has_a_face"); } else say("· ok galleries exit"); } } }
+  // P11 ── Act 3 waits for Act 2
+  for (const id of ["khezek_tor_the_vaulhaulan_seal_restore", "khezek_tor_the_vaulhaulan_seal_redirect", "khezek_tor_the_vaulhaulan_seal_break"]) { const b = byId.get(id); if (!b) { say(`✗ MISSING ${id}`); continue; } if (b.worldEffects && b.worldEffects.phaseAdvance) { delete b.worldEffects.phaseAdvance; changes++; say(`⚙ ${id}: phaseAdvance removed (the Seal ends the Seal, not Act 2)`); } else say(`· ok ${id} no phaseAdvance`); }
+  if (!byId.get("a3_title_card")) {
+    const nb = { id: "a3_title_card", label: "THATWARDS HO! — Act Three", type: "dialog", questId: "quest_valhaulan_spine", questStep: 15, timeScale: "scene", tags: "spine title", politicalTags: "", outcomes: { success: null, failure: null }, actors: [], encounter: { key: "", tier: null, actorName: "" },
+      story: { quest: "valhaulan_spine" }, where: "anywhere",
+      inject: { repeatable: false, requires: [{ flag: "storyPhase", gte: 2 }, { beatMark: "allesh_gilliam_pike_closure" }, { beatMark: "lyrenn_hex_settles" }, { beatMark: "khezek_hex_settles" }, { beatMark: "vs_bridge_seal" }] },
+      worldEffects: { territoryOutcome: null, factionEffects: [], radiationDelta: 0, sparkKey: null, turnRequests: [], warLog: "", worldModifiers: [], relationshipEffects: [], questEffects: [], phaseAdvance: { set: 3 } },
+      playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true, playerFacing: true, refs: {},
+      description: "Three towns settled. A gate that remembers right. A name for the thing on the mountain, and a heading for where its work is pointed.\n\nThe projector hums again over the Frontier Formerly Known As Texas, and the letters come down two stories tall:\n\n<b>A C T &nbsp; T H R E E &nbsp; — &nbsp; T H E &nbsp; H E A D I N G</b>\n\nThe coast. The statues. A chapel that turns to look at things nobody else can see. Three points, one heading — and every road you own now bends toward it.\n\n⚙ GM: this beat raises the story to <b>Act 3</b>. The trail widens, the vault opens, the coast starts asking questions.",
+      choices: [ch("Onward", "")] };
+    const at = (camp.beats || []).findIndex(b => b?.id === "vs_bridge_seal"); if (at >= 0) camp.beats.splice(at + 1, 0, nb); else camp.beats.push(nb); byId.set(nb.id, nb); changes++; say("＋ a3_title_card (THATWARDS HO! — Act Three; phaseAdvance 3, waits on AG/Lyrenn/KT closed + the realization)");
+  } else say("· ok a3_title_card exists");
+  try {   // repair: back to Act 2 if Act 3 opened early and nothing of Act 3 has played
+    const phase = Number(game.settings.get(NS, "storyPhase")); const st = game.settings.get(NS, "storyState"); const store = st?.played ? st : (st && typeof st === "object" ? Object.values(st).find(x => x && x.played) : null);
+    if (phase === 3 && store) { const act3Played = (camp.beats || []).some(b => store.played?.[b.id] && (b.inject?.requires || []).some(r => r?.flag === "storyPhase" && Number(r.gte) >= 3)); if (!act3Played) { say("⏪ story sits in Act 3 with no Act-3 beat played — will set storyPhase back to 2 (apply mode)"); if (!DRY_RUN) await game.settings.set(NS, "storyPhase", 2); } else say("· Act 3 content already played — leaving the act alone"); }
+  } catch (eA) { say("✗ act repair check failed: " + (eA?.message || eA)); }
+  // P12 ── Day's End, Act 2 onward
+  if (!byId.get("days_end_thatwards")) {
+    const nb = { id: "days_end_thatwards", label: "Day's End", type: "dialog", questId: null, questStep: 0, timeScale: "scene", tags: "spine terminal", politicalTags: "", outcomes: { success: null, failure: null }, actors: [], encounter: { key: "", tier: null, actorName: "" },
+      where: "anywhere", inject: { repeatable: true, evergreen: true, oncePerHex: false, requires: [{ flag: "storyPhase", gte: 2 }] },
+      worldEffects: { territoryOutcome: null, factionEffects: [], radiationDelta: 0, sparkKey: null, turnRequests: [], warLog: "", worldModifiers: [], relationshipEffects: [], questEffects: [] },
+      playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true, playerFacing: true, refs: {},
+      description: "The sun goes down wrong-colored and gorgeous, wherever you are standing when it does, and the day Thatwards is spent.\n\nWhatever you settled today is settled. Whatever you didn't will keep — the frontier is patient in the way of things that have already waited a long time. Before the world moves, the ledger wants its three things.\n\nAnd then we find out what was waiting for the ink to dry.",
+      choices: [ch("The turn is locked. Run it.", "", { description: "1. Divvy anything new — which hexes belong to which faction. 2. Plan your Strategic Activities — each faction sets its work for the turn. 3. Lock it in — your GM runs the Turn Driver and the world takes its turn." }), ch("Daylight left — back to it", "", { description: "The day isn't done. Nothing is locked." })] };
+    const at = (camp.beats || []).findIndex(b => b?.id === "ag_days_end"); if (at >= 0) camp.beats.splice(at + 1, 0, nb); else camp.beats.push(nb); byId.set(nb.id, nb); changes++; say("＋ days_end_thatwards (Day's End — Act 2 onward, placeless, evergreen)");
+  } else say("· ok days_end_thatwards exists");
+  { const addCall = (id, before) => { const b = byId.get(id); if (!b) return say(`✗ MISSING ${id}`); const cs = Array.isArray(b.choices) ? b.choices : (b.choices = []); const have = cs.find(c => c && /^call it a day$/i.test(String(c.label || "").trim())); if (have) { if (have.next !== "days_end_thatwards") { have.next = "days_end_thatwards"; changes++; say(`▸ ${id}: "Call it a day" → days_end_thatwards`); } else say(`· ok ${id} call it a day`); return; } const row = ch("Call it a day", "days_end_thatwards", { description: "The day is spent. Lock the turn, or decide there's daylight left." }); const at = before ? cs.findIndex(c => c && before.test(String(c.label || ""))) : -1; if (at >= 0) cs.splice(at, 0, row); else cs.push(row); changes++; say(`▸ ${id}: + "Call it a day" → days_end_thatwards`); };
+    addCall("allesh_gilliam_introduction_to_hq", /^leave$/i); addCall("lyrenn_quest_scene", /^ride on/i); addCall("khezek_tor_quest_scene", /^something else/i); addCall("fixit_intro_scene", /^ride back/i); addCall("fixit_town_walk", null); }
   { const ho = camp.hexOverrides || {}; const key = Object.keys(ho).find(k => (ho[k]?.onEnterBeatIds || []).includes("allesh_gilliam_introduction_to_hq") || ho[k]?.onEnterBeatId === "allesh_gilliam_introduction_to_hq");
     if (!key) say("✗ no hexOverride lists allesh_gilliam_introduction_to_hq — set Allesh-Gilliam's on-enter beats by hand: [HQ intro, allesh_gilliam_town_walk]");
     else { const want = ["allesh_gilliam_introduction_to_hq", "allesh_gilliam_town_walk"]; if (JSON.stringify(ho[key].onEnterBeatIds) !== JSON.stringify(want)) { ho[key].onEnterBeatIds = want; changes++; say(`⚙ hexOverrides ${key}: onEnterBeatIds = [HQ intro, town walk]`); } else say("· ok Allesh-Gilliam on-enter list"); } }

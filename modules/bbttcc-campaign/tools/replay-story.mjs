@@ -88,8 +88,15 @@ for (let step = 0; step < MAX; step++) {
   const s = situation(); const n = s.now;
   if (TRACE) log.push(`     ↳ now=${n?.quest?.name || "-"}/${n?.why || "-"} → ${n?.next?.beat?.id || "-"}${n?.next?.revisit ? " (revisit)" : ""} | in play: ${s.inPlay.map(q => `${q.name}→${q.next?.beat?.id || "-"}${q.next?.ready ? "" : "⛩"}`).join(", ") || "-"} | doors: ${s.doors.map(q => q.name).join(", ") || "-"}`);
   let next = n?.next?.beat || null; let why = n?.why || "-";
-  if (n?.why === "turn") { log.push(`  🔁 THE TURN — nothing more opens this turn`); if (turn >= STOP_TURN) break; turn++; const DOORS = [[2, 2], [6, 3], [10, 4], [14, 5]]; for (const [tg, ph] of DOORS) if (turn >= tg && phase < ph) { phase = ph; log.push(`  ⏩ ADVANCE → turn ${turn}, calendar door → ACT ${phase}`); if (ph === 2) play("a2_that_one_night", "phase-door"); } if (!log[log.length - 1].includes("ADVANCE")) log.push(`  ⏩ ADVANCE → turn ${turn}`); continue; }
-  if (!next || n?.why === "complete" || n?.why === "empty" || n?.why === "done-no-closer") {
+  // a gate somewhere IN PLAY names an unplayed, openable beat (2026-09-19): the table opens that door before calling the
+  // turn — Etta at the Long Market before the realization, the realization before the Act 3 card (a ride away is fine:
+  // the Travel Console block below plots it)
+  const namedInPlay = (!next || n?.why === "turn" || n?.why === "complete" || n?.why === "empty" || n?.why === "done-no-closer")
+    ? (s.inPlay || []).flatMap(q => (q.next?.reasons || [])).map(x => String(x.text || "").match(/^beatMark (\S+)$/)?.[1]).filter(Boolean).map(id => byId.get(id)).find(b => b && !st.played[b.id] && gateOK(b).ok && !m.sealOfDecl(b, st, phase)?.sealed && (actOf(b) === null || actOf(b) <= phase))
+    : null;
+  if (namedInPlay) { next = namedInPlay; why = "GATE-DOOR"; log.push(`  🔑 open the door the gate names: ${namedInPlay.id}`); }
+  if (!namedInPlay && n?.why === "turn") { log.push(`  🔁 THE TURN — nothing more opens this turn`); if (turn >= STOP_TURN) break; turn++; const DOORS = [[2, 2], [6, 3], [10, 4], [14, 5]]; for (const [tg, ph] of DOORS) if (turn >= tg && phase < ph) { phase = ph; log.push(`  ⏩ ADVANCE → turn ${turn}, calendar door → ACT ${phase}`); if (ph === 2) play("a2_that_one_night", "phase-door"); } if (!log[log.length - 1].includes("ADVANCE")) log.push(`  ⏩ ADVANCE → turn ${turn}`); continue; }
+  if (!namedInPlay && (!next || n?.why === "complete" || n?.why === "empty" || n?.why === "done-no-closer")) {
     // nothing in the story's quest → a door (dormant quest with ready start), then IN PLAY
     const d = s.doors[0]; const ip = s.inPlay.find(q => q.next?.beat);
     if (d) { next = d.next.beat; why = "DOOR:" + d.name; } else if (ip) { next = ip.next.beat; why = "IN PLAY:" + ip.name; }
@@ -98,9 +105,12 @@ for (let step = 0; step < MAX; step++) {
     if (turn === 1) { // the table advances the turn (day's end): calendar door opens Act 2 + the night
       turn = 2; if (phase < 2) { phase = 2; log.push(`  ⏩ ADVANCE → turn 2, calendar door → ACT 2`); play("a2_that_one_night", "phase-door"); } continue; }
     break; }
-  if (!n?.next?.ready && !why.startsWith("DOOR") && !why.startsWith("IN PLAY")) { log.push(`  ⏳ NOW waits: ${next.id} — ${(n.next.reasons || []).map(r => r.text).join(", ")}; roads: ${(n.roads || []).map(r => r.quest.name + "→" + (r.beat?.id || "-") + (r.ready ? "⚡" : "⛩")).join(" | ") || "-"}`); 
+  if (!namedInPlay && !n?.next?.ready && !why.startsWith("DOOR") && !why.startsWith("IN PLAY")) { log.push(`  ⏳ NOW waits: ${next.id} — ${(n.next.reasons || []).map(r => r.text).join(", ")}; roads: ${(n.roads || []).map(r => r.quest.name + "→" + (r.beat?.id || "-") + (r.ready ? "⚡" : "⛩")).join(" | ") || "-"}`); 
+    // the gate names a beat (2026-09-19): "beatMark X" unplayed and openable → the table opens THAT door (Etta at the Long
+    // Market before the realization; the realization before the Act 3 card) — a script door the walker would otherwise never take
+    const named = (n.next.reasons || []).map(x => String(x.text || "").match(/^beatMark (\S+)$/)?.[1]).filter(Boolean).map(id => byId.get(id)).find(b => b && !st.played[b.id] && gateOK(b).ok && !guards(b, "door"));
     const r = (n.roads || []).find(r => r.beat && r.ready); const d = s.doors[0]; const ip = s.inPlay.find(q => q.next?.beat && q.next.ready && q.next.beat.id !== next.id);
-    if (r) next = r.beat; else if (d) { next = d.next.beat; why = "DOOR:" + d.name; log.push(`  🚪 open a door instead: ${d.name}`); } else if (ip) { next = ip.next.beat; why = "IN PLAY:" + ip.name; log.push(`  ↪ in play instead: ${ip.name}`); }
+    if (named) { next = named; why = "GATE-DOOR"; log.push(`  🔑 open the door the gate names: ${named.id}`); } else if (r) next = r.beat; else if (d) { next = d.next.beat; why = "DOOR:" + d.name; log.push(`  🚪 open a door instead: ${d.name}`); } else if (ip) { next = ip.next.beat; why = "IN PLAY:" + ip.name; log.push(`  ↪ in play instead: ${ip.name}`); }
     else { if (turn >= STOP_TURN) break; turn++; log.push(`  ⏩ ADVANCE → turn ${turn} (everything waits)`); const DOORS = [[2, 2], [6, 3], [10, 4], [14, 5]]; for (const [tg, ph] of DOORS) if (turn >= tg && phase < ph) { phase = ph; log.push(`  ⏩ calendar door → ACT ${phase}`); if (ph === 2) play("a2_that_one_night", "phase-door"); } continue; } }
   // the Travel Console (2026-09-15): whatever the walker picked (NOW, a road, a door, IN PLAY) is a ride away → the GM plots
   // the ride first; arrival opens the town, then the situation is recomputed with the party standing there

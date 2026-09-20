@@ -1047,7 +1047,16 @@ export function sealOfDecl(beat, state, phase, { sealQuests = true, sealActs = t
   if (def.keystone) return { sealed: false };
   if (def.act === 0) return { sealed: false };
   const st = state || emptyState();
-  if (sealQuests && st.closed?.[d.quest]) return { sealed: true, kind: "quest", why: `its quest "${def.name}" is complete (${st.closed[d.quest].name})`, quest: d.quest };
+  if (sealQuests && st.closed?.[d.quest]) {
+    // THE SPINE SEALS, THE ASIDES STAY (2026-09-19, live-caught: Pike updating the map closed Allesh-Gilliam and sealed Etta's
+    // Long Market conversation with it — and the realization waits on Etta). For a SCRIPTED quest the quest-closed seal
+    // applies to its main line only: step beats, the start, the closers, its own endings. Doors, chapters (their own
+    // ending rule) and every other aside of the quest stay open after the close.
+    const sc = scriptOf(d.quest);
+    const inSteps = !!sc && [...(sc.steps || []), ...((sc.arrival && sc.arrival.steps) || [])].some(stp => (Array.isArray(stp.beats) ? stp.beats : []).map(String).includes(String(beat.id)));
+    const spine = !sc || inSteps || d.role === "start" || d.role === "closer" || (!d.chapter && d.role === "ending");
+    if (spine) return { sealed: true, kind: "quest", why: `its quest "${def.name}" is complete (${st.closed[d.quest].name})`, quest: d.quest };
+  }
   // A chapter that has ENDED seals its own start and endings (2026-09-18, live-caught: the Weeping Prisoner re-offered from the
   // Arc Bay after Justice). Other beats declared in the chapter (hubs, asides) stay open.
   if (sealQuests && d.chapter && (d.role === "start" || d.role === "ending")) {

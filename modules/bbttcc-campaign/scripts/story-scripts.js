@@ -182,6 +182,7 @@ export const STORY_SCRIPTS = {
         beats: ["vs_overture"], borrow: true, done: { anyOf: ["vs_overture", "khezek_word_ride", "khezek_tor_quest_scene"] } },
       { id: "signature", label: "The Seal Was a Signature", line: "Decide the Seal, hear Etta out at the Long Market — then the threads tie themselves.",
         beats: ["vs_bridge_seal"], done: { mark: "vs_bridge_seal" } },
+      { id: "act3", label: "Act Three", line: "Three towns settled, the gate mended, the cult named — the heading opens.", beats: ["a3_title_card"], done: { mark: "a3_title_card" } },   // the Act 3 door (2026-09-19): waits on Act 2's critical marks; turn 6 is the calendar's safety valve
       { id: "triangle", label: "Three Points Make a Heading", line: "The coast, the statues, the chapel: three points, one heading.", beats: ["vs_bridge_triangle"], done: { mark: "vs_bridge_triangle" } },
       { id: "corroboration", label: "Everyone Saw Something", line: "Corroborate what the towns saw that night.", beats: ["vs_bridge_corroboration"], done: { mark: "vs_bridge_corroboration" } },
       { id: "muster", label: "The Sky Is Waiting", line: "Muster.", beats: ["vs_bridge_muster"], done: { mark: "vs_bridge_muster" } }
