@@ -8,7 +8,7 @@
 import "../apps/campaign-tag-picker.js";
 import "../scripts/casualties-engine.js";
 import "../apps/player-beat-mirror-app.js";
-import { deriveSituation, QUEST_MAP, QUEST_SCRIPTS, scriptOf, registerScripts, scriptView, registryOf, emptyState, declOf, applyRecord, projection, sealOfDecl, isAnchorable, placeOf, hexKey } from "./story-model.js";
+import { deriveSituation, QUEST_MAP, QUEST_SCRIPTS, scriptOf, registerScripts, scriptView, registryOf, emptyState, declOf, applyRecord, projection, sealOfDecl, isAnchorable, placeOf, hexKey, rewardFor, AWARD_MARKS, QUEST_REWARDS } from "./story-model.js";
 // bbttcc-rolls-api.js removed 2026-08-28 (atlas cleanup) — game.bbttcc.api.rolls
 // had zero consumers; the beat Choice/Check UI resolves bonuses via its own
 // _rollChoiceCheck / _computeFactionOpRollBonusMap stack.
@@ -4983,10 +4983,58 @@ async function _storyProject(campaign, ctx = {}) {
   _questTrackMemo.delete(campaign);
   return { ok: true, moved };
 }
+// ═══ STORY AWARDS (owner ruling 2026-09-20: "we need to award OP for quests, and for monsters defeated") ═══════════
+// A quest CLOSED / a chapter ENDED pays every coalition faction (rewardFor in story-model); an outcome beat that carries
+// `award: { method, creature?, creatureId?, marks? }` pays the bestiary bounty for that creature by the method it was
+// overcome (kill → violence, talkdown → nonlethal, parley → diplomacy, capture, cleanse, rite). One ledger
+// (bbttcc-campaign.awardsLedger) so nothing pays twice; api.campaign.awards.settle() back-pays what the store already holds.
+const SETTING_AWARDS_LEDGER = "awardsLedger";
+function _awardsLedger() { try { const v = game.settings.get(MOD_ID, SETTING_AWARDS_LEDGER); return (v && typeof v === "object") ? v : {}; } catch (_e) { return {}; } }
+async function _awardsPay(campaign, ctx, deltas, { key = null, label = "" } = {}) {
+  try {
+    if (!game.user?.isGM || !deltas || !Object.keys(deltas).length) return null;
+    const ledger = _awardsLedger(); if (key && ledger[key]) return null;
+    const facs = await _resolveCampaignFactions(campaign, ctx); const op = game.bbttcc?.api?.op;
+    if (!op?.commit || !facs?.length) { warn("[awards] nothing to pay to (no OP api or no coalition)", { label }); return null; }
+    const paid = [];
+    for (const F of facs) { try { const r = await op.commit(F.id, deltas, { source: "story-award", label: `Story — ${label}` }); paid.push({ id: F.id, name: F.name, ok: r?.ok !== false }); } catch (eP) { warn("[awards] commit failed", F?.name, eP); } }
+    if (key) { ledger[key] = { ts: Date.now(), deltas, label, factions: paid.map(p => p.id) }; try { await game.settings.set(MOD_ID, SETTING_AWARDS_LEDGER, ledger); } catch (_eL) {} }
+    try { const esc = foundry.utils.escapeHTML; await ChatMessage.create({ speaker: { alias: "Bad Eden" }, content: `<div class="bbttcc-story-award" style="border-left:3px solid #d4a72c;padding:.35em .6em;background:rgba(212,167,44,.08);">🏆 <b>Earned</b> — ${esc(label)}: ${Object.entries(deltas).map(([k, v]) => `<b>+${esc(v)}</b> ${esc(k)}`).join(", ")} <span style="opacity:.7;">(each: ${paid.map(p => esc(p.name)).join(", ")})</span></div>` }); } catch (_eC) {}
+    log(`[awards] ${label}: ${JSON.stringify(deltas)} → ${paid.map(p => p.name).join(", ")}`);
+    return paid;
+  } catch (e) { warn("[awards] pay failed", e); return null; }
+}
+async function _awardForChanges(campaign, ctx, changes) {
+  const qn = (q) => QUEST_MAP.quests?.[q]?.name || q, cn = (q, c) => QUEST_MAP.quests?.[q]?.chapters?.[c]?.name || c;
+  for (const c of (changes || [])) {
+    if (c?.kind === "quest-closed") await _awardsPay(campaign, ctx, rewardFor(c.quest), { key: `quest:${c.quest}`, label: `${qn(c.quest)} — ${c.ending || "closed"}` });
+    else if (c?.kind === "chapter-ended") await _awardsPay(campaign, ctx, rewardFor(c.quest, c.chapter), { key: `chapter:${c.quest}.${c.chapter}`, label: `${qn(c.quest)} · ${cn(c.quest, c.chapter)} — ${c.ending || "ended"}` });
+  }
+}
+async function _awardCreature(campaign, ctx, beat, playedN = null) {
+  const a = beat?.award; if (!a || typeof a !== "object" || !a.method) return null;
+  const api = game.bbttcc?.api?.bestiary; const M = api?.METHODS?.[String(a.method)]; if (!M) { warn("[awards] unknown bounty method", a.method, beat?.id); return null; }
+  const actor = (a.creatureId && game.actors?.get?.(a.creatureId)) || (a.creature && game.actors?.find?.(x => x.name === a.creature)) || null;
+  let marks = Number(a.marks) || 0; if (!marks && actor && typeof api.bountyFor === "function") marks = Number(api.bountyFor(actor)?.marks) || 0;
+  if (!marks) { warn("[awards] no bounty for", a.creature || a.creatureId || beat?.id); return null; }
+  const n = playedN ?? Number(_storyStateFor(campaign?.id)?.played?.[beat.id]?.n || 1);
+  return _awardsPay(campaign, ctx, { [M.pool]: marks }, { key: `creature:${beat.id}:${n}`, label: `${actor?.name || a.creature || beat.label || beat.id} — ${String(M.label || a.method).toLowerCase()}` });
+}
+async function _awardsSettle(campaign, ctx = {}) {
+  const st = _storyStateFor(campaign?.id) || {}; const out = { quests: 0, chapters: 0, creatures: 0 };
+  for (const [q, r] of Object.entries(st.closed || {})) { const paid = await _awardsPay(campaign, ctx, rewardFor(q), { key: `quest:${q}`, label: `${QUEST_MAP.quests?.[q]?.name || q} — ${r?.name || "closed"} (settled)` }); if (paid) out.quests++; }
+  for (const [q, cs] of Object.entries(st.chapters || {})) for (const [c, r] of Object.entries(cs || {})) { if (!r?.ending) continue; const paid = await _awardsPay(campaign, ctx, rewardFor(q, c), { key: `chapter:${q}.${c}`, label: `${QUEST_MAP.quests?.[q]?.name || q} · ${QUEST_MAP.quests?.[q]?.chapters?.[c]?.name || c} — ${r.ending.name} (settled)` }); if (paid) out.chapters++; }
+  for (const b of (campaign?.beats || [])) { if (!b?.award?.method || !st.played?.[b.id]) continue; const n = Number(st.played[b.id].n || 1); for (let i = 1; i <= n; i++) { const paid = await _awardCreature(campaign, ctx, b, i); if (paid) out.creatures++; } }
+  return out;
+}
+const STORY_AWARDS_API = { settle: async (campaignId) => { const c = campaignId ? getCampaign(campaignId) : getCampaign(getActiveCampaignId()); return c ? _awardsSettle(c, {}) : null; }, pay: (deltas, opts) => _awardsPay(getCampaign(getActiveCampaignId()), {}, deltas, opts), ledger: _awardsLedger, rewardFor, AWARD_MARKS, QUEST_REWARDS };
+
 async function _storyRecord(campaign, beat, ctx = {}) {
   if (!game.user?.isGM || !campaign?.id || !beat?.id) return { changes: [] };
   const turn = _getTurnNumberSafe();
   const changes = await _storyMutate(campaign.id, (st) => applyRecord(st, beat, { ts: Date.now(), turn }));
+  try { await _awardForChanges(campaign, ctx, changes); } catch (eAw) { warn("[awards] quest/chapter award failed", eAw); }
+  try { await _awardCreature(campaign, ctx, beat); } catch (eAc) { warn("[awards] creature award failed", eAc); }
   if (changes.length) {
     try { await _storyProject(campaign, ctx); } catch (e) { warn("story projection failed:", e); }
     try { Hooks.callAll("bbttcc:story:changed", { campaignId: campaign.id, beatId: beat.id, changes }); } catch (_e) {}
@@ -8006,6 +8054,7 @@ function scanStableKeysReport() {
 // API
 function buildCampaignAPI() {
   return {
+    awards: STORY_AWARDS_API,   // story awards (2026-09-20): settle / pay / ledger / rewardFor
     listCampaigns,
     getCampaign,
     saveCampaign,
@@ -8683,6 +8732,7 @@ Hooks.once("init", () => {
   }
 
   // The Circuit Riders' verification tally (STORY FLOW 2026-09-17): +1 per good answer, −1 per bad; alliance needs ≥ 2.
+  game.settings.register(MOD_ID, SETTING_AWARDS_LEDGER, { name: "Story awards ledger", scope: "world", config: false, type: Object, default: {} });
   game.settings.register(MOD_ID, SETTING_CR_VERIFY, { name: "Bad Eden Circuit Riders Verification", hint: "Internal: the parley's verification tally. Do not edit manually.", scope: "world", config: false, type: Number, default: 0 });
   // The Cadence: dance-battle standing-state flags (0/1), written by outcomes.
   for (const [key, name] of [

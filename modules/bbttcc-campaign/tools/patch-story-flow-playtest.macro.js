@@ -81,6 +81,12 @@
  *  P16. ETTA'S ARITHMETIC IS ORDER-AGNOSTIC (2026-09-20, live: her exit advised on a Seal already decided). The ladder puts the
  *      Seal before Etta, so her exit speaks to a choice made or still to make — never as advice on an open question.
  *
+ *  P17. ACT 3 OPENS ON TURN 3 (owner ruling 2026-09-20: "have this be our 3rd turn, before Act 3"). The Act 3 card also
+ *      waits for `turn ≥ 3`, like the Act 2 card waits for turn 2; the model then shows Day's End as the way there.
+ *
+ *  P18. THE GRIEF TOWNS HAVE HEXES (owner, 2026-09-20): Chuckle Creek on Odaroloc River.e, Soft Landing on Saltwake Reach a,
+ *      Stillwater on Odaroloc River.d (the River Heart) — their arrivals open on entering the hex, in Act 2, not as GM doors.
+ *
  * Backup download before write; GM only.
  */
 (async () => {
@@ -257,6 +263,16 @@
   { const b = byId.get("ag_leygate_installed"); if (!b) say("✗ MISSING ag_leygate_installed"); else { const cs = Array.isArray(b.choices) ? b.choices : (b.choices = []); if (!cs.some(c => c && String(c.label || "").trim())) { cs.push(ch("Go and see your names on the map", "allesh_gilliam_pike_closure", { description: "Pike heard before you got back. Of course he did." })); changes++; say("▸ ag_leygate_installed: + \"Go and see your names on the map\" → allesh_gilliam_pike_closure"); } else say("· ok ag_leygate_installed has an exit"); } }
   // P16 ── Etta's arithmetic, whichever way you already chose
   setField("allesh_gilliam_etta_bloom_convo_exit", "description", "She didn't soften it. Valhaulans — not rumor, not ghost markings — inside the sink, and they've sealed it, and whatever that thing was built to hold has started to hum.\n\nThe sigil is in your hand now, and so is the arithmetic she left with it. Whoever restores the seal, Khezek Tor keeps the burden. Whoever redirects it chooses who pays. Whoever breaks it, no one owes anyone anything ever again.\n\n\"If you've already stood at that shaft,\" she says, \"then you already know which of those you are. The mountain does too.\"\n\nMarkets love clarity, she said. Societies rarely survive it.");
+  // P17 ── Act 3 opens on turn 3
+  { const b = byId.get("a3_title_card"); if (!b) say("✗ MISSING a3_title_card"); else { b.inject = b.inject || {}; const rs = Array.isArray(b.inject.requires) ? b.inject.requires : []; b.inject.requires = rs; if (!rs.some(r => r && r.flag === "turn")) { rs.splice(1, 0, { flag: "turn", gte: 3 }); changes++; say("⛩ a3_title_card: +gate turn ≥ 3"); } else say("· ok a3_title_card turn gate"); } }
+  // P18 ── the grief towns on their hexes
+  { const norm = (x) => String(x || "").replace(/[\s\u00a0]+/g, " ").trim().toLowerCase();
+    const hexUuid = (name) => { for (const sc of (game.scenes || [])) for (const d of (sc.drawings || [])) { const tf = d.flags?.["bbttcc-territory"]; if (tf && (tf.isHex === true || tf.kind === "territory-hex") && norm(tf.name) === norm(name)) return `Scene.${sc.id}.Drawing.${d.id}`; } return null; };
+    for (const [id, hex] of [["chuckle_arrival", "Odaroloc River.e"], ["soft_landing_arrival", "Saltwake Reach a"], ["stillwater_arrival", "Odaroloc River.d"]]) {
+      setField(id, "hexName", hex);
+      const u = hexUuid(hex); if (!u) { say(`✗ hex '${hex}' not found on any map`); continue; }
+      camp.hexOverrides = camp.hexOverrides || {}; const row = camp.hexOverrides[u] = camp.hexOverrides[u] || {}; const cur = Array.isArray(row.onEnterBeatIds) ? row.onEnterBeatIds : (row.onEnterBeatId ? [row.onEnterBeatId] : []);
+      if (cur[0] !== id) { row.onEnterBeatIds = [id, ...cur.filter(x => x !== id)]; changes++; say(`📍 on-enter ${hex} = [${row.onEnterBeatIds.join(", ")}]`); } else say(`· ok on-enter ${hex}`); } }
   { const ho = camp.hexOverrides || {}; const key = Object.keys(ho).find(k => (ho[k]?.onEnterBeatIds || []).includes("allesh_gilliam_introduction_to_hq") || ho[k]?.onEnterBeatId === "allesh_gilliam_introduction_to_hq");
     if (!key) say("✗ no hexOverride lists allesh_gilliam_introduction_to_hq — set Allesh-Gilliam's on-enter beats by hand: [HQ intro, allesh_gilliam_town_walk]");
     else { const want = ["allesh_gilliam_introduction_to_hq", "allesh_gilliam_town_walk"]; if (JSON.stringify(ho[key].onEnterBeatIds) !== JSON.stringify(want)) { ho[key].onEnterBeatIds = want; changes++; say(`⚙ hexOverrides ${key}: onEnterBeatIds = [HQ intro, town walk]`); } else say("· ok Allesh-Gilliam on-enter list"); } }

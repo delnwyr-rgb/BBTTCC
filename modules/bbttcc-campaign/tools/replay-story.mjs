@@ -113,13 +113,17 @@ for (let step = 0; step < MAX; step++) {
     // Market before the realization; the realization before the Act 3 card) — a script door the walker would otherwise never take
     const named = (n.next.reasons || []).map(x => String(x.text || "").match(/^beatMark (\S+)$/)?.[1]).filter(Boolean).map(id => byId.get(id)).find(b => b && !st.played[b.id] && gateOK(b).ok && !guards(b, "door"));
     const r = (n.roads || []).find(r => r.beat && r.ready); const d = s.doors[0]; const ip = s.inPlay.find(q => q.next?.beat && q.next.ready && q.next.beat.id !== next.id);
-    if (named) { next = named; why = "GATE-DOOR"; log.push(`  🔑 open the door the gate names: ${named.id}`); } else if (r) next = r.beat; else if (d) { next = d.next.beat; why = "DOOR:" + d.name; log.push(`  🚪 open a door instead: ${d.name}`); } else if (ip) { next = ip.next.beat; why = "IN PLAY:" + ip.name; log.push(`  ↪ in play instead: ${ip.name}`); }
+    if (named) { next = named; why = "GATE-DOOR"; log.push(`  🔑 open the door the gate names: ${named.id}`); } else if (r) { next = r.beat; if (r.viaTurn) why = "TERMINAL"; } else if (d) { next = d.next.beat; why = "DOOR:" + d.name; log.push(`  🚪 open a door instead: ${d.name}`); } else if (ip) { next = ip.next.beat; why = "IN PLAY:" + ip.name; log.push(`  ↪ in play instead: ${ip.name}`); }
     else { if (turn >= STOP_TURN) break; turn++; log.push(`  ⏩ ADVANCE → turn ${turn} (everything waits)`); const DOORS = [[2, 2], [6, 3], [10, 4], [14, 5]]; for (const [tg, ph] of DOORS) if (turn >= tg && phase < ph) { phase = ph; log.push(`  ⏩ calendar door → ACT ${phase}`); if (ph === 2) play("a2_that_one_night", "phase-door"); } continue; } }
   // the Travel Console (2026-09-15): whatever the walker picked (NOW, a road, a door, IN PLAY) is a ride away → the GM plots
   // the ride first; arrival opens the town, then the situation is recomputed with the party standing there
   { const p = m.placeOf(next, null); if (where && p && p !== "anywhere" && knownHexes.has(m.hexKey(p)) && m.hexKey(p) !== m.hexKey(where)) { const dest = String(p); where = dest; log.push(`  🐎 Travel Console → ${dest} (📍 ${dest})`); playPinned(dest); const opener = ((phase <= 1 && ARRIVE_AT_ACT1[m.hexKey(dest)]) || ARRIVE_AT[m.hexKey(dest)]); if (opener && byId.get(opener) && !st.played[opener]) play(opener, "hex"); continue; } }
   const last3 = log.slice(-3).map(l => l.trim().split(/\s+/)[1]); if (last3.length === 3 && last3.every(x => x === next.id)) { log.push(`  ■ LOOP on ${next.id} — the model keeps offering the same beat; stopping`); break; }
   if (!play(next.id, why.startsWith("DOOR") ? "door" : "gm")) { if (refusals.length > 6) break; }
+  if (why === "TERMINAL") {   // the day ends: the table plans and runs the Turn Driver (2026-09-20)
+    if (turn >= STOP_TURN) break; turn++; log.push(`  🌇 the day ends → turn ${turn}`);
+    const DOORS = [[2, 2], [6, 3], [10, 4], [14, 5]]; for (const [tg, ph] of DOORS) if (turn >= tg && phase < ph) { phase = ph; log.push(`  ⏩ calendar door → ACT ${phase}`); if (ph === 2) play("a2_that_one_night", "phase-door"); }
+  }
   if (ARRIVE[next.id] && byId.get(ARRIVE[next.id])) { if (RIDE_TO[next.id]) where = RIDE_TO[next.id]; log.push(`  🐎 ride → arrive ${ARRIVE[next.id]}${where ? ` (📍 ${where})` : ""}`); playPinned(where); play(ARRIVE[next.id], "hex"); }
   if (phase >= STOP_ACT && turn >= 2 && step > 40) break;
 }

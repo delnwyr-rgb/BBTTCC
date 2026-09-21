@@ -187,7 +187,7 @@ export const QUEST_MAP = {
    "name": "Chuckle Creek",
    "act": 2,
    "keystone": false,
-   "hex": "Chuckle Creek",
+   "hex": "Odaroloc River.e",
    "registryId": "quest_chuckle_creek",
    "chapters": {}
   },
@@ -195,7 +195,7 @@ export const QUEST_MAP = {
    "name": "Soft Landing",
    "act": 2,
    "keystone": false,
-   "hex": "Soft Landing",
+   "hex": "Saltwake Reach a",
    "registryId": "quest_soft_landing",
    "chapters": {}
   },
@@ -203,7 +203,7 @@ export const QUEST_MAP = {
    "name": "Stillwater",
    "act": 2,
    "keystone": false,
-   "hex": "Stillwater",
+   "hex": "Odaroloc River.d",
    "registryId": "quest_stillwater",
    "chapters": {}
   },
@@ -879,6 +879,18 @@ export function deriveSituation(ctx) {
       }
     }
   }
+  // THE DAY MUST END FIRST (owner ruling 2026-09-20: "make it deliberate — prompt for it if someone doesn't fire Day's End").
+  // When NOW waits on the TURN (a title card gated `turn ≥ N`), the act's Day's End terminal is offered as the way there.
+  try {
+    const nx = nowOut && nowOut.next; const reasons = nx && !nx.ready ? (nx.reasons || []) : [];
+    if (nx && reasons.some(r => /\bturn\b/i.test(String(r?.text || "")))) {
+      const term = beats.find(b => /\bterminal\b/.test(String(b.tags || "")) && String(b.id) !== "ag_days_end" && (readyOf(String(b.id))?.ready)) || (phase <= 1 ? byId.get("ag_days_end") : null);
+      if (term && !(nowOut.roads || []).some(r => r?.beat?.id === term.id)) {
+        const def = QUEST_MAP.quests[String(term.story?.quest || "")] || null;
+        nowOut = { ...nowOut, roads: [{ quest: nowOut.quest, chapter: null, beat: term, ready: true, here: hereOf(term, def), viaTurn: true, line: "The day is spent. Lock the turn, then the story moves." }, ...(nowOut.roads || [])] };
+      }
+    }
+  } catch (_eT) {}
   // a door is a quest not yet started whose START is ready NOW — readiness already carries the start beat's own
   // act gate, so the quest's nominal act is not consulted (towns span acts 1–2; Allesh-Gilliam's opening is Act 1)
   const doors = quests.filter(q => (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready)
@@ -990,6 +1002,28 @@ export function scriptView(sc, ctx) {
     current: current.map(s => s.id), doors, after: Array.isArray(sc.after) ? sc.after.slice() : [], chapters: sc.chapters && typeof sc.chapters === "object" ? sc.chapters : {},
     next, why, chapter: stepOf?.chapter || null
   };
+}
+
+// ═══ STORY AWARDS (owner ruling 2026-09-20: "we need to award OP for quests") ═══════════════════════════════════
+// A quest CLOSED pays AWARD_MARKS.quest split across its two themed channels; a chapter ENDED pays AWARD_MARKS.chapter
+// to the first. Creatures pay through the bestiary bounty (how they were overcome picks the pool). Marks: 1 OP = 10.
+export const AWARD_MARKS = { quest: 30, chapter: 10 };
+export const QUEST_REWARDS = {
+  __default: { channels: ["culture", "softpower"] },
+  offices: { channels: ["culture", "softpower"] }, allesh_gilliam: { channels: ["logistics", "diplomacy"] }, lyrenn: { channels: ["culture", "faith"] },
+  khezek_tor: { channels: ["economy", "violence"] }, valhaulan_seal: { channels: ["faith", "intrigue"] }, fixit_farm: { channels: ["economy", "logistics"] },
+  circuit_riders: { channels: ["diplomacy", "intrigue"] }, tifaret: { channels: ["faith", "softpower"] }, forgotten_cause: { channels: ["softpower", "culture"] },
+  bandit_accord: { channels: ["nonlethal", "diplomacy"] }, cadence: { channels: ["culture", "softpower"] }, chuckle_creek: { channels: ["softpower", "faith"] },
+  soft_landing: { channels: ["softpower", "faith"] }, stillwater: { channels: ["softpower", "faith"] }, valhaulan_spine: { channels: ["intrigue", "faith"] },
+  sarmoung_hum: { channels: ["faith", "culture"] }, widening_trail: { channels: ["intrigue", "logistics"] }, hidden_vault: { channels: ["culture", "nonlethal"] },
+  balcones: { channels: ["faith", "logistics"] }, flooded_towns: { channels: ["faith", "economy"] }, lost_statues: { channels: ["violence", "faith"] },
+  fifteen_year_siege: { channels: ["diplomacy", "softpower"] }, trojan_gift: { channels: ["diplomacy", "intrigue"] }, crown_mall: { channels: ["culture", "economy"] },
+  maneuver_vault: { channels: ["intrigue", "logistics"] }, ninth_guest: { channels: ["faith", "culture"] }, finale: { channels: ["violence", "intrigue"] }, gloomgill: { channels: ["faith", "culture"] }
+};
+export function rewardFor(quest, chapter = null) {
+  const r = QUEST_REWARDS[String(quest)] || QUEST_REWARDS.__default; const chans = Array.isArray(r.channels) && r.channels.length ? r.channels : ["culture"];
+  if (chapter) return { [chans[0]]: AWARD_MARKS.chapter };
+  const per = Math.floor(AWARD_MARKS.quest / chans.length); const out = {}; for (const c of chans) out[c] = per; return out;
 }
 
 export function emptyState() {
