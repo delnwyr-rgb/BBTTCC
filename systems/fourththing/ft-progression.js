@@ -1040,7 +1040,8 @@ export async function applyPathFeatures(actor, opts = {}) {
   const pack = game.packs.get(classDoc.pack);
   if (!pack) return { imported: [], skipped: [], error: `Pack ${classDoc.pack} not found` };
 
-  const classRootFolderId = classDoc.folder?.id ?? classDoc.folder ?? null;
+  let classRootFolderId = classDoc.folder?.id ?? classDoc.folder ?? null;
+  if (!classRootFolderId) { try { const idx = await pack.getIndex({ fields: ["folder"] }); classRootFolderId = (idx.get?.(classDoc.id) ?? idx.find?.(e => e._id === classDoc.id))?.folder ?? null; } catch (_e) {} }
 
   const targetFolderIds = new Set();
   const classFeatFolder = classRootFolderId ? await _findClassFeaturesFolder(pack, classRootFolderId) : null;
@@ -1053,9 +1054,28 @@ export async function applyPathFeatures(actor, opts = {}) {
       ?? actor.getFlag?.("bbttcc-character-options", "nativeLinks")?.subclassUuid
       ?? actor.getFlag?.("bbttcc-character-options", "subclassUuid")
       ?? actor.getFlag?.("bbttcc-auto-link", "nativeLinks")?.subclassUuid;
-    if (sSrc) {
-      const sDoc = await fromUuid(sSrc);
-      const sFolder = sDoc?.folder?.id ?? sDoc?.folder;
+    let sDoc = sSrc ? await fromUuid(sSrc) : null;
+    // No source on the embedded subclass (wizard-era or hand-dragged copies) → find it in the class pack BY NAME
+    // (2026-09-21: Marginalia's Annotator had no source, so its 3rd-level features were never offered).
+    if (!sDoc) {
+      try {
+        const idx = await pack.getIndex({ fields: ["type", "name", "folder"] });
+        const hit = idx.find(e => e.type === "subclass" && String(e.name).trim() === String(subclassItem.name).trim());
+        if (hit) sDoc = await pack.getDocument(hit._id);
+      } catch (_e) {}
+    }
+    if (sDoc) {
+      let sFolder = sDoc?.folder?.id ?? sDoc?.folder ?? null;
+      // A compendium document fetched by uuid can come back with folder = null while the pack INDEX knows it
+      // (live 2026-09-21: Marginalia's Annotator resolved fine, folder null, so its 3rd-level features were never
+      // offered). The index is the authority for where a pack entry lives.
+      if (!sFolder) {
+        try {
+          const idx = await pack.getIndex({ fields: ["type", "name", "folder"] });
+          const hit = idx.get?.(sDoc.id) ?? idx.find?.(e => e._id === sDoc.id) ?? idx.find?.(e => e.type === "subclass" && String(e.name).trim() === String(subclassItem.name).trim());
+          sFolder = hit?.folder ?? null;
+        } catch (_e) {}
+      }
       if (sFolder) {
         targetFolderIds.add(sFolder);
         subclassFolderName = sDoc?.folder?.name ?? null;

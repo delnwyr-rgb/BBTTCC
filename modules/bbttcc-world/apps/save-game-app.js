@@ -22,7 +22,7 @@
       classes: ["bbttcc-save-game-app", "bbttcc", "bbttcc-be", "bbttcc-theme-gm"],
       tag: "section",
       window: { title: "Bad Eden — Save Games", icon: "fas fa-save", resizable: true },
-      position: { width: 760, height: "auto" }
+      position: { width: 800, height: 720 }   // a fixed height so the list scrolls inside (2026-09-21)
     };
     static _instance = null;
     static open() {
@@ -78,6 +78,18 @@
       });
 
       root.querySelector("[data-action='refresh']")?.addEventListener("click", (ev) => { ev.preventDefault(); this.render(false); });
+      root.querySelector("[data-action='prune']")?.addEventListener("click", async (ev) => {
+        ev.preventDefault();
+        const all = api().list(); const KEEP = 20;
+        const doomed = all.filter(s => !s.golden).sort((a, b) => (Number(b.at) || 0) - (Number(a.at) || 0)).slice(KEEP);
+        if (!doomed.length) return ui.notifications?.info?.(`Nothing to prune — ${all.length} save(s), within the newest ${KEEP}.`);
+        const ok = await foundry.applications.api.DialogV2.confirm({
+          window: { title: "Prune saves?" },
+          content: `<p>Delete <b>${doomed.length}</b> save(s) older than the newest ${KEEP}? The golden master always stays.</p><ul class="bbttcc-muted" style="max-height:12rem;overflow:auto;font-size:.85em">${doomed.map(s => `<li>${esc(s.label)} — ${fmtWhen(s.at)}</li>`).join("")}</ul><p class="bbttcc-muted">Each slot leaves the list and its file is overwritten with a stub.</p>`
+        });
+        if (!ok) return;
+        this._run("Prune", async () => { const r = await api().prune({ keep: KEEP }); this._setStatus(`🧹 pruned ${r.removed} save(s); ${r.kept} kept`); ui.notifications?.info?.(`Pruned ${r.removed} save(s).`); });
+      });
 
       root.addEventListener("click", (ev) => {
         const btn = ev.target?.closest?.("[data-slot-act]");

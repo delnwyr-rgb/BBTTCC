@@ -1,6 +1,10 @@
 /* bbttcc-world — Save Games window */
-.bbttcc-save-game-app .window-content { padding: .6rem .8rem; }
-.bbttcc-save-game { display: flex; flex-direction: column; gap: .6rem; font-size: .92rem; }
+.bbttcc-save-game-app .window-content { padding: .6rem .8rem; display: flex; flex-direction: column; min-height: 0; }
+.bbttcc-save-game { display: flex; flex-direction: column; gap: .6rem; font-size: .92rem; flex: 1 1 auto; min-height: 0; }
+/* the list scrolls inside the window (owner ask 2026-09-21: "a LOT of saves") */
+.bbttcc-save-game .sg-table-wrap { flex: 1 1 auto; min-height: 8rem; overflow: auto; border-radius: 8px; }
+.bbttcc-save-game .sg-table-wrap thead th { position: sticky; top: 0; background: #0b1220; z-index: 1; }
+.bbttcc-save-game .sg-head-acts { display: flex; gap: .4rem; align-items: flex-start; }
 .bbttcc-save-game .sg-head { display: flex; justify-content: space-between; align-items: flex-start; gap: .75rem; }
 .bbttcc-save-game .sg-title { font-weight: 800; font-size: 1.3rem; }
 .bbttcc-save-game .sg-sub { font-size: .82rem; opacity: .8; }

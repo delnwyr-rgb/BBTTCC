@@ -323,6 +323,18 @@
     await writeIndex(idx);
     return true;
   }
+  // PRUNE (owner ask 2026-09-21: "maybe we just only keep the last 20 saves"): the golden master always stays; of the
+  // rest, the newest `keep` survive and older slots are removed (file stubbed, slot dropped from the index).
+  async function prune({ keep = 20 } = {}) {
+    if (!isGM()) throw new Error("GM only");
+    const rows = readIndex().slots.slice().sort((a, b) => (Number(b.at) || 0) - (Number(a.at) || 0));
+    const keepN = Math.max(0, Math.floor(Number(keep) || 0));
+    const survivors = new Set(rows.filter(s => s.golden).map(s => s.id));
+    for (const s of rows.filter(s => !s.golden).slice(0, keepN)) survivors.add(s.id);
+    const doomed = rows.filter(s => !survivors.has(s.id));
+    let removed = 0; for (const s of doomed) { try { if (await remove(s.id)) removed++; } catch (e) { warn("prune remove failed", s.id, e); } }
+    return { removed, kept: survivors.size, doomed: doomed.map(s => ({ id: s.id, label: s.label, at: s.at })) };
+  }
   function exportSlot(id) {
     const row = readIndex().slots.find(s => s.id === id);
     if (!row) return false;
@@ -368,7 +380,7 @@
       game.bbttcc.api = game.bbttcc.api || {};
       game.bbttcc.api.world = game.bbttcc.api.world || {};
       game.bbttcc.api.world.saves = {
-        list, golden, save, load, plan, readSlot, setGolden, remove, exportSlot, importFile, capture,
+        list, golden, save, load, plan, readSlot, setGolden, remove, prune, exportSlot, importFile, capture,
         dir: saveDir,
         open: () => { try { globalThis.BBTTCCSaveGameApp?.open?.(); } catch (e) { warn("open failed", e); } }
       };
