@@ -4,9 +4,9 @@
 /* ── BBTTCC Display webfont (HexChrome) ─────────────────────────────────────── */
 @font-face {
   font-family: "BBTTCC Display";
-  src: url("../fonts/bbttcc-display/BBTTCC-Display.woff2") format("woff2"),
-       url("../fonts/bbttcc-display/BBTTCC-Display.woff")  format("woff"),
-       url("../fonts/bbttcc-display/BBTTCC-Display.ttf")   format("truetype");
+  src: url("../fonts/bbttcc-display/BBTTCC-Display.woff2?v=20260920b") format("woff2"),
+       url("../fonts/bbttcc-display/BBTTCC-Display.woff?v=20260920b")  format("woff"),
+       url("../fonts/bbttcc-display/BBTTCC-Display.ttf?v=20260920b")   format("truetype");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
