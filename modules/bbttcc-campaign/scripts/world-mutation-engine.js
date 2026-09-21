@@ -1406,7 +1406,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
             r = await hexApi.seat(doc.uuid, key, { state: wantState === "integrated" ? "integrated" : "dormant" });
             if (r && r.ok && wantState === "corrupted") r = await hexApi.corrupt(doc.uuid);
           } else if (action === "integrate") {
-            r = await hexApi.integrate(doc.uuid, { actorId: (ctx && ctx.actorId) || null });
+            r = await hexApi.integrate(doc.uuid, { actorId: (ctx && ctx.actorId) || null, story: true });   // a beat's integration never fails on Reach (2026-09-20)
           } else {
             r = await hexApi[action](doc.uuid);
           }

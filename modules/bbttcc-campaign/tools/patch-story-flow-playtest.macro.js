@@ -67,12 +67,22 @@
  *      and locked a turn per day; Act 2 had none and three towns went by on one turn. `days_end_thatwards` is a placeless,
  *      evergreen terminal with generic text, reached from every Act 2+ town hub's "Call it a day"; "Run it" is always there.
  *
+ *  P13. THE SEAL'S SPARK (2026-09-20, live: "integrate refused at Khezek-Tor: reach exhausted"). A story ending is its own
+ *      Act of Repair now (engine); this repairs the world that hit it: if the store says the Seal ended in restore and
+ *      Khezek-Tor's spark is seated but not integrated, integrate it (live, apply mode).
+ *
+ *  P14. PIKE'S HUB KNOWS WHAT'S DONE (2026-09-20, live: "Head to the Leygate" reopened the first Leygate visit after the
+ *      stabilizer was won). "Head to the Leygate" shows until the gate has been seen; "Bring the crate to the Leygate" shows
+ *      once a stabilizer deal is done and until it's installed; "Check out the East Wall" hides once the wall is settled.
+ *
  * Backup download before write; GM only.
  */
 (async () => {
-  const DRY_RUN = true;
+  const DRY_RUN = true;   // the default mode; after a dry run the macro ASKS whether to apply (no constant to flip, 2026-09-20)
   const NS = "bbttcc-campaign";
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
+  async function run(apply) {
+  const DRY_RUN = !apply;
   let campsRaw = game.settings.get(NS, "campaigns");
   const campsWasStr = typeof campsRaw === "string";
   const camps = campsWasStr ? JSON.parse(campsRaw) : foundry.utils.deepClone(campsRaw);
@@ -219,14 +229,38 @@
   } else say("· ok days_end_thatwards exists");
   { const addCall = (id, before) => { const b = byId.get(id); if (!b) return say(`✗ MISSING ${id}`); const cs = Array.isArray(b.choices) ? b.choices : (b.choices = []); const have = cs.find(c => c && /^call it a day$/i.test(String(c.label || "").trim())); if (have) { if (have.next !== "days_end_thatwards") { have.next = "days_end_thatwards"; changes++; say(`▸ ${id}: "Call it a day" → days_end_thatwards`); } else say(`· ok ${id} call it a day`); return; } const row = ch("Call it a day", "days_end_thatwards", { description: "The day is spent. Lock the turn, or decide there's daylight left." }); const at = before ? cs.findIndex(c => c && before.test(String(c.label || ""))) : -1; if (at >= 0) cs.splice(at, 0, row); else cs.push(row); changes++; say(`▸ ${id}: + "Call it a day" → days_end_thatwards`); };
     addCall("allesh_gilliam_introduction_to_hq", /^leave$/i); addCall("lyrenn_quest_scene", /^ride on/i); addCall("khezek_tor_quest_scene", /^something else/i); addCall("fixit_intro_scene", /^ride back/i); addCall("fixit_town_walk", null); }
+  // P13 ── the Seal's spark, integrated after the fact
+  try {
+    const st = game.settings.get(NS, "storyState"); const store = st?.played ? st : (st && typeof st === "object" ? Object.values(st).find(x => x && x.played) : null);
+    const restored = store?.closed?.valhaulan_seal?.name === "restore";
+    const hexApi = game.bbttcc?.api?.tikkun?.hex; let kt = null;
+    for (const sc of (game.scenes || [])) for (const d of (sc.drawings || [])) { const tf = d.flags?.["bbttcc-territory"]; if (tf && (tf.isHex === true || tf.kind === "territory-hex") && String(tf.name || "").replace(/[\s\u00a0]+/g, " ").trim() === "Khezek-Tor") kt = d; }
+    const spark = kt?.flags?.["bbttcc-territory"]?.spark || null;
+    if (restored && kt && spark && spark.state !== "integrated") { say(`✦ Khezek-Tor's spark (${spark.key}) is ${spark.state} though the Seal was restored — will integrate live`); if (!DRY_RUN && hexApi?.integrate) { const r = await hexApi.integrate(kt.uuid || `Scene.${kt.parent?.id}.Drawing.${kt.id}`, { story: true }); say(r?.ok ? "✦ integrated" : `✗ integrate failed: ${r?.error || "?"}`); } }
+    else say(restored ? (spark ? "· ok Khezek-Tor's spark is integrated" : "· Khezek-Tor has no seated spark (offline?)") : "· the Seal wasn't restored here — no spark repair");
+  } catch (eK) { say("✗ spark repair check failed: " + (eK?.message || eK)); }
+  // P14 ── Pike's hub knows what's done
+  { const hq = byId.get("allesh_gilliam_introduction_to_hq"); if (!hq) say("✗ MISSING allesh_gilliam_introduction_to_hq"); else {
+      const cs = Array.isArray(hq.choices) ? hq.choices : (hq.choices = []);
+      const setReqOn = (labelRe, req) => { const c = cs.find(c => c && labelRe.test(String(c.label || ""))); if (!c) return say(`✗ hub: no choice ${labelRe}`); if (JSON.stringify(c.requires) === JSON.stringify(req)) return say(`· ok hub "${c.label}" requires`); c.requires = req; changes++; say(`▸ hub: "${c.label}" requires ${JSON.stringify(req).slice(0, 110)}`); };
+      setReqOn(/^head to the leygate$/i, [{ beatMark: "ag_leygate_visit", not: true }]);
+      setReqOn(/^check out the east wall$/i, [{ beatMark: "allesh_gilliam_east_wall_success", not: true }, { beatMark: "ag_east_wall_holds", not: true }, { beatMark: "ag_east_wall_patched", not: true }, { beatMark: "allesh_gilliam_east_wall_failure", not: true }]);
+      if (!cs.some(c => c && /^bring the crate/i.test(String(c.label || "")))) { const at = cs.findIndex(c => c && /^head to the leygate$/i.test(String(c.label || ""))); const row = ch("Bring the crate to the Leygate — Garren's waiting", "ag_leygate_delivery", { description: "The stabilizer, the spanner, and a man who reads serial numbers like names.", requires: [{ beatMark: "ag_leygate_visit" }, { anyOf: [{ beatMark: "fixit_leyline_stabilizer_trade_success" }, { beatMark: "fixit_leyline_stabilizer_shared_oversight_success" }, { beatMark: "fixit_leyline_stabilizer_hard_ask" }] }, { beatMark: "ag_leygate_installed", not: true }] }); cs.splice(at >= 0 ? at + 1 : cs.length, 0, row); changes++; say("▸ hub: + \"Bring the crate to the Leygate\" → ag_leygate_delivery (after a stabilizer deal, until installed)"); } else say("· ok hub crate choice"); } }
   { const ho = camp.hexOverrides || {}; const key = Object.keys(ho).find(k => (ho[k]?.onEnterBeatIds || []).includes("allesh_gilliam_introduction_to_hq") || ho[k]?.onEnterBeatId === "allesh_gilliam_introduction_to_hq");
     if (!key) say("✗ no hexOverride lists allesh_gilliam_introduction_to_hq — set Allesh-Gilliam's on-enter beats by hand: [HQ intro, allesh_gilliam_town_walk]");
     else { const want = ["allesh_gilliam_introduction_to_hq", "allesh_gilliam_town_walk"]; if (JSON.stringify(ho[key].onEnterBeatIds) !== JSON.stringify(want)) { ho[key].onEnterBeatIds = want; changes++; say(`⚙ hexOverrides ${key}: onEnterBeatIds = [HQ intro, town walk]`); } else say("· ok Allesh-Gilliam on-enter list"); } }
 
   console.log(`[patch-story-flow-playtest] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.map(r => "  " + r).join("\n"));
-  if (DRY_RUN) return ui.notifications.info(`Playtest patch DRY RUN: ${changes} change(s) (console). Set DRY_RUN=false to apply.`);
+  if (DRY_RUN) { ui.notifications.info(`Playtest patch DRY RUN: ${changes} change(s) (console).`); return changes; }
   const save = (data, type, name) => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([data], { type })); a.download = name; a.click(); };
   save(campsWasStr ? campsRaw : JSON.stringify(campsRaw), "text/json", `backup-campaigns-before-playtest-${Date.now()}.json`);
   await game.settings.set(NS, "campaigns", campsWasStr ? JSON.stringify(camps) : camps);
   ui.notifications.info(`Playtest patch APPLIED: ${changes} change(s). Backup downloaded.`);
+  return changes;
+  }
+  const n = await run(!DRY_RUN);
+  if (DRY_RUN && typeof Dialog !== "undefined" && Dialog.confirm) {
+    const yes = await Dialog.confirm({ title: "Story flow playtest patch", content: `<p>The dry run found <b>${Number(n) || 0}</b> data change(s) (details in the console) — live repairs (the Grove, the act, the spark) are listed there too and only run in apply mode.</p><p>Apply now? A backup of the campaigns setting downloads first.</p>` });
+    if (yes) await run(true);
+  }
 })();

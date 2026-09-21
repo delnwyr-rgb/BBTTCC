@@ -22,6 +22,9 @@
  *      the act advance comes off two outcomes.
  *  S12 Act 6 title card on ANY finale ending (Ruling A).
  *  S13 Gloomgill: `storeFacts` on the ten questions (Ruling M); hex-enter at Odaroloc River.c.
+ *  S14 SCENES (owner, 2026-09-20): the three Hex Flooded Towns battlemaps; the Mall of Forgotten Yesterdays — Donny on the
+ *      approach, the food court for the Tanneritos and the mall's life, food court 2 for the archive, the halfpipe for
+ *      Kickflip, Bev's office, Miss June's store. Bound by scene NAME (ids as fallback), so a rebuilt scene keeps binding.
  *
  * Backup download before write; GM only.
  */
@@ -164,6 +167,19 @@
     // S13 ── Gloomgill knows the answers before he asks
     for (let i = 1; i <= 10; i++) setField(`gloomgill_question_${i}`, "storeFacts", true);
     placeAt("gloomgill_intro", "Odaroloc River.c"); onEnter("Odaroloc River.c", ["gloomgill_intro"]);
+
+    // S14 ── scenes: entering the hex launches the beat, the beat launches the scene
+    const sceneId = (name, fallbackId) => (game.scenes?.find?.(sc => sc.name === name) || null)?.id || (game.scenes?.get?.(fallbackId) ? fallbackId : null) || fallbackId;
+    const bindScene = (ids, name, fallbackId) => { const sid = sceneId(name, fallbackId); if (!sid) return say(`✗ scene '${name}' not found`); for (const id of ids) { const b = get(id); if (!b) continue; if (b.sceneId === sid) { say(`· ok ${id} scene ${name}`); continue; } b.sceneId = sid; changes++; say(`🎬 ${id}: scene = ${name}`); } };
+    bindScene(["hod_flooded_probably_beaumont", "hod_flooded_probably_beaumont_stabilize", "hod_flooded_probably_beaumont_surge", "hod_flooded_probably_beaumont_ride_fail"], "Hex Flooded Town 1", "8EyrUn6kViWV6PgZ");
+    bindScene(["hod_flooded_maybe_beaumont", "hod_flooded_maybe_beaumont_interrupt", "hod_flooded_maybe_beaumont_escalate", "hod_flooded_maybe_beaumont_ride_fail"], "hex_flooded_town_2", "b8TGUizrrJuwsc1C");
+    bindScene(["hod_flooded_bedlam_barrens", "hod_flooded_bedlam_barrens_ground", "hod_flooded_bedlam_barrens_break", "hod_flooded_bedlam_barrens_break_fail", "spark_hod_echoes_reconstituting"], "hex_flooded_town_3", "WeNRc19bkkQvpVJJ");
+    bindScene(["enc_forgotten_yesterdays_approach", "enc_forgotten_yesterdays_donny_approach", "enc_forgotten_yesterdays_donny_observe", "enc_forgotten_yesterdays_donny_parley", "enc_forgotten_yesterdays_donny_respect", "enc_forgotten_yesterdays_donny_weird", "enc_forgotten_yesterdays_donny_pushy", "enc_forgotten_yesterdays_donny_mixed", "enc_forgotten_yesterdays_donny_good", "enc_forgotten_yesterdays_donny_bad_vibes", "enc_forgotten_yesterdays_donny_withdraw"], "Donny", "pkjgY0382z2Jzzds");
+    bindScene(["enc_forgotten_yesterdays_tanneritos", "enc_forgotten_yesterdays_tanneritos_friendly", "enc_forgotten_yesterdays_tanneritos_intrigue", "enc_forgotten_yesterdays_tanneritos_hostile", "enc_forgotten_yesterdays_skate", "enc_forgotten_yesterdays_skate_success", "enc_forgotten_yesterdays_skate_mixed", "enc_forgotten_yesterdays_skate_failure", "enc_forgotten_yesterdays_hub", "enc_forgotten_yesterdays_vhs_ghosts", "enc_forgotten_yesterdays_vhs_lean_in", "enc_forgotten_yesterdays_vhs_fail", "enc_forgotten_yesterdays_vhs_mock", "enc_forgotten_yesterdays_escalator", "enc_forgotten_yesterdays_escalator_success", "enc_forgotten_yesterdays_escalator_mixed", "enc_forgotten_yesterdays_escalator_fail", "enc_forgotten_yesterdays_elefem", "enc_forgotten_yesterdays_elefem_success", "enc_forgotten_yesterdays_elefem_mixed", "enc_forgotten_yesterdays_elefem_fail", "enc_forgotten_yesterdays_resolution", "enc_forgotten_yesterdays_resolution_good", "enc_forgotten_yesterdays_resolution_neutral", "enc_forgotten_yesterdays_resolution_bad"], "crown_mall_food_court_pov_1", "Qa8fnrZWZRHGHOjn");
+    bindScene(["map_crown_mall_intro", "map_crown_mall_corroboration", "map_crown_mall_partial"], "crown_mall_food_court_pov_2", "KFQK0Rb4qBSUWBeF");
+    bindScene(["enc_forgotten_yesterdays_kickflip_lazarus_intro", "enc_forgotten_yesterdays_kickflip_lazarus_1", "enc_forgotten_yesterdays_kickflip_lazarus_2", "enc_forgotten_yesterdays_kickflip_lazarus_3", "enc_forgotten_yesterdays_kickflip_lazarus_4", "enc_forgotten_yesterdays_kickflip_lazarus_5", "enc_forgotten_yesterdays_kickflip_lazarus_runback", "enc_forgotten_yesterdays_kickflip_lazarus_runback_success", "enc_forgotten_yesterdays_kickflip_lazarus_runback_fail", "enc_forgotten_yesterdays_kickflip_lazarus_echo"], "crown_mall_kickflip_lazarus_halfpipe_top_view_pov", "glPwKQepJibWdCU2");
+    bindScene(["enc_forgotten_yesterdays_laser_bev_intro", "enc_forgotten_yesterdays_laser_bev_1", "enc_forgotten_yesterdays_laser_bev_2", "enc_forgotten_yesterdays_laser_bev_3", "enc_forgotten_yesterdays_laser_bev_4", "enc_forgotten_yesterdays_laser_bev_5", "enc_forgotten_yesterdays_laser_bev_terms", "enc_forgotten_yesterdays_laser_bev_echo"], "crown_mall_lazer_bev_office_pov", "KOZMFN4vcDF7tKyg");
+    bindScene(["enc_forgotten_yesterdays_miss_june_intro", "enc_forgotten_yesterdays_miss_june_1", "enc_forgotten_yesterdays_miss_june_2", "enc_forgotten_yesterdays_miss_june_3", "enc_forgotten_yesterdays_miss_june_4", "enc_forgotten_yesterdays_miss_june_5", "enc_forgotten_yesterdays_miss_june_inventory", "enc_forgotten_yesterdays_miss_june_echo"], "crown_mall_ms_june_store_pov", "cxLnzyDMkaE3Yadg");
 
     console.log(`[seed-story-flow-acts-3-6] ${apply ? "APPLY" : "DRY RUN"} — ${changes} change(s)\n` + report.map(r => "  " + r).join("\n"));
     if (!apply) { ui.notifications.info(`Acts 3–6 seeder DRY RUN: ${changes} change(s) (console).`); return changes; }

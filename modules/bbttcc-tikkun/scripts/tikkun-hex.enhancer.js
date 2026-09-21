@@ -117,7 +117,7 @@
     return { ok: true, removed: existing.key };
   }
 
-  async function integrate(hexUuid, { actorId = null } = {}) {
+  async function integrate(hexUuid, { actorId = null, story = false } = {}) {
     if (!game.user?.isGM) throw new Error("GM only");
     const doc = await resolveHex(hexUuid);
     const existing = sparkInfo(doc);
@@ -136,8 +136,14 @@
     if (fid0 && typeof debit === "function") {
       const r = await debit(fid0);
       if (r && r.ok === false) {
-        ui.notifications?.warn(`Reach exhausted: ${r.spent}/${r.budget} Acts of Repair this turn.`);
-        return { ok: false, error: "reach exhausted", reach: r };
+        // A STORY ending is its own Act of Repair (2026-09-20, live-caught: the Valhaulan Seal restored, "integrate refused at
+        // Khezek-Tor: reach exhausted"). Beat-driven integrations debit Reach when there is Reach to debit and proceed regardless
+        // — the players earned it in play. Hand-driven integrations keep the budget.
+        if (!story) {
+          ui.notifications?.warn(`Reach exhausted: ${r.spent}/${r.budget} Acts of Repair this turn.`);
+          return { ok: false, error: "reach exhausted", reach: r };
+        }
+        log(`integrate at ${doc.uuid}: reach exhausted (${r.spent}/${r.budget}) — story-driven, integrating anyway`);
       }
     }
     await doc.update({ [`flags.${TER}.spark`]: { key: existing.key, state: "integrated", at: Date.now() } });
