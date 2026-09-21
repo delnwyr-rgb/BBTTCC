@@ -13,6 +13,16 @@ export const TIER_CAP_BAND_MARKS = [50, 70, 90, 110, 130];            // T0..T4,
 export const LOGISTICS_CAPACITY_FLOOR_MARKS = [70, 70, 90, 110, 130];  // owner ruling 2026-09-12: capacity never reads below the T1 band
 
 // ── strategic activity price policy (ruling B, 2026-09-11) ─────────────────────────────────────
+// MATERIAL MARKET (owner rulings 2026-09-21): what the land yields sells into a HOME channel by family at SELL_FRACTION
+// of retail; any other channel pays OFF_CHANNEL_FRACTION of that; Sell Surplus pays SURPLUS_MULT. Families are stamped
+// on keys in bbttcc-factions/stockpile-api.js (MATERIAL_FAMILY); the channels and numbers live here.
+export const MATERIAL_MARKET = {
+  SELL_FRACTION: 0.50,           // a T1 unit (retail 5) sells for 3 marks
+  OFF_CHANNEL_FRACTION: 0.70,    // selling into a channel that isn't the family's home
+  SURPLUS_MULT: 1.10,            // the Sell Surplus activity's market bonus
+  FAMILY_CHANNEL: { ore: "economy", salvage: "economy", wood: "economy", hide: "logistics", farm: "logistics", herb: "logistics",
+                    weave: "faith", sacred: "faith", crystal: "intrigue", yesod: "intrigue", paper: "intrigue", shore: "diplomacy" }
+};
 export const PRICE_MULT = 0.75;   // every strategic row, travel leg, siege muster and the raid staged bonus × this
 export const RECIPES = {          // alternate fuels — "how the faction got it done" (fx land via turn-driver applyRecipeSideEffects)
   establish_outpost: [

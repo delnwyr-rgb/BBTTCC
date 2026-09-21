@@ -1633,6 +1633,9 @@ async function tickFactionBonuses(){
       if (nt.attackDC !== undefined) { delete nt.attackDC; dirty = true; }   // attacker-side next-raid shift, consumed at Add Round (2026-09-12)
       if (nt.spyInsertion) { const due = safeNum(nt.spyInsertion.due, 1) - 1; if (due <= 0) { await spyReport(F, nt.spyInsertion); delete nt.spyInsertion; } else nt.spyInsertion = Object.assign({}, nt.spyInsertion, { due }); dirty = true; }
       if (dirty) {
+        // A merge-write never drops a deleted key (owner hit it 2026-09-21: the golden save's −20% survived the Advance
+        // and the fresh band landed on top → Errata −40%). Unset the subtree, then write the survivors [[reference_v14_flag_deletion_syntax]].
+        try { await F.unsetFlag(MOD_FACTIONS, "bonuses"); } catch (eU) { warn("bonuses unset failed", F?.name, eU); }
         const upd = { [`flags.${MOD_FACTIONS}.bonuses`]: b };
         if (notes.length) { const wl = clone(F.getFlag(MOD_FACTIONS, "warLogs") || []); wl.push({ ts: Date.now(), date: (new Date()).toLocaleString(), type: "turn", activity: "bonuses", summary: notes.join("; ") + "." }); upd[`flags.${MOD_FACTIONS}.warLogs`] = wl; }
         await F.update(upd);

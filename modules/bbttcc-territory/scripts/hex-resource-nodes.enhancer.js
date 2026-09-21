@@ -88,6 +88,21 @@
     return data;
   }
 
+  // HARVEST GOES TO THE STOCKPILE (owner ruling 2026-09-21): a steward with a faction gathers straight into that
+  // faction's stockpile (name/img/lastUuid remembered for pricing); anyone else stacks it in their pockets.
+  async function _deliverMaterial(actor, data, units) {
+    const fid = String(actor?.system?.faction?.id || "").replace(/^Actor\./, "");
+    const F = fid ? game.actors?.get(fid) : null; const stock = game.bbttcc?.api?.factions?.stockpile;
+    const key = foundry.utils.getProperty(data, "flags.fourththing.rfi.item.materialKey") || data.name;
+    if (F && stock?.adjust) {
+      await stock.adjust(F, key, +units, { name: data.name, img: data.img, lastUuid: data.flags?.core?.sourceId || data._stats?.compendiumSource || null });
+      return { to: "stockpile", faction: F };
+    }
+    const stackApi = game.fourththing?.stack?.orCreate;
+    if (stackApi) await stackApi(actor, data); else await actor.createEmbeddedDocuments("Item", [data]);
+    return { to: "pockets" };
+  }
+
   /**
    * Harvest one node from a hex.
    *
@@ -158,7 +173,7 @@
       await writeNodeUpdate(hexDoc, idx, arr, { charges: nextCharges });
 
       const materialItemData = await _materialItemData(RfiItems, { uuid: node.materialUuid, key: node.materialKey, name: node.materialName, tier: node.tier }, yieldUnits);
-      await actor.createEmbeddedDocuments("Item", [materialItemData]);
+      var delivered = await _deliverMaterial(actor, materialItemData, yieldUnits);
     }
 
     await ChatMessage.create({
@@ -170,7 +185,7 @@
                       ${formula} → <b>${total}</b> vs DC ${dc} (${skill})<br>
                       ${aeContribs.length ? `<span style="color:#e8c84a;font-size:0.78rem">Passives: ${aeContribs.map(c => `${c.value >= 0 ? "+" : ""}${c.value} ${c.label} (${c.src})`).join(", ")}</span><br>` : ""}
                       ${success
-                        ? `✓ <b>Success</b> — gathered ${yieldUnits} unit${yieldUnits > 1 ? "s" : ""} of ${node.materialName || node.materialKey}.<br>Node has ${nextCharges} attempt${nextCharges === 1 ? "" : "s"} remaining.`
+                        ? `✓ <b>Success</b> — gathered ${yieldUnits} unit${yieldUnits > 1 ? "s" : ""} of ${node.materialName || node.materialKey}${delivered?.to === "stockpile" ? ` → <b>${delivered.faction.name}</b>'s stockpile` : ""}.<br>Node has ${nextCharges} attempt${nextCharges === 1 ? "" : "s"} remaining.`
                         : `✗ <b>Failed</b> — no yield. The node's charges are unchanged.`}
                     </p>
                   </div></div>`
@@ -186,7 +201,7 @@
           const chance = Number(d.chance); if (!(Math.random() < (Number.isFinite(chance) ? chance : 0))) continue;
           const qr = new Roll(String(d.qty ?? "1")); await qr.evaluate(); const units = Math.max(1, Number(qr.total) || 1);
           const data = await _materialItemData(RfiItems, { uuid: d.uuid, key: d.key, name: d.name, tier: d.tier }, units);
-          await actor.createEmbeddedDocuments("Item", [data]); dropped.push({ key: d.key, units, name: data.name || d.name || d.key });
+          await _deliverMaterial(actor, data, units); dropped.push({ key: d.key, units, name: data.name || d.name || d.key });
         } catch (eD) { console.warn(TAG, "drop failed", d, eD); }
       }
       if (dropped.length) { try { await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="ft-harvest-drops">✦ <b>Also found</b> — ${dropped.map(x => `${x.units}× ${x.name}`).join(", ")}</div>` }); } catch (_eM) {} }

@@ -75,6 +75,17 @@ export const RfiHarvest = {
    * 5 if the node doesn't track its own ceiling. Used by the (future) Soma
    * Break refresh hook; safe to call manually as a GM tool.
    */
+  /** Where a gather lands (owner ruling 2026-09-21): the steward's faction stockpile when they have one, else stacked in the pockets. */
+  async _deliver(actor, data, units) {
+    const fid = String(actor?.system?.faction?.id || "").replace(/^Actor\./, "");
+    const F = fid ? game.actors?.get(fid) : null; const stock = game.bbttcc?.api?.factions?.stockpile;
+    const key = foundry.utils.getProperty(data, "flags.fourththing.rfi.item.materialKey") || data.name;
+    if (F && stock?.adjust) { await stock.adjust(F, key, +units, { name: data.name, img: data.img, lastUuid: data.flags?.core?.sourceId || null }); return { to: "stockpile", faction: F }; }
+    const orCreate = game.fourththing?.stack?.orCreate;
+    if (orCreate) await orCreate(actor, data); else await actor.createEmbeddedDocuments("Item", [data]);
+    return { to: "pockets" };
+  },
+
   async regrow(scene = canvas?.scene, { multiplier = 1 } = {}) {
     if (!scene) return { count: 0 };
     let count = 0;
@@ -250,7 +261,7 @@ export const RfiHarvest = {
           } } } }
         };
       }
-      await actor.createEmbeddedDocuments("Item", [materialItemData]);
+      var delivered = await RfiHarvest._deliver(actor, materialItemData, yieldUnits);
     }
 
     await ChatMessage.create({
@@ -262,7 +273,7 @@ export const RfiHarvest = {
                       ${formula} → <b>${total}</b> vs DC ${dc} (${skill})<br>
                       ${aeContribs.length ? `<span style="color:#e8c84a;font-size:0.78rem">Passives: ${aeContribs.map(c => `${c.value >= 0 ? "+" : ""}${c.value} ${c.label} (${c.src})`).join(", ")}</span><br>` : ""}
                       ${success
-                        ? `✓ <b>Success</b> — gathered ${yieldUnits} unit${yieldUnits > 1 ? "s" : ""} of ${h.materialName || h.materialKey}.<br>Node has ${charges - 1} attempt${charges - 1 === 1 ? "" : "s"} remaining.`
+                        ? `✓ <b>Success</b> — gathered ${yieldUnits} unit${yieldUnits > 1 ? "s" : ""} of ${h.materialName || h.materialKey}.<br>Node has ${charges - 1} attempt${charges - 1 === 1 ? "" : "s"} remaining.${delivered?.to === "stockpile" ? ` → <b>${delivered.faction.name}</b>'s stockpile` : ""}`
                         : `✗ <b>Failed</b> — no yield. The node's charges are unchanged; the harvester walks away empty-handed.`}
                     </p>
                   </div></div>`
@@ -280,7 +291,7 @@ export const RfiHarvest = {
           if (d.uuid) { const src = await fromUuid(d.uuid); if (src) { data = src.toObject(); delete data._id; foundry.utils.setProperty(data, "flags.fourththing.rfi.item.charges", units); } }
           if (!data) data = { name: d.name || d.key, type: "gear", img: "icons/svg/mystery-man.svg", system: { slot: "material", tags: ["material", d.key] },
             flags: { fourththing: { rfi: { item: { ...RfiItems.defaults({ type: "gear", system: {}, getFlag: () => null }), tier: d.tier || "I", frame: "material", origin: "found", bound: "free", materialKey: d.key, charges: units, upkeep: { mode: "passive", per: "none" } } } } } };
-          await actor.createEmbeddedDocuments("Item", [data]); dropped.push({ key: d.key, units, name: d.name || d.key });
+          await RfiHarvest._deliver(actor, data, units); dropped.push({ key: d.key, units, name: d.name || d.key });
         } catch (eD) { console.warn("Roll for Initiation | harvest drop failed", d, eD); }
       }
       if (dropped.length) { try { await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="ft-harvest-drops">✦ <b>Also found</b> — ${dropped.map(x => `${x.units}× ${x.name}`).join(", ")}</div>` }); } catch (_eM) {} }

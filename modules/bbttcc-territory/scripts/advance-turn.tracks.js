@@ -608,11 +608,11 @@
       else if (L > 70) bonus = +5;
 
       if (drift !== 0 || bonus !== 0) {
-        const curNT = (A.getFlag(MODF, "bonuses") || {}).nextTurn || {};
-        const nextPct = Number(curNT.opGainPct || 0) + bonus;
+        // SET, never add (2026-09-21): the band IS the value for the next Advance — a running sum doubled the penalty
+        // whenever the phase ran twice between expiries (Errata read −40% at loyalty 25; the band says −10%).
         updates.push(A.update({
           [`flags.${MODF}.loyalty`]: L,
-          [`flags.${MODF}.bonuses.nextTurn.opGainPct`]: nextPct
+          [`flags.${MODF}.bonuses.nextTurn.opGainPct`]: bonus
         }));
 
         lines.push(
@@ -730,10 +730,8 @@
       else if (L > 70) dcBonus = +1;
 
       if (dcBonus !== 0) {
-        const curNT = (A.getFlag(MODF, "bonuses") || {}).nextTurn || {};
-        const nextDC = Number(curNT.defenseDC || 0) + dcBonus;
         updates.push(A.update({
-          [`flags.${MODF}.bonuses.nextTurn.defenseDC`]: nextDC
+          [`flags.${MODF}.bonuses.nextTurn.defenseDC`]: dcBonus   // SET, never add (2026-09-21) — see opGainPct
         }));
         lines.push(
           `• ${A.name}: Defense DC ${dcBonus>0?"+":""}${dcBonus} next raid (Loyalty ${L})`

@@ -8585,8 +8585,15 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
 // drop-data compare equal. Scope: type "gear" only — loot and consumables — so
 // weapons, armor, and authored manifestations stay as individual lines. The
 // inventory templates already render the ×N badge off system.quantity.
+function _ftIsMaterial(obj) {
+  const r = foundry.utils.getProperty(obj, "flags.fourththing.rfi.item") ?? {};
+  return r.frame === "material" && !!r.materialKey;
+}
 function _ftStackIdentity(obj) {
   const r = foundry.utils.getProperty(obj, "flags.fourththing.rfi.item") ?? {};
+  // MATERIALS stack by what they are (owner ruling 2026-09-21: "the resources need to stack"): one line per material
+  // key + tier, its charges = the units held. Everything else stacks by name/tier/frame/origin with system.quantity.
+  if (_ftIsMaterial(obj)) return ["material", RfiCrafting.canonKey?.(r.materialKey) ?? r.materialKey, r.tier ?? ""].join(" ");
   return [obj?.type, obj?.name, r.tier ?? "", r.frame ?? "", r.origin ?? ""].join(" ");
 }
 function _ftFindStackTarget(actor, itemData) {
@@ -8601,6 +8608,12 @@ function _ftFindStackTarget(actor, itemData) {
   return null;
 }
 async function ftStackOnto(target, itemData) {
+  if (_ftIsMaterial(target)) {
+    const cur = Number(target.getFlag("fourththing", "rfi.item.charges") ?? 0) || 0;
+    const add = Math.max(1, Number(foundry.utils.getProperty(itemData, "flags.fourththing.rfi.item.charges") ?? 1) || 1);
+    await target.update({ "flags.fourththing.rfi.item.charges": cur + add });
+    return [target];
+  }
   const curQty = Math.max(1, Number(target.system?.quantity) || 1);
   const addQty = Math.max(1, Number(itemData?.system?.quantity) || 1);
   const update = { "system.quantity": curQty + addQty };
@@ -8643,6 +8656,13 @@ async function ftMergeInventoryStacks(actorOrId) {
   for (const rows of groups.values()) {
     if (rows.length < 2) continue;
     const [keep, ...rest] = rows;
+    if (_ftIsMaterial(keep)) {
+      const units = rows.reduce((n, r) => n + Math.max(1, Number(r.getFlag("fourththing", "rfi.item.charges") ?? 1) || 1), 0);
+      await keep.update({ "flags.fourththing.rfi.item.charges": units });
+      await actor.deleteEmbeddedDocuments("Item", rest.map(r => r.id));
+      merged += 1; deleted += rest.length;
+      continue;
+    }
     const total = rows.reduce((n, r) => n + Math.max(1, Number(r.system?.quantity) || 1), 0);
     const update = { "system.quantity": total };
     const unitCharges = Math.max(...rows.map(r => Number(r.getFlag("fourththing", "rfi.item.charges") ?? 0) || 0));

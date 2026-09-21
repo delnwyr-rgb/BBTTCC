@@ -62,7 +62,7 @@
             <span class="bbttcc-stockpile-qty">${m.qty}</span>
             ${canEdit ? `
               <span class="bbttcc-stockpile-rowbtns">
-                <button type="button" class="bbttcc-mini" data-action="sell" data-key="${_esc(m.key)}" data-tooltip="Sell for Economy marks"><i class="fas fa-coins"></i></button>
+                <button type="button" class="bbttcc-mini" data-action="sell" data-key="${_esc(m.key)}" data-tooltip="Sell for marks — into the material's home channel, or any other at a discount"><i class="fas fa-coins"></i></button>
                 <button type="button" class="bbttcc-mini" data-action="withdraw" data-key="${_esc(m.key)}" data-tooltip="Withdraw to a character"><i class="fas fa-arrow-up-from-bracket"></i></button>
                 ${isGM ? `<button type="button" class="bbttcc-mini" data-action="adjust" data-key="${_esc(m.key)}" data-tooltip="Manual adjust (GM)"><i class="fas fa-pen"></i></button>` : ""}
               </span>
@@ -136,11 +136,16 @@
     const api = _stockpileApi(); if (!api?.sell || !key) return;
     const have = api.qty(faction, key); const price = await api.unitPrice(faction, key);
     const name = (api.list(faction).find(m => m.key === key) || {}).name || key;
+    const off = Number(api.MARKET?.OFF_CHANNEL_FRACTION || 0.7); const cap = c => c[0].toUpperCase() + c.slice(1);
+    const channels = ["economy", "logistics", "faith", "intrigue", "diplomacy", "violence", "softpower"];
+    const opts = channels.map(c => `<option value="${c}"${c === price.channel ? " selected" : ""}>${cap(c)}${c === price.channel ? ` — home (${price.sell}/unit)` : ` (${Math.max(1, Math.round(price.sell * off))}/unit)`}</option>`).join("");
     new Dialog({
       title: `Sell — ${name}`,
-      content: `<p><b>${_esc(name)}</b>: ${have} in the stockpile · <b>${price.sell} marks</b> each (retail ${price.retail}, T${_esc(price.tier)}) → Economy.</p>
-                <div class="form-group"><label>Quantity</label><input type="number" name="qty" value="${have}" min="1" max="${have}"/></div>`,
-      buttons: { sell: { icon: '<i class="fas fa-coins"></i>', label: "Sell", callback: async (html) => { const q = Number(html.find('[name="qty"]').val()) || 0; const res = await api.sell(faction, key, q); if (res?.ok) ui.notifications?.info(`Sold ${res.qty}× ${name} for ${res.marks} marks.`); else ui.notifications?.warn(`Sale refused: ${res?.error || "?"}`); try { faction.sheet?.render(false); } catch (_e) {} } }, cancel: { label: "Cancel" } },
+      content: `<p><b>${_esc(name)}</b> (${_esc(price.family)}): ${have} in the stockpile · <b>${price.sell} marks</b> each at home (retail ${price.retail}, T${_esc(price.tier)}).</p>
+                <div class="form-group"><label>Quantity</label><input type="number" name="qty" value="${have}" min="1" max="${have}"/></div>
+                <div class="form-group"><label>Sell into</label><select name="channel">${opts}</select></div>
+                <p style="font-size:.78rem;opacity:.7;">The family's home channel pays full; any other channel pays ${Math.round(off * 100)}%.</p>`,
+      buttons: { sell: { icon: '<i class="fas fa-coins"></i>', label: "Sell", callback: async (html) => { const q = Number(html.find('[name="qty"]').val()) || 0; const channel = String(html.find('[name="channel"]').val() || price.channel); const res = await api.sell(faction, key, q, { channel }); if (res?.ok) ui.notifications?.info(`Sold ${res.qty}× ${name} for ${res.marks} marks of ${cap(res.channel)}.`); else ui.notifications?.warn(`Sale refused: ${res?.error || "?"}`); try { faction.sheet?.render(false); } catch (_e) {} } }, cancel: { label: "Cancel" } },
       default: "sell"
     }).render(true);
   }
@@ -188,6 +193,17 @@
             } else {
               ui.notifications?.error?.(res?.error || "Deposit failed");
             }
+          }
+        },
+        all: {
+          label: "Deposit ALL materials",
+          callback: async (html) => {
+            const root = html[0];
+            const ch = game.actors.get(root.querySelector('[name="charId"]')?.value);
+            if (!ch) return ui.notifications?.warn?.("Pick a character.");
+            const res = await api.depositFromCharacter(ch, faction, { drainAll: true });
+            if (res?.ok) ui.notifications?.info?.(`Deposited everything: ${(res.deposited || []).map(d => `${d.qty}× ${d.name}`).join(", ") || "nothing to deposit"}`);
+            else ui.notifications?.error?.(res?.error || "Deposit failed");
           }
         },
         cancel: { label: "Cancel" }

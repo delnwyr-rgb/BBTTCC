@@ -1,4 +1,4 @@
-import { PRICE_MULT, RECIPES } from "/modules/bbttcc-core/scripts/economy.constants.js";
+import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scripts/economy.constants.js";
 // Bad Eden — Strategic Throughput Registry (Alpha Consolidated, beacon + watchdog, deduped)
 
 (() => {
@@ -370,6 +370,19 @@ import { PRICE_MULT, RECIPES } from "/modules/bbttcc-core/scripts/economy.consta
       // OWNER DIAL (2026-06-05): +20 marks Economy into the bank next turn for a 10-mark spend.
       await scheduleFactionOP(A, { economy: 20 }, 1);
       await pushWarLog(A,"Harvest Season: +20 marks Economy next turn (tier cap applies).");
+    },
+    // Sell Surplus (material economy, owner ruling 2026-09-21): half of the stockpile's most plentiful material goes to
+    // market at the sell price +10% (api.factions.stockpile.sell, priceMult 1.1). Nothing to sell = a war-log note.
+    async sell_surplus(ctx){
+      const A = game.actors.get(ctx.factionId); if (!A) return;
+      const stock = game.bbttcc?.api?.factions?.stockpile;
+      if (!stock?.list || !stock?.sell) { await pushWarLog(A, "Sell Surplus: stockpile API unavailable — nothing sold."); return; }
+      const rows = (stock.list(A) || []).filter(r => Number(r?.qty || 0) > 0).sort((a, b) => Number(b.qty) - Number(a.qty));
+      if (!rows.length) { await pushWarLog(A, "Sell Surplus: the stockpile is empty — nothing to take to market."); return; }
+      const top = rows[0]; const n = Math.max(1, Math.floor(Number(top.qty) / 2));
+      const r = await stock.sell(A, top.key, n, { priceMult: MATERIAL_MARKET.SURPLUS_MULT });
+      if (!r?.ok) { await pushWarLog(A, `Sell Surplus: ${top.name || top.key} would not sell (${r?.error || "refused"}).`); return; }
+      await pushWarLog(A, `Sell Surplus: sold ${r.qty}× ${top.name || top.key} for ${r.marks} marks ${r.channel} (its home channel, sell price ×${MATERIAL_MARKET.SURPLUS_MULT}).`);
     },
     async ration_distribution(ctx){
       const A = game.actors.get(ctx.factionId);

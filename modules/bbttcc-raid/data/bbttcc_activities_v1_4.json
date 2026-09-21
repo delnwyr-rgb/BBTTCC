@@ -1122,5 +1122,23 @@
         "minFactionTier": 1
       }
     }
+  },
+  {
+    "name": "Sell Surplus [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "economy": 5
+        },
+        "effects": {
+          "text": "Sell half of the stockpile's most plentiful material at the market for Economy marks — sell price +10% (5-mark spend for the trip)."
+        },
+        "minFactionTier": 1
+      }
+    }
   }
 ]

@@ -41,6 +41,7 @@
 
     // Strategic Activities (strategic turn)
     harvest_season:            "+1 Economy regen next turn.",
+    sell_surplus:              "Sell half of the stockpile's most plentiful material at market (sell price +10%).",
     recon_sweep:               "Reveal alignment of 1 adjacent Hex.",
     ration_distribution:       "+1 Loyalty to one controlled Hex.",
     minor_repair:              "Remove 'Damaged Infrastructure'.",

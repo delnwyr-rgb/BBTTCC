@@ -1,3 +1,4 @@
+import { MATERIAL_MARKET } from "/modules/bbttcc-core/scripts/economy.constants.js";
 // modules/bbttcc-factions/scripts/stockpile-api.js
 // Bad Eden — Faction Material Stockpile API v0.1
 //
@@ -105,9 +106,27 @@ function list(faction) {
   return arr;
 }
 
+// PLAYER SEATS (2026-09-21): a steward harvesting into the faction stockpile from a player seat can't update the faction
+// actor unless they own it — the ONE write a stockpile needs (an adjust) relays to the GM seat via bbttcc-core gmExec.
+const RELAY_TYPE = "factions.stockpile.adjust";
+function _registerRelay() {
+  const gx = game.bbttcc?.api?.gmExec; if (!gx?.register) return;
+  gx.register(RELAY_TYPE, async (p, meta) => {
+    const F = _resolveActor(p?.factionId); if (!F) throw new Error("faction not found");
+    const r = await adjust(F, String(p?.matKey || ""), Number(p?.delta) || 0, p?.opts || {});
+    console.log(TAG, "relayed adjust", F.name, p?.matKey, p?.delta, `(for ${meta?.fromUserName || "?"})`);
+    return r;
+  });
+}
+
 async function adjust(faction, matKey, delta, opts = {}) {
   const F = _resolveActor(faction);
   if (!F || !matKey) return { ok: false, error: "missing actor or key" };
+  if (!game.user?.isGM && !F.isOwner) {
+    const gx = game.bbttcc?.api?.gmExec;
+    if (!gx?.call) return { ok: false, error: "no permission to write the faction stockpile and no GM relay available" };
+    return gx.call(RELAY_TYPE, { factionId: F.id, matKey: String(matKey), delta: Math.floor(Number(delta) || 0), opts: { name: opts?.name, img: opts?.img, lastUuid: opts?.lastUuid } });
+  }
   const d = _safeQty(delta) - 0; // signed int via _safeQty floor
   const signedDelta = Math.floor(Number(delta) || 0);
   if (!signedDelta) return { ok: true, before: qty(F, matKey), after: qty(F, matKey), delta: 0 };
@@ -233,29 +252,51 @@ async function withdrawToCharacter(character, faction, matKey, qtyAmt, _opts = {
 // Materials sell back at SELL_FRACTION of their retail unit price (rubric §1: tierBase × 0.1 × rarity; a T1 unit
 // retails at 5 marks) into the faction's ECONOMY pool. The unit price comes from the material's own item when the
 // stockpile remembers one (`lastUuid` → rfi.item.tier / rarityMult), else tier I. Tune SELL_FRACTION here.
-const SELL_FRACTION = 0.40;                                   // = rfi-pricing SALE_BACK_FRACTION
+const SELL_FRACTION = MATERIAL_MARKET.SELL_FRACTION;          // one table: bbttcc-core economy.constants.js
+// MATERIAL FAMILIES (2026-09-21) — every minted key → its family; the family → its home OP channel (MATERIAL_MARKET).
+const MATERIAL_FAMILY = Object.freeze({
+  ore: ["ore-vein", "bog-iron", "heart-iron", "mountain-stone", "anchorstone", "cold-iron", "scribed-steel", "vow-bound-edge", "hex-iron-cleat", "rad-iron", "heart-iron-shaving", "pig-iron", "threshold-iron", "brace-iron", "wardiron", "blessed-steel", "mirror-alloy", "silence-alloy", "brass", "casing-brass", "lead-shot", "sheet-steel", "rivet-plate", "pre-fall-stainless", "scrap-steel"],
+  salvage: ["scrap-salvage", "prefall-component", "pre-fall-component", "soft-alloy", "enamel-pin", "brass-thumb-bell", "bronze-nail", "spring-tension-arm", "pre-fall-electronics", "stubborn-batteries", "ley-tuned-magnetic-tape", "lunchbox-frame", "sealed-foil", "pre-fall-signage", "pre-fall-condiment", "actually-suspect-additives", "expanded-polyurethane", "competent-engraving", "heart-coil"],
+  wood: ["ash-wood", "vow-resin", "memory-resin", "sept-stamped-haft", "vow-shaft", "oak-core", "hickory-haft", "ash-haft", "walnut-stock", "vigil-resin"],
+  hide: ["herd-leather", "root-leather", "work-leather", "road-leather", "oath-leather", "sept-leather", "leather-strap", "leather-grip", "leather-cuff", "rivet-strap", "wrapped-leather", "corded-belt", "tool-loop"],
+  farm: ["wild-grain", "bad-eden-meat", "wool", "sept-wool", "ground-bean"],
+  herb: ["wild-herb", "reagent-moss", "mire-resin", "marrow-tincture", "low-grade-precognition"],
+  weave: ["sept-cloth", "blessed-thread", "silence-silk", "hex-rope", "balance-bind", "warded-wool", "prayer-thread", "calming-thread", "ash-thread", "circle-silk", "yesodium-thread", "road-canvas", "pre-fall-cotton", "gambeson", "padded-coat", "quilted-liner", "mail"],
+  sacred: ["prayer-resin", "vow-bone", "oath-ink", "sept-tuning-fork", "prayer-binding", "sacred-gold", "witness-resin", "threshold-wax", "sept-silver"],
+  crystal: ["crystal-fragment", "sun-glass", "fogged-quartz", "courier-glass", "witness-glass", "focusing-lens", "focused-crystal", "anchor-quartz", "hex-glyph-plate", "hex-script", "hex-lattice"],
+  yesod: ["yesodium", "tree-of-life-shard"],
+  paper: ["pre-fall-paper", "wax-paper", "receipt-paper", "ink-three-colors"],
+  shore: ["river-clay", "salt-block", "freshwater-pearl", "finger-bone"]
+});
+const _FAMILY_OF = new Map(); for (const [fam, keys] of Object.entries(MATERIAL_FAMILY)) for (const k of keys) _FAMILY_OF.set(k, fam);
+function familyOf(matKey) { return _FAMILY_OF.get(String(matKey || "")) || "ore"; }
+function channelFor(matKey) { const family = familyOf(matKey); return { family, channel: MATERIAL_MARKET.FAMILY_CHANNEL[family] || "economy" }; }
 const TIER_BASE_MARKS = { I: 50, II: 150, III: 450, IV: 1350, 1: 50, 2: 150, 3: 450, 4: 1350 };
 async function unitPrice(faction, matKey) {
   const F = _resolveActor(faction); const cur = F ? (_readMap(F)[matKey] || null) : null;
   let tier = "I", rarity = 1.0;
   try { if (cur?.lastUuid) { const src = await fromUuid(cur.lastUuid); const rfi = src?.getFlag?.("fourththing", "rfi.item") || {}; if (rfi.tier) tier = rfi.tier; if (Number(rfi.rarityMult) > 0) rarity = Number(rfi.rarityMult); } } catch (_e) {}
   const retail = Math.round((TIER_BASE_MARKS[tier] ?? 50) * 0.1 * rarity);
-  return { retail, sell: Math.max(1, Math.round(retail * SELL_FRACTION)), tier, rarity };
+  const { family, channel } = channelFor(matKey);
+  return { retail, sell: Math.max(1, Math.round(retail * SELL_FRACTION)), tier, rarity, family, channel };
 }
 async function sell(faction, matKey, qtyWanted, opts = {}) {
   const F = _resolveActor(faction);
   if (!F || !matKey) return { ok: false, error: "missing actor or key" };
   const have = qty(F, matKey); const n = Math.min(have, Math.max(0, Math.floor(Number(qtyWanted) || 0)));
   if (n <= 0) return { ok: false, error: have <= 0 ? "nothing to sell" : "bad quantity", have };
-  const price = await unitPrice(F, matKey); const marks = price.sell * n;
+  const price = await unitPrice(F, matKey); const mult = Number(opts.priceMult) > 0 ? Number(opts.priceMult) : 1;
+  // the channel: the family's home at full price, any other at OFF_CHANNEL_FRACTION (owner ruling 2026-09-21)
+  const channel = String(opts.channel || price.channel).toLowerCase(); const home = channel === price.channel; const chanFrac = home ? 1 : MATERIAL_MARKET.OFF_CHANNEL_FRACTION;
+  const unitMarks = Math.max(1, Math.round(price.sell * mult * chanFrac)); const marks = unitMarks * n;
   const op = game.bbttcc?.api?.op; if (!op?.commit) return { ok: false, error: "OP api unavailable" };
   const name = (_readMap(F)[matKey]?.name) || matKey;
-  const res = await op.commit(F.id, { economy: marks }, { source: "stockpile-sell", label: `Sold ${n}× ${name}`, note: `${n} × ${price.sell} marks (retail ${price.retail}, T${price.tier})`, allowOvercap: !!opts.allowOvercap });
+  const res = await op.commit(F.id, { [channel]: marks }, { source: "stockpile-sell", label: `Sold ${n}× ${name} → ${channel}`, note: `${n} × ${unitMarks} marks (retail ${price.retail}, T${price.tier}${mult !== 1 ? `, ×${mult}` : ""}${home ? "" : `, off-channel ×${MATERIAL_MARKET.OFF_CHANNEL_FRACTION}`})`, allowOvercap: !!opts.allowOvercap });
   if (res && res.ok === false) return { ok: false, error: res.error || "commit refused", marks };
   const adj = await adjust(F, matKey, -n, { name });
-  try { await ChatMessage.create({ speaker: { alias: F.name }, content: `<div class="bbttcc-stockpile-sale" style="border-left:3px solid #d4a72c;padding:.35em .6em;background:rgba(212,167,44,.08);">💰 <b>${foundry.utils.escapeHTML(F.name)}</b> sold <b>${n}× ${foundry.utils.escapeHTML(name)}</b> for <b>${marks} marks</b> of Economy <span style="opacity:.7;">(${price.sell}/unit · retail ${price.retail})</span>.</div>` }); } catch (_eC) {}
+  try { await ChatMessage.create({ speaker: { alias: F.name }, content: `<div class="bbttcc-stockpile-sale" style="border-left:3px solid #d4a72c;padding:.35em .6em;background:rgba(212,167,44,.08);">💰 <b>${foundry.utils.escapeHTML(F.name)}</b> sold <b>${n}× ${foundry.utils.escapeHTML(name)}</b> for <b>${marks} marks</b> of ${channel[0].toUpperCase() + channel.slice(1)}${home ? "" : " (off-channel)"} <span style="opacity:.7;">(${unitMarks}/unit · retail ${price.retail})</span>.</div>` }); } catch (_eC) {}
   try { Hooks.callAll("bbttcc:stockpile:sold", { factionId: F.id, materialKey: matKey, qty: n, marks, unit: price.sell }); } catch (_e) {}
-  return { ok: true, qty: n, marks, unit: price.sell, retail: price.retail, remaining: adj?.after ?? qty(F, matKey) };
+  return { ok: true, qty: n, channel, home, marks, unit: unitMarks, retail: price.retail, remaining: adj?.after ?? qty(F, matKey) };
 }
 
 function _attach() {
@@ -268,9 +309,11 @@ function _attach() {
     root.qty = qty;
     root.list = list;
     root.adjust = adjust;
+    _registerRelay();
     root.sell = sell;
     root.unitPrice = unitPrice;
     root.SELL_FRACTION = SELL_FRACTION;
+    root.MARKET = MATERIAL_MARKET; root.MATERIAL_FAMILY = MATERIAL_FAMILY; root.familyOf = familyOf; root.channelFor = channelFor;
     root.depositFromCharacter = depositFromCharacter;
     root.withdrawToCharacter = withdrawToCharacter;
     console.log(TAG, "Stockpile API ready → game.bbttcc.api.factions.stockpile");

@@ -495,6 +495,7 @@ const _BBTTCC_STANDARD_START_MANEUVERS = [
 ];
 const _BBTTCC_STANDARD_START_STRATEGICS = [
   "harvest_season",
+  "sell_surplus",
   "minor_repair",
   "develop_outpost_stability",
   "establish_outpost",
@@ -2336,8 +2337,20 @@ class BBTTCCFactionSheet extends ActorSheet {
         }
       }
     } catch (_e) {}
-    return super._render(force, options);
+    const out = await super._render(force, options);
+    // STAY ON THE TAB (owner ask 2026-09-21): every re-render (a sale, a deposit, an OP change) rebuilt the sheet on
+    // Overview. The tab the user last picked is remembered per faction and re-applied after each render.
+    try {
+      const want = BBTTCCFactionSheet._lastTab.get(this.actor?.id) || "";
+      const root = this.element?.[0] ?? this.element;
+      if (want && want !== "overview" && root instanceof HTMLElement) {
+        root.querySelectorAll(".bbttcc-tabs .item").forEach((el) => el.classList.toggle("is-active", el.getAttribute("data-tab") === want));
+        root.querySelectorAll(".bbttcc-tab").forEach((el) => el.classList.toggle("is-active", el.getAttribute("data-tab") === want));
+      }
+    } catch (_e) {}
+    return out;
   }
+  static _lastTab = new Map();   // actor id → the tab the user last picked
 
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
@@ -3101,6 +3114,7 @@ try {
 
       const tab = item.getAttribute("data-tab") || "";
       if (!tab) return;
+      try { BBTTCCFactionSheet._lastTab.set(this.actor?.id, tab); } catch (_e) {}
 
       root.querySelectorAll(".bbttcc-tabs .item").forEach((el) => el.classList.remove("is-active"));
       item.classList.add("is-active");
