@@ -55,7 +55,7 @@
     setFaction("khezek_tor_darkness_shipment_ignore", { m: -1, d: 1, op: { economy: 20 } });
 
     // ── E2 · relationships ──
-    const riders = factionByName(/^circuit riders$/i); const drowned = factionByName(/drowned south|ralph maccio|evil bad faction/i);   // owner 2026-09-21: the Evil Bad Faction actor IS Ralph's Drowned South (reset its tier by hand) const tanneritos = factionByName(/tanneritos/i);
+    const riders = factionByName(/^circuit riders$/i); const drowned = factionByName(/drowned south|ralph maccio|evil bad faction/i); /* owner 2026-09-21: the Evil Bad Faction actor IS Ralph's Drowned South (reset its tier by hand) */ const tanneritos = factionByName(/tanneritos/i);
     if (riders) { relations("enc_circuit_riders_parley_alliance", [{ sourceFactionId: "@coalition", targetFactionId: riders.id, setStatus: "allied" }]); relations("enc_circuit_riders_parley_flagged", [{ sourceFactionId: "@coalition", targetFactionId: riders.id, setStatus: "unfriendly" }]); }
     else say("⚠ no 'Circuit Riders' faction actor — the alliance/flagged relationship rows wait for it (re-run after minting)");
     if (drowned) relations("bandit_summit_accord", [{ sourceFactionId: "@coalition", targetFactionId: drowned.id, setStatus: "allied" }]); else say("⚠ no Drowned South / Ralph Maccio / Evil Bad Faction actor — the Bandit Accord's ALLIED row waits for it (re-run after minting)");
