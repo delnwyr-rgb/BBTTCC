@@ -55,10 +55,10 @@
     setFaction("khezek_tor_darkness_shipment_ignore", { m: -1, d: 1, op: { economy: 20 } });
 
     // ── E2 · relationships ──
-    const riders = factionByName(/^circuit riders$/i); const drowned = factionByName(/drowned south|ralph maccio/i); const tanneritos = factionByName(/tanneritos/i);
+    const riders = factionByName(/^circuit riders$/i); const drowned = factionByName(/drowned south|ralph maccio|evil bad faction/i);   // owner 2026-09-21: the Evil Bad Faction actor IS Ralph's Drowned South (reset its tier by hand) const tanneritos = factionByName(/tanneritos/i);
     if (riders) { relations("enc_circuit_riders_parley_alliance", [{ sourceFactionId: "@coalition", targetFactionId: riders.id, setStatus: "allied" }]); relations("enc_circuit_riders_parley_flagged", [{ sourceFactionId: "@coalition", targetFactionId: riders.id, setStatus: "unfriendly" }]); }
     else say("⚠ no 'Circuit Riders' faction actor — the alliance/flagged relationship rows wait for it (re-run after minting)");
-    if (drowned) relations("bandit_summit_accord", [{ sourceFactionId: "@coalition", targetFactionId: drowned.id, setStatus: "allied" }]); else say("⚠ no Drowned South / Ralph Maccio faction actor — the Bandit Accord's ALLIED row waits for it (re-run after minting)");
+    if (drowned) relations("bandit_summit_accord", [{ sourceFactionId: "@coalition", targetFactionId: drowned.id, setStatus: "allied" }]); else say("⚠ no Drowned South / Ralph Maccio / Evil Bad Faction actor — the Bandit Accord's ALLIED row waits for it (re-run after minting)");
     { const known = (game.actors?.contents || []).filter(a => (a.type === "faction" || a.getFlag?.("bbttcc-factions", "isFaction")) && !coalition.includes(a.id) && !/evil bad faction|prefected/i.test(String(a.name || ""))); if (known.length) relations("khezek_tor_the_vaulhaulan_seal_redirect", known.map(a => ({ sourceFactionId: "@coalition", targetFactionId: a.id, step: -1 }))); else say("⚠ no faction actors found for the Seal redirect's −1 step (offline?)"); }
     if (tanneritos) relations("chuckle_cancelled", [{ sourceFactionId: "@coalition", targetFactionId: tanneritos.id, step: -1 }]); else say("⚠ no Tanneritos faction actor — Chuckle Creek's cancellation cost waits for it");
 
@@ -125,6 +125,12 @@
     award("enc_bandit_ambush_bandits_run", "talkdown", /bandit/i, "bandit_ambush");
     award("bandit_arms_down_accept", "parley", /bandit/i, "bandit_ambush");
     award("forest_of_tifaret_obstructor", "cleanse", /obstructor/i, "obstructor_demon");
+
+    // E9 ── THE AUTHORING WORLD'S PLAYER FACTIONS (2026-09-21): 34 factionEffects rows on 30 beats name three actor ids
+    // from the April cross-world export (qrhl…, Gq3Y…, 6Dqh…) — no such faction exists here, so the rows never landed.
+    // They meant "the players' faction": retarget to "@coalition" (the WME fans that out to the roster).
+    const STALE = new Set(["qrhlINxQaEDwCcbn", "Gq3YWAEYOlrLrLQx", "6DqhVXCpDyXA7HeM"]);
+    for (const b of (camp.beats || [])) { const rows = Array.isArray(b?.worldEffects?.factionEffects) ? b.worldEffects.factionEffects : []; let n = 0; for (const r of rows) if (r && STALE.has(String(r.factionId))) { r.factionId = "@coalition"; n++; } if (n) { changes += n; say(`🎯 ${b.id}: ${n} factionEffects row(s) → @coalition`); } }
 
     console.log(`[seed-effects-act2] ${apply ? "APPLY" : "DRY RUN"} — ${changes} change(s)\n` + report.map(r => "  " + r).join("\n"));
     if (!apply) { ui.notifications.info(`Effects seeder DRY RUN: ${changes} change(s) (console).`); return changes; }

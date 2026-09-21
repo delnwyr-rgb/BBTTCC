@@ -1123,6 +1123,16 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
     let fx = [];
     if (Array.isArray(we.factionEffects)) fx = we.factionEffects;
     const defaultFactionId = (ctx.factionId !== undefined ? ctx.factionId : null);
+    // "@coalition" (2026-09-21) = one row per faction on the active campaign's roster — the authoring world's
+    // player-faction ids (34 rows on 30 beats) are retargeted here by seed-effects-act2 E9 so the beats do what they say.
+    try {
+      const rosterIds = () => { try { const capi = get(game, "bbttcc.api.campaign", null); const cid = capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null; const camp = cid && capi.getCampaign ? capi.getCampaign(cid) : null; return Array.from(new Set([].concat((camp && camp.factionIds) || [], (camp && camp.factionId) ? [camp.factionId] : []).map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean))); } catch (_e) { return []; } };
+      if (fx.some(r => r && /^@(coalition|campaign|stewards)$/i.test(String(r.factionId || "").trim()))) {
+        const ids = rosterIds(); const out = [];
+        for (const r of fx) { if (r && /^@(coalition|campaign|stewards)$/i.test(String(r.factionId || "").trim())) { for (const id of ids) out.push(Object.assign({}, r, { factionId: id })); } else out.push(r); }
+        fx = out;
+      }
+    } catch (eX) { console.warn(TAG, "factionEffects @coalition expand failed", eX); }
 
     for (let i=0;i<fx.length;i++) {
       const row = fx[i];

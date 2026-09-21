@@ -714,7 +714,7 @@ for (const b of beats) {
   }
   for (const [i, row] of (Array.isArray(we.factionEffects) ? we.factionEffects : []).entries()) {
     if (!row || typeof row !== "object") { F("E02", "ERROR", b.id, `factionEffects[${i}] not an object`); continue; }
-    if (s(row.factionId) && factionIds.size && !factionIds.has(normFid(row.factionId))) { const k = normFid(row.factionId); if (!foreignFactions.has(k)) foreignFactions.set(k, { n: 0, beats: new Set() }); const ff = foreignFactions.get(k); ff.n++; ff.beats.add(b.id); }
+    if (s(row.factionId) && !/^@(coalition|campaign|stewards)$/i.test(s(row.factionId)) && factionIds.size && !factionIds.has(normFid(row.factionId))) { const k = normFid(row.factionId); if (!foreignFactions.has(k)) foreignFactions.set(k, { n: 0, beats: new Set() }); const ff = foreignFactions.get(k); ff.n++; ff.beats.add(b.id); }
     for (const k of ["moraleDelta", "loyaltyDelta", "unityDelta", "darknessDelta", "vpDelta"]) if (row[k] != null && row[k] !== "" && !isNum(row[k])) F("E02", "WARN", b.id, `factionEffects[${i}].${k} = ${JSON.stringify(row[k])} not numeric`);
     for (const [ok, ov] of Object.entries(row.opDeltas || {})) {
       const nk = ok.toLowerCase().replace(/[_\s]/g, "");
