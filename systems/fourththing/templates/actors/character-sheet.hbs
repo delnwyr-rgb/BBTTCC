@@ -89,6 +89,10 @@
         </div>
       </div>
       <div class="ft-defenses flexrow">
+        <div class="ft-def-stat" data-tooltip="Strikes per round — your Tier for striker paths (Aurablade, Bulwark, Harmony Marshal, Shadow Courier), one for everyone else. The Combat Tracker keeps the count.">
+          <label>Strikes</label>
+          <span>{{derived.strikes.value}}<small style="opacity:.6">/rd</small></span>
+        </div>
         <div class="ft-def-stat" data-tooltip="{{ftDefenseTip 'guard'}}">
           <label>Guard</label>
           <span>{{derived.guard.value}}</span>
@@ -673,7 +677,8 @@
       </div>
       {{/if}}
 
-      {{!-- Action economy --}}
+      {{!-- Action economy — hidden unless the world setting turns the sheet tracker back on (owner ruling 2026-09-21) --}}
+      {{#if actionEconomyOn}}
       <div class="ft-combat-section">
         <div class="ft-section-header">
           <h3>Action Economy</h3>
@@ -733,6 +738,7 @@
           {{#if actionEconomy.speeds.fly}}<span class="ft-move-mode" data-tooltip="Fly speed — airborne movement.">✈ Fly {{actionEconomy.speeds.fly}} ft <span style="opacity:0.65">({{actionEconomy.speedsSq.fly}} sq)</span></span>{{/if}}
         </div>
       </div>
+      {{/if}}
 
       {{!-- Codified combat actions (Phase 1: Dash, Disengage, Hold, Aid, Hide, Dodge) --}}
       <div class="ft-combat-section">

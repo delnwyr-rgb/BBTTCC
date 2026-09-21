@@ -5881,6 +5881,8 @@ async function _checkAndDebitActionEconomy(actor, ab) {
   const cadence = ab?.type;
   if (cadence === "strategic-turn" || cadence === "scenario" || cadence === "info") return true;
 
+  // Sheet action economy OFF (owner ruling 2026-09-21: the Combat Tracker is the authority) → never gate or debit.
+  try { if (game.settings.get("fourththing", "actionEconomy") !== true) return true; } catch (_e) { return true; }
   // No active combat → don't gate. (Free play / narrative use.)
   if (!game.combat?.combatants?.find(c => c.actor?.id === actor.id)) return true;
 

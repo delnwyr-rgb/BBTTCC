@@ -3776,8 +3776,11 @@ function _ftInActiveCombat(actor) {
     return !!c.combatants?.some?.(cb => cb?.actorId === actor.id);
   } catch (_) { return false; }
 }
+// Striker paths (owner ruling 2026-09-21): strikes per round = Tier. Casters and the rest stay at one.
+const FT_STRIKER_PATHS = ["Aurablade", "Bulwark", "Harmony Marshal", "Shadow Courier"];
+function _ftActionEconomyOn() { try { return game.settings.get("fourththing", "actionEconomy") === true; } catch (_e) { return false; } }
 function _ftIsActionEconomyActive(actor) {
-  return !!actor && _ftInActiveCombat(actor) && !_ftIsFoeActor(actor);
+  return _ftActionEconomyOn() && !!actor && _ftInActiveCombat(actor) && !_ftIsFoeActor(actor);
 }
 function _ftSurgeAllowed(actor) {
   if (!_ftIsFoeActor(actor)) return true; // PCs / rigs unchanged
@@ -13759,6 +13762,10 @@ Hooks.once("init", function () {
   // Bands fire when total exceeds DC by 20+. Cosmetic at +20, mechanical from
   // +30 up. Tier gate keeps peer-on-peer rolls quiet — the ground only creaks
   // when a higher-tier actor punches down on a lower-tier target.
+  // ACTION ECONOMY ON THE SHEET (owner ruling 2026-09-21: "that's the native Combat Tracker's job") — OFF by default:
+  // no Action/Bonus/Reaction lockouts, no movement-budget nags, the sheet's Action Economy block hidden. The slots still
+  // reset each turn and may still be written, so flipping this back on loses nothing.
+  game.settings.register("fourththing", "actionEconomy", { name: "Steward sheet tracks action economy", hint: "Off (default): the Combat Tracker is the authority — the sheet neither gates Action/Bonus/Reaction nor nags about movement. On: the pre-2026-09-21 lockouts and the sheet's Action Economy block return.", scope: "world", config: true, type: Boolean, default: false });
   // THE RECIPE BOOK (2026-09-20): { common:[slugs], factions:{actorId:[slugs]}, stewards:{actorId:[slugs]} } — see RfiCrafting.recipes.
   game.settings.register("fourththing", "recipeBook", { scope: "world", config: false, type: Object, default: { common: [], factions: {}, stewards: {} } });
   game.settings.register("fourththing", "overshootEnabled", {
@@ -17333,6 +17340,14 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       if (this.items?.some?.(i => String(i.system?.identifier ?? "") === "bbttcc_feat_grim_persistence")) {
         sys.derived.integrity.max += 2 * charLevel;
       }
+      // STRIKES PER ROUND (owner ruling 2026-09-21): striker paths make Tier strikes per round (T1 1 · T2 2 · T3 3 ·
+      // T4 4); everyone else makes one. The Combat Tracker keeps the count — this is the number the sheet shows.
+      try {
+        const clsName = String(this.items?.find?.(i => i.type === "class")?.name || "");
+        const striker = FT_STRIKER_PATHS.some(n => clsName.toLowerCase().startsWith(n.toLowerCase()));
+        const tierNow = Math.max(1, Math.min(4, Number(tierForLevel(charLevel)) || 1));
+        sys.derived.strikes = { value: striker ? tierNow : 1, striker, tier: tierNow };
+      } catch (_eStrikes) { sys.derived.strikes = { value: 1, striker: false, tier: 1 }; }
       // Effect/mutation bonus to max Integrity — single-application aeBonus channel
       // (same pattern as the defenses below). Foundry applies the AE to .aeBonus
       // before derive; we fold it in and re-stamp so it survives the next cycle.
@@ -18149,7 +18164,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const next    = cur + distanceFt;
       actor.update({ "system.actions.movementUsedFt": next })
         .then(() => {
-          if (budget > 0 && next > budget && cur <= budget) {
+          if (_ftActionEconomyOn() && budget > 0 && next > budget && cur <= budget) {
             ui.notifications?.warn(`${actor.name}: movement ${next}ft exceeds budget ${budget}ft. (GM judgment — Dash, Surge, or terrain?)`);
           }
         })
@@ -19300,6 +19315,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         soulSmithState,
         harmonyMarshalState,
         sigModePills,
+        actionEconomyOn: _ftActionEconomyOn(),
         actions:       { actionUsed: actions.actionUsed ?? false,
                          bonusUsed:  actions.bonusUsed  ?? false,
                          reactionUsed: actions.reactionUsed ?? false },
