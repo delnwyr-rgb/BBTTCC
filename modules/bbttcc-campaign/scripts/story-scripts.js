@@ -190,6 +190,166 @@ export const STORY_SCRIPTS = {
     doors: [], after: [], chapters: {}
   },
 
+  // ═══ ACTS 3–6 (owner rulings A–M, 2026-09-20; proposals in ~/STORY_FLOW_ACTS_3_6_2026_09_19.md) ═══════════════════
+
+  // ─── ACT 3 · THE HEADING ───
+  widening_trail: {
+    giver: "The Seal's signature — and Sable Nine's chart, which already agreed with the water.",
+    description: "The seal pointed coastward and signed its work. Coastward there is a chapel that turns to face things nobody else can see, ash flats that never went cold, a marsh that sings when someone lies, and a harbor whose floor is a diagram at low tide. Three points make a heading. Follow it until it names a port.",
+    steps: [
+      { id: "chapel", label: "The Rotating Chapel", chapter: "the_rotating_chapel", line: "A chapel on the coast road turns to face what it's looking at. Go stand where it's looking.", beats: ["map_rotating_chapel_approach"], done: { chapter: ["widening_trail", "the_rotating_chapel"] } },
+      { id: "flats", label: "The Burnt Flats", chapter: "the_burnt_flats", line: "The Flats should be cold. They aren't. Read the heat before you read the map.", beats: ["map_burnt_flats_intro"], done: { chapter: ["widening_trail", "the_burnt_flats"] } },
+      { id: "mire", label: "The Singing Mire", chapter: "the_singing_mire", line: "The marsh sings when somebody lies. Decide who's telling the truth before you go in.", beats: ["map_singing_mire_intro"], done: { chapter: ["widening_trail", "the_singing_mire"] } },
+      { id: "anchor", label: "Anchor Reach", chapter: "anchor_reach", line: "At low tide the harbor floor is a diagram. You've seen the other two points. Close the triangle.", beats: ["map_anchor_reach_intro"], done: { chapter: ["widening_trail", "anchor_reach"] } },
+      { id: "kudzu", label: "Port Kudzu", chapter: "port_kudzu", line: "Port Kudzu floats on invoices. Somebody there saw the water go sideways. Buy, charm, or steal the story.", beats: ["map_port_kudzu_intro"], done: { chapter: ["widening_trail", "port_kudzu"] } },
+      { id: "legansus", label: "Legansus Waystation", chapter: "legansus_waystation", line: "The Circuit Riders at Legansus will verify you or file you. Bring everything.", beats: ["map_legansus_waystation_intro"], done: { chapter: ["widening_trail", "legansus_waystation"] } }
+    ],
+    doors: [], after: [],
+    chapters: {
+      the_rotating_chapel: { giver: "the chapel", line: "Map its rotations, force the mechanism, or treat it as a witness." },
+      the_burnt_flats: { giver: "the heat in the mud", line: "Read the residue as a pattern, or dig the marker rod out." },
+      the_singing_mire: { giver: "the song", line: "Tell the truth and listen, sing back, or shut it down and keep moving." },
+      anchor_reach: { giver: "the harbor floor", line: "Stabilize the pattern long enough to study it, or break an anchor and stop the routing." },
+      port_kudzu: { giver: "the captains", line: "Testimony costs money, patience, or a stolen manifest." },
+      legansus_waystation: { giver: "the Circuit Riders", line: "Submit to verification, or hold something back and be filed." }
+    }
+  },
+  hidden_vault: {
+    giver: "Pip and Patter's route notes — a door in a hill the runners were told never to knock on.",
+    description: "In the Polygonal Forest there is a door in a hill with a password on it, a family that has kept vigil outside it for three hundred customers, and a smell of butter that never left. Somebody built a bunker to keep a movie theater safe. Something inside still thinks it's opening night.",
+    steps: [
+      { id: "grove", label: "The Polygonal Grove", line: "The runners' notes say: a door in a hill, don't knock. Knock.", beats: ["enc_hidden_vault_approach"] },
+      { id: "locals", label: "The Locals", line: "The family outside has been waiting for the 300th customer. Decide if that's you.", beats: ["enc_hidden_vault_locals"], done: { anyOf: ["enc_hidden_vault_locals_friendly", "enc_hidden_vault_locals_neutral", "enc_hidden_vault_locals_hostile", "enc_hidden_vault_door"] } },
+      { id: "door", label: "The Vault Door", line: "The door wants a password. The family had it.", beats: ["enc_hidden_vault_door"] },
+      { id: "theater", label: "The Theater", line: "Empty rows, dead screens, the smell of butter. Go in.", beats: ["enc_hidden_vault_inside"] },
+      { id: "council", label: "The Popcorn Council", line: "The popcorn machines are arguing. About you.", beats: ["enc_hidden_vault_council"], done: { anyOf: ["enc_hidden_vault_council_friendly", "enc_hidden_vault_council_neutral", "enc_hidden_vault_council_hostile"] } },
+      { id: "replicator", label: "The Matter Replicator", line: "Lars prints disappointment. Make a deal or don't.", beats: ["enc_hidden_vault_replicator"], done: { anyOf: ["enc_hidden_vault_replicator_friendly", "enc_hidden_vault_replicator_neutral", "enc_hidden_vault_replicator_hostile"] } },
+      { id: "gilbert", label: "Gilbert, Attendant Eternal", line: "Gilbert has been waiting for opening night since the Shattering. Talk him down or put him down.", beats: ["enc_hidden_vault_gilbert", "gilbert_theater_parley", "gilbert_theater_fight"], done: { quest: "hidden_vault" } }
+    ],
+    doors: [], after: [], chapters: {}
+  },
+  balcones: {
+    giver: "The land itself — a fault line having a personal crisis inside your holdings.",
+    description: "The earth doesn't shake, it slides: roads drift out of agreement with themselves, a creek insists it was always over there, and the horizon shears like a badly aligned interface. It is your hex now. It is having feelings. Appease it, narrate at it, bargain with it, order it about, or build a bridge across its mood.",
+    steps: [
+      { id: "opening", label: "The Line Moves", line: "The Balcones is sliding sideways inside your borders. Go stand on it.", beats: ["balcones_faulting_you_line_opening"] },
+      { id: "choose", label: "Five Ways to Calm a Landform", line: "Five ways to calm a landform. Pick one. The land will tell you if it was the wrong one.", beats: ["balcones_faulting_you_line_choices"], done: { quest: "balcones" } }
+    ],
+    doors: [], after: [], chapters: {}
+  },
+  flooded_towns: {
+    giver: "The Water Choir's lean, and Sable Nine's chart — the same heading, three towns under water that aren't drowned.",
+    description: "Three enclaves on the coast road are flooded with light instead of water: streets that pulse in hard geometry, civic ghosts reciting traffic instructions, a district trying to finish city planning with stolen memories. Something the mountain's blast cut in half is trying to become legible again by wearing towns. Probably Beaumont first.",
+    steps: [
+      { id: "beaumont", label: "Probably Beaumont", line: "Probably Beaumont is lit from underneath. Stabilize it or ride the surge.", beats: ["hod_flooded_probably_beaumont"], done: { anyOf: ["hod_flooded_probably_beaumont_stabilize", "hod_flooded_probably_beaumont_surge"] } },
+      { id: "maybe", label: "Maybe Beaumont?", line: "Maybe Beaumont is assigning people roles. Interrupt it, or document it and get out.", beats: ["hod_flooded_maybe_beaumont"], done: { anyOf: ["hod_flooded_maybe_beaumont_interrupt", "hod_flooded_maybe_beaumont_escalate"] } },
+      { id: "barrens", label: "Bedlam Barrens", line: "Bedlam Barrens isn't even wet. Ground the pattern or break it before it completes.", beats: ["hod_flooded_bedlam_barrens"], done: { anyOf: ["hod_flooded_bedlam_barrens_ground", "hod_flooded_bedlam_barrens_break"] } },
+      { id: "whole", label: "The Hod Echoes", line: "Now the pattern is obvious. Say what it is.", beats: ["spark_hod_echoes_reconstituting"] }
+    ],
+    doors: [], after: [], chapters: {}
+  },
+  lost_statues: {
+    giver: "The red-thread stand at Lyrenn's low field, leaning all one way — and Sable Nine's six fixed points, two of which you've stood beside.",
+    description: "Three stone figures stand where the Founders left them: one in a plains basin with an open hand, one kneeling in a mountain pool with a blade across its lap, one chest-deep in dark water, guarding. Each holds a third of a Spark that only rewards strength when it is answerable. Prove worthy, or take it — the statues keep score, and they talk to each other.",
+    steps: [
+      { id: "first", label: "Northreach Expanse", line: "The first statue faces a horizon it no longer trusts. Stand in front of it and don't move.", beats: ["spark_geburah_northreach_b"], done: { anyOf: ["spark_geburah_northreach_b_worthy", "spark_geburah_northreach_b_force"] } },
+      { id: "second", label: "The Kneeling Statue", line: "The second kneels in a pool above the road. It has already heard about you.", beats: ["spark_geburah_mountains_q"], done: { anyOf: ["spark_geburah_mountains_q_worthy", "spark_geburah_mountains_q_force"] } },
+      { id: "third", label: "The Guardian", line: "The third is chest-deep in dark water, guarding. Offer something or take something.", beats: ["spark_geburah_mountains_o"], done: { anyOf: ["spark_geburah_mountains_o_worthy", "spark_geburah_mountains_o_force"] } },
+      { id: "whole", label: "Geburah Made Whole", line: "Three fragments. Make it whole and hear the verdict.", beats: ["spark_geburah_reconstituted"] }
+    ],
+    doors: [], after: ["spark_geburah_verdict_taken"], chapters: {}
+  },
+  fifteen_year_siege: {
+    giver: "A Thursday. Market day at the oldest siege still manned.",
+    description: "The siegeworks have flowerbeds. The counterweight tower has a school bell in it. Laundry strung between the lines. Fifteen years of the most polite war in the world, and it could END — you can feel it, the vertigo of standing next to a very old, very balanced thing. Four ways through, and the one thing nobody has asked in fifteen years is what the market thinks.",
+    steps: [
+      { id: "market", label: "Market Day", line: "It's Thursday. Buy a meat pie and take in the oldest siege in the world.", beats: ["siege_market_day"] },
+      { id: "commanders", label: "Both Commanders", line: "Pell in the trench, Alderwick on the wall. Hear both before you decide anything.", beats: ["siege_commander_camp", "siege_commander_town"], done: { allOf: ["siege_commander_camp", "siege_commander_town"] } },
+      { id: "doors", label: "Ending the Siege", line: "It could end. Four ways. The market has an opinion.", beats: ["siege_doors"], done: { quest: "fifteen_year_siege" } }
+    ],
+    doors: [], after: [], chapters: {}
+  },
+  trojan_gift: {
+    giver: "Six oxen and a rehearsed exit. Nobody signs for it.",
+    description: "It takes six oxen and a special wagon and it stops exactly at your gate, where the drovers unhitch, tip their hats, and leave at a pace best described as rehearsed. It is enormous. It is magnificent. Accept it, audit it in public, refuse it at the border, or forward it with your own card — every answer is a message to a sender you haven't met.",
+    steps: [
+      { id: "arrival", label: "At the Gate", line: "Something enormous is at your gate and the drovers have already left. Decide what it is.", beats: ["trojan_arrival", "trojan_paperwork"], done: { quest: "trojan_gift" } },
+      { id: "tour", label: "The Touring Gift", chapter: "the_touring_gift", line: "The gift moved on. The reports have started sounding like weather.", beats: ["trojan_tour"], done: { chapter: ["trojan_gift", "the_touring_gift"] } }
+    ],
+    doors: [], after: [], chapters: { the_touring_gift: { giver: "the turn's reports", line: "Follow the reports, let it tour, or find out who finally keeps it." } }
+  },
+
+  // ─── ACT 4 · THE MALL AND THE VAULT ───
+  crown_mall: {
+    giver: "The Circuit Riders at Legansus send you to cross-check; Donny decides whether you get in.",
+    description: "Crown Mall is what happens when a ruin decides retail was a valid metaphysics. A silver dragon lounges across the frontage and keeps out bad vibes, not people. Inside, the Tanneritos preserve route memory, dead ads and old footage — including a camcorder clip of lights moving wrong over the coast. You need the archive. The archive needs you to not be a mall cop.",
+    steps: [
+      { id: "donny", label: "Donny on the Wall", chapter: "the_mall_of_forgotten_yesterdays", line: "Crown Mall. There's a dragon on the wall. He's not keeping you out. Answer him honestly.", beats: ["enc_forgotten_yesterdays_approach", "enc_forgotten_yesterdays_donny_approach", "enc_forgotten_yesterdays_donny_parley", "enc_forgotten_yesterdays_donny_respect", "enc_forgotten_yesterdays_donny_weird"], done: { anyOf: ["enc_forgotten_yesterdays_donny_good", "enc_forgotten_yesterdays_donny_mixed"] } },
+      { id: "tanneritos", label: "The Tanneritos", chapter: "the_mall_of_forgotten_yesterdays", line: "The Tanneritos judge by skating. Don't be a mall cop about it.", beats: ["enc_forgotten_yesterdays_tanneritos", "enc_forgotten_yesterdays_skate"], done: { anyOf: ["enc_forgotten_yesterdays_skate_success", "enc_forgotten_yesterdays_skate_mixed", "enc_forgotten_yesterdays_skate_failure"] } },
+      { id: "archive", label: "The Archive", line: "Kickflip has the archive. Ask for corroboration, trade for it, or be a cop and see what happens.", beats: ["map_crown_mall_intro"], done: { anyOf: ["map_crown_mall_corroboration", "map_crown_mall_partial"] } },
+      { id: "mall", label: "The Mall Keeps Happening", chapter: "the_mall_of_forgotten_yesterdays", line: "Follow a commercial, take the escalator, meet the glitter — then decide what you are to this place.", beats: ["enc_forgotten_yesterdays_hub", "enc_forgotten_yesterdays_resolution"], done: { chapter: ["crown_mall", "the_mall_of_forgotten_yesterdays"] } }
+    ],
+    doors: [
+      { id: "bev", label: "Chairperson Laser Bev", line: "Bev has terms. Ask before you assume.", beats: ["enc_forgotten_yesterdays_laser_bev_intro"] },
+      { id: "kickflip", label: "Kickflip Lazarus", line: "He's been watching you skate. Run it back.", beats: ["enc_forgotten_yesterdays_kickflip_lazarus_intro"] },
+      { id: "june", label: "Miss June of the Endcap", line: "She sells context. Ask what's in rare inventory.", beats: ["enc_forgotten_yesterdays_miss_june_intro"] }
+    ],
+    after: [], chapters: { the_mall_of_forgotten_yesterdays: { giver: "Laser Bev", line: "Trade is possible. Alliance is possible. Acquisition is not." } }
+  },
+  maneuver_vault: {
+    giver: "Mara Quickhands, who found you herself, which is how you know it's bad.",
+    description: "Pip went out to the new-found Vault three days back and didn't come home. The Vault is a concrete hill that thinks of itself as faculty: a hologram at the door still welcoming pupils to BASIC TACTICAL INST—, cannons that click instead of firing, a foyer that grades you, an archive that whispers, a floor that drifts. And a containment loop with someone inside it, learning.",
+    steps: [
+      { id: "summons", label: "Mara Finds You", line: "Mara found you herself. Pip didn't come home.", beats: ["fc_mara_pip_summons"] },
+      { id: "accept", label: "On the Books", line: "The Vault is on the books. Somebody has to walk in first.", beats: ["maneuver_vault_acceptance"] },
+      { id: "approach", label: "The Concrete Hill", line: "A concrete hill that welcomes pupils. Knock.", beats: ["maneuver_vault_approach"] },
+      { id: "infiltrate", label: "The Door Plays", line: "The door wants to play. Let it.", beats: ["maneuver_vault_infiltration"], done: { anyOf: ["maneuver_vault_foyer_of_procedure", "maneuver_vault_infiltration_fail"] } },
+      { id: "foyer", label: "The Foyer of Procedure", line: "The foyer grades you: sneak, charm, or punch it in the sensors.", beats: ["maneuver_vault_foyer_of_procedure"], done: { anyOf: ["maneuver_vault_foyer_infiltration_success", "maneuver_vault_foyer_diplomacy_success", "maneuver_vault_foyer_violence_success"] } },
+      { id: "archive", label: "The Echo Archive", line: "The archive whispers half nonsense, half directions. Read it.", beats: ["maneuver_vault_echo_archive"], done: { mark: "maneuver_vault_echo_archive_success" } },
+      { id: "slippage", label: "The Slippage Chamber", line: "The floor drifts over places that are gone. Cross it.", beats: ["maneuver_vault_slippage_chamber"], done: { mark: "maneuver_vault_slippage_chamber_success" } },
+      { id: "loop", label: "The Containment Loop", line: "Someone is inside the loop. It's Pip. Decide how long he learns.", beats: ["maneuver_vault_the_containment_loop", "maneuver_vault_the_containment_loop_let_pip_learn", "maneuver_vault_the_containment_loop_let_pip_learn_more"], done: { quest: "maneuver_vault" } }
+    ],
+    doors: [], after: [], chapters: {}
+  },
+  ninth_guest: {
+    giver: "Sable Nine's chart. The six fixed points end here, at the water.",
+    description: "A mile before the coast the swamp stops arguing and the land stops pretending. On the last rise before the water: figures. Dozens — no. More. Standing in ranks that aren't quite ranks, facing the sea, weathered to the color of the sky. It takes a day to count them honestly. The count comes out wrong by one.",
+    steps: [
+      { id: "approach", label: "The Founders' Garden", line: "Where the land stops pretending, figures stand facing the sea. Go and stand with them.", beats: ["founders_garden_approach"] },
+      { id: "count", label: "The Count", line: "Count them honestly. It takes a day.", beats: ["founders_garden_wonder", "founders_garden_the_count"], done: { mark: "founders_garden_the_count" } },
+      { id: "plinth", label: "The Empty Plinth", line: "One plinth is bare and worn in the shape of two feet. Look where the footprints go.", beats: ["founders_garden_the_plinth"] }
+    ],
+    doors: [], after: [], chapters: {}
+  },
+
+  // ─── ACT 5 · THATWARDS HO! FINALE ───
+  finale: {
+    giver: "The Circuit Riders' muster, and the sky over the bunker.",
+    description: "They don't hide the bunker. They orbit it: ships in lazy spirals over a cracked mouth carved into the bones of the world, engines screaming, someone singing badly. Inside is a Yesodic Spark and the answer to who paid the Valhaulans to re-address the mountain's debt. Four ways in. The Riders will help with two of them. The Cadence owes you a raid.",
+    steps: [
+      { id: "entry", label: "The Sky Breaks Sideways", line: "Four ways in. The Riders help with the quiet one and the long one.", beats: ["raid_thatwards_ho_finale_entry"] },
+      { id: "approach", label: "Commit", line: "Commit.", beats: ["raid_thatwards_infiltration_alarm", "raid_thatwards_courtly_sklar", "raid_thatwards_assault_open", "raid_thatwards_siege_open"],
+        done: { anyOf: ["raid_thatwards_infiltration_success", "raid_thatwards_infiltration_fail", "raid_thatwards_courtly_honest", "raid_thatwards_courtly_playful", "raid_thatwards_courtly_fail", "raid_thatwards_assault_success", "raid_thatwards_assault_fail", "raid_thatwards_siege_success", "raid_thatwards_siege_fail"] } },
+      { id: "outcome", label: "Count It", line: "Whatever you got, you got. Count it.", beats: ["raid_thatwards_outcome_friends", "raid_thatwards_outcome_neutral_spark", "raid_thatwards_outcome_neutral_fail", "raid_thatwards_outcome_hostile_fail"],
+        done: { anyOf: ["raid_thatwards_outcome_friends", "raid_thatwards_outcome_neutral_spark", "raid_thatwards_outcome_neutral_fail", "raid_thatwards_outcome_hostile_fail"] } },
+      { id: "rewards", label: "Spoils", line: "Sklar's people give gifts they shouldn't. Take them.", beats: ["raid_thatwards_rewards_major", "raid_thatwards_rewards_standard", "raid_thatwards_rewards_intel_only"], done: { quest: "finale" } }
+    ],
+    doors: [], after: [], chapters: {}
+  },
+
+  // ─── ACT 6 · GLOOMGILL ───
+  gloomgill: {
+    giver: "Oannes, who came from the sea in instruction, not fire — and is now a game-show host who is also a marsh.",
+    description: "The marsh gives you one warning in the only language it has: silence. Then the water bulges, and the oldest teacher in the world rises in a sequined jacket to ask you ten questions about what you did Thatwards. He is not grading answers. He is grading energy. Everything you settled, broke, skipped or padded is on the card.",
+    steps: [
+      { id: "act6", label: "Act Six", line: "The finale is counted. The epilogue is waiting in the river.", beats: ["a6_title_card"], done: { mark: "a6_title_card" } },
+      { id: "intro", label: "The River Goes Silent", line: "The river goes silent a mile out. That's the invitation.", beats: ["gloomgill_intro", "gloomgill_intro_scene"], done: { mark: "gloomgill_intro_scene" } },
+      { id: "questions", label: "Ten Questions", line: "Ten questions. He's grading energy, not answers.", beats: ["gloomgill_question_1", "gloomgill_question_2", "gloomgill_question_3", "gloomgill_question_4", "gloomgill_question_5", "gloomgill_question_6", "gloomgill_question_7", "gloomgill_question_8", "gloomgill_question_9", "gloomgill_question_10"], done: { anyOf: ["gloomgill_question_10", "gloomgill_fight", "gloomgill_fled"] } },
+      { id: "verdict", label: "The Verdict", line: "The verdict.", beats: ["gloomgill_passed", "gloomgill_failed", "gloomgill_fought", "gloomgill_fled"], done: { quest: "gloomgill" } }
+    ],
+    doors: [], after: [], chapters: {}
+  },
+
   // ═══ ACT 2 · FURRIER'S FIXIT FARM ════════════════════════════════════════════
   fixit_farm: {
     giver: "Pike sends you; on site, Young Gearbox names the price-setter, Mara Quickhands",

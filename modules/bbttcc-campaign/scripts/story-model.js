@@ -234,6 +234,10 @@ export const QUEST_MAP = {
      "name": "The Rotating Chapel",
      "registryId": "quest_pI4LaZTvh9QmuRaE"
     },
+    "the_burnt_flats": {
+     "name": "The Burnt Flats",
+     "registryId": "quest_burnt_flats"
+    },
     "anchor_reach": {
      "name": "Anchor Reach",
      "registryId": "quest_OpvVkGwzBTM2Px13"
@@ -264,7 +268,7 @@ export const QUEST_MAP = {
    "name": "The Balcones Faulting You Line",
    "act": 3,
    "keystone": false,
-   "hex": "",
+   "hex": "Saltwake Reach j",
    "registryId": "quest_8II4GEGV7D3RgzPv",
    "chapters": {}
   },
@@ -288,7 +292,7 @@ export const QUEST_MAP = {
    "name": "The Fifteen-Year Siege",
    "act": 3,
    "keystone": false,
-   "hex": "",
+   "hex": "Perspicacity Fortress",
    "registryId": "quest_fifteen_year_siege",
    "chapters": {}
   },
@@ -322,7 +326,7 @@ export const QUEST_MAP = {
    "name": "The Maneuver Vault",
    "act": 4,
    "keystone": true,
-   "hex": "",
+   "hex": "Hexen Myre.c",
    "registryId": "quest_NwiADv8ZDoklqwEJ",
    "chapters": {}
   },
@@ -330,7 +334,7 @@ export const QUEST_MAP = {
    "name": "The Ninth Guest",
    "act": 4,
    "keystone": false,
-   "hex": "Static Coast e",
+   "hex": "Founder's Garden",
    "registryId": "quest_ninth_guest",
    "chapters": {}
   },
@@ -338,7 +342,7 @@ export const QUEST_MAP = {
    "name": "Thatwards Ho! Finale",
    "act": 5,
    "keystone": true,
-   "hex": "Allesh-Gilliam",
+   "hex": "Inconvenient Mountains.h",
    "registryId": "quest_thatwards_ho_finale",
    "chapters": {}
   },
@@ -543,6 +547,10 @@ export const QUEST_MAP = {
   "quest_7V8Shz2S0EtDaHSS": {
    "quest": "crown_mall",
    "chapter": null
+  },
+  "quest_burnt_flats": {
+   "quest": "widening_trail",
+   "chapter": "the_burnt_flats"
   },
   "quest_NwiADv8ZDoklqwEJ": {
    "quest": "maneuver_vault",

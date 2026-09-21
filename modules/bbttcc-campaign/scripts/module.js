@@ -2280,6 +2280,32 @@ async function _offerRetryInChain(campaign, beat, ctx) {
   } catch (_e) {}
 }
 
+// The run's ledger for a `storeFacts` beat (ruling M, 2026-09-20). Pure read; every source is optional.
+async function _storeFactsHtml(campaign, ctx = {}) {
+  const esc = (x) => foundry.utils.escapeHTML(String(x ?? ""));
+  const rows = [];
+  const st = _storyStateFor(campaign?.id) || {};
+  const qn = (q) => QUEST_MAP.quests?.[q]?.name || q; const cn = (q, c) => QUEST_MAP.quests?.[q]?.chapters?.[c]?.name || c;
+  const closed = Object.entries(st.closed || {}).map(([q, r]) => `${esc(qn(q))} — <b>${esc(r?.name || "closed")}</b>`);
+  if (closed.length) rows.push(`<div><b>Closed:</b> ${closed.join(" · ")}</div>`);
+  const chap = []; for (const [q, cs] of Object.entries(st.chapters || {})) for (const [c, r] of Object.entries(cs || {})) if (r?.ending) chap.push(`${esc(qn(q))} · ${esc(cn(q, c))} — <b>${esc(r.ending.name)}</b>`);
+  if (chap.length) rows.push(`<div><b>Chapters ended:</b> ${chap.join(" · ")}</div>`);
+  const open = Object.keys(st.started || {}).filter(q => !st.closed?.[q]).map(q => esc(qn(q)));
+  if (open.length) rows.push(`<div><b>Still open:</b> ${open.join(" · ")}</div>`);
+  try {
+    const facs = await _resolveCampaignFactions(campaign, ctx);
+    const api = game.bbttcc?.api?.raid; const held = [];
+    for (const F of (facs || [])) { const list = api?.courtlySecrets?.getSecrets?.(F.id) || []; for (const r of list) held.push(`${esc(r?.label || r?.name || "?")}${r?.acquisition && r.acquisition !== "earned" ? ` (${esc(r.acquisition)})` : ""}`); }
+    if (held.length) rows.push(`<div><b>Receipts held:</b> ${held.join(" · ")}</div>`);
+    const mil = []; for (const F of (facs || [])) { const m = api?.militia?.state?.(F); if (m && Number(m.rung) > 0) mil.push(`${esc(F.name)} rung ${esc(m.rung)}`); }
+    if (mil.length) rows.push(`<div><b>Militia:</b> ${mil.join(" · ")}</div>`);
+  } catch (_eF) {}
+  const meters = []; for (const k of ["wendigoRung", "banditMercy", "banditFear", "geburahEarned", "geburahForced", "cadenceRespect", "cadenceTribute", "cadenceUncontested", "crVerify", "chucklecreekSeen", "stillwaterCrack", "softlandingGive", "tikkunDividend"]) { try { const v = game.settings.get(MOD_ID, k); if (v !== undefined && v !== null && v !== 0 && v !== false && v !== "") meters.push(`${esc(k)} ${esc(typeof v === "object" ? JSON.stringify(v) : v)}`); } catch (_e) {} }
+  if (meters.length) rows.push(`<div><b>Meters:</b> ${meters.join(" · ")}</div>`);
+  if (!rows.length) rows.push("<div>The story has nothing on the ledger yet.</div>");
+  return `<details open class="bbttcc-store-facts" style="border-left:3px solid #4db8b0;padding:.35em .6em;margin:0 0 10px 0;background:rgba(77,184,176,.08);font-size:12px;"><summary style="cursor:pointer;"><b>📒 What the story knows</b> <span style="opacity:.7;">(GM only — he's grading energy, you're holding the ledger)</span></summary>${rows.join("")}</details>`;
+}
+
 async function _runBeatDialog(campaign, beat, ctx={}) {
   try { if (ctx && ctx.allowDesperation == null) ctx.allowDesperation = true; } catch (_eAD) {}
 
@@ -2301,6 +2327,11 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
   let unmetHtml = "";
   try { const u = beat.unmet; if (u && u.beatId && u.html && !_storyStateFor(campaign?.id)?.played?.[String(u.beatId)]) unmetHtml = String(u.html); } catch (_eU) {}
   const desc = (unmetHtml + String(beat.description || "")).trim();
+  // WHAT THE STORY KNOWS (owner ruling M, 2026-09-20: "make sure Gloomgill knows the answers before he asks them") —
+  // `beat.storeFacts` puts the run's ledger in front of the GM: closed quests and their endings, chapter endings, open
+  // threads, Receipts held, the meters and the militia. GM dialog only; never broadcast.
+  let storeFactsHtml = "";
+  if (beat.storeFacts) { try { storeFactsHtml = await _storeFactsHtml(campaign, ctx); } catch (_eSF) { storeFactsHtml = ""; } }
   const visible = await _visibleChoiceIndices(beat, campaign, ctx);   // D-1/D-2: gated / cooling choices are not shown
   const choicesAll = Array.isArray(beat.choices) ? beat.choices : [];
   const choices = visible.map(k => choicesAll[k]);
@@ -2410,6 +2441,7 @@ async function _runBeatDialog(campaign, beat, ctx={}) {
 
   const bodyHtml = `
     <div class="bbttcc-campaign-dialog">
+${storeFactsHtml}
 
 ${
   (beat && beat.audio && beat.audio.enabled && (String(beat.audio.src || "").trim() || String(beat.audio.playlistSoundUuid || "").trim()))
