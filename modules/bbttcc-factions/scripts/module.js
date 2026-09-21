@@ -3699,7 +3699,7 @@ try {
           const tierRaw = String(tierEl?.value ?? "").trim();
           if (tierRaw !== "") {
             const res = await game.bbttcc?.api?.factions?.tier?.set?.(this.actor, Number(tierRaw), { note: note || "GM edit" });
-            if (res?.ok && !res.unchanged) ui.notifications?.info?.(`${this.actor.name}: Faction Tier ${res.from} → ${res.to}${res.capsChanged ? " (OP ceilings rebanded)" : ""}.`);
+            if (res?.ok && !res.unchanged) ui.notifications?.info?.(`${this.actor.name}: Faction Standing ${res.from} → ${res.to}${res.capsChanged ? " (OP ceilings rebanded)" : ""}.`);
             if (res?.floorWarning) ui.notifications?.warn?.(res.floorWarning, { permanent: true });
             if (res && !res.ok) ui.notifications?.warn?.(`Tier not changed: ${res.reason || "unknown"}`);
           }
@@ -4809,7 +4809,7 @@ factionApi.assignStartingTerritory ??= (async ({
 
 
 // Faction Creation — minimal name prompt.
-// Creates a Tier 1 faction with the Standard Package and no starting hexes.
+// Creates a Standing 1 faction with the Standard Package and no starting hexes.
 // ──────────────────────────────────────────────────────────────────────────────
 factionApi.openCreationWizard ??= (() => {
   return async () => {
@@ -4830,7 +4830,7 @@ factionApi.openCreationWizard ??= (() => {
                 <option value="space_marine">Space Marine — Tier 0 giant fighting robot</option>
               </select>
               <p class="notes" style="opacity:.8;margin-top:.35rem;">
-                Creates a Tier 1 faction with the Standard Package applied (no hexes), plus this free starter rig.
+                Creates a Standing 1 faction with the Standard Package applied (no hexes), plus this free starter rig.
               </p>
             </div>
           </form>`,

@@ -236,7 +236,7 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     if (model.costStr) lines.push('<div class="bbttcc-tip-line"><b>Cost:</b> ' + _escapeHtml(model.costStr) + '</div>');
 
     const metaParts = [];
-    if (model.minFactionTier != null) metaParts.push("Faction Tier T" + String(model.minFactionTier));
+    if (model.minFactionTier != null) metaParts.push("Faction Standing " + String(model.minFactionTier));
     if (model.tier != null) metaParts.push("T" + String(model.tier));
     if (model.rarity) metaParts.push(model.rarity);
     if (model.storyOnly) metaParts.push("Story");
@@ -2078,7 +2078,7 @@ wrap.appendChild(top);
             const locked = bbttccIsLockedActivity(actObj, factionTier, unlocked);
             const tierReq = bbttccGetActivityRequiredTier(actObj);
             if (locked) {
-              ui?.notifications?.warn?.(`Locked: requires Tier ${tierReq}.`);
+              ui?.notifications?.warn?.(`Locked: requires Faction Standing ${tierReq}.`);
               return;
             }
           }

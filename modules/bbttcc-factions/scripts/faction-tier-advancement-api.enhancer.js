@@ -269,7 +269,7 @@
         tier,
         nextTier: null,
         canAdvance: false,
-        reason: "No requirements defined (already at max tier or tier config missing)."
+        reason: "No requirements defined (already at the top Standing, or the Standing config is missing)."
       };
     }
 

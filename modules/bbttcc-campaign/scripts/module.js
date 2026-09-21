@@ -6021,7 +6021,7 @@ async function _postFactionTierCard(lines, tierFloor, milestone) {
     <div style="border:1px solid #7a5c2e;border-radius:6px;padding:8px 10px">
       <p style="margin:0 0 4px 0">🏰 <b>Coalition grows in stature</b>${milestone ? ` — <i>${milestone}</i>` : ""}</p>
       <p style="margin:0">${lines.join("<br>")}</p>
-      <p style="margin:4px 0 0 0;opacity:.8;font-size:.9em">OP pool ceilings raised to the Tier ${tierFloor} band.</p>
+      <p style="margin:4px 0 0 0;opacity:.8;font-size:.9em">OP pool ceilings raised to the Standing ${tierFloor} band.</p>
     </div>`;
   await ChatMessage.create({ content, speaker: { alias: "Story Director" } });
 }
@@ -6067,7 +6067,7 @@ async function directorReconcileLevels(opts = {}) {
         if (cur >= tierFloor) continue;
         await f.update({ "flags.bbttcc-factions.tier": tierFloor });
         await _directorRaiseFactionOpCaps(f, tierFloor);
-        lines.push(`<b>${f.name}</b>: Tier ${cur} → <b>Tier ${tierFloor}</b>`);
+        lines.push(`<b>${f.name}</b>: Standing ${cur} → <b>Standing ${tierFloor}</b>`);
         out.factionsRaised.push(`${f.name} T${cur}→T${tierFloor}`);
         log(`[director] faction '${f.name}' tier ${cur} → ${tierFloor} (cadence floor).`);
       }

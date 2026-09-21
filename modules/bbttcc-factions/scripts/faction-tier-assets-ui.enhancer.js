@@ -328,7 +328,7 @@
 
       wrap.innerHTML = `
         <div class="bbttcc-tier-row">
-          <span class="bbttcc-tier-badge" title="Faction Tier (growth & unlock band)">T${tier} — ${tierName}</span>
+          <span class="bbttcc-tier-badge" title="Faction Standing (growth & unlock band — the faction's level)">Standing ${tier} — ${tierName}</span>
           <span class="bbttcc-tier-sub">Assets & Pressure</span>
           <div class="bbttcc-cap-strip" title="Asset Capacity (from Tier)">
             <span>Minor <b>${minorUsed}/${fmtCap(caps.minor)}</b></span>

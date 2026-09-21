@@ -258,7 +258,7 @@ function _bbttccFxPanelForRound(app, idx){
     if (m.costStr) lines.push('<div class="bbttcc-tip-line"><b>Cost:</b> ' + _escapeHtml(m.costStr) + '</div>');
 
     const meta = [];
-    if (m.minFactionTier != null) meta.push("Faction Tier T" + String(m.minFactionTier));
+    if (m.minFactionTier != null) meta.push("Faction Standing " + String(m.minFactionTier));
     if (m.tier != null) meta.push("T" + String(m.tier));
     if (m.rarity) meta.push(String(m.rarity));
     if (m.storyOnly) meta.push("Story");
@@ -7673,7 +7673,7 @@ function _canFactionUseManeuver(factionActor, mKey, { side="att", activityKey=""
   if (!isGMView) {
     const factionTier = _factionTierForActor(factionActor);
     const reqTier = _requiredFactionTierForManeuver(mKey);
-    if (reqTier > factionTier) return { ok:false, reason:`Requires Faction Tier ${reqTier} (current ${factionTier})` };
+    if (reqTier > factionTier) return { ok:false, reason:`Requires Faction Standing ${reqTier} (current ${factionTier})` };
   }
 
   // 0.1) CREW/OCCULT GRANT (survey §7a) — an active crew/association arms the faction with its

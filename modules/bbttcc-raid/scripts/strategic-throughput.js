@@ -378,7 +378,7 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       const A = game.actors.get(ctx.factionId);
       // OWNER DIAL (2026-06-05): +20 marks Economy into the bank next turn for a 10-mark spend.
       await scheduleFactionOP(A, { economy: 20 }, 1);
-      await pushWarLog(A,"Harvest Season: +20 marks Economy next turn (tier cap applies).");
+      await pushWarLog(A,"Harvest Season: +20 marks Economy next turn (the Standing cap applies).");
     },
     // Sell Surplus (material economy, owner ruling 2026-09-21): half of the stockpile's most plentiful material goes to
     // market at the sell price +10% (api.factions.stockpile.sell, priceMult 1.1). Nothing to sell = a war-log note.

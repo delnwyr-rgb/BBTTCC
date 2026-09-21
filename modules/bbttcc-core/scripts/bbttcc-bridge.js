@@ -584,7 +584,7 @@ async function _clearBridgeDebtAndLocks(actor){
     mOpKey:      "OP Type — which of the nine OP channels the faction receives. Banks hold MARKS; a standard OP check costs 10.",
     mOpQty:      "Marks — how many marks to generate (steps of 10). Every 10 marks yielded accrues 1 Blood Debt on the steward (the narrative IOU the world collects on).",
     sacrifice:   "Sacrifice — what the steward burns per 10 marks: Integrity (tier-priced meat), Stress (2 per 10 marks of mind), Aptitude ranks (30 marks per rank, restored at the next Soma Break), or a Manifestation tier-lock (40 marks per tier locked).",
-    sacIntegrity:"Integrity cost per 10 marks scales with faction tier — T0–1: 10 · T2: 7 · T3+: 5. Debited from the Integrity track; you must have the full cost on hand.",
+    sacIntegrity:"Integrity cost per 10 marks scales with faction Standing — 0–1: 10 · 2: 7 · 3+: 5. Debited from the Integrity track; you must have the full cost on hand.",
     stressPerOp: "Stress per 10 marks — Stress track points burned per 10 marks generated (default 2). The track floors at 0 and you need the full cost available.",
     aptKey:      "Aptitude key — the skill whose ranks burn (e.g. athletics, stealth, occult). The burn is flag-tracked and restores automatically at the next Soma Break.",
     opPerRank:   "Marks / Rank — marks yielded per aptitude rank burned (default 30). Ranks burned = ceiling(marks ÷ this).",
@@ -690,7 +690,7 @@ async function _clearBridgeDebtAndLocks(actor){
       '   </div>'+
 
       '   <div data-sac-panel="integrity" style="margin-top:8px;"'+tipAttr("sacIntegrity")+'>'+
-      '     <div class="bbttcc-muted">Integrity cost per OP scales by faction tier (T0–1: 10 · T2: 7 · T3+: 5). Integrity is debited and Blood Debt accrues.</div>'+
+      '     <div class="bbttcc-muted">Integrity cost per OP scales by faction Standing (0–1: 10 · 2: 7 · 3+: 5). Integrity is debited and Blood Debt accrues.</div>'+
       '   </div>'+
 
       '   <div data-sac-panel="stress" style="margin-top:8px; display:none;">'+

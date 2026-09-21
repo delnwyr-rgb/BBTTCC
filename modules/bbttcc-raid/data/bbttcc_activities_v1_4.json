@@ -11,7 +11,7 @@
           "economy": 10
         },
         "effects": {
-          "text": "+20 marks Economy into the bank next turn (10-mark spend; the tier cap applies)."
+          "text": "+20 marks Economy into the bank next turn (10-mark spend; the Standing cap applies)."
         },
         "minFactionTier": 1
       }

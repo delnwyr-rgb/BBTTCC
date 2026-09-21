@@ -80,7 +80,7 @@ import { TIER_CAP_BAND_MARKS } from "./op-engine.js";
         type: "milestone",
         activity: to > from ? "tier_advance" : "tier_reduce",
         date: (new Date()).toLocaleString(),
-        summary: `GM set Faction Tier ${from} → ${to}${opts.note ? ` — ${opts.note}` : ""}.`
+        summary: `GM set Faction Standing ${from} → ${to}${opts.note ? ` — ${opts.note}` : ""}.`
       });
       update[`flags.${MODF}.warLogs`] = warLogs;
     }
@@ -156,7 +156,7 @@ import { TIER_CAP_BAND_MARKS } from "./op-engine.js";
       <div class="bbttcc-tier-report">
         <p>
           <b>${esc(rep.actorName)}</b><br/>
-          Current Tier: <b>T${rep.tier}</b> → Next Tier: <b>T${rep.nextTier}</b>
+          Current Standing: <b>${rep.tier}</b> → Next Standing: <b>${rep.nextTier}</b>
         </p>
 
         ${formatGateBlock("Stability", rep.gates?.stability)}
@@ -289,7 +289,7 @@ import { TIER_CAP_BAND_MARKS } from "./op-engine.js";
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "bbttcc-tier-advance-btn";
-      btn.textContent = "Advance Tier (GM)";
+      btn.textContent = "Advance Standing (GM)";
       btn.addEventListener("click", async (ev) => {
         ev.preventDefault();
         await attemptAdvanceTier(actor);
