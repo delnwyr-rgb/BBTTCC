@@ -860,11 +860,30 @@ export function deriveSituation(ctx) {
     : elsewhere
       ? { quest: elsewhere, chapter: elsewhere.currentChapter, next: elsewhere.next, why: elsewhereWhy, roads: [] }
       : { quest: anchorQuest, chapter: anchorQuest.currentChapter, next: anchorQuest.next, why: anchorQuest.why, roads: anchorQuest.next && !anchorQuest.next.ready ? roadsFor(anchorQuest.next.beat) : [] }) : null;
+  // THE DOOR A GATE NAMES (2026-09-20, live-caught: Pike closed Allesh-Gilliam, the spine waited on Etta at the Long Market,
+  // and NOW said "quest complete"). When NOW has nothing fresh to offer but a quest IN PLAY waits on a beat the party can
+  // open right now, that beat IS what happens next — and if the named beat is only reached through an unplayed entry
+  // (Etta's EXIT is reached through Etta's conversation), the entry is offered.
+  let nowOut = now;
+  if (!nowOut || !nowOut.next || ["turn", "complete", "empty", "done-no-closer"].includes(String(nowOut.why || ""))) {
+    const inDoors = (b) => Object.values(QUEST_SCRIPTS).some(sc => (sc.doors || []).some(d => (d.beats || []).map(String).includes(String(b.id))));
+    const readyNow = (b) => { const r = readyOf(String(b.id)); return !!(r && r.ready) && !(sealOfDecl(b, ctx.store, phase)?.sealed); };
+    const entryFor = (x) => { const ins = beats.filter(p => p && p.id !== x.id && (p.choices || []).some(c => String(c?.next || "") === String(x.id) || String(c?.failNext || "") === String(x.id)) && String(p.story?.quest || "") === String(x.story?.quest || "") && (!fired.has(String(p.id)) || p.inject?.repeatable === true) && readyNow(p)); return ins.find(inDoors) || ins.find(p => p.inject?.repeatable === true) || ins.find(p => !fired.has(String(p.id))) || null; };
+    outer: for (const q of inPlay) {
+      for (const r of (q.next?.reasons || [])) {
+        const t = String(r?.text || ""); const mm = t.match(/^beatMark (\S+)$/) || t.match(/beat [“"']([^”"']+)[”"']/); const id = mm && mm[1]; const x = id ? byId.get(String(id)) : null;
+        if (!x || fired.has(String(x.id)) || !readyNow(x)) continue;
+        const b = entryFor(x) || x; const def = QUEST_MAP.quests[String(b.story?.quest || "")] || null;
+        nowOut = { quest: q, chapter: q.currentChapter, next: { beat: b, ready: true, reasons: [], line: q.next?.line || "", here: hereOf(b, def), gateDoor: true, named: String(x.id), opens: q.next?.beat?.id || null, stepLabel: q.next?.stepLabel || "" }, why: "gate-door", roads: [] };
+        break outer;
+      }
+    }
+  }
   // a door is a quest not yet started whose START is ready NOW — readiness already carries the start beat's own
   // act gate, so the quest's nominal act is not consulted (towns span acts 1–2; Allesh-Gilliam's opening is Act 1)
   const doors = quests.filter(q => (q.state === "dormant" || q.state === "offered") && q.next && q.next.ready)
     .sort((a, b) => Number(b.next.here === true) - Number(a.next.here === true));
-  return { act: phase, turn, quests, byKey: qByKey, anchor: anchorBeat ? { beatId: anchorId, quest: anchorLoc?.quest || null, chapter: anchorLoc?.chapter || null } : null, now, inPlay, doors, roadsFor, where: ctx.where || null };
+  return { act: phase, turn, quests, byKey: qByKey, anchor: anchorBeat ? { beatId: anchorId, quest: anchorLoc?.quest || null, chapter: anchorLoc?.chapter || null } : null, now: nowOut, inPlay, doors, roadsFor, where: ctx.where || null };
 }
 
 

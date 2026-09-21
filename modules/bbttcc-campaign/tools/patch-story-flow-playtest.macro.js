@@ -75,6 +75,12 @@
  *      stabilizer was won). "Head to the Leygate" shows until the gate has been seen; "Bring the crate to the Leygate" shows
  *      once a stabilizer deal is done and until it's installed; "Check out the East Wall" hides once the wall is settled.
  *
+ *  P15. THE INSTALL HAS AN EXIT (2026-09-20, startup beat lint: "1 dead-end venue" — `ag_leygate_installed`, reachable from
+ *      Pike's hub since P14, had no choices). "Go and see your names on the map" → Pike updates the map → "Call it a day".
+ *
+ *  P16. ETTA'S ARITHMETIC IS ORDER-AGNOSTIC (2026-09-20, live: her exit advised on a Seal already decided). The ladder puts the
+ *      Seal before Etta, so her exit speaks to a choice made or still to make — never as advice on an open question.
+ *
  * Backup download before write; GM only.
  */
 (async () => {
@@ -246,6 +252,11 @@
       setReqOn(/^head to the leygate$/i, [{ beatMark: "ag_leygate_visit", not: true }]);
       setReqOn(/^check out the east wall$/i, [{ beatMark: "allesh_gilliam_east_wall_success", not: true }, { beatMark: "ag_east_wall_holds", not: true }, { beatMark: "ag_east_wall_patched", not: true }, { beatMark: "allesh_gilliam_east_wall_failure", not: true }]);
       if (!cs.some(c => c && /^bring the crate/i.test(String(c.label || "")))) { const at = cs.findIndex(c => c && /^head to the leygate$/i.test(String(c.label || ""))); const row = ch("Bring the crate to the Leygate — Garren's waiting", "ag_leygate_delivery", { description: "The stabilizer, the spanner, and a man who reads serial numbers like names.", requires: [{ beatMark: "ag_leygate_visit" }, { anyOf: [{ beatMark: "fixit_leyline_stabilizer_trade_success" }, { beatMark: "fixit_leyline_stabilizer_shared_oversight_success" }, { beatMark: "fixit_leyline_stabilizer_hard_ask" }] }, { beatMark: "ag_leygate_installed", not: true }] }); cs.splice(at >= 0 ? at + 1 : cs.length, 0, row); changes++; say("▸ hub: + \"Bring the crate to the Leygate\" → ag_leygate_delivery (after a stabilizer deal, until installed)"); } else say("· ok hub crate choice"); } }
+  // P15 ── the install has an exit
+  { const b = byId.get("allesh_gilliam_pike_closure"); if (!b) say("✗ MISSING allesh_gilliam_pike_closure"); else { const cs = Array.isArray(b.choices) ? b.choices : (b.choices = []); if (!cs.some(c => c && String(c.label || "").trim())) { cs.push(ch("Call it a day — the map has your names on it", "days_end_thatwards", { description: "Three hexes, one working leygate, a wall on record. The day is spent." })); changes++; say("▸ allesh_gilliam_pike_closure: + \"Call it a day\" → days_end_thatwards"); } else say("· ok allesh_gilliam_pike_closure has an exit"); } }
+  { const b = byId.get("ag_leygate_installed"); if (!b) say("✗ MISSING ag_leygate_installed"); else { const cs = Array.isArray(b.choices) ? b.choices : (b.choices = []); if (!cs.some(c => c && String(c.label || "").trim())) { cs.push(ch("Go and see your names on the map", "allesh_gilliam_pike_closure", { description: "Pike heard before you got back. Of course he did." })); changes++; say("▸ ag_leygate_installed: + \"Go and see your names on the map\" → allesh_gilliam_pike_closure"); } else say("· ok ag_leygate_installed has an exit"); } }
+  // P16 ── Etta's arithmetic, whichever way you already chose
+  setField("allesh_gilliam_etta_bloom_convo_exit", "description", "She didn't soften it. Valhaulans — not rumor, not ghost markings — inside the sink, and they've sealed it, and whatever that thing was built to hold has started to hum.\n\nThe sigil is in your hand now, and so is the arithmetic she left with it. Whoever restores the seal, Khezek Tor keeps the burden. Whoever redirects it chooses who pays. Whoever breaks it, no one owes anyone anything ever again.\n\n\"If you've already stood at that shaft,\" she says, \"then you already know which of those you are. The mountain does too.\"\n\nMarkets love clarity, she said. Societies rarely survive it.");
   { const ho = camp.hexOverrides || {}; const key = Object.keys(ho).find(k => (ho[k]?.onEnterBeatIds || []).includes("allesh_gilliam_introduction_to_hq") || ho[k]?.onEnterBeatId === "allesh_gilliam_introduction_to_hq");
     if (!key) say("✗ no hexOverride lists allesh_gilliam_introduction_to_hq — set Allesh-Gilliam's on-enter beats by hand: [HQ intro, allesh_gilliam_town_walk]");
     else { const want = ["allesh_gilliam_introduction_to_hq", "allesh_gilliam_town_walk"]; if (JSON.stringify(ho[key].onEnterBeatIds) !== JSON.stringify(want)) { ho[key].onEnterBeatIds = want; changes++; say(`⚙ hexOverrides ${key}: onEnterBeatIds = [HQ intro, town walk]`); } else say("· ok Allesh-Gilliam on-enter list"); } }

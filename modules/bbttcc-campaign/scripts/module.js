@@ -5270,6 +5270,19 @@ async function _beatGateReport(beat, campaign, ctx = {}) {
     const qName = (qid) => questNames[String(qid)]?.name || String(qid);
 
     for (const c of conds) {
+      // { anyOf: [cond, …] } (2026-09-20, live-caught: the realization's gate showed BLOCKED in the Visualizer while
+      // _beatRequiresMet already passed it — the REPORT never learned the OR the gate grammar grew on 09-17)
+      if (c && Array.isArray(c.anyOf)) {
+        let any = false; const texts = [];
+        for (const sub of c.anyOf) {
+          let r = null; try { r = await _beatGateReport({ id: beat?.id, inject: { requires: [sub] } }, campaign, ctx); } catch (_eA) {}
+          const m = !!(r && r.met); any = any || m;
+          texts.push(String(r?.conditions?.[0]?.text || JSON.stringify(sub)) + (m ? " ✓" : ""));
+        }
+        out.conditions.push({ text: `any of — ${texts.join(" · ")}`, met: any, kind: "anyOf" });
+        if (!any) out.met = false;
+        continue;
+      }
       if (!c || typeof c !== "object") continue;
 
       if (c.questBucket != null) {

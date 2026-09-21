@@ -88,6 +88,9 @@ for (let step = 0; step < MAX; step++) {
   const s = situation(); const n = s.now;
   if (TRACE) log.push(`     ↳ now=${n?.quest?.name || "-"}/${n?.why || "-"} → ${n?.next?.beat?.id || "-"}${n?.next?.revisit ? " (revisit)" : ""} | in play: ${s.inPlay.map(q => `${q.name}→${q.next?.beat?.id || "-"}${q.next?.ready ? "" : "⛩"}`).join(", ") || "-"} | doors: ${s.doors.map(q => q.name).join(", ") || "-"}`);
   let next = n?.next?.beat || null; let why = n?.why || "-";
+  // a gate-door NOW offers the ENTRY (Etta's conversation); the table takes its "Leave" — the walker, which can't pick inside a
+  // hub, plays the named beat itself once the entry has been played (2026-09-20)
+  if (n?.why === "gate-door" && next && st.played[next.id] && n.next?.named && byId.get(n.next.named) && !st.played[n.next.named]) { next = byId.get(n.next.named); why = "GATE-DOOR"; log.push(`  🔑 through the door: ${next.id}`); }
   // a gate somewhere IN PLAY names an unplayed, openable beat (2026-09-19): the table opens that door before calling the
   // turn — Etta at the Long Market before the realization, the realization before the Act 3 card (a ride away is fine:
   // the Travel Console block below plots it)
