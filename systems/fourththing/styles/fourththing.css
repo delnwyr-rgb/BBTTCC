@@ -4,9 +4,34 @@
 /* ── BBTTCC Display webfont (HexChrome) ─────────────────────────────────────── */
 @font-face {
   font-family: "BBTTCC Display";
-  src: url("../fonts/bbttcc-display/BBTTCC-Display.woff2?v=20260920b") format("woff2"),
-       url("../fonts/bbttcc-display/BBTTCC-Display.woff?v=20260920b")  format("woff"),
-       url("../fonts/bbttcc-display/BBTTCC-Display.ttf?v=20260920b")   format("truetype");
+  src: url("../fonts/bbttcc-display/BBTTCC-Display.woff2?v=20260921b") format("woff2"),
+       url("../fonts/bbttcc-display/BBTTCC-Display.woff?v=20260921b")  format("woff"),
+       url("../fonts/bbttcc-display/BBTTCC-Display.ttf?v=20260921b")   format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Inlay variant — same letterforms, all ornament cut INSIDE the strokes, nothing
+ * protrudes from the silhouette. Selectable in Foundry's font picker; use
+ * font-family: "BBTTCC Display Inlay" wherever a cleaner edge is wanted. */
+@font-face {
+  font-family: "BBTTCC Display Inlay";
+  src: url("../fonts/bbttcc-display/BBTTCC-Display-Inlay.woff2?v=20260921b") format("woff2"),
+       url("../fonts/bbttcc-display/BBTTCC-Display-Inlay.woff?v=20260921b")  format("woff"),
+       url("../fonts/bbttcc-display/BBTTCC-Display-Inlay.ttf?v=20260921b")   format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Circuit variant — HexChrome capitals with their interior circuitry (slots,
+ * fullers, notches) but no external nodes, over the Inlay lowercase. */
+@font-face {
+  font-family: "BBTTCC Display Circuit";
+  src: url("../fonts/bbttcc-display/BBTTCC-Display-Circuit.woff2?v=20260921b") format("woff2"),
+       url("../fonts/bbttcc-display/BBTTCC-Display-Circuit.woff?v=20260921b")  format("woff"),
+       url("../fonts/bbttcc-display/BBTTCC-Display-Circuit.ttf?v=20260921b")   format("truetype");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
