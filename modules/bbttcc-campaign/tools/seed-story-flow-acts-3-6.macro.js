@@ -223,6 +223,19 @@
     receipt("enc_forgotten_yesterdays_miss_june_inventory", "Memory", "Miss June's stock is memory, shelved. She let you take one down.");
     receipt("enc_forgotten_yesterdays_vhs_ghosts", "Regret", "The ghosts on the tape were sorry about something. Now so are you.");
 
+    // S16 ── THE STORY HANDS OUT DOCTRINE (owner ruling 2026-09-21): the grief towns and the Trail teach the Tier 2
+    // civics to the coalition (beat.unlocks.strategics → WME grants the doctrine item to every coalition faction).
+    const unlock = (id, keys) => { const b = get(id); if (!b) return; b.unlocks = (b.unlocks && typeof b.unlocks === "object") ? b.unlocks : {}; const cur = Array.isArray(b.unlocks.strategics) ? b.unlocks.strategics : []; const add = keys.filter(k => !cur.includes(k)); if (!add.length) return say(`· ok ${id} unlocks`); b.unlocks.strategics = [...cur, ...add]; changes++; say(`🎓 ${id}: +strategics ${add.join(", ")}`); };
+    for (const id of ["chuckle_finale", "chuckle_new_episode"]) unlock(id, ["justice_tribunal"]);
+    for (const id of ["soft_landing_go_first", "soft_landing_practice"]) unlock(id, ["propaganda_tour"]);
+    for (const id of ["stillwater_ring_the_bell", "stillwater_covenant"]) unlock(id, ["peace_accords"]);
+    for (const id of ["map_rotating_chapel_map", "map_rotating_chapel_harmonize"]) unlock(id, ["cultural_exchange"]);
+    unlock("map_burnt_flats_pattern", ["reconstruction_drive"]);
+    unlock("map_singing_mire_truth", ["spy_insertion"]);
+    unlock("map_anchor_reach_stabilize", ["smuggling_network"]);
+    unlock("map_port_kudzu_testimony", ["courtly_intrigue_council"]);
+    unlock("map_legansus_waystation_verified", ["training_drills"]);
+
     console.log(`[seed-story-flow-acts-3-6] ${apply ? "APPLY" : "DRY RUN"} — ${changes} change(s)\n` + report.map(r => "  " + r).join("\n"));
     if (!apply) { ui.notifications.info(`Acts 3–6 seeder DRY RUN: ${changes} change(s) (console).`); return changes; }
     const save = (data, type, name) => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([data], { type })); a.download = name; a.click(); };

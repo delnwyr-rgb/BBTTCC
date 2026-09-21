@@ -137,7 +137,7 @@
     const have = api.qty(faction, key); const price = await api.unitPrice(faction, key);
     const name = (api.list(faction).find(m => m.key === key) || {}).name || key;
     const off = Number(api.MARKET?.OFF_CHANNEL_FRACTION || 0.7); const cap = c => c[0].toUpperCase() + c.slice(1);
-    const channels = ["economy", "logistics", "faith", "intrigue", "diplomacy", "violence", "softpower"];
+    const channels = ["economy", "logistics", "faith", "intrigue", "diplomacy", "violence", "nonlethal", "softpower", "culture"];
     const opts = channels.map(c => `<option value="${c}"${c === price.channel ? " selected" : ""}>${cap(c)}${c === price.channel ? ` — home (${price.sell}/unit)` : ` (${Math.max(1, Math.round(price.sell * off))}/unit)`}</option>`).join("");
     new Dialog({
       title: `Sell — ${name}`,

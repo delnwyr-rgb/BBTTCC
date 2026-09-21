@@ -277,6 +277,17 @@
     if (!key) say("✗ no hexOverride lists allesh_gilliam_introduction_to_hq — set Allesh-Gilliam's on-enter beats by hand: [HQ intro, allesh_gilliam_town_walk]");
     else { const want = ["allesh_gilliam_introduction_to_hq", "allesh_gilliam_town_walk"]; if (JSON.stringify(ho[key].onEnterBeatIds) !== JSON.stringify(want)) { ho[key].onEnterBeatIds = want; changes++; say(`⚙ hexOverrides ${key}: onEnterBeatIds = [HQ intro, town walk]`); } else say("· ok Allesh-Gilliam on-enter list"); } }
 
+  // P19 ── THE STORY HANDS OUT DOCTRINE (owner ruling 2026-09-21): a town settled teaches its civic activity to the
+  // coalition (beat.unlocks.strategics → WME grants the doctrine item to every coalition faction).
+  const unlock = (id, keys) => { const b = byId.get(id); if (!b) return say(`✗ MISSING beat ${id}`); b.unlocks = (b.unlocks && typeof b.unlocks === "object") ? b.unlocks : {}; const cur = Array.isArray(b.unlocks.strategics) ? b.unlocks.strategics : []; const add = keys.filter(k => !cur.includes(k)); if (!add.length) return say(`· ok ${id} unlocks`); b.unlocks.strategics = [...cur, ...add]; changes++; say(`🎓 ${id}: +strategics ${add.join(", ")}`); };
+  unlock("allesh_gilliam_pike_closure", ["civic_audit", "training_parade"]);        // the Marshal's law and his parade
+  unlock("allesh_gilliam_muster_intro", ["muster_drill"]);                          // the Muster is open
+  unlock("enc_circuit_riders_parley_alliance", ["border_patrol"]);                  // the Riders watch the roads
+  unlock("lyrenn_hex_settles", ["ration_distribution", "local_festival"]);          // the farm town feeds and feasts
+  unlock("khezek_hex_settles", ["recon_sweep"]);                                    // the miners' survey
+  unlock("khezek_tor_the_vaulhaulan_seal_restore", ["pilgrimage_route", "charity_drive"]);   // the sept, whole
+  unlock("khezek_tor_the_vaulhaulan_seal_redirect", ["pilgrimage_route"]);
+
   console.log(`[patch-story-flow-playtest] ${DRY_RUN ? "DRY RUN" : "APPLY"} — ${changes} change(s)\n` + report.map(r => "  " + r).join("\n"));
   if (DRY_RUN) { ui.notifications.info(`Playtest patch DRY RUN: ${changes} change(s) (console).`); return changes; }
   const save = (data, type, name) => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([data], { type })); a.download = name; a.click(); };

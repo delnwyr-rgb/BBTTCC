@@ -751,9 +751,20 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
         count++;
       }
 
-      if (!count) return { applied: false, count: 0 };
+      // THE STORY HANDS OUT DOCTRINE (owner ruling 2026-09-21): an unlock also GRANTS the doctrine item, so the activity
+      // shows on the faction's Activities tab and passes the planner's owned-doctrine gate (the flag alone never did).
+      let granted = 0;
+      try {
+        const D = get(game, "bbttcc.api.factions.doctrine", null);
+        if (D && typeof D.grant === "function") {
+          for (const k of mans) { const key = String(k || "").trim().toLowerCase(); if (!key) continue; try { const r = await D.grant(F, { kind: "maneuver", key, silent: true }); if (r && r.ok && !r.already) granted++; } catch (eG) { console.warn(TAG, "unlock grant failed", key, eG); } }
+          for (const k of strs) { const key = String(k || "").trim().toLowerCase(); if (!key) continue; try { const r = await D.grant(F, { kind: "strategic", key, silent: true }); if (r && r.ok && !r.already) granted++; } catch (eG) { console.warn(TAG, "unlock grant failed", key, eG); } }
+        }
+      } catch (eD) { console.warn(TAG, "unlock doctrine grant failed", eD); }
 
-      await F.update({ ["flags."+MOD_FACTIONS+".unlocks"]: cur });
+      if (!count && !granted) return { applied: false, count: 0 };
+
+      if (count) await F.update({ ["flags."+MOD_FACTIONS+".unlocks"]: cur });
 
       // Best-effort war log
       try {
@@ -1248,11 +1259,14 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
 
     // 2b) Unlock rewards
     try {
-      if (beat && beat.unlocks && warFactionId) {
-        const resU = await _applyFactionUnlocks(warFactionId, beat, beatCtx);
-        if (resU && resU.applied) {
-          changed = true;
-          notes.push("unlocks:" + String(resU.count || 0));
+      if (beat && beat.unlocks) {
+        // every coalition faction learns (2026-09-21) — the campaign roster, else the beat's war faction
+        let targets = [];
+        try { const capi = get(game, "bbttcc.api.campaign", null); const cid = capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null; const camp = cid && capi.getCampaign ? capi.getCampaign(cid) : null; targets = [].concat((camp && camp.factionIds) || [], (camp && camp.factionId) ? [camp.factionId] : []).map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean); } catch (_e) {}
+        if (!targets.length && warFactionId) targets = [warFactionId];
+        for (const fid of Array.from(new Set(targets))) {
+          const resU = await _applyFactionUnlocks(fid, beat, beatCtx);
+          if (resU && resU.applied) { changed = true; notes.push("unlocks:" + String(resU.count || 0) + ":" + fid); }
         }
       }
     } catch (e) {
