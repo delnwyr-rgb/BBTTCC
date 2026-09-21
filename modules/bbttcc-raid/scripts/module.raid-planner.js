@@ -815,6 +815,12 @@ function rigLabel(r){
 Hooks.once("init",()=>{
   const App2 = foundry.applications.api.ApplicationV2; if (!App2) return;
 
+  // Activities whose effect lands on the FACTION (meters, flags, income), not on the target hex (owner ask 2026-09-21:
+  // "call out the activities that apply to the whole faction"). Read off the throughput adapters.
+  const FACTION_WIDE = new Set(["harvest_season", "sell_surplus", "civic_audit", "local_festival", "charity_drive", "border_patrol", "training_parade",
+    "muster_drill", "training_drills", "justice_tribunal", "mass_mobilization", "mass_mobilization_std", "policy_reforms", "industrial_revolution",
+    "alliance_summit", "crisis_summit", "world_reformation_council", "enlightenment_congress"]);
+
   // Human-friendly labels for primary OP categories
   const CATEGORY_LABELS = {
     violence:   "Violence / Military",
@@ -957,6 +963,14 @@ function inferPackageGroup(activityOrKey){
 
 
   class ActivityPlanner extends App2 {
+    // ApplicationV2 reads DEFAULT_OPTIONS — the V1 `defaultOptions` getter below was never consulted, so the window
+    // had no title, close button, drag or resize handle (owner ask 2026-09-21). The frame is the core's own.
+    static DEFAULT_OPTIONS = {
+      id: "bbttcc-activity-planner",
+      classes: ["bbttcc", "bbttcc-activity-planner-window"],
+      window: { title: "Activity Planner", resizable: true, minimizable: true, frame: true, positioned: true },
+      position: { width: 660, height: 640 }
+    };
     static get defaultOptions(){
       return {
         id: "bbttcc-activity-planner",
@@ -1070,7 +1084,7 @@ if (_fid) {
 
     async _onRender(context, options) {
       await super._onRender(context, options);
-      this._installDrag();
+      if (!this.element?.querySelector?.(".window-header")) this._installDrag();   // the core frame drags itself
     }
 
     _buildStrategicList(){
@@ -1249,6 +1263,9 @@ if (_fid) {
       wrap.style.display = "flex";
       wrap.style.flexDirection = "column";
       wrap.style.height = "100%";
+      wrap.style.display = "flex";
+      wrap.style.flexDirection = "column";
+      wrap.style.minHeight = "0";
       wrap.style.boxSizing = "border-box";
 
       const facs  = factionList();
@@ -1709,7 +1726,9 @@ wrap.appendChild(top);
       const listBox = document.createElement("div");
       listBox.style.flex = "1 1 auto";
       listBox.style.minHeight = "0";
-      listBox.style.maxHeight = "320px";
+      listBox.style.maxHeight = "none";
+      listBox.style.flex = "1 1 auto";
+      listBox.style.minHeight = "160px";
       listBox.style.overflowY = "auto";
       listBox.style.border = "1px solid var(--ft-hud-border-soft, #374151)";
       listBox.style.borderRadius = "6px";
@@ -1816,6 +1835,14 @@ wrap.appendChild(top);
           const labelSpan = document.createElement("span");
           labelSpan.textContent = a.label;
           labelSpan.style.fontWeight = "600";
+          row.dataset.search = `${a.label || ""} ${a.key || ""}`.toLowerCase();
+          if (FACTION_WIDE.has(String(a.key || "").toLowerCase())) {
+            const chip = document.createElement("span");
+            chip.textContent = "⚑ faction-wide";
+            chip.title = "Affects the whole faction, not a hex — the hex you pick is only where it's staged. Staging it N times applies it N times.";
+            chip.style.cssText = "margin-left:6px;font-size:0.68rem;font-weight:600;padding:0 5px;border-radius:999px;background:rgba(76,245,255,0.14);color:var(--ft-hud-accent-soft,#bfefff);vertical-align:middle;";
+            labelSpan.appendChild(chip);
+          }
 
           // Tooltip icon (hover/click for details)
           const tipIcon = document.createElement("span");
@@ -2121,35 +2148,20 @@ wrap.appendChild(top);
           }
 
           ui.notifications?.info?.("Planned activity recorded.");
-          this.close();
+          this.render(false);   // stays open for the next one (owner ask 2026-09-21); Cancel/× closes
           return;
         }
       });
 
       searchInput.addEventListener("input", (ev) => {
+        // filter the rows IN PLACE (owner ask 2026-09-21: a re-render dropped the caret after every letter)
         this._plannerState.search = ev.target.value || "";
-        // Debounce render so typing does not drop focus/cursor.
-        this.__bbttccSearchDebounce = this.__bbttccSearchDebounce || null;
-        if (this.__bbttccSearchDebounce) clearTimeout(this.__bbttccSearchDebounce);
-
-        const el = ev.target;
-        const start = (typeof el.selectionStart === "number") ? el.selectionStart : null;
-        const end   = (typeof el.selectionEnd === "number") ? el.selectionEnd : null;
-
-        this.__bbttccSearchDebounce = setTimeout(() => {
-          this.__bbttccSearchDebounce = null;
-          this.render(false);
-
-          // Best-effort: restore focus and caret
-          try {
-            const root = this.element?.[0] ?? this.element;
-            const field = root?.querySelector?.("input[data-role='search']") || null;
-            if (field) {
-              field.focus();
-              if (start != null && end != null && field.setSelectionRange) field.setSelectionRange(start, end);
-            }
-          } catch (_e) {}
-        }, 140);
+        const term = String(this._plannerState.search || "").toLowerCase().trim();
+        for (const row of wrap.querySelectorAll(".bbttcc-activity-row")) {
+          const collapsed = !!(row.dataset.group && this._plannerState.groupCollapsed?.[row.dataset.group]);
+          const hit = !term || String(row.dataset.search || "").includes(term);
+          row.style.display = (hit && !collapsed) ? "flex" : "none";
+        }
       });
 
       this.onClose = () => {
@@ -2167,7 +2179,9 @@ wrap.appendChild(top);
 
     async _replaceHTML(result){
       const node = result?.html ?? result;
-      if (node) this.element.replaceChildren(node);
+      // keep the core frame (header, close, resize handle): replace the CONTENT, not the window
+      const content = this.element?.querySelector?.(".window-content") || this.element;
+      if (node) content.replaceChildren(node);
       return this.element;
     }
   }

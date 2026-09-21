@@ -138,14 +138,14 @@
     const name = (api.list(faction).find(m => m.key === key) || {}).name || key;
     const off = Number(api.MARKET?.OFF_CHANNEL_FRACTION || 0.7); const cap = c => c[0].toUpperCase() + c.slice(1);
     const channels = ["economy", "logistics", "faith", "intrigue", "diplomacy", "violence", "nonlethal", "softpower", "culture"];
-    const opts = channels.map(c => `<option value="${c}"${c === price.channel ? " selected" : ""}>${cap(c)}${c === price.channel ? ` — home (${price.sell}/unit)` : ` (${Math.max(1, Math.round(price.sell * off))}/unit)`}</option>`).join("");
+    const opts = channels.map(c => { const unit = c === price.channel ? price.sell : Math.max(1, Math.round(price.sell * off)); const room = api.headroom ? Math.floor(api.headroom(faction, c) / unit) : null; return `<option value="${c}"${c === price.channel ? " selected" : ""}>${cap(c)}${c === price.channel ? ` — home (${price.sell}/unit)` : ` (${unit}/unit)`}${room != null ? ` · room for ${room}` : ""}</option>`; }).join("");
     new Dialog({
       title: `Sell — ${name}`,
       content: `<p><b>${_esc(name)}</b> (${_esc(price.family)}): ${have} in the stockpile · <b>${price.sell} marks</b> each at home (retail ${price.retail}, T${_esc(price.tier)}).</p>
                 <div class="form-group"><label>Quantity</label><input type="number" name="qty" value="${have}" min="1" max="${have}"/></div>
                 <div class="form-group"><label>Sell into</label><select name="channel">${opts}</select></div>
-                <p style="font-size:.78rem;opacity:.7;">The family's home channel pays full; any other channel pays ${Math.round(off * 100)}%.</p>`,
-      buttons: { sell: { icon: '<i class="fas fa-coins"></i>', label: "Sell", callback: async (html) => { const q = Number(html.find('[name="qty"]').val()) || 0; const channel = String(html.find('[name="channel"]').val() || price.channel); const res = await api.sell(faction, key, q, { channel }); if (res?.ok) ui.notifications?.info(`Sold ${res.qty}× ${name} for ${res.marks} marks of ${cap(res.channel)}.`); else ui.notifications?.warn(`Sale refused: ${res?.error || "?"}`); try { faction.sheet?.render(false); } catch (_e) {} } }, cancel: { label: "Cancel" } },
+                <p style="font-size:.78rem;opacity:.7;">The family's home channel pays full; any other channel pays ${Math.round(off * 100)}%. A sale never overfills a bank — the quantity is trimmed to the room the cap leaves.</p>`,
+      buttons: { sell: { icon: '<i class="fas fa-coins"></i>', label: "Sell", callback: async (html) => { const q = Number(html.find('[name="qty"]').val()) || 0; const channel = String(html.find('[name="channel"]').val() || price.channel); const res = await api.sell(faction, key, q, { channel }); if (res?.ok) ui.notifications?.info(`Sold ${res.qty}× ${name} for ${res.marks} marks of ${cap(res.channel)}${res.clamped ? ` (${res.clamped} held back — the bank is at its cap)` : ""}.`); else ui.notifications?.warn(`Sale refused: ${res?.error || "?"}`); try { faction.sheet?.render(false); } catch (_e) {} } }, cancel: { label: "Cancel" } },
       default: "sell"
     }).render(true);
   }

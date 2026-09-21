@@ -280,15 +280,30 @@ async function unitPrice(faction, matKey) {
   const { family, channel } = channelFor(matKey);
   return { retail, sell: Math.max(1, Math.round(retail * SELL_FRACTION)), tier, rarity, family, channel };
 }
+// HEADROOM (2026-09-21): a sale that would push a bank over its cap is REFUSED by the OP engine (Sell Surplus tried to sell
+// 79 wild herb into a 57/70 Logistics bank and got "commit refused"). Sales size themselves to the room the cap leaves.
+function headroom(faction, channel) {
+  const F = _resolveActor(faction); if (!F) return 0;
+  const ff = F.flags?.[MOD_ID] || {}; const k = String(channel || "").toLowerCase();
+  const bank = Number(ff.opBank?.[k] || 0);
+  let cap = Number(ff.opCaps?.[k]);
+  if (!Number.isFinite(cap) || cap <= 0) { const band = [50, 70, 90, 110, 130]; const t = Math.max(0, Math.min(4, Math.floor(Number(ff.tier ?? F.system?.tier ?? 0) || 0))); cap = band[t]; }
+  return Math.max(0, Math.floor(cap - bank));
+}
+
 async function sell(faction, matKey, qtyWanted, opts = {}) {
   const F = _resolveActor(faction);
   if (!F || !matKey) return { ok: false, error: "missing actor or key" };
-  const have = qty(F, matKey); const n = Math.min(have, Math.max(0, Math.floor(Number(qtyWanted) || 0)));
-  if (n <= 0) return { ok: false, error: have <= 0 ? "nothing to sell" : "bad quantity", have };
+  const have = qty(F, matKey);
+  if (have <= 0 || Math.floor(Number(qtyWanted) || 0) <= 0) return { ok: false, error: have <= 0 ? "nothing to sell" : "bad quantity", have };
   const price = await unitPrice(F, matKey); const mult = Number(opts.priceMult) > 0 ? Number(opts.priceMult) : 1;
   // the channel: the family's home at full price, any other at OFF_CHANNEL_FRACTION (owner ruling 2026-09-21)
   const channel = String(opts.channel || price.channel).toLowerCase(); const home = channel === price.channel; const chanFrac = home ? 1 : MATERIAL_MARKET.OFF_CHANNEL_FRACTION;
-  const unitMarks = Math.max(1, Math.round(price.sell * mult * chanFrac)); const marks = unitMarks * n;
+  const unitMarks = Math.max(1, Math.round(price.sell * mult * chanFrac));
+  let n = Math.min(have, Math.max(0, Math.floor(Number(qtyWanted) || 0))); let clamped = 0;
+  if (!opts.allowOvercap) { const room = headroom(F, channel); const fit = Math.floor(room / unitMarks); if (fit < n) { clamped = n - fit; n = fit; } }
+  if (n <= 0) return { ok: false, error: clamped ? `the ${channel} bank is at its cap — nothing fits` : "nothing to sell", have, clamped };
+  const marks = unitMarks * n;
   const op = game.bbttcc?.api?.op; if (!op?.commit) return { ok: false, error: "OP api unavailable" };
   const name = (_readMap(F)[matKey]?.name) || matKey;
   const res = await op.commit(F.id, { [channel]: marks }, { source: "stockpile-sell", label: `Sold ${n}× ${name} → ${channel}`, note: `${n} × ${unitMarks} marks (retail ${price.retail}, T${price.tier}${mult !== 1 ? `, ×${mult}` : ""}${home ? "" : `, off-channel ×${MATERIAL_MARKET.OFF_CHANNEL_FRACTION}`})`, allowOvercap: !!opts.allowOvercap });
@@ -296,7 +311,7 @@ async function sell(faction, matKey, qtyWanted, opts = {}) {
   const adj = await adjust(F, matKey, -n, { name });
   try { await ChatMessage.create({ speaker: { alias: F.name }, content: `<div class="bbttcc-stockpile-sale" style="border-left:3px solid #d4a72c;padding:.35em .6em;background:rgba(212,167,44,.08);">💰 <b>${foundry.utils.escapeHTML(F.name)}</b> sold <b>${n}× ${foundry.utils.escapeHTML(name)}</b> for <b>${marks} marks</b> of ${channel[0].toUpperCase() + channel.slice(1)}${home ? "" : " (off-channel)"} <span style="opacity:.7;">(${unitMarks}/unit · retail ${price.retail})</span>.</div>` }); } catch (_eC) {}
   try { Hooks.callAll("bbttcc:stockpile:sold", { factionId: F.id, materialKey: matKey, qty: n, marks, unit: price.sell }); } catch (_e) {}
-  return { ok: true, qty: n, channel, home, marks, unit: unitMarks, retail: price.retail, remaining: adj?.after ?? qty(F, matKey) };
+  return { ok: true, qty: n, clamped, channel, home, marks, unit: unitMarks, retail: price.retail, remaining: adj?.after ?? qty(F, matKey) };
 }
 
 function _attach() {
@@ -313,6 +328,7 @@ function _attach() {
     root.sell = sell;
     root.unitPrice = unitPrice;
     root.SELL_FRACTION = SELL_FRACTION;
+    root.headroom = headroom;
     root.MARKET = MATERIAL_MARKET; root.MATERIAL_FAMILY = MATERIAL_FAMILY; root.familyOf = familyOf; root.channelFor = channelFor;
     root.depositFromCharacter = depositFromCharacter;
     root.withdrawToCharacter = withdrawToCharacter;

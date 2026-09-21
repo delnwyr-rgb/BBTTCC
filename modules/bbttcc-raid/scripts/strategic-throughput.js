@@ -250,6 +250,15 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
     const doc = ref?.document ?? ref;
     if(!doc) return;
     const tf = foundry.utils.duplicate(doc.flags?.[MODT]||{});
+    // loyalty / morale live in the SIGNED running total tf.mods.* — the one authority (territory main.js hexLoyalty,
+    // the tracks' loyalty pull). Writing tf.loyalty (2026-09-21 finding) landed nowhere: Ration Distribution,
+    // Pilgrimage Route, Propaganda, Psych Ops, Expropriation never moved a hex. Other tracks keep the flat key.
+    if (track === "loyalty" || track === "morale") {
+      const mods = (tf.mods && typeof tf.mods === "object") ? tf.mods : (tf.mods = {});
+      mods[track] = Number(mods[track] || 0) + Number(delta || 0);
+      await doc.update({ [`flags.${MODT}.mods`]: mods }, { parent: doc.parent });
+      return;
+    }
     const before = Number(tf[track]||0);
     const after = Math.max(0, before + Number(delta||0));
     tf[track] = after;
@@ -381,8 +390,8 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
       if (!rows.length) { await pushWarLog(A, "Sell Surplus: the stockpile is empty — nothing to take to market."); return; }
       const top = rows[0]; const n = Math.max(1, Math.floor(Number(top.qty) / 2));
       const r = await stock.sell(A, top.key, n, { priceMult: MATERIAL_MARKET.SURPLUS_MULT });
-      if (!r?.ok) { await pushWarLog(A, `Sell Surplus: ${top.name || top.key} would not sell (${r?.error || "refused"}).`); return; }
-      await pushWarLog(A, `Sell Surplus: sold ${r.qty}× ${top.name || top.key} for ${r.marks} marks ${r.channel} (its home channel, sell price ×${MATERIAL_MARKET.SURPLUS_MULT}).`);
+      if (!r?.ok) { await pushWarLog(A, `Sell Surplus: ${top.name || top.key} would not sell — ${r?.error || "refused"}.`); return; }
+      await pushWarLog(A, `Sell Surplus: sold ${r.qty}× ${top.name || top.key} for ${r.marks} marks ${r.channel} (its home channel, sell price ×${MATERIAL_MARKET.SURPLUS_MULT})${r.clamped ? ` — ${r.clamped} held back, the bank is at its cap` : ""}.`);
     },
     async ration_distribution(ctx){
       const A = game.actors.get(ctx.factionId);
