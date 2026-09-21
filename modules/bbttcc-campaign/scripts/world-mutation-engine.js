@@ -1450,9 +1450,44 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
     } catch (eMi) { console.warn(TAG, "militia apply failed", eMi); }
 
+    // 2g) RECIPE GRANTS (MATERIAL ECONOMY, 2026-09-20 — owner: "dole out the recipes"): worldEffects.recipeGrants =
+    // [{ name | slug, to?: "coalition" (default) | "faction" | "common", factionId? }] — the beat teaches the recipe
+    // (system RfiCrafting.recipes.learn) to every coalition faction's book, one faction's, or the common book.
+    try {
+      const rows = Array.isArray(we.recipeGrants) ? we.recipeGrants.filter(r => r && typeof r === "object" && String(r.name || r.slug || "").trim()) : [];
+      const R = get(game, "fourththing.craft.recipes", null);
+      if (rows.length && !(R && typeof R.learn === "function")) console.warn(TAG, "recipeGrants: RfiCrafting.recipes not available — nothing taught", { beatId: beatCtx.beatId });
+      if (rows.length && R && typeof R.learn === "function") {
+        const coalitionIdsForGrants = () => {
+          try {
+            const capi = get(game, "bbttcc.api.campaign", null); const cid = capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null;
+            const camp = cid && capi.getCampaign ? capi.getCampaign(cid) : null;
+            return Array.from(new Set([].concat((camp && camp.factionIds) || [], (camp && camp.factionId) ? [camp.factionId] : []).map(x => String(x || "").replace(/^Actor\./, "")).filter(Boolean)));
+          } catch (_e) { return []; }
+        };
+        const esc = (t) => String(t || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+        const lines = [];
+        for (const row of rows) {
+          const slug = R.slugOf(String(row.slug || row.name)); const to = String(row.to || "coalition").toLowerCase();
+          let targets = [];
+          if (to === "common") targets = [{ scope: "common", id: null, name: "everyone" }];
+          else if (to === "faction") { const fid = String(row.factionId || (ctx && ctx.factionId) || "").replace(/^Actor\./, ""); const A = fid ? game.actors.get(fid) : null; if (A) targets = [{ scope: "faction", id: A.id, name: A.name }]; }
+          else targets = coalitionIdsForGrants().map(id => game.actors.get(id)).filter(Boolean).map(A => ({ scope: "faction", id: A.id, name: A.name }));
+          if (!targets.length) { console.warn(TAG, "recipeGrants: no one to teach", { beatId: beatCtx.beatId, row }); continue; }
+          for (const t of targets) {
+            let r = null; try { r = await R.learn([slug], { scope: t.scope, id: t.id }); } catch (eL) { console.warn(TAG, "recipeGrants: learn failed", eL); }
+            if (r && r.added && r.added.length) { changed = true; notes.push("recipe:" + slug); lines.push(`📖 ${String(row.name || slug)} → ${t.name}`); }
+            else lines.push(`· ${String(row.name || slug)} — ${t.name} already knows it`);
+          }
+        }
+        if (lines.length) { try { await ChatMessage.create({ content: `<div class="bbttcc-recipes"><b>Recipes learned</b> — <i>${esc(beat?.label || beat?.id || "beat")}</i><ul style="margin:.3em 0 0 1em">${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul><div style="opacity:.7;font-size:.9em;margin-top:.3em">Open the Forge on a steward to make them.</div></div>`, speaker: { alias: "Bad Eden" } }); } catch (_eMsg) {} }
+      }
+    } catch (eRG) { console.warn(TAG, "recipeGrants apply failed", eRG); }
+
     // 2h) RECEIPTS (STORY FLOW D-4, 2026-09-17 — owner ruling: "courtly secrets" are RECEIPTS: something you were told
     // that you can produce later). worldEffects.receipts = [{ label, effectKey, truth?, acquisition?: "earned"|"stolen",
-    // source?: { name?, npcActorId? }, factionId? }] → one Receipt Item per row on the coalition faction, cloned from the
+    // source?: { name?, npcActorId? }, factionId?, ingredientKey? (the Forge spends it as that material — emotional
+    // ingredients are Receipts, 2026-09-21) }] → one Receipt Item per row on the coalition faction, cloned from the
     // courtly-secrets pack the way Mal-voice's _grantSecret does (api.raid.courtlySecrets.addSecret). A faction never
     // holds two Receipts of the same name (repeatable beats, the persona route and the beat route can both grant one).
     try {
@@ -1484,7 +1519,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
           const source = template.clone({
             name: label,
             system: { description: { value: `<p><em>${esc(row.truth || "")}</em></p><p style="opacity:.75;font-size:.9em;">A Receipt from ${esc(srcName)} (${acquisition}). ${esc(api.describeEffect ? (api.describeEffect(wantKeys.join("+")) || "") : "")}</p>` } },
-            flags: { "bbttcc-raid": { secret: { effectKey: wantKeys.join("+"), effectKeys: wantKeys, acquisition, source: { npcActorId: String((row.source && row.source.npcActorId) || ""), npcName: srcName, beatId: String(beatCtx.beatId || ""), acquisition, ts: Date.now() } } } }
+            flags: { "bbttcc-raid": { secret: { effectKey: wantKeys.join("+"), effectKeys: wantKeys, acquisition, ...(row.ingredientKey ? { ingredientKey: String(row.ingredientKey) } : {}), source: { npcActorId: String((row.source && row.source.npcActorId) || ""), npcName: srcName, beatId: String(beatCtx.beatId || ""), acquisition, ts: Date.now() } } } }
           });
           let created = null;
           try { created = await api.addSecret(faction.id, source, { acquisition, effectKey: wantKeys.join("+") }); } catch (eAdd) { console.warn(TAG, "receipts: addSecret failed", eAdd); }

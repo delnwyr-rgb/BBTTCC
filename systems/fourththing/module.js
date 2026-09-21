@@ -11095,13 +11095,15 @@ async function runConsumeEffects(actor, item, consume, { targets = null } = {}) 
 // ─── Forge dialog (Crafting UI) ───────────────────────────────────────────────
 // Lists every recipe across the world + visible compendia, marks which are
 // craftable from the actor's current materials, lets the player click to forge.
-async function openForgeDialog(actor) {
+async function openForgeDialog(actor, { showUnknown = false } = {}) {
   if (!actor) return;
-  const all = await RfiCrafting.recipesAvailable(actor, { includeMissing: true });
+  const isGM = !!game.user?.isGM;
+  const all = await RfiCrafting.recipesAvailable(actor, { includeMissing: true, includeUnknown: isGM && showUnknown });
   const inv = RfiCrafting.inventory(actor);
+  const gated = RfiCrafting.recipes.knownSet(actor) !== null;
 
   const tierPalette = { I: "#7aa9d4", II: "#5fb35f", III: "#d4a35f", IV: "#d46a6a" };
-  const rows = all.map(({ item, ok, missing, recipe, difficulty }) => {
+  const rows = all.map(({ item, ok, known, missing, recipe, difficulty }) => {
     const matCells = recipe.map(r => {
       const have = inv[r.key] || 0;
       const cls  = have >= r.qty ? "ok" : "low";
@@ -11110,27 +11112,31 @@ async function openForgeDialog(actor) {
     const tierBadge = `<span class="forge-tier" style="background:${tierPalette[difficulty.tier] ?? "#888"}">T${difficulty.tier}</span>`;
     const btn = ok
       ? `<button type="button" class="forge-craft-btn" data-uuid="${item.uuid}">Forge</button>`
-      : `<button type="button" class="forge-craft-btn" disabled title="Missing materials">—</button>`;
-    return `<tr class="forge-row${ok ? "" : " forge-row-low"}">
+      : (known === false
+          ? (isGM ? `<button type="button" class="forge-craft-btn forge-teach-btn" data-uuid="${item.uuid}" title="GM: teach this recipe to ${actor.name}'s faction">Teach</button>` : `<button type="button" class="forge-craft-btn" disabled title="Not known">—</button>`)
+          : `<button type="button" class="forge-craft-btn" disabled title="Missing materials">—</button>`);
+    return `<tr class="forge-row${ok ? "" : " forge-row-low"}${known === false ? " forge-row-unknown" : ""}">
               <td>${tierBadge}</td>
-              <td class="forge-name"><a class="forge-open" data-uuid="${item.uuid}">${item.name}</a></td>
+              <td class="forge-name"><a class="forge-open" data-uuid="${item.uuid}">${item.name}</a>${known === false ? ` <span class="forge-unknown-pill" style="opacity:.6;font-size:.75em">not known</span>` : ""}</td>
               <td class="forge-dc">DC ${difficulty.dc}<br><span class="forge-skill">${difficulty.skill}</span></td>
               <td class="forge-mats">${matCells}</td>
               <td class="forge-act">${btn}</td>
             </tr>`;
   }).join("");
 
+  const receiptKeys = new Set(Object.keys(RfiCrafting.receiptIngredients?.(actor) || {}));
   const invSummary = Object.entries(inv).sort((a,b)=>a[0].localeCompare(b[0]))
-    .map(([k, n]) => `<span class="forge-inv-pill">${k} ×${n}</span>`).join(" ") || "<i>no materials on hand</i>";
+    .map(([k, n]) => `<span class="forge-inv-pill"${receiptKeys.has(k) ? ' title="a Receipt the faction holds — spent when forged"' : ""}>${receiptKeys.has(k) ? "🧾 " : ""}${k} ×${n}</span>`).join(" ") || "<i>no materials on hand</i>";
 
+  const gmRow = isGM && gated ? `<div class="forge-gm-row" style="font-size:.8em;opacity:.8;margin:.2rem 0"><label><input type="checkbox" class="forge-show-unknown" ${showUnknown ? "checked" : ""}> show recipes ${actor.name} doesn't know yet (GM)</label></div>` : "";
   const html = `
     <div class="ft-forge-dialog">
-      <div class="forge-inv-row"><b>Materials:</b> ${invSummary}</div>
+      <div class="forge-inv-row"><b>Materials:</b> ${invSummary}</div>${gmRow}
       <table class="forge-table">
         <thead><tr>
           <th>Tier</th><th>Recipe</th><th>DC</th><th>Materials</th><th></th>
         </tr></thead>
-        <tbody>${rows || `<tr><td colspan="5"><i>No recipes found in available libraries.</i></td></tr>`}</tbody>
+        <tbody>${rows || `<tr><td colspan="5"><i>${gated ? `${actor.name} knows no recipes yet — the story, a faction, or the GM can teach some.` : "No recipes found in available libraries."}</i></td></tr>`}</tbody>
       </table>
     </div>`;
 
@@ -11148,12 +11154,19 @@ async function openForgeDialog(actor) {
           const item = await fromUuid(uuid);
           if (!item) return;
           btn.disabled = true;
-          await RfiCrafting.tryCraft(actor, item);
+          if (btn.classList.contains("forge-teach-btn")) {
+            const F = RfiCrafting.factionOf(actor);
+            const r = await RfiCrafting.recipes.learn([item], F ? { scope: "faction", id: F.id } : { scope: "steward", id: actor.id });
+            ui.notifications?.info(`${item.name} — taught to ${F ? F.name : actor.name}${r.added?.length ? "" : " (already known)"}.`);
+          } else {
+            await RfiCrafting.tryCraft(actor, item);
+          }
           // Re-open to refresh inventory.
           dlg.close();
-          openForgeDialog(actor);
+          openForgeDialog(actor, { showUnknown });
         });
       });
+      root.querySelector?.(".forge-show-unknown")?.addEventListener("change", (ev) => { dlg.close(); openForgeDialog(actor, { showUnknown: !!ev.currentTarget.checked }); });
       root.querySelectorAll?.(".forge-open").forEach(a => {
         a.addEventListener("click", async (ev) => {
           ev.preventDefault();
@@ -13390,6 +13403,32 @@ Hooks.once("init", function () {
         style: "normal"
       }]
     };
+    // Inlay variant: all ornament cut inside the strokes, clean silhouette.
+    CONFIG.fontDefinitions["BBTTCC Display Inlay"] = {
+      editor: true,
+      fonts: [{
+        urls: [
+          "systems/fourththing/fonts/bbttcc-display/BBTTCC-Display-Inlay.woff2",
+          "systems/fourththing/fonts/bbttcc-display/BBTTCC-Display-Inlay.woff",
+          "systems/fourththing/fonts/bbttcc-display/BBTTCC-Display-Inlay.ttf"
+        ],
+        weight: 700,
+        style: "normal"
+      }]
+    };
+    // Circuit variant: HexChrome caps, interior circuitry only, Inlay lowercase.
+    CONFIG.fontDefinitions["BBTTCC Display Circuit"] = {
+      editor: true,
+      fonts: [{
+        urls: [
+          "systems/fourththing/fonts/bbttcc-display/BBTTCC-Display-Circuit.woff2",
+          "systems/fourththing/fonts/bbttcc-display/BBTTCC-Display-Circuit.woff",
+          "systems/fourththing/fonts/bbttcc-display/BBTTCC-Display-Circuit.ttf"
+        ],
+        weight: 700,
+        style: "normal"
+      }]
+    };
   } catch (e) {
     console.warn("Roll for Initiation | BBTTCC Display font registration failed", e);
   }
@@ -13700,6 +13739,8 @@ Hooks.once("init", function () {
   // Bands fire when total exceeds DC by 20+. Cosmetic at +20, mechanical from
   // +30 up. Tier gate keeps peer-on-peer rolls quiet — the ground only creaks
   // when a higher-tier actor punches down on a lower-tier target.
+  // THE RECIPE BOOK (2026-09-20): { common:[slugs], factions:{actorId:[slugs]}, stewards:{actorId:[slugs]} } — see RfiCrafting.recipes.
+  game.settings.register("fourththing", "recipeBook", { scope: "world", config: false, type: Object, default: { common: [], factions: {}, stewards: {} } });
   game.settings.register("fourththing", "overshootEnabled", {
     name: "Reality Tear — enable Overshoot",
     hint: "When a roll exceeds its DC by 20+, generate cosmetic ripples / mechanical tears scaling with overshoot.",

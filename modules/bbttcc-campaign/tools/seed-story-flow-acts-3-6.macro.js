@@ -21,6 +21,7 @@
  *  S11 Finale: the bunker is Inconvenient Mountains.h (Ruling L); outcomes with spoils route on, rewards close the quest;
  *      the act advance comes off two outcomes.
  *  S12 Act 6 title card on ANY finale ending (Ruling A).
+ *  S15 THE STORY TEACHES (2026-09-21): recipeGrants on the Mall/Seal/Vault/finale beats; emotional-ingredient RECEIPTS on the Mall and the Bijou.
  *  S13 Gloomgill: `storeFacts` on the ten questions (Ruling M); hex-enter at Odaroloc River.c.
  *  S14 SCENES (owner, 2026-09-20): the three Hex Flooded Towns battlemaps; the Mall of Forgotten Yesterdays — Donny on the
  *      approach, the food court for the Tanneritos and the mall's life, food court 2 for the archive, the halfpipe for
@@ -180,6 +181,47 @@
     bindScene(["enc_forgotten_yesterdays_kickflip_lazarus_intro", "enc_forgotten_yesterdays_kickflip_lazarus_1", "enc_forgotten_yesterdays_kickflip_lazarus_2", "enc_forgotten_yesterdays_kickflip_lazarus_3", "enc_forgotten_yesterdays_kickflip_lazarus_4", "enc_forgotten_yesterdays_kickflip_lazarus_5", "enc_forgotten_yesterdays_kickflip_lazarus_runback", "enc_forgotten_yesterdays_kickflip_lazarus_runback_success", "enc_forgotten_yesterdays_kickflip_lazarus_runback_fail", "enc_forgotten_yesterdays_kickflip_lazarus_echo"], "crown_mall_kickflip_lazarus_halfpipe_top_view_pov", "glPwKQepJibWdCU2");
     bindScene(["enc_forgotten_yesterdays_laser_bev_intro", "enc_forgotten_yesterdays_laser_bev_1", "enc_forgotten_yesterdays_laser_bev_2", "enc_forgotten_yesterdays_laser_bev_3", "enc_forgotten_yesterdays_laser_bev_4", "enc_forgotten_yesterdays_laser_bev_5", "enc_forgotten_yesterdays_laser_bev_terms", "enc_forgotten_yesterdays_laser_bev_echo"], "crown_mall_lazer_bev_office_pov", "KOZMFN4vcDF7tKyg");
     bindScene(["enc_forgotten_yesterdays_miss_june_intro", "enc_forgotten_yesterdays_miss_june_1", "enc_forgotten_yesterdays_miss_june_2", "enc_forgotten_yesterdays_miss_june_3", "enc_forgotten_yesterdays_miss_june_4", "enc_forgotten_yesterdays_miss_june_5", "enc_forgotten_yesterdays_miss_june_inventory", "enc_forgotten_yesterdays_miss_june_echo"], "crown_mall_ms_june_store_pov", "cxLnzyDMkaE3Yadg");
+
+    // S15 ── THE STORY TEACHES (owner ruling 2026-09-21): recipes are learned through beats; emotional ingredients are
+    // RECEIPTS. worldEffects.recipeGrants = [{ name, to: "coalition" }]; worldEffects.receipts = [{ label, effectKey,
+    // truth, ingredientKey }] (the Forge spends the Receipt as that material). Idempotent by row.
+    const addFx = (id, key, row) => { const b = get(id); if (!b) return; b.worldEffects = b.worldEffects || {}; const arr = Array.isArray(b.worldEffects[key]) ? b.worldEffects[key] : (b.worldEffects[key] = []); const sig = (r) => JSON.stringify(key === "recipeGrants" ? [r.name] : [r.label]); if (arr.some(r => sig(r) === sig(row))) return say(`· ok ${id} ${key} ${sig(row)}`); arr.push(row); changes++; say(`📖 ${id}: +${key} ${sig(row)}`); };
+    const teach = (id, names) => { for (const name of names) addFx(id, "recipeGrants", { name, to: "coalition" }); };
+    const receipt = (id, label, truth) => addFx(id, "receipts", { label, effectKey: "rollPlus2", truth, ingredientKey: label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") });
+    const MALL_WARES = ["Apology Knife, Mass-Produced", "Boots That Knew Each Other Once", "Buc-ee's Beaver Talisman (Tarnished Gold)", "Foam Finger (Structural)", "Pre-Shattering Concert T-Shirt (XL)", "STAY IN MILK Embroidered Tea Towel", "S'narchy Burger Mascot's Final Smile", "S'narchy Burger Spatula of +1 Sass", "S'narchy Burger Special Sauce (Sealed Packet, Pre-Fall)", "Scarf That Was a Cat (Probably)", "Texas-Shaped Belt Buckle of Mild Authority", "The Apologizing Burger", "The Last Working Vending Machine in Bad Eden (Portable Kit)", "Whataburger Coupon, Unredeemed (Vintage)"];
+    const SNARCHY = ["S'narchy Burger Spatula of +1 Sass", "S'narchy Burger Special Sauce (Sealed Packet, Pre-Fall)", "S'narchy Burger Mascot's Final Smile", "The Apologizing Burger"];
+    const YESODIC = ["Yesodic Edge", "Yesodic Plating", "Yesodic Hammer of the First Word", "Yesodic Gate Frame", "Yesodic Memory Lens", "Yesodic Sigil of the Hearthward", "Yesodium Tongue-Stud"];
+    // the Mall: real access teaches every ware; an uncommitted vibe teaches the S'narchy counter; Kickflip teaches what he wears
+    teach("enc_forgotten_yesterdays_resolution_good", MALL_WARES);
+    teach("enc_forgotten_yesterdays_resolution_neutral", SNARCHY);
+    teach("enc_forgotten_yesterdays_kickflip_lazarus_5", ["Boots That Knew Each Other Once", "Pre-Shattering Concert T-Shirt (XL)"]);
+    // the Seal restored teaches the yesodic line; redirected, the memory lens and the sigil only
+    teach("khezek_tor_the_vaulhaulan_seal_restore", YESODIC);
+    teach("khezek_tor_the_vaulhaulan_seal_redirect", ["Yesodic Memory Lens", "Yesodic Sigil of the Hearthward"]);
+    // the Vault's archive teaches the pavise; the finale's spoils teach the mantles and the aegis
+    for (const id of ["maneuver_vault_the_containment_loop", "maneuver_vault_the_containment_loop_let_pip_learn", "maneuver_vault_the_containment_loop_let_pip_learn_more"]) teach(id, ["Mirrorface Pavise"]);
+    teach("raid_thatwards_rewards_major", ["Aegis of the Final Door", "Mantle of Witnessed Silence", "Mantle of the Unbroken Circle"]);
+    teach("raid_thatwards_rewards_standard", ["Mantle of Witnessed Silence", "Mantle of the Unbroken Circle"]);
+    // emotional ingredients — Receipts the Mall and the Bijou hand over
+    receipt("enc_forgotten_yesterdays_vhs_lean_in", "Summer Memory", "A tape of a summer nobody here lived through, and every one of you remembers it now.");
+    receipt("enc_forgotten_yesterdays_donny_respect", "Small Affection", "Donny decided you were alright. He does not decide that often.");
+    receipt("enc_forgotten_yesterdays_donny_withdraw", "Well-Meant Error", "You got it wrong in a way he could tell you meant well. He'll remember the trying.");
+    receipt("enc_forgotten_yesterdays_tanneritos_friendly", "Team Spirit", "The Tanneritos put you on the team. There is a chant. You know the chant.");
+    receipt("enc_forgotten_yesterdays_tanneritos_intrigue", "Two Different Stories", "Two tapes of the same night. Neither is lying. Both are wrong.");
+    receipt("enc_forgotten_yesterdays_skate_success", "Mascot Energy", "The halfpipe crowd gave you a name. It is not a good name. It is yours.");
+    receipt("enc_forgotten_yesterdays_skate_failure", "Indistinct Rebellion", "You were against something. The mall cops were against you. Nobody wrote down what.");
+    receipt("enc_forgotten_yesterdays_escalator_success", "Physics Violation", "The escalator agreed you were important enough to arrive. Something in the math gave way.");
+    receipt("enc_forgotten_yesterdays_elefem_success", "Cosmic Petty", "Whimsy, redirected, holds a grudge the size of a food court.");
+    receipt("enc_forgotten_yesterdays_laser_bev_3", "Metaphysical Bookkeeping", "Bev showed you the ledger where permanence is a liability. The columns balance. That is the problem.");
+    receipt("enc_forgotten_yesterdays_laser_bev_5", "Civic Conscientiousness", "Somebody at this mall still fills out the forms. Bev keeps them. She showed you which drawer.");
+    receipt("enc_forgotten_yesterdays_donny_pushy", "Frozen Sarcasm", "Donny's last remark before the door. It has not thawed.");
+    receipt("enc_forgotten_yesterdays_donny_good", "Sincere Regret", "Donny apologised for the wall. He meant it, and it cost him.");
+    receipt("gilbert_theater_parley", "Patience", "Gilbert has waited since the Shattering for opening night. He lent you some of the waiting.");
+    receipt("gilbert_theater_resolution", "Stadium Memory", "The Bijou's last full house, remembered by the building. It gave you a seat.");
+    receipt("enc_hidden_vault_replicator_friendly", "Vending Machine Soul", "Lars prints disappointment. Today he printed something that wanted to be bought.");
+    receipt("enc_forgotten_yesterdays_kickflip_lazarus_3", "Borderline Irrational State Pride", "Kickflip explained style. It was mostly about Texas. It was entirely sincere.");
+    receipt("enc_forgotten_yesterdays_miss_june_inventory", "Memory", "Miss June's stock is memory, shelved. She let you take one down.");
+    receipt("enc_forgotten_yesterdays_vhs_ghosts", "Regret", "The ghosts on the tape were sorry about something. Now so are you.");
 
     console.log(`[seed-story-flow-acts-3-6] ${apply ? "APPLY" : "DRY RUN"} — ${changes} change(s)\n` + report.map(r => "  " + r).join("\n"));
     if (!apply) { ui.notifications.info(`Acts 3–6 seeder DRY RUN: ${changes} change(s) (console).`); return changes; }

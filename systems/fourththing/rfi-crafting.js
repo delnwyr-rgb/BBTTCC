@@ -33,6 +33,32 @@ const KEY_ALIASES = Object.freeze({
 });
 function canonKey(key) { const k = String(key || ""); return KEY_ALIASES[k] || k; }
 
+// THE RECIPE BOOK (owner ruling 2026-09-20 — "everyone has everything; we could use some variety"): a recipe is KNOWN
+// to a steward when its slug sits in the COMMON book, in their faction's book, or in their own. One world setting holds
+// all three (`fourththing.recipeBook = { common:[], factions:{ <actorId>:[] }, stewards:{ <actorId>:[] } }`); beats teach
+// through worldEffects.recipeGrants; `seed-recipe-books` deals the opening hands. An EMPTY book gates nothing (back-compat).
+const BOOK_SETTING = "recipeBook";
+function slugOf(itemOrName) {
+  const n = typeof itemOrName === "string" ? itemOrName : String(itemOrName?.name || "");
+  return n.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+function _readBook() {
+  let b = null; try { b = game.settings.get("fourththing", BOOK_SETTING); } catch (_e) {}
+  if (typeof b === "string") { try { b = JSON.parse(b); } catch (_e) { b = null; } }
+  b = (b && typeof b === "object") ? foundry.utils.deepClone(b) : {};
+  b.common = Array.isArray(b.common) ? b.common : []; b.factions = (b.factions && typeof b.factions === "object") ? b.factions : {}; b.stewards = (b.stewards && typeof b.stewards === "object") ? b.stewards : {};
+  return b;
+}
+async function _writeBook(b) { await game.settings.set("fourththing", BOOK_SETTING, b); return b; }
+// EMOTIONAL INGREDIENTS ARE RECEIPTS (owner ruling 2026-09-21): a recipe key no ore can fill (regret, team-spirit,
+// summer-memory…) is satisfied by a RECEIPT the steward's faction holds — a courtly-secret Item whose `ingredientKey`
+// flag, or the slug of its name, equals the key. One Receipt = one unit; the Forge spends it (the Receipt is consumed).
+function _receiptKey(item) {
+  const sec = item?.flags?.["bbttcc-raid"]?.secret; if (!sec) return null;
+  return String(sec.ingredientKey || slugOf(item.name) || "").trim() || null;
+}
+function _bookEmpty(b) { return !b.common.length && !Object.values(b.factions).some(a => Array.isArray(a) && a.length) && !Object.values(b.stewards).some(a => Array.isArray(a) && a.length); }
+
 function _normalizeRecipe(materialOfArr) {
   return (materialOfArr ?? []).map(m => {
     if (typeof m === "string") return { key: canonKey(m), qty: 1 };
@@ -58,12 +84,53 @@ export const RfiCrafting = {
     // THE FACTION STOCKPILE COUNTS (owner ruling 2026-09-20): a steward short in the pockets forges from the faction's
     // stockpile. Pockets first, stockpile second (see _spend).
     if (includeFaction) { try { const F = RfiCrafting.factionOf(actor); const stock = game.bbttcc?.api?.factions?.stockpile; if (F && stock?.get) for (const [k0, v] of Object.entries(stock.get(F) || {})) { const k = canonKey(k0); const q = Number(v?.qty || 0); if (q > 0) map[k] = (map[k] || 0) + q; } } catch (_e) {} }
+    if (includeFaction) { try { for (const [k, items] of Object.entries(RfiCrafting.receiptIngredients(actor))) map[k] = (map[k] || 0) + items.length; } catch (_e) {} }
     return map;
+  },
+
+  /** The steward's faction's Receipts as ingredients → { key: [Item, …] } (see _receiptKey). */
+  receiptIngredients(actor) {
+    const out = {}; const F = RfiCrafting.factionOf(actor); if (!F) return out;
+    for (const it of (F.items?.contents || F.items || [])) { const k = _receiptKey(it); if (!k) continue; (out[k] = out[k] || []).push(it); }
+    return out;
   },
 
   /** Recipe-side spelling of a material key (see KEY_ALIASES). */
   canonKey,
   KEY_ALIASES,
+
+  /** The recipe book — who knows what. */
+  recipes: {
+    slugOf,
+    book: _readBook,
+    /** Slugs this steward may forge: common ∪ their faction's ∪ their own. `null` = the book is empty, nothing is gated. */
+    knownSet(actor) {
+      const b = _readBook(); if (_bookEmpty(b)) return null;
+      const out = new Set(b.common.map(String));
+      const F = RfiCrafting.factionOf(actor); if (F && Array.isArray(b.factions[F.id])) for (const x of b.factions[F.id]) out.add(String(x));
+      if (actor?.id && Array.isArray(b.stewards[actor.id])) for (const x of b.stewards[actor.id]) out.add(String(x));
+      return out;
+    },
+    isKnown(actor, item) { const k = RfiCrafting.recipes.knownSet(actor); return k === null ? true : k.has(slugOf(item)); },
+    /** learn(["combat-knife", item, "Hand Axe"], { scope: "common" | "faction" | "steward", id? }) → { added: [slugs] } */
+    async learn(what, { scope = "faction", id = null } = {}) {
+      const slugs = [].concat(what || []).map(slugOf).filter(Boolean); if (!slugs.length) return { added: [] };
+      const b = _readBook(); let list;
+      if (scope === "common") list = b.common;
+      else { const key = String(id || "").replace(/^Actor\./, ""); if (!key) return { added: [], error: "id required" }; const bag = scope === "steward" ? b.stewards : b.factions; list = (bag[key] = Array.isArray(bag[key]) ? bag[key] : []); }
+      const added = slugs.filter(x => !list.includes(x)); list.push(...added);
+      if (added.length) await _writeBook(b);
+      try { Hooks.callAll("fourththing.recipesLearned", { scope, id, added }); } catch (_e) {}
+      return { added };
+    },
+    async forget(what, { scope = "faction", id = null } = {}) {
+      const slugs = new Set([].concat(what || []).map(slugOf)); const b = _readBook();
+      if (scope === "common") b.common = b.common.filter(x => !slugs.has(x));
+      else { const key = String(id || "").replace(/^Actor\./, ""); const bag = scope === "steward" ? b.stewards : b.factions; if (Array.isArray(bag[key])) bag[key] = bag[key].filter(x => !slugs.has(x)); }
+      await _writeBook(b); return { ok: true };
+    },
+    async setBook(b) { return _writeBook(b && typeof b === "object" ? b : {}); }
+  },
 
   /** The steward's faction actor (system.faction.id), or null. */
   factionOf(actor) {
@@ -181,8 +248,9 @@ export const RfiCrafting = {
    * materials for. Excludes items that ARE materials themselves and items
    * whose recipe is empty.
    */
-  async recipesAvailable(actor, { includeMissing = false } = {}) {
+  async recipesAvailable(actor, { includeMissing = false, includeUnknown = false } = {}) {
     const inv = RfiCrafting.inventory(actor);
+    const knownSet = RfiCrafting.recipes.knownSet(actor);   // null = nothing gated
     const candidates = [];
 
     // World items.
@@ -211,9 +279,11 @@ export const RfiCrafting = {
       const missing = recipe
         .map(r => ({ key: r.key, need: r.qty, have: inv[r.key] || 0 }))
         .filter(x => x.have < x.need);
-      const ok = missing.length === 0;
+      const known = knownSet === null ? true : knownSet.has(slugOf(item));
+      if (!known && !includeUnknown) continue;
+      const ok = missing.length === 0 && known;
       if (ok || includeMissing) {
-        out.push({ item, ok, missing, recipe, difficulty: RfiCrafting.difficulty(item) });
+        out.push({ item, ok, known, missing, recipe, difficulty: RfiCrafting.difficulty(item) });
       }
     }
     return out.sort((a, b) => {
@@ -264,6 +334,15 @@ export const RfiCrafting = {
         remaining[key] = need;
       }
     } catch (eS) { console.warn("Roll for Initiation | forge stockpile draw failed", eS); }
+    // …and what neither covers may be a RECEIPT — an emotional ingredient the faction holds; the Forge spends it
+    try {
+      const rec = RfiCrafting.receiptIngredients(actor);
+      for (const [key, need0] of Object.entries(remaining)) {
+        let need = need0; const items = rec[key] || [];
+        while (need > 0 && items.length) { const it = items.shift(); try { await it.delete(); need -= 1; console.log("Roll for Initiation | forge spent a Receipt:", it.name, "as", key); } catch (eD) { console.warn("Roll for Initiation | receipt spend failed", eD); break; } }
+        remaining[key] = need;
+      }
+    } catch (eR) { console.warn("Roll for Initiation | forge receipt spend failed", eR); }
   },
 
   /**
@@ -272,8 +351,12 @@ export const RfiCrafting = {
    * origin="crafted" + originator=actor.uuid. On failure, drains half the
    * materials (rounded up) and produces nothing. Posts a chat receipt.
    */
-  async tryCraft(actor, recipeItem) {
+  async tryCraft(actor, recipeItem, { force = false } = {}) {
     const check = RfiCrafting.canCraft(actor, recipeItem);
+    if (!force && !RfiCrafting.recipes.isKnown(actor, recipeItem)) {
+      ui.notifications?.warn(`${actor.name} doesn't know how to make ${recipeItem.name} yet.`);
+      return { ok: false, reason: "unknown-recipe" };
+    }
     if (!check.hasRecipe) {
       ui.notifications?.warn(`${recipeItem.name} has no recipe (no materialOf tags).`);
       return { ok: false, reason: "no-recipe" };

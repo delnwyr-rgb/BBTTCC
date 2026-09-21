@@ -286,6 +286,49 @@ async function _grantSecret({ npcActor, def, factionId, acquisition, speakerName
   return { ok: true, created, faction };
 }
 
+// ---------------------------------------------------------------------------
+// TEACHABLE RECIPES (material economy, 2026-09-21 — owner ruling: recipes are taught through beats or through
+// conversation, the way Receipts are). persona.recipesRaw = one per line: `Recipe Name :: the condition under which
+// this NPC would teach it`. When the conversation genuinely meets it the model calls teach_recipe; the asking
+// Steward's faction learns the recipe (system RfiCrafting.recipes.learn). A taught recipe is spent on this NPC
+// (persona.recipesTaught) — change its line to re-arm. Requires the fourththing recipe book; else dormant.
+// ---------------------------------------------------------------------------
+function _recipesApi() { const R = game.fourththing?.craft?.recipes; return R?.learn ? R : null; }
+function _parseRecipeLines(raw) {
+  const R = _recipesApi(); const out = [];
+  for (const line of String(raw || "").split("\n")) {
+    const t = line.trim(); if (!t || t.startsWith("#")) continue;
+    const parts = t.split("::").map(x => x.trim());
+    if (parts.length < 2) { warn(`recipe line needs 2 '::' fields, skipped: "${t.slice(0, 60)}"`); continue; }
+    const [name, ...rest] = parts; const condition = rest.join(" :: ");
+    const slug = R ? R.slugOf(name) : _secretSlug(name);
+    if (!slug || !condition) continue;
+    out.push({ key: slug, slug, label: name, condition });
+  }
+  return out;
+}
+function _armedRecipes(npcActor) {
+  if (!_recipesApi()) return [];
+  const persona = npcActor?.getFlag?.(MODULE_ID, "persona") || {};
+  const taught = persona.recipesTaught || {};
+  return _parseRecipeLines(persona.recipesRaw).filter(r => !taught[r.key]);
+}
+async function _grantRecipe({ npcActor, def, factionId, speakerName }) {
+  const R = _recipesApi(); if (!R) return { ok: false, error: "recipe book API not available" };
+  const faction = game.actors?.get(String(factionId || "")); if (!faction) return { ok: false, error: "no faction chosen" };
+  let r = null; try { r = await R.learn([def.slug], { scope: "faction", id: faction.id }); } catch (e) { return { ok: false, error: e?.message || String(e) }; }
+  const persona = npcActor.getFlag(MODULE_ID, "persona") || {};
+  const recipesTaught = { ...(persona.recipesTaught || {}) };
+  recipesTaught[def.key] = { ts: Date.now(), by: String(speakerName || ""), factionId: faction.id, label: def.label };
+  await npcActor.setFlag(MODULE_ID, "persona", { ...persona, recipesTaught });
+  try { await game.bbttcc?.mal?.npc?.addMemory?.(npcActor, `I taught ${speakerName || "a Steward"} how to make ${def.label}.`); } catch (_e) {}
+  try { Hooks.callAll("bbttcc:dialogue:recipeTaught", { npcActorId: npcActor.id, factionId: faction.id, slug: def.slug, label: def.label, already: !(r?.added?.length) }); } catch (_e) {}
+  try {
+    await ChatMessage.create({ content: `<div class="bbttcc-recipes"><b>📖 Recipe taught</b> — <i>${_esc(npcActor.name)}</i> showed ${_esc(speakerName || "the Stewards")} how to make <b>${_esc(def.label)}</b>${r?.added?.length ? ` — ${_esc(faction.name)} can forge it now.` : ` — ${_esc(faction.name)} already knew it.`}</div>`, speaker: { alias: "Bad Eden" } });
+  } catch (_e) {}
+  return { ok: true, faction, already: !(r?.added?.length) };
+}
+
 // Grant the courtly on-ramp: stamp the entering faction with the door flag
 // the courtly engine consumes at scenario creation, remember the moment on
 // the NPC, and post the table card that opens the Raid Console. Always runs
@@ -1323,6 +1366,88 @@ How to guard them:
       } catch (e) { warn("court door sweep failed:", e?.message); return null; }
     }
 
+    // ----- Teachable recipes (material economy) -----
+    _availableRecipes() { try { return _armedRecipes(this.actor); } catch (e) { warn("recipes sweep failed:", e?.message); return []; } }
+
+    _recipeTool(recipes) {
+      return {
+        name: "teach_recipe",
+        description: "Teach the Stewards how to make one of the things you know how to make. Call this ONLY when this conversation has genuinely met that recipe's condition — never speculatively, never because you were merely asked. Call it AS you begin explaining, then describe the making plainly in character.",
+        input_schema: { type: "object", properties: {
+          recipeKey: { type: "string", enum: recipes.map(r => String(r.key)) },
+          rationale: { type: "string", description: "One short line: how the condition was met." }
+        }, required: ["recipeKey"] }
+      };
+    }
+
+    _recipesSection(recipes) {
+      return `## THINGS YOU KNOW HOW TO MAKE (via the teach_recipe tool)
+You could teach these — each has a price, the condition under which, and ONLY under which, you would:
+
+${recipes.map(r => `• [${r.key}] ${r.label}
+  YOU WILL ONLY TEACH IF: ${r.condition}`).join("\n")}
+
+How to hold them:
+1. A craft is a living; you don't give it away for asking. You may let a Steward see you know the work (hands, tools, a glance at what they carry) without offering.
+2. When the conversation GENUINELY meets a recipe's condition, call teach_recipe AS you begin, then describe the making plainly in your own voice — materials, the tricky part, what fails.
+3. One recipe per reply. Never mention the tool, conditions, keys, or anything mechanical.`;
+    }
+
+    async _resolveTeach(toolUse, recipes) {
+      const key = String(toolUse?.input?.recipeKey || "");
+      const def = recipes.find(r => String(r.key) === key);
+      if (!def) return "That isn't a craft you know. Continue the conversation naturally.";
+      const speakerActor = this._speakerActor();
+      const speakerName = speakerActor?.name || game.user.name;
+      const faction = _factionOfCharacter(speakerActor);
+      if (game.user.isGM) {
+        const picked = await this._confirmTeach(def, faction);
+        if (!picked) return "You think better of it — the craft stays yours for now. Steer the conversation gently elsewhere.";
+        const r = await _grantRecipe({ npcActor: this.actor, def, factionId: picked.factionId, speakerName });
+        if (!r.ok) { warn(`recipe grant failed: ${r.error}`); return `You begin to teach — describe the making plainly now. (Table note: the recipe could not be recorded — ${r.error}.)`; }
+        return "You begin to teach. Describe the making plainly now, in your own voice — materials, the tricky part, what fails.";
+      }
+      await this._postTeachCard(def, String(toolUse?.input?.rationale || ""), faction, speakerName);
+      return "You begin to teach. Describe the making plainly now, in your own voice. Whether it takes is not yours to know.";
+    }
+
+    async _confirmTeach(def, faction) {
+      const DialogV2 = foundry.applications?.api?.DialogV2;
+      const factions = _allFactions();
+      if (!factions.length) { ui.notifications?.warn?.("No faction actors exist to learn the recipe."); return null; }
+      const opts = factions.map(f => `<option value="${_esc(f.id)}"${faction?.id === f.id ? " selected" : ""}>${_esc(f.name)}</option>`).join("");
+      const content = `<p><b>${_esc(this.actor.name)}</b> is ready to teach <b>${_esc(def.label)}</b>.</p>
+        <p style="font-size:.8em;opacity:.7;margin:.3em 0;">Condition: ${_esc(def.condition)} — model judged it met.</p>
+        <div class="form-group"><label>The recipe goes to</label><select name="factionId" style="width:100%;">${opts}</select></div>`;
+      try {
+        if (DialogV2?.wait) {
+          const r = await DialogV2.wait({ window: { title: `Teach recipe — ${this.actor.name}` }, position: { width: 420 }, content,
+            buttons: [ { action: "teach", label: "Teach", icon: "fa-solid fa-book-open", default: true, callback: (_ev, button) => ({ factionId: String(button.form?.elements?.factionId?.value || "") }) },
+                       { action: "withhold", label: "Withhold", callback: () => null } ] }).catch(() => null);
+          return (r && typeof r === "object" && r.factionId) ? r : null;
+        }
+      } catch (_e) {}
+      return null;
+    }
+
+    async _postTeachCard(def, rationale, faction, speakerName) {
+      try {
+        const gmIds = game.users.filter(u => u.isGM).map(u => u.id);
+        const factions = _allFactions();
+        const opts = factions.map(f => `<option value="${_esc(f.id)}"${faction?.id === f.id ? " selected" : ""}>${_esc(f.name)}</option>`).join("");
+        await ChatMessage.create({ whisper: gmIds,
+          content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #4d8fb8;padding:.4em .6em;background:rgba(77,143,184,.08);">
+            <b>Recipe offered — awaiting approval</b><br>
+            <b>${_esc(this.actor.name)}</b> began teaching <i>${_esc(def.label)}</i> to ${_esc(speakerName)}<br>
+            <span style="font-size:.8em;opacity:.7;">Condition: ${_esc(def.condition)}${rationale ? ` — ${_esc(rationale)}` : ""}</span><br>
+            ${factions.length ? `<label style="font-size:.8em;">Recipe to <select name="bbttccTeachFaction" style="width:auto;max-width:60%;">${opts}</select></label><br>` : ""}
+            <button type="button" data-bbttcc-teach="teach" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-book-open"></i> Teach</button>
+            <button type="button" data-bbttcc-teach="decline" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-xmark"></i> Withhold</button>
+          </div>`,
+          flags: { [MODULE_ID]: { pendingTeach: { npcActorId: this.actor.id, key: def.key, slug: def.slug, label: def.label, condition: def.condition, factionId: faction?.id || null, speakerName, userId: game.user.id } } } });
+      } catch (e) { warn("teach card failed:", e?.message); }
+    }
+
     _courtDoorTool() {
       return {
         name: "open_court_door",
@@ -1654,11 +1779,13 @@ Every word of this conversation lands inside the engagement above — and courts
         const choices = await this._availableChoices();
         const doors = await this._availableDoors();
         const secrets = await this._availableSecrets();
+        const recipes = this._availableRecipes();
         const courtDoor = this._availableCourtDoor();
         const toolList = [];
         if (choices.length) { toolList.push(this._choiceTool(choices)); system.push({ text: this._momentsSection(choices) }); }
         if (doors.length)   { toolList.push(this._doorTool(doors));     system.push({ text: this._doorsSection(doors) }); }
         if (secrets.length) { toolList.push(this._secretTool(secrets)); system.push({ text: this._secretsSection(secrets) }); }
+        if (recipes.length) { toolList.push(this._recipeTool(recipes)); system.push({ text: this._recipesSection(recipes) }); }
         if (courtDoor)      { toolList.push(this._courtDoorTool());     system.push({ text: this._courtDoorSection(courtDoor) }); }
         const live = this._courtlyLive();
         if (live) {
@@ -1711,6 +1838,8 @@ Every word of this conversation lands inside the engagement above — and courts
               ? await this._resolveDoor(tu, doors)
               : (tu.name === "divulge_secret")
               ? await this._resolveDivulge(tu, secrets)
+              : (tu.name === "teach_recipe")
+              ? await this._resolveTeach(tu, recipes)
               : (tu.name === "open_court_door")
               ? await this._resolveCourtDoor(tu, courtDoor)
               : (tu.name === "court_notices")
@@ -2271,6 +2400,9 @@ async function _editPersonaLegacy(actor) {
     <textarea name="secretsRaw" rows="4" style="width:100%;" placeholder="The second ledger :: rollPlus2 :: they prove they already suspect the books are cooked :: The true tallies live under the third floorboard of the counting room.">${_esc(cur.secretsRaw || "")}</textarea>
     ${keysHint ? `<details style="font-size:.75em;opacity:.7;margin:.2em 0;"><summary>Valid effect keys</summary><pre style="white-space:pre-wrap;margin:.2em 0;">${_esc(keysHint)}</pre></details>` : ""}
     ${usedLines ? `<p style="font-size:.75em;opacity:.7;margin:.2em 0;">${usedLines}</p>` : ""}
+    <p style="font-size:.8em;opacity:.75;margin:.6em 0 .4em;"><b>Teachable recipes</b> — one per line: <code>Recipe Name :: the condition under which ${_esc(actor.name)} would teach it</code>. The name must match a recipe item (the Forge's list). When a conversation genuinely meets the condition, ${_esc(actor.name)} teaches it and the asking Steward's faction can forge it (player conversations pause on a GM approval card; yours confirm inline). A taught recipe is spent — change its line to re-arm it.${_recipesApi() ? "" : " <b>⚠ Recipe book API not detected (fourththing) — this section stays dormant.</b>"}</p>
+    <textarea name="recipesRaw" rows="3" style="width:100%;" placeholder="Hex-Warded Duster :: they bring back the courier's cloak with the seam intact and ask how it held">${_esc(cur.recipesRaw || "")}</textarea>
+    ${Object.values(cur.recipesTaught || {}).length ? `<p style="font-size:.75em;opacity:.7;margin:.2em 0;">${Object.values(cur.recipesTaught || {}).map(u => `✓ ${_esc(u.label)} — taught to ${_esc(u.by || "?")}`).join("<br>")}</p>` : ""}
     <p style="font-size:.8em;opacity:.75;margin:.6em 0 .4em;"><b>Court door</b> — leave blank for none. The condition under which ${_esc(actor.name)} would usher Stewards INTO their faction's court (a Courtly Intrigue engagement against it).</p>
     <input type="text" name="courtDoor" style="width:100%;" placeholder="e.g. they bring proof the tithe is being skimmed, and swear to raise it before the court themselves" value="${_esc(cur.courtDoor || "")}"/>`;
 
@@ -2278,6 +2410,7 @@ async function _editPersonaLegacy(actor) {
     topics:     String(form?.elements?.topics?.value ?? ""),
     notes:      String(form?.elements?.notes?.value ?? ""),
     secretsRaw: String(form?.elements?.secretsRaw?.value ?? ""),
+    recipesRaw: String(form?.elements?.recipesRaw?.value ?? ""),
     courtDoor:  String(form?.elements?.courtDoor?.value ?? "")
   });
 
@@ -2306,6 +2439,7 @@ async function _editPersonaLegacy(actor) {
               topics:     root.querySelector?.("[name=topics]")?.value ?? "",
               notes:      root.querySelector?.("[name=notes]")?.value ?? "",
               secretsRaw: root.querySelector?.("[name=secretsRaw]")?.value ?? "",
+              recipesRaw: root.querySelector?.("[name=recipesRaw]")?.value ?? "",
               courtDoor:  root.querySelector?.("[name=courtDoor]")?.value ?? ""
             });
           } },
@@ -2322,6 +2456,7 @@ async function _editPersonaLegacy(actor) {
   await actor.setFlag(MODULE_ID, "persona", {
     notes: String(result.notes), topics: String(result.topics),
     secretsRaw, secretsUsed: cur.secretsUsed || {},
+    recipesRaw: String(result.recipesRaw ?? ""), recipesTaught: cur.recipesTaught || {},
     courtDoor: String(result.courtDoor ?? "").trim()
   });
   const armed = _parseSecretLines(secretsRaw).filter(s => !(cur.secretsUsed || {})[s.key]);
@@ -2501,6 +2636,28 @@ function _bindSecretButtons(message, root) {
   }
 }
 
+// Teach cards (player-initiated teach_recipe) — the NPC has already begun explaining; the card gates the book entry.
+async function _handleTeachCardClick(message, action, root) {
+  if (!game.user.isGM) return;
+  const p = message.getFlag(MODULE_ID, "pendingTeach"); if (!p) return;
+  let outcome;
+  if (action === "decline") outcome = "✗ Withheld — the words were spoken, but nothing is written in the book.";
+  else {
+    const factionId = root?.querySelector?.("[name=bbttccTeachFaction]")?.value || p.factionId;
+    const npcActor = game.actors?.get(p.npcActorId);
+    if (!npcActor) outcome = "⚠ NPC actor no longer exists — nothing taught.";
+    else { try { const r = await _grantRecipe({ npcActor, def: { key: p.key, slug: p.slug, label: p.label, condition: p.condition }, factionId, speakerName: p.speakerName }); outcome = r.ok ? `✓ Taught — ${r.faction.name} can forge "${p.label}"${r.already ? " (already knew it)" : ""}` : `⚠ teach failed: ${r.error}`; } catch (e) { outcome = `⚠ teach threw: ${e?.message || e}`; } }
+  }
+  try { await message.update({ content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #4d8fb8;padding:.4em .6em;background:rgba(77,143,184,.08);"><b>Recipe offered</b> — <i>${_esc(p.label)}</i><br>${_esc(outcome)}</div>`, [`flags.${MODULE_ID}.pendingTeach`]: null }); } catch (_e) {}
+}
+function _bindTeachButtons(message, root) {
+  if (!root || !message?.getFlag?.(MODULE_ID, "pendingTeach")) return;
+  for (const btn of root.querySelectorAll("[data-bbttcc-teach]")) {
+    if (btn.dataset.bbttccBound) continue; btn.dataset.bbttccBound = "1";
+    btn.addEventListener("click", (ev) => { ev.preventDefault(); _handleTeachCardClick(message, btn.dataset.bbttccTeach, root); });
+  }
+}
+
 // Court-door cards (player-initiated open_court_door) — same shape as the
 // secret cards: the ushering words are ALREADY spoken; the card only gates
 // the mechanical entry (the courtlyDoor stamp + Raid Console signpost).
@@ -2617,8 +2774,8 @@ function _bindCourtConsoleButtons(_message, root) {
 
 // v13+ fires renderChatMessageHTML (HTMLElement); older cores fire
 // renderChatMessage (jQuery). Bind both defensively.
-Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindApprovalButtons(message, html); _bindSecretButtons(message, html); _bindCourtDoorButtons(message, html); _bindCourtConsoleButtons(message, html); _bindCourtNoticeButtons(message, html); } catch (_e) {} });
-Hooks.on("renderChatMessage",     (message, html) => { try { const r = html?.[0] ?? html; _bindApprovalButtons(message, r); _bindSecretButtons(message, r); _bindCourtDoorButtons(message, r); _bindCourtConsoleButtons(message, r); _bindCourtNoticeButtons(message, r); } catch (_e) {} });
+Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindApprovalButtons(message, html); _bindSecretButtons(message, html); _bindTeachButtons(message, html); _bindCourtDoorButtons(message, html); _bindCourtConsoleButtons(message, html); _bindCourtNoticeButtons(message, html); } catch (_e) {} });
+Hooks.on("renderChatMessage",     (message, html) => { try { const r = html?.[0] ?? html; _bindApprovalButtons(message, r); _bindSecretButtons(message, r); _bindTeachButtons(message, r); _bindCourtDoorButtons(message, r); _bindCourtConsoleButtons(message, r); _bindCourtNoticeButtons(message, r); } catch (_e) {} });
 
 // ---------------------------------------------------------------------------
 // Settings + install

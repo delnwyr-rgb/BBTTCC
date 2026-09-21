@@ -699,7 +699,7 @@ if (quests) for (const [q, qd] of Object.entries(quests)) if (!questBeats.has(q)
 }
 
 // ── effects: E02–E14 ────────────────────────────────────────────────────────
-const arrayKeys = ["factionEffects", "relationshipEffects", "worldModifiers", "turnRequests", "purifyHexes"];
+const arrayKeys = ["factionEffects", "relationshipEffects", "worldModifiers", "turnRequests", "purifyHexes", "recipeGrants"];
 const ladder = [];
 for (const b of beats) {
   const we = b.worldEffects;
