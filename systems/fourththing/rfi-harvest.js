@@ -35,6 +35,11 @@ export const RfiHarvest = {
   scanScene(scene = canvas?.scene ?? game.scenes?.current) {
     if (!scene) return [];
     const out = [];
+    // hex DRAWINGS can be nodes too (2026-09-20): the region maps' hexes carry the flag, so Gather works from the world map
+    for (const dd of (scene.drawings ?? [])) {
+      const h = foundry.utils.getProperty(dd, HARVEST_PATH);
+      if (h?.materialKey) out.push({ doc: dd, harvest: h, name: h.materialName || h.materialKey });
+    }
     for (const td of (scene.tiles ?? [])) {
       const h = foundry.utils.getProperty(td, HARVEST_PATH);
       if (h?.materialKey) out.push({ doc: td, harvest: h, name: h.materialName || h.materialKey });
@@ -51,7 +56,7 @@ export const RfiHarvest = {
    */
   async markNode(targetDoc, {
     materialKey, dc = 12, skill = "soul",
-    yieldFormula = "1", charges = 5,
+    yieldFormula = "1", charges = 5, drops = null,
     regrowthSomaBreaks = 1,
     materialName = null, materialUuid = null
   } = {}) {
@@ -59,7 +64,7 @@ export const RfiHarvest = {
     if (!materialKey) throw new Error("markNode: materialKey is required.");
     return targetDoc.update({
       [HARVEST_PATH]: {
-        materialKey, dc, skill, yieldFormula, charges,
+        materialKey, dc, skill, yieldFormula, charges, ...(Array.isArray(drops) ? { drops } : {}),
         regrowthSomaBreaks, materialName, materialUuid
       }
     });
@@ -263,7 +268,24 @@ export const RfiHarvest = {
                   </div></div>`
     });
 
-    return { ok: true, success, total, dc, yield: yieldUnits, remaining: charges - (success ? 1 : 0) };
+    // DROPS (owner ruling 2026-09-20): a node may carry `drops: [{ key, chance (0..1), qty?: "1"|"1d2", name?, uuid? }]` —
+    // on a successful gather each drop rolls its chance and lands beside the main yield.
+    const dropped = [];
+    if (success && Array.isArray(h.drops)) {
+      for (const d of h.drops) {
+        try {
+          if (!d?.key) continue; const chance = Number(d.chance); if (!(Math.random() < (Number.isFinite(chance) ? chance : 0))) continue;
+          const qr = new Roll(String(d.qty ?? "1")); await qr.evaluate(); const units = Math.max(1, Number(qr.total) || 1);
+          let data = null;
+          if (d.uuid) { const src = await fromUuid(d.uuid); if (src) { data = src.toObject(); delete data._id; foundry.utils.setProperty(data, "flags.fourththing.rfi.item.charges", units); } }
+          if (!data) data = { name: d.name || d.key, type: "gear", img: "icons/svg/mystery-man.svg", system: { slot: "material", tags: ["material", d.key] },
+            flags: { fourththing: { rfi: { item: { ...RfiItems.defaults({ type: "gear", system: {}, getFlag: () => null }), tier: d.tier || "I", frame: "material", origin: "found", bound: "free", materialKey: d.key, charges: units, upkeep: { mode: "passive", per: "none" } } } } } };
+          await actor.createEmbeddedDocuments("Item", [data]); dropped.push({ key: d.key, units, name: d.name || d.key });
+        } catch (eD) { console.warn("Roll for Initiation | harvest drop failed", d, eD); }
+      }
+      if (dropped.length) { try { await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="ft-harvest-drops">✦ <b>Also found</b> — ${dropped.map(x => `${x.units}× ${x.name}`).join(", ")}</div>` }); } catch (_eM) {} }
+    }
+    return { ok: true, success, total, dc, yield: yieldUnits, drops: dropped, remaining: charges - (success ? 1 : 0) };
   }
 };
 

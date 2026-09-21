@@ -24,10 +24,19 @@ import { tierFeeForTier, materialUnitPriceMarks } from "./rfi-pricing.js";
 
 const TIER_INT = { I: 1, II: 2, III: 3, IV: 4 };
 
+// KEY ALIASES (owner ruling 2026-09-20 — one thing, two spellings): the recipe libraries say `pre-fall-component` and
+// `scrap-steel`; the material items and the hex nodes say `prefall-component` and `scrap-salvage`. The Forge treats each
+// pair as ONE key so what the land yields satisfies what the recipes ask. Add a row here rather than minting a twin item.
+const KEY_ALIASES = Object.freeze({
+  "prefall-component": "pre-fall-component",
+  "scrap-salvage":     "scrap-steel"
+});
+function canonKey(key) { const k = String(key || ""); return KEY_ALIASES[k] || k; }
+
 function _normalizeRecipe(materialOfArr) {
   return (materialOfArr ?? []).map(m => {
-    if (typeof m === "string") return { key: m, qty: 1 };
-    return { key: String(m.key), qty: Math.max(1, Number(m.qty || 1)) };
+    if (typeof m === "string") return { key: canonKey(m), qty: 1 };
+    return { key: canonKey(m.key), qty: Math.max(1, Number(m.qty || 1)) };
   });
 }
 
@@ -36,16 +45,30 @@ export const RfiCrafting = {
    * Sum every material-frame item on the actor by its materialKey.
    * Stacks pull from `flags.fourththing.rfi.item.charges` (default 1).
    */
-  inventory(actor) {
+  inventory(actor, { includeFaction = true } = {}) {
     const map = {};
     if (!actor?.items) return map;
     for (const item of actor.items) {
       const rfi = item.getFlag?.("fourththing", "rfi.item");
       if (!rfi || rfi.frame !== "material" || !rfi.materialKey) continue;
       const qty = Number(rfi.charges ?? 1);
-      map[rfi.materialKey] = (map[rfi.materialKey] || 0) + qty;
+      const k = canonKey(rfi.materialKey);
+      map[k] = (map[k] || 0) + qty;
     }
+    // THE FACTION STOCKPILE COUNTS (owner ruling 2026-09-20): a steward short in the pockets forges from the faction's
+    // stockpile. Pockets first, stockpile second (see _spend).
+    if (includeFaction) { try { const F = RfiCrafting.factionOf(actor); const stock = game.bbttcc?.api?.factions?.stockpile; if (F && stock?.get) for (const [k0, v] of Object.entries(stock.get(F) || {})) { const k = canonKey(k0); const q = Number(v?.qty || 0); if (q > 0) map[k] = (map[k] || 0) + q; } } catch (_e) {} }
     return map;
+  },
+
+  /** Recipe-side spelling of a material key (see KEY_ALIASES). */
+  canonKey,
+  KEY_ALIASES,
+
+  /** The steward's faction actor (system.faction.id), or null. */
+  factionOf(actor) {
+    const id = String(foundry.utils.getProperty(actor ?? {}, "system.faction.id") || "").replace(/^Actor\./, "");
+    return id ? (game.actors?.get?.(id) || null) : null;
   },
 
   /**
@@ -108,11 +131,12 @@ export const RfiCrafting = {
     for (const item of actor?.items ?? []) {
       const rfi = item.getFlag?.("fourththing", "rfi.item");
       if (!rfi || rfi.frame !== "material" || !rfi.materialKey) continue;
-      if (matIndex[rfi.materialKey]) continue;
+      const mk = canonKey(rfi.materialKey);
+      if (matIndex[mk]) continue;
       const matTier = rfi.tier ?? "I";
       const rarityMult = Number(foundry.utils.getProperty(item, "flags.fourththing.rfi.item.price.rarityMult"))
         || 1.0;
-      matIndex[rfi.materialKey] = { tier: matTier, rarityMult };
+      matIndex[mk] = { tier: matTier, rarityMult };
     }
 
     let materialsCost = 0;
@@ -212,11 +236,12 @@ export const RfiCrafting = {
     for (const item of items) {
       const rfi = item.getFlag?.("fourththing", "rfi.item");
       if (!rfi || rfi.frame !== "material" || !rfi.materialKey) continue;
-      const need = remaining[rfi.materialKey] || 0;
+      const mk = canonKey(rfi.materialKey);
+      const need = remaining[mk] || 0;
       if (need <= 0) continue;
       const have = Number(rfi.charges ?? 1);
       const take = Math.min(have, need);
-      remaining[rfi.materialKey] -= take;
+      remaining[mk] -= take;
       const left = have - take;
       if (left <= 0) {
         await item.delete();
@@ -225,6 +250,20 @@ export const RfiCrafting = {
       }
       if (Object.values(remaining).every(v => v <= 0)) break;
     }
+    // what the pockets couldn't cover comes out of the faction stockpile (2026-09-20)
+    try {
+      const F = RfiCrafting.factionOf(actor); const stock = game.bbttcc?.api?.factions?.stockpile;
+      if (F && stock?.adjust && stock?.get) for (const [key, need0] of Object.entries(remaining)) {
+        let need = need0; if (need <= 0) continue;
+        // the stockpile is keyed by the item's own spelling — every alias of the recipe key may pay
+        for (const [k0, v] of Object.entries(stock.get(F) || {})) {
+          if (need <= 0) break; if (canonKey(k0) !== key) continue;
+          const have = Number(v?.qty || 0); const take = Math.min(have, need); if (take <= 0) continue;
+          await stock.adjust(F, k0, -take, {}); need -= take;
+        }
+        remaining[key] = need;
+      }
+    } catch (eS) { console.warn("Roll for Initiation | forge stockpile draw failed", eS); }
   },
 
   /**

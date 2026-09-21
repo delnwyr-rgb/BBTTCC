@@ -11220,7 +11220,8 @@ async function openGatherDialog(actor) {
           const docType = btn.dataset.docType;
           const sourceDoc = (docType === "Tile")
             ? scene.tiles.get(docId)
-            : (docType === "Token") ? scene.tokens.get(docId) : null;
+            : (docType === "Token") ? scene.tokens.get(docId)
+            : (docType === "Drawing") ? scene.drawings.get(docId) : null;   // hex nodes (2026-09-20)
           if (!sourceDoc) return;
           btn.disabled = true;
           await RfiHarvest.attempt(actor, sourceDoc);

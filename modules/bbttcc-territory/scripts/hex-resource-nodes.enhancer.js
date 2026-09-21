@@ -63,6 +63,31 @@
     });
   }
 
+  // Resolve a material's item data (uuid → master-content pack by key → stub). Shared by the main yield and the drops.
+  async function _materialItemData(RfiItems, { uuid, key, name, tier }, units) {
+    let data = null;
+    if (uuid) { try { const src = await fromUuid(uuid); if (src) { data = src.toObject(); delete data._id; } } catch (_e) {} }
+    if (!data && key) {
+      try {
+        const pack = game.packs.get("bbttcc-master-content.items");
+        if (pack) {
+          const idx = await pack.getIndex({ fields: ["flags.fourththing.rfi.item.materialKey"] });
+          const hit = idx.find(e => foundry.utils.getProperty(e, "flags.fourththing.rfi.item.materialKey") === key);
+          const src = hit ? await pack.getDocument(hit._id) : null;
+          if (src) { data = src.toObject(); delete data._id; }
+        }
+      } catch (_e) {}
+    }
+    if (!data) data = {
+      name: name || key, type: "gear", img: "icons/svg/mystery-man.svg",
+      system: { slot: "material", tags: ["material", key] },
+      flags: { fourththing: { rfi: { item: { ...RfiItems.defaults({ type: "gear", system: {}, getFlag: () => null }),
+        tier: tier || "I", frame: "material", origin: "found", bound: "free", materialKey: key, charges: units, upkeep: { mode: "passive", per: "none" } } } } }
+    };
+    foundry.utils.setProperty(data, "flags.fourththing.rfi.item.charges", units);
+    return data;
+  }
+
   /**
    * Harvest one node from a hex.
    *
@@ -132,58 +157,7 @@
       nextCharges = charges - 1;
       await writeNodeUpdate(hexDoc, idx, arr, { charges: nextCharges });
 
-      // Resolve material item — try materialUuid first, fall back to a name lookup
-      // in the master-content pack (uuid is a placeholder for offline-seeded scenes),
-      // fall back to a minimal stub.
-      let materialItemData = null;
-
-      if (node.materialUuid) {
-        try {
-          const src = await fromUuid(node.materialUuid);
-          if (src) {
-            materialItemData = src.toObject();
-            delete materialItemData._id;
-            foundry.utils.setProperty(materialItemData, "flags.fourththing.rfi.item.charges", yieldUnits);
-          }
-        } catch (e) { /* placeholder uuid — fall through to name lookup */ }
-      }
-
-      if (!materialItemData && node.materialKey) {
-        try {
-          const pack = game.packs.get("bbttcc-master-content.items");
-          if (pack) {
-            const idxFields = await pack.getIndex({ fields: ["flags.fourththing.rfi.item.materialKey"] });
-            const hit = idxFields.find(e => foundry.utils.getProperty(e, "flags.fourththing.rfi.item.materialKey") === node.materialKey);
-            if (hit) {
-              const src = await pack.getDocument(hit._id);
-              if (src) {
-                materialItemData = src.toObject();
-                delete materialItemData._id;
-                foundry.utils.setProperty(materialItemData, "flags.fourththing.rfi.item.charges", yieldUnits);
-              }
-            }
-          }
-        } catch (e) { /* fall through to stub */ }
-      }
-
-      if (!materialItemData) {
-        materialItemData = {
-          name: node.materialName || node.materialKey,
-          type: "gear",
-          img: "icons/svg/mystery-man.svg",
-          system: { slot: "material", tags: ["material", node.materialKey] },
-          flags: { fourththing: { rfi: { item: {
-            ...RfiItems.defaults({ type: "gear", system: {}, getFlag: () => null }),
-            tier: node.tier || "I",
-            frame: "material",
-            origin: "found",
-            bound: "free",
-            materialKey: node.materialKey,
-            charges: yieldUnits,
-            upkeep: { mode: "passive", per: "none" }
-          } } } }
-        };
-      }
+      const materialItemData = await _materialItemData(RfiItems, { uuid: node.materialUuid, key: node.materialKey, name: node.materialName, tier: node.tier }, yieldUnits);
       await actor.createEmbeddedDocuments("Item", [materialItemData]);
     }
 
@@ -202,7 +176,22 @@
                   </div></div>`
     });
 
-    return { ok: true, success, total, dc, yield: yieldUnits, remaining: nextCharges };
+    // DROPS (owner ruling 2026-09-20): a node may carry `drops: [{ key, chance (0..1), qty?: "1"|"1d2", name?, uuid?, tier? }]` —
+    // on a successful gather each drop rolls its chance and lands beside the main yield (same shape as the system's scene nodes).
+    const dropped = [];
+    if (success && Array.isArray(node.drops)) {
+      for (const d of node.drops) {
+        try {
+          if (!d?.key) continue;
+          const chance = Number(d.chance); if (!(Math.random() < (Number.isFinite(chance) ? chance : 0))) continue;
+          const qr = new Roll(String(d.qty ?? "1")); await qr.evaluate(); const units = Math.max(1, Number(qr.total) || 1);
+          const data = await _materialItemData(RfiItems, { uuid: d.uuid, key: d.key, name: d.name, tier: d.tier }, units);
+          await actor.createEmbeddedDocuments("Item", [data]); dropped.push({ key: d.key, units, name: data.name || d.name || d.key });
+        } catch (eD) { console.warn(TAG, "drop failed", d, eD); }
+      }
+      if (dropped.length) { try { await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="ft-harvest-drops">✦ <b>Also found</b> — ${dropped.map(x => `${x.units}× ${x.name}`).join(", ")}</div>` }); } catch (_eM) {} }
+    }
+    return { ok: true, success, total, dc, yield: yieldUnits, drops: dropped, remaining: nextCharges };
   }
 
   /** Refresh all nodes on a hex (or scene) to their maxCharges. GM tool. */
@@ -213,6 +202,25 @@
     const next = arr.map(n => ({ ...n, charges: Number(n.maxCharges ?? n.charges ?? 0) }));
     await hexDoc.update({ [NODES_PATH]: next });
     return { count: arr.length };
+  }
+
+  /** Every hex on every scene back to its ceiling — the turn driver calls this at the end of an applied turn (ruling 2026-09-20). */
+  async function regrowAllHexNodes({ scenes = game.scenes?.contents || [] } = {}) {
+    let count = 0, hexes = 0;
+    for (const sc of scenes) {
+      const updates = [];
+      for (const d of (sc.drawings?.contents || [])) {
+        const tf = d.flags?.[MOD] || {};
+        if (!(tf.isHex === true || tf.kind === "territory-hex" || tf.hexId)) continue;
+        const arr = tf.resourceNodes;
+        if (!Array.isArray(arr) || !arr.length) continue;
+        const next = arr.map(n => ({ ...n, charges: Number(n.maxCharges ?? n.charges ?? 0) }));
+        if (next.every((n, i) => Number(n.charges) === Number(arr[i]?.charges ?? 0))) continue;
+        updates.push({ _id: d.id, [NODES_PATH]: next }); count += arr.length; hexes++;
+      }
+      if (updates.length) { try { await sc.updateEmbeddedDocuments("Drawing", updates); } catch (e) { console.warn(TAG, "regrow failed on", sc.name, e); } }
+    }
+    return { count, hexes };
   }
 
   // ── GM authoring: add / delete individual nodes (multi-resource canon) ─────
@@ -257,7 +265,8 @@
       charges,
       maxCharges:   Number.isFinite(Number(nodeData.maxCharges)) ? Math.max(charges, Math.floor(Number(nodeData.maxCharges))) : charges,
       rich:         !!nodeData.rich,
-      discovered:   nodeData.discovered === undefined ? false : !!nodeData.discovered
+      discovered:   nodeData.discovered === undefined ? false : !!nodeData.discovered,
+      ...(Array.isArray(nodeData.drops) ? { drops: nodeData.drops } : {})
     };
 
     if (!node.materialKey) return { ok: false, error: "materialKey required" };
@@ -424,10 +433,11 @@
       game.bbttcc.api.territory = game.bbttcc.api.territory || {};
       game.bbttcc.api.territory.harvestHexNode = harvestHexNode;
       game.bbttcc.api.territory.regrowHex      = regrowHex;
+      game.bbttcc.api.territory.regrowAllHexNodes = regrowAllHexNodes;
       game.bbttcc.api.territory.addHexNode     = addHexNode;
       game.bbttcc.api.territory.deleteHexNode  = deleteHexNode;
       game.bbttcc.api.territory.openAddNodeDialog = openAddNodeDialog;
-      console.log(TAG, "API ready: harvestHexNode / regrowHex / addHexNode / deleteHexNode / openAddNodeDialog");
+      console.log(TAG, "API ready: harvestHexNode / regrowHex / regrowAllHexNodes / addHexNode / deleteHexNode / openAddNodeDialog");
     } catch (e) {
       console.warn(TAG, "ready hook failed", e);
     }

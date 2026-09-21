@@ -1852,6 +1852,18 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     };
   } finally {
     window._bbttccTurnLock = false;
+    // HARVEST NODES REGROW (owner ruling 2026-09-20: harvest once, regrow after a turn advance). Every scene's nodes
+    // refill to their ceiling at the end of an APPLIED turn. GM-only, never on a dry run.
+    if (apply && game.user?.isGM) {
+      try {
+        const H = game.fourththing?.harvest; let n = 0;
+        if (H?.regrow) for (const sc of (game.scenes?.contents || [])) { try { const r = await H.regrow(sc); n += Number(r?.count || 0); } catch (_eS) {} }
+        // …and the HEX nodes (flags.bbttcc-territory.resourceNodes on the region maps' hex drawings) — the ones the Hex Sheet harvests.
+        const T = game.bbttcc?.api?.territory; let hn = 0;
+        if (T?.regrowAllHexNodes) { try { const r = await T.regrowAllHexNodes(); hn = Number(r?.count || 0); } catch (_eH) {} }
+        if (n || hn) console.log("[bbttcc-territory] harvest nodes regrown:", { sceneNodes: n, hexNodes: hn });
+      } catch (eR) { console.warn("[bbttcc-territory] harvest regrow failed", eR); }
+    }
     // Pass `apply` so listeners can skip mutations on a dry-run / preview.
     Hooks.callAll("bbttcc:advanceTurn:end", { apply });
   }

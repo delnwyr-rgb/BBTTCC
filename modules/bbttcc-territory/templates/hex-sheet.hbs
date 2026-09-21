@@ -684,6 +684,7 @@
                     </div>
                     <div style="opacity:.75; font-size:.78rem;">DC {{dc}} · {{skill}} · yield {{yieldFormula}}</div>
                     <div style="opacity:.7; font-size:.74rem;">Charges: <b>{{charges}}</b> / {{maxCharges}}</div>
+                    {{#if drops.length}}<div style="opacity:.65; font-size:.72rem;">May also yield: {{#each drops}}{{name}} ({{pct}}%){{#unless @last}} · {{/unless}}{{/each}}</div>{{/if}}
                   </div>
                   <div style="display:flex; gap:.3rem; align-items:center;">
                     <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="harvest-hex-node" data-node-id="{{id}}" data-tooltip="{{bbttccTip 'hex' 'nodeHarvest'}}" {{#if @first}}data-tour="hex.harvest"{{/if}}>Harvest</button>

@@ -62,6 +62,7 @@
             <span class="bbttcc-stockpile-qty">${m.qty}</span>
             ${canEdit ? `
               <span class="bbttcc-stockpile-rowbtns">
+                <button type="button" class="bbttcc-mini" data-action="sell" data-key="${_esc(m.key)}" data-tooltip="Sell for Economy marks"><i class="fas fa-coins"></i></button>
                 <button type="button" class="bbttcc-mini" data-action="withdraw" data-key="${_esc(m.key)}" data-tooltip="Withdraw to a character"><i class="fas fa-arrow-up-from-bracket"></i></button>
                 ${isGM ? `<button type="button" class="bbttcc-mini" data-action="adjust" data-key="${_esc(m.key)}" data-tooltip="Manual adjust (GM)"><i class="fas fa-pen"></i></button>` : ""}
               </span>
@@ -124,11 +125,26 @@
     $card.off("click.bbttccstockpile");
     $card.on("click.bbttccstockpile", '[data-action="deposit"]',   () => _openDepositDialog(faction));
     $card.on("click.bbttccstockpile", '[data-action="withdraw"]',  (ev) => _openWithdrawDialog(faction, ev.currentTarget?.dataset?.key));
+    $card.on("click.bbttccstockpile", '[data-action="sell"]',      (ev) => _openSellDialog(faction, ev.currentTarget?.dataset?.key));
     $card.on("click.bbttccstockpile", '[data-action="adjust"]',    (ev) => _openAdjustDialog(faction, ev.currentTarget?.dataset?.key));
     $card.on("click.bbttccstockpile", '[data-action="adjust-new"]',()=> _openAdjustDialog(faction, null));
   }
 
   // ── Deposit dialog ───────────────────────────────────────────────────────
+  // SELL (2026-09-20): a quantity, a price preview, Economy marks on confirm (api.factions.stockpile.sell)
+  async function _openSellDialog(faction, key) {
+    const api = _stockpileApi(); if (!api?.sell || !key) return;
+    const have = api.qty(faction, key); const price = await api.unitPrice(faction, key);
+    const name = (api.list(faction).find(m => m.key === key) || {}).name || key;
+    new Dialog({
+      title: `Sell — ${name}`,
+      content: `<p><b>${_esc(name)}</b>: ${have} in the stockpile · <b>${price.sell} marks</b> each (retail ${price.retail}, T${_esc(price.tier)}) → Economy.</p>
+                <div class="form-group"><label>Quantity</label><input type="number" name="qty" value="${have}" min="1" max="${have}"/></div>`,
+      buttons: { sell: { icon: '<i class="fas fa-coins"></i>', label: "Sell", callback: async (html) => { const q = Number(html.find('[name="qty"]').val()) || 0; const res = await api.sell(faction, key, q); if (res?.ok) ui.notifications?.info(`Sold ${res.qty}× ${name} for ${res.marks} marks.`); else ui.notifications?.warn(`Sale refused: ${res?.error || "?"}`); try { faction.sheet?.render(false); } catch (_e) {} } }, cancel: { label: "Cancel" } },
+      default: "sell"
+    }).render(true);
+  }
+
   function _openDepositDialog(faction) {
     const api = _stockpileApi();
     if (!api) return ui.notifications?.error?.("Stockpile API not loaded.");

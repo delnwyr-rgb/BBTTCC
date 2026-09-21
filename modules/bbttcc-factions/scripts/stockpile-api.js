@@ -21,6 +21,8 @@
 //   depositFromCharacter(character, faction, opts?) → { ok, deposited: [{ key, qty, name }] }
 //                                                     opts: { itemId?, qty?, drainAll? }
 //   withdrawToCharacter(character, faction, matKey, qty, opts?) → { ok, itemId? }
+//   sell(faction, matKey, qty)         → { ok, qty, marks, unit, retail, remaining }  (2026-09-20: Economy marks at SELL_FRACTION of retail)
+//   unitPrice(faction, matKey)         → { retail, sell, tier, rarity }
 //
 // Hook: bbttcc:stockpile:changed { factionId, materialKey, before, after, delta }
 
@@ -227,6 +229,35 @@ async function withdrawToCharacter(character, faction, matKey, qtyAmt, _opts = {
   return { ok: true, itemId: newId };
 }
 
+// ── SELL (owner ruling 2026-09-20: "can we sell resources we get from our land?") ──────────────────────────────
+// Materials sell back at SELL_FRACTION of their retail unit price (rubric §1: tierBase × 0.1 × rarity; a T1 unit
+// retails at 5 marks) into the faction's ECONOMY pool. The unit price comes from the material's own item when the
+// stockpile remembers one (`lastUuid` → rfi.item.tier / rarityMult), else tier I. Tune SELL_FRACTION here.
+const SELL_FRACTION = 0.40;                                   // = rfi-pricing SALE_BACK_FRACTION
+const TIER_BASE_MARKS = { I: 50, II: 150, III: 450, IV: 1350, 1: 50, 2: 150, 3: 450, 4: 1350 };
+async function unitPrice(faction, matKey) {
+  const F = _resolveActor(faction); const cur = F ? (_readMap(F)[matKey] || null) : null;
+  let tier = "I", rarity = 1.0;
+  try { if (cur?.lastUuid) { const src = await fromUuid(cur.lastUuid); const rfi = src?.getFlag?.("fourththing", "rfi.item") || {}; if (rfi.tier) tier = rfi.tier; if (Number(rfi.rarityMult) > 0) rarity = Number(rfi.rarityMult); } } catch (_e) {}
+  const retail = Math.round((TIER_BASE_MARKS[tier] ?? 50) * 0.1 * rarity);
+  return { retail, sell: Math.max(1, Math.round(retail * SELL_FRACTION)), tier, rarity };
+}
+async function sell(faction, matKey, qtyWanted, opts = {}) {
+  const F = _resolveActor(faction);
+  if (!F || !matKey) return { ok: false, error: "missing actor or key" };
+  const have = qty(F, matKey); const n = Math.min(have, Math.max(0, Math.floor(Number(qtyWanted) || 0)));
+  if (n <= 0) return { ok: false, error: have <= 0 ? "nothing to sell" : "bad quantity", have };
+  const price = await unitPrice(F, matKey); const marks = price.sell * n;
+  const op = game.bbttcc?.api?.op; if (!op?.commit) return { ok: false, error: "OP api unavailable" };
+  const name = (_readMap(F)[matKey]?.name) || matKey;
+  const res = await op.commit(F.id, { economy: marks }, { source: "stockpile-sell", label: `Sold ${n}× ${name}`, note: `${n} × ${price.sell} marks (retail ${price.retail}, T${price.tier})`, allowOvercap: !!opts.allowOvercap });
+  if (res && res.ok === false) return { ok: false, error: res.error || "commit refused", marks };
+  const adj = await adjust(F, matKey, -n, { name });
+  try { await ChatMessage.create({ speaker: { alias: F.name }, content: `<div class="bbttcc-stockpile-sale" style="border-left:3px solid #d4a72c;padding:.35em .6em;background:rgba(212,167,44,.08);">💰 <b>${foundry.utils.escapeHTML(F.name)}</b> sold <b>${n}× ${foundry.utils.escapeHTML(name)}</b> for <b>${marks} marks</b> of Economy <span style="opacity:.7;">(${price.sell}/unit · retail ${price.retail})</span>.</div>` }); } catch (_eC) {}
+  try { Hooks.callAll("bbttcc:stockpile:sold", { factionId: F.id, materialKey: matKey, qty: n, marks, unit: price.sell }); } catch (_e) {}
+  return { ok: true, qty: n, marks, unit: price.sell, retail: price.retail, remaining: adj?.after ?? qty(F, matKey) };
+}
+
 function _attach() {
   try {
     game.bbttcc ??= {};
@@ -237,6 +268,9 @@ function _attach() {
     root.qty = qty;
     root.list = list;
     root.adjust = adjust;
+    root.sell = sell;
+    root.unitPrice = unitPrice;
+    root.SELL_FRACTION = SELL_FRACTION;
     root.depositFromCharacter = depositFromCharacter;
     root.withdrawToCharacter = withdrawToCharacter;
     console.log(TAG, "Stockpile API ready → game.bbttcc.api.factions.stockpile");

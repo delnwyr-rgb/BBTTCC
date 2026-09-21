@@ -650,6 +650,7 @@
         charges: Number(n.charges ?? 0),
         maxCharges: Number(n.maxCharges ?? n.charges ?? 0),
         rich: !!n.rich,
+        drops: Array.isArray(n.drops) ? n.drops.filter(d => d && d.key).map(d => ({ name: d.name || d.key, pct: Math.round(Math.max(0, Math.min(1, Number(d.chance) || 0)) * 100) })) : [],
         chargesPct: Math.max(0, Math.min(100, Math.round((Number(n.charges ?? 0) / Math.max(1, Number(n.maxCharges ?? n.charges ?? 1))) * 100)))
       })) : [];
 
