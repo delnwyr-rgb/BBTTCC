@@ -11,6 +11,12 @@ import { deriveSituation, registryOf, isAnchorable } from "../scripts/story-mode
 //       Future migration to ApplicationV2 can be done as a separate sprint.
 const TAG = "[bbttcc-campaign][BuilderApp]";
 
+// Lazy loader: Story Script Editor (Layer 2, 2026-09-21) — same pattern as the Beat Editor.
+async function _loadScriptEditorApp() {
+  try { const mod = await import("./campaign-script-editor.js"); return mod?.BBTTCCCampaignScriptEditorApp || mod?.default || null; }
+  catch (e) { console.error(TAG, "Failed to load Script Editor module:", e); return null; }
+}
+
 // Lazy loader: Beat Editor (avoids static ES import so this file can be loaded in more environments)
 async function _loadBeatEditorApp() {
   try {
@@ -767,6 +773,8 @@ export class BBTTCCCampaignBuilderApp extends Application {
 
     this._boundOnBeatUpdated = this._onBeatUpdated.bind(this);
     Hooks.on("bbttcc-campaign:updateBeat", this._boundOnBeatUpdated);
+    this._boundOnStoryUpdated ??= () => { try { this.render(false); } catch (_e) {} };
+    Hooks.on("bbttcc-campaign:storyUpdated", this._boundOnStoryUpdated);
     // Live truth layer (2026-08-24): re-render when ANY beat resolves, so the
     // hero/fired rail never go stale on beats that complete asynchronously
     // (a run whose dialog parks kept the panel frozen on the pre-run state).
@@ -789,6 +797,7 @@ export class BBTTCCCampaignBuilderApp extends Application {
 
   close(options = {}) {
     Hooks.off("bbttcc-campaign:updateBeat", this._boundOnBeatUpdated);
+    if (this._boundOnStoryUpdated) Hooks.off("bbttcc-campaign:storyUpdated", this._boundOnStoryUpdated);
     if (this._boundOnBeatResolved) Hooks.off("bbttcc:beat:resolved", this._boundOnBeatResolved);
     this._cleanupPortalLayer();
     return super.close(options);
@@ -919,10 +928,17 @@ const activeCampaignId = _getActiveCampaignId();
       const list = listQuestsSafe({ campaignId: selectedCampaign?.id || null, status: st, search: q });
       // Enrich with linked-hex rows pulled via the territory.questLinks API.
       const ql = game?.bbttcc?.api?.territory?.questLinks;
+      // Layer 2 (2026-09-21): which quests carry a story script — authored in this campaign (data) or shipped (code).
+      const storyApi = game?.bbttcc?.api?.campaign?.story;
+      const storyData = storyApi?.data?.get?.(selectedCampaign?.id || null) || { quests: {}, scripts: {} };
+      const codeScripts = storyApi?.QUEST_SCRIPTS || {};
       return list.map(qq => {
         const linkedHexes = ql?.listHexesForQuest ? ql.listHexesForQuest(qq.id) : [];
+        const scriptKey = storyApi?.data?.keyFor?.(qq.id) || null;
+        const scriptSource = scriptKey ? (storyData.scripts?.[scriptKey] ? "data" : (codeScripts[scriptKey] ? "code" : "")) : "";
         return {
           ...qq,
+          scriptKey, scriptSource, scripted: !!scriptSource,
           linkedHexes,
           hasLinkedHexes: linkedHexes.length > 0,
           linkedHexCount: linkedHexes.length,
@@ -3975,6 +3991,30 @@ try {
       await qapi.createQuest(payload.id, { ...payload, campaignId: this.campaignId || null });
       ui.notifications?.info?.("Quest created.");
       this.render(false);
+    });
+
+    // Layer 2 (2026-09-21): Story Script per quest — the giver / description / steps+Next lines / doors / chapters.
+    html.find("[data-action='edit-script']").on("click", async (ev) => {
+      ev.preventDefault();
+      const qid = ev.currentTarget?.dataset?.questId; if (!qid) return;
+      const campaignId = this.campaignId || game.bbttcc?.api?.campaign?.getActiveCampaignId?.();
+      if (!campaignId) return ui.notifications?.warn?.("Select a campaign first — scripts are stored on the campaign.");
+      const App = await _loadScriptEditorApp(); if (!App) return ui.notifications?.error?.("Could not open the Script Editor. See console.");
+      const qapi = _questApi(); const cur = qapi?.getQuest ? qapi.getQuest(qid) : { id: qid, name: qid };
+      const key = ev.currentTarget?.dataset?.scriptKey || null;
+      new App({ campaignId, key, registryQuest: cur }).render(true);
+    });
+    html.find("[data-action='seed-scripts']").on("click", async (ev) => {
+      ev.preventDefault();
+      const campaignId = this.campaignId || game.bbttcc?.api?.campaign?.getActiveCampaignId?.();
+      const api = game.bbttcc?.api?.campaign?.story?.data; if (!campaignId || !api?.seedFromCode) return;
+      let plan; try { plan = await api.seedFromCode(campaignId, { dryRun: true }); } catch (e) { return ui.notifications?.error?.(e?.message || String(e)); }
+      const n = plan.added.quests.length + plan.added.scripts.length;
+      if (!n) return ui.notifications?.info?.("Every shipped quest and script is already in this campaign's story data.");
+      const ok = await Dialog.confirm({ title: "Seed shipped scripts", content: `<p>Copy the shipped story tables into this campaign so they can be edited here?</p><p class="bbttcc-muted">${plan.added.quests.length} quest definition(s) · ${plan.added.scripts.length} script(s). Keys already authored in this campaign are kept. The shipped code stays as the fallback.</p>` });
+      if (!ok) return;
+      try { const r = await api.seedFromCode(campaignId, { dryRun: false }); ui.notifications?.info?.(`Seeded ${r.added.quests.length} quest(s) + ${r.added.scripts.length} script(s).`); this.render(false); }
+      catch (e) { ui.notifications?.error?.(e?.message || String(e)); }
     });
 
     html.find("[data-action='edit-quest']").on("click", async (ev) => {

@@ -596,6 +596,16 @@ for (const b of beats) {
 {
   let SM = null;
   try { SM = require(path.join(__dirname, "..", "scripts", "story-model.js")); } catch (e) { console.error("note: story-model.js not loadable (" + (e && e.message) + ") — D-rules skipped"); }
+  // Layer 2 (2026-09-21): a campaign's own story data (quests + scripts authored in the builder) lays over the
+  // code tables before the D-rules run, and gets its own Y-rules (beats named by steps/doors exist, done rules
+  // well-formed, chapters declared, registryId present).
+  if (SM && SM.applyStoryData && campaign.story && typeof campaign.story === "object") {
+    try {
+      const r = SM.applyStoryData(campaign.story);
+      console.error(`note: story data applied — ${r.quests} quest(s), ${r.scripts} script(s) from campaign.story`);
+      for (const f of (SM.validateStoryData ? SM.validateStoryData(campaign.story, beats) : [])) F(f.rule, f.sev, null, `[story:${f.key}] ${f.msg}`);
+    } catch (e) { console.error("note: story data could not be applied (" + (e && e.message) + ")"); }
+  }
   if (SM && SM.QUEST_MAP) {
     const QM = SM.QUEST_MAP;
     const poolId = QM.pool;

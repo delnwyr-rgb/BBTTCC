@@ -365,6 +365,7 @@
                   <option value="archived" {{#if (eq questStatusFilter "archived")}}selected{{/if}}>Archived</option>
                 </select>
               </div>
+              <button type="button" class="bbttcc-btn" data-action="seed-scripts" data-tooltip="Copy the shipped story scripts (giver / description / steps / doors / chapters for every Bad Eden quest) into this campaign\'s data so they can be edited on the Quests tab. Keys already authored here are kept.">⤓ Seed shipped scripts</button>
               <button type="button" class="bbttcc-btn bbttcc-btn-primary" data-action="new-quest" data-tour="campaign.quests-new" data-tooltip="{{bbttccTip 'campaign' 'new-quest'}}">+ New Quest</button>
             </div>
           </header>
@@ -418,6 +419,8 @@
                         <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-ico" data-action="quest-move-down" data-quest-id="{{q.id}}" data-tooltip="{{bbttccTip 'campaign' 'quest-move-down'}}">▼</button>
                         <span class="bbttcc-inline-separator">·</span>
                         <button type="button" class="bbttcc-link-button" data-action="edit-quest" data-quest-id="{{q.id}}" data-tooltip="{{bbttccTip 'campaign' 'edit-quest'}}">Edit</button>
+                        <span class="bbttcc-inline-separator">·</span>
+                        <button type="button" class="bbttcc-link-button" data-action="edit-script" data-quest-id="{{q.id}}" data-script-key="{{q.scriptKey}}" data-tooltip="Story Script — giver, player-facing description, ordered steps with the Quest Log's Next: lines, doors, chapters. {{#if (eq q.scriptSource 'code')}}Shipped script — editing forks a copy in this campaign.{{else if (eq q.scriptSource 'data')}}Authored in this campaign.{{else}}Not yet scripted — the Log shows only the registry description.{{/if}}">✦ Script{{#if (eq q.scriptSource 'code')}} · shipped{{else if (eq q.scriptSource 'data')}} · authored{{/if}}</button>
                         <span class="bbttcc-inline-separator">·</span>
                         {{#if (eq q.status "active")}}
                           <button type="button" class="bbttcc-link-button" data-action="complete-quest" data-quest-id="{{q.id}}" data-tooltip="{{bbttccTip 'campaign' 'complete-quest'}}">Complete</button>

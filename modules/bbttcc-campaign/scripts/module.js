@@ -8,6 +8,7 @@
 import "../apps/campaign-tag-picker.js";
 import "../scripts/casualties-engine.js";
 import "../apps/player-beat-mirror-app.js";
+import { applyStoryData, rebuildRegistry, validateStoryData, scaffoldStory, codeStory, slugKey } from "./story-model.js";   // Layer 2 story data (2026-09-21)
 import { deriveSituation, QUEST_MAP, QUEST_SCRIPTS, scriptOf, registerScripts, scriptView, registryOf, emptyState, declOf, applyRecord, projection, sealOfDecl, isAnchorable, placeOf, hexKey, rewardFor, AWARD_MARKS, QUEST_REWARDS } from "./story-model.js";
 // bbttcc-rolls-api.js removed 2026-08-28 (atlas cleanup) — game.bbttcc.api.rolls
 // had zero consumers; the beat Choice/Check UI resolves bonuses via its own
@@ -657,6 +658,8 @@ async function saveCampaign(id, data) {
   await setAllCampaigns(all);
   log("Saved campaign", id);
   _scheduleEncounterRebuild();
+  // Layer 2 (2026-09-21): the active campaign's story data (quests + scripts) is live the moment it is saved.
+  try { if (String(getActiveCampaignId() || "") === String(id)) _applyCampaignStory(all[id]); } catch (_e) {}
   // Campaign Turn Flow: sync per-turn availability for the active campaign.
   try {
     var active = getActiveCampaignId();
@@ -7264,7 +7267,20 @@ function _knownHexKeys() {
   return out;
 }
 
+// Layer 2 (2026-09-21): lay a campaign's story data over the code tables. Idempotent; cheap.
+let _storyAppliedSig = null;
+function _applyCampaignStory(campaign) {
+  const story = campaign?.story && typeof campaign.story === "object" ? campaign.story : null;
+  let sig = "none";
+  try { sig = story ? JSON.stringify(story) : "none"; } catch (_e) {}
+  if (sig === _storyAppliedSig) return false;
+  const r = applyStoryData(story || {});
+  _storyAppliedSig = sig;
+  if (story) log(`[story-data] applied ${r.quests} quest(s) + ${r.scripts} script(s) from campaign '${campaign?.id}'`);
+  return true;
+}
 async function _storySituation(campaign, { full = false } = {}) {
+  try { _applyCampaignStory(campaign); } catch (eSD) { warn("story data apply failed:", eSD); }
   if (!campaign) return null;
   const beats = Array.isArray(campaign.beats) ? campaign.beats : [];
   const byId = new Map(beats.map(b => [String(b.id), b]));
@@ -8106,6 +8122,40 @@ function buildCampaignAPI() {
     story: {
       QUEST_MAP, registryOf, deriveSituation, declOf, emptyState, applyRecord, projection, sealOfDecl, placeOf, hexKey,
       QUEST_SCRIPTS, scriptOf, registerScripts, scriptView,   // Phase A (2026-09-17): declared quest scripts — see story-model.js
+      // Layer 2 (2026-09-21): story data — quests + scripts authored in the builder, stored on campaign.story.
+      data: {
+        get: (campaignId) => { const c = getCampaign(campaignId || getActiveCampaignId()); const s = c?.story; return foundry.utils.deepClone(s && typeof s === "object" ? s : { quests: {}, scripts: {} }); },
+        // save one quest+script under `key`; `patch` = { quest?, script? } (null removes that half)
+        saveQuest: async (campaignId, key, patch = {}) => {
+          const cid = campaignId || getActiveCampaignId(); const c = getCampaign(cid); if (!c) throw new Error("story.data.saveQuest: campaign not found");
+          const k = slugKey(key); const story = c.story && typeof c.story === "object" ? foundry.utils.deepClone(c.story) : { quests: {}, scripts: {} };
+          story.quests ??= {}; story.scripts ??= {};
+          if (patch.quest === null) delete story.quests[k]; else if (patch.quest) story.quests[k] = patch.quest;
+          if (patch.script === null) delete story.scripts[k]; else if (patch.script) story.scripts[k] = patch.script;
+          await saveCampaign(cid, { ...c, story });
+          _storyAppliedSig = null; _applyCampaignStory(getCampaign(cid));
+          Hooks.callAll("bbttcc-campaign:storyUpdated", { campaignId: cid, key: k });
+          return story;
+        },
+        remove: async (campaignId, key) => game.bbttcc.api.campaign.story.data.saveQuest(campaignId, key, { quest: null, script: null }),
+        // the key a registry quest id resolves to (data or code), or null
+        keyFor: (registryId) => registryOf(registryId)?.quest || null,
+        scaffold: (registryQuest, opts) => scaffoldStory(registryQuest, opts),
+        validate: (campaignId, story) => { const c = getCampaign(campaignId || getActiveCampaignId()); return validateStoryData(story || c?.story || {}, c?.beats || []); },
+        code: () => codeStory(),
+        // copy the shipped code tables into a campaign's story data so they can be edited (keys already in data are kept unless overwrite)
+        seedFromCode: async (campaignId, { dryRun = true, overwrite = false } = {}) => {
+          const cid = campaignId || getActiveCampaignId(); const c = getCampaign(cid); if (!c) throw new Error("story.data.seedFromCode: campaign not found");
+          const code = codeStory(); const story = c.story && typeof c.story === "object" ? foundry.utils.deepClone(c.story) : { quests: {}, scripts: {} };
+          story.quests ??= {}; story.scripts ??= {};
+          const added = { quests: [], scripts: [] };
+          for (const [k, q] of Object.entries(code.quests)) if (overwrite || !story.quests[k]) { story.quests[k] = q; added.quests.push(k); }
+          for (const [k, sc] of Object.entries(code.scripts)) if (overwrite || !story.scripts[k]) { story.scripts[k] = sc; added.scripts.push(k); }
+          if (!story.pool && code.pool) story.pool = code.pool;
+          if (!dryRun) { await saveCampaign(cid, { ...c, story }); _storyAppliedSig = null; _applyCampaignStory(getCampaign(cid)); Hooks.callAll("bbttcc-campaign:storyUpdated", { campaignId: cid, key: null }); }
+          return { dryRun, added, totals: { quests: Object.keys(story.quests).length, scripts: Object.keys(story.scripts).length } };
+        }
+      },
       where: (campaignId) => _partyWhere(getCampaign(campaignId || getActiveCampaignId())),   // { hex, hexUuid, via, factionId } | null
       knownHexes: () => _knownHexKeys(),
       state: (campaignId) => foundry.utils.deepClone(_storyStateFor(campaignId || getActiveCampaignId())),   // a copy — the live settings object is never handed out
@@ -8897,6 +8947,7 @@ Hooks.once("ready", () => {
   game.bbttcc ??= { api: {} };
   game.bbttcc.api ??= {};
   game.bbttcc.api.campaign = buildCampaignAPI();
+  try { const ac = getCampaign(getActiveCampaignId()); if (ac) _applyCampaignStory(ac); } catch (_e) {}   // Layer 2 story data
   // Open-choice introspection (2026-08-24): the Visualizer's hero shows the
   // REAL state of play — when a beat dialog is open, the table is choosing,
   // and that IS what's next. Reads the module-level current-dialog ref.

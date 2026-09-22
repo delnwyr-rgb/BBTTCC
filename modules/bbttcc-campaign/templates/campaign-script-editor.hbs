@@ -1,0 +1,177 @@
+{{!-- campaign-script-editor.hbs — Story Script editor (Layer 2, 2026-09-21). State lives in the app; every
+     [data-path] input writes into it; list buttons mutate and re-render. --}}
+<div class="bbttcc-script-editor">
+  <header class="bbttcc-se-head">
+    <div>
+      <div class="bbttcc-se-kicker">Story Script · {{campaignLabel}}</div>
+      <h2>{{#if quest.name}}{{quest.name}}{{else}}New quest{{/if}}
+        <span class="bbttcc-chip bbttcc-se-source is-{{source}}" data-tooltip="{{#if (eq source 'code')}}Shipped script — saving forks an editable copy that wins over the shipped words{{else if (eq source 'data')}}Authored in this campaign{{else}}Not yet authored{{/if}}">{{#if (eq source 'code')}}shipped{{else if (eq source 'data')}}authored{{else}}new{{/if}}</span>
+      </h2>
+    </div>
+    <div class="bbttcc-se-actions">
+      <button type="button" class="bbttcc-btn" data-action="validate">Validate</button>
+      <button type="button" class="bbttcc-btn bbttcc-btn-primary" data-action="save">Save</button>
+      {{#if (eq source 'data')}}<button type="button" class="bbttcc-btn bbttcc-btn-danger" data-action="remove">Remove</button>{{/if}}
+    </div>
+  </header>
+
+  {{#if findings.length}}
+  <section class="bbttcc-se-findings">
+    {{#each findings as |f|}}<div class="bbttcc-se-finding {{#if f.isError}}is-error{{else}}is-warn{{/if}}"><code>{{f.rule}}</code> {{f.msg}}</div>{{/each}}
+  </section>
+  {{/if}}
+
+  {{!-- Quest --}}
+  <section class="bbttcc-se-panel">
+    <h3>Quest</h3>
+    <div class="bbttcc-se-grid4">
+      <label data-tooltip="{{TIPS.key}}"><span>Story key</span><input type="text" data-path="key" data-kind="key" value="{{key}}" {{#unless isNew}}readonly{{/unless}} placeholder="e.g. fixit_farm"/></label>
+      <label data-tooltip="{{TIPS.registryId}}"><span>Quests-tab quest</span>
+        <select data-path="quest.registryId">
+          <option value="" {{#unless quest.registryId}}selected{{/unless}}>(none — Log cannot see this script)</option>
+          {{#each regQuests as |r|}}<option value="{{r.id}}" {{#if (eq r.id ../quest.registryId)}}selected{{/if}}>{{r.name}} · {{r.id}}</option>{{/each}}
+        </select></label>
+      <label><span>Name</span><input type="text" data-path="quest.name" value="{{quest.name}}"/></label>
+      <label data-tooltip="{{TIPS.act}}"><span>Act</span><input type="number" min="0" max="6" data-path="quest.act" data-kind="int" value="{{quest.act}}"/></label>
+      <label data-tooltip="{{TIPS.hex}}"><span>Home hex</span><input type="text" data-path="quest.hex" value="{{quest.hex}}" placeholder="a hex name"/></label>
+      <label class="bbttcc-se-check" data-tooltip="{{TIPS.keystone}}"><input type="checkbox" data-path="quest.keystone" {{#if quest.keystone}}checked{{/if}}/><span>Keystone</span></label>
+    </div>
+  </section>
+
+  {{!-- Script header --}}
+  <section class="bbttcc-se-panel">
+    <h3>Script</h3>
+    <div class="bbttcc-se-grid2">
+      <label data-tooltip="{{TIPS.giver}}"><span>Giver (From:)</span><input type="text" data-path="script.giver" value="{{script.giver}}" placeholder="Marshal Yarrow Pike"/></label>
+      <label data-tooltip="{{TIPS.description}}" class="bbttcc-se-span2"><span>Player-facing description</span><textarea data-path="script.description" rows="3">{{script.description}}</textarea></label>
+    </div>
+  </section>
+
+  {{!-- Steps --}}
+  <section class="bbttcc-se-panel">
+    <h3 data-tooltip="{{TIPS.steps}}">Steps <small>— the first unfinished one is <b>Next:</b></small></h3>
+    {{#if steps.length}}
+    <div class="bbttcc-se-steps">
+      {{#each steps as |st|}}
+      <div class="bbttcc-se-step" data-step-path="{{st.path}}">
+        <div class="bbttcc-se-step-bar">
+          <span class="bbttcc-se-step-n">{{add st.i 1}}</span>
+          <input type="text" class="bbttcc-se-step-label" data-path="{{st.path}}.label" value="{{st.label}}" placeholder="Step label (Log chip)"/>
+          <input type="text" class="bbttcc-se-step-id" data-path="{{st.path}}.id" data-kind="key" value="{{st.id}}" placeholder="id"/>
+          <span class="bbttcc-se-spacer"></span>
+          <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-list-act="up" data-list="steps" data-index="{{st.i}}" {{#if st.first}}disabled{{/if}}>↑</button>
+          <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-list-act="down" data-list="steps" data-index="{{st.i}}" {{#if st.last}}disabled{{/if}}>↓</button>
+          <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-danger" data-list-act="del" data-list="steps" data-index="{{st.i}}">✕</button>
+        </div>
+        <label data-tooltip="{{../TIPS.stepLine}}"><span>Next: line</span><textarea data-path="{{st.path}}.line" rows="2">{{st.line}}</textarea></label>
+        <div class="bbttcc-se-grid3">
+          <label data-tooltip="{{../TIPS.stepBeats}}" class="bbttcc-se-span2"><span>Beats</span>
+            <input type="text" data-path="{{st.path}}.beats" data-kind="ids" value="{{st.beats}}" placeholder="beat ids, comma-separated"/>
+            <input type="text" class="bbttcc-se-pick" list="bbttcc-se-beats" data-pick-beat="{{st.path}}" placeholder="＋ pick a beat…"/></label>
+          <label data-tooltip="{{../TIPS.stepDone}}"><span>Done when</span>
+            <select data-done-kind>{{#each ../DONE_KINDS as |k|}}<option value="{{k.key}}" {{#if (eq k.key st.doneKind)}}selected{{/if}}>{{k.label}}</option>{{/each}}</select>
+            {{#unless (eq st.doneKind 'any')}}<input type="text" data-done-value value="{{st.doneValue}}" placeholder="{{#if (eq st.doneKind 'chapter')}}quest/chapter{{else if (eq st.doneKind 'quest')}}quest key{{else}}beat id(s){{/if}}"/>{{/unless}}</label>
+          <label data-tooltip="{{../TIPS.stepChapter}}"><span>Chapter</span>
+            <select data-path="{{st.path}}.chapter"><option value="" {{#unless st.chapter}}selected{{/unless}}>(none)</option>{{#each st.chapters as |c|}}<option value="{{c}}" {{#if (eq c st.chapter)}}selected{{/if}}>{{c}}</option>{{/each}}</select></label>
+          <label><span>Group (any order)</span><input type="text" data-path="{{st.path}}.group" value="{{st.group}}" placeholder="optional"/></label>
+          <label><span>Here line</span><input type="text" data-path="{{st.path}}.hereLine" value="{{st.hereLine}}" placeholder="optional — when the party is already there"/></label>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+    {{else}}<p class="bbttcc-muted">No steps yet.</p>{{/if}}
+    <button type="button" class="bbttcc-btn bbttcc-btn-sm" data-list-act="add" data-list="steps">＋ Step</button>
+  </section>
+
+  {{!-- Doors --}}
+  <section class="bbttcc-se-panel">
+    <h3 data-tooltip="{{TIPS.doors}}">Doors <small>— open all act, never Next</small></h3>
+    {{#each doors as |d|}}
+    <div class="bbttcc-se-step bbttcc-se-door" data-step-path="{{d.path}}">
+      <div class="bbttcc-se-step-bar">
+        <input type="text" class="bbttcc-se-step-label" data-path="{{d.path}}.label" value="{{d.label}}" placeholder="Door label"/>
+        <input type="text" class="bbttcc-se-step-id" data-path="{{d.path}}.id" data-kind="key" value="{{d.id}}" placeholder="id"/>
+        <span class="bbttcc-se-spacer"></span>
+        <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-list-act="up" data-list="doors" data-index="{{d.i}}" {{#if d.first}}disabled{{/if}}>↑</button>
+        <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-list-act="down" data-list="doors" data-index="{{d.i}}" {{#if d.last}}disabled{{/if}}>↓</button>
+        <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-danger" data-list-act="del" data-list="doors" data-index="{{d.i}}">✕</button>
+      </div>
+      <div class="bbttcc-se-grid2">
+        <label><span>Also open: line</span><input type="text" data-path="{{d.path}}.line" value="{{d.line}}"/></label>
+        <label><span>Beats</span><input type="text" data-path="{{d.path}}.beats" data-kind="ids" value="{{d.beats}}" placeholder="beat ids"/><input type="text" class="bbttcc-se-pick" list="bbttcc-se-beats" data-pick-beat="{{d.path}}" placeholder="＋ pick a beat…"/></label>
+      </div>
+    </div>
+    {{/each}}
+    <button type="button" class="bbttcc-btn bbttcc-btn-sm" data-list-act="add" data-list="doors">＋ Door</button>
+  </section>
+
+  {{!-- Chapters --}}
+  <section class="bbttcc-se-panel">
+    <h3 data-tooltip="{{TIPS.chapters}}">Chapters</h3>
+    {{#if chapterRows.length}}
+    <table class="bbttcc-table bbttcc-se-table"><thead><tr><th>Key</th><th>Name</th><th>Quests-tab quest</th><th>Giver</th><th>Line</th><th></th></tr></thead><tbody>
+      {{#each chapterRows as |c|}}
+      <tr>
+        <td><input type="text" data-ch-key="{{c.key}}" data-ch-field="key" value="{{c.key}}"/></td>
+        <td><input type="text" data-ch-key="{{c.key}}" data-ch-field="name" value="{{c.name}}"/></td>
+        <td><select data-ch-key="{{c.key}}" data-ch-field="registryId"><option value="" {{#unless c.registryId}}selected{{/unless}}>(none)</option>{{#each ../regQuests as |r|}}<option value="{{r.id}}" {{#if (eq r.id c.registryId)}}selected{{/if}}>{{r.name}}</option>{{/each}}</select></td>
+        <td><input type="text" data-ch-key="{{c.key}}" data-ch-field="giver" value="{{c.giver}}"/></td>
+        <td><input type="text" data-ch-key="{{c.key}}" data-ch-field="line" value="{{c.line}}" placeholder="Next: while this chapter is current"/></td>
+        <td><button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-danger" data-list-act="del-chapter" data-ch-key="{{c.key}}">✕</button></td>
+      </tr>
+      {{/each}}
+    </tbody></table>
+    {{/if}}
+    <button type="button" class="bbttcc-btn bbttcc-btn-sm" data-list-act="add-chapter">＋ Chapter</button>
+  </section>
+
+  {{!-- Arrival --}}
+  <section class="bbttcc-se-panel">
+    <h3 data-tooltip="{{TIPS.arrival}}">Arrival <small>— the act-1 opener that seals when the act turns</small></h3>
+    {{#if hasArrival}}
+    <div class="bbttcc-se-grid3">
+      <label><span>Act</span><input type="number" min="0" max="6" data-path="script.arrival.act" data-kind="int" value="{{script.arrival.act}}"/></label>
+      <label><span>Giver</span><input type="text" data-path="script.arrival.giver" value="{{script.arrival.giver}}"/></label>
+      <label class="bbttcc-se-span3"><span>Description</span><textarea data-path="script.arrival.description" rows="2">{{script.arrival.description}}</textarea></label>
+    </div>
+    {{#each arrivalSteps as |st|}}
+    <div class="bbttcc-se-step" data-step-path="{{st.path}}">
+      <div class="bbttcc-se-step-bar">
+        <span class="bbttcc-se-step-n">A{{add st.i 1}}</span>
+        <input type="text" class="bbttcc-se-step-label" data-path="{{st.path}}.label" value="{{st.label}}" placeholder="Step label"/>
+        <input type="text" class="bbttcc-se-step-id" data-path="{{st.path}}.id" data-kind="key" value="{{st.id}}" placeholder="id"/>
+        <span class="bbttcc-se-spacer"></span>
+        <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-list-act="up" data-list="arrival" data-index="{{st.i}}" {{#if st.first}}disabled{{/if}}>↑</button>
+        <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-list-act="down" data-list="arrival" data-index="{{st.i}}" {{#if st.last}}disabled{{/if}}>↓</button>
+        <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-danger" data-list-act="del" data-list="arrival" data-index="{{st.i}}">✕</button>
+      </div>
+      <label><span>Next: line</span><textarea data-path="{{st.path}}.line" rows="2">{{st.line}}</textarea></label>
+      <div class="bbttcc-se-grid3">
+        <label class="bbttcc-se-span2"><span>Beats</span><input type="text" data-path="{{st.path}}.beats" data-kind="ids" value="{{st.beats}}"/><input type="text" class="bbttcc-se-pick" list="bbttcc-se-beats" data-pick-beat="{{st.path}}" placeholder="＋ pick a beat…"/></label>
+        <label><span>Done when</span>
+          <select data-done-kind>{{#each ../DONE_KINDS as |k|}}<option value="{{k.key}}" {{#if (eq k.key st.doneKind)}}selected{{/if}}>{{k.label}}</option>{{/each}}</select>
+          {{#unless (eq st.doneKind 'any')}}<input type="text" data-done-value value="{{st.doneValue}}"/>{{/unless}}</label>
+      </div>
+    </div>
+    {{/each}}
+    <button type="button" class="bbttcc-btn bbttcc-btn-sm" data-list-act="add" data-list="arrival">＋ Arrival step</button>
+    <button type="button" class="bbttcc-btn bbttcc-btn-sm bbttcc-btn-danger" data-list-act="del-arrival">Remove Arrival</button>
+    {{else}}
+    <button type="button" class="bbttcc-btn bbttcc-btn-sm" data-list-act="add-arrival">＋ Add an Arrival chapter</button>
+    {{/if}}
+  </section>
+
+  {{!-- After + JSON --}}
+  <section class="bbttcc-se-panel">
+    <h3 data-tooltip="{{TIPS.after}}">Epilogue beats</h3>
+    <input type="text" data-path="script.after" data-kind="ids" value="{{after}}" placeholder="beat ids played after the quest closes"/>
+  </section>
+  <details class="bbttcc-se-panel bbttcc-se-json">
+    <summary data-tooltip="{{TIPS.json}}">Advanced — JSON</summary>
+    <textarea name="json" rows="14" spellcheck="false">{{json}}</textarea>
+    {{#if jsonError}}<div class="bbttcc-se-finding is-error">{{jsonError}}</div>{{/if}}
+    <button type="button" class="bbttcc-btn bbttcc-btn-sm" data-action="json-load">Load JSON into the form</button>
+  </details>
+
+  <datalist id="bbttcc-se-beats">{{#each beats as |b|}}<option value="{{b.id}}">{{b.label}}</option>{{/each}}</datalist>
+</div>

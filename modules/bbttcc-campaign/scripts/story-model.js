@@ -1180,3 +1180,102 @@ export function declarationsFor(beats) {
 
 // Phase B (2026-09-17): the authored scripts for Acts 0–2 register at load.
 registerScripts(STORY_SCRIPTS);
+
+// ═════════════════════════════════════════════════════════════════════════════
+// STORY DATA — Layer 2 of GM authoring parity (owner ruling 2026-09-21: "GMs who buy the product must
+// be able to produce their own stories with all the same features as what we ship").
+// A campaign may carry `campaign.story = { quests: {key: questDef}, scripts: {key: script}, pool? }`
+// — the SAME shapes as QUEST_MAP.quests[key] and QUEST_SCRIPTS[key]. applyStoryData() lays the data
+// over the code baseline (data wins per key), rebuilds QUEST_MAP.registry from every quest's
+// registryIds, and registers the scripts. The shipped code tables stay as the seed/fallback;
+// seedFromCode() (module.js) copies them into a campaign so they can be edited in the builder.
+//   questDef = { name, act, keystone?, hex, registryId, chapters: { chKey: { name, registryId? } } }
+// ═════════════════════════════════════════════════════════════════════════════
+export const CODE_SCRIPTS = STORY_SCRIPTS;
+const _CODE_QUESTS   = JSON.parse(JSON.stringify(QUEST_MAP.quests));
+const _CODE_REGISTRY = JSON.parse(JSON.stringify(QUEST_MAP.registry));
+const _CODE_POOL     = QUEST_MAP.pool;
+export function codeStory() { return { quests: JSON.parse(JSON.stringify(_CODE_QUESTS)), scripts: JSON.parse(JSON.stringify(STORY_SCRIPTS)), pool: _CODE_POOL }; }
+export const slugKey = (s) => String(s || "").toLowerCase().replace(/^quest_/, "").replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "") || "quest";
+export function normalizeQuestDef(key, q = {}) {
+  const chapters = {};
+  for (const [ck, ch] of Object.entries(q?.chapters && typeof q.chapters === "object" ? q.chapters : {})) {
+    if (!ch || typeof ch !== "object") continue;
+    chapters[slugKey(ck)] = { name: String(ch.name || ck), ...(ch.registryId ? { registryId: String(ch.registryId) } : {}) };
+  }
+  return {
+    name: String(q?.name || key), act: Number.isFinite(Number(q?.act)) ? Number(q.act) : 0,
+    keystone: !!q?.keystone, hex: String(q?.hex || ""), registryId: String(q?.registryId || ""),
+    chapters
+  };
+}
+export function rebuildRegistry() {
+  const reg = { ..._CODE_REGISTRY };
+  for (const [k, q] of Object.entries(QUEST_MAP.quests)) {
+    if (!q || typeof q !== "object") continue;
+    if (q.registryId) reg[String(q.registryId).trim()] = { quest: k };
+    for (const [ck, ch] of Object.entries(q.chapters || {})) if (ch?.registryId) reg[String(ch.registryId).trim()] = { quest: k, chapter: ck };
+  }
+  QUEST_MAP.registry = reg;
+  return reg;
+}
+export function applyStoryData(story) {
+  const out = { quests: 0, scripts: 0 };
+  if (!story || typeof story !== "object") return out;
+  // reset to the code baseline first so a removed data quest/script falls back cleanly on re-apply
+  for (const k of Object.keys(QUEST_MAP.quests)) if (!_CODE_QUESTS[k]) delete QUEST_MAP.quests[k];
+  for (const k of Object.keys(_CODE_QUESTS)) QUEST_MAP.quests[k] = JSON.parse(JSON.stringify(_CODE_QUESTS[k]));
+  for (const k of Object.keys(QUEST_SCRIPTS)) if (!STORY_SCRIPTS[k]) delete QUEST_SCRIPTS[k];
+  for (const k of Object.keys(STORY_SCRIPTS)) QUEST_SCRIPTS[k] = STORY_SCRIPTS[k];
+  QUEST_MAP.pool = _CODE_POOL;
+  const quests = story.quests && typeof story.quests === "object" ? story.quests : {};
+  for (const [k, q] of Object.entries(quests)) { if (!q || typeof q !== "object") continue; QUEST_MAP.quests[slugKey(k)] = normalizeQuestDef(slugKey(k), q); out.quests++; }
+  if (story.pool) QUEST_MAP.pool = String(story.pool);
+  rebuildRegistry();
+  const scripts = story.scripts && typeof story.scripts === "object" ? story.scripts : {};
+  for (const [k, sc] of Object.entries(scripts)) { if (!sc || typeof sc !== "object") continue; QUEST_SCRIPTS[slugKey(k)] = sc; out.scripts++; }
+  return out;
+}
+// A fresh script for a registry quest — what the builder opens when nothing is authored yet.
+export function scaffoldStory(registryQuest, { key = null } = {}) {
+  const rid = String(registryQuest?.id || "");
+  const k = slugKey(key || registryQuest?.name || rid);
+  return {
+    key: k,
+    quest: { name: String(registryQuest?.name || k), act: 1, keystone: false, hex: "", registryId: rid, chapters: {} },
+    script: { giver: "", description: String(registryQuest?.description || ""), steps: [], doors: [], after: [], chapters: {} }
+  };
+}
+// Findings for the editor and the lint: every beat a script names must exist; done rules must be
+// well-formed; chapters named by steps must be declared; the quest needs a registryId to reach the Log.
+export function validateStoryData(story, beats = []) {
+  const ids = new Set((Array.isArray(beats) ? beats : []).map(b => String(b?.id || "")));
+  const F = [];
+  const quests = story?.quests || {}, scripts = story?.scripts || {};
+  const chk = (key, where, arr) => { for (const id of (Array.isArray(arr) ? arr : [])) if (ids.size && !ids.has(String(id))) F.push({ rule: "Y01", sev: "ERROR", key, msg: `${where} names beat '${id}' which is not in the campaign` }); };
+  for (const [key, sc] of Object.entries(scripts)) {
+    const q = quests[key] || QUEST_MAP.quests[key] || null;
+    if (!q) F.push({ rule: "Y02", sev: "WARN", key, msg: `script '${key}' has no quest definition (name / act / hex / registryId) — the Log cannot find it` });
+    else if (!q.registryId) F.push({ rule: "Y02", sev: "WARN", key, msg: `quest '${key}' has no registryId — link it to a Quests-tab quest or the Log never shows its script` });
+    const steps = [...(sc.arrival?.steps || []), ...(sc.steps || [])];
+    if (!steps.length) F.push({ rule: "Y03", sev: "WARN", key, msg: `script '${key}' has no steps — nothing will read as Next:` });
+    steps.forEach((st, i) => {
+      const where = `step ${i + 1} (${st.label || st.id || "?"})`;
+      if (!String(st.line || "").trim()) F.push({ rule: "Y03", sev: "WARN", key, msg: `${where} has no Next: line` });
+      if (!Array.isArray(st.beats) || !st.beats.length) F.push({ rule: "Y03", sev: "WARN", key, msg: `${where} lists no beats` });
+      chk(key, where, st.beats);
+      const d = st.done;
+      if (d && typeof d === "object") {
+        if (d.mark) chk(key, `${where} done.mark`, [d.mark]);
+        chk(key, `${where} done.anyOf`, d.anyOf); chk(key, `${where} done.allOf`, d.allOf);
+        if (Array.isArray(d.chapter) && !(quests[d.chapter[0]] || QUEST_MAP.quests[d.chapter[0]])?.chapters?.[d.chapter[1]]) F.push({ rule: "Y04", sev: "ERROR", key, msg: `${where} done.chapter names unknown chapter ${d.chapter[0]}/${d.chapter[1]}` });
+        if (d.quest && !(quests[d.quest] || QUEST_MAP.quests[d.quest])) F.push({ rule: "Y04", sev: "ERROR", key, msg: `${where} done.quest names unknown quest '${d.quest}'` });
+      }
+      if (st.chapter && q && !q.chapters?.[st.chapter]) F.push({ rule: "Y04", sev: "ERROR", key, msg: `${where} names chapter '${st.chapter}' which the quest does not declare` });
+    });
+    (sc.doors || []).forEach((d, i) => chk(key, `door ${i + 1} (${d.label || "?"})`, d.beats));
+    chk(key, "after (epilogue)", sc.after);
+    for (const ck of Object.keys(sc.chapters || {})) if (q && !q.chapters?.[ck]) F.push({ rule: "Y04", sev: "WARN", key, msg: `script chapter '${ck}' is not declared on the quest` });
+  }
+  return F;
+}

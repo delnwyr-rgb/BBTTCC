@@ -1,0 +1,42 @@
+/* Story Script editor (Layer 2, 2026-09-21) — builder visual language. */
+.bbttcc-campaign-script-editor .window-content { padding: 0.6rem 0.8rem 1rem; }
+.bbttcc-script-editor { display: flex; flex-direction: column; gap: 0.7rem; font-size: 0.82rem; }
+.bbttcc-se-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.bbttcc-se-kicker { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; }
+.bbttcc-se-head h2 { margin: 0.1rem 0 0; font-size: 1.15rem; border: none; display: flex; align-items: center; gap: 0.5rem; }
+.bbttcc-se-actions { display: flex; gap: 0.4rem; }
+.bbttcc-se-source.is-code { border-color: rgba(255,207,92,0.6); color: #ffd98a; }
+.bbttcc-se-source.is-data { border-color: rgba(0,229,255,0.6); color: #7ff0ff; }
+.bbttcc-se-panel { padding: 0.55rem 0.7rem; border: 1px solid rgba(255,255,255,0.09); border-radius: 0.5rem; background: rgba(255,255,255,0.02); }
+.bbttcc-se-panel h3 { margin: 0 0 0.45rem; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.08em; color: #ffcf5c; }
+.bbttcc-se-panel h3 small { text-transform: none; letter-spacing: 0; color: inherit; opacity: 0.6; font-weight: 400; }
+.bbttcc-se-grid2, .bbttcc-se-grid3, .bbttcc-se-grid4 { display: grid; gap: 0.45rem 0.6rem; }
+.bbttcc-se-grid2 { grid-template-columns: 1fr 1fr; }
+.bbttcc-se-grid3 { grid-template-columns: 1fr 1fr 1fr; }
+.bbttcc-se-grid4 { grid-template-columns: repeat(4, 1fr); }
+.bbttcc-se-span2 { grid-column: span 2; }
+.bbttcc-se-span3 { grid-column: span 3; }
+.bbttcc-script-editor label { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
+.bbttcc-script-editor label > span { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.6; }
+.bbttcc-script-editor input[type=text], .bbttcc-script-editor input[type=number], .bbttcc-script-editor select, .bbttcc-script-editor textarea {
+  width: 100%; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); color: #e6f0ff; border-radius: 4px; padding: 0.25rem 0.4rem; font-size: 0.82rem;
+}
+.bbttcc-script-editor textarea { resize: vertical; }
+.bbttcc-script-editor input[readonly] { opacity: 0.6; }
+.bbttcc-se-check { flex-direction: row !important; align-items: center; gap: 0.4rem !important; padding-top: 1rem; }
+.bbttcc-se-steps { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.5rem; }
+.bbttcc-se-step { padding: 0.5rem 0.6rem; border-radius: 0.45rem; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.07); display: flex; flex-direction: column; gap: 0.4rem; }
+.bbttcc-se-step-bar { display: flex; align-items: center; gap: 0.4rem; }
+.bbttcc-se-step-n { min-width: 1.6rem; text-align: center; font-weight: 700; color: #7ff0ff; }
+.bbttcc-se-step-label { flex: 1 1 auto; }
+.bbttcc-se-step-id { flex: 0 0 160px; opacity: 0.8; font-family: var(--font-mono, monospace); font-size: 0.74rem !important; }
+.bbttcc-se-spacer { flex: 1 1 auto; }
+.bbttcc-se-pick { margin-top: 0.2rem; opacity: 0.75; }
+.bbttcc-se-door { margin-bottom: 0.45rem; }
+.bbttcc-se-table input, .bbttcc-se-table select { font-size: 0.78rem !important; }
+.bbttcc-se-findings { display: flex; flex-direction: column; gap: 0.25rem; }
+.bbttcc-se-finding { padding: 0.3rem 0.5rem; border-radius: 4px; font-size: 0.78rem; }
+.bbttcc-se-finding.is-error { background: rgba(255,80,80,0.12); border: 1px solid rgba(255,80,80,0.45); color: #ffb0b0; }
+.bbttcc-se-finding.is-warn { background: rgba(255,207,92,0.08); border: 1px solid rgba(255,207,92,0.4); color: #ffd98a; }
+.bbttcc-se-json summary { cursor: pointer; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.08em; color: #ffcf5c; }
+.bbttcc-se-json textarea { font-family: var(--font-mono, monospace); font-size: 0.72rem !important; margin: 0.4rem 0; }
