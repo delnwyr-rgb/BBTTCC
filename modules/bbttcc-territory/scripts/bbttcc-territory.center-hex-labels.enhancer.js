@@ -159,15 +159,27 @@
       const c = centerOf(r.drawing); if (!c) continue;
       const g = new PIXI.Container(); g.eventMode = "static"; g.cursor = "pointer";
       const size = Math.max(22, Math.min(40, Math.round((c.bounds?.height || 160) * 0.22)));
-      const color = r.wordSent && !r.visited ? 0xff9a6a : (r.anyHinted ? 0x7ff0ff : 0xffcf5c);
+      // Colour-blind-safe (owner is red-green CVD, 2026-09-22): the three states sit on the blue↔yellow axis
+      // AND differ in shape, so no state depends on hue alone —
+      //   story (GM)      : gold ✦ in a plain ring
+      //   hinted (players): sky-blue ✦ in a double ring
+      //   word sent, unvisited: white ✉ on a blue square
+      const state = (r.wordSent && !r.visited) ? "word" : (r.anyHinted ? "hinted" : "story");
+      const color = state === "word" ? 0xffffff : state === "hinted" ? 0x4fc3ff : 0xffd54f;
+      const ring  = state === "word" ? 0x3d7cff : color;
       const bg = new PIXI.Graphics();
-      bg.beginFill(0x0a1220, 0.85); bg.lineStyle(2, color, 0.95); bg.drawCircle(0, 0, size * 0.62); bg.endFill();
+      bg.beginFill(state === "word" ? 0x123a7a : 0x0a1220, 0.9); bg.lineStyle(2.5, ring, 0.95);
+      if (state === "word") bg.drawRoundedRect(-size * 0.62, -size * 0.62, size * 1.24, size * 1.24, size * 0.18);
+      else bg.drawCircle(0, 0, size * 0.62);
+      bg.endFill();
+      if (state === "hinted") { bg.lineStyle(1.5, ring, 0.8); bg.drawCircle(0, 0, size * 0.78); }
       g.addChild(bg);
-      const glyph = new PIXI.Text(r.wordSent && !r.visited ? "✉" : "✦", new PIXI.TextStyle({ fontFamily: "sans-serif", fontSize: size, fill: color, stroke: 0x000000, strokeThickness: 3 }));
+      const glyph = new PIXI.Text(state === "word" ? "✉" : "✦", new PIXI.TextStyle({ fontFamily: "sans-serif", fontSize: size, fill: color, stroke: 0x000000, strokeThickness: 3 }));
       glyph.anchor.set(0.5, 0.55); g.addChild(glyph);
       const n = (r.linked?.length || 0) + (isGM ? (r.unplayed || 0) : 0);
       if (n > 1) {
         const badge = new PIXI.Text(String(n), new PIXI.TextStyle({ fontFamily: "sans-serif", fontSize: Math.round(size * 0.5), fontWeight: "700", fill: 0xffffff, stroke: 0x000000, strokeThickness: 3 }));
+        const bb = new PIXI.Graphics(); bb.beginFill(0x000000, 0.75); bb.drawCircle(size * 0.5, -size * 0.45, size * 0.32); bb.endFill(); g.addChild(bb);
         badge.anchor.set(0.5, 0.5); badge.position.set(size * 0.5, -size * 0.45); g.addChild(badge);
       }
       // dim, unhinted story = a whisper only the GM sees
