@@ -3005,6 +3005,37 @@ async function _maybePromptQuestAcceptance(campaign, beat, ctx) {
   }
 }
 
+// ── Quest Log next line (Layer 1, owner ruling 2026-09-21) ──────────────────
+// A beat may carry `nextLine`: the sentence the players' Quest Log shows under
+// "Next:" for the beat's quest once the beat has played. Stored on every
+// coalition faction's quest ledger row as beatNext = { text, beatId, ts };
+// each later beat of the quest with its own line replaces it. The Log's
+// precedence: GM ✎ override → shipped story-script line → beatNext → nothing.
+// Layer 2 (next session) moves the whole script shape into campaign data.
+async function _applyBeatNextLine(campaign, beat, ctx) {
+  const text = String(beat?.nextLine || "").trim();
+  if (!text) return { applied: false };
+  const rows = Array.isArray(beat?.worldEffects?.questEffects) ? beat.worldEffects.questEffects : [];
+  const qid = String(beat?.questId || rows.find(r => r?.questId)?.questId || "").trim();
+  if (!qid) { log(`[next-line] '${beat?.id}' carries a next line but no quest — skipped.`); return { applied: false }; }
+  const factions = await _resolveCampaignFactions(campaign, ctx);
+  if (!factions.length) return { applied: false };
+  const MOD = "bbttcc-factions";
+  let n = 0;
+  for (const faction of factions) {
+    const cur = (faction.getFlag ? (faction.getFlag(MOD, "quests") || {}) : {}) || {};
+    let next;
+    try { next = foundry.utils?.deepClone ? foundry.utils.deepClone(cur) : JSON.parse(JSON.stringify(cur || {})); } catch (_e) { continue; }
+    const entry = next.active?.[qid] || next.completed?.[qid] || next.archived?.[qid] || null;
+    if (!entry) { log(`[next-line] '${beat.id}': ${faction.name} has no ledger row for ${qid} yet (accept the quest first) — skipped.`); continue; }
+    entry.beatNext = { text, beatId: String(beat.id || ""), ts: Date.now() };
+    entry.lastTouchedTs = Date.now();
+    try { await faction.setFlag(MOD, "quests", next); n++; } catch (e) { warn("[next-line] write failed for", faction.name, e); }
+  }
+  if (n) log(`[next-line] '${beat.id}' → ${qid}: "${text}" on ${n} faction(s).`);
+  return { applied: n > 0, count: n };
+}
+
 async function _applyQuestEffects(campaign, beat, ctx) {
   try {
     const we = beat && beat.worldEffects ? beat.worldEffects : null;
@@ -3335,6 +3366,8 @@ async function _applyBeatEffectsOnce(campaign, beat, ctx = {}, { skipOpenTravel 
     } catch (eWm) { warn("World effects failed:", eWm); }
     // Quest effects (Beat Editor -> World Effects -> Quest Effects)
     try { await _applyQuestEffects(campaign, beat, ctx); } catch (eQuestFx) { warn("Quest effects failed:", eQuestFx); }
+    // Quest Log next line (Layer 1, 2026-09-21) — after the quest rows so a same-beat "accept" has created the ledger row.
+    try { await _applyBeatNextLine(campaign, beat, ctx); } catch (eNL) { warn("Beat next line failed:", eNL); }
     if (at === "pick" && (Array.isArray(beat?.worldEffects?.questEffects) && beat.worldEffects.questEffects.length))
       log(`[effects] '${beat.id}' quest effects applied at the reply pick (before routing).`);
     return true;

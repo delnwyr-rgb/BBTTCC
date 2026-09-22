@@ -97,6 +97,15 @@
           </p>
         </div>
 
+        {{!-- Quest Log next line (Layer 1, 2026-09-21) — the GM-authorable "Next:" --}}
+        <div class="form-group" data-tour="beats.nextLine">
+          <label data-tooltip="{{bbttccTip 'beats' 'nextLine'}}">Quest Log — Next line (optional)</label>
+          <textarea name="nextLine" rows="2" placeholder="e.g. Pike is waiting at the HQ. Hear the errands.">{{beat.nextLine}}</textarea>
+          <p class="bbttcc-muted bbttcc-mt-xs">
+            What the players' Quest Log shows under <b>Next:</b> once this beat has played — until a later beat with a line plays. Needs a Quest above. A shipped story script keeps precedence where one exists; the GM's ✎ override in the Log sits on top of both.
+          </p>
+        </div>
+
         <div class="form-group">
           <label data-tooltip="{{bbttccTip 'beats' 'questRole'}}">Quest Role (optional)</label>
           <select name="questRole">

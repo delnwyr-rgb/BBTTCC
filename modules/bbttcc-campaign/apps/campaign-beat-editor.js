@@ -71,6 +71,7 @@ const BEATS_HELP = {
   timePoints: "Time Points — RETIRED 2026-09-13. Beats no longer debit the world clock; only travel legs move the Day chip. Stored, ignored.",
   playerFacing: "Player-Facing — when the beat runs, players get a read-only mirror window (title, description, choice list) delivered over a chat courier. They can watch but not click; only the GM's dialog resolves anything.",
   questId: "Quest — ties the beat to a questline for Builder filtering and bookkeeping. Completion is NOT automatic: to close the quest, author a Quest Effect row (World Effects tab) with action Complete on the beat that should finish it.",
+  nextLine: "Quest Log — Next line: the sentence players read under Next: in their Quest Log after this beat plays. It stays until a later beat of the same quest with its own line plays. Player-facing — write it in the voice of the world, not as a GM note. (Shipped story scripts keep precedence; the Log's ✎ override sits on top.)",
   questStep: "Quest Step — the beat's CANONICAL ORDER within its quest (2026-08-23). Drives the Visualizer's quest-order NEXT guidance and beat sorting; beats without one fall back to authoring order. Leave gaps (10, 20, 30…) so later beats can slot between.",
   questRole: "Quest Role — start / core / optional / resolution. Only 'start' is live: when that beat runs, the GM gets a quest-acceptance prompt. The other roles are display labels.",
   turnNumber: "Available Turn — groups the beat under a Strategic Turn in the Builder and, on turn advance, whispers the GM a 'Now Available' callout (already-fired beats get badged). It never auto-fires the beat; the GM still runs it by hand.",
@@ -3170,6 +3171,9 @@ _syncCoreFromForm() {
       const qs = Number(qStepRaw);
       this.beat.questStep = (!qStepRaw) ? null : (isFinite(qs) ? Math.max(0, Math.floor(qs)) : null);
     }
+    // Quest Log next line (Layer 1, 2026-09-21)
+    const nlRaw = _val("textarea[name='nextLine']");
+    if (nlRaw != null) this.beat.nextLine = String(nlRaw).trim() || null;
 
     // questRole is a <select> in the template (was queried as input — never matched,
     // so the field silently reverted on tab switches). Match by name only.
@@ -3574,6 +3578,8 @@ _syncCoreFromForm() {
 
       const qRole = String(fd.get("questRole") || "").trim();
       this.beat.questRole = qRole || null;
+      // Quest Log next line (Layer 1, 2026-09-21)
+      if (fd.has && fd.has("nextLine")) this.beat.nextLine = String(fd.get("nextLine") || "").trim() || null;
     } catch (_eQ) {}
 
     // Encounter (only applies when type=encounter)

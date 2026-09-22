@@ -147,13 +147,17 @@
       // stored on the ledger row as { text, stepKey, ts, by }. stepKey = the authored line(s) it replaced;
       // when the story advances and the authored line changes, the override lapses by itself and the
       // script's words return. "Restore authored" clears it early.
-      const authoredLines = Array.isArray(si0?.lines) ? si0.lines : [];
+      // Precedence (Layer 1, 2026-09-21): GM ✎ override → shipped story-script line → the last played
+      // beat's own `nextLine` (beatNext, authored in the Beat Editor) → nothing.
+      const beatNextLine = String(tr.beatNext?.text || "").trim();
+      const authoredLines = (Array.isArray(si0?.lines) && si0.lines.length) ? si0.lines : (beatNextLine ? [beatNextLine] : []);
       const authoredKey = authoredLines.join(" | ");
       const ov = (tr.nextLine && typeof tr.nextLine === "object") ? tr.nextLine : null;
       const ovActive = !!(ov?.text && String(ov.stepKey ?? "") === authoredKey);
-      const si = (si0 && ovActive)
-        ? { ...si0, lines: [String(ov.text)], html: si0.renderHtml ? si0.renderHtml([String(ov.text)]) : si0.html }
-        : si0;
+      const effLines = ovActive ? [String(ov.text)] : authoredLines;
+      const si = si0
+        ? { ...si0, lines: effLines, html: si0.renderHtml ? si0.renderHtml(effLines) : si0.html }
+        : (effLines.length ? { giver: "", description: "", stepLabel: "", lines: effLines, doors: [] } : null);
       const { seenCount, completedCount } = beatProgress(tr);
       const acceptedTs = tr.acceptedTs || tr.accepted || null;
       const completedTs = tr.completedTs || tr.completed || null;

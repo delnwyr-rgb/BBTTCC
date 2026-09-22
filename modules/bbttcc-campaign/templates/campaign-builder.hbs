@@ -300,7 +300,7 @@
                             <span class="bbttcc-chip" style="color:#5ac878;border-color:rgba(90,200,120,.55);" data-tooltip="{{bbttccTip 'campaign' 'fired-chip'}}">✓ fired{{#if row.firedTurn}} T{{row.firedTurn}}{{/if}}</span>
                           {{/if}}
                           {{#if row.questName}}
-                            <span class="bbttcc-chip bbttcc-chip-quest" data-tooltip="{{bbttccTip 'campaign' 'quest-chip'}}">📜 {{row.questName}}</span>
+                            <span class="bbttcc-chip bbttcc-chip-quest" data-tooltip="{{bbttccTip 'campaign' 'quest-chip'}}">📜 {{row.questName}}</span>{{#if row.beat.nextLine}}<span class="bbttcc-chip" data-tooltip="Carries a Quest Log “Next:” line — players read it after this beat plays: “{{row.beat.nextLine}}”">✎</span>{{/if}}
                           {{/if}}
                         </div>
                         <div class="bbttcc-muted bbttcc-beat-secondary"><code>{{row.beat.id}}</code><button type="button" class="bbttcc-link-button bbttcc-copy-id" data-action="copy-beat-id" data-beat-id="{{row.beat.id}}" data-tooltip="Copy the stable beat id">⧉</button></div>

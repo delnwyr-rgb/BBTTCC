@@ -529,6 +529,17 @@ for (const [q, list] of questBeats) {
 }
 if (quests) for (const [q, qd] of Object.entries(quests)) if (!questBeats.has(q) && !accepted.has(q)) F("Q06", "INFO", null, `registry quest "${qd?.name || q}" (${q}) has no beats and is never accepted`, { quest: q });
 
+// ── N01: Quest Log next line (Layer 1, 2026-09-21) — a beat that carries `nextLine` must name a quest,
+//    or the Log can never show it (the runtime skips it with a log line). WARN, not ERROR: the words are
+//    harmless, just unreachable.
+for (const b of beats) {
+  const nl = String(b?.nextLine || "").trim();
+  if (!nl) continue;
+  const rows = Array.isArray(b?.worldEffects?.questEffects) ? b.worldEffects.questEffects : [];
+  if (!s(b.questId) && !rows.some(r => s(r?.questId))) F("N01", "WARN", b.id, `carries a Quest Log next line ("${nl.slice(0, 60)}${nl.length > 60 ? "…" : ""}") but no quest — set Quest on the beat`);
+  if (nl.length > 240) F("N01", "WARN", b.id, `next line is ${nl.length} chars — the Log shows one sentence; trim it`);
+}
+
 // ── seals & acceptance: S01–S04, Q09–Q10 (2026-09-09, after the Lyrenn East Channels stall) ──
 {
   // Q09: a beat gated on `questBucket is active` for a quest that NO beat ever accepts.
