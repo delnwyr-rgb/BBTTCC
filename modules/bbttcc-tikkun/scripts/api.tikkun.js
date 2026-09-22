@@ -340,6 +340,11 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     if (String(phase || "").toLowerCase() === "corrupted") {
       try { Hooks.callAll("bbttcc:spark:corrupted", { actor, sparkKey: s.key || key, sparkItem: null, sephirah: s.sephirah ?? null, spark: s }); } catch (_e) {}
     }
+    // Owner ruling 2026-09-21: Sparks step the Enlightenment ladder. The system
+    // (fourththing) listens and raises the Steward's level from the Constellation.
+    if (String(phase || "").toLowerCase() === "integrated") {
+      try { Hooks.callAll("bbttcc:spark:integrated", { actor, sparkKey: s.key || key, sephirah: s.sephirah ?? null, spark: s, sparks: map }); } catch (_e) {}
+    }
     return s;
   }
 

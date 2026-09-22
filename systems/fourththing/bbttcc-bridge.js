@@ -1330,13 +1330,13 @@ export function getTerrainMagicModifiers(actor) {
  */
 export function getTikkunData(actor) {
   const rawSys = actor.system?.system ?? actor.system;
-  const base   = { stage: rawSys?.tikkun?.stage ?? "sleeper", sparks: {}, enlightenmentPoints: 0 };
+  // `stage` (the Awakening dropdown) retired 2026-09-21 — Enlightenment is the one ladder.
+  const base   = { sparks: {}, enlightenmentPoints: 0 };
   if (!bbttccActive()) return base;
 
   try {
     const flags = actor.getFlag("bbttcc-tikkun", "data") ?? {};
     return {
-      stage:               flags.stage               ?? base.stage,
       sparks:              flags.sparks              ?? {},
       enlightenmentPoints: flags.enlightenmentPoints ?? 0,
       tikkunActions:       flags.tikkunActions       ?? [],

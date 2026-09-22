@@ -16549,6 +16549,83 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // can read the radiation bite without importing this module.
   game.fourththing.radiationBite = _ftRadiationBite;
 
+  // ── Enlightenment ladder — stepped by the Great Work (owner ruling 2026-09-21) ──
+  // The Awakening dropdown (system.tikkun.stage) is retired: nothing read it.
+  // The ONE ladder is the Enlightenment identity (bbttcc-character-options flag +
+  // "Enlightenment: X" item, AE by enlightenment.js). Sparks integrated into the
+  // Steward's Constellation (flags.bbttcc-tikkun.sparks) raise it:
+  //   rung = integrated ≥ total ? 5 : ⌊5 · integrated / total⌋  (3-spark constellation:
+  //   1 → Awakening · 2 → Wisdom · 3 → Enlightened). It never lowers by itself, and a
+  //   Qliphothic Steward is not lifted — corruption has to be faced first.
+  const FT_ENL_LADDER = ["unawakened", "awakening", "seeking", "wisdom", "understanding", "enlightened"];
+  const FT_ENL_LABELS = { unawakened: "Unawakened", awakening: "Awakening", seeking: "Seeking", wisdom: "Wisdom", understanding: "Understanding", enlightened: "Enlightened", qliphothic: "Qliphothic" };
+  function _ftSparkTally(actor) {
+    const map = actor?.flags?.["bbttcc-tikkun"]?.sparks ?? {};
+    const arr = Object.values(map).filter(s => s && typeof s === "object");
+    const total = arr.length;
+    const integrated = arr.filter(s => s.integrated === true && !s.corrupted).length;
+    const corrupted  = arr.filter(s => s.corrupted === true).length;
+    return { total, integrated, corrupted };
+  }
+  function _ftRungForSparks({ total, integrated }) {
+    if (!total) return 0;
+    if (integrated >= total) return FT_ENL_LADDER.length - 1;
+    return Math.max(0, Math.min(FT_ENL_LADDER.length - 1, Math.floor((FT_ENL_LADDER.length - 1) * integrated / total)));
+  }
+  game.fourththing.enlightenment = {
+    LADDER: FT_ENL_LADDER,
+    LABELS: FT_ENL_LABELS,
+    level(actor)  { return String(actor?.getFlag?.("bbttcc-character-options", "enlightenment")?.level || "unawakened"); },
+    tally: _ftSparkTally,
+    rungForSparks: _ftRungForSparks,
+    // Sheet readout: where the Steward stands and what the next Spark buys.
+    describe(actor) {
+      const level = this.level(actor);
+      const t = _ftSparkTally(actor);
+      const rank = FT_ENL_LADDER.indexOf(level);
+      const rung = _ftRungForSparks(t);
+      let nextLabel = null, nextAt = null;
+      if (level !== "qliphothic" && t.total && rank < FT_ENL_LADDER.length - 1) {
+        // smallest integrated count whose rung exceeds the current rank
+        for (let n = t.integrated + 1; n <= t.total; n++) {
+          if (_ftRungForSparks({ total: t.total, integrated: n }) > rank) { nextAt = n; nextLabel = FT_ENL_LABELS[FT_ENL_LADDER[_ftRungForSparks({ total: t.total, integrated: n })]]; break; }
+        }
+      }
+      const corrupt = level === "qliphothic";
+      const rungs = FT_ENL_LADDER.map((k, i) => ({ key: k, label: FT_ENL_LABELS[k], lit: !corrupt && i <= rank && i > 0, current: !corrupt && i === rank, first: i === 0 }));
+      return { level, label: FT_ENL_LABELS[level] ?? level, rank, rung, ...t, nextLabel, nextAt, corrupt, apex: level === "enlightened", rungs };
+    },
+    // Raise (never lower) the ladder from the Constellation. GM-authoritative.
+    async syncFromSparks(actor, { source = "spark" } = {}) {
+      if (!actor || actor.type !== "character") return null;
+      const level = this.level(actor);
+      if (level === "qliphothic") return null;
+      const t = _ftSparkTally(actor);
+      const rung = _ftRungForSparks(t);
+      const rank = Math.max(0, FT_ENL_LADDER.indexOf(level));
+      if (rung <= rank) return null;
+      const next = FT_ENL_LADDER[rung];
+      await setActorEnlightenment(actor, next);
+      ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#e8c84a">✦ ${ftEscapeHtml(actor.name)} — Enlightenment rises: <b>${FT_ENL_LABELS[next]}</b></span></div>
+          <p style="margin:0.3rem 0;font-size:0.8rem">${t.integrated}/${t.total} Sparks integrated into the Constellation${rung === FT_ENL_LADDER.length - 1 ? " — the Great Work is whole." : "."}</p></div>`
+      });
+      Hooks.callAll("fourththing.enlightenmentStepped", { actorId: actor.id, from: level, to: next, sparks: t, source });
+      return next;
+    },
+    async set(actor, levelKey) { return setActorEnlightenment(actor, levelKey); }
+  };
+  const _ftEnlGm = () => game.user?.isGM && (!game.users?.activeGM || game.users.activeGM === game.user);
+  Hooks.on("bbttcc:spark:integrated", ({ actor }) => { if (_ftEnlGm()) game.fourththing.enlightenment.syncFromSparks(actor, { source: "spark:integrated" }).catch(e => console.warn("Roll for Initiation | enlightenment step failed", e)); });
+  // Belt and braces: any write to the Constellation (seeders, repair macros, the
+  // tikkun popup) re-checks the ladder on the primary GM.
+  Hooks.on("updateActor", (actor, changes) => {
+    if (!_ftEnlGm() || actor?.type !== "character") return;
+    if (!foundry.utils.hasProperty(changes, "flags.bbttcc-tikkun.sparks")) return;
+    game.fourththing.enlightenment.syncFromSparks(actor, { source: "constellation" }).catch(e => console.warn("Roll for Initiation | enlightenment step failed", e));
+  });
+
   // ── Techniques rulings R1/R2/R5 (2026-09-21) — Strain · temp Integrity · Impose ──
   game.fourththing.strainBite = _ftStrainBite;
   game.fourththing.rankBonus  = _ftRankBonus;
@@ -19614,6 +19691,37 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         details,
         derived,
         magic:         { ...magic, clarityPips, noisePercent: (magic.noise.value ?? 0) * 10 },
+        enlightenment: (() => { try { return game.fourththing.enlightenment.describe(actor); } catch (_e) { return null; } })(),
+        // The Work tab (redesign 2026-09-21): the Constellation rendered natively from
+        // flags.bbttcc-tikkun.sparks — bbttcc-tikkun's sheet enhancer only wires the
+        // Repair / Deposit buttons when it finds [data-bbttcc-native-constellation].
+        greatWork:     (() => {
+          try {
+            const map = actor.flags?.["bbttcc-tikkun"]?.sparks ?? {};
+            const arr = Object.values(map).filter(s => s && typeof s === "object");
+            const GLYPH = { conceptual: "🧠", vestigial: "🕯", animate: "💫" };
+            const LABEL = { deposited: "Deposited", corrupted: "Corrupted", integrated: "Integrated", gathered: "Gathered", identified: "Identified", unseen: "Unseen" };
+            const sparks = arr.map(s => {
+              const status = s.deposited ? "deposited" : s.corrupted ? "corrupted" : s.integrated ? "integrated" : (s.acquired || s.status === "gathered") ? "gathered" : s.identified ? "identified" : "unseen";
+              const hist = Array.isArray(s.history) ? s.history : [];
+              const lastNote = String(hist[hist.length - 1]?.note ?? "").trim();
+              return {
+                key: String(s.key ?? s.id ?? ""), name: String(s.name ?? s.key ?? "Spark"), kind: String(s.kind ?? ""),
+                glyph: GLYPH[String(s.kind ?? "").toLowerCase()] ?? "✦", sephirah: s.sephirah ?? null,
+                status, label: LABEL[status], lastNote,
+                integrated: status === "integrated" || status === "deposited",
+                canDeposit: !!s.integrated && !s.corrupted && !s.deposited,
+                canRepair:  !!s.corrupted
+              };
+            });
+            const total = sparks.length;
+            const integrated = sparks.filter(s => s.integrated).length;
+            const deposited  = sparks.filter(s => s.status === "deposited").length;
+            const corrupted  = sparks.filter(s => s.status === "corrupted").length;
+            const pct = total ? Math.round(100 * integrated / total) : 0;
+            return { sparks, total, integrated, deposited, corrupted, pct, whole: total > 0 && integrated >= total, active: !!game.bbttcc?.api?.tikkun };
+          } catch (_e) { return { sparks: [], total: 0, integrated: 0, deposited: 0, corrupted: 0, pct: 0, whole: false, active: false }; }
+        })(),
         strain:        (() => {
           const bite = _ftStrainBite(actor);
           return { level: bite.level, max: FT.STRAIN_MAX, bits: bite.bits, active: bite.level > 0, color: FT.CONDITIONS.strained.color };

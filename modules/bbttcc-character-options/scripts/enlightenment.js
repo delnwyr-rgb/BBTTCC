@@ -39,11 +39,16 @@ const EFFECTS = {
     changes: [],
     flags: { "bbttcc.enlightenment.unawakened": true }
   },
+  // RFI translation (2026-09-21, owner ruling "Sparks step the ladder"): the old
+  // change rows wrote dnd5e keys (system.bonuses.abilities.*, flags.dnd5e.skills.*)
+  // that fourththing never reads — four rungs were mechanically empty. 5e "saves"
+  // → Resolve / Guard / Evasion (system.derived.*.aeBonus), 5e "checks" / skill
+  // advantage → +1 to the aptitudes the rung is about. OWNER-TUNABLE.
   awakening: {
     label: "Bad Eden: Awakening",
     icon: "icons/magic/perception/eye-ringed-glow-angry-red.webp",
     changes: [
-      { key: "system.bonuses.abilities.save", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "+1", priority: 20 },
+      { key: "system.derived.resolve.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
     ],
     flags: { "bbttcc.enlightenment.aura": false }
   },
@@ -51,8 +56,9 @@ const EFFECTS = {
     label: "Bad Eden: Seeking",
     icon: "icons/magic/perception/third-eye-blue.webp",
     changes: [
-      { key: "flags.dnd5e.skills.rel.adv", mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, value: "true", priority: 20 },
-      { key: "flags.dnd5e.skills.ins.adv", mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, value: "true", priority: 20 },
+      { key: "system.derived.resolve.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.skills.occult.value",     mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.skills.insight.value",    mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
     ],
     flags: { "bbttcc.enlightenment.hints": true }
   },
@@ -60,7 +66,11 @@ const EFFECTS = {
     label: "Bad Eden: Wisdom",
     icon: "icons/magic/holy/meditation-chi-focus-blue.webp",
     changes: [
-      { key: "system.bonuses.abilities.check", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "+1", priority: 20 },
+      { key: "system.derived.resolve.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.skills.occult.value",     mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.skills.insight.value",    mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.skills.meditation.value", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.skills.faith.value",      mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
     ],
     flags: {
       "bbttcc.enlightenment.auraClarity": true,
@@ -71,7 +81,13 @@ const EFFECTS = {
     label: "Bad Eden: Understanding",
     icon: "icons/magic/holy/prayer-hands-glowing-yellow.webp",
     changes: [
-      { key: "system.bonuses.abilities.save", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "+2", priority: 20 },
+      { key: "system.derived.resolve.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "2", priority: 20 },
+      { key: "system.derived.guard.aeBonus",   mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.derived.evasion.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.skills.occult.value",     mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.skills.insight.value",    mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.skills.meditation.value", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.skills.faith.value",      mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
     ],
     flags: {
       "bbttcc.enlightenment.auraClarity": true,
@@ -82,8 +98,15 @@ const EFFECTS = {
     label: "Bad Eden: Enlightened",
     icon: "icons/magic/holy/barrier-shield-winged-gold.webp",
     changes: [
-      { key: "system.bonuses.abilities.save",  mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "+2", priority: 20 },
-      { key: "system.bonuses.abilities.check", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "+1", priority: 20 },
+      { key: "system.derived.resolve.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "2", priority: 20 },
+      { key: "system.derived.guard.aeBonus",   mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.derived.evasion.aeBonus", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.derived.stress.aeBonus",  mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "5", priority: 20 },
+      { key: "system.skills.occult.value",     mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.skills.insight.value",    mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.skills.meditation.value", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.skills.faith.value",      mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+      { key: "system.skills.ritual.value",     mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
     ],
     flags: {
       "bbttcc.enlightenment.auraClarity": true,
@@ -96,8 +119,9 @@ const EFFECTS = {
     label: "Bad Eden: Qliphothic (Corrupted)",
     icon: "icons/magic/unholy/beam-impact-red.webp",
     changes: [
-      { key: "system.traits.dr.value", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "necrotic", priority: 20 },
-      { key: "flags.dnd5e.skills.itm.adv", mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, value: "true", priority: 20 },
+      // RFI resists live at system.defenses.* — the Bucket-A grant row is what the derive reads.
+      { key: "flags.fourththing.grant.resists", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "qliphothic", priority: 20 },
+      { key: "system.skills.intimidation.value", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
     ],
     flags: {
       "bbttcc.enlightenment.healingHalved": true,
@@ -429,9 +453,10 @@ async function refreshClarityAuras() {
         await actor.createEmbeddedDocuments("ActiveEffect", [{
           name: AURA_NAME,
           img: "icons/magic/holy/meditation-chi-focus-blue.webp",
+          // RFI translation (2026-09-21): the aura hands nearby allies +1 Perception / +1 Insight.
           changes: [
-            { key: "flags.dnd5e.skills.prc.adv", mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, value: "true", priority: 20 },
-            { key: "flags.dnd5e.skills.ins.adv", mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, value: "true", priority: 20 },
+            { key: "system.skills.perception.value", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
+            { key: "system.skills.insight.value",    mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "1", priority: 20 },
           ],
           duration: {},
           flags: { [MOD]: { [AURA_AE_FLAG]: true } }

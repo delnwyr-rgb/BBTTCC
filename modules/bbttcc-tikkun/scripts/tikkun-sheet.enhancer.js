@@ -174,6 +174,10 @@
   function _injectIntoFTNativeTab(app, $html, actor) {
     const $panel = _findFTNativeTikkunPanel($html);
     if (!$panel) return false;
+    // 2026-09-21 — the FT Steward sheet renders the Constellation natively (The Work
+    // tab redesign). Don't inject a second card; just wire Repair / Deposit.
+    const $native = $panel.find("[data-bbttcc-native-constellation]").first();
+    if ($native.length) { _wireSparkActions($html, actor, $panel); return true; }
 
     let $container = $panel.find("[data-bbttcc-constellation]").first();
     if (!$container.length) {
@@ -349,6 +353,8 @@
         return;
       }
       // Re-render the host HTML so Repair/Deposit buttons reflect new state.
+      // Native FT panel: the sheet re-renders itself on the actor update.
+      if ($host.find("[data-bbttcc-native-constellation]").length) return;
       const inner = $host[0];
       if (inner) inner.innerHTML = buildTikkunInnerHTML(actor);
     });

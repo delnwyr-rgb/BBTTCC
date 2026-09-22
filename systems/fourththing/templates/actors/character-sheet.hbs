@@ -1427,80 +1427,137 @@
       {{> "systems/fourththing/templates/partials/inventory-list.hbs" items=gear}}
     </div>
 
-    {{!-- ── Tikkun ── --}}
-    {{!-- #3: Identity chooser buttons removed --}}
+    {{!-- ── The Work (redesign 2026-09-21) ──
+         One page, one ladder: the Great Work (Constellation) steps Enlightenment. The
+         Awakening dropdown, the EP badge and the "Egregore" heading are retired. The
+         Constellation renders natively here; bbttcc-tikkun wires Repair / Deposit. --}}
     <div class="tab tikkun" data-tab="tikkun">
-      <div class="ft-tikkun-layout">
+      <div class="ft-work">
 
-        <div class="ft-tikkun-main">
-          <div class="ft-combat-section">
-            <h3>Awakening</h3>
-            <div class="ft-enlightenment-track">
-              <select name="system.tikkun.stage" class="ft-enlightenment-select">
-                <option value="sleeper"      {{#if (eq system.tikkun.stage "sleeper")}}selected{{/if}}>Sleeper</option>
-                <option value="awakened"     {{#if (eq system.tikkun.stage "awakened")}}selected{{/if}}>Awakened</option>
-                <option value="adept"        {{#if (eq system.tikkun.stage "adept")}}selected{{/if}}>Adept</option>
-                <option value="illuminated"  {{#if (eq system.tikkun.stage "illuminated")}}selected{{/if}}>Illuminated</option>
-                <option value="transcendent" {{#if (eq system.tikkun.stage "transcendent")}}selected{{/if}}>Transcendent</option>
-              </select>
-              {{#if bbttcc.active}}
-              <span class="ft-ep-badge">{{bbttcc.tikkun.enlightenmentPoints}} EP</span>
-              {{#if bbttcc.tikkun.qliphothicTaint}}
-              <span class="ft-taint-badge">Taint {{bbttcc.tikkun.qliphothicTaint}}</span>
-              {{/if}}
-              {{/if}}
+        {{!-- Hero: title + Enlightenment rail --}}
+        <section class="ft-work-hero">
+          <div class="ft-work-title">
+            <span class="ft-work-glyph">✦</span>
+            <div>
+              <h2>The Great Work</h2>
+              <p class="ft-work-sub">Sparks of Light, gathered across timelines and hearts. Each one integrated lifts the Steward a rung.</p>
             </div>
           </div>
-
-          {{#if bbttcc.active}}
-          <div class="ft-combat-section">
-            <h3>Sparks</h3>
-            {{#if bbttcc.tikkun.tikkunActions.length}}
-            <div class="ft-sparks-list">
-              {{#each bbttcc.tikkun.tikkunActions as |action|}}
-              <div class="ft-spark-item">
-                <span class="ft-spark-name">{{action.name}}</span>
-                <span class="ft-spark-seph" style="color:{{ftSephColor action.sephirah}}">{{ftSephLabel action.sephirah}}</span>
-                <span class="ft-spark-status {{#if action.complete}}complete{{/if}}">{{#if action.complete}}✦{{else}}○{{/if}}</span>
-              </div>
+          {{#if enlightenment}}
+          <div class="ft-work-ladder{{#if enlightenment.corrupt}} is-corrupt{{/if}}{{#if enlightenment.apex}} is-apex{{/if}}" data-tooltip="Enlightenment — raised by Sparks integrated into your Constellation (1 → Awakening · 2 → Wisdom · all → Enlightened on a three-Spark Constellation). It never falls on its own; a Qliphothic Steward must face the corruption first. GM: the Edit panel still sets it by hand.">
+            <div class="ft-work-ladder-head">
+              <span class="ft-work-ladder-label">Enlightenment</span>
+              <span class="ft-work-ladder-level">{{enlightenment.label}}</span>
+            </div>
+            <div class="ft-work-rungs">
+              {{#each enlightenment.rungs as |r|}}
+              {{#unless r.first}}<span class="ft-work-rung{{#if r.lit}} lit{{/if}}{{#if r.current}} current{{/if}}" data-tooltip="{{r.label}}"><i></i><small>{{r.label}}</small></span>{{/unless}}
               {{/each}}
             </div>
-            {{else}}
-            <p class="ft-hint">No active Tikkun actions. Open the Tikkun popup to assign Sparks.</p>
+            <div class="ft-work-ladder-foot">
+              {{#if enlightenment.corrupt}}Corrupted — face the Qliphoth before the ladder will lift you.
+              {{else if enlightenment.apex}}The apex. Minor Miracles, the faction's +10% OP regen, the Gate to Epic play.
+              {{else if enlightenment.nextLabel}}Next rung <b>{{enlightenment.nextLabel}}</b> at {{enlightenment.nextAt}}/{{enlightenment.total}} Sparks.
+              {{else if enlightenment.total}}Integrate the remaining Sparks to rise.
+              {{else}}No Constellation yet — the Great Work has not begun.{{/if}}
+              {{#if bbttcc.tikkun.qliphothicTaint}}<span class="ft-taint-badge">Taint {{bbttcc.tikkun.qliphothicTaint}}</span>{{/if}}
+            </div>
+          </div>
+          {{/if}}
+        </section>
+
+        <div class="ft-work-grid">
+          <div class="ft-work-main">
+
+            {{!-- Constellation --}}
+            <section class="ft-work-panel ft-work-constellation" data-bbttcc-native-constellation>
+              <header class="ft-work-panel-head">
+                <h3>Constellation</h3>
+                <span class="ft-work-count">{{greatWork.integrated}}<small>/{{greatWork.total}} integrated</small></span>
+              </header>
+              <div class="ft-work-bar" data-tooltip="{{greatWork.pct}}% of the Constellation integrated{{#if greatWork.deposited}} · {{greatWork.deposited}} deposited with the faction{{/if}}{{#if greatWork.corrupted}} · {{greatWork.corrupted}} corrupted{{/if}}">
+                <i style="width:{{greatWork.pct}}%"></i>
+              </div>
+              {{#if greatWork.sparks.length}}
+              <div class="ft-work-sparks">
+                {{#each greatWork.sparks as |s|}}
+                <article class="ft-work-spark is-{{s.status}}" data-tooltip="{{s.name}} — {{s.label}}{{#if s.lastNote}} · {{s.lastNote}}{{/if}}">
+                  <div class="ft-work-spark-orb"><span>{{s.glyph}}</span></div>
+                  <div class="ft-work-spark-body">
+                    <div class="ft-work-spark-name">{{s.name}}</div>
+                    <div class="ft-work-spark-meta">
+                      <span class="ft-work-chip st-{{s.status}}">{{s.label}}</span>
+                      {{#if s.sephirah}}<span class="ft-work-chip seph" style="color:{{ftSephColor s.sephirah}};border-color:{{ftSephColor s.sephirah}}">{{ftSephLabel s.sephirah}}</span>{{/if}}
+                      {{#if s.kind}}<span class="ft-work-chip kind">{{s.kind}}</span>{{/if}}
+                    </div>
+                  </div>
+                  <div class="ft-work-spark-act">
+                    {{#if s.canRepair}}<button type="button" class="ft-work-btn repair" data-action="bbttcc-tk-repair" data-spark-key="{{s.key}}" data-tooltip="Begin the Repair Ritual">⚒ Repair</button>
+                    {{else if s.canDeposit}}<button type="button" class="ft-work-btn deposit" data-action="bbttcc-tk-deposit" data-spark-key="{{s.key}}" data-tooltip="Deposit this Spark with your faction">→ Deposit</button>
+                    {{else if (eq s.status "deposited")}}<span class="ft-work-done">🏛 held by the faction</span>{{/if}}
+                  </div>
+                </article>
+                {{/each}}
+              </div>
+              {{else}}
+              <p class="ft-work-empty">No Sparks recorded yet. When this Steward begins a Constellation, the Sparks of Light appear here.</p>
+              {{/if}}
+            </section>
+
+            {{!-- Threads of the Work (the tikkun actions list) --}}
+            {{#if bbttcc.active}}
+            <section class="ft-work-panel">
+              <header class="ft-work-panel-head"><h3>Threads of the Work</h3></header>
+              {{#if bbttcc.tikkun.tikkunActions.length}}
+              <div class="ft-work-threads">
+                {{#each bbttcc.tikkun.tikkunActions as |action|}}
+                <div class="ft-work-thread{{#if action.complete}} done{{/if}}">
+                  <span class="ft-work-thread-mark">{{#if action.complete}}✦{{else}}○{{/if}}</span>
+                  <span class="ft-work-thread-name">{{action.name}}</span>
+                  <span class="ft-work-chip seph" style="color:{{ftSephColor action.sephirah}};border-color:{{ftSephColor action.sephirah}}">{{ftSephLabel action.sephirah}}</span>
+                </div>
+                {{/each}}
+              </div>
+              {{else}}
+              <p class="ft-work-empty">No threads in hand. The Tikkun console assigns them.</p>
+              {{/if}}
+            </section>
             {{/if}}
           </div>
-          {{/if}}
-        </div>
 
-        {{!-- Right: faction + terrain data only --}}
-        <div class="ft-bbttcc-quickbar">
-          <h3>Egregore & Terrain</h3>
-          {{#if bbttcc.faction}}
-          <div class="ft-faction-live">
-            <div class="ft-faction-header">
-              <span class="ft-faction-name">{{bbttcc.faction.name}}</span>
-              <button type="button" data-action="ftBBTTCCFaction" class="ft-faction-link-btn">→</button>
-            </div>
-            <div class="ft-faction-stats">
-              {{#if bbttcc.faction.morale}}<span class="ft-fstat"><span class="ft-fstat-label">Morale</span><span class="ft-fstat-val">{{bbttcc.faction.morale}}</span></span>{{/if}}
-              {{#if bbttcc.faction.level}}<span class="ft-fstat"><span class="ft-fstat-label">Standing</span><span class="ft-fstat-val">{{bbttcc.faction.level}}</span></span>{{/if}}
-              {{#if bbttcc.faction.op}}<span class="ft-fstat"><span class="ft-fstat-label">OP</span><span class="ft-fstat-val">{{bbttcc.faction.op}}</span></span>{{/if}}
-            </div>
-          </div>
-          {{/if}}
-          {{#if bbttcc.terrain.terrainLabel}}
-          <div class="ft-terrain-live">
-            <span class="ft-terrain-icon">⬡</span>
-            <span class="ft-terrain-name">{{bbttcc.terrain.terrainLabel}}</span>
-            {{#if bbttcc.terrain.alignBonus}}<span class="ft-terrain-bonus">+1 Align</span>{{/if}}
-            {{#if bbttcc.terrain.noiseBonus}}<span class="ft-terrain-noise">+1 Noise</span>{{/if}}
-          </div>
-          {{/if}}
-          {{#unless bbttcc.active}}
-          <p class="ft-hint">Bad Eden support module not active.</p>
-          {{/unless}}
+          {{!-- Side: faction + ground --}}
+          <aside class="ft-work-side">
+            <section class="ft-work-panel">
+              <header class="ft-work-panel-head"><h3>Faction</h3></header>
+              {{#if bbttcc.faction}}
+              <button type="button" data-action="ftBBTTCCFaction" class="ft-work-faction" data-tooltip="Open the faction sheet">
+                <span class="ft-work-faction-name">{{bbttcc.faction.name}}</span><span class="ft-work-faction-go">→</span>
+              </button>
+              <div class="ft-work-stats">
+                {{#if bbttcc.faction.level}}<div class="ft-work-stat"><small>Standing</small><b>{{bbttcc.faction.level}}</b></div>{{/if}}
+                {{#if bbttcc.faction.morale}}<div class="ft-work-stat"><small>Morale</small><b>{{bbttcc.faction.morale}}</b></div>{{/if}}
+                {{#if bbttcc.faction.op}}<div class="ft-work-stat"><small>OP</small><b>{{bbttcc.faction.op}}</b></div>{{/if}}
+              </div>
+              {{else}}
+              <p class="ft-work-empty">Unaffiliated.</p>
+              {{/if}}
+            </section>
+            <section class="ft-work-panel">
+              <header class="ft-work-panel-head"><h3>Ground</h3></header>
+              {{#if bbttcc.terrain.terrainLabel}}
+              <div class="ft-work-ground">
+                <span class="ft-work-ground-hex">⬡</span>
+                <span class="ft-work-ground-name">{{bbttcc.terrain.terrainLabel}}</span>
+                {{#if bbttcc.terrain.alignBonus}}<span class="ft-work-chip good">+1 Align</span>{{/if}}
+                {{#if bbttcc.terrain.noiseBonus}}<span class="ft-work-chip bad">+1 Noise</span>{{/if}}
+              </div>
+              {{else}}
+              <p class="ft-work-empty">No hex under your feet.</p>
+              {{/if}}
+              {{#unless bbttcc.active}}<p class="ft-work-empty">Bad Eden support module not active.</p>{{/unless}}
+            </section>
+          </aside>
         </div>
-
       </div>
     </div>
 
