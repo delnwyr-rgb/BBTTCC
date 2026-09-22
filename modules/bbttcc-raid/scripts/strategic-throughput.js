@@ -905,8 +905,18 @@ import { PRICE_MULT, RECIPES, MATERIAL_MARKET } from "/modules/bbttcc-core/scrip
   const _nm      = (tf) => String(tf?.name || "the hex");
   const _size    = (tf) => String(tf?.size || "").toLowerCase();
   const ok = { ok: true }; const no = (reason) => ({ ok: false, reason });
+  // Survey rule (2026-09-22): once the surveyors have brought WORD from a hex, the outpost cannot even be
+  // planned until someone of the faction has stood there. (The FIRST attempt is allowed — that attempt IS
+  // the survey.) Reads the territory API; silent when it is not loaded.
+  const _surveyNo = (c) => {
+    try {
+      const sv = game.bbttcc?.api?.territory?.survey; if (!sv?.check || !c.targetDoc) return null;
+      const r = sv.check({ hexDoc: c.targetDoc, factionId: c.actor?.id });
+      return (r?.blocked && r.wordSent) ? no(r.message) : null;
+    } catch (_e) { return null; }
+  };
   const CAN_PLAN = {
-    establish_outpost: (c) => _tfOwner(c.targetFlags) ? no(`${_nm(c.targetFlags)} is already held${_mine(c) ? " by you" : ""} — Establish Outpost claims UNCLAIMED ground.`) : ok,
+    establish_outpost: (c) => _surveyNo(c) || (_tfOwner(c.targetFlags) ? no(`${_nm(c.targetFlags)} is already held${_mine(c) ? " by you" : ""} — Establish Outpost claims UNCLAIMED ground.`) : ok),
     develop_outpost_stability: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to stabilize.`) : (!["outpost","village",""].includes(_size(c.targetFlags)) ? no(`${_nm(c.targetFlags)} is a ${_size(c.targetFlags)} — Develop Outpost is for a young outpost or village.`) : ok),
     upgrade_outpost_settlement: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours to upgrade.`) : (_size(c.targetFlags) !== "outpost" ? no(`${_nm(c.targetFlags)} is a ${_size(c.targetFlags) || "settled hex"} — Upgrade is Outpost → Village; use the Townbuilder above that.`) : ok),
     establish_trade_route: (c) => !_mine(c) ? no(`${_nm(c.targetFlags)} is not yours — a trade route starts from a hex you hold.`) : (!c.toHexUuid ? no("Pick a TO hex you hold for the route.") : ok),

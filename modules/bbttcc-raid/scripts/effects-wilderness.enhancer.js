@@ -127,6 +127,20 @@
         if (alreadyOwned) {
           return "Target hex is already owned.";
         }
+        // SURVEY RULE (owner ruling 2026-09-22): unvisited ground that hides unplayed story does not
+        // found. The turn returns WORD instead — the quest starts, the hex is pinned on the map, and
+        // founding waits until someone of this faction has stood there. The OP already spent is the
+        // survey's price; nothing is refunded. Hexes without story found exactly as before.
+        try {
+          const survey = game.bbttcc?.api?.territory?.survey;
+          if (survey?.check) {
+            const r = survey.check({ hexDoc: doc, factionId: A.id });
+            if (r?.blocked) {
+              if (!r.wordSent) await survey.word({ hexDoc: doc, factionId: A.id, actor: A, report: r });
+              return `Survey — no outpost. ${r.message}`;
+            }
+          }
+        } catch (eSv) { console.warn(TAG, "survey rule check failed (founding proceeds)", eSv); }
 
         // seed basic territory flags
         f.isHex      = true;

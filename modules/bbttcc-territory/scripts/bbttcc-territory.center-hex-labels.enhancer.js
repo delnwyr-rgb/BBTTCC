@@ -103,3 +103,88 @@
     }
   });
 })();
+
+/* ── Quest markers on the hex map (owner ask 2026-09-22) ──────────────────────
+ * A glyph on every territory hex that carries story: linked quests (Quests tab → Link Hex, or the Survey
+ * rule's Word) and, for the GM, unplayed hex-tied beats. Data comes from
+ * game.bbttcc.api.territory.questMarkers.list(scene); player visibility follows the quest-links rule
+ * (hinted, or fog already lifted). Setting "Quest markers": gm (default) · all · off. Click a marker →
+ * the hex sheet. Non-destructive: PIXI objects on the drawings layer, rebuilt on every refresh.
+ */
+(() => {
+  const MOD = "bbttcc-territory";
+  const S_MARKERS = "questMarkers";
+  const TAG = `[${MOD}][quest-markers]`;
+  let _cont = null, _timer = null;
+  const mode = () => { try { return String(game.settings.get(MOD, S_MARKERS) || "gm"); } catch (_e) { return "gm"; } };
+  Hooks.once("init", () => {
+    try {
+      game.settings.register(MOD, S_MARKERS, {
+        name: "Quest markers on hex maps",
+        hint: "Mark hexes that carry quests or unplayed story beats. gm = the GM sees every story hex (players see hinted ones); all = players also see fog-revealed linked hexes; off = no markers.",
+        scope: "world", config: true, type: String, choices: { gm: "GM (+ hinted for players)", all: "Everyone (linked + hinted)", off: "Off" }, default: "gm",
+        onChange: () => schedule()
+      });
+    } catch (e) { console.warn(TAG, "setting registration failed", e); }
+  });
+  function clear() { try { if (_cont && !_cont.destroyed) _cont.destroy({ children: true }); } catch (_e) {} _cont = null; }
+  function centerOf(d) {
+    try {
+      const obj = d.object; const doc = d;
+      const local = (() => {
+        const shape = doc?.shape;
+        if (shape?.type === "p" && Array.isArray(shape.points) && shape.points.length >= 6) {
+          const n = Math.floor(shape.points.length / 2); let sx = 0, sy = 0;
+          for (let i = 0; i < n; i++) { sx += Number(shape.points[i * 2] || 0); sy += Number(shape.points[i * 2 + 1] || 0); }
+          return { x: sx / n, y: sy / n };
+        }
+        return { x: Number(shape?.width ?? doc?.width ?? 0) / 2, y: Number(shape?.height ?? doc?.height ?? 0) / 2 };
+      })();
+      return { x: Number(doc.x || 0) + local.x, y: Number(doc.y || 0) + local.y, bounds: obj?.bounds };
+    } catch (_e) { return null; }
+  }
+  function draw() {
+    clear();
+    if (!canvas?.ready || !canvas.scene) return;
+    const m = mode(); if (m === "off") return;
+    const api = game.bbttcc?.api?.territory?.questMarkers; if (!api?.list) return;
+    const isGM = !!game.user?.isGM;
+    let rows = [];
+    try { rows = api.list(canvas.scene) || []; } catch (e) { console.warn(TAG, "list failed", e); return; }
+    if (!isGM) rows = rows.filter(r => r.anyHinted || (m === "all" && r.playerVisible));
+    if (!rows.length) return;
+    const parent = canvas.drawings || canvas.stage;
+    _cont = new PIXI.Container(); _cont.eventMode = "passive"; _cont.zIndex = 9000; parent.addChild(_cont);
+    for (const r of rows) {
+      const c = centerOf(r.drawing); if (!c) continue;
+      const g = new PIXI.Container(); g.eventMode = "static"; g.cursor = "pointer";
+      const size = Math.max(22, Math.min(40, Math.round((c.bounds?.height || 160) * 0.22)));
+      const color = r.wordSent && !r.visited ? 0xff9a6a : (r.anyHinted ? 0x7ff0ff : 0xffcf5c);
+      const bg = new PIXI.Graphics();
+      bg.beginFill(0x0a1220, 0.85); bg.lineStyle(2, color, 0.95); bg.drawCircle(0, 0, size * 0.62); bg.endFill();
+      g.addChild(bg);
+      const glyph = new PIXI.Text(r.wordSent && !r.visited ? "✉" : "✦", new PIXI.TextStyle({ fontFamily: "sans-serif", fontSize: size, fill: color, stroke: 0x000000, strokeThickness: 3 }));
+      glyph.anchor.set(0.5, 0.55); g.addChild(glyph);
+      const n = (r.linked?.length || 0) + (isGM ? (r.unplayed || 0) : 0);
+      if (n > 1) {
+        const badge = new PIXI.Text(String(n), new PIXI.TextStyle({ fontFamily: "sans-serif", fontSize: Math.round(size * 0.5), fontWeight: "700", fill: 0xffffff, stroke: 0x000000, strokeThickness: 3 }));
+        badge.anchor.set(0.5, 0.5); badge.position.set(size * 0.5, -size * 0.45); g.addChild(badge);
+      }
+      // dim, unhinted story = a whisper only the GM sees
+      if (isGM && !r.anyHinted && !r.linked?.length) g.alpha = 0.7;
+      g.position.set(c.x + (c.bounds ? c.bounds.width * 0.28 : size), c.y - (c.bounds ? c.bounds.height * 0.28 : size));
+      const names = [...(r.linked || []).map(l => `${l.name}${l.hinted ? " (hinted)" : ""}`), ...(isGM ? r.storyNames : [])];
+      const tip = `${r.hexName}: ${names.join(" · ") || "story"}${isGM && r.unplayed ? ` — ${r.unplayed} unplayed beat${r.unplayed === 1 ? "" : "s"}` : ""}${r.wordSent && !r.visited ? " — word sent, unvisited" : ""}`;
+      g.on("pointerover", () => { try { ui.notifications?.info?.(tip, { permanent: false, console: false }); } catch (_e) {} });
+      g.on("pointerdown", (ev) => { try { ev.stopPropagation?.(); const open = game.bbttcc?.api?.territory?.openHexSheet; if (open && isGM) open(r.hexUuid); else ui.notifications?.info?.(tip); } catch (_e) {} });
+      _cont.addChild(g);
+    }
+    console.log(TAG, `drew ${_cont.children.length} marker(s)`);
+  }
+  function schedule() { if (_timer) clearTimeout(_timer); _timer = setTimeout(() => { _timer = null; try { draw(); } catch (e) { console.warn(TAG, "draw failed", e); } }, 250); }
+  Hooks.on("canvasReady", schedule);
+  Hooks.on("canvasTearDown", clear);
+  for (const h of ["createDrawing", "updateDrawing", "deleteDrawing"]) Hooks.on(h, (doc) => { if (doc?.flags?.[MOD] || doc?.parent?.id === canvas?.scene?.id) schedule(); });
+  for (const h of ["bbttcc:story:changed", "bbttcc:survey:word", "bbttcc:hex:visited", "bbttcc-campaign:storyUpdated", "bbttcc:questMarkers:refresh", "bbttcc:beat:resolved"]) Hooks.on(h, schedule);
+  Hooks.on("updateSetting", (s) => { if (String(s?.key || "").endsWith(`${MOD}.${S_MARKERS}`)) schedule(); });
+})();

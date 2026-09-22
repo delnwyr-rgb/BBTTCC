@@ -53,7 +53,7 @@ export const STORY_SCRIPTS = {
         { id: "tent", label: "The Tent at the Edge of Town", line: "There's a tent at the edge of town that wasn't there yesterday. Look in on your way out.", beats: ["hum_quiet_tent"], borrow: true },   // the Hum's rung 1, pinned here by ruling
         { id: "crossroads", label: "The Crossroads", line: "Ride out and see that over which you now have Stewardship, which sounds awesome and definitely something to brag about in postcards home.",
           beats: ["ag_crossroads_first_rides"], done: { mark: "ag_days_end" } },   // the hub stays current until the day ends (playtest 2026-09-18)
-        { id: "daysend", label: "Day's End", line: "Divvy the hexes, set each faction's plans, then the GM runs the turn.", beats: ["ag_days_end"] },
+        { id: "daysend", label: "Day's End", line: "Divvy the hexes, set each faction's plans, then the GM runs the turn. The River Heart lies open to the south — collapsed, and so all of it on the map already. Ride it when you're ready; some of what the grief left there is still waiting to be met.", beats: ["ag_days_end"] },
         { id: "title", label: "Title Card", line: "The first turn is in the books. Roll problems.", beats: ["ag_title_card"] }
       ] },
     steps: [
@@ -70,7 +70,10 @@ export const STORY_SCRIPTS = {
     doors: [
       { id: "tamsin", label: "Father Tamsin", line: "Father Tamsin has a night story. Ask about the dream.", beats: ["allesh_gilliam_father_tamsin_conversation", "ag_tamsin_the_dream", "ag_tamsin_the_dream_after", "ag_tamsin_the_dream_after_hundred"] },
       { id: "etta", label: "Etta at the Long Market", line: "Etta said questions keep. They've kept. Go to the Long Market.", beats: ["allesh_gilliam_the_long_market_intro", "allesh_gilliam_etta_bloom_conversation", "allesh_gilliam_etta_bloom_convo_exit"] },
-      { id: "muster", label: "The Muster", line: "The Muster is open by the North Gate. Captain Brakk is drilling farmers.", beats: ["allesh_gilliam_muster_intro"] }
+      { id: "muster", label: "The Muster", line: "The Muster is open by the North Gate. Captain Brakk is drilling farmers.", beats: ["allesh_gilliam_muster_intro"] },
+      // The River Heart nod (owner ask 2026-09-22): listed all act under "Also open" — the grief towns
+      // (Chuckle Creek / Soft Landing / Stillwater) are hex-tied and only meet the party on the ground.
+      { id: "river_heart", label: "The River Heart", line: "The River Heart lies open to the south — collapsed, so the whole of it shows on the map. Its towns are not quests you accept; they are places you go. Ride there and they will meet you.", beats: [] }
     ],
     after: ["allesh_gilliam_wall_stands_straight"],
     chapters: {

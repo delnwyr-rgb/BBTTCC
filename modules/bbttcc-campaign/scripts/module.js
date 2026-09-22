@@ -8122,6 +8122,30 @@ function buildCampaignAPI() {
     story: {
       QUEST_MAP, registryOf, deriveSituation, declOf, emptyState, applyRecord, projection, sealOfDecl, placeOf, hexKey,
       QUEST_SCRIPTS, scriptOf, registerScripts, scriptView,   // Phase A (2026-09-17): declared quest scripts — see story-model.js
+      // Survey rule + quest markers (2026-09-22): the story hidden on ONE hex — unplayed beats tied to it
+      // (targetHexUuid, or placeOf() resolving to its name) and the quest keys / registry ids they belong to.
+      // Sync, so the planner's refusal text and the territory overlay can read it on render.
+      hexStory: (hexDoc) => {
+        try {
+          const doc = hexDoc?.document ?? hexDoc; if (!doc) return null;
+          const c = getCampaign(getActiveCampaignId()); if (!c) return null;
+          const uuid = String(doc.uuid || ""), name = String(doc.flags?.["bbttcc-territory"]?.name || doc.text || "");
+          const key = name ? hexKey(name) : null;
+          const played = _storyStateFor(c.id)?.played || {};
+          const beats = [], questKeys = new Set();
+          for (const b of (c.beats || [])) {
+            if (!b?.id || played[b.id]) continue;
+            const tied = (b.targetHexUuid && String(b.targetHexUuid) === uuid) || (key && (() => { const p = placeOf(b); return p && p !== "anywhere" && hexKey(p) === key; })());
+            if (!tied) continue;
+            beats.push({ id: b.id, label: String(b.label || b.id) });
+            const d = declOf(b); if (d?.quest) questKeys.add(d.quest);
+          }
+          const keys = Array.from(questKeys);
+          const registryIds = keys.map(k => QUEST_MAP.quests[k]?.registryId).filter(Boolean);
+          const questNames = keys.map(k => QUEST_MAP.quests[k]?.name || k);
+          return { hexUuid: uuid, hexName: name, beats, questKeys: keys, registryIds, questNames };
+        } catch (e) { warn("hexStory failed", e); return null; }
+      },
       // Layer 2 (2026-09-21): story data — quests + scripts authored in the builder, stored on campaign.story.
       data: {
         get: (campaignId) => { const c = getCampaign(campaignId || getActiveCampaignId()); const s = c?.story; return foundry.utils.deepClone(s && typeof s === "object" ? s : { quests: {}, scripts: {} }); },
@@ -8192,6 +8216,34 @@ function buildCampaignAPI() {
     tikkun: { get: _tikkunGet, max: TIKKUN_MAX },
     // Open "wants a word" invitations as a surface (2026-09-12): list() for the
     // Quest Log's Invitations tab; accept({beatId}) from ANY seat (player → GM relay).
+    // Survey rule (owner ruling 2026-09-22): the outpost that came back as WORD. Starts the hex's quests in
+    // the story store (via "survey" — the Log lists them active with the script's first Next: line), posts
+    // the player-facing card and a GM whisper naming the beats that wait on the ground.
+    survey: {
+      word: async ({ hexDoc, hexUuid, hexName, factionId, actor, questKeys = [], registryIds = [], beats = [] } = {}) => {
+        if (!game.user?.isGM) return null;
+        const c = getCampaign(getActiveCampaignId()); if (!c) return null;
+        const turn = _getTurnNumberSafe(); const ts = Date.now();
+        const started = [];
+        if (questKeys.length) {
+          await _storyMutate(c.id, (st) => { st.started ??= {}; for (const k of questKeys) { if (!QUEST_MAP.quests[k] || st.started[k]) continue; st.started[k] = { ts, turn, beatId: null, via: "survey", hexUuid: String(hexUuid || "") }; started.push(k); } });
+          if (started.length) { try { await _storyProject(c, {}); } catch (e) { warn("survey projection failed", e); } try { Hooks.callAll("bbttcc:story:changed", { campaignId: c.id, beatId: null, changes: started.map(q => ({ kind: "quest-started", quest: q, via: "survey" })) }); } catch (_e) {} }
+        }
+        const names = questKeys.map(k => QUEST_MAP.quests[k]?.name || k);
+        const firstLine = (() => { for (const k of questKeys) { const sc = scriptOf(k); const ln = sc?.arrival?.steps?.[0]?.line || sc?.steps?.[0]?.line; if (ln) return ln; } return ""; })();
+        const esc = foundry.utils.escapeHTML;
+        const fac = actor?.name || (factionId ? game.actors?.get(String(factionId).replace(/^Actor\./, ""))?.name : "") || "the faction";
+        await ChatMessage.create({
+          speaker: { alias: "Word from the surveyors" },
+          content: `<div class="bbttcc-story-ledger"><b>${esc(hexName || "the hex")}</b> — the surveyors ${esc(fac)} sent came back without planting a flag.
+            <p style="margin:.35em 0">${names.length ? `Something waits there: <b>${esc(names.join(", "))}</b>.` : "Something waits there."} ${firstLine ? `<i>${esc(firstLine)}</i>` : ""}</p>
+            <p style="margin:.35em 0;opacity:.8">The map now marks it. No outpost rises on ${esc(hexName || "that ground")} until someone has stood there.</p></div>`
+        });
+        if (beats.length) await ChatMessage.create({ whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id), speaker: { alias: "Survey (GM)" },
+          content: `<div class="bbttcc-story-ledger" style="font-size:.8rem"><b>${esc(hexName || "hex")}</b> holds ${beats.length} unplayed hex-tied beat(s): ${beats.map(b => `<code>${esc(b.id)}</code>`).join(", ")}. Quests: ${esc(names.join(", ") || "—")}.${started.length ? " Started via survey: " + esc(started.join(", ")) + "." : ""}</div>` });
+        return { started, names, firstLine };
+      }
+    },
     invites: {
       list: (opts = {}) => _listOpenInvites(opts || {}),
       accept: (opts = {}) => _acceptInviteAnySeat(opts || {}),
