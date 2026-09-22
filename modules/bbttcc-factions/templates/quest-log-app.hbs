@@ -112,6 +112,11 @@
               <button type="button" class="button" data-ql-act="note" data-quest-id="{{selected.questId}}">
                 Notes
               </button>
+              {{#if isGM}}
+              <button type="button" class="button" data-ql-act="next-line" data-quest-id="{{selected.questId}}" title="Override the Next: line players see for the current step (returns to the authored words when the step advances)">
+                ✎ Next line{{#if selected.nextLineEdited}} · edited{{/if}}
+              </button>
+              {{/if}}
 
               {{#if isGM}}
                 {{#if (bbttcc_eq selected.status "active")}}

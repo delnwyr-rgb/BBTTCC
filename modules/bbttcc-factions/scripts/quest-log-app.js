@@ -128,10 +128,11 @@
         const lines = cur.map(st => st.line).filter(Boolean); if (!lines.length && q.next?.line) lines.push(q.next.line);
         const stepLabel = cur.map(st => st.label).filter(Boolean).join(" · ") || (q.state === "completed" ? "complete" : "");
         const doors = (sc.doors || []).filter(d => d.line).map(d => ({ label: d.label, line: d.line, ready: d.ready }));
-        return { giver: sc.giver || "", description: sc.description || "", stepLabel, lines, doors,
-          html: `${sc.giver ? `<p class="bbttcc-muted"><b>From:</b> ${esc(sc.giver)}</p>` : ""}${sc.description ? `<p>${esc(sc.description)}</p>` : ""}` +
-            (lines.length ? `<p><b>Next:</b></p><ul>${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` : "") +
-            (doors.length ? `<p><b>Also open:</b></p><ul>${doors.map(d => `<li>${esc(d.line)}</li>`).join("")}</ul>` : "") };
+        // renderHtml(lines) — the Log rebuilds this with a table-edited next line when one is stored (2026-09-21).
+        const renderHtml = (ls) => `${sc.giver ? `<p class="bbttcc-muted"><b>From:</b> ${esc(sc.giver)}</p>` : ""}${sc.description ? `<p>${esc(sc.description)}</p>` : ""}` +
+            (ls.length ? `<p><b>Next:</b></p><ul>${ls.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` : "") +
+            (doors.length ? `<p><b>Also open:</b></p><ul>${doors.map(d => `<li>${esc(d.line)}</li>`).join("")}</ul>` : "");
+        return { giver: sc.giver || "", description: sc.description || "", stepLabel, lines, doors, renderHtml, html: renderHtml(lines) };
       };
     } catch (_e) { return () => null; }
   }
@@ -141,7 +142,18 @@
     const keys = mapObj ? Object.keys(mapObj) : [];
     for (const qid of keys) {
       const tr = mapObj[qid] || {};
-      const si = scriptInfo(qid);
+      const si0 = scriptInfo(qid);
+      // NEXT-LINE OVERRIDE (owner ask 2026-09-21 — wordsmithing at the table): a GM-edited next line is
+      // stored on the ledger row as { text, stepKey, ts, by }. stepKey = the authored line(s) it replaced;
+      // when the story advances and the authored line changes, the override lapses by itself and the
+      // script's words return. "Restore authored" clears it early.
+      const authoredLines = Array.isArray(si0?.lines) ? si0.lines : [];
+      const authoredKey = authoredLines.join(" | ");
+      const ov = (tr.nextLine && typeof tr.nextLine === "object") ? tr.nextLine : null;
+      const ovActive = !!(ov?.text && String(ov.stepKey ?? "") === authoredKey);
+      const si = (si0 && ovActive)
+        ? { ...si0, lines: [String(ov.text)], html: si0.renderHtml ? si0.renderHtml([String(ov.text)]) : si0.html }
+        : si0;
       const { seenCount, completedCount } = beatProgress(tr);
       const acceptedTs = tr.acceptedTs || tr.accepted || null;
       const completedTs = tr.completedTs || tr.completed || null;
@@ -154,6 +166,11 @@
         description: si?.html || (si && (si.giver || si.lines?.length) ? `${si.giver ? `<p class="bbttcc-muted"><b>From:</b> ${foundry.utils.escapeHTML(si.giver)}</p>` : ""}${qDesc(reg, qid)}${si.lines?.length ? `<p><b>Next:</b> ${foundry.utils.escapeHTML(si.lines[0])}</p>` : ""}` : qDesc(reg, qid)),
         image: qImg(reg, qid),
         notes: String(tr.notes || "").trim(),
+        nextLine: si?.lines?.[0] || "",
+        nextLineAuthored: authoredLines[0] || "",
+        nextLineEdited: ovActive,
+        nextLineStale: !!(ov?.text && !ovActive),
+        __authoredKey: authoredKey,
         questStep: Number(tr.questStep ?? tr.step ?? 1) || 1,
         stepLabel: si?.stepLabel || "",
         acceptedTs,
@@ -254,6 +271,7 @@
       this.__state.selected = sel;
 
       const selected = sel ? (all.find(r => r.questId === sel) || null) : null;
+      this.__rows = all;   // the ✎ Next line dialog reads the rendered rows (authored line + step key)
       // 📍 Where (2026-09-14): town-hub doors this quest points at — derived from the
       // quest's un-completed beats' sceneId (api.travel.doors.forQuest). No new schema.
       if (selected && !selected.isInvite) {
@@ -424,6 +442,53 @@
 
         // GM-only from here
         if (!game.user?.isGM) return ui.notifications?.warn?.("GM only.");
+
+        // ✎ Edit next line (2026-09-21): override the story script's next-step line for THIS step only.
+        if (act === "next-line") {
+          const row0 = ensureRow();
+          const rowView = [...(this.__rows || [])].find(r => r.questId === qid) || null;
+          const authored = String(rowView?.nextLineAuthored || "");
+          const current  = String(rowView?.nextLine || authored || "");
+          const authoredKey = String(rowView?.__authoredKey ?? authored);
+          const content = `
+            <p class="bbttcc-muted">Quest: <b>${foundry.utils.escapeHTML(qname)}</b> <small><code>${foundry.utils.escapeHTML(qid)}</code></small></p>
+            <p class="bbttcc-muted" style="font-size:.8rem">This replaces the <b>Next:</b> line players see for the current step only. When the story advances, the authored words return.</p>
+            <textarea style="width:100%; min-height:120px;" name="qnext">${foundry.utils.escapeHTML(current)}</textarea>
+            ${authored ? `<p class="bbttcc-muted" style="font-size:.78rem;margin-top:.4rem">Authored: <i>${foundry.utils.escapeHTML(authored)}</i></p>` : `<p class="bbttcc-muted" style="font-size:.78rem;margin-top:.4rem">No authored next line for this step — yours will show until the step changes.</p>`}
+          `;
+          new Dialog({
+            title: "Edit Next Line",
+            content,
+            classes: ["bbttcc-hexchrome-dialog"],
+            buttons: {
+              save: {
+                label: "Save",
+                callback: async (html2) => {
+                  const val = String(html2.find("textarea[name='qnext']").val() || "").trim();
+                  const row = ensureRow();
+                  if (!val || val === authored) { delete row.nextLine; }
+                  else row.nextLine = { text: val, stepKey: authoredKey, ts: Date.now(), by: game.user?.name || "GM" };
+                  row.lastTouchedTs = Date.now();
+                  await persist();
+                  this.render(false);
+                }
+              },
+              restore: {
+                label: "Restore authored",
+                callback: async () => {
+                  const row = ensureRow();
+                  delete row.nextLine;
+                  row.lastTouchedTs = Date.now();
+                  await persist();
+                  this.render(false);
+                }
+              },
+              cancel: { label: "Cancel" }
+            },
+            default: "save"
+          }).render(true);
+          return;
+        }
 
         if (act === "complete") {
           const row = ensureRow();
