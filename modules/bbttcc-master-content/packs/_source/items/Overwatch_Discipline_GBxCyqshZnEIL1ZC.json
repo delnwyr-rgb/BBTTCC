@@ -5,13 +5,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats (Batch 3)",
-      "revision": 1,
+      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
+      "revision": 2,
       "rules": "2026"
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Overwatch Discipline</h2><p><em>Patience sharpens the blade.</em></p><hr /><h3>Rules</h3><p>If you have not moved on your turn, you reroll the lowest die on reaction strikes until the start of your next turn.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Overwatch Discipline</h2><p><em>Patience sharpens the blade.</em></p><hr /><h3>Rules</h3><p>If you have not moved on your turn, you reroll the lowest die on reaction strikes until the start of your next turn.</p><p class=\"ft-engine-note\"><em>⚙ While you have not moved this turn, your attack rolls reroll the lowest die; the reaction-strike gate is read by the GM.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_overwatch_discipline",
@@ -42,6 +42,17 @@
       "pack": "bbttcc-feats-batch3",
       "featNumber": 50,
       "generatedAt": "2026-01-19T05:04:20.693394Z"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "attack",
+          "mode": "reroll-lowest",
+          "vs": "reaction strikes",
+          "when": "unmoved",
+          "note": "Overwatch Discipline — you have not moved this turn"
+        }
+      ]
     }
   },
   "_id": "GBxCyqshZnEIL1ZC",

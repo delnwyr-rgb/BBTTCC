@@ -6,13 +6,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Feats Expansion v1",
-      "revision": 1,
+      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
+      "revision": 2,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<h2>Spark Sense</h2><p><em>Some truths are louder than sound.</em></p><hr /><h3>Rules</h3><p>You gain a skill rank in Occult (Mind). If you already have it, you gain mastery.</p><p>As an action, you may focus on the unseen and learn one of the following about a creature, object, or place within 6 squares (choose one):</p><ul><li>Whether it is suffused with magic-like resonance</li><li>Whether it feels aligned toward Renewal or toward Corruption (GM adjudication)</li><li>Whether it bears an active ward, curse, or binding</li></ul><p>You can use this principle a number of times equal to your skill rank bonus, regaining all uses on a Sanctuary.</p>",
+      "value": "<h2>Spark Sense</h2><p><em>Some truths are louder than sound.</em></p><hr /><h3>Rules</h3><p>You gain a skill rank in Occult (Mind). If you already have it, its rank rises by one instead.</p><p>As an action, you may focus on the unseen and learn one of the following about a creature, object, or place within 6 squares (choose one):</p><ul><li>Whether it is suffused with magic-like resonance</li><li>Whether it feels aligned toward Renewal or toward Corruption (GM adjudication)</li><li>Whether it bears an active ward, curse, or binding</li></ul><p>You can use this principle a number of times equal to your rank bonus, regaining all uses on a Soma Break.</p><p class=\"ft-engine-note\"><em>⚙ +1 Occult. 🃏 Card — rank-bonus uses per Soma Break.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_spark_sense",
@@ -42,6 +42,184 @@
     "bbttcc": {
       "pack": "bbttcc-feats-expansion-v1",
       "generatedAt": "2026-01-18T20:40:45.006988+00:00"
+    },
+    "fourththing": {},
+    "autoanimations": {
+      "id": "ft-spark-sense",
+      "label": "Spark Sense",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "detectmagic",
+          "variant": "intro",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "QbGNBV70xh9pF0eh",

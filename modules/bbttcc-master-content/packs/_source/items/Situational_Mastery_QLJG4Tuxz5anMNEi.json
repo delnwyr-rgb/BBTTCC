@@ -6,13 +6,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1",
-      "revision": 1,
+      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
+      "revision": 2,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Situational Mastery</h2><p><em>Every fight begins with a choice.</em></p><hr /><h3>Rules</h3><p>At the start of each combat, choose one: reroll the lowest die on your first attack roll, reroll the lowest die on your first defense checks, or +2 squares movement until the end of your first turn.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Situational Mastery</h2><p><em>Every fight begins with a choice.</em></p><hr /><h3>Rules</h3><p>At the start of each combat, choose one: reroll the lowest die on your first attack roll, reroll the lowest die on your first defense checks, or +2 squares movement until the end of your first turn.</p><p class=\"ft-engine-note\"><em>⚙ First round: your first attack roll or defense check rerolls the lowest die; the movement pick is by hand.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_situational_mastery",
@@ -42,6 +42,201 @@
     "bbttcc": {
       "pack": "bbttcc-feats-core-v1",
       "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "attack",
+          "mode": "reroll-lowest",
+          "vs": "your first attack roll — or pick the first defense check / +2 squares instead",
+          "when": "firstRound",
+          "note": "Situational Mastery — start of combat"
+        },
+        {
+          "context": "defense",
+          "mode": "reroll-lowest",
+          "vs": "your first defense check — if that was your pick",
+          "when": "firstRound",
+          "note": "Situational Mastery — start of combat"
+        }
+      ]
+    },
+    "autoanimations": {
+      "id": "ft-situational-mastery",
+      "label": "Situational Mastery",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "divinesmite",
+          "variant": "source",
+          "color": "yellowwhite",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "QbGNBV70xh9pF0eh",

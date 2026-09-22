@@ -7,7 +7,7 @@
     "source": "Bad Eden Core Feats (Batch 3) (2026 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><h2>Threatening Silence</h2><p><em>Sometimes the quiet is the threat.</em></p><hr><h3>Rules</h3><p>As a Bonus action once per Respite, choose one creature that can see you within 6 squares That creature roll 3d10 keep lowest 2 on its next attack roll against a target other than you.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><h2>Threatening Silence</h2><p><em>Sometimes the quiet is the threat.</em></p><hr><h3>Rules</h3><p>As a Bonus action once per Scene Break, choose one creature that can see you within 6 squares That creature is Imposed: its next attack roll against a target other than you is 3d10 keep-lowest-2.</p><p class=\"ft-engine-note\"><em>🃏 Card — bonus action, once per Scene Break; target first: Imposed.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_threatening_silence",
@@ -215,7 +215,8 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
-    }
+    },
+    "fourththing": {}
   },
   "_id": "4jCeY0iHWA3KKak0",
   "folder": "QbGNBV70xh9pF0eh",

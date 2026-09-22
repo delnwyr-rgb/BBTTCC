@@ -6,13 +6,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Feats Expansion v1",
-      "revision": 1,
+      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
+      "revision": 2,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Darkness Hardened</h2><p><em>The Dark doesn’t scare you. It negotiates.</em></p><hr /><h3>Rules</h3><p>You reroll the lowest die on defense checks against being Shaken.</p><p>Additionally, when you fail a defense check against fear or horror, you may choose to succeed instead. If you do, you gain one level of Stress after the effect ends. Once you use this principle, you can’t use it again until you finish a Sanctuary.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Darkness Hardened</h2><p><em>The Dark doesn’t scare you. It negotiates.</em></p><hr /><h3>Rules</h3><p>You reroll the lowest die on defense checks against being Shaken.</p><p>Additionally, when you fail a defense check against fear or horror, you may choose to succeed instead. If you do, you gain one level of Strain after the effect ends. Once you use this principle, you can’t use it again until you finish a Soma Break.</p><p class=\"ft-engine-note\"><em>⚙ Defense checks vs Shaken reroll the lowest die. 🃏 Card — once per Soma Break: choose to succeed; one level of Strain lands.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_darkness_hardened",
@@ -42,6 +42,193 @@
     "bbttcc": {
       "pack": "bbttcc-feats-expansion-v1",
       "generatedAt": "2026-01-18T20:40:44.997021+00:00"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "defense",
+          "mode": "reroll-lowest",
+          "vs": "being Shaken",
+          "note": "Darkness Hardened"
+        }
+      ]
+    },
+    "autoanimations": {
+      "id": "ft-darkness-hardened",
+      "label": "Darkness Hardened",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "conditions",
+          "animation": "fear",
+          "variant": "02",
+          "color": "darkpurple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "QbGNBV70xh9pF0eh",

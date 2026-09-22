@@ -162,7 +162,8 @@
       "derived": {
         "integrity": {
           "value": 16,
-          "max": 16
+          "max": 16,
+          "temp": 0
         },
         "stress": {
           "value": 16,
@@ -252,7 +253,8 @@
         "radiationIrradiated": false,
         "radiationSickened": false,
         "radiationPoisoned": false,
-        "radiationTerminal": false
+        "radiationTerminal": false,
+        "imposed": false
       },
       "lastStand": {
         "active": false,
@@ -298,7 +300,10 @@
         "value": 0,
         "ledger": []
       },
-      "tags": []
+      "tags": [],
+      "strain": {
+        "value": 0
+      }
     },
     "npc": {
       "role": "",
@@ -339,7 +344,8 @@
       "derived": {
         "integrity": {
           "value": 10,
-          "max": 10
+          "max": 10,
+          "temp": 0
         },
         "stress": {
           "value": 8,
@@ -425,7 +431,8 @@
         "radiationIrradiated": false,
         "radiationSickened": false,
         "radiationPoisoned": false,
-        "radiationTerminal": false
+        "radiationTerminal": false,
+        "imposed": false
       },
       "actions": {
         "actionUsed": false,
@@ -441,6 +448,9 @@
       },
       "conditionImmunities": [],
       "tags": [],
+      "strain": {
+        "value": 0
+      },
       "radiation": {
         "rp": 0,
         "thresholds": {

@@ -8,7 +8,7 @@
     "source": "Bad Eden Feats Expansion v1 (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><h2>Calm the Mob</h2><p><em>Crowds don’t think. They feel. So you give them something else to feel.</em></p><hr><h3>Rules</h3><p>You gain a skill rank in Diplomacy (Presence) or Intimidation (Presence) (your choice). If you already have it, you gain mastery.</p><p>When you spend at least 1 minute addressing a group of non-hostile or uncertain creatures, you may make a Presence (Diplomacy (Presence) or Intimidation (Presence)) check (DC set by the GM). On a success, you reduce immediate hostility: the crowd hesitates, disperses, or agrees to hear terms. On a failure, you still buy time, but a complication occurs (a challenger steps forward, guards arrive, a rumor spreads).</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div><h2>Calm the Mob</h2><p><em>Crowds don’t think. They feel. So you give them something else to feel.</em></p><hr><h3>Rules</h3><p>You gain a skill rank in Diplomacy (Presence) or Intimidation (Presence) (your choice). If you already have it, its rank rises by one instead.</p><p>When you spend at least 1 minute addressing a group of non-hostile or uncertain creatures, you may make a Presence (Diplomacy (Presence) or Intimidation (Presence)) check (DC set by the GM). On a success, you reduce immediate hostility: the crowd hesitates, disperses, or agrees to hear terms. On a failure, you still buy time, but a complication occurs (a challenger steps forward, guards arrive, a rumor spreads).</p><p class=\"ft-engine-note\"><em>⚙ +1 to Diplomacy or Intimidation — whichever you rank higher.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_calm_the_mob",
@@ -38,6 +38,184 @@
     "bbttcc": {
       "pack": "bbttcc-feats-expansion-v1",
       "generatedAt": "2026-01-18T20:40:45.007126+00:00"
+    },
+    "fourththing": {},
+    "autoanimations": {
+      "id": "ft-calm-the-mob",
+      "label": "Calm the Mob",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "bless",
+          "variant": "intro",
+          "color": "yellow",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "QbGNBV70xh9pF0eh",

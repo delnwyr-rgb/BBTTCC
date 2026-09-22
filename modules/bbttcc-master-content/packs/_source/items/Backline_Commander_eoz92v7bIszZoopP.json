@@ -8,7 +8,7 @@
     "source": "Bad Eden Feats Expansion v1 (2024 rules)",
     "tags": [],
     "description": {
-      "value": "<h2>Backline Commander</h2><p><em>You don’t need to be closest to steer the fight.</em></p><hr><h3>Rules</h3><p>As a Bonus action, choose one ally who can see or hear you within 6 squares That ally may immediately move up to 2 squares without provoking reaction strikes.</p><p>You can use this principle a number of times equal to your skill rank bonus, and you regain all expended uses when you finish a Sanctuary.</p>",
+      "value": "<h2>Backline Commander</h2><p><em>You don’t need to be closest to steer the fight.</em></p><hr><h3>Rules</h3><p>As a Bonus action, choose one ally who can see or hear you within 6 squares That ally may immediately move up to 2 squares without provoking reaction strikes.</p><p>You can use this principle a number of times equal to your rank bonus, and you regain all expended uses when you finish a Soma Break.</p><p class=\"ft-engine-note\"><em>🃏 Card — bonus action, rank-bonus uses per Soma Break; target the ally first.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_backline_commander",
@@ -215,7 +215,8 @@
       "isCustomized": true,
       "fromAmmo": false,
       "version": 5
-    }
+    },
+    "fourththing": {}
   },
   "folder": "QbGNBV70xh9pF0eh",
   "sort": 5400000,

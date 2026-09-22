@@ -6,13 +6,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Core Feats v1",
-      "revision": 1,
+      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
+      "revision": 2,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<h2>Iron Will</h2><p><em>Your mind—or your body—has learned how to say no.</em></p><hr /><h3>Rules</h3><p>Choose Soul or Body. You gain a skill rank in defense checks using that attribute. Once per Sanctuary, you may reroll a failed defense check using that attribute.</p>",
+      "value": "<h2>Iron Will</h2><p><em>Your mind—or your body—has learned how to say no.</em></p><hr /><h3>Rules</h3><p>Choose Soul or Body: defense checks keyed to it gain +1 (Body → Guard, Soul → Resolve). Once per Soma Break, you may reroll a failed defense check using that attribute.</p><p class=\"ft-engine-note\"><em>⚙ +1 Guard (Body) or +1 Resolve (Soul) — the engine takes your higher faculty (ties → Soul); the GM can set flags.fourththing.ironWill. 🃏 Card — once per Soma Break: banks a reroll for the failed defense check.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_iron_will",
@@ -42,6 +42,184 @@
     "bbttcc": {
       "pack": "bbttcc-feats-core-v1",
       "generatedAt": "2026-01-18T18:59:59.544766+00:00"
+    },
+    "fourththing": {},
+    "autoanimations": {
+      "id": "ft-iron-will",
+      "label": "Iron Will",
+      "macro": {
+        "enable": false,
+        "playWhen": "0"
+      },
+      "menu": "ontoken",
+      "primary": {
+        "video": {
+          "dbSection": "static",
+          "menuType": "shieldfx",
+          "animation": "ice",
+          "variant": "03",
+          "color": "purple",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "isWait": false,
+          "opacity": 1,
+          "playbackRate": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "secondary": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "soundOnly": {
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        }
+      },
+      "source": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "target": {
+        "enable": false,
+        "video": {
+          "dbSection": "static",
+          "menuType": "spell",
+          "animation": "curewounds",
+          "variant": "01",
+          "color": "blue",
+          "enableCustom": false,
+          "customPath": ""
+        },
+        "sound": {
+          "enable": false,
+          "delay": 0,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "startTime": 0,
+          "volume": 0.75
+        },
+        "options": {
+          "addTokenWidth": false,
+          "anchor": "0.5",
+          "contrast": 0,
+          "delay": 0,
+          "elevation": 1000,
+          "fadeIn": 250,
+          "fadeOut": 500,
+          "isMasked": false,
+          "isRadius": true,
+          "isWait": false,
+          "opacity": 1,
+          "repeat": 1,
+          "repeatDelay": 250,
+          "saturate": 0,
+          "size": 1.5,
+          "tint": false,
+          "tintColor": "#FFFFFF",
+          "zIndex": 1
+        }
+      },
+      "isEnabled": true,
+      "isCustomized": true,
+      "fromAmmo": false,
+      "version": 5
     }
   },
   "folder": "QbGNBV70xh9pF0eh",

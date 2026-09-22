@@ -81,6 +81,9 @@
           <label>Integrity</label>
           <input type="number" name="system.derived.integrity.value" value="{{derived.integrity.value}}" min="0" max="{{derived.integrity.max}}"/>
           <span class="ft-stat-max">/ {{derived.integrity.max}}</span>
+          <span class="ft-stat-temp{{#if derived.integrity.temp}} active{{/if}}" data-tooltip="Temporary Integrity — absorbed before your track. Grants never stack (the higher pool stands). Clears on Soma Break.">
+            <input type="number" name="system.derived.integrity.temp" value="{{derived.integrity.temp}}" min="0"/><small>temp</small>
+          </span>
         </div>
         <div class="ft-stat" data-tooltip="{{ftPoolTip 'stress'}}">
           <label>Stress</label>
@@ -193,6 +196,12 @@
       </div>
       {{/if}}
     </div>
+      {{!-- Steward art (owner ask 2026-09-21): the Derived block had the room — give the
+           portrait a real frame beside the Faculties. Same ftEditPortrait action as the header thumb. --}}
+      <div class="ft-steward-art" data-action="ftEditPortrait" data-tooltip="{{actor.name}} — click to change the portrait">
+        <img src="{{actor.img}}" alt="{{actor.name}}"/>
+        <div class="ft-steward-art-overlay">📷</div>
+      </div>
       </section>
       <div class="ft-core flexcol">
         <div class="ft-core-left flexcol">
@@ -441,6 +450,18 @@
             <span class="ft-out-of">/ 10</span>
             <span class="ft-rad-tier" style="color:{{darkness.color}};border-color:{{darkness.color}}">🜃 {{darkness.bandLabel}}</span>
             <span class="ft-rad-penalties" style="opacity:0.75">taint {{darkness.taint}}{{#if darkness.fragTotal}} · fragments {{darkness.fragFaced}}/{{darkness.fragTotal}} faced{{/if}}</span>
+          </div>
+
+          {{!-- Strain — stackable, exhaustion-style condition (techniques ruling R1, 2026-09-21).
+               Levels via game.fourththing.strain; a Soma Break recovers one. --}}
+          <div class="ft-rad-display ft-strain{{#if strain.active}} ft-rad-sick{{/if}}" data-tooltip="Strain — stackable like exhaustion: 1 −1 to all rolls · 2 movement halved · 3 −2 to all rolls · 4 max Integrity and Stress halved · 5 movement 0 · 6 you fall (Dying). A Soma Break recovers one level.">
+            <span class="ft-rad-label">Strain</span>
+            <span class="ft-rad-val" style="color:{{strain.color}}">{{strain.level}} / {{strain.max}}</span>
+            <button type="button" class="ft-strain-adj" data-action="ftStrainAdjust" data-delta="-1" data-tooltip="Recover one level of Strain">−</button>
+            <button type="button" class="ft-strain-adj" data-action="ftStrainAdjust" data-delta="1" data-tooltip="Take one level of Strain">+</button>
+            {{#if strain.bits.length}}
+            <span class="ft-rad-penalties" style="color:{{strain.color}}">{{#each strain.bits}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</span>
+            {{/if}}
           </div>
           {{#if darkness.fragTotal}}
           {{!-- Descent D3 — the fragment ledger (owner/GM sheet = details
@@ -868,10 +889,12 @@
         <h3>Conditions</h3>
         <div class="ft-conditions-grid">
           {{#each CONDITIONS as |cond key|}}
+          {{#unless cond.ladder}}
           <button type="button" data-action="ftConditionToggle" data-condition="{{key}}"
-                  class="ft-condition-btn {{#if (lookup ../conditions key)}}active{{/if}}">
-            {{ftCap key}}
+                  class="ft-condition-btn {{#if (lookup ../conditions key)}}active{{/if}}" data-tooltip="{{cond.desc}}">
+            {{cond.label}}
           </button>
+          {{/unless}}
           {{/each}}
         </div>
       </div>

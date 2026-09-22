@@ -2551,32 +2551,44 @@ export async function openBulwarkStance(actor) {
 // Posts the ability card to chat. Faithful gate without hand-authoring a
 // bespoke dialog per feat — bespoke automation can still supersede later by
 // re-routing the id.
-export async function openGenericPerUse(actor, item) {
+export async function openGenericPerUse(actor, item, { effect = null } = {}) {
   if (!actor || !item) return;
   const rawDesc = String(item.system?.description?.value ?? item.system?.body ?? "");
   const desc = rawDesc.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
   const name = item.name;
   const slug = String(item.system?.identifier || name).toLowerCase().replace(/[^a-z0-9]+/g, "_");
 
+  // Cadence from the item's own text. Techniques canon (2026-09-21) writes the
+  // long forms — "until you finish a Scene Break or Soma Break", "regain all
+  // uses on a Soma Break" — so those are parsed too; the lighter cadence wins
+  // when both rests are named.
   const cad =
-    /1\s*\/\s*soma|once per soma/i.test(desc)                  ? "soma"  :
-    /1\s*\/\s*scene|once per scene/i.test(desc)                ? "scene" :
-    /1\s*\/\s*(round|turn)|once per (round|turn)/i.test(desc)  ? "round" :
+    /1\s*\/\s*scene|once per scene|until you (?:finish|take) an? scene break|per scene break/i.test(desc) ? "scene" :
+    /1\s*\/\s*soma|once per soma|until you (?:finish|take) an? soma break|(?:regain|recover)[^.]{0,60}on an? soma break|per soma break/i.test(desc) ? "soma"  :
+    /1\s*\/\s*(round|turn)|once per (round|turn)|until the start of your next turn/i.test(desc)  ? "round" :
     /1\s*\/\s*day|once per day/i.test(desc)                    ? "day"   : null;
+  // "a number of times equal to your rank bonus" → N uses per window.
+  const nUses = /number of times equal to your (?:skill )?rank bonus/i.test(desc)
+    ? Math.max(1, Number(game.fourththing?.rankBonus?.(actor)) || 1)
+    : 1;
 
   const sceneId = canvas?.scene?.id ?? "none";
   const round   = Number(game.combat?.round ?? 0);
+  const today   = new Date().toDateString();
   const uses    = actor.flags?.fourththing?.perUse?.[slug] ?? null;
-  let spent = false;
+  let count = 0;
   if (uses && cad) {
-    if (cad === "soma")  spent = true; // cleared only by Soma Break
-    if (cad === "scene") spent = uses.sceneId === sceneId;
-    if (cad === "round") spent = !game.combat?.started ? false : (uses.sceneId === sceneId && uses.round === round);
-    if (cad === "day")   spent = uses.day === new Date().toDateString();
+    const sameWindow =
+      cad === "soma"  ? true :
+      cad === "scene" ? uses.sceneId === sceneId :
+      cad === "round" ? (!game.combat?.started ? false : (uses.sceneId === sceneId && uses.round === round)) :
+                        uses.day === today;
+    if (sameWindow) count = Math.max(1, Number(uses.count ?? 1) || 1);
   }
+  const spent = !!cad && count >= nUses;
   if (spent) {
     const when = { soma: "recovers on Soma Break", scene: "1/scene — recovers on Scene/Soma Break", round: "1/round", day: "1/day" }[cad];
-    return ui.notifications?.warn(`${actor.name}: ${name} is spent (${when}).`);
+    return ui.notifications?.warn(`${actor.name}: ${name} is spent (${nUses > 1 ? `${nUses}/${when}` : when}).`);
   }
 
   const cost = /\breaction\b/i.test(desc) ? "reaction"
@@ -2586,11 +2598,23 @@ export async function openGenericPerUse(actor, item) {
     const ok = await _checkAndDebitActionEconomy(actor, { label: name, actionCost: cost });
     if (!ok) return;
   }
+  // Engine effect (techniques 2026-09-21): bank a reroll, impose, grant temp
+  // Integrity, take Strain, Reclamation's trade … Runs BEFORE the use is
+  // debited so a "target a token first" refusal costs nothing.
+  let effectNote = "";
+  if (typeof effect === "function") {
+    let r;
+    try { r = await effect(actor, item); }
+    catch (e) { console.warn("[fourththing] technique effect failed", name, e); ui.notifications?.warn(`${name}: effect failed — see console.`); return false; }
+    if (r === false) return false;
+    if (typeof r === "string") effectNote = r;
+  }
   if (cad) {
-    await actor.setFlag("fourththing", `perUse.${slug}`, { cad, sceneId, round, day: new Date().toDateString(), at: Date.now() });
+    await actor.setFlag("fourththing", `perUse.${slug}`, { cad, sceneId, round, day: today, at: Date.now(), count: count + 1 });
   }
 
-  const cadChip = cad ? `<span class="ft-manifest-chip">${{ soma: "1/Soma Break", scene: "1/scene", round: "1/round", day: "1/day" }[cad]}</span>` : "";
+  const cadLabel = { soma: "Soma Break", scene: "scene", round: "round", day: "day" }[cad];
+  const cadChip = cad ? `<span class="ft-manifest-chip">${nUses > 1 ? `${count + 1}/${nUses} per ${cadLabel}` : `1/${cadLabel}`}</span>` : "";
   const costChip = cost ? `<span class="ft-manifest-chip">${cost}</span>` : "";
   const shown = desc.length > 600 ? desc.slice(0, 597) + "…" : desc;
   ChatMessage.create({
@@ -2600,11 +2624,110 @@ export async function openGenericPerUse(actor, item) {
         <img src="${item.img}" style="width:24px;height:24px;border:none" alt=""/>
         <span class="ft-roll-name">✦ ${name}</span>${cadChip}${costChip}
       </div>
-      <p style="margin:0.3rem 0;font-size:0.8rem">${shown}</p>
+      <p style="margin:0.3rem 0;font-size:0.8rem">${shown}</p>${effectNote}
     </div>`
   });
   try { game.fourththing?.ftPlayAutoAnimation?.(actor, item, { hit: false }); } catch (_e) {}
   return true;
+}
+
+// ─── Techniques (audit 2026-09-21, rulings R1–R6) ────────────────────────────
+// Every Bad Eden technique routes here (FEATURE_ROUTER → "technique_use"): the
+// generic per-use card supplies cadence / action-cost gating from the canon
+// text, and TECHNIQUE_EFFECTS adds the engine effect where one exists. Passives
+// (Weapon Familiarity, Hold the Line …) simply post their reminder card.
+const _tq = {
+  targets() { return Array.from(game.user?.targets ?? []).map(t => t?.actor).filter(Boolean); },
+  ally(actor) { const t = _tq.targets().find(a => a.id !== actor.id); return t ?? null; },
+  rb(actor, skill = null) { return Math.max(1, Number(game.fourththing?.rankBonus?.(actor, skill)) || 1); },
+  note(txt, color = "#a0d4ff") { return `<p style="margin:0.3rem 0 0;font-size:0.78rem;color:${color}">${txt}</p>`; },
+  async bank(actor, n, from) {
+    const banked = Array.isArray(actor.flags?.fourththing?.aidBanked) ? [...actor.flags.fourththing.aidBanked] : [];
+    const source = String(from).toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    for (let i = 0; i < n; i++) banked.push({ from, kind: "reroll-lowest", set: Date.now(), source });
+    await actor.update({ "flags.fourththing.aidBanked": banked });
+    return _tq.note(`${from}: ${n} reroll${n > 1 ? "s" : ""} banked for <b>${actor.name}</b> — auto-fires on the next roll.`);
+  },
+  async impose(source, note = "") {
+    const ts = _tq.targets();
+    if (!ts.length) { ui.notifications?.warn(`${source}: target a token first.`); return false; }
+    const hit = [];
+    for (const t of ts) { if (await game.fourththing.impose.apply(t, { source })) hit.push(t.name); }
+    if (!hit.length) { ui.notifications?.warn(`${source}: no valid target (immune, or not a creature).`); return false; }
+    return _tq.note(`${source}: <b>${hit.join(", ")}</b> ${hit.length > 1 ? "are" : "is"} Imposed — next attack roll or defense check is 3d10 keep-lowest-2.${note ? " " + note : ""}`, "#d08ab8");
+  },
+  async temp(who, amount, source) {
+    const got = await game.fourththing.tempIntegrity.grant(who, amount, source, { quiet: true });
+    return _tq.note(`${source}: <b>${who.name}</b> holds <b>${got}</b> temporary Integrity.`, "#78c88c");
+  }
+};
+export const TECHNIQUE_EFFECTS = {
+  bbttcc_feat_adaptive_defense: async (a) => {
+    const s = a.system?.system ?? a.system; const v = Math.max(Number(s?.attributes?.violence?.value) || 0, Number(s?.attributes?.intrigue?.value) || 0);
+    return _tq.note(`Reduce the hit by <b>${_tq.rb(a) + v}</b> (rank bonus ${_tq.rb(a)} + Violence/Intrigue ${v}).`);
+  },
+  bbttcc_feat_calculated_risk:   async (a) => (await _tq.bank(a, 1, "Calculated Risk")) + _tq.note("Attack rolls against you reroll their lowest die until the start of your next turn.", "#d08ab8"),
+  bbttcc_feat_combat_logistics:  async (a) => _tq.temp(_tq.ally(a) ?? a, _tq.rb(a), "Combat Logistics"),
+  bbttcc_feat_controlled_aggression: async () => _tq.impose("Controlled Aggression", "You deal minimum damage on this hit."),
+  bbttcc_feat_darkness_hardened: async (a) => { await game.fourththing.strain.gain(a, 1, "Darkness Hardened"); return _tq.note("You chose to succeed — one level of Strain lands after the effect ends.", "#c47a3a"); },
+  bbttcc_feat_deliberate_tempo:  async (a) => _tq.bank(a, 1, "Deliberate Tempo"),
+  bbttcc_feat_desperate_measure: async (a) => _tq.note(`The glancing blow deals <b>${_tq.rb(a)}</b> damage of the weapon's type — no riders.`),
+  bbttcc_feat_disciplined_fire:  async () => _tq.targets().length
+    ? _tq.impose("Disciplined Fire — Disrupt", "(or Pin: the target's movement is reduced by 2 squares until the start of your next turn)")
+    : _tq.note("Pin: −2 squares movement until the start of your next turn · Disrupt: target a token to Impose its next attack."),
+  bbttcc_feat_focused_execution: async (a) => _tq.note(`Ignore half cover; on a hit add <b>+${_tq.rb(a, "firearms")}</b> damage. On a miss your movement drops by 2 squares until the end of your next turn.`),
+  bbttcc_feat_iron_nerves:       async () => { const r = await new Roll("1d4").evaluate(); return _tq.note(`+<b>${r.total}</b> (1d4) to this defense check against being Shaken or charmed.`); },
+  bbttcc_feat_iron_will:         async (a) => (await _tq.bank(a, 1, "Iron Will")) + _tq.note("Spend it to reroll the failed defense check."),
+  bbttcc_feat_last_ritual:       async (a) => { const t = _tq.ally(a); if (!t) { ui.notifications?.warn("Penultimate Rites: target the ally at 0 Integrity."); return false; } return (await _tq.temp(t, _tq.rb(a), "Penultimate Rites")) + _tq.note(`${t.name} is stabilized (they stay at 0 — the temp pool is what keeps them here).`); },
+  bbttcc_feat_linebreaker:       async () => _tq.impose("Linebreaker", "Reaction strikes it makes until the end of its next turn use the imposed dice."),
+  bbttcc_feat_medic_of_the_wastes: async (a) => _tq.note(`Stabilize + <b>${_tq.rb(a, "faith")}</b> Integrity; at a Scene Break two creatures each regain <b>${_tq.rb(a, "faith")}</b> more.`),
+  bbttcc_feat_pressure_transference: async (a) => { const t = _tq.ally(a); if (!t) { ui.notifications?.warn("Pressure Transference: target the ally within 2 squares."); return false; } return _tq.bank(t, 1, "Pressure Transference"); },
+  bbttcc_feat_reclamation:       async (a) => {
+    const s = a.system?.system ?? a.system; const cur = Number(s?.magic?.clarity?.value) || 0, max = Number(s?.magic?.clarity?.max) || 0;
+    const next = Math.min(max, cur + 2);
+    if (next <= cur) { ui.notifications?.warn("Reclamation: Clarity is already full."); return false; }
+    await a.update({ "system.magic.clarity.value": next });
+    const line = await game.fourththing.rolls._applyDamageToActor(a, 1, { track: "stress", ignoreResists: true, damageType: "psychic" });
+    return _tq.note(`Clarity ${cur} → <b>${next}</b> · ${line}`);
+  },
+  bbttcc_feat_relentless_advance: async (a) => _tq.temp(a, _tq.rb(a, "melee"), "Relentless Advance"),
+  bbttcc_feat_spark_sense:       async (a) => _tq.note(`Ask one: resonance? · Renewal or Corruption? · ward, curse, or binding? (${_tq.rb(a, "occult")} uses per Soma Break.)`),
+  bbttcc_feat_tactical_reserve:  async (a) => {
+    const n = (Array.isArray(a.flags?.fourththing?.aidBanked) ? a.flags.fourththing.aidBanked : []).filter(b => b?.source === "tactical-reserve").length;
+    return _tq.note(`Reserve rerolls banked: <b>${n}</b> (Soma Break refills to 2). Spend one on your own roll (auto) or hand it to an ally within 6 squares (GM moves it).`);
+  },
+  bbttcc_feat_threatening_silence: async () => _tq.impose("Threatening Silence", "Applies to its next attack against a target other than you."),
+  bbttcc_feat_unbroken_guard:    async () => _tq.impose("Unbroken Guard", "Its movement is 0 until the end of its current turn."),
+  bbttcc_feat_unsettling_precision: async () => _tq.impose("Unsettling Precision", "Applies to its next defense check before the end of its next turn."),
+  bbttcc_feat_unyielding_finish: async (a) => _tq.bank(a, 1, "Unyielding Finish"),
+  bbttcc_feat_backline_commander: async (a) => { const t = _tq.ally(a); return _tq.note(`${t ? `<b>${t.name}</b>` : "The chosen ally"} may move 2 squares now without provoking reaction strikes.`); },
+  bbttcc_feat_grim_persistence:  async (a) => _tq.note(`Integrity max +${2 * (Number((a.system?.system ?? a.system)?.details?.level) || 1)} (wired). Hold-at-1: ${a.flags?.fourththing?.grimPersistenceUsed ? "<b>spent</b> — recovers on Soma Break" : "<b>ready</b> — fires automatically"}.`),
+  bbttcc_feat_combat_instinct:   async () => _tq.note("Initiative rerolls its lowest die (wired). You cannot be Surprised (immunity granted)."),
+};
+export const TECHNIQUE_IDS = [
+  "bbttcc_feat_adaptive_defense","bbttcc_feat_anchor_point","bbttcc_feat_backline_commander","bbttcc_feat_battlefield_presence",
+  "bbttcc_feat_bladed_tempo","bbttcc_feat_bound_and_bargained","bbttcc_feat_breach_specialist","bbttcc_feat_calculated_risk",
+  "bbttcc_feat_calm_the_mob","bbttcc_feat_combat_instinct","bbttcc_feat_combat_intuition","bbttcc_feat_combat_logistics",
+  "bbttcc_feat_controlled_aggression","bbttcc_feat_controlled_collapse","bbttcc_feat_danger_close","bbttcc_feat_darkness_hardened",
+  "bbttcc_feat_decisive_momentum","bbttcc_feat_deep_well","bbttcc_feat_deliberate_tempo","bbttcc_feat_desperate_measure",
+  "bbttcc_feat_disciplined_fire","bbttcc_feat_drawing_deep","bbttcc_feat_edge_of_control","bbttcc_feat_enduring_focus",
+  "bbttcc_feat_environmental_opportunist","bbttcc_feat_fluid_footwork","bbttcc_feat_focused_execution","bbttcc_feat_frugal_caster",
+  "bbttcc_feat_grave_calm","bbttcc_feat_grim_persistence","bbttcc_feat_hard_lessons","bbttcc_feat_hold_the_line",
+  "bbttcc_feat_improvised_engineer","bbttcc_feat_iron_nerves","bbttcc_feat_iron_will","bbttcc_feat_ironclad_training",
+  "bbttcc_feat_last_exit","bbttcc_feat_leyline_attunement","bbttcc_feat_light_footprint","bbttcc_feat_linebreaker",
+  "bbttcc_feat_lucid_footing","bbttcc_feat_many_hands","bbttcc_feat_medic_of_the_wastes","bbttcc_feat_overreach",
+  "bbttcc_feat_overwatch_discipline","bbttcc_feat_pay_the_toll","bbttcc_feat_last_ritual","bbttcc_feat_pressure_tested",
+  "bbttcc_feat_pressure_transference","bbttcc_feat_quickdraw_protocol","bbttcc_feat_quiet_casting","bbttcc_feat_reclamation",
+  "bbttcc_feat_refracted_attention","bbttcc_feat_refuse_the_narrative","bbttcc_feat_relentless_advance","bbttcc_feat_rig_hand",
+  "bbttcc_feat_scavenged_insight","bbttcc_feat_scavenger_savant","bbttcc_feat_shadow_advantage","bbttcc_feat_signature_ascendant",
+  "bbttcc_feat_situational_mastery","bbttcc_feat_spark_sense","bbttcc_feat_steady_hand","bbttcc_feat_strike_and_fade",
+  "bbttcc_feat_sure_recitation","bbttcc_feat_tactical_reserve","bbttcc_feat_threat_assessment","bbttcc_feat_threatening_silence",
+  "bbttcc_feat_unbroken_guard","bbttcc_feat_unsettling_precision","bbttcc_feat_unyielding_finish","bbttcc_feat_vaultbreaker",
+  "bbttcc_feat_weapon_familiarity","bbttcc_feat_weatherwise","bbttcc_feat_wide_working"
+];
+export async function openTechnique(actor, item) {
+  const id = String(item?.system?.identifier ?? "");
+  return openGenericPerUse(actor, item, { effect: TECHNIQUE_EFFECTS[id] ?? null });
 }
 
 // ─── Bulwark T2 — Anchor or Advance (wired 2026-06-07, Brexit audit) ──────────
@@ -6075,6 +6198,9 @@ const CHAR_OPT_ROUTE = "char_opt_lookup";
 for (const id of Object.keys(CHAR_OPT_ABILITIES)) {
   FEATURE_ROUTER[id] = CHAR_OPT_ROUTE;
 }
+// Techniques (2026-09-21) win over the five legacy char-opt entries: one
+// route, canon text drives the cadence, TECHNIQUE_EFFECTS drives the engine.
+for (const id of TECHNIQUE_IDS) FEATURE_ROUTER[id] = "technique_use";
 
 export async function openWyrdlensTikkunSight(actor) {
   return _openSomaBreakAbility(actor, "wlTikkunSight", "Tikkun Sight",
@@ -7316,6 +7442,7 @@ export async function dispatchFeatureAction(actor, item) {
     case "bulwark_anchor_advance": return openBulwarkAnchorOrAdvance(actor);  // T2 signature (2026-06-07)
     case "bulwark_breach":         return openBulwarkTheBreach(actor);        // Avalanche L13 (2026-06-07)
     case "generic_per_use":        return openGenericPerUse(actor, item);     // Gauntlet fix-pass 1 (2026-06-07)
+    case "technique_use":          return openTechnique(actor, item);         // Techniques audit R1–R6 (2026-09-21)
     // Shadow Courier (Pace pool replaces legacy Access Dice — no spend/pool dialogs)
     case "shadow_courier_package":      return openShadowCourierPackage(actor);
     case "shadow_courier_crossing":     return openShadowCourierCrossing(actor);

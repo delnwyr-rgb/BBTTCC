@@ -6,13 +6,13 @@
   "system": {
     "category": "technique",
     "source": {
-      "custom": "Bad Eden Feats Expansion v1",
-      "revision": 1,
+      "custom": "Bad Eden Core Feats v1 — techniques canon 2026-09-21",
+      "revision": 2,
       "rules": "2024"
     },
     "tags": [],
     "description": {
-      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Leyline Attunement</h2><p><em>You don’t just cross the world. You listen to it.</em></p><hr /><h3>Rules</h3><p>When you take a Respite, you may attune to the local flow. Until your next Sanctuary, you gain one of the following benefits (choose when you attune):</p><ul><li><strong>Guidance of the Current:</strong> You reroll the lowest die on one Athletics (Violence) checks you make each hour of travel.</li><li><strong>Quiet Step:</strong> You reroll the lowest die on one Stealth (Intrigue) checks you make each hour of travel.</li><li><strong>Resonant Warning:</strong> You reroll the lowest die on Initiative (Intrigue) rolls made in the first combat after you begin travel.</li></ul><p>You can change the chosen benefit each time you attune.</p>",
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<h2>Leyline Attunement</h2><p><em>You don’t just cross the world. You listen to it.</em></p><hr /><h3>Rules</h3><p>When you take a Scene Break, you may attune to the local flow. Until your next Soma Break, you gain one of the following benefits (choose when you attune):</p><ul><li><strong>Guidance of the Current:</strong> You reroll the lowest die on one Athletics (Violence) checks you make each hour of travel.</li><li><strong>Quiet Step:</strong> You reroll the lowest die on one Stealth (Intrigue) checks you make each hour of travel.</li><li><strong>Resonant Warning:</strong> You reroll the lowest die on Initiative (Intrigue) rolls made in the first combat after you begin travel.</li></ul><p>You can change the chosen benefit each time you attune.</p><p class=\"ft-engine-note\"><em>⚙ The initiative / Athletics / Stealth rerolls are wired with the attunement named as the gate — the GM reads which you chose.</em></p>",
       "chat": ""
     },
     "identifier": "bbttcc_feat_leyline_attunement",
@@ -42,6 +42,30 @@
     "bbttcc": {
       "pack": "bbttcc-feats-expansion-v1",
       "generatedAt": "2026-01-18T20:40:44.996669+00:00"
+    },
+    "fourththing": {
+      "rerolls": [
+        {
+          "context": "initiative",
+          "mode": "reroll-lowest",
+          "vs": "the first combat after attuning (Resonant Warning)",
+          "note": "Leyline Attunement"
+        },
+        {
+          "context": "check",
+          "skill": "athletics",
+          "mode": "reroll-lowest",
+          "vs": "one check per hour of travel (Guidance of the Current)",
+          "note": "Leyline Attunement"
+        },
+        {
+          "context": "check",
+          "skill": "stealth",
+          "mode": "reroll-lowest",
+          "vs": "one check per hour of travel (Quiet Step)",
+          "note": "Leyline Attunement"
+        }
+      ]
     }
   },
   "folder": "QbGNBV70xh9pF0eh",

@@ -111,7 +111,8 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
   // Radiation Sickness — flat penalty to every aptitude check. Read from the
   // system helper (exposed on game.fourththing) so the threshold ladder stays
   // single-source; defaults to 0 if unavailable.
-  const radPenalty = game.fourththing?.radiationBite?.(actor)?.rollPenalty ?? 0;
+  const radPenalty = (game.fourththing?.radiationBite?.(actor)?.rollPenalty ?? 0)
+                   + (game.fourththing?.strainBite?.(actor)?.rollPenalty ?? 0);   // Strain (techniques R1, 2026-09-21)
   // Use raw rank for the additive numeric bonus so chat-card math still
   // reflects the stored value; rankData.bonus reflects the clamped table.
   const totalBonus = attrVal + Number(rank) + aeBonus - radPenalty;
@@ -241,16 +242,35 @@ const _isAddChange = (change) => change?.type === "add" || change?.mode === 2;
 // rides the AE column on the sheet and every skill roll automatically, and
 // vanishes if the item is removed. Playtest 2026-06-06: Spark Sense should
 // provide +1 Occult and didn't (the pack item carries no Active Effect).
+// Techniques R1 canon (2026-09-21): "you gain a skill rank in X; if you already
+// have it, its rank rises by one instead" = +1 to that aptitude either way.
+// `choice: [a, b]` rows resolve to whichever of the two the actor ranks higher
+// (ties → the first). Tool "ranks" from the 5e port map onto the aptitude that
+// covers the work (thieves' tools → tinkering, artisan's/tinker's tools → tinkering).
 export const ITEM_APTITUDE_GRANTS = {
-  "spark sense": { occult: 1 },
+  "spark sense":          { occult: 1 },
+  "breach specialist":    { tinkering: 1 },
+  "improvised engineer":  { tinkering: 1 },
+  "rig hand":             { tinkering: 1 },
+  "medic of the wastes":  { faith: 1 },
+  "scavenger savant":     { investigation: 1 },
+  "calm the mob":         { choice: ["diplomacy", "intimidation"] },
+  "threat assessment":    { choice: ["perception", "investigation"] },
+  "weatherwise":          { choice: ["athletics", "lore"] },
 };
 function _itemAptitudeGrants(actor) {
   const out = {};
+  const rawSys = actor?.system?.system ?? actor?.system;
   for (const item of actor?.items ?? []) {
     const n = String(item.name ?? "").toLowerCase().trim();
     for (const [nameKey, grants] of Object.entries(ITEM_APTITUDE_GRANTS)) {
       if (!n.startsWith(nameKey)) continue;
       for (const [skill, v] of Object.entries(grants)) {
+        if (skill === "choice" && Array.isArray(v) && v.length) {
+          const pick = [...v].sort((a, b) => (Number(rawSys?.skills?.[b]?.value) || 0) - (Number(rawSys?.skills?.[a]?.value) || 0))[0];
+          out[pick] = (out[pick] ?? 0) + 1;
+          continue;
+        }
         out[skill] = (out[skill] ?? 0) + (Number(v) || 0);
       }
     }
@@ -343,13 +363,56 @@ export function getAllAttrAEBonuses(actor) {
 // Id-keyed reroll grants for techniques whose imported items carry no
 // flags.fourththing.rerolls (audit 2026-06-07: Anchor Point promised
 // reroll-lowest vs push/prone/Shaken/charm and granted nothing).
-const ID_REROLL_GRANTS = {
+// Techniques audit R4 (2026-09-21): every reroll-shaped technique lives here,
+// id-keyed, so the engine reads it whether or not the pack item was restamped
+// (restamp-techniques.macro.js mirrors the same rows onto
+// flags.fourththing.rerolls for the sheet's Passives panel). `vs` is a
+// narrative gate surfaced in chat; `when` is an ENGINE gate evaluated by
+// _grantWhenOk (belowHalfIntegrity · armored · unmoved · firstRound).
+export const ID_REROLL_GRANTS = {
   bbttcc_feat_anchor_point: [
     { context: "save",            mode: "reroll-lowest", vs: "being pushed, pulled, knocked prone, Shaken, or charmed", note: "Anchor Point" },
     { context: "check",           mode: "reroll-lowest", vs: "being pushed, pulled, knocked prone, Shaken, or charmed", note: "Anchor Point" },
     { context: "forced-movement", mode: "reroll-lowest", note: "Anchor Point" }
-  ]
+  ],
+  bbttcc_feat_combat_instinct:    [ { context: "initiative", mode: "reroll-lowest", note: "Combat Instinct" } ],
+  bbttcc_feat_danger_close:       [ { context: "initiative", mode: "reroll-lowest", when: "belowHalfIntegrity", note: "Danger Close — below half Integrity" },
+                                    { context: "check", attribute: "intrigue", mode: "reroll-lowest", when: "belowHalfIntegrity", note: "Danger Close — below half Integrity" } ],
+  bbttcc_feat_darkness_hardened:  [ { context: "defense", mode: "reroll-lowest", vs: "being Shaken", note: "Darkness Hardened" } ],
+  bbttcc_feat_grave_calm:         [ { context: "defense", mode: "reroll-lowest", vs: "being Shaken", note: "Grave Calm — on a success an ally within 2 squares gets the same on their next save" } ],
+  bbttcc_feat_ironclad_training:  [ { context: "defense", mode: "reroll-lowest", vs: "being knocked prone", when: "armored", note: "Ironclad Training — armor or shield" } ],
+  bbttcc_feat_enduring_focus:     [ { context: "check", attribute: "body", mode: "reroll-lowest", vs: "maintaining a Clarity hold", note: "Enduring Focus" } ],
+  bbttcc_feat_overwatch_discipline: [ { context: "attack", mode: "reroll-lowest", vs: "reaction strikes", when: "unmoved", note: "Overwatch Discipline — you have not moved this turn" } ],
+  bbttcc_feat_quickdraw_protocol: [ { context: "attack", mode: "reroll-lowest", vs: "your first attack with a weapon drawn on initiative", when: "firstRound", note: "Quickdraw Protocol — first round" } ],
+  bbttcc_feat_shadow_advantage:   [ { context: "attack", mode: "reroll-lowest", vs: "a creature that has not yet acted this round (once per round)", note: "Shadow Advantage" } ],
+  bbttcc_feat_situational_mastery: [ { context: "attack", mode: "reroll-lowest", vs: "your first attack roll — or pick the first defense check / +2 squares instead", when: "firstRound", note: "Situational Mastery — start of combat" },
+                                     { context: "defense", mode: "reroll-lowest", vs: "your first defense check — if that was your pick", when: "firstRound", note: "Situational Mastery — start of combat" } ],
+  bbttcc_feat_strike_and_fade:    [ { context: "check", skill: "stealth", mode: "reroll-lowest", vs: "after Strike and Fade ends in dim light, darkness, or cover", note: "Strike and Fade" } ],
+  bbttcc_feat_vaultbreaker:       [ { context: "check", mode: "reroll-lowest", vs: "locating hidden doors, panels, caches, and secret compartments", note: "Vaultbreaker" } ],
+  bbttcc_feat_leyline_attunement: [ { context: "initiative", mode: "reroll-lowest", vs: "the first combat after attuning (Resonant Warning)", note: "Leyline Attunement" },
+                                    { context: "check", skill: "athletics", mode: "reroll-lowest", vs: "one check per hour of travel (Guidance of the Current)", note: "Leyline Attunement" },
+                                    { context: "check", skill: "stealth", mode: "reroll-lowest", vs: "one check per hour of travel (Quiet Step)", note: "Leyline Attunement" } ],
+  bbttcc_feat_sure_recitation:    [ { context: "caster-check", mode: "reroll-lowest", note: "Sure Recitation" } ]
 };
+// ENGINE gates for `when` (evaluated at roll time; false = the grant sits out).
+function _grantWhenOk(actor, when) {
+  const rawSys = actor?.system?.system ?? actor?.system;
+  switch (String(when)) {
+    case "belowHalfIntegrity": {
+      const v = Number(rawSys?.derived?.integrity?.value) || 0, m = Number(rawSys?.derived?.integrity?.max) || 0;
+      return m > 0 && v < m / 2;
+    }
+    case "armored":
+      return (actor?.items ?? []).some(i => (i.type === "armor" && (i.system?.equipped ?? i.flags?.fourththing?.equipped ?? true))
+                                          || /\bshield\b/i.test(String(i.name ?? "")) && (i.system?.equipped ?? i.flags?.fourththing?.equipped ?? true));
+    case "unmoved":
+      return (Number(rawSys?.actions?.movementUsedFt) || 0) === 0;
+    case "firstRound":
+      return !!game.combat?.started && Number(game.combat?.round ?? 0) <= 1;
+    default:
+      return true;
+  }
+}
 
 export function collectRerolls(actor, query = {}) {
   const out = [];
@@ -364,9 +427,16 @@ export function collectRerolls(actor, query = {}) {
     for (const g of grants) {
       if (!g || !g.context || !g.mode) continue;
       // context match — exact, OR "check" matches anything skill/attribute-shaped
+      // Techniques R4 (2026-09-21): "defense" and "save" are the same roll family
+      // (Guard / Evasion / Resolve checks and manifestation saves); "initiative"
+      // is queried by FourthThingCombat.rollInitiative.
       const ctxMatch = g.context === wantContext
-        || (g.context === "check" && (wantContext === "check" || wantContext === "save" || wantContext === "attack"));
+        || (g.context === "check" && (wantContext === "check" || wantContext === "save" || wantContext === "attack"))
+        || (g.context === "save" && wantContext === "defense")
+        || (g.context === "defense" && wantContext === "save");
       if (!ctxMatch) continue;
+      if (g.when && !_grantWhenOk(actor, g.when)) continue;
+      if (g.defense && query.defense && g.defense !== query.defense) continue;
       // narrowers: if grant specifies a skill, query must match (or no skill in query yet)
       if (g.skill     && wantSkill     && g.skill     !== wantSkill)     continue;
       if (g.attribute && wantAttribute && g.attribute !== wantAttribute) continue;
@@ -392,7 +462,7 @@ export function collectRerolls(actor, query = {}) {
   if (annoPending > 0) {
     const ctxOk = !wantContext
       || wantContext === "check" || wantContext === "save" || wantContext === "attack"
-      || wantContext === "caster-check";
+      || wantContext === "caster-check" || wantContext === "defense";
     if (ctxOk) {
       out.push({
         mode: "reroll-lowest",
@@ -436,8 +506,22 @@ export function collectRerolls(actor, query = {}) {
   const _aid = actor?.flags?.fourththing?.aidBanked;
   if (Array.isArray(_aid) && _aid.some(b => b?.kind === "reroll-lowest")) {
     const ctxOk = !wantContext || wantContext === "check" || wantContext === "save"
-               || wantContext === "attack" || wantContext === "caster-check";
-    if (ctxOk) out.push({ mode: "reroll-lowest", sourceItemName: "Aid (Rallying Words)", sourceItemId: null, _aid: true });
+               || wantContext === "attack" || wantContext === "caster-check"
+               || wantContext === "defense" || wantContext === "initiative";
+    // Label carries the banker (Aid · Tactical Reserve · Pressure Tested · a
+    // technique card …) so the chat line says who paid for the reroll.
+    const _first = _aid.find(b => b?.kind === "reroll-lowest");
+    const _label = _first?.from && _first.from !== "Aid" ? `Banked: ${_first.from}` : "Aid (Rallying Words)";
+    if (ctxOk) out.push({ mode: "reroll-lowest", sourceItemName: _label, sourceItemId: null, _aid: true });
+  }
+  // Hard Lessons (technique): after a failed defense check, reroll-lowest on
+  // defense checks until the end of your next turn. Armed by
+  // resolveManifestationSave; round-scoped so nothing needs clearing.
+  if (wantContext === "defense" || wantContext === "save") {
+    const hl = actor?.flags?.fourththing?.hardLessons;
+    if (hl && (!game.combat?.started || Number(game.combat?.round ?? 0) <= (Number(hl.round) || 0) + 1)) {
+      out.push({ mode: "reroll-lowest", sourceItemName: "Hard Lessons", sourceItemId: null });
+    }
   }
   return out;
 }
@@ -487,7 +571,7 @@ export async function consumeAncestryReroll(actor, applied) {
 // (Makes Aid, Rallying Words, and all Harmony Marshal rally abilities auto-fire.)
 export async function consumeAidReroll(actor, applied) {
   if (!actor || !Array.isArray(applied) || !applied.length) return;
-  const used = applied.some(a => a?.source === "Aid (Rallying Words)" || a?.sourceItemName === "Aid (Rallying Words)");
+  const used = applied.some(a => /^Banked: |^Aid \(Rallying Words\)$/.test(String(a?.source ?? a?.sourceItemName ?? "")));
   if (!used) return;
   const banked = Array.isArray(actor.flags?.fourththing?.aidBanked) ? [...actor.flags.fourththing.aidBanked] : [];
   const i = banked.findIndex(b => b?.kind === "reroll-lowest");

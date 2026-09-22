@@ -1974,6 +1974,38 @@ function _ftCoreDice(mode, actor = null) {
 // the roll total (banking was already gated; this closes the total-inflation
 // half). Playtest 2026-06-09: "NPCs still roll surge dice into their totals."
 function _ftXd10(actor) { return (actor && !_ftSurgeAllowed(actor)) ? "2d10" : "2d10x10"; }
+// Active defense check (Guard / Evasion / Resolve) — one path for steward and
+// NPC sheets. Techniques R4/R5 (2026-09-21): honors "defense" reroll grants
+// (+ banked rerolls), the Imposed condition (3d10kl2, consumed) and the Strain
+// roll penalty. 2d10x10 + defense value, posted to chat.
+async function _ftRollDefenseCheck(actor, which = "guard") {
+  if (!actor) return null;
+  const sys   = actor.system?.system ?? actor.system ?? {};
+  const v     = Number(sys.derived?.[which]?.value ?? 10);
+  const pen   = _ftStrainBite(actor).rollPenalty;
+  const imposed = !!game.fourththing.impose?.isImposed?.(actor);
+  const die   = imposed ? "3d10kl2" : _ftXd10(actor);
+  const bonus = v - pen;
+  const roll  = await new Roll(`${die} + ${bonus}`).roll();
+  const notes = [];
+  if (imposed) {
+    notes.push(`<span style="color:#b04a8a">Imposed — 3d10 keep-lowest-2</span>`);
+    try { await game.fourththing.impose.consume(actor, "defense"); } catch (_e) {}
+  } else {
+    try {
+      const grants = collectRerolls(actor, { context: "defense", defense: which });
+      const res    = await applyRerollGrants(roll, grants, bonus);
+      await consumeAidReroll(actor, res.applied);
+      for (const a of res.applied) notes.push(`<span style="color:#a0d4ff">${a.mode === "reroll-lowest" ? "↑" : "↓"} rerolled ${a.before} → ${a.after} (${ftEscapeHtml(a.source)})</span>`);
+    } catch (_e) { console.warn("Roll for Initiation | defense reroll grants failed", _e); }
+  }
+  if (pen) notes.push(`<span style="color:#c47a3a">Strain −${pen}</span>`);
+  await roll.toMessage({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    flavor:  `${ftEscapeHtml(actor.name)} — ${ftCap(which)} check (DC ${v})${notes.length ? " · " + notes.join(" · ") : ""}`
+  });
+  return roll;
+}
 // Resolve a user-chosen mode against any effect-forced adv/dis, 5e-style: a
 // matched pair cancels to normal. Returns "advantage" | "disadvantage" | "normal".
 function _ftResolveRollMode({ user = "normal", forcedAdv = false, forcedDis = false } = {}) {
@@ -3502,7 +3534,13 @@ function buildManifestationGlossaryHTML() {
     ["Workings vs Forms", "Workings (instant) resolve and end; Forms (sustained / bound / enduring) persist and pay upkeep. <b>Only TCCs can manifest workings.</b> Non-TCCs are restricted to forms — they shape the world by holding it open, not by intervening directly."],
     ["TCC Bonuses", "Trad Caster Classes (Cosmic Linguist, Wyrdlens Adept, Dreamwalker, Pactkeeper) get: +5 Clarity max, −1 Clarity per cast (floor 0), exclusive access to T0 Fiats and to Workings."],
     ["T0 Fiat",     "TCC-only spoken cue. Must begin with \"Let there be …\". No roll, no resource, no upkeep — the 'I light the candle with a thought' register, always available between proper workings. Click the ◌ Fiat button on the sheet."],
-    ["Scene Break", "Lighter recovery cadence between Soma Breaks. Refills Clarity to at least half max (round up), shaves 1 Noise. Universal — anyone can take one between scenes via the ◐ Scene Break button."]
+    ["Scene Break", "Lighter recovery cadence between Soma Breaks. Refills Clarity to at least half max (round up), shaves 1 Noise. Universal — anyone can take one between scenes via the ◐ Scene Break button."],
+    ["Rank bonus", "The aptitude ladder's bonus: Novice +1 · Proficient +2 · Expert +3 · Master +4 · Legendary +5. When a technique says \"your rank bonus\" without naming an aptitude, use your highest rank held (floor +1)."],
+    ["Square",      "1 square = 5 ft. Technique ranges are written in squares; the grid is feet."],
+    ["Strain",      "Stackable, exhaustion-style condition (levels 1–6): 1 −1 to all rolls · 2 movement halved · 3 −2 to all rolls · 4 max Integrity and Stress halved · 5 movement 0 · 6 you fall (Dying). A Soma Break recovers ONE level."],
+    ["Temporary Integrity", "A buffer that absorbs Integrity damage before your track. Grants never stack — the higher pool stands. Clears on Soma Break."],
+    ["Imposed",     "Your next attack roll or defense check is 3d10 keep-lowest-2 (no explosions). Consumed by that roll; otherwise clears at the end of your next turn."],
+    ["Banked reroll", "A reroll-lowest waiting on your sheet (Aid, Rallying Words, Tactical Reserve, Pressure Tested …). Auto-fires on your next check / save / attack / defense / initiative roll."]
   ];
   const items = rows.map(([term, body]) =>
     `<div class="ft-manifest-glossary-row"><b>${term}</b><span> — ${ftEscapeHtml(body)}</span></div>`
@@ -10037,6 +10075,16 @@ FT.CONDITIONS = {
   compelled:  { label: "Compelled",  color: "#7d3cff", desc: "On your turn you must spend at least one action toward a directive named by the source; otherwise you may act freely." },
   dying:      { label: "Dying",      color: "#8b0000", desc: "Integrity reduced to 0. Make a Last Stand roll at the start of each of your turns. 3 successes → stabilize at 1 Integrity. 3 failures → Cross the Threshold." },
   surprise:   { label: "Surprised",  color: "#cc7a00", desc: "Cannot take any action on the first round of combat. Ends at the start of your next turn." },
+  // Imposed (techniques ruling R5, 2026-09-21): the target's next attack roll or
+  // defense check is made with 3d10 keep-lowest-2 (no explosions). Consumed by
+  // that roll; safety-expires at the start of the target's second turn-start
+  // ("until the end of its next turn"). Applied via game.fourththing.impose.
+  imposed:    { label: "Imposed",    color: "#b04a8a", img: "icons/svg/downgrade.svg", desc: "Your next attack roll or defense check is made with 3d10 keep-lowest-2 (no explosions). Consumed by that roll; otherwise clears at the end of your next turn." },
+  // Strain (techniques ruling R1, 2026-09-21): the stackable, exhaustion-style
+  // condition the 5e→RFI translation had flattened into "a level of Stress".
+  // Numeric store system.strain.value (0–6); bite in FT.STRAIN_BITE. Display
+  // entry only (ladder) — set levels via game.fourththing.strain.
+  strained:   { label: "Strained",   color: "#c47a3a", img: "icons/svg/degen.svg", ladder: true, desc: "Levels of Strain stack like exhaustion: 1 −1 to all rolls · 2 movement halved · 3 −2 to all rolls · 4 max Integrity and Stress halved · 5 movement 0 · 6 you fall (Dying). A Soma Break recovers one level." },
   // ── Submersion ladder (water / underwater) ─────────────────────────────────
   // Applied by the environment, not by manifestations: a steward in an underwater
   // zone is Submerged; once their breath budget is spent they begin Drowning; at
@@ -10060,19 +10108,19 @@ FT.CONDITIONS = {
   // truth, kept synchronous for prepareDerivedData. bbttcc-radiation's display
   // ladder (TIERS) syncs itself FROM this table at ready. Never toggle these by
   // hand — set RP.
-  radiationIrradiated: { label: "Irradiated", color: "#7ec850", img: "icons/svg/radiation.svg", desc: "Radiation 25+. −1 to all rolls." },
-  radiationSickened:   { label: "Sickened",   color: "#b6d038", img: "icons/svg/biohazard.svg", desc: "Radiation 50+. −2 to all rolls; max Integrity −5. Mutations set in." },
-  radiationPoisoned:   { label: "Poisoned",   color: "#d99a1c", img: "icons/svg/poison.svg", desc: "Radiation 75+. −3 to all rolls; max Integrity −10; lose your Reaction each turn; 1d4 Integrity at the start of your turn." },
-  radiationTerminal:   { label: "Terminal",   color: "#c0392b", img: "icons/svg/skull.svg", desc: "Radiation 100+. −4 to all rolls; max Integrity −20; lose your Action each turn; 1d6 Integrity at the start of your turn." },
+  radiationIrradiated: { ladder: true, label: "Irradiated", color: "#7ec850", img: "icons/svg/radiation.svg", desc: "Radiation 25+. −1 to all rolls." },
+  radiationSickened:   { ladder: true, label: "Sickened",   color: "#b6d038", img: "icons/svg/biohazard.svg", desc: "Radiation 50+. −2 to all rolls; max Integrity −5. Mutations set in." },
+  radiationPoisoned:   { ladder: true, label: "Poisoned",   color: "#d99a1c", img: "icons/svg/poison.svg", desc: "Radiation 75+. −3 to all rolls; max Integrity −10; lose your Reaction each turn; 1d4 Integrity at the start of your turn." },
+  radiationTerminal:   { ladder: true, label: "Terminal",   color: "#c0392b", img: "icons/svg/skull.svg", desc: "Radiation 100+. −4 to all rolls; max Integrity −20; lose your Action each turn; 1d6 Integrity at the start of your turn." },
 
   // Personal Darkness bands (Descent Engine D1, DESCENT_ENGINE_SPEC §1.2 —
   // owner-ruled 2026-09-02). Display ladder only; the mechanical bite is
   // FT.DARKNESS_BITE below (single source of truth). Every band costs AND
   // grants — the dark is a stage, not a fail-state.
-  darknessShadowed:  { label: "Shadowed",  color: "#8a7bb8", img: "icons/svg/blind.svg",  desc: "Darkness 3+. Presence gains from repairs −1. You perceive dark doors and dormant sparks in dark hexes; +1 vs Qliphothic fear/charm." },
-  darknessUmbral:    { label: "Umbral",    color: "#6a4fa3", img: "icons/svg/eye.svg",    desc: "Darkness 5+. Max Clarity −2; lawful factions react poorly. Qliphothic resistance; you may gather fragments; Chaos-mode misfire softened one step." },
-  darknessNadir:     { label: "Nadir",     color: "#472a78", img: "icons/svg/terror.svg", desc: "Darkness 8+. −2 on Soul-defense rolls; Mal turns unreliable about you; allies' auras do not reach you. +2 Intent inside dark hexes; Greater Qliphoth parley becomes possible." },
-  darknessThreshold: { label: "Threshold", color: "#1b0f33", img: "icons/svg/skull.svg",  desc: "Darkness 10. Each scene: Soul save DC 15 or act on your worst un-faced fragment. You may knock at Daath." }
+  darknessShadowed:  { ladder: true, label: "Shadowed",  color: "#8a7bb8", img: "icons/svg/blind.svg",  desc: "Darkness 3+. Presence gains from repairs −1. You perceive dark doors and dormant sparks in dark hexes; +1 vs Qliphothic fear/charm." },
+  darknessUmbral:    { ladder: true, label: "Umbral",    color: "#6a4fa3", img: "icons/svg/eye.svg",    desc: "Darkness 5+. Max Clarity −2; lawful factions react poorly. Qliphothic resistance; you may gather fragments; Chaos-mode misfire softened one step." },
+  darknessNadir:     { ladder: true, label: "Nadir",     color: "#472a78", img: "icons/svg/terror.svg", desc: "Darkness 8+. −2 on Soul-defense rolls; Mal turns unreliable about you; allies' auras do not reach you. +2 Intent inside dark hexes; Greater Qliphoth parley becomes possible." },
+  darknessThreshold: { ladder: true, label: "Threshold", color: "#1b0f33", img: "icons/svg/skull.svg",  desc: "Darkness 10. Each scene: Soul save DC 15 or act on your worst un-faced fragment. You may knock at Daath." }
 };
 
 // ── Radiation Sickness — mechanical bite ────────────────────────────────────
@@ -10104,6 +10152,52 @@ FT.DARKNESS_BITE = [
   { min: 5,  key: "darknessUmbral",    clarityMaxPenalty: 2, soulSavePenalty: 0, presenceGainPenalty: 1, intentBonusDarkHex: 0, seesDarkDoors: true, gathersFragments: true, compulsion: null, mayKnock: false },
   { min: 3,  key: "darknessShadowed",  clarityMaxPenalty: 0, soulSavePenalty: 0, presenceGainPenalty: 1, intentBonusDarkHex: 0, seesDarkDoors: true, gathersFragments: false, compulsion: null, mayKnock: false }
 ];
+// ── Strain — mechanical bite (techniques ruling R1, 2026-09-21) ─────────────
+// Single source of truth for what a level of Strain DOES. Stackable 1–6,
+// exhaustion-shaped: penalties accumulate as the level climbs. Read off
+// system.strain.value so the lookup is synchronous inside prepareDerivedData
+// (radiation / darkness pattern). Consumed by: every roll path's flat penalty
+// (attributeTest / cast / strike / aptitude / defense / initiative), the
+// movement derivation (moveScale), the Integrity + Stress max derivation
+// (halveMax) and the level-6 fall (game.fourththing.strain.set).
+FT.STRAIN_MAX = 6;
+FT.STRAIN_BITE = [
+  { min: 6, rollPenalty: 2, moveScale: 0,   halveMax: true,  falls: true  },
+  { min: 5, rollPenalty: 2, moveScale: 0,   halveMax: true,  falls: false },
+  { min: 4, rollPenalty: 2, moveScale: 0.5, halveMax: true,  falls: false },
+  { min: 3, rollPenalty: 2, moveScale: 0.5, halveMax: false, falls: false },
+  { min: 2, rollPenalty: 1, moveScale: 0.5, halveMax: false, falls: false },
+  { min: 1, rollPenalty: 1, moveScale: 1,   halveMax: false, falls: false }
+];
+function _ftStrainBite(actor) {
+  const none = { level: 0, rollPenalty: 0, moveScale: 1, halveMax: false, falls: false, bits: [] };
+  if (!actor || (actor.type !== "character" && actor.type !== "npc")) return none;
+  const rawSys = actor.system?.system ?? actor.system;
+  const level  = Math.max(0, Math.min(FT.STRAIN_MAX, Math.floor(Number(rawSys?.strain?.value) || 0)));
+  if (!level) return none;
+  const row  = FT.STRAIN_BITE.find(r => level >= r.min) ?? FT.STRAIN_BITE[FT.STRAIN_BITE.length - 1];
+  const bits = [];
+  if (row.rollPenalty)         bits.push(`−${row.rollPenalty} to all rolls`);
+  if (row.moveScale === 0)     bits.push("movement 0");
+  else if (row.moveScale < 1)  bits.push("movement halved");
+  if (row.halveMax)            bits.push("max Integrity & Stress halved");
+  if (row.falls)               bits.push("you fall — Dying");
+  return { level, rollPenalty: row.rollPenalty, moveScale: row.moveScale, halveMax: row.halveMax, falls: row.falls, bits };
+}
+// Rank bonus (techniques ruling R1, 2026-09-21): the ladder bonus of the
+// aptitude in play (Novice +1 … Legendary +5). Where a technique names no
+// aptitude ("your skill rank bonus" — the 5e proficiency-bonus translation),
+// use the actor's HIGHEST rank held, floor 1. Monsters: their tier.
+function _ftRankBonus(actor, skill = null) {
+  const rawSys = actor?.system?.system ?? actor?.system;
+  const bonusOf = (rank) => Number(SKILL_RANK_DATA?.[Math.max(0, Math.min(5, Number(rank) || 0))]?.bonus) || 0;
+  if (skill) return Math.max(1, bonusOf(rawSys?.skills?.[skill]?.value));
+  let best = 0;
+  for (const s of Object.values(rawSys?.skills ?? {})) best = Math.max(best, Number(s?.value) || 0);
+  if (!best) { try { if (typeof _ftIsFoeActor === "function" && _ftIsFoeActor(actor)) return Math.max(1, Number(rawSys?.details?.tier ?? rawSys?.tier) || 1); } catch (_e) {} }
+  return Math.max(1, bonusOf(best));
+}
+
 function _ftDarknessBite(actor) {
   const none = { value: 0, taint: 0, band: "clear", key: null, clarityMaxPenalty: 0, soulSavePenalty: 0, presenceGainPenalty: 0, intentBonusDarkHex: 0, seesDarkDoors: false, gathersFragments: false, compulsion: null, mayKnock: false };
   // Steward-level mechanic — characters/NPCs only; factions live on their own
@@ -13707,7 +13801,7 @@ Hooks.once("init", function () {
     soul:      "Soul — conviction, attunement, the shape of your faith. Drives Occult, Faith, Warding armor. Feeds Stress max and Resolve."
   };
   globalThis.FT_POOL_TIPS = {
-    integrity: "Integrity — your physical track. Reduced by kinetic, energy, poison, and sephirotic damage. Max = 10 + 3·Body + per-level bracket (vanguard 4 / mid 3 / caster 2 + ⌊Body/2⌋). Refills on Soma Break.",
+    integrity: "Integrity — your physical track. Reduced by kinetic, energy, poison, and sephirotic damage. Max = 10 + 3·Body + per-level bracket (vanguard 4 / mid 3 / caster 2 + ⌊Body/2⌋). Refills on Soma Break. Temporary Integrity (the small box) absorbs damage first and clears on Soma Break; Strain 4+ halves the max.",
     stress:    "Stress — your mental/spiritual track. Reduced by psychic and qliphothic damage. Max = 10 + 2·Mind + Soul. Refills on Soma Break."
   };
   globalThis.FT_DEFENSE_TIPS = {
@@ -14055,7 +14149,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
     // Radiation Sickness — flat penalty to faculty checks AND sheet aptitude
     // checks (both route through attributeTest via the sheet's _onFtRoll).
-    const _radPen = _ftRadiationBite(actor).rollPenalty;
+    const _radPen = _ftRadiationBite(actor).rollPenalty + _ftStrainBite(actor).rollPenalty;
     // Noise "Intrigue detection" (2026-08-17) — the glossary's second promised
     // consequence, finally real. Scoped to INTRIGUE checks alone: a caster
     // trailing metaphysical residue is harder to hide, but Noise must not become
@@ -14291,7 +14385,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const _castTierBonus = _castSurge.tierSurge ? _castTier : 0;
 
     // Radiation Sickness — flat penalty to the cast's positive total.
-    const _castRadPen = _ftRadiationBite(actor).rollPenalty;
+    const _castRadPen = _ftRadiationBite(actor).rollPenalty + _ftStrainBite(actor).rollPenalty;
     // Clean caster channel — a single-read net cast modifier (mutations/effects
     // can push it + as a clarity-boon or − as a noise-bane). We do NOT use raw
     // magic.clarity/noise.value AEs: those double-count here (read live above AND
@@ -14597,11 +14691,15 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // ("bound by name"). Caster = `actor` here. Simplification: applies to all of
     // the caster's manifestation saves while held, not a single named target.
     const _clSentence = !!actor?.flags?.fourththing?.modes?.clSentence;
-    const effOverride = (rollOverride === "3d10kl2" || _abDisSaves || _clSentence) ? "3d10kl2" : rollOverride;
+    // Imposed (techniques R5, 2026-09-21): forces 3d10kl2 on this defense check; consumed by it.
+    const _imposedSave = !!game.fourththing.impose?.isImposed?.(target);
+    if (_imposedSave) { try { await game.fourththing.impose.consume(target, "defense"); } catch (_e) {} }
+    const effOverride = (rollOverride === "3d10kl2" || _abDisSaves || _clSentence || _imposedSave) ? "3d10kl2" : rollOverride;
     // Descent D2 — Nadir+ personal Darkness bites Soul-defense rolls
     // (FT.DARKNESS_BITE.soulSavePenalty, spec §1.2). Target side: the roller.
     const _dkSavePen = saveAttr === "soul" ? (Number(_ftDarknessBite(target)?.soulSavePenalty) || 0) : 0;
-    const totalBonusEff = totalBonus - _dkSavePen;
+    const _strainSavePen = _ftStrainBite(target).rollPenalty;
+    const totalBonusEff = totalBonus - _dkSavePen - _strainSavePen;
     let formula      = effOverride === "3d10kl2"
       ? `3d10kl2 + ${totalBonusEff}`
       : `${_ftXd10(target)} + ${totalBonusEff}`;
@@ -14611,6 +14709,22 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
     const roll       = new Roll(formula);
     await roll.evaluate();
+
+    // Techniques R4 (2026-09-21): "defense" / "save" reroll grants on the TARGET
+    // (Anchor Point, Grave Calm, Darkness Hardened, Ironclad Training, Hard
+    // Lessons, banked rerolls …). Skipped on the 3d10kl2 path — keep-lowest
+    // pools don't reroll.
+    let _defRerollNote = "";
+    if (effOverride !== "3d10kl2") {
+      try {
+        const _defGrants = collectRerolls(target, { context: "defense", attribute: saveAttr });
+        const _defRes    = await applyRerollGrants(roll, _defGrants, totalBonusEff);
+        await consumeAidReroll(target, _defRes.applied);
+        if (_defRes.applied.length) {
+          _defRerollNote = `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">${_defRes.applied.map(a => `${a.mode === "reroll-lowest" ? "↑" : "↓"} rerolled ${a.before} → ${a.after} (${ftEscapeHtml(a.source)})`).join(", ")}</p>`;
+        }
+      } catch (_e) { console.warn("Roll for Initiation | defense reroll grants failed", _e); }
+    }
 
     const dieResults    = roll.dice?.[0]?.results ?? [];
     const explosions    = Math.max(0, dieResults.length - 2);
@@ -14631,6 +14745,27 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
     // Iron Word OR Aurablade Resolve OR Human Adaptive auto-succeed: override DC.
     const saved = (_saveSurge.ironWord || _abAutoHit || _adaptiveApplies) ? true : (total >= dc);
+    // Hard Lessons (technique): a failed defense check arms reroll-lowest on the
+    // defense checks you make before the end of your next turn (round-scoped —
+    // collectRerolls reads the flag; nothing to clear).
+    if (!saved && target.items?.some?.(i => String(i.system?.identifier ?? "") === "bbttcc_feat_hard_lessons")) {
+      try { await target.setFlag("fourththing", "hardLessons", { round: Number(game.combat?.round ?? 0), at: Date.now() }); } catch (_e) {}
+    }
+    // Pressure Tested (technique): succeed on a defense check → bank a
+    // reroll-lowest (the "ignore the effect entirely" fork stays with the GM).
+    // Once per Scene Break (perUse scene cadence).
+    if (saved && target.items?.some?.(i => String(i.system?.identifier ?? "") === "bbttcc_feat_pressure_tested")
+        && !target.flags?.fourththing?.perUse?.bbttcc_feat_pressure_tested) {
+      try {
+        const _pb = Array.isArray(target.flags?.fourththing?.aidBanked) ? [...target.flags.fourththing.aidBanked] : [];
+        _pb.push({ from: "Pressure Tested", kind: "reroll-lowest", set: Date.now(), source: "pressure-tested" });
+        await target.update({
+          "flags.fourththing.aidBanked": _pb,
+          "flags.fourththing.perUse.bbttcc_feat_pressure_tested": { cad: "scene", sceneId: canvas?.scene?.id ?? "none", round: Number(game.combat?.round ?? 0), day: new Date().toDateString(), at: Date.now() }
+        });
+        _defRerollNote += `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">Pressure Tested — a reroll is banked for ${ftEscapeHtml(target.name)}'s next roll (or the GM lets them ignore the effect).</p>`;
+      } catch (_e) {}
+    }
     if (_abAutoHit) {
       const _left = (Number(_abAutoSave.uses) || 1) - 1;
       if (_left > 0) await target.update({ "flags.fourththing.aurablade.oneShot.autoSucceedSave.uses": _left });
@@ -14655,6 +14790,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
 
     const html = `<div class="fourththing-roll">
       <div class="ft-roll-header"><span class="ft-roll-name" style="color:${headerColor}">🛡 ${ftEscapeHtml(target.name)} — ${ftCap(saveAttr)} save vs ${ftEscapeHtml(item?.name ?? "Manifestation")}: ${headerLabel}</span></div>
+      ${_imposedSave ? `<p style="font-size:0.74rem;color:#b04a8a;margin:0.15rem 0 0">Imposed — rolled 3d10 keep-lowest-2.</p>` : ""}${_strainSavePen ? `<p style="font-size:0.74rem;color:#c47a3a;margin:0.15rem 0 0">Strain −${_strainSavePen}</p>` : ""}${_defRerollNote}
       <div class="ft-result-row ${saved ? "ft-success" : "ft-failure"}">
         <span class="ft-total">${total}</span>
         <span class="ft-outcome">vs DC ${dc} → ${consequenceLabel}</span>
@@ -14943,7 +15079,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     const flankMod  = Math.max(0, Number(flankBonus) || 0);
     // Radiation Sickness — flat accuracy penalty (folded into the strike's flat
     // modifier so it's visible in the roll formula).
-    const _radPen   = _ftRadiationBite(actor).rollPenalty;
+    const _radPen   = _ftRadiationBite(actor).rollPenalty + _ftStrainBite(actor).rollPenalty;
     // Foe standing tier bonus (owner ruling 2026-08-22): monsters carry empty
     // skill maps and never explode dice, so their to-hit was faculty-only and
     // the tier badge meant nothing on the attack line. Foes add their tier to
@@ -14966,7 +15102,11 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       String(damageType).toLowerCase() === "kinetic" &&
       String(skill).toLowerCase() === "firearms" &&
       _ftEnvOf(actor) === "underwater";
-    const _attkMode    = _ftResolveRollMode({ user: rollMode, forcedDis: _abDisAttack || _rangedKineticUnderwater });
+    // Imposed (techniques R5, 2026-09-21): the condition forces 3d10kl2 on this
+    // attack and is consumed by it.
+    const _imposedAttack = !!game.fourththing.impose?.isImposed?.(actor);
+    if (_imposedAttack) { try { await game.fourththing.impose.consume(actor, "attack"); } catch (_e) {} }
+    const _attkMode    = _ftResolveRollMode({ user: rollMode, forcedDis: _abDisAttack || _rangedKineticUnderwater || _imposedAttack });
     const _rankClamped = Math.max(0, Math.min(5, Number(skillVal) || 0));
     const _rankData    = SKILL_RANK_DATA[_rankClamped] ?? SKILL_RANK_DATA[0];
     const _masterPool  = _rankClamped >= 4;                       // Master / Legendary
@@ -15647,6 +15787,19 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
 
     const cur    = rawSys?.derived?.[track]?.value ?? 0;
+    // Temporary Integrity (techniques ruling R2, 2026-09-21) — the buffer eats
+    // Integrity damage first. Characters/NPCs only (rigs carry hull, not a
+    // temp pool). Writes the remainder alongside the main track.
+    let tempNote = "";
+    if (track === "integrity" && actor.type !== "rig" && dmg > 0) {
+      const _tempPool = Math.max(0, Math.floor(Number(rawSys?.derived?.integrity?.temp) || 0));
+      if (_tempPool > 0) {
+        const _tempSpent = Math.min(_tempPool, dmg);
+        dmg -= _tempSpent;
+        oneShotClears["system.derived.integrity.temp"] = _tempPool - _tempSpent;
+        tempNote = ` · temp Integrity −${_tempSpent}${_tempPool - _tempSpent > 0 ? ` (${_tempPool - _tempSpent} left)` : " (gone)"}`;
+      }
+    }
     let   newVal = Math.max(0, cur - dmg);
 
     // Aurablade Mercy · Prevent Drop — this hit can't reduce the guarded ally
@@ -15751,7 +15904,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     }
 
     const destroyedTag = rigDestroyed ? " — DESTROYED" : "";
-    return `${actor.name}: ${track} ${cur} → ${newVal} (−${dmg})${defenseTag}${preventDropNote}${destroyedTag}${phoenixNote}`;
+    return `${actor.name}: ${track} ${cur} → ${newVal} (−${dmg})${defenseTag}${tempNote}${preventDropNote}${destroyedTag}${phoenixNote}`;
   };
 
   // ── BBTTCC combat adapter seam (Phase 1) ──────────────────────────────────
@@ -16078,6 +16231,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       "system.resources.surge.value":          0,
       "system.derived.integrity.value":        sys.derived?.integrity?.max        ?? 16,
       "system.derived.stress.value":           sys.derived?.stress?.max           ?? 16,
+      // Temporary Integrity (R2) clears at the deepest rest.
+      "system.derived.integrity.temp":         0,
       // 1/scene + 1/Sanctuary recoveries (Brexit audit 2026-06-07): Bulwark T2
       // Anchor-or-Advance, Avalanche L13 The Breach, Grim Persistence hold-at-1.
       "flags.fourththing.bulwark.-=anchorAdvanceUsedScene": null,
@@ -16092,6 +16247,23 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     if (sys.resources?.stress?.max !== undefined) {
       updates["system.resources.stress.current"] = 0;
     }
+
+    // Strain (techniques R1, 2026-09-21): a Soma Break recovers ONE level —
+    // exhaustion-shaped, never a full wipe.
+    const _strainBefore = Math.max(0, Math.floor(Number(sys.strain?.value) || 0));
+    const _strainAfter  = Math.max(0, _strainBefore - 1);
+    if (_strainBefore > 0) updates["system.strain.value"] = _strainAfter;
+    // Tactical Reserve (techniques R3, 2026-09-21): 2 banked rerolls per Soma
+    // Break — a refill, not a stack (any unspent Reserve rerolls are replaced).
+    let _tacticalNote = "";
+    if (actor.items?.some?.(i => String(i.system?.identifier ?? "") === "bbttcc_feat_tactical_reserve")) {
+      const _keep = (Array.isArray(actor.flags?.fourththing?.aidBanked) ? actor.flags.fourththing.aidBanked : []).filter(b => b?.source !== "tactical-reserve");
+      const _stamp = () => ({ from: "Tactical Reserve", kind: "reroll-lowest", set: Date.now(), source: "tactical-reserve" });
+      updates["flags.fourththing.aidBanked"] = [..._keep, _stamp(), _stamp()];
+      _tacticalNote = `<p style="margin:0.3rem 0 0;font-size:0.78rem;color:#a0d4ff">Tactical Reserve: 2 rerolls banked.</p>`;
+    }
+    // Imposed (R5) is combat-scoped — it never survives a Soma Break.
+    if (sys.conditions?.imposed) updates["system.conditions.imposed"] = false;
 
     // Dreamwalker — Dream Echo Reservoir gains 1 die per Soma Break (capped
     // at maxDice=2 per canonical L13 feature). prepareDerivedData clamps later;
@@ -16140,6 +16312,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     await actor.update(updates);
     if (itemUpdates.length) await actor.updateEmbeddedDocuments("Item", itemUpdates);
     if (sceneId) await actor.setFlag("fourththing", "lastSomaBreakScene", sceneId);
+    // Marker effects follow the stores written above (Strain level chip, Imposed icon).
+    try { await game.fourththing.strain?._sync?.(actor); } catch (_e) {}
+    try { if (sys.conditions?.imposed) await _ftSyncConditionAE(actor, "imposed", false); } catch (_e) {}
+    if (_strainBefore > 0) Hooks.callAll("fourththing.strainChanged", { actorId: actor.id, before: _strainBefore, after: _strainAfter, source: "soma-break" });
+    const _strainNote = _strainBefore > 0
+      ? `<p style="margin:0.3rem 0 0;font-size:0.78rem;color:#c47a3a">Strain ${_strainBefore} → ${_strainAfter}${_strainAfter > 0 ? " (one level per Soma Break)" : " — clear"}.</p>`
+      : "";
     if (Array.isArray(actor.flags?.fourththing?.aptitudeBurn) && actor.flags.fourththing.aptitudeBurn.length) {
       await actor.unsetFlag("fourththing", "aptitudeBurn");
     }
@@ -16187,8 +16366,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           The body remembers what it was. Uses restored, tracks reset, Integrity and Stress refilled.
         </p>
         <p style="margin:0.2rem 0;font-size:0.72rem;opacity:0.55;font-style:italic">
-          Noise, Radiation, and Darkness persist — they require fiction to reduce.
-        </p>${grantNote}${trigNote}
+          Noise, Radiation, and Darkness persist — they require fiction to reduce. Strain eases one level.
+        </p>${_strainNote}${_tacticalNote}${grantNote}${trigNote}
       </div>`
     });
 
@@ -16369,6 +16548,118 @@ game.fourththing.rolls.attributeTest = async function (actor, {
   // Exposed so the separate ft-progression.js roll path (and any external caller)
   // can read the radiation bite without importing this module.
   game.fourththing.radiationBite = _ftRadiationBite;
+
+  // ── Techniques rulings R1/R2/R5 (2026-09-21) — Strain · temp Integrity · Impose ──
+  game.fourththing.strainBite = _ftStrainBite;
+  game.fourththing.rankBonus  = _ftRankBonus;
+  // Strain: the ONLY sanctioned write path for system.strain.value. Emits
+  // fourththing.strainChanged {actorId, before, after, source}. Level 6 = the
+  // fall: current Integrity is driven to 0 through the damage chokepoint so the
+  // death ladder (Dying / Last Stand) engages normally.
+  async function _ftSyncStrainAE(actor, level) {
+    const existing = actor.effects?.find(e => e.flags?.fourththing?.condition === "strained");
+    const cond = FT.CONDITIONS.strained;
+    if (!level) { if (existing) await existing.delete(); return; }
+    const name = `Strained ${level}`;
+    if (existing) { if (existing.name !== name) await existing.update({ name }); return; }
+    await actor.createEmbeddedDocuments("ActiveEffect", [{
+      name, icon: cond.img, img: cond.img, tint: cond.color, origin: actor.uuid,
+      statuses: ["strained"], showIcon: CONST.ACTIVE_EFFECT_SHOW_ICON.ALWAYS, changes: [],
+      flags: { fourththing: { condition: "strained" } }
+    }]);
+  }
+  game.fourththing.strain = {
+    bite: _ftStrainBite,
+    max:  FT.STRAIN_MAX,
+    get(actor)  { return _ftStrainBite(actor).level; },
+    _sync(actor) { return _ftSyncStrainAE(actor, _ftStrainBite(actor).level); },
+    async set(actor, level, source = "gm") {
+      if (!actor || (actor.type !== "character" && actor.type !== "npc")) return null;
+      const before = _ftStrainBite(actor).level;
+      const after  = Math.max(0, Math.min(FT.STRAIN_MAX, Math.floor(Number(level) || 0)));
+      if (after === before) return _ftStrainBite(actor);
+      await actor.update({ "system.strain.value": after });
+      await _ftSyncStrainAE(actor, after);
+      const bite = _ftStrainBite(actor);
+      const cond = FT.CONDITIONS.strained;
+      ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: `<div class="fourththing-roll">
+          <span class="ft-condition-applied" style="color:${cond.color}">◈ ${ftEscapeHtml(actor.name)} — Strain ${before} → <b>${after}</b>${source ? ` <span style="opacity:0.6">(${ftEscapeHtml(String(source))})</span>` : ""}</span>
+          <p class="ft-condition-desc">${after ? bite.bits.join(" · ") : "Clear."}${after && after < FT.STRAIN_MAX ? " — a Soma Break recovers one level." : ""}</p>
+        </div>`
+      });
+      Hooks.callAll("fourththing.strainChanged", { actorId: actor.id, before, after, source });
+      if (bite.falls && after > before) {
+        // The fall: drive Integrity to 0 through the chokepoint (ignores resists, no temp buffer — it's exhaustion, not a hit).
+        try {
+          const rawSys = actor.system?.system ?? actor.system;
+          const curI = Number(rawSys?.derived?.integrity?.value) || 0;
+          if (rawSys?.derived?.integrity?.temp) await actor.update({ "system.derived.integrity.temp": 0 });
+          if (curI > 0) await game.fourththing.rolls._applyDamageToActor(actor, curI, { track: "integrity", ignoreResists: true, damageType: "strain" });
+        } catch (_e) { console.warn("Roll for Initiation | strain fall failed", _e); }
+      }
+      return bite;
+    },
+    gain(actor, n = 1, source = "gain")    { return this.set(actor, _ftStrainBite(actor).level + (Number(n) || 0), source); },
+    recover(actor, n = 1, source = "rest") { return this.set(actor, _ftStrainBite(actor).level - (Number(n) || 0), source); }
+  };
+  // Temporary Integrity (R2): a buffer that absorbs Integrity damage before the
+  // track. Grants never stack — the higher pool wins (5e temp-HP rule). Clears
+  // on Soma Break. Characters and NPCs only.
+  game.fourththing.tempIntegrity = {
+    get(actor) { const s = actor?.system?.system ?? actor?.system; return Math.max(0, Math.floor(Number(s?.derived?.integrity?.temp) || 0)); },
+    async grant(actor, amount, source = "", { quiet = false } = {}) {
+      if (!actor || (actor.type !== "character" && actor.type !== "npc")) return 0;
+      const cur  = this.get(actor);
+      const want = Math.max(0, Math.floor(Number(amount) || 0));
+      if (want <= cur) {
+        if (!quiet) ui.notifications?.info?.(`${actor.name} already holds ${cur} temp Integrity (${source || "grant"} would give ${want} — the higher pool stands).`);
+        return cur;
+      }
+      await actor.update({ "system.derived.integrity.temp": want });
+      if (!quiet) ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: `<div class="fourththing-roll"><span class="ft-condition-applied" style="color:#78c88c">🛡 ${ftEscapeHtml(actor.name)} gains <b>${want}</b> temporary Integrity${source ? ` (${ftEscapeHtml(String(source))})` : ""}${cur ? ` — replaces ${cur}` : ""}.</span></div>`
+      });
+      return want;
+    },
+    async clear(actor) { if (this.get(actor)) await actor.update({ "system.derived.integrity.temp": 0 }); }
+  };
+  // Impose (R5): the Imposed condition — next attack roll or defense check is
+  // 3d10 keep-lowest-2. Consumed by the roll (attack / defense / manifestation
+  // save paths call consume) or expired at the target's second turn-start.
+  game.fourththing.impose = {
+    isImposed(actor) { const s = actor?.system?.system ?? actor?.system; return !!s?.conditions?.imposed; },
+    async apply(target, { source = "", note = "" } = {}) {
+      if (!target || (target.type !== "character" && target.type !== "npc")) return false;
+      const round = Number(game.combat?.round ?? 0);
+      if (this.isImposed(target)) {
+        try { await target.setFlag("fourththing", "imposedAt", { round, turnStarts: 0, source }); } catch (_e) {}
+        return true;
+      }
+      const on = await game.fourththing.toggleCondition(target, "imposed");
+      if (!on) return false;   // immune
+      try { await target.setFlag("fourththing", "imposedAt", { round, turnStarts: 0, source }); } catch (_e) {}
+      if (source || note) ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: target }),
+        content: `<div class="fourththing-roll"><span style="font-size:0.78rem;color:#b04a8a">${ftEscapeHtml(String(source || "Imposed"))}${note ? ` — ${ftEscapeHtml(String(note))}` : ""}</span></div>`
+      });
+      return true;
+    },
+    async clear(target, why = "") {
+      if (!this.isImposed(target)) return false;
+      try { await target.update({ "system.conditions.imposed": false }); } catch (_e) {}
+      try { await _ftSyncConditionAE(target, "imposed", false); } catch (_e) {}
+      try { await target.unsetFlag("fourththing", "imposedAt"); } catch (_e) {}
+      if (why) ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: target }),
+        content: `<div class="fourththing-roll"><span style="font-size:0.78rem;opacity:0.75">◈ ${ftEscapeHtml(target.name)} — Imposed ${why === "expired" ? "expired" : `consumed (${ftEscapeHtml(String(why))})`}.</span></div>`
+      });
+      return true;
+    },
+    consume(target, what = "roll") { return this.clear(target, what); }
+  };
 
   // ── Descent Engine D1 — personal Darkness API (DESCENT_ENGINE_SPEC §1.1) ──
   // The ONLY sanctioned write path for system.darkness. Every mutation emits
@@ -17360,6 +17651,12 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       // current Integrity down to the reduced max automatically.
       const _radCap = _ftRadiationBite(this).integrityCap;
       if (_radCap > 0) sys.derived.integrity.max = Math.max(1, sys.derived.integrity.max - _radCap);
+      // Strain 4+ halves max Integrity (and max Stress below) — techniques R1, 2026-09-21.
+      const _strain = _ftStrainBite(this);
+      if (_strain.halveMax) sys.derived.integrity.max = Math.max(1, Math.floor(sys.derived.integrity.max / 2));
+      // Temporary Integrity (R2): a separate buffer, never clamped to max, never
+      // negative. Absorbed first by _applyDamageToActor; cleared on Soma Break.
+      sys.derived.integrity.temp = Math.max(0, Math.floor(Number(sys.derived.integrity.temp) || 0));
       // Clamp value to max — `??=` only seeded when undefined, so stale values
       // from earlier maxes (e.g. NPC seeded at 120 then re-stat to 46) leaked
       // through and displayed as 120/46. Treat max as the cap on every prepare.
@@ -17385,6 +17682,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       const _aeStrMax = Number(sys.derived.stress.aeBonus) || 0;
       if (_aeStrMax) sys.derived.stress.max = Math.max(1, sys.derived.stress.max + _aeStrMax);
       sys.derived.stress.aeBonus = _aeStrMax;
+      if (_strain.halveMax) sys.derived.stress.max = Math.max(1, Math.floor(sys.derived.stress.max / 2));
       {
         const cur = sys.derived.stress.value ?? sys.derived.stress.max;
         sys.derived.stress.value = Math.max(0, Math.min(cur, sys.derived.stress.max));
@@ -17400,6 +17698,15 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       sys.derived.guard.value      = 10 + v + b;
       sys.derived.evasion.value    = 10 + i + b;
       sys.derived.resolve.value    = 10 + p + s;
+      // Iron Will (technique, canon 2026-09-21): "choose Soul or Body — a rank in
+      // defense checks using it" → +1 to the defense that faculty keys (Body →
+      // Guard, Soul → Resolve). The engine picks the higher faculty (ties → Soul);
+      // flags.fourththing.ironWill = "body" | "soul" overrides.
+      if (this.items?.some?.(i => String(i.system?.identifier ?? "") === "bbttcc_feat_iron_will")) {
+        const _iwPick = String(this.flags?.fourththing?.ironWill || (b > s ? "body" : "soul"));
+        if (_iwPick === "body") sys.derived.guard.value += 1; else sys.derived.resolve.value += 1;
+        sys.derived.ironWill = _iwPick;
+      }
 
       // Rank-scaled armor bonuses from equipped armor items. See FT.ARMOR_RANK_SCALE.
       const armorBonus = ftComputeArmorBonus(this, sys);
@@ -17458,6 +17765,8 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       if (this.flags?.fourththing?.bulwarkStance === "advance") {
         sys.derived.movement.walk += 10;
       }
+      // Strain 2+ halves movement; 5+ zeroes it (techniques R1, 2026-09-21).
+      if (_strain.moveScale !== 1) sys.derived.movement.walk = Math.floor(sys.derived.movement.walk * _strain.moveScale);
 
       // Initiative bonus reader (RFI canon: 2026-04-29; AE-aware 2026-05-05).
       // Items declare flags.fourththing.passives.initiative.bonus = N. AEs
@@ -17638,10 +17947,36 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         // Foe-gate explosions: a hostile NPC without GM-enabled Surge rolls a
         // plain 2d10 so unearned Surge dice don't inflate its initiative total
         // (it banks nothing either way). PCs/bosses keep the exploding base.
-        const initFormula = _ftSurgeAllowed(actor) ? baseFormula : baseFormula.replace(/2d10x10/g, "2d10");
+        // Strain (techniques R1): flat −N folded into the formula so it reads on the card.
+        const _initStrainPen = actor ? _ftStrainBite(actor).rollPenalty : 0;
+        const initFormula = (_ftSurgeAllowed(actor) ? baseFormula : baseFormula.replace(/2d10x10/g, "2d10"))
+                          + (_initStrainPen ? ` - ${_initStrainPen}` : "");
         const roll     = new Roll(initFormula, rollData);
         try { await roll.evaluate(); }
         catch (e) { console.warn("Roll for Initiation | initiative roll failed", combatant.name, e); continue; }
+        // Techniques R4 (2026-09-21): "initiative" reroll grants (Combat Instinct,
+        // Danger Close, Quickdraw Protocol, Leyline Attunement …). Applied after
+        // the explosion chain, like every other post-roll grant.
+        let initNote = "";
+        if (actor) {
+          try {
+            const _ig = collectRerolls(actor, { context: "initiative" });
+            if (_ig.length) {
+              const _diceSum = (roll.dice?.[0]?.results ?? []).reduce((s, r) => s + (Number(r.result) || 0), 0);
+              const _ir = await applyRerollGrants(roll, _ig, roll.total - _diceSum);
+              await consumeAidReroll(actor, _ir.applied);
+              for (const a of _ir.applied) initNote += ` <span style="color:#a0d4ff">↑ rerolled ${a.before} → ${a.after} (${ftEscapeHtml(a.source)})</span>`;
+            }
+          } catch (_e) { console.warn("Roll for Initiation | initiative reroll grants failed", _e); }
+          if (_initStrainPen) initNote += ` <span style="color:#c47a3a">Strain −${_initStrainPen}</span>`;
+          // Iron Nerves (technique): rolling initiative grants temporary Integrity = rank bonus.
+          if (actor.items?.some?.(i => String(i.system?.identifier ?? "") === "bbttcc_feat_iron_nerves")) {
+            try {
+              const _tn = await game.fourththing.tempIntegrity.grant(actor, _ftRankBonus(actor), "Iron Nerves", { quiet: true });
+              if (_tn > 0) initNote += ` <span style="color:#78c88c">Iron Nerves: ${_tn} temp Integrity</span>`;
+            } catch (_e) {}
+          }
+        }
 
         // Count explosions on the first die-pool term (excludes the 2 base dice).
         const dieResults = roll.dice?.[0]?.results ?? [];
@@ -17662,7 +17997,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
                         ?? `${combatant.name} rolls initiative.`;
         const messageData = foundry.utils.mergeObject({
           speaker: ChatMessage.getSpeaker({ actor, token: combatant.token, alias: combatant.name }),
-          flavor:  flavorBase + surgeNote,
+          flavor:  flavorBase + surgeNote + initNote,
           flags:   { "core.initiativeRoll": true }
         }, messageOptions);
         // v14: Roll#toMessage's rollMode option became messageMode (same
@@ -17862,6 +18197,22 @@ game.fourththing.rolls.attributeTest = async function (actor, {
           });
         } catch (_e) { console.warn("Roll for Initiation | radiation tick failed", _e); }
       }
+    }
+
+    // ── Imposed (techniques R5) — safety expiry ───────────────────────────────
+    // "Until the end of its next turn": the condition is normally consumed by
+    // the next attack/defense roll; if nothing consumed it, clear it at the
+    // start of the actor's SECOND turn-start after it landed. GM-authoritative.
+    if (game.user?.isGM && (!game.users?.activeGM || game.users.activeGM === game.user)) {
+      try {
+        const _sysI = actor.system?.system ?? actor.system;
+        if (_sysI?.conditions?.imposed) {
+          const _at = actor.flags?.fourththing?.imposedAt ?? { turnStarts: 0 };
+          const _n  = (Number(_at.turnStarts) || 0) + 1;
+          if (_n >= 2) await game.fourththing.impose.clear(actor, "expired");
+          else await actor.setFlag("fourththing", "imposedAt", { ..._at, turnStarts: _n });
+        }
+      } catch (_e) { console.warn("Roll for Initiation | imposed expiry failed", _e); }
     }
 
     // ── Submersion — per-turn underwater bite (breath / drowning / crush) ─────
@@ -18643,6 +18994,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         ftCombatAction:   FourthThingCharacterSheet._onFtCombatAction,
         ftMoveAdjust:     FourthThingCharacterSheet._onFtMoveAdjust,
         ftNewTurn:        FourthThingCharacterSheet._onFtNewTurn,
+        ftStrainAdjust:   FourthThingCharacterSheet._onFtStrainAdjust,
         ftActAgain:       FourthThingCharacterSheet._onFtActAgain,
         ftSurgeSpend:     FourthThingCharacterSheet._onFtSurgeSpend,
         ftSomaBreak:      FourthThingCharacterSheet._onFtSomaBreak,
@@ -19262,6 +19614,10 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         details,
         derived,
         magic:         { ...magic, clarityPips, noisePercent: (magic.noise.value ?? 0) * 10 },
+        strain:        (() => {
+          const bite = _ftStrainBite(actor);
+          return { level: bite.level, max: FT.STRAIN_MAX, bits: bite.bits, active: bite.level > 0, color: FT.CONDITIONS.strained.color };
+        })(),
         radiation:     (() => {
           // Player-legible radiation tier: name, color, and the active bite so
           // the sheet shows the dread at a glance (not just a number).
@@ -19970,15 +20326,13 @@ game.fourththing.rolls.attributeTest = async function (actor, {
     // ftNpcDefenseRoll path — 2d10x10 + derived defense value, posted to chat.
     // Used when something asks the steward to make a defense check actively.
     static async _onFtDefenseRoll(event, target) {
-      const actor = this.actor;
-      const which = String(target.dataset.defense || "guard");
-      const sys   = actor.system?.system ?? actor.system ?? {};
-      const v     = Number(sys.derived?.[which]?.value ?? 10);
-      const roll  = await new Roll(`${_ftXd10(actor)} + ${v}`).roll();
-      await roll.toMessage({
-        speaker: ChatMessage.getSpeaker({ actor }),
-        flavor:  `${actor.name} — ${ftCap(which)} check (DC ${v})`
-      });
+      return _ftRollDefenseCheck(this.actor, String(target.dataset.defense || "guard"));
+    }
+    // Strain ± on the Steward tab (techniques R1, 2026-09-21).
+    static async _onFtStrainAdjust(event, target) {
+      const delta = Number(target.dataset.delta) || 0;
+      if (!delta) return;
+      return game.fourththing.strain.gain(this.actor, delta, "sheet");
     }
 
     static async _onFtSkillRoll(event, target) {
@@ -21219,15 +21573,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       });
     }
     static async _onFtNpcDefenseRoll(event, target) {
-      const actor = this.actor;
-      const which = String(target.dataset.defense || "guard");
-      const sys   = actor.system?.system ?? actor.system ?? {};
-      const v     = Number(sys.derived?.[which]?.value ?? 10);
-      const roll  = await new Roll(`${_ftXd10(actor)} + ${v}`).roll();
-      await roll.toMessage({
-        speaker:   ChatMessage.getSpeaker({ actor }),
-        flavor:    `${actor.name} — ${ftCap(which)} check (DC ${v})`
-      });
+      return _ftRollDefenseCheck(this.actor, String(target.dataset.defense || "guard"));
     }
     static async _onFtNpcSurgeInit(event, target) {
       const actor = this.actor;
