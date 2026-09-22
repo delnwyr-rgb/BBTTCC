@@ -8349,6 +8349,28 @@ async function _onBeatResolvedGeburah({ beat } = {}) {
   }
 }
 
+// worldEffects.meters (2026-09-22, Chuckle Creek v2): a beat moves a registered story meter when it
+// resolves — [{ key, delta?, set?, min?, max? }]. Keys = the meters the gate resolver knows
+// (chucklecreekSeen, wendigoRung, crVerify, banditMercy …). GM-only write; clamps; logs. This is
+// what lets a grief town's rungs open from play instead of a GM hand on the setting.
+const STORY_METER_KEYS = new Set(["wendigoRung", "banditMercy", "banditFear", "geburahEarned", "geburahForced", "cadenceRespect", "cadenceTribute", "cadenceUncontested", "crVerify", "chucklecreekSeen", "stillwaterCrack", "softlandingGive", "tikkunDividend"]);
+async function _onBeatResolvedMeters({ beat } = {}) {
+  try {
+    if (!game.user?.isGM) return;
+    const rows = Array.isArray(beat?.worldEffects?.meters) ? beat.worldEffects.meters : [];
+    for (const r of rows) {
+      const key = String(r?.key || "").trim(); if (!STORY_METER_KEYS.has(key)) { warn(`[meters] '${beat?.id}': unknown meter '${key}' — skipped`); continue; }
+      const cur = _banditMeterGet(key);
+      let next = (r.set !== undefined && r.set !== null) ? Number(r.set) : cur + (Number(r.delta) || 0);
+      if (r.min !== undefined) next = Math.max(Number(r.min), next);
+      if (r.max !== undefined) next = Math.min(Number(r.max), next);
+      if (!Number.isFinite(next) || next === cur) continue;
+      await game.settings.set(MOD_ID, key, next);
+      log(`[meters] '${beat.id}' → ${key} ${cur} → ${next}.`);
+    }
+  } catch (e) { warn("[meters] failed:", e); }
+}
+
 async function _onBeatResolvedCrVerify({ beat } = {}) {
   try {
     if (!game.user?.isGM) return;
@@ -9023,6 +9045,7 @@ Hooks.once("ready", () => {
   // travel beat resolves. Pure reactive subscriber — no behavior change to beats.
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedWendigoRung);
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedCrVerify);
+  Hooks.on("bbttcc:beat:resolved", _onBeatResolvedMeters);   // worldEffects.meters (2026-09-22)
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedGeburah);
   // Forgotten-Cause arc (step 3): move feud state (causeRecovered / heat /
   // peace-by-deletion) when the Confluence + Cultural Summit beats resolve.
