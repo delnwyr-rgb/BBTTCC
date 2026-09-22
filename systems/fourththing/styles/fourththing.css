@@ -1996,7 +1996,7 @@
 .ft-id-ancestry   { border-color: #27ae60; }
 .ft-id-archetype  { border-color: #e8c84a; }
 .ft-id-crew       { border-color: #9b59b6; }
-.ft-id-occult     { border-color: #c03030; }
+.ft-id-occult     { border-color: #8f7cff; }   /* CVD-safe: violet beside the green ancestry pill */
 .ft-id-philosophy { border-color: #546e7a; }
 .ft-id-sephirotic { border-color: #b0bec5; }
 
@@ -2212,9 +2212,9 @@
   transition: all 0.1s;
 }
 .ft-burn-pip.lit { opacity: 1; }
-.ft-burn-pip.lit.Controlled { color: #27ae60; }
-.ft-burn-pip.lit.Engaged    { color: #f2c94c; }
-.ft-burn-pip.lit.Overheated { color: #eb5757; }
+.ft-burn-pip.lit.Controlled { color: #4fc3ff; }   /* CVD-safe ladder: blue → gold → magenta (owner is red-green colour-blind, 2026-09-22) */
+.ft-burn-pip.lit.Engaged    { color: #ffd54f; }
+.ft-burn-pip.lit.Overheated { color: #ff5ac8; }
 
 /* ── Aura display ───────────────────────────────────────────────────────── */
 
@@ -4098,9 +4098,9 @@
   color: #0d1018;
 }
 .ft-inv-tier-I   { background: #7aa9d4; }
-.ft-inv-tier-II  { background: #5fb35f; }
+.ft-inv-tier-II  { background: #3dd6c0; }   /* CVD-safe: teal, not green */
 .ft-inv-tier-III { background: #d4a35f; }
-.ft-inv-tier-IV  { background: #d46a6a; }
+.ft-inv-tier-IV  { background: #d45ab8; }   /* CVD-safe: magenta, not red */
 .ft-inv-name {
   flex: 1 1 auto;
   font-weight: 600;
@@ -6330,7 +6330,7 @@
   font-size: 0.68rem; opacity: 0.55;
   border: 1px solid rgba(120,200,140,0.35); border-radius: 10px;
 }
-.ft-stat-temp.active { opacity: 1; color: #78c88c; border-color: rgba(120,200,140,0.7); background: rgba(120,200,140,0.08); }
+.ft-stat-temp.active { opacity: 1; color: #4fc3ff; border-color: rgba(79,195,255,0.7); background: rgba(79,195,255,0.08); }
 .ft-stat-temp input {
   width: 2.4rem; text-align: center; font-size: 0.72rem; padding: 0 0.15rem;
   background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15); color: inherit;
@@ -6449,8 +6449,8 @@
 .ft-character-sheet .ft-work-chip.st-identified { color: #b8c8ff; border-color: rgba(160,180,255,0.45); }
 .ft-character-sheet .ft-work-chip.st-corrupted { color: #ff8a8a; border-color: rgba(255,80,80,0.6); background: rgba(255,80,80,0.1); }
 .ft-character-sheet .ft-work-chip.st-unseen { opacity: 0.5; }
-.ft-character-sheet .ft-work-chip.good { color: #8ee8a0; border-color: rgba(120,200,140,0.6); }
-.ft-character-sheet .ft-work-chip.bad  { color: #ff9a6a; border-color: rgba(242,153,74,0.6); }
+.ft-character-sheet .ft-work-chip.good { color: #4fc3ff; border-color: rgba(79,195,255,0.6); }   /* CVD-safe: blue = good, gold = cost */
+.ft-character-sheet .ft-work-chip.bad  { color: #ffd54f; border-color: rgba(255,213,79,0.6); }
 .ft-character-sheet .ft-work-btn {
   padding: 0.18rem 0.55rem; border-radius: 5px; font-size: 0.72rem; font-weight: 600; cursor: pointer;
   background: rgba(0,229,255,0.1); color: #a0e8ff; border: 1px solid rgba(0,229,255,0.45);

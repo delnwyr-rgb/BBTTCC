@@ -3103,7 +3103,7 @@ async function _ftHandleLegendaryStrikeInvoke(btn, message) {
         <span class="ft-roll-name" style="color:#eb9beb">✨ Legendary — ${ftCap(ctx.skill)}</span>
         <span class="ft-defense-pill">vs ${dc}</span>
       </div>
-      <p style="margin:0.2rem 0;font-size:0.82rem">${ftEscapeHtml(actor.name)} invokes Legendary: <b>${mode}</b> — <b style="color:${hit ? "#6fcf97" : "#eb5757"}">${hit ? "✦ Hit" : "✗ still misses"}</b> <span style="opacity:0.6">(1/scene)</span>.</p>
+      <p style="margin:0.2rem 0;font-size:0.82rem">${ftEscapeHtml(actor.name)} invokes Legendary: <b>${mode}</b> — <b style="color:${hit ? "#4fc3ff" : "#ff7b7b"}">${hit ? "✦ Hit" : "✗ still misses"}</b> <span style="opacity:0.6">(1/scene)</span>.</p>
       ${dmgBlock}
     </div>`
   });
@@ -10070,7 +10070,7 @@ FT.CONDITIONS = {
   prone:      { label: "Prone",      color: "#78909c", desc: "Melee attacks against you +2; ranged −2."            },
   shaken:     { label: "Shaken",     color: "#e8c84a", desc: "−2 to Resolve checks; Stress costs +1."             },
   burning:    { label: "Burning",    color: "#c03030", desc: "1d4 Integrity damage at start of each turn."         },
-  restrained: { label: "Restrained", color: "#27ae60", desc: "Cannot move; Evasion reduced to base 10."           },
+  restrained: { label: "Restrained", color: "#3dd6c0", desc: "Cannot move; Evasion reduced to base 10."           },
   charmed:    { label: "Charmed",    color: "#e07ec6", desc: "Cannot take hostile action against the source; source has reroll-lowest on social checks against you." },
   compelled:  { label: "Compelled",  color: "#7d3cff", desc: "On your turn you must spend at least one action toward a directive named by the source; otherwise you may act freely." },
   dying:      { label: "Dying",      color: "#8b0000", desc: "Integrity reduced to 0. Make a Last Stand roll at the start of each of your turns. 3 successes → stabilize at 1 Integrity. 3 failures → Cross the Threshold." },
@@ -10108,10 +10108,10 @@ FT.CONDITIONS = {
   // truth, kept synchronous for prepareDerivedData. bbttcc-radiation's display
   // ladder (TIERS) syncs itself FROM this table at ready. Never toggle these by
   // hand — set RP.
-  radiationIrradiated: { ladder: true, label: "Irradiated", color: "#7ec850", img: "icons/svg/radiation.svg", desc: "Radiation 25+. −1 to all rolls." },
-  radiationSickened:   { ladder: true, label: "Sickened",   color: "#b6d038", img: "icons/svg/biohazard.svg", desc: "Radiation 50+. −2 to all rolls; max Integrity −5. Mutations set in." },
-  radiationPoisoned:   { ladder: true, label: "Poisoned",   color: "#d99a1c", img: "icons/svg/poison.svg", desc: "Radiation 75+. −3 to all rolls; max Integrity −10; lose your Reaction each turn; 1d4 Integrity at the start of your turn." },
-  radiationTerminal:   { ladder: true, label: "Terminal",   color: "#c0392b", img: "icons/svg/skull.svg", desc: "Radiation 100+. −4 to all rolls; max Integrity −20; lose your Action each turn; 1d6 Integrity at the start of your turn." },
+  radiationIrradiated: { ladder: true, label: "Irradiated", color: "#7ec8ff", img: "icons/svg/radiation.svg", desc: "Radiation 25+. −1 to all rolls." },
+  radiationSickened:   { ladder: true, label: "Sickened",   color: "#ffd54f", img: "icons/svg/biohazard.svg", desc: "Radiation 50+. −2 to all rolls; max Integrity −5. Mutations set in." },
+  radiationPoisoned:   { ladder: true, label: "Poisoned",   color: "#ff9a3c", img: "icons/svg/poison.svg", desc: "Radiation 75+. −3 to all rolls; max Integrity −10; lose your Reaction each turn; 1d4 Integrity at the start of your turn." },
+  radiationTerminal:   { ladder: true, label: "Terminal",   color: "#ff5ac8", img: "icons/svg/skull.svg", desc: "Radiation 100+. −4 to all rolls; max Integrity −20; lose your Action each turn; 1d6 Integrity at the start of your turn." },
 
   // Personal Darkness bands (Descent Engine D1, DESCENT_ENGINE_SPEC §1.2 —
   // owner-ruled 2026-09-02). Display ladder only; the mechanical bite is
@@ -14600,7 +14600,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">Passives: ${aeContribs.map(c => `${c.value >= 0 ? "+" : ""}${c.value} ${c.label} (${c.src})`).join(", ")}</p>`
       : "";
 
-    const headerColor = hit ? "#5fb35f" : "#c45f5f";
+    const headerColor = hit ? "#4fc3ff" : "#ff7b7b";   // CVD-safe: blue = success, coral = failure (words carry it too)
     const headerLabel = hit ? "HIT"     : "MISS";
     const html = `<div class="fourththing-roll">
       <div class="ft-roll-header"><span class="ft-roll-name" style="color:${headerColor}">⚔ ${ftEscapeHtml(item?.name ?? "Manifestation")} — ${headerLabel} vs ${ftEscapeHtml(target.name)}</span></div>
@@ -14782,7 +14782,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">Passives: ${aeContribs.map(c => `${c.value >= 0 ? "+" : ""}${c.value} ${c.label} (${c.src})`).join(", ")}</p>`
       : "";
 
-    const headerColor      = saved ? "#5fb35f" : "#c45f5f";
+    const headerColor      = saved ? "#4fc3ff" : "#ff7b7b";
     const headerLabel      = saved ? "RESISTED" : "FAILED SAVE";
     const consequenceLabel = saved
       ? (onSave === "negate" ? "no effect" : "halved")
@@ -14920,7 +14920,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
       </div>`;
     };
 
-    const headerColor = casterWins ? "#5fb35f" : "#c45f5f";
+    const headerColor = casterWins ? "#4fc3ff" : "#ff7b7b";
     const headerLabel = casterWins ? "CASTER WINS" : "TARGET RESISTS";
     const consequence = casterWins
       ? "full effect"
@@ -18483,7 +18483,7 @@ game.fourththing.rolls.attributeTest = async function (actor, {
         }
         const saved = _adaptiveCS ? true : (roll.total >= dc);
         const condLabel = FT.CONDITIONS?.[meta.condition ?? eff.flags.fourththing.condition]?.label ?? "condition";
-        const headerColor = saved ? "#5fb35f" : "#c45f5f";
+        const headerColor = saved ? "#4fc3ff" : "#ff7b7b";
         const headerLabel = saved ? "SHAKEN OFF" : "STILL AFFLICTED";
         await roll.toMessage({
           speaker: ChatMessage.getSpeaker({ actor }),

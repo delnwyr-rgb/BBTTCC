@@ -20,14 +20,14 @@ export const AURA_STATES = {
   none:    { label: "None",    color: "#78909c", desc: "No active aura" },
   fury:    { label: "Fury",    color: "#c03030", desc: "Aggressive — strike first, strike hard" },
   resolve: { label: "Resolve", color: "#4a90d9", desc: "Defensive — absorb, protect, endure" },
-  mercy:   { label: "Mercy",   color: "#27ae60", desc: "Restorative — heal, cleanse, sustain" },
+  mercy:   { label: "Mercy",   color: "#3dd6c0", desc: "Restorative — heal, cleanse, sustain" },
   dread:   { label: "Dread",   color: "#9b59b6", desc: "Psychic — fear, shadow, displacement" }
 };
 
 export const BURN_BANDS = [
-  { min: 0, max: 1, label: "Controlled", color: "#27ae60", desc: "Stable. Full options available." },
-  { min: 2, max: 3, label: "Engaged",    color: "#f2c94c", desc: "+1 damage. Stabilize costs are higher." },
-  { min: 4, max: 99, label: "Overheated", color: "#eb5757", desc: "+2 damage. Risk backlash at end of turn." }
+  { min: 0, max: 1, label: "Controlled", color: "#4fc3ff", desc: "Stable. Full options available." },
+  { min: 2, max: 3, label: "Engaged",    color: "#ffd54f", desc: "+1 damage. Stabilize costs are higher." },
+  { min: 4, max: 99, label: "Overheated", color: "#ff5ac8", desc: "+2 damage. Risk backlash at end of turn." }
 ];
 
 export function getBurnBand(burn, bands = BURN_BANDS) {
@@ -67,7 +67,7 @@ export const BURN_CLASSES = {
     bands: [
       { min: 0, max: 1,  label: "Cool",       color: "#5dade2", desc: "Forge banked. Steady — no bonus." },
       { min: 2, max: 3,  label: "Stoked",     color: "#f2994a", desc: "Forge roaring. Repairs ×1.5." },
-      { min: 4, max: 99, label: "Overheated", color: "#eb5757", desc: "Furnace bites. Repairs ×2, but drawing on it costs you Stress." },
+      { min: 4, max: 99, label: "Overheated", color: "#ff5ac8", desc: "Furnace bites. Repairs ×2, but drawing on it costs you Stress." },
     ],
     vent: [
       { id: "quench",   label: "Quench (action)",       reduce: 2,     req: "any",        desc: "Spend your action to cool the forge by 2" },
