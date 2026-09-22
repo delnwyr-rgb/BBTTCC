@@ -71,6 +71,12 @@ const BEATS_HELP = {
   timePoints: "Time Points — RETIRED 2026-09-13. Beats no longer debit the world clock; only travel legs move the Day chip. Stored, ignored.",
   playerFacing: "Player-Facing — when the beat runs, players get a read-only mirror window (title, description, choice list) delivered over a chat courier. They can watch but not click; only the GM's dialog resolves anything.",
   questId: "Quest — ties the beat to a questline for Builder filtering and bookkeeping. Completion is NOT automatic: to close the quest, author a Quest Effect row (World Effects tab) with action Complete on the beat that should finish it.",
+  storyQuest: "Story quest — which story quest this beat belongs to. Default (blank) derives it from the Quest link above, so most beats need nothing here. Set it when the beat belongs to a different story quest than its registry link, or to a quest with no registry link.",
+  storyChapter: "Story chapter — the chapter of that quest this beat advances (chapters are declared in the quest's Story Script on the Quests tab). Needed for role 'ending'.",
+  storyRole: "Story role — start: playing this beat starts the quest/chapter · ending: this beat ENDS the chapter (needs a chapter; the Ending name labels it) · closer: this beat CLOSES the whole quest (and the chapter it stands in). Blank = the beat merely plays inside the quest.",
+  storyEnding: "Ending name — the label recorded when this beat ends a chapter or closes the quest (e.g. 'reconciled', 'burned'). Blank = the last word of the beat id.",
+  alsoStarts: "Also starts — other story quests (and chapters) this beat starts when it plays: `quest_key` or `quest_key/chapter_key`, comma-separated. A Word beat that opens a town, for instance.",
+  alsoEnds: "Also ends — other quests/chapters this beat closes when it plays: `quest_key`, `quest_key/chapter_key`, optionally `=ending_name`. Comma-separated.",
   nextLine: "Quest Log — Next line: the sentence players read under Next: in their Quest Log after this beat plays. It stays until a later beat of the same quest with its own line plays. Player-facing — write it in the voice of the world, not as a GM note. (Shipped story scripts keep precedence; the Log's ✎ override sits on top.)",
   questStep: "Quest Step — the beat's CANONICAL ORDER within its quest (2026-08-23). Drives the Visualizer's quest-order NEXT guidance and beat sorting; beats without one fall back to authoring order. Leave gaps (10, 20, 30…) so later beats can slot between.",
   questRole: "Quest Role — start / core / optional / resolution. Only 'start' is live: when that beat runs, the GM gets a quest-acceptance prompt. The other roles are display labels.",
@@ -639,6 +645,25 @@ Hooks.once("init", () => {
   } catch (e) {}
 });
 
+// Story declaration (Layer 2b): parse the editor fields into beat.story or drop it when everything is blank.
+function _storyFromFields({ quest, chapter, role, ending, alsoStarts, alsoEnds }) {
+  const parseList = (txt, withEnding) => String(txt || "").split(",").map(x => x.trim()).filter(Boolean).map(tok => {
+    let ending = null; if (withEnding && tok.includes("=")) { const [l, r] = tok.split("="); tok = l.trim(); ending = r.trim() || null; }
+    const [q, ch] = tok.split("/").map(x => x.trim());
+    if (!q) return null; const o = { quest: q }; if (ch) o.chapter = ch; if (ending) o.ending = ending; return o;
+  }).filter(Boolean);
+  const d = {};
+  if (String(quest || "").trim()) d.quest = String(quest).trim();
+  if (String(chapter || "").trim()) d.chapter = String(chapter).trim();
+  if (String(role || "").trim()) d.role = String(role).trim();
+  if (String(ending || "").trim()) d.ending = String(ending).trim();
+  const as = parseList(alsoStarts, false); if (as.length) d.alsoStarts = as;
+  const ae = parseList(alsoEnds, true);    if (ae.length) d.alsoEnds = ae;
+  // chapter / role / ending without a quest still ride on the derived quest (declOf falls back to the Quest link) —
+  // but a role needs SOME quest to act on; keep the object only when it says something.
+  return Object.keys(d).length ? d : null;
+}
+
 export class BBTTCCCampaignBeatEditorApp extends Application {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
@@ -681,6 +706,8 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
     if (!isFinite(qs) || qs < 0) qs = 0;
     this.beat.questStep = qs ? Math.floor(qs) : null;
     this.beat.questRole = String(this.beat.questRole || "").trim() || null;
+    // Story declaration (Layer 2b, 2026-09-21) — { quest, chapter?, role?, ending?, alsoStarts?[], alsoEnds?[] }
+    if (this.beat.story && typeof this.beat.story !== "object") delete this.beat.story;
 
 
     // Optional: target hex UUID (for world modifiers / territory effects)
@@ -930,6 +957,27 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       questOptions = [];
     }
 
+    // Story declaration view (Layer 2b, 2026-09-21): every story quest the engine knows (shipped + this
+    // campaign's data), their chapters, the derived default from the Quest link, and the current values.
+    const storyDecl = (() => {
+      const out = { quests: [], chapters: [], derived: null, quest: "", chapter: "", role: "", ending: "", alsoStarts: "", alsoEnds: "" };
+      try {
+        const story = game.bbttcc?.api?.campaign?.story;
+        const QM = story?.QUEST_MAP?.quests || {};
+        out.quests = Object.entries(QM).map(([k, q]) => ({ key: k, name: String(q?.name || k), act: Number(q?.act ?? 0) }))
+          .sort((a, b) => (a.act - b.act) || a.name.localeCompare(b.name));
+        for (const [k, q] of Object.entries(QM)) for (const [ck, ch] of Object.entries(q?.chapters || {})) out.chapters.push({ quest: k, key: ck, name: String(ch?.name || ck) });
+        const m = story?.registryOf?.(this.beat.questId);
+        if (m) out.derived = { quest: m.quest, chapter: m.chapter || "", name: QM[m.quest]?.name || m.quest };
+        const d = this.beat.story && typeof this.beat.story === "object" ? this.beat.story : {};
+        out.quest = String(d.quest || ""); out.chapter = String(d.chapter || ""); out.role = String(d.role || ""); out.ending = String(d.ending || "");
+        const fmt = (arr) => (Array.isArray(arr) ? arr : []).map(a => a && a.quest ? `${a.quest}${a.chapter ? "/" + a.chapter : ""}${a.ending ? "=" + a.ending : ""}` : "").filter(Boolean).join(", ");
+        out.alsoStarts = fmt(d.alsoStarts); out.alsoEnds = fmt(d.alsoEnds);
+        out.chapters = out.chapters.map(c => ({ ...c, show: c.quest === (out.quest || out.derived?.quest || "") }));
+      } catch (_e) {}
+      return out;
+    })();
+
     // Generic target options for structured turn requests
     const requestTargetOptions = []
       .concat([{ id: "", label: "(None)" }])
@@ -1126,6 +1174,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       timeScales,
       turnOptions,
       beatIdOptions,
+      storyDecl,   // Layer 2b story declaration view
       questOptions,
       skillStatOptions,
 
@@ -2602,6 +2651,21 @@ _ensureWorldModifiersUI(html) {
   activateListeners(html) {
     super.activateListeners(html);
 
+    // Story declaration (Layer 2b): the Chapter list follows the chosen story quest (or the derived one).
+    try {
+      const $h = html instanceof jQuery ? html : $(html);
+      const qSel = $h.find("select[name='storyQuest']")[0], cSel = $h.find("select[name='storyChapter']")[0];
+      if (qSel && cSel) {
+        const derived = String(qSel.dataset.derived || this.beat?.questId && game.bbttcc?.api?.campaign?.story?.registryOf?.(this.beat.questId)?.quest || "");
+        const sync = () => {
+          const q = qSel.value || derived;
+          for (const o of cSel.options) { if (!o.value) continue; const show = !q || o.dataset.quest === q; o.hidden = !show; o.disabled = !show; }
+          if (cSel.selectedOptions[0]?.hidden) cSel.value = "";
+        };
+        qSel.addEventListener("change", sync); sync();
+      }
+    } catch (_e) {}
+
     // Inject Unlocks checklists (anchored in World Effects tab)
     this._ensureUnlocksUI(html);
 
@@ -3179,6 +3243,11 @@ _syncCoreFromForm() {
     // so the field silently reverted on tab switches). Match by name only.
     const qRole = _val("[name='questRole']");
     if (qRole != null) this.beat.questRole = String(qRole || "").trim() || null;
+    // Story declaration (Layer 2b, 2026-09-21)
+    if (_val("[name='storyQuest']") != null) {
+      const d = _storyFromFields({ quest: _val("[name='storyQuest']"), chapter: _val("[name='storyChapter']"), role: _val("[name='storyRole']"), ending: _val("[name='storyEnding']"), alsoStarts: _val("[name='alsoStarts']"), alsoEnds: _val("[name='alsoEnds']") });
+      if (d) this.beat.story = d; else delete this.beat.story;
+    }
 
     // Encounter fields (rendered only when type=encounter; skip when absent)
     const encKey = _val("input[name='encounter-key']");
@@ -3580,6 +3649,11 @@ _syncCoreFromForm() {
       this.beat.questRole = qRole || null;
       // Quest Log next line (Layer 1, 2026-09-21)
       if (fd.has && fd.has("nextLine")) this.beat.nextLine = String(fd.get("nextLine") || "").trim() || null;
+      // Story declaration (Layer 2b, 2026-09-21)
+      if (fd.has && fd.has("storyQuest")) {
+        const d = _storyFromFields({ quest: fd.get("storyQuest"), chapter: fd.get("storyChapter"), role: fd.get("storyRole"), ending: fd.get("storyEnding"), alsoStarts: fd.get("alsoStarts"), alsoEnds: fd.get("alsoEnds") });
+        if (d) this.beat.story = d; else delete this.beat.story;
+      }
     } catch (_eQ) {}
 
     // Encounter (only applies when type=encounter)

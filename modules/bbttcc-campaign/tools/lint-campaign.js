@@ -620,7 +620,7 @@ for (const b of beats) {
         if (d.role === "ending" && !d.chapter) F("D02", "ERROR", b.id, `story.role 'ending' needs a chapter (a quest closes with role 'closer')`);
         declared.set(s(b.id), d);
       } else if (mapped && s(b.questId) !== s(poolId)) {
-        F("D01", "WARN", b.id, `no story declaration — run tools/migrate-story-declarations (maps to ${mapped.quest}${mapped.chapter ? "·" + mapped.chapter : ""})`);
+        F("D01", "WARN", b.id, `no story declaration — derives from its Quest link (${mapped.quest}${mapped.chapter ? "·" + mapped.chapter : ""}); set Story quest / Role in the Beat Editor if it should start, end or close something`);
       }
     }
     if (declared.size) {

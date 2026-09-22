@@ -119,6 +119,51 @@
             UI label only (start/core/optional/resolution).
           </p>
         </div>
+
+        {{!-- Story declaration (Layer 2b, 2026-09-21) — what playing this beat does to the story store --}}
+        <fieldset class="bbttcc-story-decl" data-tour="beats.storyDecl">
+          <legend data-tooltip="{{bbttccTip 'beats' 'storyQuest'}}">Story declaration</legend>
+          <p class="bbttcc-muted bbttcc-mt-xs">
+            Playing a beat records it against a story quest: <b>start</b> opens it, <b>ending</b> closes a chapter, <b>closer</b> closes the quest. Leave the quest blank to derive it from the Quest link above{{#if storyDecl.derived}} (currently → <b>{{storyDecl.derived.name}}</b>{{#if storyDecl.derived.chapter}} · {{storyDecl.derived.chapter}}{{/if}}){{/if}}. Quests and chapters are authored on the Quests tab (✦ Script).
+          </p>
+          <div class="bbttcc-story-decl-grid">
+            <div class="form-group">
+              <label data-tooltip="{{bbttccTip 'beats' 'storyQuest'}}">Story quest</label>
+              <select name="storyQuest">
+                <option value="" {{#unless storyDecl.quest}}selected{{/unless}}>(derive from Quest link)</option>
+                {{#each storyDecl.quests as |q|}}<option value="{{q.key}}" {{#if (eq q.key ../storyDecl.quest)}}selected{{/if}}>Act {{q.act}} · {{q.name}} · {{q.key}}</option>{{/each}}
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-tooltip="{{bbttccTip 'beats' 'storyChapter'}}">Chapter</label>
+              <select name="storyChapter">
+                <option value="" {{#unless storyDecl.chapter}}selected{{/unless}}>(none)</option>
+                {{#each storyDecl.chapters as |c|}}<option value="{{c.key}}" data-quest="{{c.quest}}" {{#if (eq c.key ../storyDecl.chapter)}}selected{{/if}} {{#unless c.show}}hidden{{/unless}}>{{c.name}} · {{c.key}}{{#unless c.show}} ({{c.quest}}){{/unless}}</option>{{/each}}
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-tooltip="{{bbttccTip 'beats' 'storyRole'}}">Role</label>
+              <select name="storyRole">
+                <option value="" {{#unless storyDecl.role}}selected{{/unless}}>(plays inside the quest)</option>
+                <option value="start" {{#if (eq storyDecl.role "start")}}selected{{/if}}>start — opens the quest / chapter</option>
+                <option value="ending" {{#if (eq storyDecl.role "ending")}}selected{{/if}}>ending — closes the chapter</option>
+                <option value="closer" {{#if (eq storyDecl.role "closer")}}selected{{/if}}>closer — closes the quest</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-tooltip="{{bbttccTip 'beats' 'storyEnding'}}">Ending name</label>
+              <input type="text" name="storyEnding" value="{{storyDecl.ending}}" placeholder="e.g. reconciled" />
+            </div>
+            <div class="form-group">
+              <label data-tooltip="{{bbttccTip 'beats' 'alsoStarts'}}">Also starts</label>
+              <input type="text" name="alsoStarts" value="{{storyDecl.alsoStarts}}" placeholder="quest_key, quest_key/chapter_key" />
+            </div>
+            <div class="form-group">
+              <label data-tooltip="{{bbttccTip 'beats' 'alsoEnds'}}">Also ends</label>
+              <input type="text" name="alsoEnds" value="{{storyDecl.alsoEnds}}" placeholder="quest_key/chapter_key=ending" />
+            </div>
+          </div>
+        </fieldset>
       </div>
     </section>
 

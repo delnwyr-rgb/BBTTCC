@@ -117,3 +117,9 @@
   font-size: 12px;
   opacity: 0.95;
 }
+
+/* Story declaration block in the Beat Editor (Layer 2b, 2026-09-21) */
+.bbttcc-campaign-beat-editor .bbttcc-story-decl { margin: 0.6rem 0; padding: 0.5rem 0.7rem 0.6rem; border: 1px solid rgba(0,229,255,0.25); border-radius: 0.5rem; background: rgba(0,229,255,0.04); }
+.bbttcc-campaign-beat-editor .bbttcc-story-decl legend { padding: 0 0.4rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #7ff0ff; }
+.bbttcc-campaign-beat-editor .bbttcc-story-decl-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.35rem 0.7rem; }
+.bbttcc-campaign-beat-editor .bbttcc-story-decl-grid .form-group { margin: 0; }
