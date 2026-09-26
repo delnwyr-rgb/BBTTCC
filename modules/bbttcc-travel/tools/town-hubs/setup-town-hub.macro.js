@@ -26,7 +26,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 (async () => {
-  const TOWN_KEY = "fixit";              // <-- fixit | ag | lyrenn | kt | chuckle  (keys of towns.json)
+  const TOWN_KEY = "chuckle";              // <-- fixit | ag | lyrenn | kt | chuckle  (keys of towns.json)
   const DRY_RUN = true;                  // <-- set false to apply
   const CONFIG_URL = "modules/bbttcc-travel/tools/town-hubs/towns.json";
   const SCOPE = "bbttcc-travel", NS = "bbttcc-campaign", TERR = "bbttcc-territory";
