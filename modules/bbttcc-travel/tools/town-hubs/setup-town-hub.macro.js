@@ -27,7 +27,7 @@
  */
 (async () => {
   const TOWN_KEY = "chuckle";              // <-- fixit | ag | lyrenn | kt | chuckle  (keys of towns.json)
-  const DRY_RUN = true;                  // <-- set false to apply
+  const DRY_RUN = false;                  // <-- set false to apply
   const CONFIG_URL = "modules/bbttcc-travel/tools/town-hubs/towns.json";
   const SCOPE = "bbttcc-travel", NS = "bbttcc-campaign", TERR = "bbttcc-territory";
   const DUR_MS = 24000;
@@ -101,6 +101,11 @@
   const byId = Object.fromEntries(beats.map(b => [b.id, b]));
   let beatChanges = 0;
   const townQuest = (C.townQuestFrom || []).map(id => byId[id]?.questId).find(Boolean) || null;
+  // EVERGREEN town (2026-09-25, live-caught: "Pearl's Diner Exterior stays closed — it belongs to Act 1"): a door
+  // cinematic is undeclared, so its storyPhase≥1 gate reads as Act 1 content and the act seal shuts the door once
+  // the story moves on. towns.json `evergreen: true` stamps inject.evergreen on every door opener — a grief town
+  // (an evergreen quest) is reachable in any act. Existing door beats are SYNCed when the flag changes.
+  const EVERGREEN = C.evergreen === true;
 
   // ── 3. exterior cinematics ───────────────────────────────────────────────
   const mkCinematic = (d) => {
@@ -110,7 +115,7 @@
     return {
       id: d.beatId, label: `${TOWN} - ${d.label} Exterior`, type: "cinematic", timeScale: "scene", tags: "town-door exterior", politicalTags: "",
       outcomes: { success: null, failure: null },
-      inject: { cooldownTurns: 0, repeatable: true, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit", requires },
+      inject: { cooldownTurns: 0, repeatable: true, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit", requires, ...(EVERGREEN ? { evergreen: true } : {}) },
       actors: [], choices: intro ? [{ label: "Go in", next: intro.id, description: "", checkStat: "", checkDC: 0, failNext: "" }] : [],
       encounter: { key: "", tier: null, actorName: "" },
       worldEffects: { territoryOutcome: null, factionEffects: [], radiationDelta: 0, sparkKey: null, turnRequests: [], warLog: "", worldModifiers: [], relationshipEffects: [], questEffects: [] },
@@ -132,7 +137,8 @@
         if (cur.cinematic?.startSceneId !== want.cinematic.startSceneId) diffs.push("start");
         if ((cur.cinematic?.nextSceneId || null) !== want.cinematic.nextSceneId) diffs.push("next");
         if (JSON.stringify(cur.choices || []) !== JSON.stringify(want.choices)) diffs.push("choices");
-        if (diffs.length) { changes.push(`beat SYNC ${d.beatId}: ${diffs.join(", ")} → "${d.sc.exterior.name}"${want.cinematic.nextSceneId ? ` → "${d.sc.interior.name}"` : ""}`); beatChanges++; if (!DRY_RUN) { cur.cinematic = want.cinematic; cur.choices = want.choices; } }
+        if (!!cur.inject?.evergreen !== EVERGREEN) diffs.push("evergreen");
+        if (diffs.length) { changes.push(`beat SYNC ${d.beatId}: ${diffs.join(", ")} → "${d.sc.exterior.name}"${want.cinematic.nextSceneId ? ` → "${d.sc.interior.name}"` : ""}`); beatChanges++; if (!DRY_RUN) { cur.cinematic = want.cinematic; cur.choices = want.choices; cur.inject = { ...(cur.inject || {}), ...(EVERGREEN ? { evergreen: true } : {}) }; if (!EVERGREEN && cur.inject) delete cur.inject.evergreen; } }
       }
       continue;
     }
