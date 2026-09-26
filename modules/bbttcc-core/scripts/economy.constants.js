@@ -57,11 +57,16 @@ export const RECIPES = {          // alternate fuels — "how the faction got it
   upgrade_outpost_settlement: [
     { label:"charter & works",    cost:{ economy:30, softpower:20, logistics:20 } },
     { label:"festival founding",  cost:{ culture:30, faith:20, logistics:20 }, fx:{ hex:{ loyaltyDelta:1 }, faction:{ moraleDelta:2 } } }
+  ],
+  build_bridge: [             // crossings (owner ruling 2026-09-25)
+    { label:"hired builders",     cost:{ economy:20, logistics:14 } },
+    { label:"work gang",          cost:{ violence:20, logistics:14 },   note:"pressed labour under guard",     fx:{ hex:{ loyaltyDelta:-2 }, faction:{ darknessDelta:1 } } },
+    { label:"barn-raising",       cost:{ culture:15, softpower:10, logistics:10 }, note:"the whole valley turned out", days:1, fx:{ hex:{ loyaltyDelta:1 }, faction:{ moraleDelta:1 } } }
   ]
 };
 export const LEDGER_DAY_COST = {   // world-clock days a planned activity funds from the month's unspent days
   develop_infrastructure_std: 3, infrastructure_expansion: 3, establish_outpost: 3, upgrade_outpost_settlement: 3,
-  develop_outpost_stability: 2, establish_supply_line: 2, establish_trade_route: 2
+  develop_outpost_stability: 2, establish_supply_line: 2, establish_trade_route: 2, build_bridge: 3
 };
 
 // ── hex identity → yield ladder ────────────────────────────────────────────────────────────────

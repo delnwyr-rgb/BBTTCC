@@ -1752,6 +1752,45 @@
           });
         }
       } catch (eR) { console.warn("[bbttcc-hex-sheet] routes card failed", eR); }
+      // ───────────── Crossing card (bridges + the assumed crossing, 2026-09-25) ─────────────
+      try {
+        const doc = this._hexDoc; const tf = doc?.flags?.[MOD_T] || {};
+        const mainPane = root.querySelector('main.bbttcc-pane');
+        const scroller = mainPane ? (mainPane.querySelector('.bbttcc-pane-scroll') || mainPane) : null;
+        const prevC = scroller?.querySelector('[data-bbttcc-crossing-card="1"]'); if (prevC) prevC.remove();
+        const key = String(tf.terrain?.key || tf.terrain || "").toLowerCase();
+        const spec = game.bbttcc?.api?.travel?.__terrain?.[key] || null;
+        const water = spec ? (String(spec.medium || "land") === "water" && String(spec.depthBand || "surface") === "surface") : /river|lake|sea|ocean|bay|strait|water/.test(key);
+        const cr = (tf.crossing && typeof tf.crossing === "object") ? tf.crossing : null;
+        if (scroller && (water || cr)) {
+          const esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
+          const isGMc = !!game.user?.isGM;
+          const holder = cr ? game.actors.get(String(cr.factionId || "")) : null;
+          const cut = !!cr && Number(cr.integrity ?? 1) <= 0;
+          const integ = Number(tf.integration?.progress ?? 0) || 0; const port = String(tf.type || "").toLowerCase() === "port";
+          const assumed = water && (tf.factionId || tf.ownerId) && (integ >= 5 || port);
+          const lines = [];
+          if (cr) lines.push(`<li><b>${cut ? "⛔ Bridge — CUT" : "🌉 Bridge"}</b>${cr.name ? ` "${esc(cr.name)}"` : ""} · held by <b>${esc(holder?.name || cr.factionId || "?")}</b> · built turn ${Number(cr.builtTurn || 0)}${cut ? ` · cut turn ${Number(cr.cutTurn || 0)}${isGMc && cr.cutBy ? ` by ${esc(game.actors.get(String(cr.cutBy))?.name || cr.cutBy)}` : ""}` : ""}</li>`);
+          if (cr && !cut) lines.push(`<li>Free for the holder and allies · <b>${Number(cr.toll ?? 5)} marks</b> toll (Economy, paid to the holder) for the neutral · closed to the hostile.</li>`);
+          if (cr && cut) lines.push(`<li>Nobody crosses here until ${esc(holder?.name || "the holder")} plans <i>Build Bridge</i> again.</li>`);
+          if (assumed) lines.push(`<li><b>Assumed crossing</b> — ${port ? "a Port's boats" : "a Settled hex's fords and ferries"}: the holder and their allies cross this water on foot.</li>`);
+          else if (water && !cr) lines.push(`<li class="hint">Open water. Cross with a boat, a charter, a bridge (<i>Build Bridge</i> from a hex next door), or settle it (integration 5) / found a Port.</li>`);
+          const cardC = document.createElement('div'); cardC.className = 'bbttcc-hex-card'; cardC.setAttribute('data-bbttcc-crossing-card', '1');
+          cardC.innerHTML = `<h3 style="margin:0 0 .3rem;">Crossing</h3><ul style="margin:0;padding-left:1.1rem;">${lines.join("")}</ul>` +
+            (isGMc && cr ? `<div style="display:flex;gap:.4rem;align-items:center;margin-top:.35rem;flex-wrap:wrap;"><label style="font-size:.8rem;">Toll <input type="number" min="0" max="99" step="1" value="${Number(cr.toll ?? 5)}" data-crossing-toll style="width:4.5em;"></label><button type="button" class="bbttcc-btn bbttcc-btn-xs" data-crossing-save>Save</button>${cut ? `<button type="button" class="bbttcc-btn bbttcc-btn-xs" data-crossing-restore>Restore (GM)</button>` : ""}<button type="button" class="bbttcc-btn bbttcc-btn-xs" data-crossing-remove>Remove bridge</button></div>` : "");
+          const gmNotes = scroller.querySelector('[data-bbttcc-gm-notes-card="1"]');
+          if (gmNotes) scroller.insertBefore(cardC, gmNotes); else scroller.appendChild(cardC);
+          if (isGMc && cr) cardC.addEventListener("click", async (ev) => {
+            const t = ev.target; if (!(t instanceof HTMLElement)) return;
+            if (t.closest("[data-crossing-save]")) { ev.preventDefault(); const v = Math.max(0, Math.round(Number(cardC.querySelector("[data-crossing-toll]")?.value || 0))); await doc.update({ [`flags.${MOD_T}.crossing`]: Object.assign({}, cr, { toll: v }) }); ui.notifications?.info?.(`Toll set to ${v} marks.`); }
+            else if (t.closest("[data-crossing-restore]")) { ev.preventDefault(); await doc.update({ [`flags.${MOD_T}.crossing`]: Object.assign({}, cr, { integrity: 1, cutBy: null, cutTurn: null }) }); ui.notifications?.info?.("Bridge restored."); }
+            else if (t.closest("[data-crossing-remove]")) { ev.preventDefault(); await doc.unsetFlag(MOD_T, "crossing"); ui.notifications?.info?.("Bridge removed."); }
+            else return;
+            try { Hooks.callAll("bbttcc:crossing:changed", { hexUuid: doc.uuid, hexName: tf.name, action: "gm-edit" }); } catch (_e) {}
+            try { this.render(false); } catch (_e) {}
+          });
+        }
+      } catch (eC) { console.warn("[bbttcc-hex-sheet] crossing card failed", eC); }
       // ───────────── Quests card (Hex ↔ Quest links) ─────────────
       try {
         const doc = this._hexDoc;

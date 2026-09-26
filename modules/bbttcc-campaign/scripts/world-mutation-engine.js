@@ -1474,6 +1474,31 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       }
     } catch (eMi) { console.warn(TAG, "militia apply failed", eMi); }
 
+    // 2j) CHARTERS (owner ruling 2026-09-25 — "getting help from folks who already have the resources"):
+    // worldEffects.charter = { fromFactionId?|fromFactionName?, domains?, turns?|until?, rigName?, factionId?, revoke? }
+    // — a beat grants the party's faction passage on another faction's rigs (the Jackalope favour: the
+    // Fixit Farm's boat). Default = every non-land domain the carrier's rigs have, for 3 turns; `until:null`
+    // with no `turns` = standing. `revoke:true` ends the carrier's charters instead.
+    try {
+      const chr = we.charter && typeof we.charter === "object" ? we.charter : null;
+      const tapi = get(game, "bbttcc.api.travel.charters", null);
+      if (chr && tapi && typeof tapi.grant === "function") {
+        const capi = get(game, "bbttcc.api.campaign", null); const cid = capi && capi.getActiveCampaignId ? capi.getActiveCampaignId() : null;
+        let camp = (cid && capi && typeof capi.getCampaign === "function") ? capi.getCampaign(cid) : null;
+        const fid = String(chr.factionId || (ctx && ctx.factionId) || (camp && camp.factionId) || ((camp && camp.factionIds) || [])[0] || "").replace(/^Actor\./, "");
+        const byName = (n) => { const nn = String(n || "").replace(/[\s\u00a0]+/g, " ").trim().toLowerCase(); return nn ? (game.actors.find(a => asFactionActor(a) && String(a.name).replace(/[\s\u00a0]+/g, " ").trim().toLowerCase() === nn) || null) : null; };
+        const carrier = chr.fromFactionId ? game.actors.get(String(chr.fromFactionId).replace(/^Actor\./, "")) : byName(chr.fromFactionName);
+        if (fid && carrier) {
+          if (chr.revoke === true) { const r = await tapi.revoke(fid, { fromFactionId: carrier.id }); if (r && r.removed) { changed = true; notes.push("charter:revoked:" + carrier.name); } }
+          else {
+            const turns = (chr.turns != null) ? Number(chr.turns) : (chr.until === null ? null : 3);
+            const r = await tapi.grant(fid, { fromFactionId: carrier.id, domains: Array.isArray(chr.domains) && chr.domains.length ? chr.domains : null, rigName: chr.rigName || "", turns, until: chr.until != null ? Number(chr.until) : null, source: "beat", note: chr.note || "" });
+            if (r && r.ok) { changed = true; notes.push("charter:" + carrier.name); } else console.warn(TAG, "charter grant refused", r);
+          }
+        } else if (chr) console.warn(TAG, "charter: faction or carrier not resolved", { fid, from: chr.fromFactionId || chr.fromFactionName });
+      }
+    } catch (eCh) { console.warn(TAG, "charter apply failed", eCh); }
+
     // 2g) RECIPE GRANTS (MATERIAL ECONOMY, 2026-09-20 — owner: "dole out the recipes"): worldEffects.recipeGrants =
     // [{ name | slug, to?: "coalition" (default) | "faction" | "common", factionId? }] — the beat teaches the recipe
     // (system RfiCrafting.recipes.learn) to every coalition faction's book, one faction's, or the common book.

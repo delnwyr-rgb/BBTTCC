@@ -143,9 +143,39 @@
       return { x: Number(doc.x || 0) + local.x, y: Number(doc.y || 0) + local.y, bounds: obj?.bounds };
     } catch (_e) { return null; }
   }
+  // Bridges (owner ruling 2026-09-25): a crossing built by a faction is public infrastructure — everyone
+  // sees it, whatever the quest-marker setting. Colour-blind-safe: an intact bridge is a GOLD plank on a
+  // dark disc; a cut bridge is a GREY plank with a slash through it (shape carries the state, not hue).
+  function drawBridges() {
+    const isGM = !!game.user?.isGM;
+    for (const d of canvas.scene.drawings ?? []) {
+      const tf = d.flags?.[MOD]; const cr = tf?.crossing; if (!tf || !cr || typeof cr !== "object") continue;
+      const c = centerOf(d); if (!c) continue;
+      const cut = Number(cr.integrity ?? 1) <= 0;
+      const holder = game.actors.get(String(cr.factionId || ""))?.name || "unknown";
+      const size = Math.max(20, Math.min(36, Math.round((c.bounds?.height || 160) * 0.2)));
+      const g = new PIXI.Container(); g.eventMode = "static"; g.cursor = "pointer";
+      const col = cut ? 0x9aa7b8 : 0xffd54f;
+      const bg = new PIXI.Graphics(); bg.beginFill(0x0a1220, 0.9); bg.lineStyle(2.5, col, 0.95); bg.drawCircle(0, 0, size * 0.62); bg.endFill(); g.addChild(bg);
+      const plank = new PIXI.Graphics();
+      plank.lineStyle(Math.max(3, size * 0.16), col, 1); plank.moveTo(-size * 0.42, size * 0.08); plank.lineTo(size * 0.42, size * 0.08);      // the deck
+      plank.lineStyle(Math.max(2, size * 0.1), col, 1); plank.moveTo(-size * 0.42, size * 0.08); plank.quadraticCurveTo(0, -size * 0.5, size * 0.42, size * 0.08);   // the arch
+      plank.moveTo(-size * 0.22, size * 0.08); plank.lineTo(-size * 0.22, size * 0.32); plank.moveTo(size * 0.22, size * 0.08); plank.lineTo(size * 0.22, size * 0.32);  // piers
+      if (cut) { plank.lineStyle(Math.max(3, size * 0.14), 0xffffff, 1); plank.moveTo(-size * 0.45, size * 0.45); plank.lineTo(size * 0.45, -size * 0.45); }
+      g.addChild(plank);
+      const tip = `${String(tf.name || d.text || "hex")}: ${cut ? "bridge CUT" : "bridge"}${cr.name ? ` "${cr.name}"` : ""} — held by ${holder}${cut ? "" : `, toll ${Number(cr.toll ?? 5)} marks for the neutral`}`;
+      g.on("pointerover", () => { try { ui.notifications?.info?.(tip, { permanent: false, console: false }); } catch (_e) {} });
+      g.on("pointerdown", (ev) => { try { ev.stopPropagation?.(); const open = game.bbttcc?.api?.territory?.openHexSheet; if (open && isGM) open(d.uuid); else ui.notifications?.info?.(tip); } catch (_e) {} });
+      g.position.set(c.x - (c.bounds ? c.bounds.width * 0.28 : size), c.y + (c.bounds ? c.bounds.height * 0.28 : size));
+      _cont.addChild(g);
+    }
+  }
   function draw() {
     clear();
     if (!canvas?.ready || !canvas.scene) return;
+    const parent = canvas.drawings || canvas.stage;
+    _cont = new PIXI.Container(); _cont.eventMode = "passive"; _cont.zIndex = 9000; parent.addChild(_cont);
+    try { drawBridges(); } catch (e) { console.warn(TAG, "bridge markers failed", e); }
     const m = mode(); if (m === "off") return;
     const api = game.bbttcc?.api?.territory?.questMarkers; if (!api?.list) return;
     const isGM = !!game.user?.isGM;
@@ -153,8 +183,6 @@
     try { rows = api.list(canvas.scene) || []; } catch (e) { console.warn(TAG, "list failed", e); return; }
     if (!isGM) rows = rows.filter(r => r.anyHinted || (m === "all" && r.playerVisible));
     if (!rows.length) return;
-    const parent = canvas.drawings || canvas.stage;
-    _cont = new PIXI.Container(); _cont.eventMode = "passive"; _cont.zIndex = 9000; parent.addChild(_cont);
     for (const r of rows) {
       const c = centerOf(r.drawing); if (!c) continue;
       const g = new PIXI.Container(); g.eventMode = "static"; g.cursor = "pointer";
@@ -197,6 +225,6 @@
   Hooks.on("canvasReady", schedule);
   Hooks.on("canvasTearDown", clear);
   for (const h of ["createDrawing", "updateDrawing", "deleteDrawing"]) Hooks.on(h, (doc) => { if (doc?.flags?.[MOD] || doc?.parent?.id === canvas?.scene?.id) schedule(); });
-  for (const h of ["bbttcc:story:changed", "bbttcc:survey:word", "bbttcc:hex:visited", "bbttcc-campaign:storyUpdated", "bbttcc:questMarkers:refresh", "bbttcc:beat:resolved"]) Hooks.on(h, schedule);
+  for (const h of ["bbttcc:story:changed", "bbttcc:survey:word", "bbttcc:hex:visited", "bbttcc-campaign:storyUpdated", "bbttcc:questMarkers:refresh", "bbttcc:beat:resolved", "bbttcc:crossing:changed"]) Hooks.on(h, schedule);
   Hooks.on("updateSetting", (s) => { if (String(s?.key || "").endsWith(`${MOD}.${S_MARKERS}`)) schedule(); });
 })();

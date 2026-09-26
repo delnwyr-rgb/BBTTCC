@@ -154,6 +154,9 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
     mass_mobilization_std: "Call up the militia: your next raid gains initiative advantage and one free maneuver.",
     repair_fortifications: "Mend the walls: the hex's primary facility recovers one damage step.",
     repair_rig: "Field repairs on one of your rigs (pick the rig): recovers one damage step.",
+    build_bridge: "Bridge a river, lake or strait hex next to your holdings: you and your allies cross free, the neutral pay a toll (5 marks, yours), the hostile are turned back. A strategic point — it can be cut.",
+    cut_bridge: "Cut a bridge (anyone's, even your own): nobody crosses there until its builder rebuilds it.",
+    charter_passage: "Charter another faction's boats, flyers or subs (pick their rig): their domains carry you for 3 turns; the carrier is paid. Needs them at neutral or better with you.",
 
     // Siege clash activities (bbttcc-raid siege-counter-activities)
     bombard: "Siege, attacker: batter the current wall layer — rolled structure damage; a breached layer opens the next.",
@@ -880,7 +883,17 @@ Hooks.once("init",()=>{
     return parts.join("   ");
   }
 
-  const isRigActivity = (activityKey) => String(activityKey||"").toLowerCase() === "repair_rig";
+  // Rig-target rows: repair_rig picks one of YOUR raid rigs; charter_passage (2026-09-25) picks ANOTHER
+  // faction's travel rig Actor (type "rig", mobile, with a non-land domain) — the boat you are chartering.
+  const RIG_TARGET_ACTIVITIES = new Set(["repair_rig", "charter_passage"]);
+  const isRigActivity = (activityKey) => RIG_TARGET_ACTIVITIES.has(String(activityKey||"").toLowerCase());
+  const isCharterActivity = (activityKey) => String(activityKey||"").toLowerCase() === "charter_passage";
+  function listFactionTravelRigs(factionActor){
+    const fid = String(factionActor?.id || ""); if (!fid) return [];
+    const dom = game.bbttcc?.api?.travel?.domains;
+    const rigs = dom?.factionRigs ? dom.factionRigs(fid) : [];
+    return rigs.map(r => ({ rigId: r.id, name: r.name, domains: (dom?.rigDomains ? dom.rigDomains(r) : ["land"]) })).filter(r => r.domains.some(d => d !== "land"));
+  }
 
 
 function inferPackageGroup(activityOrKey){
@@ -920,6 +933,7 @@ function inferPackageGroup(activityOrKey){
     "fortify_hex": { groupKey:"hold_defend", groupLabel:"Hold & Defend", groupOrder: 1 },
     "border_patrol": { groupKey:"hold_defend", groupLabel:"Hold & Defend", groupOrder: 2 },
     "muster_drill": { groupKey:"hold_defend", groupLabel:"Hold & Defend", groupOrder: 4 },
+    "cut_bridge": { groupKey:"hold_defend", groupLabel:"Hold & Defend", groupOrder: 5 },
     "patrol_routes": { groupKey:"hold_defend", groupLabel:"Hold & Defend", groupOrder: 3 },
 
     // Wilderness Development
@@ -929,6 +943,8 @@ function inferPackageGroup(activityOrKey){
     "develop_outpost_stability": { groupKey:"wilderness_dev", groupLabel:"Wilderness Development", groupOrder: 3 },
     "upgrade_outpost_settlement": { groupKey:"wilderness_dev", groupLabel:"Wilderness Development", groupOrder: 4 },
     "upgrade_outpost": { groupKey:"wilderness_dev", groupLabel:"Wilderness Development", groupOrder: 4 },
+    "build_bridge": { groupKey:"wilderness_dev", groupLabel:"Wilderness Development", groupOrder: 6 },
+    "charter_passage": { groupKey:"wilderness_dev", groupLabel:"Wilderness Development", groupOrder: 7 },
     "found_farm": { groupKey:"wilderness_dev", groupLabel:"Wilderness Development", groupOrder: 5 }
   };
 
@@ -1587,12 +1603,13 @@ if ((this._lockedFactionId || this._lockFaction) && !game.user.isGM) {
         while (rigSel.firstChild) rigSel.removeChild(rigSel.firstChild);
 
         const fac = game.actors.get(facId);
-        const rigs = listFactionRigs(fac);
+        const charter = isCharterActivity(this._plannerState.selectedKey);
+        const rigs = charter ? listFactionTravelRigs(fac) : listFactionRigs(fac);
 
         if (!rigs.length) {
           const opt = document.createElement("option");
           opt.value = "";
-          opt.textContent = "(no rigs)";
+          opt.textContent = charter ? "(no boats, flyers or subs)" : "(no rigs)";
           rigSel.appendChild(opt);
           this._plannerState.rigId = "";
           return;
@@ -1601,7 +1618,7 @@ if ((this._lockedFactionId || this._lockFaction) && !game.user.isGM) {
         for (const r of rigs) {
           const opt = document.createElement("option");
           opt.value = r.rigId;
-          opt.textContent = rigLabel(r);
+          opt.textContent = charter ? `${r.name} — ${r.domains.filter(d => d !== "land").join(", ")}` : rigLabel(r);
           rigSel.appendChild(opt);
         }
 
@@ -2114,8 +2131,17 @@ wrap.appendChild(top);
                 return;
               }
               const def = game.actors.get(defenderId);
-              const rig = listFactionRigs(def).find(r => String(r.rigId) === String(rigId));
+              const rigActor = isCharterActivity(activityKey) ? game.actors.get(rigId) : null;
+              const rig = rigActor ? { rigId, name: rigActor.name } : listFactionRigs(def).find(r => String(r.rigId) === String(rigId));
               const targetName = `${def?.name || "Faction"}: ${rig?.name || rigId}`;
+              // Plan-time refusal for rig rows (2026-09-25): same contract as the hex branch, no OP on a refusal.
+              try {
+                const effR = game.bbttcc?.api?.raid?.EFFECTS?.[String(activityKey)];
+                if (effR && typeof effR.canPlan === "function") {
+                  const verdict = await effR.canPlan({ actor: game.actors.get(attackerId), targetType: "rig", defender: def, rigId, rigActor, activityKey: String(activityKey) });
+                  if (verdict && verdict.ok === false) { ui.notifications?.warn?.(verdict.reason || "That cannot be planned."); return; }
+                }
+              } catch (eCanR) { console.warn("[bbttcc-raid-planner] rig canPlan check failed (fail-open)", eCanR); }
 
               await game.bbttcc.api.raid.planActivity({
                 attackerId,

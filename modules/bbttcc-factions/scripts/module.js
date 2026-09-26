@@ -493,6 +493,9 @@ const _BBTTCC_STANDARD_START_MANEUVERS = [
   "opt_infernal_bargain",
   "courtly_whispered_aside"
 ];
+// Rows added to the standard package after worlds were already seeded — granted by the top-up in
+// _bbttccEnsureBaselineDoctrine at ready. Keep this list to what is safe to hand every standard faction.
+const _BBTTCC_STANDARD_TOPUP_STRATEGICS = ["build_bridge", "cut_bridge", "charter_passage"];   // crossings, 2026-09-25
 const _BBTTCC_STANDARD_START_STRATEGICS = [
   "harvest_season",
   "sell_surplus",
@@ -501,6 +504,9 @@ const _BBTTCC_STANDARD_START_STRATEGICS = [
   "establish_outpost",
   "establish_supply_line",
   "establish_trade_route",
+  "build_bridge",        // crossings (owner ruling 2026-09-25)
+  "cut_bridge",
+  "charter_passage",
   "found_site_farm",
   "found_site_fortress",
   "found_site_mine",
@@ -519,7 +525,17 @@ async function _bbttccEnsureBaselineDoctrine(actor){
     if (!a || !isFactionActor(a)) return false;
 
     const seedMeta = a.getFlag?.(MODULE_ID, "doctrineSeedMeta") || {};
-    if (seedMeta?.inProgress || seedMeta?.applied) return false;
+    if (seedMeta?.inProgress) return false;
+    if (seedMeta?.applied) {
+      // Dated TOP-UPS (2026-09-25): rows added to the standard package after a faction was seeded are
+      // granted once, silently, so a running world gets them without re-seeding (Errata, Sweet Release).
+      if (String(seedMeta.packageKey || "standard") !== "standard") return false;
+      if (!game.user?.isGM) return false;   // the ready loop hits every client; only the GM writes
+      const have = _bbttccOwnedDoctrineKeys(a, "strategic");
+      let n = 0;
+      for (const k of _BBTTCC_STANDARD_TOPUP_STRATEGICS) { if (have.has(k)) continue; try { await _bbttccGrantDoctrineEmbeddedItem(a, { kind:"strategic", key:String(k), silent:true }); n++; } catch(_e){} }
+      return n > 0;
+    }
 
     const hasAny =
       (_bbttccListDoctrineItems(a, "maneuver").length > 0) ||
@@ -4429,8 +4445,51 @@ factionApi.applyStartingPackage ??= (async ({
     }
   } catch (e) { console.warn("[bbttcc-factions] starter-rig grant failed (non-fatal):", e); }
 
+  // Starter CHARTER (owner ruling 2026-09-25): the Jackalopes dropped the party off and left their
+  // boat docked at Bedlam Plains — three turns of pre-paid rental on "The Absolutely Reliable"
+  // (Furrier's Fixit Farm's water-surface rig). After that: Charter Passage to renew, a trade route
+  // with the Farm, a bridge, or a boat of your own. Standard package only; idempotent via flag.
+  try {
+    const ch = game.bbttcc?.api?.travel?.charters;
+    if (String(pkg.key || packageKey) !== "standard") { /* other packages bring their own rides */ }
+    else if (a.getFlag?.(MODULE_ID, "starterCharterGranted")) console.log(`[bbttcc-factions] starter charter skipped for ${a.name} — already granted.`);
+    else if (!ch?.grant) console.warn("[bbttcc-factions] starter charter SKIPPED — api.travel.charters unavailable (is bbttcc-travel loaded?).");
+    else {
+      const r = await _bbttccGrantStarterCharter(a, ch);
+      if (r?.ok) { await a.setFlag(MODULE_ID, "starterCharterGranted", true); console.log(`[bbttcc-factions] starter charter granted to ${a.name}:`, r.row); }
+      else console.warn(`[bbttcc-factions] starter charter for ${a.name} not granted — ${r?.error || "no carrier"}`);
+    }
+  } catch (e) { console.warn("[bbttcc-factions] starter charter failed (non-fatal):", e); }
+
   return { ok: true, actorId: a.id, packageKey: pkg.key, applied: patch };
 });
+
+// The Jackalopes' boat: Furrier's Fixit Farm by name, else any faction whose mobile rig has a water-surface
+// domain. Exported on the API so the grant-starter-charter macro and a from-the-top reset use the same rule.
+const STARTER_CHARTER = { carrierName: "Furrier's Fixit Farm", rigName: "The Absolutely Reliable", turns: 3, dock: "Bedlam Plains" };
+async function _bbttccGrantStarterCharter(a, ch) {
+  const norm = (s) => String(s || "").replace(/[\s\u00a0]+/g, " ").trim().toLowerCase();
+  const dom = game.bbttcc?.api?.travel?.domains;
+  let carrier = (game.actors?.contents ?? []).find(x => isFactionActor(x) && norm(x.name) === norm(STARTER_CHARTER.carrierName)) || null;
+  let rig = null;
+  const boatsOf = (fid) => (dom?.factionRigs ? dom.factionRigs(fid) : []).filter(r => (dom?.rigDomains ? dom.rigDomains(r) : []).includes("water-surface"));
+  if (carrier) rig = boatsOf(carrier.id).find(r => norm(r.name) === norm(STARTER_CHARTER.rigName)) || boatsOf(carrier.id)[0] || null;
+  if (!carrier || !rig) {
+    for (const f of (game.actors?.contents ?? [])) { if (!isFactionActor(f) || f.id === a.id) continue; const b = boatsOf(f.id); if (b.length) { carrier = f; rig = b[0]; break; } }
+  }
+  if (!carrier || !rig) return { ok: false, error: "no faction with a water-surface rig in this world" };
+  const r = await ch.grant(a.id, { fromFactionId: carrier.id, rigName: rig.name, domains: ["water-surface"], turns: STARTER_CHARTER.turns, source: "starter", note: `left docked at ${STARTER_CHARTER.dock} when the Jackalopes dropped you off — pre-paid` });
+  if (r?.ok) {
+    try {
+      const logs = Array.isArray(a.getFlag(MODULE_ID, "warLogs")) ? deepClone(a.getFlag(MODULE_ID, "warLogs")) : [];
+      logs.push({ ts: Date.now(), date: new Date().toLocaleString(), type: "commit", summary: `The Jackalopes left ${rig.name} docked at ${STARTER_CHARTER.dock} — ${STARTER_CHARTER.turns} turns of rental pre-paid (through turn ${r.row.until}). After that: renew (Charter Passage), trade with ${carrier.name}, bridge, or buy your own.` });
+      await a.update({ [`flags.${MODULE_ID}.warLogs`]: logs });
+    } catch (_e) {}
+  }
+  return r;
+}
+factionApi.grantStarterCharter ??= (actorOrId) => { const a = resolveFactionActor(actorOrId) || actorOrId; const ch = game.bbttcc?.api?.travel?.charters; if (!a || !ch?.grant) return Promise.resolve({ ok: false, error: "faction or charter API missing" }); return _bbttccGrantStarterCharter(a, ch); };
+factionApi.STARTER_CHARTER = STARTER_CHARTER;
 
 
 

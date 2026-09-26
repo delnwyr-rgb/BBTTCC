@@ -222,29 +222,165 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
     });
   }
 
+  // ── CHARTERS (owner ruling 2026-09-25, "getting help from folks who already have the resources") ──
+  // A faction may travel on ANOTHER faction's rigs under a charter: flags.bbttcc-factions.charters =
+  // [{ fromFactionId, rigName?, domains:[...], since, until|null, source }]. `until` is a world turn
+  // (inclusive); null = standing. Charters come from the Charter Passage strategic activity, from a
+  // beat (worldEffects.charter — the Jackalope favour), or IMPLICITLY from a trade route: while a
+  // stored trade edge links a hex you hold to a hex another faction holds, their boats carry your
+  // goods and your people (Trade Route auto-cover).
+  const CHARTER_FLAG_NS = "bbttcc-factions";
+  function _worldTurn() { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch (_e) { return 0; } }
+  function _factionActor(idOrActor) {
+    if (!idOrActor) return null;
+    if (idOrActor instanceof Actor) return idOrActor;
+    return game.actors.get(String(idOrActor).replace(/^Actor\./, "")) || null;
+  }
+  function charterList(factionId, { activeOnly = true } = {}) {
+    const A = _factionActor(factionId); if (!A) return [];
+    const raw = A.getFlag?.(CHARTER_FLAG_NS, "charters");
+    const rows = Array.isArray(raw) ? raw : [];
+    const t = _worldTurn();
+    return rows.filter(c => c && typeof c === "object" && (!activeOnly || c.until == null || Number(c.until) >= t));
+  }
+  // Trade Route auto-cover: the far end of every trade edge held by ANOTHER faction ⇒ that faction's rig domains.
+  function tradeRoutePartners(factionId) {
+    const fid = String(factionId || "").replace(/^Actor\./, ""); const out = new Set(); if (!fid) return out;
+    try {
+      for (const sc of game.scenes ?? []) for (const d of sc.drawings ?? []) {
+        const tf = d.flags?.[MOD_TERR]; if (!tf || String(tf.factionId || tf.ownerId || "").replace(/^Actor\./, "") !== fid) continue;
+        for (const r of (Array.isArray(tf.routes) ? tf.routes : [])) {
+          if (String(r?.kind || "trade") !== "trade") continue;
+          let far = null; try { far = fromUuidSync(String(r.hexUuid || "")); } catch (_e) {}
+          const o = String(far?.flags?.[MOD_TERR]?.factionId || far?.flags?.[MOD_TERR]?.ownerId || "").replace(/^Actor\./, "");
+          if (o && o !== fid) out.add(o);
+        }
+      }
+    } catch (_e) {}
+    return out;
+  }
+  // Every domain a faction can travel by charter, with who carries them: [{ domain, fromFactionId, via, rigName }]
+  function charteredDomains(factionId) {
+    const out = [];
+    for (const c of charterList(factionId)) for (const d of (Array.isArray(c.domains) ? c.domains : [])) out.push({ domain: String(d).toLowerCase(), fromFactionId: String(c.fromFactionId || ""), via: String(c.source || "charter"), rigName: c.rigName || "" });
+    for (const pid of tradeRoutePartners(factionId)) for (const rig of factionRigs(pid)) for (const d of rigDomains(rig)) if (d !== "land") out.push({ domain: d, fromFactionId: pid, via: "trade-route", rigName: rig.name });
+    return out;
+  }
+  async function charterGrant(factionId, { fromFactionId, domains = null, rigName = "", turns = null, until = null, source = "charter", note = "" } = {}) {
+    const A = _factionActor(factionId); const B = _factionActor(fromFactionId);
+    if (!A) return { ok: false, error: "faction not found" };
+    if (!B) return { ok: false, error: "carrier faction not found" };
+    let doms = Array.isArray(domains) && domains.length ? domains.map(d => String(d).toLowerCase()) : null;
+    if (!doms) { doms = []; for (const rig of factionRigs(B.id)) for (const d of rigDomains(rig)) if (d !== "land" && !doms.includes(d)) doms.push(d); }
+    if (!doms.length) return { ok: false, error: `${B.name} has no rig that goes anywhere a foot can't` };
+    const t = _worldTurn();
+    const row = { fromFactionId: String(B.id), rigName: String(rigName || ""), domains: doms, since: t, until: until != null ? Number(until) : (turns != null ? t + Number(turns) : null), source: String(source || "charter"), note: String(note || ""), ts: Date.now() };
+    const rows = charterList(A.id, { activeOnly: false }).filter(c => !(String(c.fromFactionId) === row.fromFactionId && String(c.source) === row.source));
+    rows.push(row);
+    await A.setFlag(CHARTER_FLAG_NS, "charters", rows);
+    try { Hooks.callAll("bbttcc:travel:charterChanged", { factionId: A.id, fromFactionId: B.id, row, action: "grant" }); } catch (_e) {}
+    return { ok: true, row };
+  }
+  async function charterRevoke(factionId, { fromFactionId = null, source = null } = {}) {
+    const A = _factionActor(factionId); if (!A) return { ok: false, error: "faction not found" };
+    const fid = fromFactionId ? String(fromFactionId).replace(/^Actor\./, "") : null;
+    const before = charterList(A.id, { activeOnly: false });
+    const rows = before.filter(c => !((fid == null || String(c.fromFactionId) === fid) && (source == null || String(c.source) === String(source))));
+    await A.setFlag(CHARTER_FLAG_NS, "charters", rows);
+    try { Hooks.callAll("bbttcc:travel:charterChanged", { factionId: A.id, fromFactionId: fid, action: "revoke", removed: before.length - rows.length }); } catch (_e) {}
+    return { ok: true, removed: before.length - rows.length };
+  }
+
+  // Rental clock (owner ruling 2026-09-25: "3 turns of pre-paid rental, then buy your own or renew"):
+  // after every applied Advance Turn the GM client writes one war-log line per faction whose charter
+  // is in its LAST turn, and one when it has just run out. Each note lands once (row.noted = turn).
+  Hooks.on("bbttcc:advanceTurn:end", async (ctx) => {
+    try {
+      if (ctx?.apply === false || !game.user?.isGM) return;
+      const t = _worldTurn();
+      for (const A of (game.actors?.contents ?? [])) {
+        if (!isFactionActor(A)) continue;
+        const rows = charterList(A.id, { activeOnly: false }); if (!rows.length) continue;
+        let changed = false; const lines = [];
+        for (const c of rows) {
+          if (c.until == null) continue;
+          const carrier = game.actors.get(String(c.fromFactionId))?.name || "the carrier"; const boat = c.rigName || `${carrier}'s boats`;
+          if (Number(c.until) === t && c.noted !== t) { lines.push(`Charter — ${boat} (${carrier}): this is the LAST turn of the rental. Renew it (Charter Passage), open a trade route with ${carrier}, or build your own.`); c.noted = t; changed = true; }
+          else if (Number(c.until) === t - 1 && c.noted !== t) { lines.push(`Charter ENDED — ${boat} went home to ${carrier}. Rivers are walls again until you charter, bridge, or buy.`); c.noted = t; changed = true; }
+        }
+        if (!changed) continue;
+        await A.setFlag(CHARTER_FLAG_NS, "charters", rows);
+        try { const logs = Array.isArray(A.getFlag(CHARTER_FLAG_NS, "warLogs")) ? foundry.utils.duplicate(A.getFlag(CHARTER_FLAG_NS, "warLogs")) : []; for (const summary of lines) { const ts = Date.now(); logs.push({ ts, date: new Date(ts).toLocaleString(), type: "travel", summary }); } await A.setFlag(CHARTER_FLAG_NS, "warLogs", logs); } catch (_e) {}
+      }
+    } catch (e) { console.warn(TAG, "charter rental clock failed", e); }
+  });
+
   // The union of domains a faction can field: always "land" (on-foot members)
-  // plus every domain across its mobile/hybrid rigs.
-  function factionTravelDomains(factionId) {
+  // plus every domain across its mobile/hybrid rigs, plus chartered domains.
+  function factionTravelDomains(factionId, { includeCharters = true } = {}) {
     const set = new Set(["land"]);
     for (const rig of factionRigs(factionId)) for (const d of rigDomains(rig)) set.add(d);
+    if (includeCharters) for (const c of charteredDomains(factionId)) set.add(c.domain);
     return set;
   }
 
+  // ── CROSSINGS (owner ruling 2026-09-25) ── a surface-water hex can be entered on foot when:
+  //   assumed : the hex is held by you or an ALLY and is Settled (integration ≥ 5) or a Port — a
+  //             town on a river has a ford, a ferry, a footbridge; nobody rows to their own market.
+  //   bridge  : flags.bbttcc-territory.crossing = { kind:"bridge", factionId, toll, integrity, … }
+  //             built by the Build Bridge activity. Free for the builder and allies; a TOLL (marks,
+  //             Economy) for everyone at neutral or better with the builder; closed to the hostile.
+  //             A CUT bridge (integrity 0) carries nobody until the builder rebuilds it.
+  // Returns null (no crossing) or { via:"assumed"|"bridge", ownerId, toll, tollTo, label }.
+  const ALLIED_TIER = 5, NEUTRAL_TIER = 3;
+  function _relTier(ownerId, factionId) {
+    try { const rel = game.bbttcc?.api?.factions?.relations; if (rel?.tier) return Number(rel.tier(ownerId, factionId)); } catch (_e) {}
+    return NEUTRAL_TIER;
+  }
+  function crossingFor(hexLike, factionId) {
+    try {
+      const doc = hexLike?.document ?? hexLike; const tf = doc?.flags?.[MOD_TERR] || {};
+      const fid = String(factionId || "").replace(/^Actor\./, ""); if (!fid) return null;
+      const ownerId = String(tf.factionId || tf.ownerId || "").replace(/^Actor\./, "");
+      const isSelf = !!ownerId && ownerId === fid;
+      const isAlly = !!ownerId && !isSelf && _relTier(ownerId, fid) >= ALLIED_TIER;
+      const integ = Number(tf.integration?.progress ?? tf.development?.stage ?? 0) || 0;
+      const isPort = String(tf.type || "").toLowerCase() === "port";
+      if ((isSelf || isAlly) && (integ >= 5 || isPort)) return { via: "assumed", ownerId, toll: 0, tollTo: null, label: isPort ? "the port's boats" : `${isSelf ? "your" : "an ally's"} settled crossing` };
+      const cr = tf.crossing; if (!cr || typeof cr !== "object" || String(cr.kind || "bridge") !== "bridge") return null;
+      if (Number(cr.integrity ?? 1) <= 0) return null;
+      const bid = String(cr.factionId || "").replace(/^Actor\./, "");
+      const builderName = game.actors.get(bid)?.name || "someone";
+      if (!bid || bid === fid || _relTier(bid, fid) >= ALLIED_TIER) return { via: "bridge", ownerId: bid, toll: 0, tollTo: null, label: bid === fid ? "your bridge" : `${builderName}'s bridge (allied — no toll)` };
+      if (_relTier(bid, fid) < NEUTRAL_TIER) return null;
+      const toll = Math.max(0, Math.round(Number(cr.toll ?? 5) || 0));
+      return { via: "bridge", ownerId: bid, toll, tollTo: toll > 0 ? bid : null, label: `${builderName}'s bridge (toll ${toll} marks)` };
+    } catch (_e) { return null; }
+  }
+
   // The gate check: can this faction enter a hex of this terrain spec?
-  // Returns { ok, medium, required, have, rigs } — ok:true when unrestricted
-  // (land) or the faction has at least one satisfying domain.
-  function canFactionEnterTerrain(factionId, spec) {
+  // Returns { ok, medium, required, have, rigs, crossing? } — ok:true when unrestricted
+  // (land), the faction has at least one satisfying domain (its own rigs or chartered ones),
+  // or — for surface water, when the destination hex is given — a crossing carries it.
+  function canFactionEnterTerrain(factionId, spec, hexDoc = null) {
     const required = requiredDomainsForTerrain(spec);
     const have = factionTravelDomains(factionId);
     if (!required) return { ok: true, medium: terrainMedium(spec), required: null, have: [...have] };
-    const ok = required.some(d => have.has(d));
+    let ok = required.some(d => have.has(d));
+    const depthBand = String(spec?.depthBand || "surface");
+    let crossing = null;
+    if (!ok && hexDoc && terrainMedium(spec) === "water" && depthBand === "surface") { crossing = crossingFor(hexDoc, factionId); ok = !!crossing; }
+    const ownRigs = ok ? factionRigs(factionId).filter(r => rigDomains(r).some(d => required.includes(d))).map(r => r.name) : [];
+    const chartered = ok && !ownRigs.length && !crossing ? charteredDomains(factionId).filter(c => required.includes(c.domain)) : [];
     return {
       ok,
       medium: terrainMedium(spec),
-      depthBand: String(spec?.depthBand || "surface"),
+      depthBand,
       required,
       have: [...have],
-      rigs: ok ? factionRigs(factionId).filter(r => rigDomains(r).some(d => required.includes(d))).map(r => r.name) : []
+      rigs: ownRigs,
+      chartered: chartered.map(c => ({ fromFactionId: c.fromFactionId, fromName: game.actors.get(c.fromFactionId)?.name || c.fromFactionId, via: c.via, rigName: c.rigName, domain: c.domain })),
+      crossing
     };
   }
 
@@ -924,18 +1060,24 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
       let gateOn = true;
       try { gateOn = game.settings.get(ENC_DIAL_NS, DOMAIN_GATE_KEY) !== false; } catch (_e) {}
       if (gateOn && opts.bypassDomainGate !== true) {
-        const gate = canFactionEnterTerrain(factionId, spec);
+        const gate = canFactionEnterTerrain(factionId, spec, to?.document ?? to);
         if (!gate.ok) {
           const domLabel = (k) => game.fourththing?.constants?.MOVEMENT_DOMAINS?.[k]?.label || k;
           const need = gate.required.map(domLabel).join(" or ");
           const mediumWord = gate.medium === "water"
             ? (gate.depthBand === "surface" ? "open water" : `the ${gate.depthBand}`)
             : gate.medium;
-          const msg = `${actor.name} can't cross into ${mediumWord} (${key}) — needs a rig with: ${need}. Build or bring one, or have the GM force passage.`;
+          const ways = (gate.medium === "water" && gate.depthBand === "surface")
+            ? " — or a bridge (Build Bridge), a Settled river hex or Port of yours or an ally's, or a charter on another faction's boats (Charter Passage, or a trade route to them)."
+            : ". Build or bring one, or have the GM force passage.";
+          const msg = `${actor.name} can't cross into ${mediumWord} (${key}) — needs a rig with: ${need}${ways}`;
           ui.notifications?.warn?.(msg);
           console.log(TAG, "Domain gate BLOCKED travel:", { factionId, terrain: key, ...gate });
           return { ok: false, blocked: true, reason: "domain-gate", terrainKey: key, gate, summary: msg };
         }
+        // Carried across: remember HOW, for the toll (below) and the war log.
+        if (gate.crossing) ctx.crossing = gate.crossing;
+        else if (gate.chartered?.length) ctx.charter = gate.chartered[0];
       }
     } catch (e) {
       console.warn(TAG, "domain gate check failed (non-fatal, allowing travel)", e);
@@ -1148,7 +1290,22 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     const b = to.center;
     drawTrail(a, b, getFactionColor(actor));
 
+    // Bridge toll (2026-09-25): the crossing's marks ride on this leg's Economy cost, then the
+    // bridge-holder is paid — a bridge is a strategic point, and the point is the toll.
+    if (ctx.crossing?.toll > 0 && ctx.crossing.tollTo) {
+      ctx.cost = ctx.cost || {};
+      ctx.cost.economy = Math.max(0, Math.round(Number(ctx.cost.economy || 0))) + Number(ctx.crossing.toll);
+    }
     const spend = await spendOP({ factionId, cost: ctx.cost });
+    if (spend && spend.ok !== false && ctx.crossing?.toll > 0 && ctx.crossing.tollTo) {
+      try {
+        const opApi = game.bbttcc?.api?.op;
+        if (opApi?.commit) await opApi.commit(ctx.crossing.tollTo, { economy: Number(ctx.crossing.toll) }, `bridge toll from ${actor.name}`);
+        const holder = game.actors.get(ctx.crossing.tollTo);
+        try { Hooks.callAll("bbttcc:travel:toll", { factionId, holderId: ctx.crossing.tollTo, toll: ctx.crossing.toll, hexUuid: to?.document?.uuid || to?.uuid }); } catch (_e) {}
+        console.log(TAG, "bridge toll paid", { from: actor.name, to: holder?.name, toll: ctx.crossing.toll });
+      } catch (eToll) { console.warn(TAG, "bridge toll credit failed (leg proceeds)", eToll); }
+    }
     if (spend && spend.ok === false) {
       // Insufficient OP: the leg never happens — no travel roll, no encounter,
       // no movement, no war log. Nothing was debited (op.commit refused).
@@ -2047,14 +2204,20 @@ function registerTravelAPI() {
     factionRigs,
     factionTravelDomains,
     canFactionEnterTerrain,
-    // Convenience: gate a faction against a terrain KEY (resolves the spec).
-    canEnterTerrainKey: (factionId, terrainKey) => {
+    // Convenience: gate a faction against a terrain KEY (resolves the spec). Pass the destination
+    // hex as the third argument to let a crossing (assumed / bridge) answer for surface water.
+    canEnterTerrainKey: (factionId, terrainKey, hexDoc = null) => {
       const spec = TERRAIN_TABLE[terrainKey] || TERRAIN_NORM[normalizeTerrainKey(terrainKey)] || null;
-      return canFactionEnterTerrain(factionId, spec || {});
+      return canFactionEnterTerrain(factionId, spec || {}, hexDoc);
     },
     factionSubDepth,
-    factionAirReach
+    factionAirReach,
+    crossingFor,
+    charteredDomains
   };
+  // Charters (2026-09-25): passage on another faction's rigs. See charterGrant() above for the row shape.
+  api.travel.charters = { list: charterList, grant: charterGrant, revoke: charterRevoke, partners: tradeRoutePartners, domains: charteredDomains };
+  api.travel.crossingFor = crossingFor;
 
   // Diving: surface-water hex ⇵ underwater scene (gated on a depth-rated sub).
   api.travel.dive    = diveFromHex;

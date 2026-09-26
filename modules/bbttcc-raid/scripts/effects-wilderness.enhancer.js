@@ -486,6 +486,122 @@
       });
     }
 
-    console.log(TAG, "Wilderness development effects installed:", Object.keys(SITE_TYPES), "+ districts");
+    // -----------------------------------------------------------------------
+    // 6) CROSSINGS (owner ruling 2026-09-25): Build Bridge · Cut the Bridge · Charter Passage
+    //    The Errata Society and Sweet Release could not GET to Odaroloc River.e — no boats. Three
+    //    doors: a bridge you build (a strategic point: free for you and allies, a toll for the
+    //    neutral, closed to the hostile, and cuttable), the assumed crossing (Settled river hex or
+    //    Port of yours/an ally's — lives in bbttcc-travel crossingFor), and a charter on another
+    //    faction's boats (this row; also worldEffects.charter, and trade-route auto-cover).
+    //    Costs are marks before the ×0.75 price policy.
+    // -----------------------------------------------------------------------
+    const BRIDGE_DEFAULT_TOLL = 5;      // marks Economy per crossing, paid to the holder
+    const CHARTER_TURNS = 3;            // a chartered boat carries you for this many world turns
+    const CHARTER_FEE_MARKS = 8;        // what the carrier is paid (Economy) — the charter's economy line after the multiplier
+    const worldTurn = () => { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch (_e) { return 0; } };
+    const relTier = (a, b) => { try { const rel = game.bbttcc?.api?.factions?.relations; return rel?.tier ? Number(rel.tier(a, b)) : 3; } catch (_e) { return 3; } };
+    const tfOwner = (tf) => String(tf?.factionId || tf?.ownerId || "").replace(/^Actor\./, "");
+    const hexName = (tf) => String(tf?.name || "the hex");
+    async function warLog(A, summary){
+      try { const logs = Array.isArray(A.getFlag(MOD_F, "warLogs")) ? foundry.utils.duplicate(A.getFlag(MOD_F, "warLogs")) : []; const ts = Date.now(); logs.push({ ts, date: new Date(ts).toLocaleString(), type: "strategic", summary }); await A.setFlag(MOD_F, "warLogs", logs); } catch (_e) {}
+    }
+    function isSurfaceWater(tf){
+      const key = String(tf?.terrain?.key || tf?.terrain || "").toLowerCase();
+      const spec = game.bbttcc?.api?.travel?.__terrain?.[key] || null;
+      if (spec) return String(spec.medium || "land") === "water" && String(spec.depthBand || "surface") === "surface";
+      return /river|lake|sea|ocean|bay|strait|water/.test(key);
+    }
+    const crossingOf = (tf) => (tf?.crossing && typeof tf.crossing === "object") ? tf.crossing : null;
+
+    EFFECTS.build_bridge = Object.assign({}, EFFECTS.build_bridge, {
+      kind: "strategic", band: "standard", label: "Build Bridge",
+      cost: EFFECTS.build_bridge?.cost || { economy: 20, logistics: 14 },
+      storyOnly: false,
+      async canPlan({ actor, targetDoc, targetFlags }){
+        const tf = targetFlags || targetDoc?.flags?.[MOD_T] || {};
+        if (!isSurfaceWater(tf)) return { ok:false, reason: `${hexName(tf)} is not open water — a bridge wants a river, a lake or a strait to cross.` };
+        const cr = crossingOf(tf);
+        if (cr && Number(cr.integrity ?? 1) > 0) { const who = game.actors.get(String(cr.factionId || ""))?.name || "someone"; return { ok:false, reason: `${hexName(tf)} is already bridged${String(cr.factionId) === String(actor?.id) ? " by you" : ` by ${who}`} — cross it, cut it, or pay the toll.` }; }
+        const o = tfOwner(tf);
+        if (o && o !== String(actor?.id) && relTier(o, actor?.id) < 2) return { ok:false, reason: `${hexName(tf)} is held by a faction hostile to you — the work gang would be shot at. Take the hex first.` };
+        return { ok:true };
+      },
+      async apply({ actor, entry }){
+        const A = actor; const doc = await getHexDocumentFromEntry(entry);
+        if (!doc) return "Target is not a valid hex Drawing/Tile.";
+        const f = copy(doc.flags?.[MOD_T] || {});
+        const prev = crossingOf(f);
+        const rebuilt = !!(prev && Number(prev.integrity ?? 1) <= 0 && String(prev.factionId) === String(A.id));
+        f.crossing = { kind: "bridge", factionId: String(A.id), builtTurn: worldTurn(), toll: Number(prev?.toll ?? BRIDGE_DEFAULT_TOLL), integrity: 1, name: String(entry?.note || prev?.name || "").trim().slice(0, 60), cutBy: null, cutTurn: null };
+        await doc.update({ [`flags.${MOD_T}.crossing`]: f.crossing });
+        try { Hooks.callAll("bbttcc:crossing:changed", { hexUuid: doc.uuid, hexName: hexName(f), factionId: A.id, action: rebuilt ? "rebuilt" : "built", crossing: f.crossing }); } catch (_e) {}
+        const msg = `${rebuilt ? "Bridge rebuilt" : "Bridge built"} at ${hexName(f)}${f.crossing.name ? ` ("${f.crossing.name}")` : ""}: free for you and your allies, ${f.crossing.toll} marks toll for the neutral, closed to the hostile. A strategic point — it can be cut.`;
+        await warLog(A, msg);
+        console.log(TAG, "build_bridge", { faction: A.name, hex: hexName(f), crossing: f.crossing });
+        return msg;
+      }
+    });
+
+    EFFECTS.cut_bridge = Object.assign({}, EFFECTS.cut_bridge, {
+      kind: "strategic", band: "standard", label: "Cut the Bridge",
+      cost: EFFECTS.cut_bridge?.cost || { violence: 10, intrigue: 10 },
+      storyOnly: false,
+      async canPlan({ targetDoc, targetFlags }){
+        const tf = targetFlags || targetDoc?.flags?.[MOD_T] || {};
+        const cr = crossingOf(tf);
+        if (!cr) return { ok:false, reason: `${hexName(tf)} has no bridge to cut.` };
+        if (Number(cr.integrity ?? 1) <= 0) return { ok:false, reason: `The bridge at ${hexName(tf)} is already down.` };
+        return { ok:true };
+      },
+      async apply({ actor, entry }){
+        const A = actor; const doc = await getHexDocumentFromEntry(entry);
+        if (!doc) return "Target is not a valid hex Drawing/Tile.";
+        const f = copy(doc.flags?.[MOD_T] || {}); const cr = crossingOf(f);
+        if (!cr || Number(cr.integrity ?? 1) <= 0) return `No standing bridge at ${hexName(f)} — nothing cut.`;
+        const next = Object.assign({}, cr, { integrity: 0, cutBy: String(A.id), cutTurn: worldTurn() });
+        await doc.update({ [`flags.${MOD_T}.crossing`]: next });
+        const holder = game.actors.get(String(cr.factionId || ""));
+        try { Hooks.callAll("bbttcc:crossing:changed", { hexUuid: doc.uuid, hexName: hexName(f), factionId: A.id, action: "cut", crossing: next }); } catch (_e) {}
+        const own = String(cr.factionId) === String(A.id);
+        const msg = own ? `You burned your own bridge at ${hexName(f)}. Nobody crosses there until you rebuild it.` : `The bridge at ${hexName(f)} is cut — ${holder?.name || "its holder"} crosses nothing there until they rebuild it (Build Bridge).`;
+        await warLog(A, msg);
+        if (holder && !own) await warLog(holder, `Your bridge at ${hexName(f)} was CUT${game.user?.isGM ? ` (by ${A.name})` : ""}. Plan Build Bridge there to restore it.`);
+        return msg;
+      }
+    });
+
+    // Charter Passage targets a RIG (the planner's rig chooser lists another faction's travel rigs
+    // with a non-land domain): entry = { targetType:"rig", defenderId: carrier faction, rigId: rig ACTOR id }.
+    EFFECTS.charter_passage = Object.assign({}, EFFECTS.charter_passage, {
+      kind: "strategic", band: "standard", label: "Charter Passage",
+      cost: EFFECTS.charter_passage?.cost || { diplomacy: 20, economy: 10 },
+      storyOnly: false, targetType: "rig",
+      async canPlan({ actor, defender, rigActor }){
+        if (!defender) return { ok:false, reason: "Pick the faction whose boats you are chartering." };
+        if (String(defender.id) === String(actor?.id)) return { ok:false, reason: "You cannot charter your own boats — you already own them." };
+        if (relTier(defender.id, actor?.id) < 3) return { ok:false, reason: `${defender.name} will not carry you — they rate you below neutral.` };
+        const doms = game.bbttcc?.api?.travel?.domains?.rigDomains?.(rigActor) || [];
+        if (!rigActor || !doms.some(d => d !== "land")) return { ok:false, reason: `${rigActor?.name || "That rig"} goes nowhere a foot can't — charter a boat, a flyer or a sub.` };
+        return { ok:true };
+      },
+      async apply({ actor, entry }){
+        const A = actor; const carrier = game.actors.get(String(entry?.defenderId || ""));
+        const rig = game.actors.get(String(entry?.rigId || ""));
+        const ch = game.bbttcc?.api?.travel?.charters;
+        if (!carrier) return "Charter refused — carrier faction not found.";
+        if (!ch?.grant) return "Charter refused — the travel charter API is not loaded.";
+        const doms = rig ? (game.bbttcc?.api?.travel?.domains?.rigDomains?.(rig) || []).filter(d => d !== "land") : null;
+        const r = await ch.grant(A.id, { fromFactionId: carrier.id, rigName: rig?.name || "", domains: doms && doms.length ? doms : null, turns: CHARTER_TURNS, source: "charter" });
+        if (!r?.ok) return `Charter refused — ${r?.error || "unknown"}.`;
+        try { const op = game.bbttcc?.api?.op; if (op?.commit) await op.commit(carrier.id, { economy: CHARTER_FEE_MARKS }, `charter fee from ${A.name}`); } catch (_e) {}
+        const msg = `Charter with ${carrier.name}: ${rig?.name || "their boats"} carry you (${r.row.domains.join(", ")}) through turn ${r.row.until}. ${carrier.name} pocket ${CHARTER_FEE_MARKS} marks.`;
+        await warLog(A, msg);
+        await warLog(carrier, `${A.name} chartered ${rig?.name || "your boats"} through turn ${r.row.until} — ${CHARTER_FEE_MARKS} marks Economy in.`);
+        console.log(TAG, "charter_passage", { faction: A.name, carrier: carrier.name, rig: rig?.name, row: r.row });
+        return msg;
+      }
+    });
+
+    console.log(TAG, "Wilderness development effects installed:", Object.keys(SITE_TYPES), "+ districts + crossings (build_bridge, cut_bridge, charter_passage)");
   });
 })();
