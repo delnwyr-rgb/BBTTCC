@@ -179,5 +179,373 @@
     "removeBeats": ["khezek_tor_camp_exterior"],
     "removeDoors": ["cookline"],
     "notes": ["The Seal, Level Four and the sink are underground — reached through the Lift Hall door, not a surface door. The Seal beats point at the Seal POV so the Quest Log lights the dome."]
+  },
+
+  "chuckle": {
+
+     "town": "Chuckle Creek",
+
+     "hexAliases": [
+
+        "chuckle creek",
+
+        "chuckle-creek",
+
+        "chucklecreek"
+
+     ],
+
+     "hubs": {
+
+        "main": {
+
+           "sceneName": "Scene.kF78G2bo6QfKkNTY",
+
+           "label": "Chuckle Creek",
+
+           "refWidth": 4800,
+
+           "refHeight": 4800
+
+        }
+
+     },
+
+     "townQuestFrom": [
+
+        "chuckle_arrival"
+
+     ],
+
+     "doors": [
+
+        {
+
+           "hub": "main",
+
+           "key": "diner",
+
+           "label": "Pearl's Diner",
+
+           "x": 1590,
+
+           "y": 3940,
+
+           "w": 610,
+
+           "h": 490,
+
+           "color": "#ffd54f",
+
+           "exterior": "chuckle_creek_diner_exterior_view_hexchrome_pov",
+
+           "interior": "chuckle_creek_diner_interior_view_hexchrome_pov",
+
+           "beatId": "chuckle_arrival"
+
+        },
+
+        {
+
+           "hub": "main",
+
+           "key": "grange",
+
+           "label": "The Grange Hall",
+
+           "x": 1110,
+
+           "y": 680,
+
+           "w": 1020,
+
+           "h": 1100,
+
+           "color": "#4fc3ff",
+
+           "exterior": "chuckle_creek_grange_hall_exterior_hexchrome_pov_v2",
+
+           "interior": "chuckle_creek_grange_hall_interior_hexchrome_pov",
+
+           "beatId": "chuckle_projector"
+
+        },
+
+        {
+
+           "hub": "main",
+
+           "key": "booth",
+
+           "label": "Marnie's Booth",
+
+           "x": 4000,
+
+           "y": 3760,
+
+           "w": 520,
+
+           "h": 700,
+
+           "color": "#ffffff",
+
+           "exterior": "chuckle_creek_marni_booth_exterior_hexchrome_pov",
+
+           "interior": "chuckle_creek_marnie_booth_view_hexchrome_pov",
+
+           "beatId": "chuckle_tape_shelf"
+
+        },
+
+        {
+
+           "hub": "main",
+
+           "key": "creek",
+
+           "label": "The Creek",
+
+           "x": 450,
+
+           "y": 2850,
+
+           "w": 1700,
+
+           "h": 850,
+
+           "color": "#7fd0ff",
+
+           "exterior": "chuckle_creek_creek_view_hexchrome_pov",
+
+           "beatId": "chuckle_creek_itself"
+
+        },
+
+        {
+
+           "hub": "main",
+
+           "key": "edge",
+
+           "label": "The Edge of Town",
+
+           "x": 1900,
+
+           "y": 0,
+
+           "w": 750,
+
+           "h": 700,
+
+           "color": "#c9a0ff",
+
+           "exterior": "chuckle_creek_seam_view_hexchrome_pov",
+
+           "beatId": "chuckle_rung_3"
+
+        },
+
+        {
+
+           "hub": "main",
+
+           "key": "plaque",
+
+           "label": "The Title Card",
+
+           "x": 2050,
+
+           "y": 1480,
+
+           "w": 300,
+
+           "h": 340,
+
+           "color": "#ffffff",
+
+           "exterior": "chuckle_creek_memorial_view_hexchrome_pov",
+
+           "beatId": "chuckle_rung_4"
+
+        }
+
+     ],
+
+     "cross": [],
+
+     "beatMap": [
+
+        [
+
+           "chuckle_arrival",
+
+           "@chuckle_creek_intro_view_hexchrome_pov",
+
+           ""
+
+        ],
+
+        [
+
+           "chuckle_pie",
+
+           "diner",
+
+           "interior"
+
+        ],
+
+        [
+
+           "chuckle_rung_1",
+
+           "diner",
+
+           "interior"
+
+        ],
+
+        [
+
+           "chuckle_rung_2",
+
+           "diner",
+
+           "interior"
+
+        ],
+
+        [
+
+           "chuckle_piano_kid",
+
+           "diner",
+
+           "exterior"
+
+        ],
+
+        [
+
+           "chuckle_hollis",
+
+           "diner",
+
+           "exterior"
+
+        ],
+
+        [
+
+           "chuckle_creek_itself",
+
+           "creek",
+
+           "exterior"
+
+        ],
+
+        [
+
+           "chuckle_rung_3",
+
+           "edge",
+
+           "exterior"
+
+        ],
+
+        [
+
+           "chuckle_rung_4",
+
+           "plaque",
+
+           "exterior"
+
+        ],
+
+        [
+
+           "chuckle_projector",
+
+           "grange",
+
+           "interior"
+
+        ],
+
+        [
+
+           "chuckle_tape_shelf",
+
+           "booth",
+
+           "interior"
+
+        ],
+
+        [
+
+           "chuckle_rental_slip",
+
+           "booth",
+
+           "interior"
+
+        ],
+
+        [
+
+           "chuckle_showrunner",
+
+           "booth",
+
+           "interior"
+
+        ],
+
+        [
+
+           "chuckle_credits",
+
+           "grange",
+
+           "interior"
+
+        ],
+
+        [
+
+           "chuckle_finale",
+
+           "grange",
+
+           "interior"
+
+        ],
+
+        [
+
+           "chuckle_new_episode",
+
+           "grange",
+
+           "interior"
+
+        ],
+
+        [
+
+           "chuckle_cancelled",
+
+           "grange",
+
+           "interior"
+
+        ]
+
+     ]
+
   }
 }
