@@ -195,7 +195,7 @@ export const QUEST_MAP = {
    "name": "Soft Landing",
    "act": 2,
    "keystone": false,
-   "hex": "Saltwake Reach a",
+   "hex": "Ynnermire.b",
    "registryId": "quest_soft_landing",
    "chapters": {}
   },
@@ -350,7 +350,7 @@ export const QUEST_MAP = {
    "name": "Gloomgill",
    "act": 6,
    "keystone": false,
-   "hex": "Odaroloc River.c",
+   "hex": "Lake Suspicious",
    "registryId": "quest_5obLcPkexYRVZqlg",
    "chapters": {}
   }
