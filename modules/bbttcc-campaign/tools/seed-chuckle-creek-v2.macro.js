@@ -179,7 +179,7 @@
 
   // ── 3. the story script (Layer 2 data) ─────────────────────────────────────
   const SCRIPT = {
-    quest: { name: "Chuckle Creek", act: 2, keystone: false, hex: "Chuckle Creek", registryId: Q, chapters: {} },
+    quest: { name: "Chuckle Creek", act: 2, keystone: false, hex: "Odaroloc River.e", registryId: Q, chapters: {} },   // the shipped placement: the town IS Odaroloc River.e (arrival beat hexName agrees)
     script: {
       giver: "nobody. A road that ends in a painted backdrop, and a woman who wants you to eat",
       description: "The sky is a painted backdrop and the sun has a face. A man takes an anvil to the skull, flattens to the thickness of a playing card, springs back, and tips his hat. Nothing here can hurt anyone, the pie is mostly steam and enthusiasm, and the creek actually chuckles. Everyone is in costume and nobody has mentioned it. Enjoy it. They have, since Halloween night, 2077.",
@@ -205,8 +205,11 @@
     }
   };
   const storyApi = game.bbttcc?.api?.campaign?.story?.data;
-  const have = storyApi?.get?.(campaignId)?.scripts?.[KEY];
-  const scriptChanged = JSON.stringify(have || null) !== JSON.stringify(SCRIPT.script);
+  const haveData = storyApi?.get?.(campaignId) || {};
+  const have = haveData.scripts?.[KEY];
+  const questChanged = JSON.stringify(haveData.quests?.[KEY] || null) !== JSON.stringify(SCRIPT.quest);
+  const scriptChanged = JSON.stringify(have || null) !== JSON.stringify(SCRIPT.script) || questChanged;
+  if (questChanged && have) say("✎ story quest def: hex → Odaroloc River.e (placeOf for every beat of the town)");
   if (scriptChanged) { changes++; say(`✦ story script chuckle_creek → campaign.story (${SCRIPT.script.steps.length} steps, ${SCRIPT.script.doors.length} doors)`); } else say("· ok story script (already)");
 
   // ── report / write ─────────────────────────────────────────────────────────
