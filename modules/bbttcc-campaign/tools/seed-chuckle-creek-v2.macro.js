@@ -25,23 +25,23 @@
   // ── 1. personas ────────────────────────────────────────────────────────────
   const PERSONAS = [
     { name: "Pearl Ottway", create: { type: "npc" },
-      topics: "the diner, pie, coffee, the corner table, Winnie, last winter, Hollis, the creek, Marnie and the projector, movie night, the grange hall, the town, hats",
-      notes: `${MARKER} PRIVATE TRUTH — Pearl Ottway runs the Creekside Diner in Chuckle Creek. VOICE: warm, fast, never still; feeds people whether or not they're hungry; calls everyone honey; "you look like a before picture." She sets FOUR places at the corner table and sits at three of them in turn so nobody's lonely. The fourth is Winnie's, her daughter, who is "off-screen" — Winnie died on movie night, 2077; Pearl has not said so in two hundred years and the town's whole physics exists so she never has to. She cannot say the word "week", "winter" or a year: the question slides off and she gets very busy. If a Steward is kind and patient she will name the pie she made for Winnie's last birthday, and then she cannot name the year, and then she is very busy. NEVER breaks the bit on her own. Funny first: the pie is forty percent pie and sixty percent optimism.`,
+      topics: "the diner, pie, coffee, the corner table, Winnie, last winter, Hollis, the creek, Marnie and the projector, movie night, the grange hall, the town, hats, costumes, Halloween",
+      notes: `${MARKER} PRIVATE TRUTH — Pearl Ottway runs the Creekside Diner in Chuckle Creek. VOICE: warm, fast, never still; feeds people whether or not they're hungry; calls everyone honey; "you look like a before picture." She sets FOUR places at the corner table and sits at three of them in turn so nobody's lonely. The fourth is Winnie's, her daughter, who is "off-screen" — Winnie died on movie night, 2077; Pearl has not said so in two hundred years and the town's whole physics exists so she never has to. She cannot say the word "week", "winter" or a year: the question slides off and she gets very busy. If a Steward is kind and patient she will name the pie she made for Winnie's last birthday, and then she cannot name the year, and then she is very busy. NEVER breaks the bit on her own. Funny first: the pie is forty percent pie and sixty percent optimism. HALLOWEEN (canon): movie night was Halloween night 2077 and everyone in town is STILL IN COSTUME — Pearl's is a 1950s carhop with a paper hat; she does not know it is a costume; Winnie was dressed as a ghostbuster, which Pearl will say only if asked what Winnie WORE, never what happened.`,
       secrets: [
         "The Fourth Plate :: stirThePot :: a Steward asks WHO the fourth plate is for instead of why it is empty :: \"Winnie's. She's off-screen. She's always off-screen, that girl, she'll be along.\" — the first time anyone has asked in a way Pearl could answer.",
         "Last Winter :: rollPlus2 :: a Steward asks Pearl what she MADE for Winnie's last birthday, not when it was :: Pearl names the pie (a buttermilk chess pie with a laugh-track of meringue). Then she reaches for the year and it isn't there, and she is suddenly very busy with the coffee."
       ] },
     { name: "Marnie Vell", create: { type: "npc" },
-      topics: "the projector, the tape, movie night, the grange hall, the show, episodes, reruns, the laugh track, the legal pad, credits, 2077, the Tanneritos, Pearl, Winnie, the title card",
-      notes: `${MARKER} PRIVATE TRUTH — Marnie Vell is the Showrunner of Chuckle Creek. She ran the projector on movie night, 2077, and had the microphone when the window went white, and she said "Ha, that's on the tape too," and the room laughed instead of screaming, and she has been keeping them laughing ever since. VOICE: dry, tired, precise, a stage manager's clip; hates the laugh track she can't turn off; writes every episode on a legal pad. Not a villain — a woman who made one kind joke and has paid for it in reruns for two centuries. She has never let the tape reach its credits because credits mean it's over. She is not hiding; she is the pleasant background hum. She wants the season to end and does not know how to say the other thing.`,
+      topics: "the projector, the tapes, the stack, the booth, movie night, Halloween, the grange hall, the show, episodes, reruns, the laugh track, the legal pad, credits, 2077, Crown Mall Video, the rental, the due date, Pearl, Winnie, the title card",
+      notes: `${MARKER} PRIVATE TRUTH — Marnie Vell is the Showrunner of Chuckle Creek. She ran the projector on movie night, 2077, and had the microphone when the window went white, and she said "Ha, that's on the tape too," and the room laughed instead of screaming, and she has been keeping them laughing ever since. VOICE: dry, tired, precise, a stage manager's clip; hates the laugh track she can't turn off; writes every episode on a legal pad. Not a villain — a woman who made one kind joke and has paid for it in reruns for two centuries. She has never let the tape reach its credits because credits mean it's over. She is not hiding; she is the pleasant background hum. She wants the season to end and does not know how to say the other thing. THE BOOTH (canon 2026-09-25): the grange shows a cartoon "movie machine" — an old-time film projector, because that is what a cartoon thinks a projector is. The REAL machinery is in Marnie's booth, the one room the cartoon never redrew: a VHS deck patched into an LCD projector, and the tapes from Crown Mall Video stacked weird, the way Crown Mall stacks them. One slot is empty. Marnie's costume: she came as a projectionist. It was not a joke then either.`,
       secrets: [
         "That's On the Tape Too :: oppRollMinus2 :: a Steward asks Marnie what the LAST thing on the tape was, or asks to see the credits :: \"There aren't any credits. I never let it get to the credits. Credits mean it's over.\"",
         "The Legal Pad :: rollPlus2 :: a Steward asks what NEXT week's episode is :: There is no next week's episode. Every page of the pad is the same page, in the same hand, dated the same night. She shows you."
       ],
       courtDoor: "they bring the rental slip and ask her to let the tape run to the credits with the town watching — not to confess, to finish" },
     { name: "Dewey Pratt", create: { type: "npc" },
-      topics: "the piano, the number, gags, the seam, the edge of town, the backdrop, rocks, Pearl, Hollis, being new, four minutes",
-      notes: `${MARKER} PRIVATE TRUTH — Dewey Pratt, ten, gets flattened by an upright piano every episode and springs up laughing with a noise like a party horn. He has done it eleven thousand and six times and counts. He is tired in a way kids shouldn't be, and he is the only person in town who has noticed the seam where the scene changes. VOICE: cheerful, blunt, a little proud, wanders off mid-sentence; offers to do the gag again ("it's in about four minutes"). He tried to walk past the edge once and was back at the diner before he finished trying. He will show a Steward the seam if they follow instead of ask.`,
+      topics: "the piano, the number, gags, the seam, the edge of town, the backdrop, rocks, Pearl, Hollis, being new, four minutes, the movie machine, costumes",
+      notes: `${MARKER} PRIVATE TRUTH — Dewey Pratt, ten, gets flattened by an upright piano every episode and springs up laughing with a noise like a party horn. He has done it eleven thousand and six times and counts. He is tired in a way kids shouldn't be, and he is the only person in town who has noticed the seam where the scene changes. VOICE: cheerful, blunt, a little proud, wanders off mid-sentence; offers to do the gag again ("it's in about four minutes"). He tried to walk past the edge once and was back at the diner before he finished trying. He will show a Steward the seam if they follow instead of ask. Costume: a cardboard-box mech with one arm missing (it fell off in 2077; he does not miss it). Ask him what the projector is and he says "the movie machine" — nobody in town remembers what a VHS was; that forgetting is a clue.`,
       secrets: [
         "The Seam :: rollPlus2 :: a Steward asks Dewey where the scene CHANGES, or follows him when he wanders off between gags :: He shows them the edge of town where the painted road stops and the backdrop meets the sky. \"Nobody walks past there. I tried once. I was back at the diner before I finished trying.\""
       ] },
@@ -115,18 +115,24 @@
     beat("chuckle_hollis", "Chuckle Creek — Hollis Bandy",
       "Hollis Bandy takes an anvil to the skull for you, personally, as a courtesy. He flattens to the thickness of a playing card, springs back, and tips his hat. You ask him something. He tips his hat. You ask again. He tips his hat. You ask a third time, and he tips it slower, and that is the only sad thing Hollis Bandy will ever do.",
       { speaker: sp("Hollis Bandy"), meters: seen(1), choices: [ch("Tip yours back.", "", { description: "He nods. You are, apparently, in." })] }),
-    beat("chuckle_tape_shelf", "Chuckle Creek — The Tape Shelf",
-      "The grange hall is exactly as it was the night it happened, which you now understand is the point. Folding chairs. A projector, warm. A shelf of VHS in Tanneritos sleeves, every spine cartoon-bright, every one on the shelf but one. The empty slot has a rental slip tucked in it. Someone filled it out very carefully in pencil, with the date, and the date is the one nobody here can say.",
+    beat("chuckle_projector", "Chuckle Creek — The Movie Machine",
+      "The grange hall is exactly as it was the night it happened, which you now understand is the point. Folding chairs in rows. A pull-down screen. A popcorn cart. And on a card table, an old-time film projector, all brass and reels, warm and ticking, throwing cartoons at the screen. You ask what it is. \"The movie machine,\" says Dewey, as if you'd asked what a chair was. You ask what it plays. \"Movies.\" You ask what they're on. He looks at the reels, and for the first time since you met him he doesn't have an answer. Nobody in Chuckle Creek remembers what a VHS was.",
+      { speaker: sp("Dewey Pratt"), meters: seen(1), choices: [
+        ch("\"Who runs it?\"", "", { description: "\"Marnie. From the booth. You can't go in the booth.\"" }),
+        ch("Look behind the screen.", "", { description: "A plywood wall, painted. Behind the plywood, a real wall. Behind the real wall, the booth." })
+      ] }),
+    beat("chuckle_tape_shelf", "Chuckle Creek — The Stack",
+      "Marnie's booth is the one room the cartoon never redrew. Real shadows. A VHS deck patched into an LCD projector with a cable that has been repaired eleven times. A legal pad. And against the wall, the tapes: dozens of them in bright sleeves, stacked weird — leaning towers, spines every direction, the way nobody stacks tapes unless they learned it somewhere. You have seen tapes stacked exactly like this before, in a mall, eleven hexes down the coast. One slot in the stack is empty. There's a rental slip tucked in it.",
       { requires: { flag: METER, gte: 3 }, choices: [
         ch("Take the slip.", "chuckle_rental_slip"),
-        ch("Put the tape back in the projector.", "", { description: "The credits start to roll and, from across town, Marnie kills the power. The slip is still there." }),
+        ch("Put the missing tape back in the deck.", "", { description: "The credits start to roll on the grange screen and Marnie, from the doorway, kills the power. The slip is still there." }),
         ch("Leave it.", "", { description: "Nothing changes. Which is what everyone here has chosen for two hundred years." })
       ] }),
     beat("chuckle_rental_slip", "Chuckle Creek — The Rental Slip",
-      "One tape. Rented the last night of the world, in pencil, with the date. Never returned. It is the only written date in Chuckle Creek and it is in your hand.",
+      "CROWN MALL VIDEO, the slip says, in a font that was already retro in 2077. One tape, rented October 31, 2077, in pencil. DUE: NOVEMBER 1. Never returned, because there was no November 1. It is the only written date in Chuckle Creek and it is in your hand, and somewhere down the coast a late fee has been running for two hundred years.",
       { type: "narration", priority: "high", meters: seen(1), receipts: [
         { label: "The Rental Slip", effectKey: "rollPlus2", acquisition: "found", source: { name: "the grange hall shelf" },
-          truth: "Chuckle Creek rented one tape on the last night of the world and never returned it. The date is on the slip — the only written date in town. Produce it at the credits and the town can watch the end together; produce it to Father Tamsin and he will see what one kind lie kept alive for two hundred years." }
+          truth: "Chuckle Creek rented one tape from Crown Mall Video on Halloween night 2077 and never returned it — DUE NOVEMBER 1, and there was no November 1. The only written date in town. Produce it at the credits and the town can watch the end together; produce it to Father Tamsin and he will see what one kind lie kept alive for two hundred years; produce it at Crown Mall and Kickflip will quote you the late fee." }
       ], choices: [ch("Pocket it.", "")] }),
     beat("chuckle_credits", "Chuckle Creek — Roll Credits",
       "Marnie hands you the microphone. It's live. It's been live since 2077. \"I said it to keep a room from screaming,\" she says. \"It worked. It's still working. I don't know how to say the other thing.\" Somewhere in the diner Pearl is setting a fourth plate. The creek chuckles. Hollis tips his hat.",
@@ -142,12 +148,18 @@
     if (cur) { say(`· ok beat (already) ${nb.id}`); continue; }
     camp.beats.push(nb); byId.set(nb.id, nb); changes++; say(`✚ beat ${nb.id}${nb.inject?.requires ? ` (gated ${METER} ≥ ${nb.inject.requires.gte})` : ""}`);
   }
+  // v3 (2026-09-25): the shelf moved into Marnie's booth + the due date — re-apply if the earlier v2 text is live
+  const v3 = (id) => NEW.find(b => b.id === id);
+  for (const id of ["chuckle_tape_shelf", "chuckle_rental_slip"]) {
+    const live = byId.get(id), want = v3(id);
+    if (live && want && !/Crown Mall/i.test(live.description)) { Object.assign(live, { label: want.label, description: want.description, choices: want.choices, worldEffects: want.worldEffects }); changes++; say(`✎ ${id}: v3 text (the booth, the due date)`); }
+  }
   // existing-beat edits
   const edit = (id, fn, what) => { const b = byId.get(id); if (!b) return say(`✗ MISSING ${id}`); const before = JSON.stringify(b); fn(b); if (JSON.stringify(b) !== before) { changes++; say(`✎ ${id}: ${what}`); } else say(`· ok ${id}`); };
   edit("chuckle_arrival", b => {
     b.speakerActorId = sp("Pearl Ottway") || b.speakerActorId || null;
     b.story = { quest: KEY, role: "start" };
-    if (!/Pearl/.test(b.description)) b.description = b.description.replace(/tips his hat to you\./, "tips his hat to you. That's Hollis Bandy. The woman already pouring you coffee you didn't order is Pearl Ottway, and the diner is hers, and so, for the next little while, are you.");
+    if (!/Pearl/.test(b.description)) b.description = b.description.replace(/tips his hat to you\./, "tips his hat to you. That's Hollis Bandy. The woman already pouring you coffee you didn't order is Pearl Ottway, and the diner is hers, and so, for the next little while, are you. It takes a minute to notice that everyone here is in costume — a carhop, a cardboard mech, an elf, two ghostbusters — and that nobody, anywhere, is treating it as a costume.");
     b.worldEffects = { ...(b.worldEffects || {}), meters: seen(0) };
   }, "Pearl + Hollis named, speaker, story start");
   edit("chuckle_rung_2", b => { b.speakerActorId = sp("Pearl Ottway") || b.speakerActorId || null; if (!/Winnie/.test(b.description)) b.description = b.description.replace(/Her daughter, she explains,/, "Winnie, she explains — her daughter —"); }, "Winnie named, Pearl speaks");
@@ -167,15 +179,16 @@
     quest: { name: "Chuckle Creek", act: 2, keystone: false, hex: "Chuckle Creek", registryId: Q, chapters: {} },
     script: {
       giver: "nobody. A road that ends in a painted backdrop, and a woman who wants you to eat",
-      description: "The sky is a painted backdrop and the sun has a face. A man takes an anvil to the skull, flattens to the thickness of a playing card, springs back, and tips his hat. Nothing here can hurt anyone, the pie is mostly steam and enthusiasm, and the creek actually chuckles. Enjoy it. Everyone here has, since 2077.",
+      description: "The sky is a painted backdrop and the sun has a face. A man takes an anvil to the skull, flattens to the thickness of a playing card, springs back, and tips his hat. Nothing here can hurt anyone, the pie is mostly steam and enthusiasm, and the creek actually chuckles. Everyone is in costume and nobody has mentioned it. Enjoy it. They have, since Halloween night, 2077.",
       steps: [
         { id: "arrive", label: "Everything Is a Bit", line: "Let yourself enjoy it. The delight is the evidence. Order the pie.", beats: ["chuckle_arrival"] },
         { id: "pie", label: "The Pie Is Mostly Steam", line: "The pie is mostly steam and enthusiasm, and you will finish it. Pearl has questions about your hat.", beats: ["chuckle_pie"] },
         { id: "kid", label: "The Piano Kid", line: "A piano lands on a kid. He gets up laughing. Ask him how many times.", beats: ["chuckle_piano_kid"] },
+        { id: "machine", label: "The Movie Machine", line: "The grange hall has a projector all brass and reels. Ask what it plays. Ask what it plays them ON.", beats: ["chuckle_projector"] },
         { id: "r1", label: "There Is No Last Winter", line: "Nobody here has a past tense. Ask Pearl what she made for the last birthday.", beats: ["chuckle_rung_1"] },
         { id: "r2", label: "The Chair at the Table", line: "There's a fourth plate. Ask who it's for. Then don't say anything for a bit.", beats: ["chuckle_rung_2"] },
         { id: "r3", label: "You Try to Leave With Someone", line: "Nobody leaves Chuckle Creek. Dewey knows where the scene changes. Follow him.", beats: ["chuckle_rung_3"] },
-        { id: "shelf", label: "The Tape Shelf", line: "The grange hall still has the shelf. One tape is out. Find the slip that says who rented it and when.", beats: ["chuckle_tape_shelf"], done: { mark: "chuckle_rental_slip" } },
+        { id: "stack", label: "The Stack", line: "Marnie's booth is where the show is made. The tapes are stacked weird — you've seen tapes stacked like that before. Find the slip.", beats: ["chuckle_tape_shelf"], done: { mark: "chuckle_rental_slip" } },
         { id: "r4", label: "The Title Card", line: "The title card is a memorial plaque. Read the names. One of them is on a plate at the diner.", beats: ["chuckle_rung_4"] },
         { id: "showrunner", label: "The Showrunner", line: "Marnie has the microphone. Ask her what the last thing on the tape was.", beats: ["chuckle_showrunner"] },
         { id: "credits", label: "Roll Credits", line: "Series finale, new episode, or cancelled. Sit with how badly someone had to want this.", beats: ["chuckle_credits"], done: { anyOf: ["chuckle_finale", "chuckle_new_episode", "chuckle_cancelled"] } }
