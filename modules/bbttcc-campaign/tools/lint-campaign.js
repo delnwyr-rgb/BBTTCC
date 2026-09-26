@@ -569,6 +569,7 @@ for (const b of beats) {
     for (const [to, via] of routeTargets(b)) {
       const t = byId.get(s(to)); if (!t) continue;
       const tp = phaseOf(t); if (tp == null || tp < 1 || tp >= from || t.inject?.evergreen === true) continue;
+      if (t.story?.quest && quests?.[t.story.quest]?.evergreen === true) continue;   // an evergreen QUEST never act-seals (2026-09-25)
       // phaseEntry = { belowPhase: N, to } redirects ONLY while storyPhase < N — safe when N ≤ target act + 1 (the target is never sealed when the redirect fires).
       if (/^phaseEntry/.test(String(via)) && isNum(b.phaseEntry?.belowPhase) && Number(b.phaseEntry.belowPhase) <= tp + 1) continue;
       down++;

@@ -59,6 +59,18 @@ function situation({ fired = [], phase = 2, buckets = {}, where = null, anchor =
 const q = (sit) => sit.byKey[Q];
 
 console.log("story-model scripts — fixture suite");
+// ── evergreen quests (2026-09-25): a grief town never act-seals; a plain act-2 quest still does ─────────
+test("evergreen: Chuckle Creek (act 2) is NOT act-sealed in Act 3; Allesh-Gilliam (act 2) is", () => {
+  const st = m.emptyState();
+  const cc = m.sealOfDecl({ id: "x", story: { quest: "chuckle_creek", role: "start" } }, st, 3);
+  assert.equal(cc.sealed, false);
+  const ag = m.sealOfDecl({ id: "y", story: { quest: "allesh_gilliam", role: "start" } }, st, 3);
+  assert.equal(ag.sealed, true); assert.equal(ag.kind, "act");
+  assert.equal(m.QUEST_MAP.quests.stillwater.evergreen, true); assert.equal(m.QUEST_MAP.quests.soft_landing.evergreen, true);
+  assert.equal(m.normalizeQuestDef("z", { name: "Z", act: 2, evergreen: true }).evergreen, true);
+  assert.equal("evergreen" in m.normalizeQuestDef("z", { name: "Z", act: 2 }), false);
+});
+
 // the real Acts 0–2 scripts register at load; the fixture swaps in its own for the two keys it uses and restores after
 const realQ = m.QUEST_SCRIPTS[Q], realH = m.QUEST_SCRIPTS[H];
 delete m.QUEST_SCRIPTS[H];   // the fixture's helper quest is UNSCRIPTED on purpose

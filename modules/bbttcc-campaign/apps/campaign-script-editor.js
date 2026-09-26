@@ -20,6 +20,7 @@ const TIPS = {
   act: "Act the quest belongs to (0–6). Its content seals when a later act opens; Arrival steps seal when their own act turns.",
   hex: "Home hex (a hex NAME on the world map). Beats without their own `where` play here; the NOW card says 'X is at <hex>'.",
   keystone: "Keystone quests carry the act — the Director lists them first.",
+  evergreen: "Evergreen quests never close with their act — a town, a place, an aside the party can reach in any later act. (They still seal once played through.)",
   giver: "Who hands the quest over — shows as 'From:' in the Quest Log.",
   description: "Player-facing summary — the paragraph under the quest's name in the Log. Write it in the world's voice.",
   steps: "Ordered steps. The first unfinished step whose gate is met is CURRENT; its Line is the Quest Log's 'Next:'. A step with a Group shares 'current' with every other unfinished step in that group (any order).",
@@ -80,7 +81,7 @@ export class BBTTCCCampaignScriptEditorApp extends Application {
   }
   _shape() {
     const q = this.state.quest, s = this.state.script;
-    q.name ??= ""; q.act ??= 1; q.keystone = !!q.keystone; q.hex ??= ""; q.registryId ??= ""; q.chapters ??= {};
+    q.name ??= ""; q.act ??= 1; q.keystone = !!q.keystone; q.evergreen = !!q.evergreen; q.hex ??= ""; q.registryId ??= ""; q.chapters ??= {};
     s.giver ??= ""; s.description ??= ""; s.steps = Array.isArray(s.steps) ? s.steps : []; s.doors = Array.isArray(s.doors) ? s.doors : [];
     s.after = Array.isArray(s.after) ? s.after : []; s.chapters ??= {};
     if (s.arrival) { s.arrival.act ??= 1; s.arrival.giver ??= ""; s.arrival.description ??= ""; s.arrival.steps = Array.isArray(s.arrival.steps) ? s.arrival.steps : []; }

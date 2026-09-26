@@ -179,7 +179,7 @@
 
   // ── 3. the story script (Layer 2 data) ─────────────────────────────────────
   const SCRIPT = {
-    quest: { name: "Chuckle Creek", act: 2, keystone: false, hex: "Odaroloc River.e", registryId: Q, chapters: {} },   // the shipped placement: the town IS Odaroloc River.e (arrival beat hexName agrees)
+    quest: { name: "Chuckle Creek", act: 2, keystone: false, evergreen: true, hex: "Odaroloc River.e", registryId: Q, chapters: {} },   // evergreen (2026-09-25): a grief town never closes with its act   // the shipped placement: the town IS Odaroloc River.e (arrival beat hexName agrees)
     script: {
       giver: "nobody. A road that ends in a painted backdrop, and a woman who wants you to eat",
       description: "The sky is a painted backdrop and the sun has a face. A man takes an anvil to the skull, flattens to the thickness of a playing card, springs back, and tips his hat. Nothing here can hurt anyone, the pie is mostly steam and enthusiasm, and the creek actually chuckles. Everyone is in costume and nobody has mentioned it. Enjoy it. They have, since Halloween night, 2077.",

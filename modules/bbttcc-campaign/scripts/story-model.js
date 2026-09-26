@@ -187,6 +187,7 @@ export const QUEST_MAP = {
    "name": "Chuckle Creek",
    "act": 2,
    "keystone": false,
+   "evergreen": true,
    "hex": "Odaroloc River.e",
    "registryId": "quest_chuckle_creek",
    "chapters": {}
@@ -195,6 +196,7 @@ export const QUEST_MAP = {
    "name": "Soft Landing",
    "act": 2,
    "keystone": false,
+   "evergreen": true,
    "hex": "Ynnermire.b",
    "registryId": "quest_soft_landing",
    "chapters": {}
@@ -203,6 +205,7 @@ export const QUEST_MAP = {
    "name": "Stillwater",
    "act": 2,
    "keystone": false,
+   "evergreen": true,
    "hex": "Odaroloc River.d",
    "registryId": "quest_stillwater",
    "chapters": {}
@@ -742,7 +745,7 @@ export function deriveSituation(ctx) {
     let state = (qrec?.closed || bucket === "completed" || bucket === "archived" || closerFired) ? "completed"
       : (qrec?.started || bucket === "active" || anyFired) ? "active"
       : mainStarts.some(b => invited.has(String(b.id))) ? "offered" : "dormant";
-    if (state === "dormant" && !def.keystone && def.act >= 1 && phase > def.act) state = "closed";
+    if (state === "dormant" && !def.keystone && !def.evergreen && def.act >= 1 && phase > def.act) state = "closed";
     // next — one ladder, in order of signal strength:
     //  (a) the anchor's own chapter, if it still has something · (b) routed from the anchor anywhere in
     //  the quest · (c) an open chapter with a next · (d) the quest's own body (main beats, closers last)
@@ -810,7 +813,7 @@ export function deriveSituation(ctx) {
     const firedCount = all.filter(b => fired.has(String(b.id))).length;
     stamp(next, def); for (const c of chapters) stamp(c.next, def);
     if (next && next.hereLine && next.here === true) next.line = next.hereLine;   // "go and see" when already there
-    quests.push({ key, name: def.name, act: def.act, keystone: !!def.keystone, hex: def.hex || "", registryId: reg, state, chapters, next, why, currentChapter: chapter, starts: mainStarts, closers: mainEnds, progress: { fired: firedCount, total: all.length }, beats: all, script });
+    quests.push({ key, name: def.name, act: def.act, keystone: !!def.keystone, evergreen: !!def.evergreen, hex: def.hex || "", registryId: reg, state, chapters, next, why, currentChapter: chapter, starts: mainStarts, closers: mainEnds, progress: { fired: firedCount, total: all.length }, beats: all, script });
   }
   const qByKey = Object.fromEntries(quests.map(q => [q.key, q]));
   // scripted HANDOFF steps (ride for Fixit → the crate comes from the Fixit Farm's chapter): the beat to run is the
@@ -1107,6 +1110,10 @@ export function sealOfDecl(beat, state, phase, { sealQuests = true, sealActs = t
   const def = QUEST_MAP.quests[d.quest];
   if (def.keystone) return { sealed: false };
   if (def.act === 0) return { sealed: false };
+  // EVERGREEN quests (owner ruling 2026-09-25, live-caught: Chuckle Creek is Act 2 content, the party reached it in Act 3
+  // and the arrival read "was never started and Act 2 is over"): a grief town is a PLACE — it never closes with an act.
+  // The quest-closed and chapter-ended seals below still apply once it has been played through.
+  const evergreen = def.evergreen === true;
   const st = state || emptyState();
   if (sealQuests && st.closed?.[d.quest]) {
     // THE SPINE SEALS, THE ASIDES STAY (2026-09-19, live-caught: Pike updating the map closed Allesh-Gilliam and sealed Etta's
@@ -1124,7 +1131,7 @@ export function sealOfDecl(beat, state, phase, { sealQuests = true, sealActs = t
     const ch = st.chapters?.[d.quest]?.[d.chapter];
     if (ch?.ending) return { sealed: true, kind: "chapter", why: `its chapter "${def.chapters?.[d.chapter]?.name || d.chapter}" has ended (${ch.ending.name})`, quest: d.quest, chapter: d.chapter };
   }
-  if (sealActs && !st.started?.[d.quest] && def.act >= 1 && Number(phase) > def.act) return { sealed: true, kind: "act", why: `"${def.name}" was never started and Act ${def.act} is over (the story is in Act ${phase})`, quest: d.quest, act: def.act, phase: Number(phase) };
+  if (sealActs && !evergreen && !st.started?.[d.quest] && def.act >= 1 && Number(phase) > def.act) return { sealed: true, kind: "act", why: `"${def.name}" was never started and Act ${def.act} is over (the story is in Act ${phase})`, quest: d.quest, act: def.act, phase: Number(phase) };
   return { sealed: false };
 }
 
@@ -1206,6 +1213,7 @@ export function normalizeQuestDef(key, q = {}) {
   return {
     name: String(q?.name || key), act: Number.isFinite(Number(q?.act)) ? Number(q.act) : 0,
     keystone: !!q?.keystone, hex: String(q?.hex || ""), registryId: String(q?.registryId || ""),
+    ...(q?.evergreen ? { evergreen: true } : {}),
     chapters
   };
 }
