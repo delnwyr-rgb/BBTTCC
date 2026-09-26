@@ -15,7 +15,7 @@
  * Backs up the campaigns setting before writing. F5 afterwards.
  */
 (async () => {
-  const DRY_RUN = true;                      // <-- set false to apply
+  const DRY_RUN = false;                      // <-- set false to apply
   const NS = "bbttcc-campaign", MAL = "bbttcc-mal-voice";
   const Q = "quest_chuckle_creek", KEY = "chuckle_creek", METER = "chucklecreekSeen";
   const MARKER = "[CHUCKLE-CREEK-V2-2026-09-22]";
@@ -79,9 +79,9 @@
   if (!byId.get("chuckle_arrival")) return ui.notifications.error("Run seed-chuckle-creek.macro.js (2026-08-18) first — the town has never been seeded.");
 
   const TAGS = "chuckle_creek grief_refusals story discovery";
-  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, meters = null, receipts = null, story = null, requires = null, timePoints = 0, priority = "background", memoryText = null, questEffects = null } = {}) => ({
+  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, meters = null, receipts = null, story = null, requires = null, timePoints = 0, priority = "background", memoryText = null, questEffects = null, outcomes = null } = {}) => ({
     id, label, type, timeScale: "scene", timePoints, questId: Q, tags: TAGS, politicalTags: "",
-    description, outcomes: { success: null, failure: null },
+    description, outcomes: outcomes || { success: null, failure: null },
     inject: { cooldownTurns: 0, repeatable: false, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit", ...(requires ? { requires } : {}) },
     actors: [], refs: {}, playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true,
     storyChain: KEY, priority,
@@ -97,7 +97,7 @@
   const NEW = [
     beat("chuckle_pie", "Chuckle Creek — The Pie Is Mostly Steam",
       "Pearl sets down a pie that is, on inspection, about forty percent pie. The rest is steam, arranged with real artistry, and a kind of aggressive optimism you can taste. \"Eat,\" she says. \"You look like a before picture.\" Hollis Bandy, at the counter, takes an anvil to the head from nowhere in particular, flattens, springs back, and tips his hat to you. Nobody looks up. The creek, outside, chuckles.",
-      { speaker: sp("Pearl Ottway"), meters: seen(1), choices: [
+      { speaker: sp("Pearl Ottway"), meters: seen(1), outcomes: { success: null, failure: "Pearl pats your hand. \"You'll get there, honey.\" More pie appears. It is, somehow, more steam than before." }, choices: [
         ch("\"This is the best pie I've had in weeks.\"", "", { checkStat: "presence", checkDC: 12, description: "Pearl warms — and says \"weeks? honey, what's a week.\"" }),
         ch("\"Where does the steam go?\"", "", { checkStat: "mind", checkDC: 12, description: "There are no crumbs on any plate in the diner. Not one." }),
         ch("Ask about the man with the anvil.", "", { description: "\"Hollis? Hollis is fine. Hollis is always fine.\"" })
@@ -131,7 +131,7 @@
     beat("chuckle_rental_slip", "Chuckle Creek — The Rental Slip",
       "CROWN MALL VIDEO, the slip says, in a font that was already retro in 2077. One tape, rented October 31, 2077, in pencil. DUE: NOVEMBER 1. Never returned, because there was no November 1. It is the only written date in Chuckle Creek and it is in your hand, and somewhere down the coast a late fee has been running for two hundred years.",
       { type: "narration", priority: "high", meters: seen(1), receipts: [
-        { label: "The Rental Slip", effectKey: "rollPlus2", acquisition: "found", source: { name: "the grange hall shelf" },
+        { label: "The Rental Slip", effectKey: "rollPlus2", acquisition: "earned", source: { name: "the stack in Marnie's booth" },
           truth: "Chuckle Creek rented one tape from Crown Mall Video on Halloween night 2077 and never returned it — DUE NOVEMBER 1, and there was no November 1. The only written date in town. Produce it at the credits and the town can watch the end together; produce it to Father Tamsin and he will see what one kind lie kept alive for two hundred years; produce it at Crown Mall and Kickflip will quote you the late fee." }
       ], choices: [ch("Pocket it.", "")] }),
     beat("chuckle_credits", "Chuckle Creek — Roll Credits",
@@ -154,6 +154,9 @@
     const live = byId.get(id), want = v3(id);
     if (live && want && !/Crown Mall/i.test(live.description)) { Object.assign(live, { label: want.label, description: want.description, choices: want.choices, worldEffects: want.worldEffects }); changes++; say(`✎ ${id}: v3 text (the booth, the due date)`); }
   }
+  // v3.1 (2026-09-25, lint E15/C05 on the seeded save): receipt acquisition must be earned|stolen; the pie's checks get a failure line
+  { const live = byId.get("chuckle_rental_slip"); const r = live?.worldEffects?.receipts?.[0]; if (r && r.acquisition === "found") { r.acquisition = "earned"; r.source = { name: "the stack in Marnie's booth" }; changes++; say("✎ chuckle_rental_slip: receipt acquisition found → earned"); } }
+  { const live = byId.get("chuckle_pie"); const want = NEW.find(b => b.id === "chuckle_pie"); if (live && want && !live.outcomes?.failure) { live.outcomes = want.outcomes; changes++; say("✎ chuckle_pie: failure outcome"); } }
   // existing-beat edits
   const edit = (id, fn, what) => { const b = byId.get(id); if (!b) return say(`✗ MISSING ${id}`); const before = JSON.stringify(b); fn(b); if (JSON.stringify(b) !== before) { changes++; say(`✎ ${id}: ${what}`); } else say(`· ok ${id}`); };
   edit("chuckle_arrival", b => {

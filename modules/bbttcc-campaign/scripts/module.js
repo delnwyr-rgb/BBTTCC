@@ -1626,6 +1626,8 @@ function _choiceCheckLabel(key) {
   const k = String(key || "").trim().toLowerCase();
   const map = {
     gm: "GM Adjudication",
+    // fourththing faculties (2026-09-25) — checkStat may name a faculty directly; the roll path already handles it
+    violence: "Violence", intrigue: "Intrigue", presence: "Presence", body: "Body", mind: "Mind", soul: "Soul",
 
     str: "Strength",
     dex: "Dexterity",
