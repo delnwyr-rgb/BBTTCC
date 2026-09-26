@@ -241,7 +241,9 @@
 
            "interior": "chuckle_creek_diner_interior_view_hexchrome_pov",
 
-           "beatId": "chuckle_arrival"
+           "beatId": "chuckle_diner_exterior",
+
+           "intro": "chuckle_pie"
 
         },
 
@@ -267,7 +269,9 @@
 
            "interior": "chuckle_creek_grange_hall_interior_view_hexchrome_pov",
 
-           "beatId": "chuckle_projector"
+           "beatId": "chuckle_grange_exterior",
+
+           "intro": "chuckle_projector"
 
         },
 
@@ -293,7 +297,9 @@
 
            "interior": "chuckle_creek_marnie_booth_view_hexchrome_pov",
 
-           "beatId": "chuckle_tape_shelf"
+           "beatId": "chuckle_booth_exterior",
+
+           "intro": "chuckle_tape_shelf"
 
         },
 
@@ -317,7 +323,9 @@
 
            "exterior": "chuckle_creek_creek_view_hexchrome_pov",
 
-           "beatId": "chuckle_creek_itself"
+           "beatId": "chuckle_creek_itself",
+
+           "direct": true
 
         },
 
@@ -341,7 +349,9 @@
 
            "exterior": "chuckle_creek_seam_view_hexchrome_pov",
 
-           "beatId": "chuckle_rung_3"
+           "beatId": "chuckle_rung_3",
+
+           "direct": true
 
         },
 
@@ -365,7 +375,9 @@
 
            "exterior": "chuckle_creek_memorial_view_hexchrome_pov",
 
-           "beatId": "chuckle_rung_4"
+           "beatId": "chuckle_rung_4",
+
+           "direct": true
 
         }
 
