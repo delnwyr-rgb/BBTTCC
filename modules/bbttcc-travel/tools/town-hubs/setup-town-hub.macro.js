@@ -44,7 +44,21 @@
 
   const changes = [], warns = [], todo = [...(C.notes || [])];
   const norm = (s) => String(s || "").replace(/[\s ]+/g, " ").trim().toLowerCase();
-  const sceneByName = (name) => { if (!name) return null; if (/^Scene\./.test(name)) return game.scenes.get(name.split(".").pop()) || null; return game.scenes.find(s => norm(s.name) === norm(name)) || null; };
+  // Scene lookup (2026-09-25): exact (normalized) first; then a DRIFT match that ignores the decorative
+  // parts of a HexChrome export name (view · hexchrome · pov · battlemap · a trailing v2/v3) and accepts a
+  // unique prefix either way — so "grange_hall_exterio_view_hexchrome_pov" (a typo'd import) still binds
+  // to the config's "grange_hall_exterior_hexchrome_pov_v2". Drift matches land in the change report.
+  const loose = (n) => norm(n).replace(/[^a-z0-9]+/g, "").replace(/(view|hexchrome|pov|battlemap)/g, "").replace(/v\d+$/, "");
+  const sceneByName = (name) => {
+    if (!name) return null;
+    if (/^Scene\./.test(name)) return game.scenes.get(name.split(".").pop()) || null;
+    const exact = game.scenes.find(s => norm(s.name) === norm(name)); if (exact) return exact;
+    const want = loose(name); if (!want) return null;
+    const cands = game.scenes.filter(s => { const have = loose(s.name); return have === want || (have.length >= 8 && want.length >= 8 && (have.startsWith(want) || want.startsWith(have))); });
+    if (cands.length === 1) { const note = `scene "${name}" matched by drift → "${cands[0].name}"`; if (!changes.includes(note)) changes.push(note); return cands[0]; }
+    if (cands.length > 1) { const note = `scene "${name}": ${cands.length} drift candidates — name one exactly: ${cands.map(c => c.name).join(" | ")}`; if (!warns.includes(note)) warns.push(note); }
+    return null;
+  };
   const liveScene = (ref) => { const r = String(ref || "").trim(); if (!r) return null; return game.scenes.get(r.split(".").pop()) || null; };
   const replaceable = (sc) => !sc || REPLACE_SCENE_NAMES.has(sc.name);
 
