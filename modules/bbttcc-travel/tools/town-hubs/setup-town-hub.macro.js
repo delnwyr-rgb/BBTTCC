@@ -48,13 +48,14 @@
   // parts of a HexChrome export name (view · hexchrome · pov · battlemap · a trailing v2/v3) and accepts a
   // unique prefix either way — so "grange_hall_exterio_view_hexchrome_pov" (a typo'd import) still binds
   // to the config's "grange_hall_exterior_hexchrome_pov_v2". Drift matches land in the change report.
-  const loose = (n) => norm(n).replace(/[^a-z0-9]+/g, "").replace(/(view|hexchrome|pov|battlemap)/g, "").replace(/v\d+$/, "");
+  const loose = (n) => norm(n).replace(/[^a-z0-9]+/g, "").replace(/(view|hexchrome|pov)/g, "").replace(/v\d+$/, "");
   const sceneByName = (name) => {
     if (!name) return null;
     if (/^Scene\./.test(name)) return game.scenes.get(name.split(".").pop()) || null;
     const exact = game.scenes.find(s => norm(s.name) === norm(name)); if (exact) return exact;
     const want = loose(name); if (!want) return null;
-    const cands = game.scenes.filter(s => { const have = loose(s.name); return have === want || (have.length >= 8 && want.length >= 8 && (have.startsWith(want) || want.startsWith(have))); });
+    // a prefix only counts when the shorter name is most of the longer one — "chucklecreek" must not match every town scene
+    const cands = game.scenes.filter(s => { const have = loose(s.name); if (have === want) return true; const [a, b] = have.length <= want.length ? [have, want] : [want, have]; return a.length >= 8 && b.startsWith(a) && a.length >= Math.ceil(b.length * 0.7); });
     if (cands.length === 1) { const note = `scene "${name}" matched by drift → "${cands[0].name}"`; if (!changes.includes(note)) changes.push(note); return cands[0]; }
     if (cands.length > 1) { const note = `scene "${name}": ${cands.length} drift candidates — name one exactly: ${cands.map(c => c.name).join(" | ")}`; if (!warns.includes(note)) warns.push(note); }
     return null;
