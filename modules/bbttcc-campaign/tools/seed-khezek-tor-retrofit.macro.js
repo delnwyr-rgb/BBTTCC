@@ -243,6 +243,8 @@
     for (const d of (SCRIPT.doors || [])) if (doorLine[d.id]) d.line = doorLine[d.id];
   }
   const haveData = storyApi?.get?.(campaignId) || {};
+  // keep `after` entries other seeders appended to the live data script (Maneuver Vault adds kt_pulled_files_filed) — re-runs must not drop them
+  if (SCRIPT && Array.isArray(haveData.scripts?.[KEY]?.after)) SCRIPT.after = Array.from(new Set([...(SCRIPT.after || []), ...haveData.scripts[KEY].after]));
   const questChanged = QUEST && JSON.stringify(haveData.quests?.[KEY] || null) !== JSON.stringify(QUEST);
   const scriptChanged = SCRIPT && (JSON.stringify(haveData.scripts?.[KEY] || null) !== JSON.stringify(SCRIPT) || questChanged);
   if (scriptChanged) { changes++; say(`✦ story script khezek_tor → campaign.story (${SCRIPT.steps.length} steps, chapters: ${Object.keys(QUEST.chapters).join("/")}, after +tape)`); } else if (SCRIPT) say("· ok story script (already)");

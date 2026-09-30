@@ -1348,6 +1348,11 @@
     "cross": [],
     "beatMap": [
       [
+        "soft_landing_castle_exterior",
+        "castle",
+        "exterior"
+      ],
+      [
         "soft_landing_arrival",
         "@soft_landing_arrival_hexchrome_pov",
         ""
@@ -1548,6 +1553,11 @@
     ],
     "cross": [],
     "beatMap": [
+      [
+        "stillwater_bandstand_exterior",
+        "bandstand",
+        "exterior"
+      ],
       [
         "stillwater_arrival",
         "@stillwater_arrival_hexchrome_pov",
