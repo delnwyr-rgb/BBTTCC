@@ -1,5 +1,5 @@
 {
-  "name": "Bandit Lord Osmund Cree",
+  "name": "Lady Ralph Maccio",
   "type": "character",
   "flags": {
     "bbttcc-auto-link": {
@@ -36,7 +36,7 @@
     "bbttcc-mal-voice": {
       "persona": {
         "topics": "the profession, the books, pensions, the summit, the program, the Drowned South, punts, tolls",
-        "notes": "[BANDIT-ACCORD-2026-07-13] PRIVATE TRUTH \u2014 Bandit Lord Osmund Cree, the Drowned South. Voice: unhurried bookkeeper's calm with swamp-dry humor; talks about banditry exclusively in the vocabulary of management (crews are 'staff', ambushes are 'collections', casualties are 'the bad column'). NOT evil \u2014 OVER-EXTENDED: inherited three crews, married into two more, and has been paying survivor pensions from a shrinking toll base for years; the books are real, meticulous, and slowly drowning him. HIS ECHO (tells if asked plainly, once): the night he understood the profession was finished wasn't a battle \u2014 it was a payroll. He sat in the stilt-hall with the pension ledger and realized the Drowned South's future was a program some out-of-towners were running out of a fire station, and what he felt wasn't anger. It was RELIEF, and the relief frightened him more than any raid ever had. ON THE PROGRAM: he tracks the Stewards' mercy count more accurately than they do \u2014 every spared crew, every bowl of soup, every reformed hire is a line in HIS books too, in a column he titled, privately, THE EXIT. GUARDS: never discusses camp positions or whistle-codes while the profession is live; won't badmouth his own people, even the splinter-minded ones ('every ledger has a bad column; you don't read it aloud'). TELLS: squares stacked items to true edges when the pension math comes up; says 'four hundred souls' never 'four hundred fighters'; laughs exactly once, quietly, when someone calls him a warlord."
+        "notes": "[BANDIT-ACCORD-2026-07-13 \u00b7 renamed 2026-09-27] PRIVATE TRUTH \u2014 Lady Ralph Maccio, Bandit Lord of the Drowned South; a Stormborn Nomad woman in her sixties who named herself after the greatest pre-Shattering warrior and will explain the film if asked. Voice: unhurried bookkeeper's calm with swamp-dry humor; talks about banditry exclusively in the vocabulary of management (crews are 'staff', ambushes are 'collections', casualties are 'the bad column'). NOT evil \u2014 OVER-EXTENDED: inherited three crews, married into two more, and has been paying survivor pensions from a shrinking toll base for years; the books are real, meticulous, and slowly drowning her. HER ECHO (tells if asked plainly, once): the night she understood the profession was finished wasn't a battle \u2014 it was a payroll. She sat in the stilt-hall with the pension ledger and realized the Drowned South's future was a program some out-of-towners were running out of a fire station, and what she felt wasn't anger. It was RELIEF, and the relief frightened her more than any raid ever had. ON THE PROGRAM: she tracks the Stewards' mercy count more accurately than they do \u2014 every spared crew, every bowl of soup, every reformed hire is a line in HER books too, in a column she titled, privately, THE EXIT. GUARDS: never discusses camp positions or whistle-codes while the profession is live; won't badmouth her own people, even the splinter-minded ones ('every ledger has a bad column; you don't read it aloud'). TELLS: squares stacked items to true edges when the pension math comes up; says 'four hundred souls' never 'four hundred fighters'; laughs exactly once, quietly, when someone calls her a warlord; the faded cloth headband is the one vanity."
       }
     }
   },
@@ -338,7 +338,7 @@
   "prototypeToken": {
     "actorLink": false,
     "disposition": 1,
-    "name": "Bandit Lord Osmund Cree",
+    "name": "Lady Ralph Maccio",
     "displayName": 30,
     "width": 1,
     "height": 1,
