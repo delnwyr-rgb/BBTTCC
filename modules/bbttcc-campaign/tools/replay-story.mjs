@@ -17,6 +17,8 @@ const MAX = Number((argv.find(a => a.startsWith("--max=")) || "--max=160").slice
 const raw = JSON.parse(fs.readFileSync(file, "utf8")); const j = raw.kind === "bbttcc-campaign-bundle" ? { settings: [{ ns: "bbttcc-campaign", key: "campaigns", value: { [raw.campaignId]: raw.campaign } }, { ns: "bbttcc-campaign", key: "activeCampaignId", value: raw.campaignId }], scenes: [] } : raw;
 const settings = j.settings || []; const get = (ns, k) => { const r = settings.find(s => s.ns === ns && s.key === k); let v = r?.value; if (typeof v === "string") { try { v = JSON.parse(v) } catch { } } return v; };
 const cid = get("bbttcc-campaign", "activeCampaignId"); const c = get("bbttcc-campaign", "campaigns")[cid];
+// Layer 2 story data (2026-09-27): the world plays campaign.story scripts/quests over the code ones — replay the same way the lint does
+try { if (c.story && typeof c.story === "object" && m.applyStoryData) { const r = m.applyStoryData(c.story); console.error(`note: story data applied — ${r.quests} quest(s), ${r.scripts} script(s) from campaign.story`); } } catch (e) { console.error("note: story data NOT applied — " + (e?.message || e)); }
 const byId = new Map(c.beats.map(b => [b.id, b]));
 // ── world state ──
 // start FROM the save's own state when it has one (a mid-game save replays forward, not from the top)

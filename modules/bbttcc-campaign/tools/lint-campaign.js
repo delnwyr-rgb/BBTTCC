@@ -40,7 +40,7 @@ const path = require("path");
 
 // ─── engine facts (keep in sync with module.js) ─────────────────────────────
 const OP_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
-const CHECK_STATS = new Set(["gm","str","dex","con","int","wis","cha","save.str","save.dex","save.con","save.int","save.wis","save.cha","acr","ani","arc","ath","dec","his","ins","itm","inv","med","nat","prc","prf","per","rel","slt","ste","sur"]);
+const CHECK_STATS = new Set(["gm","violence","intrigue","presence","body","mind","soul","str","dex","con","int","wis","cha","save.str","save.dex","save.con","save.int","save.wis","save.cha","acr","ani","arc","ath","dec","his","ins","itm","inv","med","nat","prc","prf","per","rel","slt","ste","sur"]);
 const GATE_FLAGS = {              // name → [min, max] sanity band (null = unbounded)
   storyPhase: [0, 6], wendigoRung: [0, 4], tikkunDividend: [0, 5], hexesClaimed: [0, null], turn: [0, null],
   banditMercy: [0, null], banditFear: [0, null],

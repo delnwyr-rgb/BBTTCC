@@ -97,11 +97,14 @@
   const NEW = [
     beat("chuckle_pie", "Chuckle Creek — The Pie Is Mostly Steam",
       "Pearl sets down a pie that is, on inspection, about forty percent pie. The rest is steam, arranged with real artistry, and a kind of aggressive optimism you can taste. \"Eat,\" she says. \"You look like a before picture.\" Hollis Bandy, at the counter, takes an anvil to the head from nowhere in particular, flattens, springs back, and tips his hat to you. Nobody looks up. The creek, outside, chuckles.",
-      { speaker: sp("Pearl Ottway"), meters: seen(1), outcomes: { success: null, failure: "Pearl pats your hand. \"You'll get there, honey.\" More pie appears. It is, somehow, more steam than before." }, choices: [
-        ch("\"This is the best pie I've had in weeks.\"", "", { checkStat: "presence", checkDC: 12, description: "Pearl warms — and says \"weeks? honey, what's a week.\"" }),
-        ch("\"Where does the steam go?\"", "", { checkStat: "mind", checkDC: 12, description: "There are no crumbs on any plate in the diner. Not one." }),
+      { speaker: sp("Pearl Ottway"), meters: seen(1), choices: [
+        ch("\"This is the best pie I've had in weeks.\"", "", { checkStat: "presence", checkDC: 12, failNext: "chuckle_pie_fail", description: "Pearl warms — and says \"weeks? honey, what's a week.\"" }),
+        ch("\"Where does the steam go?\"", "", { checkStat: "mind", checkDC: 12, failNext: "chuckle_pie_fail", description: "There are no crumbs on any plate in the diner. Not one." }),
         ch("Ask about the man with the anvil.", "", { description: "\"Hollis? Hollis is fine. Hollis is always fine.\"" })
       ] }),
+    beat("chuckle_pie_fail", "Chuckle Creek — More Pie",
+      "Pearl pats your hand. \"You'll get there, honey.\" More pie appears. It is, somehow, more steam than before.",
+      { type: "narration", speaker: sp("Pearl Ottway"), choices: [ch("Eat.", "", { description: "You do. It's mostly weather." })] }),
     beat("chuckle_piano_kid", "Chuckle Creek — The Piano Kid",
       "A piano falls on a child. It's a full-size upright, and it lands with the sound a piano makes, and the boy under it is flat as a doormat for exactly one second before he inflates back up with a noise like a party horn and laughs so hard he has to sit down. \"Eleven thousand and six,\" he says, to nobody. Then, to you: \"You're new. Want to see it again? It's in about four minutes.\"",
       { speaker: sp("Dewey Pratt"), meters: seen(1), choices: [
@@ -156,7 +159,9 @@
   }
   // v3.1 (2026-09-25, lint E15/C05 on the seeded save): receipt acquisition must be earned|stolen; the pie's checks get a failure line
   { const live = byId.get("chuckle_rental_slip"); const r = live?.worldEffects?.receipts?.[0]; if (r && r.acquisition === "found") { r.acquisition = "earned"; r.source = { name: "the stack in Marnie's booth" }; changes++; say("✎ chuckle_rental_slip: receipt acquisition found → earned"); } }
-  { const live = byId.get("chuckle_pie"); const want = NEW.find(b => b.id === "chuckle_pie"); if (live && want && !live.outcomes?.failure) { live.outcomes = want.outcomes; changes++; say("✎ chuckle_pie: failure outcome"); } }
+  // v3.2 (2026-09-25, lint C05/G02 offline): outcomes.failure is a ROUTE (a beat id), not prose — the v3.1 text landed there and the fail
+  // path would warn "Beat not found". The pie's failed checks now route to chuckle_pie_fail (created above if missing).
+  { const live = byId.get("chuckle_pie"); if (live) { let n = 0; for (const c of live.choices || []) if (c.checkStat && !c.failNext) { c.failNext = "chuckle_pie_fail"; n++; } if (typeof live.outcomes?.failure === "string") { live.outcomes.failure = null; n++; } if (n) { changes++; say("✎ chuckle_pie: failed checks route to chuckle_pie_fail (v3.2)"); } } }
   // existing-beat edits
   const edit = (id, fn, what) => { const b = byId.get(id); if (!b) return say(`✗ MISSING ${id}`); const before = JSON.stringify(b); fn(b); if (JSON.stringify(b) !== before) { changes++; say(`✎ ${id}: ${what}`); } else say(`· ok ${id}`); };
   edit("chuckle_arrival", b => {

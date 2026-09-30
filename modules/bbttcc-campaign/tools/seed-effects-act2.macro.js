@@ -72,9 +72,9 @@
     hexMods("chuckle_finale", [{ remove: ["Noncanon"], hexName: "Odaroloc River.e" }]); setFaction("chuckle_finale", { m: -2, l: 2 });
     hexMods("chuckle_new_episode", [{ remove: ["Noncanon"], add: ["Managed Fiction"], hexName: "Odaroloc River.e" }]); setFaction("chuckle_new_episode", { m: 1 });
     hexMods("chuckle_cancelled", [{ remove: ["Noncanon"], hexName: "Odaroloc River.e" }]); setFaction("chuckle_cancelled", { m: -3, l: -2 });
-    hexMods("soft_landing_go_first", [{ remove: ["Cushioned"], hexName: "Saltwake Reach a" }]); setFaction("soft_landing_go_first", { m: -1, u: 2 });
-    timed("soft_landing_practice", [{ key: "cushioned_decay", label: "Cushioned (decaying)", op: "add", enabled: true, hexName: "Saltwake Reach a", durationTurns: 4, modifiers: ["Cushioned (decaying)"] }]); setFaction("soft_landing_practice", { m: 1 });
-    hexMods("soft_landing_harden", [{ remove: ["Cushioned"], hexName: "Saltwake Reach a" }]); setFaction("soft_landing_harden", { m: -3, l: -2 });
+    hexMods("soft_landing_go_first", [{ remove: ["Cushioned"], hexName: "Ynnermire.b" }]); setFaction("soft_landing_go_first", { m: -1, u: 2 });
+    timed("soft_landing_practice", [{ key: "cushioned_decay", label: "Cushioned (decaying)", op: "add", enabled: true, hexName: "Ynnermire.b", durationTurns: 4, modifiers: ["Cushioned (decaying)"] }]); setFaction("soft_landing_practice", { m: 1 });
+    hexMods("soft_landing_harden", [{ remove: ["Cushioned"], hexName: "Ynnermire.b" }]); setFaction("soft_landing_harden", { m: -3, l: -2 });
     hexMods("stillwater_ring_the_bell", [{ remove: ["Stasis"], hexName: "Odaroloc River.d" }]); setFaction("stillwater_ring_the_bell", { m: -1, u: 1, l: 2 });
     hexMods("stillwater_covenant", [{ add: ["Managed Yesod"], hexName: "Odaroloc River.d" }]); setFaction("stillwater_covenant", { op: { economy: 10 } });
     hexMods("stillwater_harvest", [{ remove: ["Stasis"], add: ["Harvested Yesod"], hexName: "Odaroloc River.d" }]); setFaction("stillwater_harvest", { d: 2, op: { economy: 40, faith: -10 } });
