@@ -849,8 +849,9 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     // (2026-08-20 playtest) meant "Death (0)" looked selected while the state
     // held null, and downstream filters (heritage-by-ancestry, doctrine-by-path)
     // saw nothing picked.
-    const effective = overrideName || suggestion?.name || "";
-    const isOverridden = !!overrideName;
+    // Doctrine goes through _effective so a pick from another Path reads as empty.
+    const effective = (category === "doctrine" ? this._effective("doctrine") : (overrideName || suggestion?.name)) || "";
+    const isOverridden = !!overrideName && overrideName === effective;
     const hint = note ? `<span class="bbttcc-twv2-row-note">${note}</span>` : "";
     const placeholder = effective ? "" : `<option value="" selected disabled>— choose —</option>`;
     const optionsHtml = placeholder + (ranked || []).map(r => {
@@ -1083,7 +1084,15 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
   }
 
   _effective(category) {
-    return this._overrides[category] || this._suggestion?.build?.[category]?.name || null;
+    const v = this._overrides[category] || this._suggestion?.build?.[category]?.name || null;
+    // A Doctrine only counts while it belongs to the effective Path. After a
+    // Path change the old pick/suggestion is UNPICKED (row shows "— choose —",
+    // Create stays blocked) instead of riding along onto the wrong class.
+    if (category === "doctrine" && v) {
+      const ranked = this._currentDoctrineRanking();
+      if (ranked.length && !ranked.some(r => r.name === v)) return null;
+    }
+    return v;
   }
 
   // --- Description pane (pack-data driven) ---
@@ -1345,6 +1354,9 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
           const val = sel.value;
           if (val === this._suggestion?.build?.[cat]?.name) delete this._overrides[cat];
           else this._overrides[cat] = val;
+          // Path changed → any doctrine override belonged to the old Path. Drop it;
+          // the suggested doctrine returns only if the suggested Path does.
+          if (cat === "path") delete this._overrides.doctrine;
           // Update focus to the changed thing
           this._focusedCategory = cat;
           this._focusedOptionName = val;
@@ -1673,6 +1685,10 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     if (aptitudePicks < 3) {
       ui.notifications?.warn(`Yesod aptitude picks incomplete — choose 3 (${aptitudePicks} chosen).`);
       this._scrollToFinalizeSection(root, "aptitudes");
+      return;
+    }
+    if (!this._effective("doctrine")) {
+      ui.notifications?.warn("Doctrine is required — pick one for the selected Path.");
       return;
     }
     const confirmed = this._buildConfirmedBuild();

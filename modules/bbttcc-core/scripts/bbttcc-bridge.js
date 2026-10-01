@@ -870,7 +870,7 @@ async function _clearBridgeDebtAndLocks(actor){
             var opKey    = root.find("select[name='b_opKey']").val();
             var spend    = num(root.find("input[name='b_spend']").val(), 10) / _mpo();   // dialog is MARKS
             var kind     = String(root.find("select[name='b_kind']").val() || "skill");
-            var key      = String(root.find("input[name='b_key']").val() || "").trim().toLowerCase();
+            var key      = String(root.find("[name='b_key']").val() || "").trim().toLowerCase();
             var mode     = String(root.find("select[name='b_mode']").val() || "flat");
             var dice     = String(root.find("input[name='b_dice']").val() || "1d6");
 

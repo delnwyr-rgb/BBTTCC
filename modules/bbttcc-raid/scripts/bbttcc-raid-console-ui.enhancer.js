@@ -96,7 +96,7 @@
     "post-commit": { lbl: "⏳ on outcome", bg: "rgba(58,46,14,0.35)", fg: "#ffd88c", brd: "rgba(108,84,24,0.55)", title: "Will fire automatically when the round outcome resolves." },
     "fired":       { lbl: "✓ fired",        bg: "rgba(64,64,64,0.45)", fg: "#cfcfcf", brd: "rgba(120,120,120,0.55)", title: "Already fired this round." }
   };
-  function fireRowHTML(fireMode, key, side, isFired) {
+  function fireRowHTML(fireMode, key, side, isFired, factionId = "") {
     const baseStyle = `display:inline-block;padding:1px .4em;border-radius:4px;font-size:.7em;font-weight:600;letter-spacing:.03em;vertical-align:middle;margin-left:.35rem;`;
     if (isFired) {
       const s = FM_FIRE_STYLES.fired;
@@ -104,7 +104,8 @@
     }
     const s = FM_FIRE_STYLES[fireMode] || FM_FIRE_STYLES.anytime;
     if (fireMode === "anytime") {
-      return `<button type="button" class="bbttcc-fm-fire" data-fire-maneuver="${key}" data-fire-side="${side}" title="${s.title}" style="${baseStyle}background:${s.bg};color:${s.fg};border:1px solid ${s.brd};cursor:pointer;">${s.lbl}</button>`;
+      const facAttr = factionId ? ` data-fire-faction-id="${factionId}"` : "";
+      return `<button type="button" class="bbttcc-fm-fire" data-fire-maneuver="${key}" data-fire-side="${side}"${facAttr} title="${s.title}" style="${baseStyle}background:${s.bg};color:${s.fg};border:1px solid ${s.brd};cursor:pointer;">${s.lbl}</button>`;
     }
     return `<span class="bbttcc-fm-fire" data-fm-pending="${fireMode}" title="${s.title}" style="${baseStyle}background:${s.bg};color:${s.fg};border:1px solid ${s.brd};opacity:.85;">${s.lbl}</span>`;
   }
@@ -116,8 +117,11 @@
       return app?.vm?.rounds?.[idx] || null;
     } catch (_e) { return null; }
   }
-  function wasManFired(round, side, key) {
-    return !!round?.meta?.firedManeuvers?.[String(side)]?.[String(key)];
+  // Support gates are namespaced per support faction: firedManeuvers.support[factionId][key].
+  function wasManFired(round, side, key, factionId = "") {
+    const fm = round?.meta?.firedManeuvers;
+    if (String(side) === "support") return !!fm?.support?.[String(factionId)]?.[String(key)];
+    return !!fm?.[String(side)]?.[String(key)];
   }
 
   function applyCardStyling(appEl) {
@@ -205,24 +209,30 @@
         // Phase 4D — Surface C: per-row fire action chip (anytime → ▶ Fire Now).
         const side = String(cb.dataset.side || "att");
         const round = roundForLabel(app, lbl);
-        const fired = wasManFired(round, side, key);
+        // Coalition support rows are keyed by their own faction — carry it through the rebuild.
+        const supFid = (side === "support") ? String(cb.dataset.factionId || "").trim() : "";
+        const fired = wasManFired(round, side, key, supFid);
         const roundOpen = !!round?.open && !round?.committed && !round?.cancelled;
         const showFire = (cb.checked || fired) && roundOpen;
-        const fireHtml = showFire ? fireRowHTML(fireMode, key, side, fired) : "";
+        const fireHtml = showFire ? fireRowHTML(fireMode, key, side, fired, supFid) : "";
 
         // ✦ Crew/occult/class grant badge — names the active source that unlocked this maneuver
         // for the side's faction (survey §7a). The enhancer rebuilds the label innerHTML from
         // scratch, so the badge must live HERE (the mkFS copy gets wiped).
-        const facId = side === "def" ? round?.defenderId : round?.attackerId;
+        const facId = side === "support" ? supFid : (side === "def" ? round?.defenderId : round?.attackerId);
         const fac = facId ? game.actors.get(facId) : null;
         const grantedBy = fac ? game.bbttcc?.api?.raid?.crewGrants?.grantedBy?.(fac, key) : null;
         const grantHtml = grantedBy
           ? `<span class="bbttcc-crew-grant" title="Unlocked by ${foundry.utils.escapeHTML(fac?.name || "your faction")}'s active crew / association / class: ${foundry.utils.escapeHTML(grantedBy)}" style="margin-left:4px;font-size:0.66rem;font-weight:600;color:#9fe0b0;background:#102818;border:1px solid #3f8a55;border-radius:6px;padding:1px .4em;white-space:nowrap;">✦ ${foundry.utils.escapeHTML(grantedBy)}</span>`
           : "";
 
-        // Rebuild the label content
+        // Rebuild the label content. The replacement input must keep EVERY attribute the
+        // console's handlers read (data-faction-id for support rows, the id) — dropping
+        // data-faction-id left support factions unable to select, pay for, or fire maneuvers.
+        const facAttr = cb.dataset.factionId ? ` data-faction-id="${cb.dataset.factionId}"` : "";
+        const idAttr = cb.id ? ` id="${cb.id}"` : "";
         lbl.innerHTML = `
-          <input type="checkbox" ${cb.checked?"checked":""} data-maneuver="${cb.dataset.maneuver}" data-side="${cb.dataset.side}">
+          <input type="checkbox" ${cb.checked?"checked":""} data-maneuver="${cb.dataset.maneuver}" data-side="${cb.dataset.side}"${facAttr}${idAttr}${cb.disabled?" disabled":""}>
           <span>${baseLabel}</span>
           ${fmBadgeHtml}
           ${badgeHtml}

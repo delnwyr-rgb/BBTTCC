@@ -2,6 +2,18 @@
  * Source: ~/WIDENING_TRAIL_RETROFIT_2026_09_27.md. Voices (Captain Robot, Sable Nine, three NEW actors), fail landings, the two skips become
  * endings, receipt THE SIDEWAYS MANIFEST, and the bible's "fourth way in" as DOORS (Ride the Wagon → the cult camp; the Keeper; Legansus filings +
  * the seven positions). Front door unchanged. Idempotent; backs up the campaigns setting. F5 after.
+ *
+ * REVIEW FIXES 2026-10-01 (GAME_REVIEW_2026_09_30, HIGH ×2):
+ *  • ROUTING-ONLY ENDINGS: the voice() pass stamped Captain Robot / Sable 9 / Brother Ansel / Dot Pellew (and the testimony's Blask) onto
+ *    chapter ENDING beats that carry labelled choices and gate only on storyPhase ≥ 3 — so a talk with that NPC could enact the ending cold,
+ *    from anywhere, repeatedly (Legansus `verified` also alsoEnds the whole Trail). Every voiced Trail ending (chapel ×3, Anchor Reach ×3
+ *    incl. `marked`, Port Kudzu testimony/partial, the cult camp, Legansus verified/flagged) is now dialogueOffer:false and gated on the beat
+ *    that routes to it + its chapter bucket not yet completed (ROUTE_ONLY below). A route never consults inject.requires, so every authored
+ *    choice still reaches its ending; the NPC still remembers it (speaker kept).
+ *  • NEW ENDINGS JOIN THE NEXT GATE: map_anchor_reach_marked and wt_cult_camp ended their chapters but the next chapter's start gate still
+ *    listed only the old endings (NOW waited forever). map_port_kudzu_intro's anyOf gains `marked`; map_legansus_waystation_intro's gains
+ *    wt_cult_camp (NEXT_START_ALTS — additive, never removes an alternative). The camp door is gated on the wagon / the caravan route.
+ *  Already-seeded worlds: tools/patch-template-review-fixes-2026-10-01.macro.js does the same repair in one run.
  */
 (async () => {
   const DRY_RUN = true;                       // <-- set false to apply
@@ -46,17 +58,40 @@
 
   const TAGS = "widening_trail story";
   const P3 = { flag: "storyPhase", gte: 3 };
-  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, receipts = null, story = null, requires = null, timePoints = 0, priority = "background", memoryText = null, questEffects = null, questId = Q_MAIN, hexName = null } = {}) => ({
+  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, receipts = null, story = null, requires = null, timePoints = 0, priority = "background", memoryText = null, questEffects = null, questId = Q_MAIN, hexName = null, offer = true } = {}) => ({
     id, label, type, timeScale: "scene", timePoints, questId, tags: TAGS, politicalTags: "",
     description, outcomes: { success: null, failure: null },
     inject: { cooldownTurns: 0, repeatable: true, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit", ...(requires ? { requires } : {}) },
     actors: [], refs: {}, playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true,
     storyChain: KEY, priority, ...(hexName ? { hexName } : {}), ...(speaker ? { speakerActorId: speaker } : {}),
+    ...(offer === false ? { dialogueOffer: false } : {}),   // a routing-only node: never a conversation moment
     story: story || { quest: KEY }, ...(memoryText ? { memoryText } : {}),
     choices: choices || [{ label: "Continue", next: "", description: "", checkStat: "", checkDC: 0, failNext: "" }],
     worldEffects: { ...(receipts ? { receipts } : {}), ...(questEffects ? { questEffects } : {}) }
   });
   const ch = (label, next = "", extra = {}) => ({ label, next, description: "", checkStat: "", checkDC: 0, failNext: "", ...extra });
+  // ── routing-only endings (REVIEW FIXES 2026-10-01) — keep in sync with tools/patch-template-review-fixes-2026-10-01.macro.js ──
+  // gate = the beat(s) that route to the ending + the chapter's bucket not yet completed (every ending completes it), so neither a
+  // conversation nor the Director can enact an ending cold or a second time; the authored routes ignore inject.requires and still land
+  const NOT_DONE = (q) => ({ questBucket: q, isNot: "completed" });
+  const GATE_CHAPEL_END = [P3, { beatMark: "map_rotating_chapel_approach" }, NOT_DONE(Q_CHAPEL)];
+  const GATE_REACH_END = [P3, { beatMark: "map_anchor_reach_intro" }, NOT_DONE(Q_REACH)];
+  const GATE_KUDZU_TESTIMONY = [P3, { beatMark: "map_port_kudzu_intro" }, NOT_DONE(Q_KUDZU)];
+  const GATE_KUDZU_PARTIAL = [P3, { anyOf: [{ beatMark: "map_port_kudzu_intro" }, { beatMark: "wt_kudzu_rebuff" }] }, NOT_DONE(Q_KUDZU)];
+  const GATE_CAMP = [P3, { anyOf: [{ beatMark: "wt_caravan_ride" }, { beatMark: "ag_caravan_route" }] }, NOT_DONE(Q_KUDZU)];
+  const GATE_LEG_VERIFIED = [P3, { anyOf: [{ beatMark: "map_legansus_waystation_intro" }, { beatMark: "wt_legansus_sequence" }] }, NOT_DONE(Q_LEG)];
+  const GATE_LEG_FLAGGED = [P3, { beatMark: "map_legansus_waystation_intro" }, NOT_DONE(Q_LEG)];
+  const ROUTE_ONLY = {
+    map_rotating_chapel_map: GATE_CHAPEL_END, map_rotating_chapel_force: GATE_CHAPEL_END, map_rotating_chapel_harmonize: GATE_CHAPEL_END,
+    map_anchor_reach_stabilize: GATE_REACH_END, map_anchor_reach_break: GATE_REACH_END, map_anchor_reach_marked: GATE_REACH_END,
+    map_port_kudzu_testimony: GATE_KUDZU_TESTIMONY, map_port_kudzu_partial: GATE_KUDZU_PARTIAL, wt_cult_camp: GATE_CAMP,
+    map_legansus_waystation_verified: GATE_LEG_VERIFIED, map_legansus_waystation_flagged: GATE_LEG_FLAGGED
+  };
+  // the retrofit's new chapter endings join the NEXT chapter's start gate (an anyOf alternative next to the old endings)
+  const NEXT_START_ALTS = [
+    { id: "map_port_kudzu_intro", among: ["map_anchor_reach_stabilize", "map_anchor_reach_break"], add: ["map_anchor_reach_marked"] },
+    { id: "map_legansus_waystation_intro", among: ["map_port_kudzu_testimony", "map_port_kudzu_partial"], add: ["wt_cult_camp"] }
+  ];
   const CHAPEL = { quest: KEY, chapter: "the_rotating_chapel" }, FLATS = { quest: KEY, chapter: "the_burnt_flats" }, MIRE = { quest: KEY, chapter: "the_singing_mire" }, REACH = { quest: KEY, chapter: "anchor_reach" }, KUDZU = { quest: KEY, chapter: "port_kudzu" }, LEG = { quest: KEY, chapter: "legansus_waystation" };
 
   const NEW = [
@@ -81,7 +116,7 @@
       { type: "narration", speaker: sp("Sable 9"), story: REACH, questId: Q_REACH, requires: [P3], choices: [ch("Wait for the tide.", "map_anchor_reach_intro"), ch("Break an anchor point instead.", "map_anchor_reach_break")] }),
     beat("map_anchor_reach_marked", "Anchor Reach — Marked and Left",
       "You mark the site, three pilings and the one with shoulders, and you leave the diagram in the water where it can keep holding still for whoever needs it to. Sable folds the chair. The human logistics trail runs inland from here, and somebody is at the other end of it, floating on invoices.",
-      { type: "narration", speaker: sp("Sable 9"), story: { ...REACH, role: "ending", ending: "marked" }, questId: Q_REACH, requires: [P3],
+      { type: "narration", speaker: sp("Sable 9"), story: { ...REACH, role: "ending", ending: "marked" }, questId: Q_REACH, requires: GATE_REACH_END, offer: false,
         questEffects: [{ action: "complete", questId: Q_REACH, beatId: "", state: "completed", text: "Anchor Reach marked and left in the water." }],
         choices: [ch("Follow the trail to Port Kudzu.", "map_port_kudzu_intro")] }),
     beat("wt_kudzu_rebuff", "Port Kudzu — Rented by the Breath",
@@ -106,7 +141,7 @@
       { type: "narration", story: KUDZU, questId: Q_KUDZU, requires: [P3], choices: [ch("Back to the port. Next third market.", "map_port_kudzu_intro")] }),
     beat("wt_cult_camp", "The Camp on No Map",
       "It is a stretch of nothing that gets visited far too regularly to be nothing: tents in rows, a kettle, and a gate that is not a gate yet, lying sideways in the sand the way a Valhaulan ship lands when it means to. The wagon unloads. Nobody counts the salt. A road-worn man in a walker's coat is checking the sky against a schedule, and he is exactly on time, and he is proud of nothing else.",
-      { speaker: sp("Pilgrim Wick"), story: { ...KUDZU, role: "ending", ending: "caravan" }, questId: Q_KUDZU, requires: [P3], priority: "high", timePoints: 1,
+      { speaker: sp("Pilgrim Wick"), story: { ...KUDZU, role: "ending", ending: "caravan" }, questId: Q_KUDZU, requires: GATE_CAMP, offer: false, priority: "high", timePoints: 1,
         memoryText: "The Stewards rode the Jackalope supply wagon to the cult's camp on the coast and saw the gate lying sideways in the sand.",
         questEffects: [{ action: "complete", questId: Q_KUDZU, beatId: "", state: "completed", text: "Port Kudzu — the back way: the Stewards rode the wagon to the camp." }],
         choices: [
@@ -160,6 +195,11 @@
   voice(["map_port_kudzu_intro", "map_port_kudzu_partial"], "Harbourmaster Dot Pellew");
   // the wagon door hangs off the Reach's endings and the port
   for (const id of ["map_anchor_reach_stabilize", "map_anchor_reach_break", "map_anchor_reach_marked", "map_port_kudzu_intro"]) addChoice(id, ch("You know when the wagon leaves. Be on it.", "wt_caravan_ride", { requires: { beatMark: "ag_caravan_route" } }), "the wagon (hidden)");
+  // REVIEW FIXES 2026-10-01 — reconcile (additive: adds missing conditions / alternatives, never removes one)
+  const ensureReq = (b, conds) => { b.inject = b.inject || {}; const cur = Array.isArray(b.inject.requires) ? b.inject.requires.slice() : (b.inject.requires && typeof b.inject.requires === "object" ? [b.inject.requires] : []); const have = new Set(cur.map(c => JSON.stringify(c))); for (const c of conds) if (!have.has(JSON.stringify(c))) { cur.push(c); have.add(JSON.stringify(c)); } b.inject.requires = cur; };
+  const ensureAlt = (b, among, add) => { const rs = Array.isArray(b.inject?.requires) ? b.inject.requires : []; const grp = rs.find(x => Array.isArray(x?.anyOf) && x.anyOf.some(y => among.includes(y?.beatMark))); if (!grp) return false; for (const m of add) if (!grp.anyOf.some(y => y?.beatMark === m)) grp.anyOf.push({ beatMark: m }); return true; };
+  for (const [id, gate] of Object.entries(ROUTE_ONLY)) edit(id, b => { ensureReq(b, gate); if (b.dialogueOffer !== false) b.dialogueOffer = false; }, "routing-only ending: gated on its route + chapter open; dialogueOffer:false");
+  for (const a of NEXT_START_ALTS) edit(a.id, b => { if (!ensureAlt(b, a.among, a.add)) say(`✗ ${a.id}: no anyOf over ${a.among.join("/")} — gate NOT widened (check by hand)`); }, `start gate also opens on ${a.add.join(", ")}`);
 
   // story script
   const storyApi = game.bbttcc?.api?.campaign?.story?.data;

@@ -18,7 +18,11 @@
  *   town, hexAliases[], hubs{key:{sceneName,label,refWidth,refHeight}}, doors[], cross[], beatMap[],
  *   hubBeats{hubKey:[beatIds]}, overrideLiveBeats[], replaceSceneNames[], removeBeats[], removeDoors[],
  *   leave{beatId:note}, notes[]. Door: {hub,key,label,x,y,w,h,color,exterior,interior,extra[],beatId,
- *   intro,blurb,direct}. Scenes are named by name or "Scene.<id>". beatMap rows: [prefix, doorKey,
+ *   intro,blurb,direct,floor?,gate?}. Scenes are named by name or "Scene.<id>". beatMap rows: [prefix, doorKey,
+ *   WALK-IN (2026-09-30): town `walkIn: true` also lays a Region over every door (token-move-in → doors.enter → the same
+ *   opener; `gate` {beatMark|anyOf, fallback, message} plays the fallback beat until the mark is played). `floor` = a
+ *   scene level NAME (or index) — the Drawing and Region live on that level only. `escalators`: [{hub,key,label,x,y,w,h,
+ *   floors:[name,name]}] → a native changeLevel Region spanning both levels.
  *   "exterior"|"interior"] or [prefix, "@Scene name", ""] for a scene with no door.
  *
  * HOW TO RUN: Script macro, GM, on ember. Set TOWN, run (DRY_RUN=true reports), set DRY_RUN=false, run.
@@ -26,7 +30,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 (async () => {
-  const TOWN_KEY = "chuckle";              // <-- fixit | ag | lyrenn | kt | chuckle | softlanding | stillwater  (keys of towns.json)
+  const TOWN_KEY = "chuckle";              // <-- fixit | ag | lyrenn | kt | chuckle | softlanding | stillwater | crownmall | maneuvervault | gloomgill  (keys of towns.json)
   const DRY_RUN = false;                  // <-- set false to apply
   const CONFIG_URL = "modules/bbttcc-travel/tools/town-hubs/towns.json";
   const SCOPE = "bbttcc-travel", NS = "bbttcc-campaign", TERR = "bbttcc-territory";
@@ -41,6 +45,7 @@
   const BEAT_MAP = C.beatMap || []; const HUB_BEATS = C.hubBeats || {}; const LEAVE = C.leave || {};
   const OVERRIDE_LIVE_BEATS = new Set(C.overrideLiveBeats || []); const REPLACE_SCENE_NAMES = new Set(C.replaceSceneNames || []);
   const REMOVE_BEATS = C.removeBeats || []; const REMOVE_DOORS = C.removeDoors || [];
+  const WALK_IN = C.walkIn === true; const ESCALATORS = C.escalators || [];
 
   const changes = [], warns = [], todo = [...(C.notes || [])];
   const norm = (s) => String(s || "").replace(/[\s ]+/g, " ").trim().toLowerCase();
@@ -78,6 +83,16 @@
       if (!DRY_RUN) await h.scene.update({ [`flags.${SCOPE}.isTownHub`]: true, [`flags.${SCOPE}.townLabel`]: h.label, [`flags.${SCOPE}.hexUuid`]: hex?.uuid || "" });
     }
   }
+  // scene levels (v14 native): a door's `floor` names a level (by name, loose) or indexes one; null = whole scene
+  const levelsOf = (sc) => { const L = sc.levels; const arr = Array.isArray(L) ? L : (L?.contents || Array.from(L || [])); return [...arr].sort((a, b) => Number(a.elevation?.bottom ?? 0) - Number(b.elevation?.bottom ?? 0)); };  // index = floor order, lowest first
+  const levelFor = (hubKey, floor) => {
+    if (floor == null || floor === "") return null;
+    const L = levelsOf(HUBS[hubKey].scene); if (!L.length) { warns.push(`floor "${floor}" asked but "${HUBS[hubKey].scene.name}" has no levels`); return null; }
+    if (typeof floor === "number") return L[floor] || null;
+    const want = norm(floor); const hit = L.find(l => norm(l.name) === want) || L.find(l => norm(l.name).includes(want));
+    if (!hit) warns.push(`floor "${floor}" not found on "${HUBS[hubKey].scene.name}" (have: ${L.map(l => l.name).join(" | ")})`);
+    return hit || null;
+  };
   const mainHubKey = C.mainHub || Object.keys(HUBS)[0]; const main = HUBS[mainHubKey].scene;
 
   // ── location scenes ──────────────────────────────────────────────────────
@@ -149,21 +164,58 @@
   for (const d of DOORS) if (d.direct && d.beatId && !byId[d.beatId]) warns.push(`${d.label}: door beat ${d.beatId} not found — door will plain-dive`);
 
   // ── 2. doors + 4. return links ───────────────────────────────────────────
-  const placeDoor = async (hubKey, key, label, color, x, y, w, h, link, shape = "e") => {
-    const H = HUBS[hubKey]; const sc = H.scene; const k = sc.width / H.refWidth;
+  const placeDoor = async (hubKey, key, label, color, x, y, w, h, link, shape = "e", { floor = null, gate = null, walkIn = WALK_IN } = {}) => {
+    const H = HUBS[hubKey]; const sc = H.scene; const k = sc.width / H.refWidth; const ky = H.refHeight ? sc.height / H.refHeight : k;  // per-axis: backgrounds stretch to the scene rect
     const offX = sc.dimensions?.sceneX || 0, offY = sc.dimensions?.sceneY || 0;
-    const W = Math.round(w * k), Hh = Math.round(h * k), X = Math.round(offX + x * k - W / 2), Y = Math.round(offY + y * k - Hh / 2);
-    const data = { x: X, y: Y, shape: { type: shape, width: W, height: Hh },
+    const W = Math.round(w * k), Hh = Math.round(h * ky), X = Math.round(offX + x * k - W / 2), Y = Math.round(offY + y * ky - Hh / 2);
+    const lvl = levelFor(hubKey, floor); const onLevel = lvl ? { elevation: Number(lvl.elevation?.bottom ?? 0), levels: [lvl.id ?? lvl._id] } : {};
+    const data = { x: X, y: Y, shape: { type: shape, width: W, height: Hh }, ...onLevel,
       strokeColor: color, strokeWidth: Math.max(6, Math.round(14 * k)), strokeAlpha: 0.85, fillType: CONST.DRAWING_FILL_TYPES.SOLID, fillColor: color, fillAlpha: 0.08,
       text: label, fontSize: Math.max(36, Math.round(96 * k)), textColor: "#ffffff", textAlpha: 0.95, locked: true, interface: true, flags: { [SCOPE]: { locationLink: link } } };
     const cur = sc.drawings.contents.find(d => d.flags?.[SCOPE]?.locationLink?.key === key);
-    const desc = `${H.label} · ${label} @ (${X + W / 2},${Y + Hh / 2}) ${W}×${Hh} → "${liveScene(link.targetSceneUuid)?.name}"${link.beatId ? ` · beat ${link.beatId}` : ""}`;
+    const where = lvl ? ` [${lvl.name}]` : "";
+    const desc = `${H.label} · ${label}${where} @ (${X + W / 2},${Y + Hh / 2}) ${W}×${Hh} → "${liveScene(link.targetSceneUuid)?.name}"${link.beatId ? ` · beat ${link.beatId}` : ""}`;
     if (!cur) { changes.push(`door ${desc}`); if (!DRY_RUN) await sc.createEmbeddedDocuments("Drawing", [data]); }
-    else if (JSON.stringify(cur.flags[SCOPE].locationLink) !== JSON.stringify(link)) { changes.push(`door relink ${desc}`); if (!DRY_RUN) await cur.update({ [`flags.${SCOPE}.locationLink`]: link }); }
+    else {
+      const upd = {};
+      if (JSON.stringify(cur.flags[SCOPE].locationLink) !== JSON.stringify(link)) upd[`flags.${SCOPE}.locationLink`] = link;
+      if (lvl && (JSON.stringify(Array.from(cur.levels || [])) !== JSON.stringify(onLevel.levels) || cur.elevation !== onLevel.elevation)) { upd.levels = onLevel.levels; upd.elevation = onLevel.elevation; }
+      if (Object.keys(upd).length) { changes.push(`door relink ${desc}`); if (!DRY_RUN) await cur.update(upd); }
+    }
+    if (!walkIn) return;
+    // the walk-in Region: same rectangle, same level band, executeScript → doors.enter on the mover's client
+    const rlink = { ...link, doorKey: key, ...(gate ? { gate } : {}) };
+    const band = lvl ? { bottom: Number(lvl.elevation?.bottom ?? 0), top: Number(lvl.elevation?.top ?? 0) } : { bottom: null, top: null };
+    const source = `// bbttcc walk-in door "${key}" — fires on the mover's client only\nif (!event.user.isSelf) return;\nawait game.bbttcc?.api?.travel?.doors?.enter?.(region.uuid, { tokenUuid: event.data?.token?.uuid });`;
+    const rdata = { name: `Door · ${label}`, color, visibility: CONST.REGION_VISIBILITY?.GAMEMASTER ?? 1,
+      shapes: [{ type: "rectangle", x: X, y: Y, width: W, height: Hh, rotation: 0, hole: false }], elevation: band, ...(lvl ? { levels: onLevel.levels } : {}),
+      behaviors: [{ name: `walk-in ${key}`, type: "executeScript", system: { events: ["tokenMoveIn"], source } }],
+      flags: { [SCOPE]: { locationLink: rlink } } };
+    const rcur = (sc.regions?.contents || []).find(r => r.flags?.[SCOPE]?.locationLink?.doorKey === key);
+    if (!rcur) { changes.push(`region ${H.label} · ${label}${where} (walk-in${gate ? ", gated on " + (gate.beatMark || (gate.anyOf || []).join("|")) : ""})`); if (!DRY_RUN) await sc.createEmbeddedDocuments("Region", [rdata]); }
+    else {
+      const sh = rcur.shapes?.[0] || {}; const moved = Math.round(sh.x) !== X || Math.round(sh.y) !== Y || Math.round(sh.width) !== W || Math.round(sh.height) !== Hh;
+      const relinked = JSON.stringify(rcur.flags[SCOPE].locationLink) !== JSON.stringify(rlink);
+      if (moved || relinked) { changes.push(`region resync ${H.label} · ${label}`); if (!DRY_RUN) await rcur.update({ shapes: rdata.shapes, elevation: band, ...(lvl ? { levels: onLevel.levels } : {}), [`flags.${SCOPE}.locationLink`]: rlink }); }
+    }
+  };
+  // escalators / stairs: a native changeLevel Region spanning two levels (the token is prompted to change floor)
+  const placeEscalator = async (e) => {
+    const H = HUBS[e.hub]; const sc = H.scene; const k = sc.width / H.refWidth; const ky = H.refHeight ? sc.height / H.refHeight : k;
+    const offX = sc.dimensions?.sceneX || 0, offY = sc.dimensions?.sceneY || 0;
+    const W = Math.round(e.w * k), Hh = Math.round(e.h * ky), X = Math.round(offX + e.x * k - W / 2), Y = Math.round(offY + e.y * ky - Hh / 2);
+    const lv = (e.floors || []).map(f => levelFor(e.hub, f)).filter(Boolean); if (lv.length < 2) { warns.push(`escalator ${e.key}: needs two resolvable floors`); return; }
+    const bottom = Math.min(...lv.map(l => Number(l.elevation?.bottom ?? 0))), top = Math.max(...lv.map(l => Number(l.elevation?.top ?? 0)));
+    const rdata = { name: `Escalator · ${e.label}`, color: e.color || "#ffd54f", visibility: CONST.REGION_VISIBILITY?.ALWAYS ?? 2,
+      shapes: [{ type: "rectangle", x: X, y: Y, width: W, height: Hh, rotation: 0, hole: false }], elevation: { bottom, top }, levels: lv.map(l => l.id ?? l._id),
+      behaviors: [{ name: `change level ${e.key}`, type: "changeLevel", system: {} }], flags: { [SCOPE]: { escalator: e.key } } };
+    const cur = (sc.regions?.contents || []).find(r => r.flags?.[SCOPE]?.escalator === e.key);
+    if (!cur) { changes.push(`escalator ${H.label} · ${e.label} [${lv.map(l => l.name).join(" ↔ ")}] @ (${X + W / 2},${Y + Hh / 2}) ${W}×${Hh}`); if (!DRY_RUN) await sc.createEmbeddedDocuments("Region", [rdata]); }
+    else changes.push(`· ok escalator ${e.label}`);
   };
   for (const d of DOORS) {
     if (!d.sc.exterior) continue;
-    await placeDoor(d.hub, d.key, d.label, d.color || "#ffffff", d.x, d.y, d.w, d.h, { key: d.key, label: d.label, targetSceneUuid: d.sc.exterior.uuid, sceneUuids: d.allScenes.map(s => s.uuid), beatId: d.beatId || null });
+    await placeDoor(d.hub, d.key, d.label, d.color || "#ffffff", d.x, d.y, d.w, d.h, { key: d.key, label: d.label, targetSceneUuid: d.sc.exterior.uuid, sceneUuids: d.allScenes.map(s => s.uuid), beatId: d.beatId || null }, "e", { floor: d.floor ?? null, gate: d.gate || null, walkIn: d.walkIn ?? WALK_IN });
     const hubScene = HUBS[d.hub].scene;
     for (const sc of d.allScenes) {
       const rl = sc.flags?.[SCOPE]?.returnLink;
@@ -175,6 +227,7 @@
     if (cur) { changes.push(`door REMOVE ${key} on "${H.scene.name}"`); if (!DRY_RUN) await cur.delete(); }
   }
   for (const c of CROSS) await placeDoor(c.hub, c.key, c.label, c.color || "#ffffff", c.x, c.y, c.w, c.h, { key: c.key, label: c.label, targetSceneUuid: HUBS[c.to].scene.uuid, sceneUuids: [], beatId: null }, "r");
+  for (const e of ESCALATORS) await placeEscalator(e);
   if (hex && hex.flags?.[SCOPE]?.townHubSceneUuid !== main.uuid) { changes.push(`hex "${hex.flags[TERR].name}": townHubSceneUuid → "${main.name}"`); if (!DRY_RUN) await hex.update({ [`flags.${SCOPE}.townHubSceneUuid`]: main.uuid }); }
 
   // ── 5. beat scene ids ────────────────────────────────────────────────────

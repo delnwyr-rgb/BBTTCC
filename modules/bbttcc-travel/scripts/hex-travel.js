@@ -841,24 +841,28 @@ function _applyPricePolicy(cost) { const m = _pricePolicyMult(); const out = {};
   function pulseToken(token, colorHex = "#00FF66") {
     if (!VISUALS.dicePulse || !token) return;
     const c = PIXI.utils.string2hex(colorHex);
+    const g = new PIXI.Graphics();
+    g.eventMode = "none";
     let state = 0;
     const id = setInterval(() => {
       state++;
       const on = state % 2 === 1;
       try {
         if (token.destroyed) return;         // token died (scene swap) — done() reaps
-        token.border = token.border || new PIXI.Graphics();
-        token.border.clear();
-        token.border.lineStyle(6, c, on ? 0.9 : 0.2);
-        const b = token.getBounds();
-        token.border.drawRoundedRect(b.x - 4, b.y - 4, b.width + 8, b.height + 8, 8);
-        if (!token.border.parent) canvas.stage.addChild(token.border);
+        if (g.destroyed) return;
+        // Own Graphics as a child of the token (token-local coords) — NEVER
+        // core token.border: destroying/nulling that made every later core
+        // _refreshState throw on this.border.tint (the "tint null" crash).
+        if (!g.parent) token.addChild(g);
+        const w = Number(token.w) || 0, h = Number(token.h) || 0;
+        g.clear();
+        g.lineStyle(6, c, on ? 0.9 : 0.2);
+        g.drawRoundedRect(-4, -4, w + 8, h + 8, 8);
       } catch(e) {}
     }, 150);
     const done = _onFxDone(() => {
       clearInterval(id);
-      try { if (token.border && !token.border.destroyed) token.border.destroy(true); } catch(e) {}
-      token.border = null;
+      try { if (!g.destroyed) g.destroy(true); } catch(e) {}
     });
     setTimeout(done, VISUALS.pulseMs);
   }
@@ -1631,8 +1635,14 @@ function _ensureInjectorSettingsRegistered() {
 }
 
 function _getTurnIndexFallback() {
-  // Prefer a Bad Eden turn counter if one exists; otherwise 0.
-  // MVP-safe: cooldown enforcement still works via timestamp if needed later.
+  // The world turn's authority is api.world.getState().turn (same read as
+  // _worldTurn above and campaign's _getTurnNumberSafe). api.turn never had a
+  // getTurnIndex()/turnIndex — that read was always 0, which pinned the global
+  // cooldown shut forever. Kept only as a last-ditch fallback.
+  try {
+    const w = Number(game.bbttcc?.api?.world?.getState?.()?.turn);
+    if (Number.isFinite(w)) return w;
+  } catch (_e) {}
   const t = game.bbttcc?.api?.turn?.getTurnIndex?.() ?? game.bbttcc?.api?.turn?.turnIndex;
   return Number.isFinite(Number(t)) ? Number(t) : 0;
 }
@@ -1793,7 +1803,12 @@ function _cooldownBlocked(state, nowTurn, globalCooldownTurns = 1, triggerType =
   // Explicitly exempt terminal triggers
   if (triggerType === "hex_enter") return false;
 
+  // lastInjectedTurn 0 also means "never" — only a state that HAS injected
+  // (lastInjectedAt stamped) can be cooling down, so turn 0/1 are not blocked
+  // on a fresh state. A stamp from a LATER turn (save reload) does not block.
+  if (!Number(state?.lastInjectedAt || 0)) return false;
   const last = Number(state?.lastInjectedTurn || 0);
+  if (last > nowTurn) return false;
   return (nowTurn - last) < globalCooldownTurns;
 }
 
@@ -1814,7 +1829,8 @@ function _blockedByBeatRules(state, beat, ctx, nowTurn) {
   if (!repeatable && rec.firedCount > 0) return { blocked: true, why: "once-only" };
 
   const cooldownTurns = Number(inject.cooldownTurns || 0);
-  if (cooldownTurns > 0 && (nowTurn - Number(rec.lastFiredTurn || 0)) < cooldownTurns) {
+  // only a beat that has actually fired cools down (lastFiredTurn 0 = never), and never against a later-turn stamp
+  if (cooldownTurns > 0 && rec.firedCount > 0 && Number(rec.lastFiredTurn || 0) <= nowTurn && (nowTurn - Number(rec.lastFiredTurn || 0)) < cooldownTurns) {
     return { blocked: true, why: `cooldownTurns(${cooldownTurns})` };
   }
 

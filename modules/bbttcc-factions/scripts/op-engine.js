@@ -298,6 +298,20 @@ async function preview(factionId, deltas, context) {
  *
  * Set context.allowOvercap=true to bypass the cap refusal (GM tooling).
  */
+// Per-faction commit queue (2026-10-01): a commit is a read-modify-write of the whole
+// opBank, and several turn-end listeners commit to one faction without awaiting each
+// other — each read the bank before the others' write landed and the last write won.
+// Every commit for a faction now chains onto the previous one, so each reads the bank
+// its predecessor wrote. Signature and return shape are unchanged.
+const _commitChains = new Map();   // factionId → tail promise (never rejects)
+function _enqueueCommit(key, fn) {
+  const run = (_commitChains.get(key) || Promise.resolve()).then(fn, fn);
+  const tail = run.catch(() => {});
+  _commitChains.set(key, tail);
+  tail.then(() => { if (_commitChains.get(key) === tail) _commitChains.delete(key); });
+  return run;
+}
+
 /** Commit OP-bank deltas. @param {Object<string,number>} deltas — MARKS per channel (negative spends). */
 async function commit(factionId, deltas, context) {
   // Phase 1 seat routing (2026-08-29): bank writes are GM work. A player seat
@@ -318,6 +332,10 @@ async function commit(factionId, deltas, context) {
     }
     // gmExec absent (stale client): fall through to the old direct attempt.
   }
+  const key = String(factionId?.id || factionId || "").replace(/^Actor\./, "");
+  return _enqueueCommit(key, () => _commitNow(factionId, deltas, context));
+}
+async function _commitNow(factionId, deltas, context) {
   const faction = await _getFactionActor(factionId);
   if (!faction) {
     return { ok: false, error: "Faction not found", factionId, context, committed: false };

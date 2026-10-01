@@ -24,6 +24,8 @@
   function installOnce(){
     const raid = game.bbttcc?.api?.raid || game.modules.get("bbttcc-raid")?.api?.raid;
     if (!raid || typeof raid.applyPostRoundEffects !== "function") return console.warn(TAG, "raid.applyPostRoundEffects not found");
+    // Idempotent: installOnce also runs on every canvasReady — never stack a second morale layer.
+    if (raid.__moraleWrapped || raid.applyPostRoundEffects.__bbttccMoraleWrapped) return;
     const orig = raid.applyPostRoundEffects;
     raid.applyPostRoundEffects = async function wrapped(args={}){
       const res = await orig(args);
@@ -42,6 +44,8 @@
       } catch(e){ console.warn(TAG, "morale adjust failed", e); }
       return res;
     };
+    raid.applyPostRoundEffects.__bbttccMoraleWrapped = true;
+    raid.__moraleWrapped = true;
     console.log(TAG, "installed");
   }
   Hooks.once("ready", installOnce);

@@ -5,6 +5,15 @@
  * sequence); THE CRATES (receipt THE PAYMASTER'S NUMBERS); SKLAR'S ARITHMETIC = the turn (+ fail); routes from every branch to the outcomes and
  * from the outcomes to the rewards; the courier after-beat; four war-log strings scrubbed of the paymaster's name (named only by Gloomgill).
  * Idempotent; backs up the campaigns setting. F5 after.
+ *
+ * REVIEW FIXES 2026-10-01 (GAME_REVIEW_2026_09_30, HIGH): the crates, Sklar's arithmetic, the turn and the unmoved landing gated only on
+ * storyPhase ≥ 5 while carrying storyChain + priority high + speakers — the Director (and a talk with Sklar / the purser) could hand out the
+ * Paymaster's Numbers or play Sklar's turn before anyone entered the bunker. Each is now gated on the beats that ROUTE to it:
+ *   crates ← a successful branch or the Leygate (GATE_CRATES) · arithmetic ← the crates or a courtly success (GATE_ARITH)
+ *   turn / unmoved ← the arithmetic (GATE_TURN), and those two outcome nodes are dialogueOffer:false.
+ * The crates + arithmetic stay conversation-offerable once their gate is met (the NOW lines are "ask the purser" / "show her"). Every
+ * authored route still lands (a route never consults inject.requires). Re-runs reconcile already-seeded beats additively.
+ * Already-seeded worlds: tools/patch-template-review-fixes-2026-10-01.macro.js does the same repair in one run.
  */
 (async () => {
   const DRY_RUN = true;                       // <-- set false to apply
@@ -46,17 +55,24 @@
 
   const TAGS = "finale story";
   const P5 = { flag: "storyPhase", gte: 5 };
-  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, receipts = null, requires = null, timePoints = 0, priority = "background", memoryText = null, story = null, questId = Q, repeatable = false, hexName = null } = {}) => ({
+  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, receipts = null, requires = null, timePoints = 0, priority = "background", memoryText = null, story = null, questId = Q, repeatable = false, hexName = null, offer = true } = {}) => ({
     id, label, type, timeScale: "scene", timePoints, questId, tags: TAGS, politicalTags: "",
     description, outcomes: { success: null, failure: null },
     inject: { cooldownTurns: 0, repeatable, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit", requires: requires || [P5] },
     actors: [], refs: {}, playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true,
     storyChain: KEY, priority, ...(speaker ? { speakerActorId: speaker } : {}), ...(hexName ? { hexName } : {}),
+    ...(offer === false ? { dialogueOffer: false } : {}),   // a routing-only node: never a conversation moment
     story: story || { quest: KEY }, ...(memoryText ? { memoryText } : {}),
     choices: choices || [{ label: "Continue", next: "", description: "", checkStat: "", checkDC: 0, failNext: "" }],
     worldEffects: { ...(receipts ? { receipts } : {}) }
   });
   const ch = (label, next = "", extra = {}) => ({ label, next, description: "", checkStat: "", checkDC: 0, failNext: "", ...extra });
+  // gates = the beats that route to each node — keep in sync with tools/patch-template-review-fixes-2026-10-01.macro.js
+  const GATE_CRATES = [P5, { anyOf: ["raid_thatwards_infiltration_success", "raid_thatwards_courtly_honest", "raid_thatwards_courtly_playful", "raid_thatwards_assault_success", "raid_thatwards_siege_success", "finale_leygate_arrival"].map(beatMark => ({ beatMark })) }];
+  const GATE_ARITH = [P5, { anyOf: ["finale_the_crates", "raid_thatwards_courtly_honest", "raid_thatwards_courtly_playful"].map(beatMark => ({ beatMark })) }];
+  const GATE_TURN = [P5, { beatMark: "finale_sklars_arithmetic" }];
+  const FINALE_GATES = { finale_the_crates: GATE_CRATES, finale_sklars_arithmetic: GATE_ARITH, finale_sklar_turns: GATE_TURN, finale_sklar_unmoved: GATE_TURN };
+  const FINALE_NO_OFFER = ["finale_sklar_turns", "finale_sklar_unmoved"];
   const NUMBERS = { label: "The Paymaster's Numbers", effectKey: "favorShift", acquisition: "earned", source: { name: "crate nine, under the good rope" }, truth: "A burned invoice stub from a Valhaulan fuel crate: an account number, a shipping seal, a signature nobody initials twice, and a figure. The figure is what the island costs, and it is not what Sklar is being paid. Show it to her and she does the arithmetic out loud." };
 
   const NEW = [
@@ -94,7 +110,7 @@
         ] }),
     beat("finale_the_crates", "The Crates — Crate Nine, Under the Good Rope",
       "The purser counts you as you come in — twice — and goes back to her crates. Fuel, rope, plunder, fuel. The fuel is too consistent; the crates are stencilled with a seal nobody in this fleet has a name for, and the chits are signed by nobody, initialled twice. In crate nine, under the good rope, there is a burned invoice stub with an account number, a shipping seal, a signature, and a figure. The figure is what the island costs. It is not what anyone here is being paid.",
-      { speaker: PU, priority: "high", timePoints: 1, requires: [P5], receipts: [NUMBERS],
+      { speaker: PU, priority: "high", timePoints: 1, requires: GATE_CRATES, receipts: [NUMBERS],
         memoryText: "The Stewards found the Paymaster's Numbers in the Valhaulan crates: what the island costs, and what Sklar is being paid.",
         choices: [
           ch("Ask her what the fuel costs.", "", { description: "\"I don't know. That's the problem. Piracy I can price.\" She recounts a stack, which she does when she is lying, and she is not lying about the number." }),
@@ -103,7 +119,7 @@
         ] }),
     beat("finale_sklars_arithmetic", "Sklar's Arithmetic",
       "She has a drink in one hand and your measure in the other. \"So. You found the crates. Everyone finds the crates; it's a bunker, there's nowhere else to put things.\" She has seen the client's paper. She will not say the name — \"I'm not being paid to say it\" — and she has never once been shown a figure. That is the crack. Put something in it.",
-      { speaker: SK, priority: "high", timePoints: 1, requires: [P5],
+      { speaker: SK, priority: "high", timePoints: 1, requires: GATE_ARITH,
         choices: [
           ch("Show her the Paymaster's Numbers.", "finale_sklar_turns", { requires: { beatMark: "finale_the_crates" }, description: "She reads it twice. The second time her lips move." }),
           ch("Show her the Service Manifest.", "finale_sklar_turns", { requires: { beatMark: "hv_service_manifest" }, description: "What the bunkers were really buying, two hundred years ago, from the same mine. She reads it once." }),
@@ -113,7 +129,7 @@
         ] }),
     beat("finale_sklar_turns", "Not Enough For An Island",
       "She does the arithmetic out loud, in front of people she was paid to fight: what the Seal takes, what the beam carries, what the figure says the island is worth on somebody's ledger, and what she was paid. She stops laughing, which she does exactly once per conversation, and this is the once. \"I am not being paid enough for an island.\" Then, to the bunker at large, at a volume that lands sideways: \"WE'RE DONE. Switch it off. Stop singing.\" The ships stop singing. Somewhere on the coast a hex that was being told it was lied to hears, for the first time in a while, nothing at all.",
-      { speaker: SK, priority: "high", timePoints: 1, requires: [P5],
+      { speaker: SK, priority: "high", timePoints: 1, requires: GATE_TURN, offer: false,
         memoryText: "Sklar Bjrornholt did the arithmetic and broke with the paymaster: \"I am not being paid enough for an island.\"",
         choices: [
           ch("Terms.", "raid_thatwards_outcome_friends", { description: "\"Not family. Let's not get irresponsible.\"" }),
@@ -121,7 +137,7 @@
         ] }),
     beat("finale_sklar_unmoved", "Sklar, Unmoved",
       "\"That's a very good speech,\" she says, and means it, and it changes nothing, because she has been paid in speeches before. \"Bring me a number.\" You are allowed to leave, which is somehow worse than being thrown out.",
-      { speaker: SK, requires: [P5],
+      { speaker: SK, requires: GATE_TURN, offer: false,
         choices: [
           ch("Leave with the Spark.", "raid_thatwards_outcome_neutral_spark", { requires: { beatMark: "finale_the_crates" } }),
           ch("Leave.", "raid_thatwards_outcome_neutral_fail")
@@ -142,6 +158,9 @@
   const addChoices = (b, list) => { for (const c of list) if (!(b.choices || []).some(x => x.label === c.label)) b.choices = [...(b.choices || []), c]; };
   const voice = (id, actorId) => edit(id, b => { if (actorId && !b.speakerActorId) b.speakerActorId = actorId; }, "speaker");
 
+  // REVIEW FIXES 2026-10-01 — reconcile already-seeded beats (adds missing conditions, never removes one) + the offer opt-out
+  const ensureReq = (b, conds) => { b.inject = b.inject || {}; const cur = Array.isArray(b.inject.requires) ? b.inject.requires.slice() : (b.inject.requires && typeof b.inject.requires === "object" ? [b.inject.requires] : []); const have = new Set(cur.map(c => JSON.stringify(c))); for (const c of conds) if (!have.has(JSON.stringify(c))) { cur.push(c); have.add(JSON.stringify(c)); } b.inject.requires = cur; };
+  for (const [id, gate] of Object.entries(FINALE_GATES)) edit(id, b => { ensureReq(b, gate); if (FINALE_NO_OFFER.includes(id) && b.dialogueOffer !== false) b.dialogueOffer = false; }, `gated on the beats that route here${FINALE_NO_OFFER.includes(id) ? "; routing-only" : ""}`);
   // the count as a door off the entry
   edit("raid_thatwards_ho_finale_entry", b => { if (!(b.choices || []).some(c => c.next === "finale_count_the_coalition")) b.choices = [ch("Count your Operations first.", "finale_count_the_coalition"), ...(b.choices || [])]; }, "the count");
   // routes from every branch

@@ -449,7 +449,13 @@
   async function _classBoon({ factionId, targetUuid, S }, { key, title, bufferDelta = 0, defAnytime = 0, defRenewal = 0, morale = 0, note, vfxHook }) {
     const actor = game.actors.get(factionId);
     const r = await _withSiege(S, targetUuid, (state) => {
-      if (bufferDelta) state.buffer = Math.max(0, (Number(state.buffer) || 0) + bufferDelta);
+      // Buffer is an OBJECT of channels (siege-state), never a scalar — a gain lands in
+      // logistics (the supply train); a loss shaves round-robin like every other drain.
+      if (bufferDelta) {
+        if (!state.buffer || typeof state.buffer !== "object") state.buffer = {};
+        if (bufferDelta > 0) state.buffer.logistics = (Number(state.buffer.logistics) || 0) + bufferDelta;
+        else S.shaveBuffer(state.buffer, -bufferDelta);
+      }
       if (defAnytime) state.defenderAnytimeBudget = Math.max(0, (Number(state.defenderAnytimeBudget) || 0) + defAnytime);
       if (defRenewal) state.renewalPool = Math.max(0, (Number(state.renewalPool) || 0) + defRenewal);
       S.appendNarrativeBeat(state, { turn: _turn(), kind: key, title, description: `${actor?.name || "A Steward"} — ${note}` });

@@ -51,6 +51,18 @@ function _newId() {
   catch { return Math.random().toString(36).slice(2, 18); }
 }
 
+const RELAY_CREATE = "factions.pending.create";
+function _registerRelay() {
+  const gx = game.bbttcc?.api?.gmExec; if (!gx?.register) return;
+  gx.register(RELAY_CREATE, async (p, meta) => {
+    const A = _resolveActor(p?.from), B = _resolveActor(p?.to);
+    if (!A || !B) return { ok: false, error: "actor not found" };
+    const requester = meta?.local ? game.user : game.users?.get?.(meta?.fromUserId);
+    if (!_userOwnsFaction(requester, A)) return { ok: false, error: `${meta?.fromUserName || "That seat"} does not own ${A.name}.` };
+    return create({ from: A, to: B, offer: p?.offer, ask: p?.ask, reason: p?.reason });
+  });
+}
+
 function list(faction) {
   const F = _resolveActor(faction);
   if (!F) return [];
@@ -62,6 +74,22 @@ async function create({ from, to, offer, ask, reason } = {}) {
   const B = _resolveActor(to);
   if (!A || !B) return { ok: false, error: "actor not found" };
   if (A.id === B.id) return { ok: false, error: "self-trade" };
+
+  // PLAYER SEATS (2026-10-01): the inbox lives on the RECIPIENT, which the proposing
+  // player usually does not own — relay the write to the primary GM (bbttcc-core gmExec).
+  // The GM handler checks the requester owns the SENDING faction, then runs create() there.
+  if (!game.user?.isGM && !B.isOwner) {
+    const gx = game.bbttcc?.api?.gmExec;
+    if (!gx?.call) return { ok: false, error: "GM relay not available on this client — reload and try again." };
+    if (!gx.primaryGmId?.()) return { ok: false, noGm: true, error: "No GM is connected — the offer was not submitted. Try again when the GM is online." };
+    try {
+      return (await gx.call(RELAY_CREATE, { from: A.id, to: B.id, offer: offer || {}, ask: ask || {}, reason: String(reason || "") }))
+        || { ok: false, error: "GM relay returned nothing" };
+    } catch (e) {
+      console.warn(TAG, "create relay failed", e);
+      return { ok: false, error: String(e?.message || e) };
+    }
+  }
 
   const now = Date.now();
   const entry = {
@@ -334,6 +362,7 @@ function _attach() {
     root.expireSweep = expireSweep;
     root.expireAllInboxes = expireAllInboxes;
     root.emitPlayerAction = emitPlayerAction;
+    _registerRelay();   // GM-side handler for player-seat create()
     console.log(TAG, "Pending Trades API ready → game.bbttcc.api.factions.pending");
   } catch (e) {
     console.warn(TAG, "pending API wiring failed", e);

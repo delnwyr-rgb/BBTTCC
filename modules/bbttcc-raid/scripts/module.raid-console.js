@@ -563,7 +563,8 @@ function _rcSyncManeuverSelectionsFromDOM(app, idx, round){
     // Only apply if we found any checkboxes (avoid wiping in scenario modes).
     if (att.length || def.length) {
       round.mansSelected = att;
-      round.mansSelectedDef = def;
+      // Player seats render no defender boxes — only the GM seat is authoritative for def picks.
+      if (_rcIsGMUser()) round.mansSelectedDef = def;
     }
     // Support is keyed independently per faction; only overwrite when this
     // render actually exposed support checkboxes (guard against scenario wipe).
@@ -1635,6 +1636,54 @@ function _rcMarkManFired(r, side, key, factionId = null) {
   return true;
 }
 
+// The once-per-round gates (firedManeuvers / mechApplied) and the Fire Now effect stash
+// are append-only until commit — a session sync must never re-open them (commit-time B2
+// would re-apply the same effects). Union src's gates into dst.
+function _rcMergeRoundGates(dst, src) {
+  try {
+    if (!dst || !src || dst === src) return;
+    if (dst.committed || dst.cancelled) return;
+    const sf = src.meta?.firedManeuvers;
+    if (sf && typeof sf === "object") {
+      const df = _rcInitFiredMan(dst);
+      const mergeBucket = (d, b) => {
+        for (const [k, v] of Object.entries(b || {})) {
+          if (!v || typeof v !== "object") continue;
+          const applied = !!(v.mechApplied || d[k]?.mechApplied);
+          d[k] = Object.assign({}, v, d[k] || {});
+          if (applied) d[k].mechApplied = true;
+        }
+      };
+      mergeBucket(df.att, sf.att);
+      mergeBucket(df.def, sf.def);
+      for (const [fid, b] of Object.entries(sf.support || {})) mergeBucket((df.support[fid] ||= {}), b);
+    }
+    const si = src.meta?.intents;
+    if (si && typeof si === "object") {
+      dst.meta ||= {};
+      const di = (dst.meta.intents ||= {});
+      const sA = si.applied?.roundEffects, sP = si.pending?.worldEffects;
+      if (Array.isArray(sA) && sA.length > (di.applied?.roundEffects?.length || 0)) { di.applied ||= {}; di.applied.roundEffects = foundry.utils.duplicate(sA); }
+      if (Array.isArray(sP) && sP.length > (di.pending?.worldEffects?.length || 0)) { di.pending ||= {}; di.pending.worldEffects = foundry.utils.duplicate(sP); }
+    }
+  } catch (_e) {}
+}
+// Fold what `base` (the copy being replaced) authoritatively holds into `incoming` rounds,
+// matched by roundId. keepDef: the incoming payload came from a player seat, which never
+// authors defender maneuver picks — the stored (GM) list stands.
+function _rcMergeSessionRounds(incoming, base, { keepDef = false } = {}) {
+  if (!Array.isArray(incoming) || !Array.isArray(base)) return incoming;
+  for (const inc of incoming) {
+    const rid = String(inc?.roundId || "");
+    if (!rid) continue;
+    const old = base.find(b => String(b?.roundId || "") === rid);
+    if (!old) continue;
+    if (keepDef && !inc.committed && !inc.cancelled && Array.isArray(old.mansSelectedDef)) inc.mansSelectedDef = old.mansSelectedDef.slice();
+    _rcMergeRoundGates(inc, old);
+  }
+  return incoming;
+}
+
 const _RC_FM_FIRE_STYLES = {
   "pre-roll":    { lbl: "⏱ at commit",   bg: "rgba(14,58,94,0.35)",  fg: "#7fc8ff", brd: "rgba(30,95,140,0.55)", title: "Will fire automatically when the round commits." },
   "anytime":     { lbl: "▶ Fire Now",    bg: "rgba(28,58,28,0.65)",  fg: "#bfffbf", brd: "rgba(46,140,46,0.85)", title: "Fire this maneuver now." },
@@ -2517,11 +2566,24 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       this.vm.logWar      = !!s.logWar;
       this.vm.includeDefender = (s.includeDefender !== undefined) ? !!s.includeDefender : this.vm.includeDefender;
 
-      this.vm.rounds = Array.isArray(s.rounds) ? foundry.utils.duplicate(s.rounds) : (this.vm.rounds || []);
+      // Never let a sync re-open a once-per-round fire gate this seat already holds.
+      this.vm.rounds = Array.isArray(s.rounds) ? _rcMergeSessionRounds(foundry.utils.duplicate(s.rounds), this.vm.rounds || []) : (this.vm.rounds || []);
       return true;
     } finally {
       this.__sessionApplying = false;
     }
+  }
+
+  // Fire Now applied effects and stamped the once-per-round gate on `r` — get it into the
+  // session flag NOW so no other seat's save (or the commit) can re-open and re-apply it.
+  async _persistFireGate(r){
+    try {
+      // A sync may have swapped vm.rounds while the fire awaited — re-find the live round.
+      const live = (this.vm.rounds || []).find(x => x && String(x.roundId || "") === String(r?.roundId || ""));
+      if (live && live !== r) _rcMergeRoundGates(live, r);
+      if (this.__sessionApplying) this._queueSaveSession();
+      else await this._saveSessionNow();
+    } catch (e) { warn("_persistFireGate failed", e); }
   }
 
   _queueSaveSession(){
@@ -3177,10 +3239,11 @@ _renderScenarioHUD(host, round){
 
       const isGMView = !!_rcIsGMUser();
 
-      // Players should never see defender maneuver choices.
+      // Players should never see defender maneuver choices. Hide them in the VIEW only —
+      // the round object is shared session state that this seat saves back to the GM, so
+      // wiping round.mansSelectedDef here erased the GM's picks on the next sync.
       if (!_rcIsGMUser()) {
         for (const k of Object.keys(mapDef)) delete mapDef[k];
-        round.mansSelectedDef = [];
       }
 
       const keysA = Object.keys(mapAtt), keysD = Object.keys(mapDef);
@@ -4596,6 +4659,7 @@ r.view = {
         btn.disabled = true;
         // Thread the support actor as the firing faction (attribution).
         await _rcFireOneManeuver(r, "support", key, sfActor, null, this);
+        await this._persistFireGate(r);
         this.render();
         return;
       }
@@ -4613,6 +4677,7 @@ r.view = {
       }
       btn.disabled = true;
       await _rcFireOneManeuver(r, side, key, null, null, this);
+      await this._persistFireGate(r);
       this.render();
     });
   }
@@ -6835,6 +6900,20 @@ function bindAPI() {
             if (!attackerId || !payload) return;
             const a = await getActorByIdOrUuid(attackerId);
             if (!a) return;
+            // Relayed payloads come from player seats: the stored defender picks stand, and
+            // fire gates only ever accumulate (stored ∪ incoming).
+            try {
+              const stored = a.getFlag(RAID_ID, "raidSession");
+              if (Array.isArray(payload.rounds) && Array.isArray(stored?.rounds)) _rcMergeSessionRounds(payload.rounds, stored.rounds, { keepDef: true });
+              // A player's Fire Now must reach the GM's open console even if rev doesn't advance here.
+              for (const app of Array.from(globalThis.__bbttccRaidOpenConsoles || [])) {
+                if (String(app?.vm?.attackerId || "") !== String(a.id) || !Array.isArray(app.vm.rounds) || !Array.isArray(payload.rounds)) continue;
+                for (const live of app.vm.rounds) {
+                  const inc = payload.rounds.find(x => String(x?.roundId || "") === String(live?.roundId || ""));
+                  if (inc) _rcMergeRoundGates(live, inc);
+                }
+              }
+            } catch (_eMerge) {}
             await a.setFlag(RAID_ID, "raidSession", payload);
             return;
           }
@@ -8670,11 +8749,12 @@ function _b3ReadStrategicBoons(round, attacker, mansAtt){
 async function _b3ConsumeStrategicBoons(round, attacker){
   try {
     const used = round?.meta?.b3?.boons; if (!used || (!used.initiativeAdv && !used.freeManeuver)) return;
-    const b = foundry.utils.duplicate(attacker?.getFlag?.("bbttcc-factions", "bonuses") || {});
-    if (!b.nextTurn) return;
-    if (used.initiativeAdv) delete b.nextTurn.initiativeAdv;
-    if (used.freeManeuver) delete b.nextTurn.freeManeuver;
-    await attacker.update({ "flags.bbttcc-factions.bonuses": b });
+    const nt = attacker?.getFlag?.("bbttcc-factions", "bonuses")?.nextTurn;
+    if (!nt) return;
+    // update()/setFlag MERGE objects — writing the parent back without the keys removes
+    // nothing (the boon stayed on forever). One-shot consumption needs unsetFlag per key.
+    if (used.initiativeAdv && nt.initiativeAdv !== undefined) await attacker.unsetFlag("bbttcc-factions", "bonuses.nextTurn.initiativeAdv");
+    if (used.freeManeuver && nt.freeManeuver !== undefined) await attacker.unsetFlag("bbttcc-factions", "bonuses.nextTurn.freeManeuver");
   } catch (e) { warn("consume strategic boons failed", e); }
 }
 

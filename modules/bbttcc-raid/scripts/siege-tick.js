@@ -337,14 +337,17 @@
   // ============================================================
 
   async function _onAdvanceTurnEnd(ctx){
+    // Dry-run / preview Advance Turn must not mutate — only an applied turn ticks sieges.
+    if (!ctx?.apply) return;
+    // Only the ACTIVE GM runs the tick (state mutations on shared hex docs; one writer).
+    if (!game.user?.isGM) return;
+    if (game.users?.activeGM && game.users.activeGM !== game.user) return;
+
     const S = globalThis.__bbttccSiegeState;
     if (!S?.listActiveSieges) return;
 
     const active = S.listActiveSieges();
     if (!active.length) return;
-
-    // Only GM should run the tick (state mutations on shared hex docs)
-    if (!game.user?.isGM) return;
 
     console.log(TAG, `ticking ${active.length} active siege(s) for turn ${_currentTurn()}`);
 
@@ -368,7 +371,7 @@
     game.bbttcc = game.bbttcc || { api: {} };
     game.bbttcc.api = game.bbttcc.api || {};
     game.bbttcc.api.siege = game.bbttcc.api.siege || {};
-    game.bbttcc.api.siege.tickAll = () => _onAdvanceTurnEnd({});
+    game.bbttcc.api.siege.tickAll = () => _onAdvanceTurnEnd({ apply: true });   // manual = a real tick
     game.bbttcc.api.siege.tickOne = async (hexUuid) => {
       const S = globalThis.__bbttccSiegeState;
       if (!S?.listActiveSieges) return { ok: false, reason: "siege-state not loaded" };

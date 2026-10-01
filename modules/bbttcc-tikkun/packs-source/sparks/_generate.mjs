@@ -45,6 +45,13 @@ const KINDS = {
     label:      "Conceptual",
     materialKey:"vow-resin",
     materialAmount: 1,
+    // ⚠ OWNER RULING OWED (review 2026-09-30): `soul` is a FACULTY, not one of the
+    // nine faction OP channels (violence, nonlethal, intrigue, economy, softpower,
+    // diplomacy, logistics, culture, faith) — no opBank ever holds it, so this
+    // repair cost can never be paid and a corrupted Conceptual spark stays
+    // corrupted. Left as designed until ruled; proposed replacement: "culture"
+    // (doctrine / song / vow; distinct from Animate's faith). After changing it:
+    // re-run this generator, then tools/load-sparks-pack.macro.js.
     opCost:     { pool: "soul",      amount: 2 },
     ritualDC:   18,
     descIntro:  "Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow."
@@ -140,6 +147,14 @@ function buildSpark(seph, kindKey) {
     },
     _key: `!items!${id}`
   };
+}
+
+// Guard: a repair pool must be a real faction OP channel (see the ruling note above).
+const OP_CHANNELS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
+for (const [k, kind] of Object.entries(KINDS)) {
+  if (!OP_CHANNELS.includes(kind.opCost.pool)) {
+    console.warn(`⚠ KINDS.${k}.opCost.pool = "${kind.opCost.pool}" is not a faction OP channel — its repair ritual is unpayable in play.`);
+  }
 }
 
 let written = 0;

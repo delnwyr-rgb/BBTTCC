@@ -2497,7 +2497,22 @@ async function openHexEditorByUuid(uuid){
             };
 
             // Compute effective from whichever vector will be used for UI
-            const mods = Array.isArray(data.modifiers) ? data.modifiers : [];
+            // Start from the STORED list and overlay the rendered checkboxes: the form only
+            // renders the catalog + unique states, so anything else on the hex (Supply Line,
+            // Logistics Hub, resolution outcomes, a differently-cased catalog name) must
+            // survive a Save it was never shown in.
+            const mods = (() => {
+              const checked = Array.isArray(data.modifiers) ? data.modifiers : [];
+              const storedRaw = dr.flags?.[MOD]?.modifiers ?? f?.modifiers;
+              const stored = Array.isArray(storedRaw) ? storedRaw : [];
+              const rendered = new Set([
+                ...HEX_MODIFIER_CATALOG.map(m => m.name),
+                ...Object.values(WORLD_MODIFIERS).map(v => v.label)
+              ]);
+              const checkedLower = new Set(checked.map(m => String(m).toLowerCase()));
+              const kept = stored.filter(m => !rendered.has(m) && !checkedLower.has(String(m).toLowerCase()));
+              return [...new Set([...kept, ...checked])];
+            })();
             const vectorForDisplay =
               (manualResourceOverride && Object.values(base).some(n=>n>0))
                 ? base

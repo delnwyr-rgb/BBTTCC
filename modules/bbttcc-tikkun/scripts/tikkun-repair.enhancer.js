@@ -32,8 +32,19 @@ console.log("[bbttcc-tikkun/repair] LOADED");
 (() => {
   const TAG = "[bbttcc-tikkun/repair]";
 
-  // ── OP pool keys (mirrors bbttcc-bridge.js) ────────────────────────────
-  const OP_POOLS = ["violence","intrigue","softpower","diplomacy","economy","nonlethal","faith","logistics","siege","body","soul","culture"];
+  // ── Faction OP channels ────────────────────────────────────────────────
+  // The NINE channels a faction opBank actually holds (op-engine OP_KEYS).
+  // 🪤 The six faculties share some names with these (violence / intrigue), but
+  // `soul` and `body` are faculties ONLY, and `siege` is a method tag — no engine
+  // path ever credits them to an opBank, so a recipe priced in one of them can
+  // never be paid. Guarded below so that reads as a recipe fault, not "have 0".
+  const OP_CHANNELS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
+  function _isOpChannel(pool) {
+    const keys = game.bbttcc?.api?.op?.KEYS;
+    return (Array.isArray(keys) && keys.length ? keys : OP_CHANNELS).includes(String(pool || ""));
+  }
+  const _badPoolMsg = (pool, sparkName) =>
+    `"${pool}" is not a faction OP channel — the repair recipe on ${sparkName} cannot be paid. Fix the spark's repair.opCost.pool (owner ruling), then reload the sparks pack.`;
 
   // ── Faction-member scanning ────────────────────────────────────────────
   function _getFactionMembers(factionId) {
@@ -147,6 +158,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     if (!factionActor || !pool || !amount) return;
     const bank = _opBank(factionActor);
     const cur = Number(bank[pool]) || 0;
+    if (!_isOpChannel(pool)) throw new Error(`"${pool}" is not a faction OP channel — repair recipe cannot be paid.`);
     if (cur < amount) throw new Error(`Insufficient ${pool} marks: have ${cur}, need ${amount}.`);
     bank[pool] = cur - amount;
     await factionActor.update({ "flags.bbttcc-factions.opBank": bank });
@@ -193,7 +205,8 @@ console.log("[bbttcc-tikkun/repair] LOADED");
     const matScan = _scanMaterialAcrossFaction(factionActor.id, matKey);
     const opAvail = _factionOpAvailable(factionActor, opPool);
     const matOK   = !matKey  || matScan.available >= matNeed;
-    const opOK    = !opPool || opAvail >= opNeed;
+    const opPoolBad = !!opPool && opNeed > 0 && !_isOpChannel(opPool);
+    const opOK    = !opPool || (!opPoolBad && opAvail >= opNeed);
 
     // Contributor picker — any faction member.
     const members = _getFactionMembers(factionActor.id);
@@ -207,7 +220,7 @@ console.log("[bbttcc-tikkun/repair] LOADED");
       ? `<li>Material: <b>${matNeed}× ${matKey}</b> &nbsp; <span style="color:${matOK ? "#6fcf97" : "#c03030"}">${matOK ? "✓ available" : `✗ have ${matScan.available}`}</span></li>`
       : `<li>Material: <i>(none required)</i></li>`;
     const opLine = opPool
-      ? `<li>OP: <b>${opNeed} ${opPool}</b> &nbsp; <span style="color:${opOK ? "#6fcf97" : "#c03030"}">${opOK ? `✓ have ${opAvail}` : `✗ have ${opAvail}`}</span></li>`
+      ? `<li>OP: <b>${opNeed} ${opPool}</b> &nbsp; <span style="color:${opOK ? "#6fcf97" : "#c03030"}">${opOK ? `✓ have ${opAvail}` : (opPoolBad ? `✗ "${opPool}" is not a faction OP channel — recipe cannot be paid` : `✗ have ${opAvail}`)}</span></li>`
       : `<li>OP: <i>(none required)</i></li>`;
 
     const content = `<div style="font-size:0.86rem">
@@ -233,6 +246,10 @@ console.log("[bbttcc-tikkun/repair] LOADED");
         roll: {
           label: "Roll Ritual",
           callback: async (html) => {
+            if (opPoolBad) {
+              ui.notifications?.error?.(_badPoolMsg(opPool, sparkItem.name));
+              return;
+            }
             if (!matOK || !opOK) {
               const missing = [];
               if (!matOK) missing.push(`materials: need ${matNeed}× ${matKey}, have ${matScan.available}`);
@@ -408,13 +425,14 @@ console.log("[bbttcc-tikkun/repair] LOADED");
       const opAvail  = opPool && opPool !== "—"
         ? _factionOpAvailable(faction, opPool)
         : Infinity;
-      const ready = matAvail >= matNeed && opAvail >= opNeed;
+      const opPoolBad = opPool !== "—" && opNeed > 0 && !_isOpChannel(opPool);
+      const ready = matAvail >= matNeed && opAvail >= opNeed && !opPoolBad;
       return `
         <tr>
           <td>${item?.name ?? sparkKey} ${sephLabel ? `<span style="opacity:0.6;font-size:0.74rem">(${sephLabel})</span>` : ""}</td>
           <td>${actor.name}</td>
           <td style="text-align:center">${matNeed ? `${matNeed}× ${matKey} <span style="opacity:0.7">(have ${matAvail === Infinity ? "—" : matAvail})</span>` : "—"}</td>
-          <td style="text-align:center">${opNeed ? `${opNeed} ${opPool} <span style="opacity:0.7">(have ${opAvail === Infinity ? "—" : opAvail})</span>` : "—"}</td>
+          <td style="text-align:center">${opNeed ? `${opNeed} ${opPool} <span style="opacity:0.7">(${opPoolBad ? "⚠ not an OP channel — unpayable" : `have ${opAvail === Infinity ? "—" : opAvail}`})</span>` : "—"}</td>
           <td style="text-align:center">${dc}${attempts ? ` <span style="opacity:0.6">(-${2*attempts})</span>` : ""}</td>
           <td style="text-align:right"><button type="button" class="bbttcc-tk-repair-begin" data-actor-id="${actor.id}" data-spark-key="${sparkKey}" ${ready ? "" : "disabled style=\"opacity:0.5\""}>Begin Repair</button></td>
         </tr>`;

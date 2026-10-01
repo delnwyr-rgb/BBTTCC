@@ -363,6 +363,20 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
   //   • Calls the faction-level `integrateSpark(factionId, sparkKey, count: 1)`
   //     which writes the three faction storage formats + war-log entry.
   //   • Fires `bbttcc:spark:deposited` for downstream listeners.
+  const DEPOSIT_RELAY = "tikkun.depositSpark";
+  function _registerDepositRelay() {
+    const gx = game.bbttcc?.api?.gmExec;
+    if (!gx?.register) return;
+    gx.register(DEPOSIT_RELAY, async (p, meta) => {
+      const actor = _asActor(p?.actorId);
+      if (!actor) throw new Error("actor not found");
+      const caller = game.users?.get(String(meta?.fromUserId || ""));
+      if (!meta?.local && !(caller && actor.testUserPermission?.(caller, "OWNER"))) throw new Error(`${caller?.name || "caller"} does not own ${actor.name}`);
+      // Faction always resolves from the character's own flag on a relayed deposit.
+      const s = await depositSpark({ actorId: actor.id, sparkKey: String(p?.sparkKey || ""), note: String(p?.note || "") });
+      return foundry.utils.deepClone(s);
+    });
+  }
   async function depositSpark({ actorId, sparkKey, factionId, note = "" } = {}) {
     const actor = _asActor(actorId);
     if (!actor) throw new Error("depositSpark: actor not found");
@@ -379,17 +393,32 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     const faction = game.actors?.get(fid);
     if (!faction) throw new Error(`depositSpark: faction ${fid} not found`);
 
+    // Seat-aware: the deposit ends in faction-actor writes (and GM-gated listeners
+    // on bbttcc:spark:deposited), which a PLAYER seat cannot perform — and the
+    // Deposit button on The Work tab is theirs to click. Player seats relay the
+    // whole deposit to the primary GM via bbttcc-core gmExec; the handler checks
+    // the caller OWNS the depositing character.
+    if (!game.user?.isGM) {
+      const gx = game.bbttcc?.api?.gmExec;
+      if (!gx?.call) throw new Error("depositSpark: a GM must be connected to receive the deposit");
+      const out = await gx.call(DEPOSIT_RELAY, { actorId: actor.id, sparkKey, note });
+      ui.notifications?.info?.(`${actor.name} deposited ${s.name} to ${faction.name}.`);
+      return out;
+    }
+
     // Faction-level integration write. Faction-side function lives in
     // tikkun-sparks.enhancer.js and writes all three storage shapes.
+    // If it fails (or is missing) the deposit did NOT happen: throw BEFORE the
+    // character flip, so the spark stays depositable and nothing claims a count
+    // the faction never received.
     const sephKey = String(s.sephirah || sparkKey).toLowerCase();
     const factionApi = game?.bbttcc?.api?.tikkun?.integrateSpark;
-    if (typeof factionApi === "function") {
-      try {
-        await factionApi({ factionId: fid, key: sephKey, count: 1 });
-      } catch (e) {
-        // Don't strand the deposit — log and continue with the character flip.
-        console.warn("[bbttcc-tikkun/api] faction integrateSpark failed during deposit:", e);
-      }
+    if (typeof factionApi !== "function") throw new Error("depositSpark: faction integrateSpark is not installed — nothing deposited");
+    try {
+      await factionApi({ factionId: fid, key: sephKey, count: 1 });
+    } catch (e) {
+      console.warn("[bbttcc-tikkun/api] faction integrateSpark failed during deposit:", e);
+      throw new Error(`depositSpark: ${faction.name} could not receive ${s.name ?? sparkKey} (${e?.message ?? e}) — nothing deposited`);
     }
 
     s.deposited = true;
@@ -565,6 +594,8 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
 
       API.getGreatWorkState               = getGreatWorkState;
       API.getGreatWorkStateForAllFactions = getGreatWorkStateForAllFactions;
+
+      _registerDepositRelay();
 
       console.log(TAG, "API ready (installAPI):", Object.keys(API));
     } catch (e) {

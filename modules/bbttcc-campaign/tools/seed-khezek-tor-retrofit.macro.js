@@ -11,6 +11,15 @@
  *  4. Full KT script (code + the new steps before "squares", polished doors, tape in `after`) → campaign.story; quest def + chapter.
  *
  * Idempotent; backs up the campaigns setting. F5 after.
+ *
+ * REVIEW FIXES 2026-10-01 (GAME_REVIEW_2026_09_30, HIGH ×2):
+ *  • the climax step was `id: "word"`, which is ALSO the code script's "Word from the Mountain" step, so the filter dropped it and the
+ *    chapter had no ending on the NOW card. It is `oword` now, and the filter matches by id OR by beats.
+ *  • the two endings (given / thin) carried Calder as speaker and no gate — a conversation with Calder could play them cold. They are
+ *    gated on the chapter + kt_official_word (given also on both receipts) and marked dialogueOffer:false; the four fail landings are
+ *    dialogueOffer:false too (routing-only nodes). executeBeat never consults inject.requires on a route, so the endings stay reachable
+ *    from kt_official_word's choices. A re-run over an already-seeded world reconciles the existing beats (adds what is missing only).
+ *    Already-seeded worlds: tools/patch-template-review-fixes-2026-10-01.macro.js does the same repair in one run.
  */
 (async () => {
   const DRY_RUN = true;                       // <-- set false to apply
@@ -96,7 +105,7 @@
 
   const TAGS = "khezek_tor official_word story";
   const CH = { quest: KEY, chapter: "the_official_word" };
-  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, receipts = null, story = null, requires = null, timePoints = 0, priority = "background", memoryText = null, questEffects = null, factionEffects = null, scene = null } = {}) => ({
+  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, receipts = null, story = null, requires = null, timePoints = 0, priority = "background", memoryText = null, questEffects = null, factionEffects = null, scene = null, offer = true } = {}) => ({
     id, label, type, timeScale: "scene", timePoints, questId: Q_WORD, tags: TAGS, politicalTags: "",
     description, outcomes: { success: null, failure: null },
     inject: { cooldownTurns: 0, repeatable: false, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit", ...(requires ? { requires } : {}) },
@@ -104,6 +113,7 @@
     storyChain: KEY, priority,
     ...(scene ? { sceneId: scene } : {}),
     ...(speaker ? { speakerActorId: speaker } : {}),
+    ...(offer === false ? { dialogueOffer: false } : {}),   // a routing-only node: never a conversation moment
     story: story || CH,
     ...(memoryText ? { memoryText } : {}),
     choices: choices || [{ label: "Continue", next: "", description: "", checkStat: "", checkDC: 0, failNext: "" }],
@@ -112,6 +122,11 @@
   const ch = (label, next = "", extra = {}) => ({ label, next, description: "", checkStat: "", checkDC: 0, failNext: "", ...extra });
   const P2 = { flag: "storyPhase", gte: 2 };
   const ACTIVE = [P2, { questBucket: Q_WORD, is: "active" }];
+  // the endings are reached ONLY by kt_official_word's choices (a route never consults inject.requires); these gates keep the Director
+  // and the conversation surface from offering them before the cookline scene has happened
+  const GATE_THIN = [...ACTIVE, { beatMark: "kt_official_word" }];
+  const GATE_GIVEN = [...GATE_THIN, { beatMark: "kt_dropped_manifest" }, { beatMark: "kt_back_room_roster" }];
+  const NO_OFFER = ["kt_official_word_open_fail", "kt_brennig_desk_fail", "kt_cage_shaft_fail", "kt_good_room_fail", "kt_official_word_given", "kt_official_word_thin"];
   const COALITION = ["6H5Grt3HybAs1rSq", "eIXghZ73hKSXmP3x"];
   const fx = (morale = 0, loyalty = 0) => COALITION.map(factionId => ({ factionId, moraleDelta: morale, loyaltyDelta: loyalty, unityDelta: 0, darknessDelta: 0, opDeltas: {}, allowOvercap: false }));
 
@@ -128,7 +143,7 @@
         ] }),
     beat("kt_official_word_open_fail", "Khezek-Tor — A Number on the Board",
       "Calder writes a number on the board. It is not an answer. It is tonnage. He goes back to work, and so does the mountain, and the shift list goes back into his pocket folded around its gap.",
-      { type: "narration", speaker: sp("Drax Calder"), scene: SC.brace, requires: ACTIVE, choices: [ch("Watch him work.", "", { description: "He talks again, about the Brace. Not about the list." })] }),
+      { type: "narration", speaker: sp("Drax Calder"), scene: SC.brace, requires: ACTIVE, offer: false, choices: [ch("Watch him work.", "", { description: "He talks again, about the Brace. Not about the list." })] }),
     beat("kt_brennig_desk", "Khezek-Tor — Brennig's Desk",
       "Two pallets and a door, and on it the whole mountain's paperwork in a hand that gets neater the worse the news is. Brennig is counting crates aloud, which is what he does instead of the subject. \"Nine. Ten. Don't mind me. Eleven.\"",
       { speaker: sp("Brennig Tamsin"), scene: SC.lift, requires: ACTIVE, choices: [
@@ -138,7 +153,7 @@
       ] }),
     beat("kt_brennig_desk_fail", "Khezek-Tor — Starting Again at One",
       "You lose count at nine. He starts again at one, out loud, without a flicker of impatience, and it is the most patient thing you have seen anyone do in this world, and you understand that he has had practice.",
-      { type: "narration", speaker: sp("Brennig Tamsin"), scene: SC.lift, requires: ACTIVE, choices: [ch("Count with him.", "", { description: "Eleven. You get there." })] }),
+      { type: "narration", speaker: sp("Brennig Tamsin"), scene: SC.lift, requires: ACTIVE, offer: false, choices: [ch("Count with him.", "", { description: "Eleven. You get there." })] }),
     beat("kt_cage_shaft", "Khezek-Tor — Below Four",
       "Sable brings two chairs, which is how you know they've decided to like you. The cage shaft is a square of dark with a rope down it and a chart pinned beside it with one mark that has never moved. \"It's down there,\" Sable says. \"It has been down there the whole time. Nobody goes below Four except me, and I don't touch things. Charting isn't touching.\"",
       { speaker: sp("Sable 9"), scene: SC.maw, requires: [...ACTIVE, { beatMark: "kt_brennig_desk" }], choices: [
@@ -148,7 +163,7 @@
       ] }),
     beat("kt_cage_shaft_fail", "Khezek-Tor — Better Rope",
       "\"We come back with better rope,\" Sable says, coiling it. \"The mountain isn't going anywhere, which is the one thing I can promise about it.\" They fold the second chair. They leave the first one, for next time.",
-      { type: "narration", speaker: sp("Sable 9"), scene: SC.maw, requires: ACTIVE, choices: [ch("Come back with better rope.", "kt_cage_shaft")] }),
+      { type: "narration", speaker: sp("Sable 9"), scene: SC.maw, requires: ACTIVE, offer: false, choices: [ch("Come back with better rope.", "kt_cage_shaft")] }),
     beat("kt_dropped_manifest", "Khezek-Tor — The Dropped Manifest",
       "Ore counts, in Brennig's hand, for a shift two years gone. Under them, a second list in a different hand: names, and beside the names a chamber number, and beside the chamber number, in a third hand that pressed hard, FORBIDDEN. The middle Tamsin brother went down for this. He is, technically, still holding it.",
       { type: "narration", scene: SC.maw, priority: "high", requires: ACTIVE,
@@ -164,7 +179,7 @@
       ] }),
     beat("kt_good_room_fail", "Khezek-Tor — The Room Stays Shut",
       "She pours. Whatever it is, it is exactly the right thing for whoever you are, which is her whole trick. The room stays shut. \"Ask better,\" she says, not unkindly, \"or bring me something to read.\"",
-      { type: "narration", speaker: sp("\"Doc\"Vess Greeley"), scene: SC.waiting, requires: ACTIVE, choices: [ch("Drink what she poured.", "", { description: "It's a sprain, not a break." })] }),
+      { type: "narration", speaker: sp("\"Doc\"Vess Greeley"), scene: SC.waiting, requires: ACTIVE, offer: false, choices: [ch("Drink what she poured.", "", { description: "It's a sprain, not a break." })] }),
     beat("kt_back_room_roster", "Khezek-Tor — The Back-Room Roster",
       "In the drawer under the suture kit, in her prescription hand: who was hurt on the Night the Mountain Coughed, in order, with what she did for each. And one man she treated who was not on the shift list at all. Cross it against the dropped manifest and the same name is on both, in different hands.",
       { type: "narration", scene: SC.waiting, priority: "high", requires: ACTIVE,
@@ -187,13 +202,13 @@
       ] }),
     beat("kt_official_word_given", "Khezek-Tor — The Word, Given",
       "The outfit says it. The chamber was forbidden and somebody knew. The crew was steered, and the men who steered it are named, here, out loud, off a manifest a dead man carried and a roster a doctor kept. The receipts go east through the gate tonight. Nobody cheers. Calder picks the chalk back up and underlines the date on the board, once, and around here that is a medal. Bez serves.",
-      { type: "narration", speaker: sp("Drax Calder"), scene: SC.cookline, priority: "high", timePoints: 1, story: { ...CH, role: "ending", ending: "given" },
+      { type: "narration", speaker: sp("Drax Calder"), scene: SC.cookline, priority: "high", timePoints: 1, story: { ...CH, role: "ending", ending: "given" }, requires: GATE_GIVEN, offer: false,
         memoryText: "The Stewards said the official word at the cookline of Khezek-Tor with the dropped manifest and the back-room roster in their hands. The crews heard it. Calder underlined it. The receipts went east.",
         questEffects: [{ action: "complete", questId: Q_WORD, beatId: "", state: "completed", text: "The official word, given — with receipts. The Cough has a cause and names." }],
         factionEffects: fx(1, 1), choices: [ch("Eat what Bez gives you.", "")] }),
     beat("kt_official_word_thin", "Khezek-Tor — The Word, Thin",
       "The outfit says it knows. It does not say what it knows, because it doesn't, not yet, not with anything in its hands. The crews nod the way you nod at weather. Calder writes nothing on the board. Bez starts serving again, which is a kindness, and everyone takes it as one.",
-      { type: "narration", speaker: sp("Drax Calder"), scene: SC.cookline, timePoints: 1, story: { ...CH, role: "ending", ending: "thin" },
+      { type: "narration", speaker: sp("Drax Calder"), scene: SC.cookline, timePoints: 1, story: { ...CH, role: "ending", ending: "thin" }, requires: GATE_THIN, offer: false,
         memoryText: "The Stewards said the outfit knew, at the cookline, with nothing in their hands. The crews nodded like weather.",
         questEffects: [{ action: "complete", questId: Q_WORD, beatId: "", state: "completed", text: "The official word, thin — said without receipts." }],
         factionEffects: fx(-1, 0), choices: [ch("Eat anyway.", "")] }),
@@ -209,6 +224,11 @@
 
   // speakers on the speakerless
   const edit = (id, fn, what) => { const b = byId.get(id); if (!b) return say(`✗ MISSING ${id}`); const before = JSON.stringify(b); fn(b); if (JSON.stringify(b) !== before) { changes++; say(`✎ ${id}: ${what}`); } else say(`· ok ${id}`); };
+  // reconcile beats seeded before the 2026-10-01 review fixes: add the missing gate conditions (never remove any) + the offer opt-out
+  const ensureReq = (b, conds) => { b.inject = b.inject || {}; const cur = Array.isArray(b.inject.requires) ? b.inject.requires.slice() : (b.inject.requires && typeof b.inject.requires === "object" ? [b.inject.requires] : []); const have = new Set(cur.map(c => JSON.stringify(c))); for (const c of conds) if (!have.has(JSON.stringify(c))) { cur.push(c); have.add(JSON.stringify(c)); } b.inject.requires = cur; };
+  edit("kt_official_word_given", b => ensureReq(b, GATE_GIVEN), "gated on the cookline scene + both receipts");
+  edit("kt_official_word_thin", b => ensureReq(b, GATE_THIN), "gated on the cookline scene");
+  for (const id of NO_OFFER) edit(id, b => { if (b.dialogueOffer !== false) b.dialogueOffer = false; }, "dialogueOffer:false (routing-only)");
   const voice = (ids, name) => { for (const id of ids) edit(id, b => { if (!b.speakerActorId && sp(name)) b.speakerActorId = sp(name); }, `speaker ${name}`); };
   voice(["khezek_tor_the_lift_hall", "khezek_tor_darkness_shipment_quest_acceptance"], "Brennig Tamsin");
   voice(["khezek_tor_the_brace", "khezek_tor_drax_calder_convo_1", "khezek_tor_drax_calder_convo_2", "khezek_tor_drax_calder_convo_3", "khezek_tor_drax_calder_convo_echo", "khezek_tor_mine_that_answered_back_quest_acceptance", "khezek_brace_groans"], "Drax Calder");
@@ -231,9 +251,11 @@
       { id: "shaft", label: "Below Four", group: "word", chapter: W, line: "The manifest is in the cage shaft where the middle brother left it. Sable has rope. Bring your own chair.", beats: ["kt_cage_shaft"], done: { mark: "kt_dropped_manifest" } },
       { id: "room", label: "The Good Room", group: "word", chapter: W, line: "Doc Greeley's back room has been shut since the Cough. Ask what it's FOR. Don't joke in there.", beats: ["kt_good_room"], done: { mark: "kt_back_room_roster" } },
       { id: "place", label: "The Place Setting", group: "word", chapter: W, line: "There are more plates at the cookline than brothers. Ask Brennig whose. Then put the manifest on it.", beats: ["kt_place_setting"] },
-      { id: "word", label: "The Official Word", group: "word", chapter: W, line: "Say it out loud at the cookline, with the receipts in your hands. The mountain gets to hear it too.", beats: ["kt_official_word"], done: { anyOf: ["kt_official_word_given", "kt_official_word_thin"] } }
+      // id `oword`, NOT `word`: the code script already has a step `word` ("Word from the Mountain") and the clash dropped this one (review 2026-09-30)
+      { id: "oword", label: "The Official Word", group: "word", chapter: W, line: "Say it out loud at the cookline, with the receipts in your hands. The mountain gets to hear it too.", beats: ["kt_official_word"], done: { anyOf: ["kt_official_word_given", "kt_official_word_thin"] } }
     ];
-    const has = (id) => SCRIPT.steps.some(s => s.id === id); const fresh = add.filter(s => !has(s.id));
+    // already there = same id OR already plays one of the step's beats (an id clash must never silently drop a step again)
+    const has = (st) => SCRIPT.steps.some(s => s.id === st.id || (s.beats || []).some(b => (st.beats || []).includes(b))); const fresh = add.filter(st => !has(st));
     const at = SCRIPT.steps.findIndex(s => s.id === "squares"); if (at >= 0) SCRIPT.steps.splice(at, 0, ...fresh); else SCRIPT.steps.push(...fresh);
     SCRIPT.chapters = { ...(SCRIPT.chapters || {}), [W]: { giver: "Foreman Calder, who has said nothing official since the Cough", line: "Nobody from the outfit has said a word since the Cough. You are the outfit. Go and be the word." } };
     SCRIPT.after = Array.from(new Set([...(SCRIPT.after || []), "kt_comeuppance_tape"]));

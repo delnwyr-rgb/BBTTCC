@@ -531,6 +531,9 @@
                 {{#if ../skillStatOptions.length}}
                   <select name="choice-check-stat">
                     <option value="">(No check)</option>
+                    {{#if (lookup ../customCheckStats index)}}
+                      <option value="{{ch.checkStat}}" selected>{{ch.checkStat}} (custom)</option>
+                    {{/if}}
                     {{#each ../skillStatOptions as |opt|}}
                       <option value="{{opt.key}}" {{#if (eq opt.key ch.checkStat)}}selected{{/if}}>
                         {{opt.label}} ({{opt.key}})

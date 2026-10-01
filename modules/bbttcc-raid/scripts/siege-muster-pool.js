@@ -95,29 +95,43 @@
     try { _api()?.siege?.refreshHud?.(); } catch (_e) {}   // 🪖 chips track every pool move (debounced)
     return next;
   }
+  // Per-faction write queue. Every pool move is read-modify-write on ONE flag; a Recall
+  // deletes N tokens at once → N credits racing on the same pre-update size (last write
+  // wins, survivors vanish). Chain them so each reads the size the previous one wrote.
+  const _poolQ = new Map();
+  function _serial(f, fn) {
+    const id = String(f?.id || "");
+    const p = (_poolQ.get(id) || Promise.resolve()).then(fn, fn);
+    _poolQ.set(id, p.catch(() => {}));
+    return p;
+  }
   // Checkout: Form Up fields troops → they leave the pool. Returns the amount actually taken.
   async function debit(f, n, reason = "") {
     if (!game.user?.isGM) return 0;
     f = _fac(f); n = Math.max(0, Math.round(_num(n, 0)));
     if (!f || n <= 0) return 0;
-    const p = get(f);
-    const take = Math.min(p.size, n);
-    if (take <= 0) return 0;
-    await _write(f, { size: p.size - take });
-    if (reason) console.log(TAG, `${f.name} −${take} troops (${reason}) → pool ${p.size - take}/${p.cap}`);
-    return take;
+    return _serial(f, async () => {
+      const p = get(f);
+      const take = Math.min(p.size, n);
+      if (take <= 0) return 0;
+      await _write(f, { size: p.size - take });
+      if (reason) console.log(TAG, `${f.name} −${take} troops (${reason}) → pool ${p.size - take}/${p.cap}`);
+      return take;
+    });
   }
   // Checkin: recalled SURVIVORS come home (never above the raw cap — casualties don't).
   async function credit(f, n, reason = "") {
     if (!game.user?.isGM) return 0;
     f = _fac(f); n = Math.max(0, Math.round(_num(n, 0)));
     if (!f || n <= 0) return 0;
-    const p = get(f);
-    const give = Math.max(0, Math.min(n, p.cap - p.size));
-    if (give <= 0) return 0;
-    await _write(f, { size: p.size + give });
-    if (reason) console.log(TAG, `${f.name} +${give} troops (${reason}) → pool ${p.size + give}/${p.cap}`);
-    return give;
+    return _serial(f, async () => {
+      const p = get(f);
+      const give = Math.max(0, Math.min(n, p.cap - p.size));
+      if (give <= 0) return 0;
+      await _write(f, { size: p.size + give });
+      if (reason) console.log(TAG, `${f.name} +${give} troops (${reason}) → pool ${p.size + give}/${p.cap}`);
+      return give;
+    });
   }
 
   // ── Raise Troops (the costed faucet) ──────────────────────────────────────────
@@ -181,8 +195,8 @@
       console.warn(TAG, "op API unavailable — raising troops WITHOUT payment");
     }
 
-    const p = get(f);
-    const pool = await _write(f, { size: p.size + q.troops, raisedTotal: _num(f.flags?.[MOD_R]?.musterPool?.raisedTotal, 0) + q.troops });
+    let p = get(f);
+    const pool = await _serial(f, () => { p = get(f); return _write(f, { size: p.size + q.troops, raisedTotal: _num(f.flags?.[MOD_R]?.musterPool?.raisedTotal, 0) + q.troops }); });
 
     const surch = (q.mult > 1) ? ` <span style="opacity:.7;">(×${q.mult} — ${q.band})</span>` : "";
     try {
@@ -206,12 +220,14 @@
       try {
         if (a?.getFlag?.(MOD_F, "isFaction") !== true) continue;
         if (!a.flags?.[MOD_R]?.musterPool) continue;            // virtual pools are already full
-        const p = get(a);
-        if (p.band !== "stable" && p.band !== "stretched") continue;   // overextension = no recovery
-        if (p.size >= p.effectiveCap) continue;
-        const gain = Math.min(Math.max(1, Math.round(p.cap * 0.10)), p.effectiveCap - p.size);
-        await _write(a, { size: p.size + gain });
-        lines.push(`${a.name} +${gain} (→ ${p.size + gain}/${p.cap})`);
+        await _serial(a, async () => {
+          const p = get(a);
+          if (p.band !== "stable" && p.band !== "stretched") return;   // overextension = no recovery
+          if (p.size >= p.effectiveCap) return;
+          const gain = Math.min(Math.max(1, Math.round(p.cap * 0.10)), p.effectiveCap - p.size);
+          await _write(a, { size: p.size + gain });
+          lines.push(`${a.name} +${gain} (→ ${p.size + gain}/${p.cap})`);
+        });
       } catch (e) { console.warn(TAG, "trickle failed for", a?.name, e); }
     }
     if (lines.length) {

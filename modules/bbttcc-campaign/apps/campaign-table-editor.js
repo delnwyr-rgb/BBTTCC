@@ -302,6 +302,12 @@ export class BBTTCCCampaignTableEditorApp extends Application {
       }
     }
 
+    // Row-index snapshot of the stored entries: Save overlays the form columns
+    // onto these so fields the grid does not show (once, phaseGte/phaseLte,
+    // terrains, hex lists, tag lists) survive. Add/Remove write the stored
+    // table and re-render, so form row i is always stored entry i.
+    this._renderedEntries = foundry.utils.deepClone(t.entries);
+
     const entries = t.entries.map(e => {
       const c = e && e.conditions ? e.conditions : {};
       return {
@@ -358,6 +364,16 @@ export class BBTTCCCampaignTableEditorApp extends Application {
           opt.textContent = row.label;
           if (String(row.value) === target) opt.selected = true;
           sel.appendChild(opt);
+        }
+
+        // A stored value with no matching option stays selected (never
+        // silently replaced by the first option on Save).
+        if (target && !rows.some(row => String(row.value) === target)) {
+          const keep = document.createElement("option");
+          keep.value = target;
+          keep.textContent = target + " (stored)";
+          keep.selected = true;
+          sel.appendChild(keep);
         }
       }
 
@@ -687,17 +703,23 @@ export class BBTTCCCampaignTableEditorApp extends Application {
       if (!campaignId || !beatId) continue;
       if (weight <= 0) continue;
 
-      const conditions = {};
-      if (entryTerrains[i]) conditions.terrain = entryTerrains[i];
-      if (entryTiers[i]) conditions.tier = entryTiers[i];
-      if (entryRequiredTags[i]) conditions.requiredTag = entryRequiredTags[i];
+      // Start from the stored entry behind this row; overlay only the columns
+      // the grid edits.
+      const prev = (Array.isArray(this._renderedEntries) && this._renderedEntries[i] && typeof this._renderedEntries[i] === "object")
+        ? foundry.utils.deepClone(this._renderedEntries[i])
+        : {};
+      const conditions = (prev.conditions && typeof prev.conditions === "object") ? prev.conditions : {};
+      const setCond = (key, val) => { if (val) conditions[key] = val; else delete conditions[key]; };
+      setCond("terrain", entryTerrains[i]);
+      setCond("tier", entryTiers[i]);
+      setCond("requiredTag", entryRequiredTags[i]);
 
-      entries.push({
+      entries.push(Object.assign(prev, {
         campaignId: campaignId,
         beatId: beatId,
         weight: weight,
         conditions: conditions
-      });
+      }));
     }
 
     const payload = {

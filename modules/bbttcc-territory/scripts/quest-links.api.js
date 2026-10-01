@@ -362,15 +362,39 @@ function questMarkersFor(scene = null) {
   }
   return out;
 }
-// Arrival → visited (primary GM writes; every client hears the hook).
+// Arrival → visited. Hooks.callAll is LOCAL: bbttcc:afterTravel fires only on the seat that ran the
+// leg (hex-travel.js travelHex), so that seat is the one writer — a GM seat marks directly, a player
+// seat (cannot update the hex Drawing) relays the mark to the primary GM via bbttcc-core gmExec.
+// The encounter re-emits (travel console + arbitration relay) carry ctx.to = { uuid, obj } and
+// ctx.encounter; they are a second hook for the SAME arrival and are skipped so n counts once.
+const VISITED_RELAY = "territory.visited.mark";
 Hooks.on("bbttcc:afterTravel", async (ctx) => {
   try {
-    if (!game.user?.isGM || (game.users?.activeGM && game.users.activeGM !== game.user)) return;
-    const to = _hexDocOf(ctx?.to); if (!to?.update) return;
-    if (ctx?.encounter && String(ctx?.source || "") === "travel-console-relay") return;   // the relay re-emits with the encounter payload
-    await visitedMark(to, ctx?.factionId || ctx?.actor?.id || null, { via: String(ctx?.source || "travel") });
+    if (ctx?.encounter) return;
+    const to = _hexDocOf(ctx?.to); if (!to?.update || !to?.uuid) return;
+    const fid = ctx?.factionId || ctx?.actor?.id || null;
+    const via = String(ctx?.source || "travel");
+    const gx = game.bbttcc?.api?.gmExec;
+    if (game.user?.isGM || !gx?.call) { if (game.user?.isGM) await visitedMark(to, fid, { via }); return; }
+    await gx.call(VISITED_RELAY, { hexUuid: to.uuid, factionId: fid, via });
   } catch (e) { _warn("visited mark on arrival failed", e); }
 });
+function _registerVisitedRelay() {
+  const gx = game.bbttcc?.api?.gmExec;
+  if (!gx?.register) return;
+  gx.register(VISITED_RELAY, async (p, meta) => {
+    let doc = null;
+    try { doc = _hexDocOf(await fromUuid(String(p?.hexUuid || ""))); } catch (_e) {}
+    const tf = doc?.flags?.[MOD] || {};
+    if (!doc?.update || !(tf.isHex === true || String(tf.kind || "").toLowerCase() === "territory-hex" || tf.hexId)) throw new Error("not a hex drawing");
+    const fid = String(p?.factionId || "").replace(/^Actor\./, "");
+    const A = fid ? game.actors?.get(fid) : null;
+    const caller = game.users?.get(String(meta?.fromUserId || ""));
+    if (fid && !meta?.local && !(A && caller && A.testUserPermission?.(caller, "OWNER"))) throw new Error(`${caller?.name || "caller"} does not own ${A?.name || fid}`);
+    await visitedMark(doc, fid || null, { via: String(p?.via || "travel") });
+    return { ok: true };
+  });
+}
 
 /* ─────────────────────────────  Mount  ───────────────────────────── */
 
@@ -393,6 +417,7 @@ function _mount() {
   game.bbttcc.api.territory.visited = { has: visitedHas, mark: visitedMark, list: visitedList };
   game.bbttcc.api.territory.survey  = { check: surveyCheck, word: surveyWord, clear: surveyClear };
   game.bbttcc.api.territory.questMarkers = { list: questMarkersFor, refresh: () => { try { Hooks.callAll("bbttcc:questMarkers:refresh"); } catch (_e) {} } };
+  _registerVisitedRelay();
   _log("mounted at game.bbttcc.api.territory.questLinks (+ visited · survey · questMarkers)");
 }
 

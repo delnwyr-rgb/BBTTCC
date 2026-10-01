@@ -56,6 +56,8 @@
                          : (typeof spec.unityDelta === "number") ? spec.unityDelta
                          : null;
         if (unityDelta === null) return;
+        // Idempotent: installOnce re-runs on every canvasReady — wrap each spec exactly once.
+        if (spec.__unityWrapped || spec.apply?.__unityWrapped) return;
 
         const origApply = (typeof spec.apply === "function") ? spec.apply : null;
         spec.apply = async function wrappedApply({ actor, entry, key: k, spec: s, cost }) {
@@ -69,6 +71,8 @@
           } catch (e) { console.warn(TAG, "adjustUnity(Strategic) failed", k, e); }
           return note;
         };
+        spec.apply.__unityWrapped = true;
+        spec.__unityWrapped = true;
       });
       console.log(TAG, "Wrapped EFFECTS.apply for Victory/Unity where declared.");
     } catch (e) {
@@ -76,7 +80,9 @@
     }
 
     // ---------- 2) Wrap applyPostRoundEffects to award by outcome ----------
-    if (typeof raid.applyPostRoundEffects === "function") {
+    if (raid.__victoryWrapped || raid.applyPostRoundEffects?.__bbttccVictoryWrapped) {
+      // already wrapped (canvasReady re-entry) — never stack a second Unity layer
+    } else if (typeof raid.applyPostRoundEffects === "function") {
       const origPost = raid.applyPostRoundEffects;
       raid.applyPostRoundEffects = async function wrappedPost(args = {}) {
         const res = await origPost(args);
@@ -123,6 +129,8 @@
         }
         return res;
       };
+      raid.applyPostRoundEffects.__bbttccVictoryWrapped = true;
+      raid.__victoryWrapped = true;
       console.log(TAG, "Wrapped applyPostRoundEffects with Victory/Unity awards.");
     } else {
       console.warn(TAG, "applyPostRoundEffects not found; skipping outcome awards.");

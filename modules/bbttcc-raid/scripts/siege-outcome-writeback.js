@@ -252,6 +252,10 @@
       const cfg = MATRIX[state.status];
       if (!cfg) { console.warn(TAG, "no matrix row for status", state.status); return; }
 
+      // Stamp the once-gate BEFORE any side effect (merge-write of the one key), so a re-fire
+      // of bbttcc:siege:outcome is a no-op even if the step-9 clear fails.
+      await S.setSiegeState(hexUuid, { _writtenBack: true });
+
       const turn = _currentTurn();
       const ref = await fromUuid(hexUuid);
       const hexDoc = ref?.document ?? ref ?? null;
@@ -309,7 +313,7 @@
       await _chatCard({ state, cfg, hexName: ref?.name || hexDoc?.name, refunded, holdingsSummary, musterSummary });
 
       // 9. Clear the siege flag + faction back-refs (the campaign moves on).
-      try { await S.clearState(hexUuid); } catch (e) { console.warn(TAG, "clearState failed", e); }
+      try { await S.clearSiegeState(hexUuid); } catch (e) { console.warn(TAG, "clearSiegeState failed", e); }
       for (const [fid, flag] of [[attackerId, "activeSieges"], [defenderId, "defendingSieges"]]) {
         const a = fid && game.actors?.get?.(fid);
         if (!a) continue;

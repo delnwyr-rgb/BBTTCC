@@ -215,9 +215,10 @@
   // SCENE skips deleteToken hooks — recall the muster before tearing a battle scene down.
   async function _refundPoolOnDelete(tokDoc) {
     if (!game.user?.isGM) return;
+    if (game.users?.activeGM && game.users.activeGM !== game.user) return;   // one writer — two GM seats must not both refund
     const md = tokDoc?.flags?.[MOD_R]?.musterDeployment;
     if (!md?.factionId) return;
-    const s = _tokStrength(tokDoc);
+    const s = _tokStrength(tokDoc);   // pool.credit serializes per faction (a Recall deletes N tokens at once)
     if (s <= 0) return;
     const f = game.actors.get(md.factionId); if (!f) return;
     try { await _siege()?.pool?.credit?.(f, s, "recalled from the field"); } catch (e) { console.warn(TAG, "pool refund failed", e); }

@@ -531,7 +531,9 @@ class BeatAudioManager {
       try { await this.preload(src); } catch (_ePreload) {}
 
       _audioDebug("manager:AH.play", { src, volume, loop, push, trigger, ctx: _ctxStateSnapshot() });
-      const s = await AH.play({ src, volume, loop }, { push });
+      // socketOptions is boolean | {recipients}: ANY object (even {push:false})
+      // is truthy and broadcasts, so pass the boolean itself.
+      const s = await AH.play({ src, volume, loop }, push);
       _audioDebug("manager:AH.play-resolved", {
         src, haveSound: !!s, trigger,
         soundLoaded: s?.loaded,

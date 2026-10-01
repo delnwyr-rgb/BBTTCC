@@ -86,8 +86,15 @@ async function explodeFromBase(baseValue) {
 // no exploding dice fed into the total, nothing banked (playtest 2026-06-09).
 export async function skillRollWithRank(actor, { attribute, skill, label = "", allowSurge = true } = {}) {
   const rawSys   = actor.system?.system ?? actor.system;
-  const attrVal  = rawSys?.attributes?.[attribute]?.value ?? 2;
-  const rank     = rawSys?.skills?.[skill]?.value ?? 0;
+  // ⚠ SOURCE reads — same fix as attributeTest (2026-08-15). Derived
+  // `actor.system` is already AE-applied, and the getAEBonusFor* sweep below
+  // adds the same Active Effects again, so every AE landed twice (and an AE
+  // could lift the roll into the next rank mechanic / suppress the rank-0
+  // fumble). Base faculty + rank come from source; AEs apply exactly once.
+  const srcRoot  = (typeof actor.toObject === "function" ? actor.toObject() : actor)?.system;
+  const srcSys   = srcRoot?.system ?? srcRoot ?? {};
+  const attrVal  = srcSys?.attributes?.[attribute]?.value ?? 2;
+  const rank     = srcSys?.skills?.[skill]?.value ?? 0;
   // Monsters have no aptitude requirements (owner ruling 2026-09-04): a wolf
   // is never "untrained" with its own teeth. A bestiary creature with no stored
   // rank rolls with Trained-tier mechanics (no fumble) and the label "Innate";
@@ -1288,7 +1295,13 @@ export async function levelSignatureManifestations(actor, newTier) {
 
 export async function levelUp(actor) {
   const rawSys  = actor.system?.system ?? actor.system;
-  const current = rawSys?.details?.level ?? 1;
+  // ⚠ SOURCE reads (never derived) for anything written back: derived faculty =
+  // source + live AEs, so writing derived+1 folded the AE into the stored value
+  // while the AE stayed live on top (the faculty ratchet). Same rule as
+  // levelDown / openSpendSkillPoints.
+  const readSrc = () => { const r = actor.toObject().system; return r?.system ?? r ?? {}; };
+  const src     = readSrc();
+  const current = Number(src?.details?.level ?? rawSys?.details?.level) || 1;
   const newLevel = current + 1;
   const newTier  = tierForLevel(newLevel);
   const oldTier  = tierForLevel(current);
@@ -1345,7 +1358,7 @@ export async function levelUp(actor) {
   const attrNames = ["Violence", "Intrigue", "Presence", "Body", "Mind", "Soul"];
   const attrKeys  = ["violence", "intrigue", "presence", "body", "mind", "soul"];
   const attrOpts  = attrKeys.map((k, i) => {
-    const cur = rawSys?.attributes?.[k]?.value ?? 2;
+    const cur = src?.attributes?.[k]?.value ?? 2;
     return `<option value="${k}">${attrNames[i]} (currently ${cur}${cur >= 10 ? " — at cap" : ""})</option>`;
   }).join("");
 
@@ -1377,7 +1390,9 @@ export async function levelUp(actor) {
           label: `Advance to ${newLevel}`,
           callback: async (html) => {
             const attrKey = html.find("[name='attrChoice']").val();
-            const cur     = rawSys?.attributes?.[attrKey]?.value ?? 2;
+            // Re-read source NOW — the dialog may have sat open while the sheet changed.
+            const srcNow  = readSrc();
+            const cur     = Number(srcNow?.attributes?.[attrKey]?.value ?? 2);
             const newVal  = Math.min(10, cur + 1);
 
             // Snapshot Integrity max BEFORE the level/attr update so we can
@@ -1394,7 +1409,7 @@ export async function levelUp(actor) {
             };
 
             if (gainSkillPts) {
-              const curSP = rawSys?.details?.skillPoints ?? 0;
+              const curSP = Number(srcNow?.details?.skillPoints) || 0;
               updates["system.details.skillPoints"] = curSP + gainSkillPts;
             }
 

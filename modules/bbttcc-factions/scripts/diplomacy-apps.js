@@ -381,8 +381,13 @@ class BBTTCC_TradeApp extends foundry.applications.api.ApplicationV2 {
         const pending = game?.bbttcc?.api?.factions?.pending;
         let pendingId = null;
         if (pending?.create) {
-          const res = await pending.create({ from: this.actor, to: target, offer, ask, reason });
+          // Own try/catch: a failed inbox write must not swallow the GM whisper below.
+          let res = null;
+          try { res = await pending.create({ from: this.actor, to: target, offer, ask, reason }); }
+          catch (eP) { console.warn(TAG, "pending.create failed", eP); }
           if (res?.ok) pendingId = res.id;
+          // No GM seat to carry the write: say so and do nothing.
+          else if (res?.noGm) return ui.notifications?.warn?.(res.error);
         }
         const offerStr = _summarizeForChat(offer);
         const askStr   = _summarizeForChat(ask);

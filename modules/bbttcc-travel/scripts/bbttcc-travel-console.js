@@ -2203,7 +2203,40 @@
             const r = await game.bbttcc.api.travel.travelHex({ factionId, hexFrom: L.fromUuid, hexTo: L.toUuid, tokenId, sceneId, source: "travel-console", terrainKey: (destHex?.terrainKey || null), timePoints: Number(destHex?.travelUnits || 1), costMult: gmOverrides.costMult, costAdd: gmOverrides.costAdd, dcMod: gmOverrides.encDcMod, encounterPolicy: gmOverrides.encounterPolicy, finalLeg: (i === legs.length - 1) });
 
             out.push(`${i + 1}) ${r?.summary || (r?.ok ? "Travel OK" : "Travel failed")}`);
-            if (!r?.ok) break;
+            if (!r?.ok) {
+              // Leg REFUSED (insufficient OP / domain gate / scout-sign abort):
+              // nothing was debited and the party did not move on this leg. Stop
+              // here — animate ONLY the legs that actually executed, and keep the
+              // refused leg + everything after it in the planner and the
+              // RideSession (same shape as the encounter pause below) so the
+              // player can top up and Execute again, or re-plan. Previously this
+              // fell through and walked the token down the whole route for free.
+              const executedUuids = legs.slice(0, i).map(x => x.toUuid).filter(Boolean);
+              const executedLegMeta = legs.slice(0, i).map(x => ({ gate: x?.gate ?? null }));
+              const remaining = legs.slice(i);
+              legs.length = 0; legs.push(...remaining);
+              render();
+              try {
+                await rideApi?.save?.(factionId, {
+                  ...rideSession,
+                  legs: remaining.map(x => ({ fromUuid: x.fromUuid, toUuid: x.toUuid, fromId: x.fromId, toId: x.toId, gate: x.gate ?? null })),
+                  executed: 0,
+                  stage: "refused",
+                  encounter: null,
+                  updatedTs: Date.now()
+                });
+              } catch (_eRS4) {}
+              $rout.textContent = out.join("\n") + `\n\nRoute stopped at leg ${i + 1} (${destLabel})${r?.reason ? ` — ${r.reason}` : ""}.\n${remaining.length} leg(s) kept in the planner — fix the problem and Execute Route again, or re-plan.`;
+              if (executedUuids.length && game.bbttcc?.runVisuals) {
+                try {
+                  await new Promise(r2 => setTimeout(r2, 150));
+                  await game.bbttcc.runVisuals(game.bbttcc.ui.travelConsole, { uuids: executedUuids, legMeta: executedLegMeta, factionId, tokenId, sceneId, token, passengerCount: joiningFactionIds.length });
+                } catch (e) {
+                  console.warn(TAG, "Visuals failed during refused-leg stop", e);
+                }
+              }
+              return;
+            }
 
             // ── Phase E1: passenger OP debits ────────────────────────────────
             // Per-leg passenger debits. After the lead pays through travelHex,

@@ -1649,5 +1649,570 @@
         "interior"
       ]
     ]
+  },
+  "crownmall": {
+    "town": "Crown Mall",
+    "evergreen": true,
+    "hexAliases": [
+      "crown mall",
+      "crownmall",
+      "the crown mall",
+      "mall of forgotten yesterdays"
+    ],
+    "hubs": {
+      "main": {
+        "sceneName": "Scene.dkoIBTYxiMaKWqb9",
+        "label": "Crown Mall",
+        "refWidth": 4000,
+        "refHeight": 4000
+      }
+    },
+    "walkIn": true,
+    "townQuestFrom": [
+      "enc_forgotten_yesterdays_approach"
+    ],
+    "doors": [
+      {
+        "hub": "main",
+        "key": "frontage",
+        "label": "Donny on the Wall",
+        "floor": "Ground Floor",
+        "x": 2100,
+        "y": 3300,
+        "w": 900,
+        "h": 260,
+        "color": "#ffd54f",
+        "exterior": "Donny",
+        "beatId": "crown_mall_frontage_exterior",
+        "intro": "enc_forgotten_yesterdays_donny_approach"
+      },
+      {
+        "hub": "main",
+        "key": "june",
+        "label": "Miss June's Endcap",
+        "floor": "Ground Floor",
+        "x": 3175,
+        "y": 875,
+        "w": 550,
+        "h": 750,
+        "color": "#4fc3ff",
+        "exterior": "crown_mall_ms_june_store_pov",
+        "beatId": "crown_mall_june_exterior",
+        "intro": "enc_forgotten_yesterdays_miss_june_intro",
+        "gate": {
+          "beatMark": "enc_forgotten_yesterdays_donny_good",
+          "fallback": "enc_forgotten_yesterdays_donny_approach",
+          "message": "Donny is on the wall. Nobody gets past him without a vibe check."
+        }
+      },
+      {
+        "hub": "main",
+        "key": "bev",
+        "label": "Laser Bev's Office",
+        "floor": "Ground Floor",
+        "x": 925,
+        "y": 3100,
+        "w": 550,
+        "h": 380,
+        "color": "#c9a0ff",
+        "exterior": "crown_mall_lazer_bev_office_pov",
+        "beatId": "crown_mall_bev_exterior",
+        "intro": "enc_forgotten_yesterdays_laser_bev_intro",
+        "gate": {
+          "beatMark": "enc_forgotten_yesterdays_donny_good",
+          "fallback": "enc_forgotten_yesterdays_donny_approach",
+          "message": "Donny is on the wall. Nobody gets past him without a vibe check."
+        }
+      },
+      {
+        "hub": "main",
+        "key": "glitter",
+        "label": "The Glitter Storm",
+        "floor": "Ground Floor",
+        "x": 3200,
+        "y": 2200,
+        "w": 400,
+        "h": 1300,
+        "color": "#ffffff",
+        "exterior": "crown_mall_food_court_pov_1",
+        "beatId": "enc_forgotten_yesterdays_elefem",
+        "direct": true,
+        "gate": {
+          "beatMark": "enc_forgotten_yesterdays_donny_good",
+          "fallback": "enc_forgotten_yesterdays_donny_approach",
+          "message": "Donny is on the wall. Nobody gets past him without a vibe check."
+        }
+      },
+      {
+        "hub": "main",
+        "key": "foodcourt",
+        "label": "The Food Court",
+        "floor": "Second Floor",
+        "x": 900,
+        "y": 950,
+        "w": 650,
+        "h": 1150,
+        "color": "#ffd54f",
+        "exterior": "crown_mall_food_court_pov_1",
+        "interior": "crown_mall_food_court_pov_2",
+        "beatId": "crown_mall_foodcourt_exterior",
+        "intro": "enc_forgotten_yesterdays_tanneritos",
+        "gate": {
+          "beatMark": "enc_forgotten_yesterdays_donny_good",
+          "fallback": "enc_forgotten_yesterdays_donny_approach",
+          "message": "Donny is on the wall. Nobody gets past him without a vibe check."
+        }
+      },
+      {
+        "hub": "main",
+        "key": "halfpipe",
+        "label": "Kickflip's Halfpipe",
+        "floor": "Second Floor",
+        "x": 3200,
+        "y": 950,
+        "w": 500,
+        "h": 700,
+        "color": "#7fd0ff",
+        "exterior": "crown_mall_kickflip_lazarus_halfpipe_top_view_pov",
+        "beatId": "crown_mall_halfpipe_exterior",
+        "intro": "enc_forgotten_yesterdays_kickflip_lazarus_intro",
+        "gate": {
+          "beatMark": "enc_forgotten_yesterdays_donny_good",
+          "fallback": "enc_forgotten_yesterdays_donny_approach",
+          "message": "Donny is on the wall. Nobody gets past him without a vibe check."
+        }
+      },
+      {
+        "hub": "main",
+        "key": "video",
+        "label": "Crown Mall Video",
+        "floor": "Second Floor",
+        "x": 2500,
+        "y": 1375,
+        "w": 650,
+        "h": 700,
+        "color": "#ffffff",
+        "exterior": "crown_mall_ms_june_store_pov",
+        "beatId": "mall_video_store",
+        "direct": true,
+        "gate": {
+          "beatMark": "enc_forgotten_yesterdays_donny_good",
+          "fallback": "enc_forgotten_yesterdays_donny_approach",
+          "message": "Donny is on the wall. Nobody gets past him without a vibe check."
+        }
+      },
+      {
+        "hub": "main",
+        "key": "quarters",
+        "label": "The Living Quarters",
+        "floor": "Second Floor",
+        "x": 2650,
+        "y": 2500,
+        "w": 400,
+        "h": 1300,
+        "color": "#4fc3ff",
+        "exterior": "crown_mall_living_quarters_pov",
+        "gate": {
+          "beatMark": "enc_forgotten_yesterdays_donny_good",
+          "fallback": "enc_forgotten_yesterdays_donny_approach",
+          "message": "Donny is on the wall. Nobody gets past him without a vibe check."
+        }
+      }
+    ],
+    "escalators": [
+      {
+        "hub": "main",
+        "key": "escalator",
+        "label": "The Impossible Escalator",
+        "x": 1600,
+        "y": 1140,
+        "w": 750,
+        "h": 260,
+        "floors": [
+          "Ground Floor",
+          "Second Floor"
+        ]
+      }
+    ],
+    "cross": [],
+    "beatMap": [
+      [
+        "enc_forgotten_yesterdays_approach",
+        "@Scene.dkoIBTYxiMaKWqb9",
+        ""
+      ],
+      [
+        "enc_forgotten_yesterdays_donny",
+        "frontage",
+        "exterior"
+      ],
+      [
+        "enc_forgotten_yesterdays_miss_june",
+        "june",
+        "exterior"
+      ],
+      [
+        "mall_video_store",
+        "video",
+        "exterior"
+      ],
+      [
+        "enc_forgotten_yesterdays_laser_bev",
+        "bev",
+        "exterior"
+      ],
+      [
+        "enc_forgotten_yesterdays_kickflip",
+        "halfpipe",
+        "exterior"
+      ],
+      [
+        "enc_forgotten_yesterdays_elefem",
+        "glitter",
+        "exterior"
+      ],
+      [
+        "enc_forgotten_yesterdays_tanneritos",
+        "foodcourt",
+        "exterior"
+      ],
+      [
+        "enc_forgotten_yesterdays_skate",
+        "foodcourt",
+        "exterior"
+      ],
+      [
+        "enc_forgotten_yesterdays_hub",
+        "foodcourt",
+        "exterior"
+      ],
+      [
+        "enc_forgotten_yesterdays_vhs",
+        "foodcourt",
+        "exterior"
+      ],
+      [
+        "enc_forgotten_yesterdays_escalator",
+        "foodcourt",
+        "exterior"
+      ],
+      [
+        "enc_forgotten_yesterdays_resolution",
+        "foodcourt",
+        "exterior"
+      ],
+      [
+        "map_crown_mall",
+        "foodcourt",
+        "interior"
+      ],
+      [
+        "mall_watch_clip",
+        "foodcourt",
+        "interior"
+      ],
+      [
+        "mall_heading_matched",
+        "foodcourt",
+        "interior"
+      ],
+      [
+        "mall_route_board",
+        "foodcourt",
+        "interior"
+      ]
+    ],
+    "notes": [
+      "floor = the level NAME (confirmed live: Mall of Forgotten Yesterdays Ground Floor 0–40, Second Floor 41–80; loose match).",
+      "Door rectangles are placed off the gridded stills (ref 4000x4000 per floor); nudge x/y/w/h after the first apply.",
+      "Only Donny's frontage is ungated. Every interior region is gated on enc_forgotten_yesterdays_donny_good; an unmet gate replays Donny on the Wall at the table (GM seat)."
+    ]
+  },
+  "maneuvervault": {
+    "town": "The Maneuver Vault",
+    "hexAliases": [
+      "hexen myre.c",
+      "hexen myre c",
+      "the maneuver vault",
+      "maneuver vault"
+    ],
+    "hubs": {
+      "main": {
+        "sceneName": "Scene.v6TwqBOnYTY09ikx",
+        "label": "The Maneuver Vault",
+        "refWidth": 1700,
+        "refHeight": 3700
+      }
+    },
+    "walkIn": true,
+    "townQuestFrom": [
+      "maneuver_vault_approach"
+    ],
+    "doors": [
+      {
+        "hub": "main",
+        "key": "gate",
+        "label": "The Door Plays",
+        "x": 870,
+        "y": 3420,
+        "w": 460,
+        "h": 280,
+        "color": "#ffd54f",
+        "exterior": "maneuver_vault_approach",
+        "beatId": "maneuver_vault_infiltration",
+        "direct": true
+      },
+      {
+        "hub": "main",
+        "key": "foyer",
+        "label": "The Foyer of Procedure",
+        "x": 810,
+        "y": 2790,
+        "w": 1000,
+        "h": 260,
+        "color": "#4fc3ff",
+        "exterior": "Vault Foyer",
+        "beatId": "maneuver_vault_foyer_exterior",
+        "intro": "maneuver_vault_foyer_of_procedure"
+      },
+      {
+        "hub": "main",
+        "key": "archive",
+        "label": "The Echo Archive",
+        "x": 820,
+        "y": 2250,
+        "w": 800,
+        "h": 560,
+        "color": "#7fd0ff",
+        "exterior": "echo_vault",
+        "beatId": "maneuver_vault_archive_exterior",
+        "intro": "maneuver_vault_echo_archive"
+      },
+      {
+        "hub": "main",
+        "key": "slippage",
+        "label": "The Slippage Chamber",
+        "x": 790,
+        "y": 1450,
+        "w": 760,
+        "h": 640,
+        "color": "#c9a0ff",
+        "exterior": "Slippage Chamber",
+        "beatId": "maneuver_vault_slippage_exterior",
+        "intro": "maneuver_vault_slippage_chamber"
+      },
+      {
+        "hub": "main",
+        "key": "loop",
+        "label": "The Containment Loop",
+        "x": 810,
+        "y": 720,
+        "w": 700,
+        "h": 520,
+        "color": "#ffffff",
+        "exterior": "Maneuver Vault Diorama",
+        "beatId": "maneuver_vault_the_containment_loop",
+        "direct": true
+      }
+    ],
+    "cross": [],
+    "beatMap": [
+      [
+        "maneuver_vault_approach",
+        "@maneuver_vault_approach",
+        ""
+      ],
+      [
+        "maneuver_vault_honor_roll",
+        "@maneuver_vault_approach",
+        ""
+      ],
+      [
+        "maneuver_vault_infiltration",
+        "@Scene.v6TwqBOnYTY09ikx",
+        ""
+      ],
+      [
+        "maneuver_vault_foyer",
+        "foyer",
+        "interior"
+      ],
+      [
+        "maneuver_vault_slippage",
+        "slippage",
+        "exterior"
+      ],
+      [
+        "maneuver_vault_echo_archive",
+        "archive",
+        "exterior"
+      ],
+      [
+        "maneuver_vault_sealed_records",
+        "archive",
+        "exterior"
+      ],
+      [
+        "maneuver_vault_pulled_files",
+        "archive",
+        "exterior"
+      ],
+      [
+        "maneuver_vault_the_containment_loop",
+        "@Scene.v6TwqBOnYTY09ikx",
+        ""
+      ],
+      [
+        "maneuver_vault_pip",
+        "@Scene.v6TwqBOnYTY09ikx",
+        ""
+      ]
+    ],
+    "notes": [
+      "Placed off the REAL scene background the-maneuver-vault-hexchrome-battlemap.webm (1700x3700), bottom = road. Order bottom→top: entrance chevron, cubby corridor (foyer), vortex pool (echo archive), hex-tile floor (slippage), plasma dome (containment loop / Diorama POV).",
+      "Single level, walk-in regions, no gates: the door plays regardless.",
+      "The live foyer_of_procedure beat still points at the Diorama scene (the plasma-dome room); the runner leaves live scene ids alone. If the foyer should show Vault Foyer, add maneuver_vault_foyer_of_procedure to overrideLiveBeats."
+    ]
+  },
+  "gloomgill": {
+    "town": "Gloomgill Perch",
+    "hexAliases": [
+      "lake suspicious",
+      "gloomgill perch",
+      "gloomgill"
+    ],
+    "hubs": {
+      "main": {
+        "sceneName": "Scene.7ZdrCfFrXJhmhINV",
+        "label": "Gloomgill Perch",
+        "refWidth": 5900,
+        "refHeight": 4600
+      }
+    },
+    "walkIn": true,
+    "townQuestFrom": [
+      "gloomgill_intro"
+    ],
+    "doors": [
+      {
+        "hub": "main",
+        "key": "stage",
+        "label": "The Stage",
+        "x": 2525,
+        "y": 2000,
+        "w": 1050,
+        "h": 1200,
+        "color": "#4fc3ff",
+        "exterior": "gloomgill_perch_pov",
+        "beatId": "gloomgill_stage_exterior",
+        "intro": "gloomgill_intro_scene",
+        "blurb": "The arch, the two marks, the lake holding its breath. Step onto the island and the show starts."
+      },
+      {
+        "hub": "main",
+        "key": "applause",
+        "label": "The Applause",
+        "x": 1630,
+        "y": 1940,
+        "w": 320,
+        "h": 820,
+        "color": "#ffd54f",
+        "exterior": "gloomgill_perch_pov",
+        "beatId": "gloomgill_applause",
+        "direct": true
+      },
+      {
+        "hub": "main",
+        "key": "scoreboard",
+        "label": "The Scoreboard",
+        "x": 4150,
+        "y": 470,
+        "w": 600,
+        "h": 420,
+        "color": "#ffffff",
+        "exterior": "gloomgill_perch_pov",
+        "beatId": "gloomgill_scoreboard",
+        "direct": true
+      }
+    ],
+    "cross": [],
+    "beatMap": [
+      [
+        "gloomgill_stage_exterior",
+        "stage",
+        "exterior"
+      ],
+      [
+        "gloomgill_intro_scene",
+        "stage",
+        "exterior"
+      ],
+      [
+        "gloomgill_intro",
+        "@Scene.7ZdrCfFrXJhmhINV",
+        ""
+      ],
+      [
+        "gloomgill_fight",
+        "@Scene.7ZdrCfFrXJhmhINV",
+        ""
+      ],
+      [
+        "gloomgill_question_",
+        "stage",
+        "exterior"
+      ],
+      [
+        "gloomgill_correct",
+        "stage",
+        "exterior"
+      ],
+      [
+        "gloomgill_incorrect",
+        "stage",
+        "exterior"
+      ],
+      [
+        "gloomgill_passed",
+        "stage",
+        "exterior"
+      ],
+      [
+        "gloomgill_failed",
+        "stage",
+        "exterior"
+      ],
+      [
+        "gloomgill_fought",
+        "stage",
+        "exterior"
+      ],
+      [
+        "gloomgill_fled",
+        "stage",
+        "exterior"
+      ],
+      [
+        "gloomgill_applause",
+        "applause",
+        "exterior"
+      ],
+      [
+        "gloomgill_scoreboard",
+        "scoreboard",
+        "exterior"
+      ],
+      [
+        "gloomgill_final_fact",
+        "stage",
+        "exterior"
+      ]
+    ],
+    "notes": [
+      "Placed off gloomgill-perch-hexchrome-battlemap.webm (5900x4600, the live level background); scene is 9000x6750 so the runner scales per axis.",
+      "Arrival + the fight stay on the battlemap; the stage island (arch + the two eye sigils) is the walk-in door into the POV, and the whole show plays there.",
+      "Applause = the long bench on the island's west side (the audience). Scoreboard = the end of the north pier. Both are direct doors; their own requires decide whether they play.",
+      "Ungated: the stage is the quest. Single level."
+    ]
   }
 }

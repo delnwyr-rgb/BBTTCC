@@ -14,6 +14,20 @@
  *     data quest def with the new chapter.
  *
  * Nothing in the Debt has been played live (checked against save 0k2fikz9ehvr). Idempotent; backs up the campaigns setting. F5 after.
+ *
+ * REVIEW FIXES 2026-10-01 (GAME_REVIEW_2026_09_30, HIGH ×2):
+ *  • GATES: the Pipeline's two endings and Etta's fail landing carried a speaker and no gate, so a talk with Tamsin / Etta could play them
+ *    cold from Act 1. pactkeeper / route_only are gated on the chapter + ag_caravan_route + their own verdict; caravan_fail on the chapter;
+ *    all three are dialogueOffer:false (routing-only). A route never consults inject.requires, so ag_caravan_route still reaches them.
+ *  • THE SPINE: the Debt + Pipeline steps were spliced into the main `steps`, which made every one of their beats "spine" — Pike's closure
+ *    (routed straight from the leygate install) then sealed the whole spy arc. sealOfDecl seals: step beats, role start, role closer. So the
+ *    two chapters now live in chapter-scoped DOORS (`debt`, `pipeline`: no `line`, so nothing new prints under "Also open"; their beats in
+ *    `beats`; the eight authored step rows kept verbatim under `rungs` for the wordsmithing doc), and the two chapter START beats
+ *    (ag_confessor_dead_drop, ag_pipeline_backward) carry inject.evergreen so the quest-closed seal does not shut the chapters' own doors
+ *    (both keep their `questBucket … isNot completed` gate, so a finished chapter is not re-offered). The chapters' Next: lines come from
+ *    script.chapters, as they did before the retrofit. The cleaner engine fix (sealOfDecl: spine = !d.chapter && …) would let `rungs` go
+ *    back to being steps; until then this is the data-only shape that survives Pike.
+ *  Already-seeded worlds: tools/patch-template-review-fixes-2026-10-01.macro.js does the same repair in one run.
  */
 (async () => {
   const DRY_RUN = true;                       // <-- set false to apply
@@ -103,14 +117,15 @@
   const byId = new Map(camp.beats.map(b => [b.id, b]));
   for (const need of ["ag_confessor_dead_drop", "ag_tamsin_confrontation", "ag_confessor_redeemed", "ag_confessor_pike", "ag_confessor_counterfeit", "allesh_gilliam_etta_bloom_convo_exit"]) if (!byId.get(need)) return ui.notifications.error(`Beat ${need} missing — the Confessor's Debt was never seeded here.`);
 
-  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, receipts = null, story = null, requires = null, timePoints = 0, priority = "background", memoryText = null, questEffects = null, factionEffects = null, questId = Q_DEBT, tags = "allesh_gilliam confessors_debt story", scene = null } = {}) => ({
+  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, receipts = null, story = null, requires = null, timePoints = 0, priority = "background", memoryText = null, questEffects = null, factionEffects = null, questId = Q_DEBT, tags = "allesh_gilliam confessors_debt story", scene = null, offer = true, evergreen = false } = {}) => ({
     id, label, type, timeScale: "scene", timePoints, questId, tags, politicalTags: "",
     description, outcomes: { success: null, failure: null },
-    inject: { cooldownTurns: 0, repeatable: false, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit", ...(requires ? { requires } : {}) },
+    inject: { cooldownTurns: 0, repeatable: false, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit", ...(requires ? { requires } : {}), ...(evergreen ? { evergreen: true } : {}) },
     actors: [], refs: {}, playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true,
     storyChain: KEY, priority,
     ...(scene ? { sceneId: scene } : {}),
     ...(speaker ? { speakerActorId: speaker } : {}),
+    ...(offer === false ? { dialogueOffer: false } : {}),   // a routing-only node: never a conversation moment
     story: story || { quest: KEY, chapter: "the_confessor_s_debt" },
     ...(memoryText ? { memoryText } : {}),
     choices: choices || [{ label: "Continue", next: "", description: "", checkStat: "", checkDC: 0, failNext: "" }],
@@ -121,6 +136,10 @@
   const DEBT_ACTIVE = [P2, { questBucket: Q_DEBT, is: "active" }];
   const PIPE = { quest: KEY, chapter: "the_pipeline" };
   const PIPE_TAGS = "allesh_gilliam pipeline story";
+  // the Pipeline's routing-only nodes: reached by ag_market_caravan_route / ag_caravan_route's choices, never offered cold
+  const PIPE_ACTIVE = [P2, { questBucket: Q_PIPE, is: "active" }];
+  const GATE_PACT = [...PIPE_ACTIVE, { beatMark: "ag_caravan_route" }, { anyOf: [{ beatMark: "ag_confessor_redeemed" }, { beatMark: "ag_confessor_pike" }] }];
+  const GATE_ROUTE_ONLY = [...PIPE_ACTIVE, { beatMark: "ag_caravan_route" }, { beatMark: "ag_confessor_counterfeit" }];
   const COALITION = ["6H5Grt3HybAs1rSq", "eIXghZ73hKSXmP3x"];   // the Errata Society, Sweet Release — as the existing verdict beats address them
   const fx = (loyalty = 0, unity = 0) => COALITION.map(factionId => ({ factionId, moraleDelta: 0, loyaltyDelta: loyalty, unityDelta: unity, darknessDelta: 0, opDeltas: {}, allowOvercap: false }));
 
@@ -157,7 +176,7 @@
     // ── THE PIPELINE (new chapter) ──
     beat("ag_pipeline_backward", "Allesh-Gilliam — Run the Channel Backward",
       "For a fortnight the candle moves and the drip tray fills, and everything that comes down the mountain comes to you first. Tamsin translates, apologising for the code. \"He calls the Seal the kettle. I don't know why. I never asked. I should have asked.\" Three things come down. A supply run: every third Long Market a wagon loads for a camp that is on no map, two days coastward and two back. A rumor Wick was told to squash: lights over the coast, and a mall where somebody filmed them. And a fold that isn't words at all — seven positions, the kind a Leygate takes.",
-      { speaker: sp("Father Tamsin"), questId: Q_PIPE, tags: PIPE_TAGS, story: { ...PIPE, role: "start" }, scene: SCENES.church, priority: "high",
+      { speaker: sp("Father Tamsin"), questId: Q_PIPE, tags: PIPE_TAGS, story: { ...PIPE, role: "start" }, scene: SCENES.church, priority: "high", evergreen: true,   // the chapter outlives Pike's closure
         requires: [P2, { anyOf: [{ beatMark: "ag_confessor_redeemed" }, { beatMark: "ag_confessor_pike" }, { beatMark: "ag_confessor_counterfeit" }] }, { questBucket: Q_PIPE, isNot: "completed" }],
         questEffects: [{ action: "accept", questId: Q_PIPE, beatId: "", state: "active", text: "The confessor's channel runs backward. Three headings: a caravan, a camcorder, a sequence." }],
         choices: [
@@ -174,7 +193,7 @@
       ] }),
     beat("ag_market_caravan_fail", "Allesh-Gilliam — More Preserves",
       "Etta sells you preserves. They are very good. The question goes back on the shelf, and she pats it, and says \"come back when you're done pretending,\" and means it kindly, and means it.",
-      { type: "narration", speaker: sp("Etta Bloom"), questId: Q_PIPE, tags: PIPE_TAGS, story: PIPE, scene: SCENES.market, choices: [ch("Eat the preserves.", "")] }),
+      { type: "narration", speaker: sp("Etta Bloom"), questId: Q_PIPE, tags: PIPE_TAGS, story: PIPE, scene: SCENES.market, requires: PIPE_ACTIVE, offer: false, choices: [ch("Eat the preserves.", "")] }),
     beat("ag_caravan_route", "Allesh-Gilliam — The Caravan Route",
       "Third stall from the east end, the one that sells rope and never seems to sell any rope. Every third market a Jackalope wagon loads there: salt, wax, flour, no meat, no questions. Two days coastward, two days back. Etta has been adjusting inventory for it for a season. Now so can you.",
       { type: "narration", questId: Q_PIPE, tags: PIPE_TAGS, story: PIPE, scene: SCENES.market, priority: "high",
@@ -187,7 +206,7 @@
         ] }),
     beat("ag_tamsin_pactkeeper", "Allesh-Gilliam — The Man Who Reads the Terms",
       "\"I have been serving something for a year and a half,\" he says, \"and I never once read the terms. I would like to read the terms.\" He means it literally. He has paper. He asks what you have found, out there, that would tell him what his family's echo has actually been buying, and he waits, and for once he does not reach for a metaphor.",
-      { speaker: sp("Father Tamsin"), questId: Q_PIPE, tags: PIPE_TAGS, story: { ...PIPE, role: "ending", ending: "pactkeeper" }, scene: SCENES.church, priority: "high", timePoints: 1,
+      { speaker: sp("Father Tamsin"), questId: Q_PIPE, tags: PIPE_TAGS, story: { ...PIPE, role: "ending", ending: "pactkeeper" }, scene: SCENES.church, priority: "high", timePoints: 1, requires: GATE_PACT, offer: false,
         memoryText: "Father Tamsin read the terms. He sat down on the floor of his own church, and then said he would walk to the coast and count the Garden. He is a Pactkeeper now, not a confessor.",
         questEffects: [{ action: "complete", questId: Q_PIPE, beatId: "", state: "completed", text: "Pactkeeper — Tamsin read the terms and stopped being an echo." }],
         factionEffects: fx(1, 0),
@@ -199,7 +218,7 @@
         ] }),
     beat("ag_pipeline_route_only", "Allesh-Gilliam — The Route Is Yours. The Man Is Not.",
       "You have the caravan, the heading, and the sequence, and Tamsin has a kettle and a lie he doesn't know he's telling. He asks, once, whether the Stewards have found anything out there that would help him understand what the mountain wants. You tell him you're still looking. He thanks you. He means it. Somewhere under Khezek Tor the dark is looking at paintings, and so, in a way, is he.",
-      { type: "narration", speaker: sp("Father Tamsin"), questId: Q_PIPE, tags: PIPE_TAGS, story: { ...PIPE, role: "ending", ending: "route_only" }, scene: SCENES.church, priority: "high", timePoints: 1,
+      { type: "narration", speaker: sp("Father Tamsin"), questId: Q_PIPE, tags: PIPE_TAGS, story: { ...PIPE, role: "ending", ending: "route_only" }, scene: SCENES.church, priority: "high", timePoints: 1, requires: GATE_ROUTE_ONLY, offer: false,
         memoryText: "The coalition kept Tamsin's channel and Tamsin's lie. The caravan route is theirs; the man never read the terms.",
         questEffects: [{ action: "complete", questId: Q_PIPE, beatId: "", state: "completed", text: "Route only — the pipeline harvested; the confessor left deceived." }],
         factionEffects: fx(0, -1),
@@ -212,6 +231,14 @@
 
   // existing-beat edits
   const edit = (id, fn, what) => { const b = byId.get(id); if (!b) return say(`✗ MISSING ${id}`); const before = JSON.stringify(b); fn(b); if (JSON.stringify(b) !== before) { changes++; say(`✎ ${id}: ${what}`); } else say(`· ok ${id}`); };
+  // reconcile beats seeded before the 2026-10-01 review fixes: add the missing gate conditions (never remove any), the offer opt-out,
+  // and the evergreen mark on the two chapter starts
+  const ensureReq = (b, conds) => { b.inject = b.inject || {}; const cur = Array.isArray(b.inject.requires) ? b.inject.requires.slice() : (b.inject.requires && typeof b.inject.requires === "object" ? [b.inject.requires] : []); const have = new Set(cur.map(c => JSON.stringify(c))); for (const c of conds) if (!have.has(JSON.stringify(c))) { cur.push(c); have.add(JSON.stringify(c)); } b.inject.requires = cur; };
+  const routeOnly = (id, conds, what) => edit(id, b => { ensureReq(b, conds); if (b.dialogueOffer !== false) b.dialogueOffer = false; }, what);
+  routeOnly("ag_market_caravan_fail", PIPE_ACTIVE, "gated on the chapter; routing-only");
+  routeOnly("ag_tamsin_pactkeeper", GATE_PACT, "gated on the caravan route + mercy/Pike; routing-only");
+  routeOnly("ag_pipeline_route_only", GATE_ROUTE_ONLY, "gated on the caravan route + the counterfeit; routing-only");
+  for (const id of ["ag_confessor_dead_drop", "ag_pipeline_backward"]) edit(id, b => { b.inject = b.inject || {}; if (b.inject.evergreen !== true) b.inject.evergreen = true; }, "chapter start outlives Pike's closure (inject.evergreen)");
   edit("ag_confessor_dead_drop", b => {
     if (!(b.choices || []).some(c => c.next === "ag_confessor_drip_tray")) b.choices = [ch("Fish the fold out of the wax.", "ag_confessor_drip_tray"), ch("Leave it for the courier. Watch who comes.", "ag_confessor_pilgrim")];
   }, "routes to the drip tray / the pilgrim");
@@ -239,9 +266,9 @@
   const QUEST = codeQuest ? { ...codeQuest, chapters: { ...(codeQuest.chapters || {}), the_pipeline: { name: "The Pipeline", registryId: Q_PIPE } } } : null;
   const SCRIPT = codeScript ? JSON.parse(JSON.stringify(codeScript)) : null;
   if (SCRIPT) {
-    const has = (id) => SCRIPT.steps.some(s => s.id === id);
     const DEBT = "the_confessor_s_debt";
-    const add = [
+    // the eight authored rows. They are NOT steps (see REVIEW FIXES in the header): a step beat is spine, and Pike's closure seals the spine.
+    const RUNGS = [
       { id: "candle", label: "The Third Candle", group: "debt", chapter: DEBT, line: "The third candle from the door has moved a finger-width. Check the drip tray. Try not to enjoy this.", beats: ["ag_confessor_dead_drop"] },
       { id: "drop", label: "The Drip Tray", group: "debt", chapter: DEBT, line: "Unfold it. It's a maintenance schedule and one metaphor that doesn't work. Somebody in this town is bad at this.", beats: ["ag_confessor_drip_tray"] },
       { id: "pilgrim", label: "The Guest Who Pays Exact", group: "debt", chapter: DEBT, line: "Verna's ledger has a guest who pays exact and never sleeps in the bed. Ask her what the little star means.", beats: ["ag_confessor_pilgrim"] },
@@ -251,9 +278,15 @@
       { id: "market", label: "Etta Sells You Preserves First", group: "pipeline", chapter: "the_pipeline", line: "Etta already knows which stall stocks a camp that isn't on any map. She will sell you preserves first.", beats: ["ag_market_caravan_route"], done: { mark: "ag_caravan_route" } },
       { id: "pactkeeper", label: "The Man Who Reads the Terms", group: "pipeline", chapter: "the_pipeline", line: "Tamsin wants to read the terms. Show him what you've found. Then let him sit down.", beats: ["ag_tamsin_pactkeeper", "ag_pipeline_route_only"], done: { anyOf: ["ag_tamsin_pactkeeper", "ag_pipeline_route_only"] } }
     ];
-    // the chapter groups sit BEFORE Pike's closure so the main closer stays the last step (lint SC06); they are gated, any-order groups
-    const closeAt = SCRIPT.steps.findIndex(s => s.id === "close"); const fresh = add.filter(st => !has(st.id));
-    if (closeAt >= 0) SCRIPT.steps.splice(closeAt, 0, ...fresh); else SCRIPT.steps.push(...fresh);
+    // chapter-scoped doors: the beats stay listed for the script (lint, the gate-door entry) but never become spine. No `line` on purpose —
+    // the Log prints every door line under "Also open", and these two would spoil the candle on day one; script.chapters carries the Next: line.
+    const CHAPTER_DOORS = [
+      { id: "debt", label: "The Confessor's Debt", chapter: DEBT, beats: ["ag_confessor_dead_drop", "ag_confessor_drip_tray", "ag_confessor_pilgrim", "ag_tamsin_confrontation", "ag_confessor_relief"], rungs: RUNGS.filter(r => r.chapter === DEBT) },
+      { id: "pipeline", label: "The Pipeline", chapter: "the_pipeline", beats: ["ag_pipeline_backward", "ag_market_caravan_route", "ag_tamsin_pactkeeper", "ag_pipeline_route_only"], rungs: RUNGS.filter(r => r.chapter === "the_pipeline") }
+    ];
+    const rungIds = new Set(RUNGS.map(r => r.id));
+    SCRIPT.steps = SCRIPT.steps.filter(st => !rungIds.has(st.id));   // (the code script never had them; belt and braces)
+    for (const d of CHAPTER_DOORS) if (!(SCRIPT.doors || []).some(x => x.id === d.id)) SCRIPT.doors = [...(SCRIPT.doors || []), d];
     SCRIPT.chapters = { ...(SCRIPT.chapters || {}),
       [DEBT]: { giver: "the third candle", line: "The tea is already poured. That's how you know. Go and see Father Tamsin, and decide what justice looks like." },
       the_pipeline: { giver: "Father Tamsin, running his channel the other way", line: "Three headings came down the mountain: a caravan, a camcorder, a sequence. Start with the one Etta already knows about." } };

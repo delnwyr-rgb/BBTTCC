@@ -111,10 +111,28 @@ function sparkCensus() {
   return { temples, lamps: seph.size };
 }
 
+// "The party" for the Gaze = the protagonist faction (repair.js resolver, read
+// through worldHealth().protagonists: the protagonistFactions setting, else
+// every faction with a Converged member) holding the highest unmasked Presence
+// total. presence.band()/hunted() need a real ref — with none they read 0/null.
+function partyFaction() {
+  const P = game.fourththing?.epic?.presence;
+  let best = null, bestTotal = -1;
+  try {
+    for (const id of game.fourththing?.epic?.worldHealth?.()?.protagonists ?? []) {
+      const f = game.actors?.get(id);
+      if (!f) continue;
+      const t = Number(P?.partyTotal?.(f)) || 0;
+      if (t > bestTotal) { best = f; bestTotal = t; }
+    }
+  } catch (_e) {}
+  return best;
+}
+
 function computeBP() {
   let presencePts = 0;
   try {
-    const band = game.fourththing?.epic?.presence?.band?.()?.key ?? "low";
+    const band = game.fourththing?.epic?.presence?.band?.(partyFaction())?.key ?? "low";
     presencePts = BAND_POINTS[band] ?? BAND_POINTS.low;
   } catch (_e) {}
   let wh = 0;
@@ -156,7 +174,7 @@ async function eventOmen(tier, detail) {
 
 async function eventHunter(tier, detail) {
   let steward = null;
-  try { steward = game.fourththing?.epic?.presence?.hunted?.() ?? null; } catch (_e) {}
+  try { steward = game.fourththing?.epic?.presence?.hunted?.(partyFaction()) ?? null; } catch (_e) {}
   if (!steward) return eventOmen(tier, detail);
   const frags = (() => { try { return game.fourththing?.darkness?.fragments?.(steward) ?? []; } catch (_e) { return []; } })();
   const open = frags.filter(f => !f?.faced);

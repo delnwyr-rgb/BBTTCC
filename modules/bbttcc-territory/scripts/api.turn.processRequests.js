@@ -121,9 +121,12 @@
         const ownerId = tf.factionId || tf.ownerId || null;
         const owner   = ownerId ? factionsById.get(ownerId) : null;
 
-        const requests = await doc.getFlag(MOD_TERRITORY, "requests") || {};
+        // Work on COPIES — getFlag hands back the document's own objects, and an
+        // in-place edit would make the later write diff to nothing.
+        const requests = copy(await doc.getFlag(MOD_TERRITORY, "requests") || {});
         const reqKeys  = Object.keys(requests);
         if (!reqKeys.length) continue;
+        const consumed = [];   // request keys handled this pass — unset below
 
         // DEBUG: log any hex that actually has requests
         log("HEX REQUESTS: found pending requests on hex", {
@@ -134,8 +137,9 @@
           requests: copy(requests)
         });
 
-        let mods      = await doc.getFlag(MOD_TERRITORY, "mods")      || {};
+        let mods      = copy(await doc.getFlag(MOD_TERRITORY, "mods") || {});
         let modifiers = await doc.getFlag(MOD_TERRITORY, "modifiers") || [];
+        if (!Array.isArray(modifiers)) modifiers = [];
 
         let didSomething = false;
 
@@ -144,6 +148,7 @@
           mods.darkness = Math.max(0, Number(mods.darkness||0) - 2);
           mods.loyalty  = Number(mods.loyalty||0) + 1;
           delete requests.cleanseCorruption;
+          consumed.push("cleanseCorruption");
           didSomething = true;
 
           log("HEX REQUESTS: applied cleanseCorruption", {
@@ -186,6 +191,7 @@
           if (res.changed) { modifiers = res.mods; removedBits.push("Blocked Pass"); }
 
           delete requests.clearRockslide;
+          consumed.push("clearRockslide");
           didSomething = true;
 
           log("HEX REQUESTS: applied clearRockslide", {
@@ -223,9 +229,12 @@
           const newStatus = requests.statusSet;
           const oldStatus = String(tf.status || "unclaimed");
           delete requests.statusSet;
+          consumed.push("statusSet");
           didSomething = true;
 
-          await doc.setFlag(MOD_TERRITORY, "status", newStatus);
+          // Already in the requested state → consume quietly (no write, no war log).
+          const statusChanged = oldStatus !== String(newStatus);
+          if (statusChanged) await doc.setFlag(MOD_TERRITORY, "status", newStatus);
 
           log("HEX REQUESTS: applied statusSet", {
             uuid: doc.uuid,
@@ -234,7 +243,7 @@
             remainingRequests: copy(requests)
           });
 
-          if (owner) {
+          if (owner && statusChanged) {
             await pushWarLog(owner, {
               type: "turn",
               activity: "status_set",
@@ -260,9 +269,12 @@
         // --- destroyHex ------------------------------------------------------
         if (requests.destroyHex) {
           delete requests.destroyHex;
+          consumed.push("destroyHex");
           didSomething = true;
 
-          await doc.setFlag(MOD_TERRITORY, "destroyed", true);
+          // Already destroyed → consume quietly (no write, no war log, no dossier entry).
+          const wasDestroyed = tf.destroyed === true;
+          if (!wasDestroyed) await doc.setFlag(MOD_TERRITORY, "destroyed", true);
 
           log("HEX REQUESTS: applied destroyHex", {
             uuid: doc.uuid,
@@ -270,7 +282,7 @@
             remainingRequests: copy(requests)
           });
 
-          if (owner) {
+          if (owner && !wasDestroyed) {
             await pushWarLog(owner, {
               type: "turn",
               activity: "destroy_hex",
@@ -280,7 +292,7 @@
           // Hex Dossier — destruction is a permanent owner action.
           try {
             const recorder = game?.bbttcc?.api?.territory?.recordHexImprovement;
-            if (typeof recorder === "function") {
+            if (typeof recorder === "function" && !wasDestroyed) {
               await recorder(doc, {
                 kind: "owner_action",
                 label: "Hex marked destroyed",
@@ -294,8 +306,13 @@
         }
 
         if (didSomething) {
-          // write back requests, mods, modifiers via setFlag
-          await doc.setFlag(MOD_TERRITORY, "requests",  requests);
+          // Consumed requests must really LEAVE the document. setFlag MERGES objects
+          // (writing the reduced copy back deletes nothing — every request used to be
+          // re-applied on every Apply turn), so each handled key is unset explicitly.
+          for (const key of consumed) {
+            await doc.unsetFlag(MOD_TERRITORY, `requests.${key}`);
+          }
+          // mods + modifiers via setFlag (additive / array-replace — merge is correct here)
           await doc.setFlag(MOD_TERRITORY, "mods",      mods);
           await doc.setFlag(MOD_TERRITORY, "modifiers", modifiers);
           changed += 1;

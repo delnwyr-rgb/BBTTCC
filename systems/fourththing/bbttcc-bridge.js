@@ -416,36 +416,98 @@ async function ftSwapEmbeddedByType(actor, cfg, newKey) {
 // items whose name prefix or lineage flag doesn't match the NEW selection,
 // then import the new doc + advancement grants and stamp lineage tags.
 
+// ── Stable per-campaign-start OP ledger ─────────────────────────────────────
+// `startingGrantsFiredItems` is keyed by EMBEDDED ITEM ID, and a swap deletes +
+// recreates the items, so A → B → A re-paid the faction every pass (unlimited OP
+// from the sheet dropdown). The paid ledger below is keyed by the item's SOURCE
+// NAME, so it survives item deletion:
+//   flags.fourththing.startingGrantsPaid[<name key>] =
+//     { itemName, paidAt, resources: { "<x>-op": <amount paid> } }
+//     | { itemName, paidAt, all: true, seededFromLegacy: true }
+// Legacy per-item-id entries are folded in by name (`all: true` — every grant on
+// that item counts as paid) so stewards already paid under the old ledger are
+// not paid again on their next swap.
+const FT_STARTING_GRANTS_PAID_FLAG = "startingGrantsPaid";
+const FT_STARTING_GRANT_POOL = {
+  "violence-op":"violence","intrigue-op":"intrigue","soft-power-op":"softpower",
+  "diplomacy-op":"diplomacy","economy-op":"economy","non-lethal-op":"nonlethal",
+  "faith-op":"faith","logistics-op":"logistics","siege-op":"siege","body-op":"body","soul-op":"soul"
+};
+
+function _ftGrantNameKey(name) {
+  // Flag-safe (no dots) and stable across re-imports of the same pack doc.
+  return String(name ?? "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+}
+
+async function _ftLoadPaidStartingGrants(actor) {
+  const paid = foundry.utils.deepClone(actor.getFlag("fourththing", FT_STARTING_GRANTS_PAID_FLAG) ?? {});
+  const legacy = actor.getFlag("fourththing", "startingGrantsFiredItems") ?? {};
+  const seeded = {};
+  for (const [id, rec] of Object.entries(legacy)) {
+    const nm = rec?.itemName ?? actor.items?.get?.(id)?.name;
+    const key = _ftGrantNameKey(nm);
+    if (!key || paid[key]) continue;
+    paid[key] = seeded[key] = {
+      itemName: String(nm), paidAt: Number(rec?.firedAt) || Date.now(), all: true, seededFromLegacy: true
+    };
+  }
+  if (Object.keys(seeded).length) {
+    try { await actor.setFlag("fourththing", FT_STARTING_GRANTS_PAID_FLAG, seeded); } catch (_e) {}
+  }
+  return paid;
+}
+
+// Pay one item's per-campaign-start OP grants unless the ledger says they were
+// already paid. Mutates `paid`; returns the entry to persist (or null).
+async function _ftPayCampaignStartOnce(actor, item, paid) {
+  const grants = item?.flags?.fourththing?.resourceGrants;
+  if (!Array.isArray(grants)) return null;
+  const key = _ftGrantNameKey(item.name);
+  if (!key || paid[key]?.all) return null;
+  const before = { ...(paid[key]?.resources ?? {}) };
+  const resources = { ...before };
+  let changed = false;
+  for (const g of grants) {
+    if (g?.cadence !== "per-campaign-start") continue;
+    try {
+      if (typeof g.resource !== "string" || !g.resource.endsWith("-op")) continue;
+      if (g.resource in before) continue;   // already paid on an earlier swap
+      const factionId = actor.getFlag?.("bbttcc-factions", "factionId");
+      const faction = factionId ? game.actors?.get(factionId) : null;
+      if (!faction) continue;
+      const pool = FT_STARTING_GRANT_POOL[g.resource];
+      if (!pool) continue;
+      const bank = foundry.utils.duplicate(faction.flags?.["bbttcc-factions"]?.opBank ?? {});
+      bank[pool] = (Number(bank[pool]) || 0) + Number(g.amount);
+      await faction.update({ "flags.bbttcc-factions.opBank": bank });
+      resources[g.resource] = (Number(resources[g.resource]) || 0) + Number(g.amount);
+      changed = true;
+    } catch (_e) { /* skip per-grant errors so the swap completes */ }
+  }
+  if (!changed) return null;
+  paid[key] = { itemName: item.name, paidAt: Date.now(), resources };
+  return paid[key];
+}
+
 async function _ftFireCampaignStartFor(actor, createdItems) {
   // Mirrors the apply-starting-grants macro, scoped to specific items.
   const fired = actor.getFlag("fourththing", "startingGrantsFiredItems") ?? {};
   const firedClean = { ...fired };
   let dirty = false;
-  const POOL = {
-    "violence-op":"violence","intrigue-op":"intrigue","soft-power-op":"softpower",
-    "diplomacy-op":"diplomacy","economy-op":"economy","non-lethal-op":"nonlethal",
-    "faith-op":"faith","logistics-op":"logistics","siege-op":"siege","body-op":"body","soul-op":"soul"
-  };
+  const paid = await _ftLoadPaidStartingGrants(actor);
+  const paidNew = {};
   for (const item of createdItems) {
     const grants = item.flags?.fourththing?.resourceGrants;
     if (!Array.isArray(grants)) continue;
     const starts = grants.filter(g => g.cadence === "per-campaign-start");
     if (!starts.length) continue;
-    for (const g of starts) {
-      try {
-        if (typeof g.resource !== "string" || !g.resource.endsWith("-op")) continue;
-        const factionId = actor.getFlag?.("bbttcc-factions", "factionId");
-        const faction = factionId ? game.actors?.get(factionId) : null;
-        if (!faction) continue;
-        const pool = POOL[g.resource];
-        if (!pool) continue;
-        const bank = foundry.utils.duplicate(faction.flags?.["bbttcc-factions"]?.opBank ?? {});
-        bank[pool] = (Number(bank[pool]) || 0) + Number(g.amount);
-        await faction.update({ "flags.bbttcc-factions.opBank": bank });
-      } catch (_e) { /* skip per-grant errors */ }
-    }
+    const entry = await _ftPayCampaignStartOnce(actor, item, paid);
+    if (entry) paidNew[_ftGrantNameKey(item.name)] = entry;
     firedClean[item.id] = { firedAt: Date.now(), itemName: item.name, viaSwap: true };
     dirty = true;
+  }
+  if (Object.keys(paidNew).length) {
+    await actor.setFlag("fourththing", FT_STARTING_GRANTS_PAID_FLAG, paidNew);
   }
   return { firedClean, dirty };
 }
@@ -465,6 +527,10 @@ async function _ftAtomicSwap(actor, cfg, newKey) {
   }
   const newLower = newName.toLowerCase();
 
+  // Fold the legacy per-item-id grant ledger into the stable one while the old
+  // items still exist (names resolve), so this swap can't re-pay them.
+  await _ftLoadPaidStartingGrants(actor);
+
   // Aggressive cleanup — delete by type, lineage-mismatch, name-prefix-mismatch
   const toDeleteIds = new Set();
   for (const it of actor.items ?? []) {
@@ -473,7 +539,7 @@ async function _ftAtomicSwap(actor, cfg, newKey) {
     if (lineage && lineage !== newLower) { toDeleteIds.add(it.id); continue; }
     if (namePrefixMatch && newLower) {
       const m = String(it.name ?? "").match(namePrefixMatch);
-      if (m) {
+      if (m && (!cfg.prefixItemTest || cfg.prefixItemTest(it, m[1]))) {
         const matched = m[1].trim().toLowerCase();
         if (matched !== newLower) toDeleteIds.add(it.id);
       }
@@ -607,6 +673,30 @@ export async function applyActorClassChange(actor, newKey) {
   return result;
 }
 
+// A species CORE as authored in the ancestries pack (packs/_source/ancestries):
+// a feat whose flags.bbttcc carries one of the species markers —
+//   kind === <species slug>            ("human", "circuitborn", "angel", "dragon"…)
+//   kind === "ancestryHooks"           ("Echo-Diver: Strategic Hooks", "Scion: …")
+//   speciesTrait                       ("Echo-Diver: Vault Sight", "Qliph-Scarred: …")
+//   <species>Feature                   (echoDiverFeature, menhirkinFeature, qliphFeature)
+// Identity-family items (archetype / alignment / …) are never species cores.
+function _ftIsSpeciesCoreItem(it, prefix) {
+  if (it?.type !== "feat") return false;
+  if (it?.flags?.["bbttcc-character-options"]?.category) return false;
+  const b = it?.flags?.bbttcc;
+  if (!b || typeof b !== "object") return false;
+  const squash = v => String(v ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+  const want = squash(prefix);
+  const kind = squash(b.kind);
+  if (kind && (kind === want || kind === "ancestryhooks")) return true;
+  if (b.speciesTrait) return true;
+  return Object.keys(b).some(k => {
+    if (!/.Feature$/.test(k)) return false;
+    const stem = squash(k.slice(0, -"Feature".length));
+    return !!stem && want.startsWith(stem);
+  });
+}
+
 export async function applyActorAncestryChange(actor, newKey) {
   // Cascade: clear heritage first (heritages are ancestry-specific)
   await applyActorHeritageChange(actor, null);
@@ -619,6 +709,10 @@ export async function applyActorAncestryChange(actor, newKey) {
     lineageFlag: "grantedByAncestry",
     // Species cores: "Human: Stubborn Spark", "Menhirkin: ...", etc.
     namePrefixMatch: /^([A-Z][a-zA-Z'\-]+):\s/,
+    // "<Word>: ..." is also the shape of Archetype / Alignment / Enlightenment /
+    // Occult items and of class features ("Aurablade: ...") — only genuine
+    // species cores may be swept by name.
+    prefixItemTest: _ftIsSpeciesCoreItem,
     label: "ancestry"
   }, newKey);
 }
@@ -687,6 +781,11 @@ export async function applyActorHeritageChange(actor, newKey) {
     }
   }
   const newLower = newHeritageShort.toLowerCase();
+
+  // Stable paid-grant ledger (see _ftLoadPaidStartingGrants) — loaded before the
+  // cleanup so legacy per-item-id entries are folded in while the items exist.
+  const paidGrants = await _ftLoadPaidStartingGrants(actor);
+  const paidNew = {};
 
   // ── Aggressive cleanup ── delete ALL heritage residue that doesn't match
   //   the NEW heritage. Three signals:
@@ -798,42 +897,16 @@ export async function applyActorHeritageChange(actor, newKey) {
     if (!Array.isArray(grants)) continue;
     const startingGrants = grants.filter(g => g.cadence === "per-campaign-start");
     if (startingGrants.length === 0) continue;
-    // Use the engine helper if exposed; otherwise inline the apply.
-    const fire = game.fourththing?.fireResourceGrants;
-    if (typeof fire === "function") {
-      // The helper walks ALL items — to avoid double-fire on items that
-      // weren't part of this swap, mark this single item as the "last fired"
-      // by stamping its id in firedClean BEFORE the call. Then call the
-      // helper, which will skip it via no-op since cadence-matching items
-      // already get fired by walking. Simpler: inline the fire here.
-    }
-    // Inline single-item fire — use the same engine semantics
-    for (const g of startingGrants) {
-      try {
-        const fireOne = game.fourththing?._applyOneGrant; // not exported as public API
-        // Fallback path: directly nudge the faction opBank for OP grants
-        if (typeof g.resource === "string" && g.resource.endsWith("-op")) {
-          const factionId = actor.getFlag?.("bbttcc-factions", "factionId");
-          const faction = factionId ? game.actors?.get(factionId) : null;
-          if (!faction) continue;
-          const POOL = {
-            "violence-op":"violence","intrigue-op":"intrigue","soft-power-op":"softpower",
-            "diplomacy-op":"diplomacy","economy-op":"economy","non-lethal-op":"nonlethal",
-            "faith-op":"faith","logistics-op":"logistics","siege-op":"siege","body-op":"body","soul-op":"soul"
-          };
-          const pool = POOL[g.resource];
-          if (!pool) continue;
-          const bank = foundry.utils.duplicate(faction.flags?.["bbttcc-factions"]?.opBank ?? {});
-          bank[pool] = (Number(bank[pool]) || 0) + Number(g.amount);
-          await faction.update({ "flags.bbttcc-factions.opBank": bank });
-        }
-      } catch (_e) { /* swallow per-grant errors so swap completes */ }
-    }
+    // Pay each OP grant at most once per steward — the paid ledger is keyed by
+    // source name, so Empyrean → None → Empyrean does not mint OP again.
+    const entry = await _ftPayCampaignStartOnce(actor, item, paidGrants);
+    if (entry) paidNew[_ftGrantNameKey(item.name)] = entry;
     firedClean[newId] = { firedAt: Date.now(), itemName: item.name, viaSwap: true };
     firedDirty = true;
   }
 
   if (firedDirty) await actor.setFlag("fourththing", "startingGrantsFiredItems", firedClean);
+  if (Object.keys(paidNew).length) await actor.setFlag("fourththing", FT_STARTING_GRANTS_PAID_FLAG, paidNew);
 
   const uuid = `Compendium.${packKey}.Item.${nextKey}`;
   await actor.setFlag("bbttcc-character-options", "heritageUuid", uuid);

@@ -310,7 +310,8 @@
   async function clearSiegeState(hexUuid){
     const doc = await _hexDocFromUuid(hexUuid);
     if (!doc) return;
-    await doc.update({ [`flags.${MOD_T}.-=siege`]: null }, { parent: doc.parent });
+    // v14 dropped the "-=key" deletion syntax — unsetFlag is the one that actually removes it.
+    await doc.unsetFlag(MOD_T, "siege");
   }
 
   function listActiveSieges(){

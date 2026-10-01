@@ -1564,7 +1564,7 @@ async function _playBeatAudioFallback(beat) {
     const volume = Number.isFinite(vol0) ? Math.max(0, Math.min(1, vol0)) : 0.85;
     const loop = !!a.loop;
     const push = !!a.broadcastPlayers;
-    return await AH.play({ src, volume, loop }, { push });
+    return await AH.play({ src, volume, loop }, push); // boolean, not {push}: any object broadcasts
   } catch (_e) { return null; }
 }
 
@@ -5479,10 +5479,16 @@ async function injectorFire(ctx = {}) {
     promptDebt = true,
 
     // NEW: fallback behavior
-    fallbackOnDecline = false
+    fallbackOnDecline = false,
+
+    // Non-travel draws (the Reality-Tear adversary draw): candidates must carry
+    // THIS tag instead of inject.travel_threshold, so a travel encounter can
+    // never be drawn in their place.
+    requireTag = ""
   } = ctx;
 
   const ctxTags = _splitTags(tags);
+  const mustTag = _splitTags(requireTag)[0] || "";
   const all = listCampaigns();
   const campaigns = campaignId ? all.filter(c => c.id === campaignId) : all;
 
@@ -5533,7 +5539,8 @@ async function injectorFire(ctx = {}) {
     );
     for (const b of beats) {
       const inject = b.inject || {};
-      if (!_matchesTravelThreshold(b)) continue;
+      const bTags = mustTag ? _splitTags(b.tags) : null;
+      if (mustTag ? !bTags.includes(mustTag) : !_matchesTravelThreshold(b)) continue;
       if (!(await _beatRequiresMet(b, c, ctx))) continue;   // Story Director gate (inject.requires)
 
       if (inject.oncePerHex && hexUuid) {
@@ -5548,7 +5555,10 @@ async function injectorFire(ctx = {}) {
         if (turn > 0 && (turn - lastTurn) < cd) continue;
       }
 
-      let score = _scoreBeat(b, ctxTags);
+      // requireTag mode scores on tag overlap alone (no travel-threshold fallback match).
+      let score = mustTag
+        ? 100 + 10 * ctxTags.filter(t => t && bTags.includes(t)).length
+        : _scoreBeat(b, ctxTags);
       if (score <= 0) continue;
 
       // Foreshadow bonus: this vignette plants a clue for a chain that's in motion.
@@ -7477,6 +7487,7 @@ async function _drawAdversaryBeat(info = {}) {
     const res = await injectorFire({
       campaignId,
       tags: tags.join(" "),
+      requireTag: "adversary", // only adversary-tagged beats — never a travel encounter
       autoDebt:   false,  // overshoot is itself the trigger — don't double-count war-log debt
       promptDebt: false,  // fire directly, no GM debt dialog
       allowMulti: false,
@@ -8148,6 +8159,11 @@ function buildCampaignAPI() {
           return { hexUuid: uuid, hexName: name, beats, questKeys: keys, registryIds, questNames };
         } catch (e) { warn("hexStory failed", e); return null; }
       },
+      // Walk-in doors (2026-09-30): the played ledger, read-only — which beats this campaign has seen. Region door gates
+      // (bbttcc-travel location-doors `enter`) ask `hasMark(beatId)` before opening an interior; a Steward who has not
+      // passed Donny gets Donny instead of the store.
+      played: (campaignId) => { try { return foundry.utils.deepClone(_storyStateFor(campaignId || getActiveCampaignId())?.played || {}); } catch (_e) { return {}; } },
+      hasMark: (beatId, campaignId) => { try { return !!_storyStateFor(campaignId || getActiveCampaignId())?.played?.[String(beatId || "")]; } catch (_e) { return false; } },
       // Layer 2 (2026-09-21): story data — quests + scripts authored in the builder, stored on campaign.story.
       data: {
         get: (campaignId) => { const c = getCampaign(campaignId || getActiveCampaignId()); const s = c?.story; return foundry.utils.deepClone(s && typeof s === "object" ? s : { quests: {}, scripts: {} }); },

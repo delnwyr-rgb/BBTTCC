@@ -21,9 +21,9 @@ const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 /* ===================== Economic Horizon (Faction Tier → Rarity Horizon) =====================
 
-  - Tier A → Uncommon
-  - Tier B → Rare
-  - Tier C → Very Rare
+  - Tier A → Uncommon   (numeric faction tier 0–1)
+  - Tier B → Rare       (numeric faction tier 2)
+  - Tier C → Very Rare  (numeric faction tier 3–4)
   - Artifact → never purchasable (discovery only)
 
   Catalog entries MAY declare `rarity`, but for Gear we also auto-resolve rarity from the
@@ -68,9 +68,20 @@ function _normalizeExternalRarity(raw) {
 }
 
 function factionEconomicHorizon(factionActor) {
-  const tier = String(factionActor?.getFlag?.(MOD_FACTIONS, "tier") || "A").toUpperCase();
-  if (tier === "C") return "very_rare";
-  if (tier === "B") return "rare";
+  // flags.bbttcc-factions.tier is a NUMBER 0–4 (read through the facts layer); this used to
+  // compare it to the letters A/B/C, so every faction sat at Uncommon forever.
+  // ASSUMPTION (2026-10-01, owner ruling owed): no doc states how the five numeric tiers fold
+  // onto the three lettered horizons, so this maps conservatively — 0–1 → A, 2 → B, 3–4 → C.
+  const raw = factionActor?.getFlag?.(MOD_FACTIONS, "tier");
+  const letter = String(raw ?? "").trim().toUpperCase();   // legacy lettered data
+  if (letter === "C") return "very_rare";
+  if (letter === "B") return "rare";
+  if (letter === "A") return "uncommon";
+  let tier = 0;
+  try { const fx = game.bbttcc?.facts?.faction?.tier; tier = fx ? fx(factionActor) : Number(raw); } catch (_e) { tier = Number(raw); }
+  if (!Number.isFinite(tier)) tier = 0;
+  if (tier >= 3) return "very_rare";
+  if (tier === 2) return "rare";
   return "uncommon";
 }
 
@@ -470,7 +481,7 @@ const MARKET_TIPS = {
   sort:      "Sort — Name (A→Z), or RFI Tier (I–IV) ascending/descending. Entries with no tier sort after Tier IV; equal-tier rows stay alphabetized.",
   openDoc:   "Open item sheet — inspect the actual item (stats, description, tier) before you spend marks on it.",
   cost:      "Cost — the list price. RFI flag-priced items show their native pool in marks (e.g. 'Viol 50 marks'); 'Split' items pay each portion to its own pool; legacy entries show catalog Economy OP (1 OP = 10 marks). The Horizon chip shows the final scaled price your faction pays.",
-  chip:      "Economic Horizon — your faction's tier sets its rarity horizon (Tier A→Uncommon, B→Rare, C→Very Rare). At or under the horizon, gear is Standard Issue (free; rigs/facilities/assets still pay base cost). Above it the price strains: ×1 / ×2 / ×4 at 1 / 2 / 3+ rarity steps over. Artifacts are never purchasable — discovery only.",
+  chip:      "Economic Horizon — your faction's tier sets its rarity horizon (Tier 0–1→Uncommon, 2→Rare, 3–4→Very Rare). At or under the horizon, gear is Standard Issue (free; rigs/facilities/assets still pay base cost). Above it the price strains: ×1 / ×2 / ×4 at 1 / 2 / 3+ rarity steps over. Artifacts are never purchasable — discovery only.",
   profChip:  "Untrained — the selected Buyer Character has rank 0 in the skill this weapon or armor is gated on. Armor worn at rank 0 grants NO defensive benefit; weapons are wielded untrained. You can still buy it (stockpiling, training ahead, gifting) — the chip is a warning, not a block.",
   buy:       "Buy — commits the purchase: confirmation first (flag-priced items let you pay from a non-native pool at ×1.5 friction), then the marks are spent from the Buyer Faction's OP bank and the goods are delivered — gear to the Buyer Character's inventory, rigs to the faction, facilities/assets/upgrades to the Delivery Hex, actor entries cloned into the world under the buying faction. Writes a war-log receipt and whispers the GM.",
   payFromPool: "Pay from — which OP pool covers the bill. The native pool pays list price; any other pool pays ×1.5 (cross-pool friction). Balances shown are the faction's current opBank, in marks.",

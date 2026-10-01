@@ -88,13 +88,48 @@
     };
   }
 
+  // Seat-aware write: the settlement lives on the hex Drawing, which a PLAYER
+  // seat cannot update (Drawings belong to their author) — and the UI lets a
+  // faction owner build. GM seats write directly; player seats relay to the
+  // primary GM via bbttcc-core gmExec (same pattern as the Build Units spend),
+  // whose handler checks the caller OWNS the hex's faction.
+  const TB_RELAY = "territory.townbuilder.writeSettlement";
   async function writeSettlement(hexDoc, settlement) {
+    const gx = game.bbttcc?.api?.gmExec;
+    if (game.user?.isGM || !gx?.call) return _writeSettlementLocal(hexDoc, settlement);
+    await gx.call(TB_RELAY, { hexUuid: hexDoc.uuid, settlement });
+  }
+  async function _writeSettlementLocal(hexDoc, settlement) {
     // Arrays replace wholesale on update; we only add/modify keys, so a plain
     // path-write is safe (no "-=key" deletions needed here).
     await hexDoc.update(
       { [`flags.${MOD_T}.settlement`]: settlement },
       { parent: hexDoc.parent ?? null }
     );
+  }
+  function _registerSettlementRelay() {
+    const gx = game.bbttcc?.api?.gmExec;
+    if (!gx?.register) return;
+    gx.register(TB_RELAY, async (p, meta) => {
+      let doc = null;
+      try { const d = await fromUuid(String(p?.hexUuid || "")); doc = d?.document ?? d ?? null; } catch (_e) {}
+      const tf = doc?.flags?.[MOD_T] || {};
+      if (!doc?.update || !(tf.isHex === true || tf.kind === "territory-hex" || tf.hexId)) throw new Error("not a hex drawing");
+      const A = factionOf(doc);
+      if (!A) throw new Error("no owning faction");
+      const caller = game.users?.get(String(meta?.fromUserId || ""));
+      if (!meta?.local && !(caller && A.testUserPermission?.(caller, "OWNER"))) throw new Error(`${caller?.name || "caller"} does not own ${A.name}`);
+      const s = p?.settlement;
+      if (!s || typeof s !== "object" || !Array.isArray(s.assets) || !Array.isArray(s.districts)) throw new Error("bad settlement payload");
+      // A player seat may add / rename / assign — never remove (demolish and
+      // dissolve are GM-only), so every recorded asset + district must survive.
+      const cur = getSettlement(doc);
+      const keeps = (list, next) => (list || []).every(x => next.some(y => y?.id === x.id));
+      if (cur && !(keeps(cur.assets, s.assets) && keeps(cur.districts, s.districts))) throw new Error("a player seat cannot remove buildings or districts");
+      await _writeSettlementLocal(doc, s);
+      log(`settlement written on ${hexName(doc)} (for ${meta?.fromUserName || "?"})`);
+      return { ok: true };
+    });
   }
 
   function ladderFor(hexDoc) {
@@ -197,7 +232,12 @@
     }
 
     settlement.districts.push({ id: foundry.utils.randomID(16), type: t, name: districtName, addedTs: game.time.worldTime });
-    await writeSettlement(hexDoc, settlement);
+    try { await writeSettlement(hexDoc, settlement); }
+    catch (e) { // refund — the BU left the ledger but the district was never recorded
+      warn("district write failed:", e);
+      if (cost > 0) { try { await faction.setFlag(MOD_F, "buildUnits", buBalance(faction) + cost); } catch (_e) {} }
+      return { ok: false, error: `Could not record the district (${e?.message ?? e})${cost > 0 ? " — Build Units refunded" : ""}.` };
+    }
 
     try {
       await game.bbttcc?.api?.territory?.recordHexImprovement?.(hexDoc, {
@@ -576,7 +616,13 @@
       builtTs: game.time.worldTime,
       paidMaterials: payMats // demolish salvages half ONLY when materials were drawn
     });
-    await writeSettlement(hexDoc, settlement);
+    try { await writeSettlement(hexDoc, settlement); }
+    catch (e) { // unwind — no orphan actor, no lost BU, when the hex record cannot be written
+      warn("settlement write failed:", e);
+      try { await built.actor.delete(); } catch (_e) {}
+      if (spent) { try { await faction.setFlag(MOD_F, "buildUnits", buBalance(faction) + buCost); } catch (_e) {} }
+      return { ok: false, error: `Could not record the building on the hex (${e?.message ?? e})${spent ? " — Build Units refunded" : ""}.` };
+    }
 
     // Town map exists? Drop the new building straight onto it (GM only —
     // token creation is GM-gated; players' builds get placed on next GM pass).
@@ -965,6 +1011,7 @@
   });
 
   Hooks.once("ready", () => {
+    _registerSettlementRelay();
     game.bbttcc ??= { api: {} };
     game.bbttcc.api ??= {};
     game.bbttcc.api.territory ??= {};

@@ -235,7 +235,9 @@
     box.items = items;
     nextFlags.opSchedules = box;
 
-    await F.update({ ["flags."+MOD_FACTIONS]: nextFlags });
+    // Write ONLY the schedule key — never the whole namespace snapshot (it would
+    // merge stale opBank / warLogs back over concurrent writers).
+    await F.update({ ["flags."+MOD_FACTIONS+".opSchedules"]: box });
     return { ok: true, count: items.length, item: item };
   }
 
@@ -265,7 +267,7 @@
       const ts = Date.now();
       wl.push(Object.assign({ ts: ts, date: (new Date(ts)).toLocaleString() }, entry));
       flags.warLogs = wl;
-      await F.update({ ["flags."+MOD_FACTIONS]: flags });
+      await F.update({ ["flags."+MOD_FACTIONS+".warLogs"]: wl });
       return true;
     } catch (_e) {}
     return false;
@@ -552,17 +554,17 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       nextItems.push(it);
     }
 
-    // Write back if changed
+    // Write back if changed. ONLY the schedule key: `flags` is a pre-loop
+    // snapshot, and op.commit / war-log / audit writes landed during the loop —
+    // writing the whole namespace would revert the opBank grant just applied.
     if (nextItems.length !== items.length) {
-      flags.opSchedules = { v:1, items: nextItems };
-      await F.update({ ["flags."+MOD_FACTIONS]: flags });
+      await F.update({ ["flags."+MOD_FACTIONS+".opSchedules"]: { v:1, items: nextItems } });
       return { ok:true, changed:true, applied: applied, remaining: nextItems.length };
     }
 
     // If we applied but lengths same (e.g., recurring bumped in-place) still rewrite for nextTurn changes
     if (applied > 0) {
-      flags.opSchedules = { v:1, items: nextItems };
-      await F.update({ ["flags."+MOD_FACTIONS]: flags });
+      await F.update({ ["flags."+MOD_FACTIONS+".opSchedules"]: { v:1, items: nextItems } });
       return { ok:true, changed:true, applied: applied, remaining: nextItems.length };
     }
 

@@ -910,6 +910,22 @@ async function _ftAurabladeStampOneShot(actor, key, value = true) {
   await actor.setFlag("fourththing", `aurablade.oneShot.${key}`, value);
 }
 
+// Helper — stamp a one-shot `flags.fourththing.aurablade.<key>` on ANOTHER
+// actor (foe or ally). Owner writes directly; a player seat that doesn't own
+// the target goes through the GM relay (ft-applyEffects `flags`). Returns
+// false when nothing could be written (no GM online) — never throws, so the
+// Burn cost + chat card still land. 2026-10-01.
+async function _ftAurabladeStampTarget(targetActor, key, value = true) {
+  if (!targetActor) return false;
+  try {
+    const mode = await game.fourththing?.applyEffectsToTarget?.(targetActor, [], [], { flags: { [`aurablade.${key}`]: value } });
+    return mode === "direct" || mode === "relay";
+  } catch (e) {
+    console.warn("[fourththing] Aurablade target stamp failed", key, e);
+    return false;
+  }
+}
+
 // Canon-driven action matrix per AURABLADE class doc:
 //   Burn 0–1 Controlled · Burn 2–3 Engaged · Burn 4+ Overheated
 // Each action carries: band gate, burn cost (how much Burn entering the
@@ -1101,14 +1117,19 @@ export async function openAurabladeAction(actor) {
                   });
                   appliedNote = `↗ ${targetActor.name} shoved 5 ft.`;
                 }
-              } catch (e) { console.warn("Fury push failed", e); }
+              } catch (e) {
+                console.warn("Fury push failed", e);
+                // Player seats can't move a token they don't own — hand it to the GM.
+                appliedNote = `↗ GM: shove ${targetActor.name} 5 ft directly away (not auto-moved).`;
+              }
               break;
             }
             case "fury_dis_attack": {
               // Stamp the ENEMY so their next attack rolls 3d10kl2 — attackTest
               // consumes it (no actor-scan needed), mirroring dread_dis_saves.
-              await targetActor.setFlag?.("fourththing", "aurablade.disAttackOnce", true);
-              appliedNote = `🎯 ${targetActor.name}'s next attack this turn is rolled 3d10kl2.`;
+              appliedNote = (await _ftAurabladeStampTarget(targetActor, "disAttackOnce", true))
+                ? `🎯 ${targetActor.name}'s next attack this turn is rolled 3d10kl2.`
+                : `🎯 GM: ${targetActor.name}'s next attack this turn is rolled 3d10kl2 (not auto-applied).`;
               break;
             }
             // ─── RESOLVE ────────────────────────────────────────────────────
@@ -1146,8 +1167,9 @@ export async function openAurabladeAction(actor) {
             case "mercy_redirect": {
               // Stamp the reduction on the ALLY so _applyDamageToActor consumes
               // it when they're next hit. Redirect-to-self stays GM-adjudicated.
-              await targetActor.setFlag?.("fourththing", "aurablade.reduceNextDamageByTier", tier);
-              appliedNote = `🤍 Next damage to ${targetActor.name} is reduced by ${tier} (your tier). (Redirect-to-self stays GM-adjudicated.)`;
+              appliedNote = (await _ftAurabladeStampTarget(targetActor, "reduceNextDamageByTier", tier))
+                ? `🤍 Next damage to ${targetActor.name} is reduced by ${tier} (your tier). (Redirect-to-self stays GM-adjudicated.)`
+                : `🤍 GM: reduce the next damage to ${targetActor.name} by ${tier} (not auto-applied).`;
               break;
             }
             case "mercy_stabilize": {
@@ -1160,17 +1182,23 @@ export async function openAurabladeAction(actor) {
                   await targetActor.update({ "system.derived.integrity.value": 1 });
                 }
                 appliedNote = `❤ ${targetActor.name} stabilized.`;
-              } catch (e) { console.warn("Mercy stabilize failed", e); }
+              } catch (e) {
+                console.warn("Mercy stabilize failed", e);
+                // Player seats can't write to an ally they don't own — hand it to the GM.
+                appliedNote = `❤ GM: stabilize ${targetActor.name} (clear Dying, Integrity to 1) — not auto-applied.`;
+              }
               break;
             }
             case "mercy_prevent_drop": {
-              await targetActor.setFlag?.("fourththing", "aurablade.preventDropOnce", true);
-              appliedNote = `❤ ${targetActor.name} cannot drop below 1 Integrity on the next hit.`;
+              appliedNote = (await _ftAurabladeStampTarget(targetActor, "preventDropOnce", true))
+                ? `❤ ${targetActor.name} cannot drop below 1 Integrity on the next hit.`
+                : `❤ GM: ${targetActor.name} cannot drop below 1 Integrity on the next hit (not auto-applied).`;
               break;
             }
             case "mercy_lastsave": {
-              await targetActor.setFlag?.("fourththing", "aurablade.autoPassLastStand", true);
-              appliedNote = `❤ ${targetActor.name}: next failed Last Stand check converts to a success.`;
+              appliedNote = (await _ftAurabladeStampTarget(targetActor, "autoPassLastStand", true))
+                ? `❤ ${targetActor.name}: next failed Last Stand check converts to a success.`
+                : `❤ GM: ${targetActor.name}'s next failed Last Stand check converts to a success (not auto-applied).`;
               break;
             }
             // ─── DREAD ──────────────────────────────────────────────────────
@@ -1187,15 +1215,18 @@ export async function openAurabladeAction(actor) {
               // Apply a 1-round AE that flags the target with disSaves so the
               // save roller picks up 3d10kl2. The state isn't in FT.CONDITIONS,
               // so create a bespoke AE here.
+              // Owner-or-relay so it lands on foes the player doesn't own.
               try {
-                await targetActor.createEmbeddedDocuments?.("ActiveEffect", [{
+                const mode = await game.fourththing?.applyEffectsToTarget?.(targetActor, [{
                   name: "Dread — Disadvantage on Saves",
                   icon: "icons/svg/skull.svg",
                   duration: { rounds: 1 },
                   changes: [],
                   flags: { fourththing: { aurablade: { disSavesAll: true } } }
-                }]);
-                appliedNote = `🕳 ${targetActor.name}: disadvantage on ALL saves until your next turn.`;
+                }], []);
+                appliedNote = (mode === "direct" || mode === "relay")
+                  ? `🕳 ${targetActor.name}: disadvantage on ALL saves until your next turn.`
+                  : `🕳 GM: ${targetActor.name} has disadvantage on ALL saves until your next turn (not auto-applied).`;
               } catch (e) { console.warn("Dread AE failed", e); }
               break;
             }
@@ -4014,6 +4045,7 @@ async function _openShieldProjector(actor, key, label, body) {
               game.socket?.emit?.("system.fourththing", {
                 t: "ft-applyDamage",
                 actorId: targetActor.id,
+                targetUuid: targetActor.uuid,   // unlinked tokens: hit the synthetic actor
                 baseDmg: heal, op: "heal", track: "integrity",
                 damageType: "", damageFlavor: ""
               });

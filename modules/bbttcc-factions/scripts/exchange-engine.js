@@ -325,10 +325,58 @@ function sharingGet(factionOrId) {
   return { factionId: A.id, name: A.name, lentTotal, borrowedTotal, net: lentTotal - borrowedTotal, lentTo: cur.lentTo || {}, borrowedFrom: cur.borrowedFrom || {}, borrowStreak: streak, lastTurn: cur.ledger?.length ? cur.ledger[cur.ledger.length - 1].turn : null, ledger: cur.ledger || [] };
 }
 
-async function share({ from, to, offer, reason } = {}) {
+// ── PLAYER SEATS (2026-10-01) ─────────────────────────────────────────────────
+// A player seat cannot write a faction it does not own, and a send touches BOTH
+// factions (bank, Build Units, stockpile, war logs, sharing trace, rollback). Only the
+// marks leg used to be relayed, so a mixed send credited the recipient and then failed
+// before the sender was debited. The WHOLE share/trade now runs on the primary GM
+// through bbttcc-core gmExec: the GM re-checks ownership and affordability, applies
+// both sides atomically, and the player gets the same { ok, applied?, error? } back.
+const RELAY_SHARE = "factions.exchange.share";
+const RELAY_TRADE = "factions.exchange.trade";
+function _seatOwns(meta, actor) {
+  if (!meta || meta.local) return true;
+  const u = game.users?.get?.(meta.fromUserId);
+  if (!u || !actor) return false;
+  if (u.isGM) return true;
+  try { return !!actor.testUserPermission?.(u, "OWNER"); } catch (_e) { return false; }
+}
+async function _relayToGm(type, payload) {
+  const gx = game.bbttcc?.api?.gmExec;
+  if (!gx?.call) return { ok: false, error: "GM relay not available on this client — reload and try again." };
+  if (!gx.primaryGmId?.()) return { ok: false, noGm: true, error: "No GM is connected — nothing was sent. Try again when the GM is online." };
+  try {
+    const res = await gx.call(type, payload);
+    if (res?.ok) _refreshAfterExchange({ fromId: payload.from, toId: payload.to });
+    return res || { ok: false, error: "GM relay returned nothing" };
+  } catch (e) {
+    console.warn(TAG, `${type} relay failed`, e);
+    return { ok: false, error: String(e?.message || e) };
+  }
+}
+function _registerRelay() {
+  const gx = game.bbttcc?.api?.gmExec; if (!gx?.register) return;
+  gx.register(RELAY_SHARE, async (p, meta) => {
+    const A = _resolveActor(p?.from), B = _resolveActor(p?.to);
+    if (!A || !B) return { ok: false, error: "actor not found" };
+    if (!_seatOwns(meta, A)) return { ok: false, error: `${meta?.fromUserName || "That seat"} does not own ${A.name}.` };
+    return share({ from: A, to: B, offer: p?.offer, reason: p?.reason }, meta?.local ? null : meta?.fromUserName);
+  });
+  gx.register(RELAY_TRADE, async (p, meta) => {
+    const A = _resolveActor(p?.from), B = _resolveActor(p?.to);
+    if (!A || !B) return { ok: false, error: "actor not found" };
+    // A direct trade moves resources OUT of both factions, so the seat must own both;
+    // anything else goes through a pending offer the other side accepts.
+    if (!_seatOwns(meta, A) || !_seatOwns(meta, B)) return { ok: false, error: "A trade with a faction you do not own must be submitted as an offer (Trade → Submit Offer)." };
+    return trade({ from: A, to: B, offer: p?.offer, ask: p?.ask, reason: p?.reason }, meta?.local ? null : meta?.fromUserName);
+  });
+}
+
+async function share({ from, to, offer, reason } = {}, viaSeat = null) {
   const A = _resolveActor(from);
   const B = _resolveActor(to);
   if (!A || !B) return { ok: false, error: "actor not found" };
+  if (!game.user?.isGM) return _relayToGm(RELAY_SHARE, { from: A.id, to: B.id, offer, reason });
 
   const relApi = game?.bbttcc?.api?.factions?.relations;
   if (!relApi?.canTrade) return { ok: false, error: "relations API not loaded" };
@@ -362,7 +410,7 @@ async function share({ from, to, offer, reason } = {}) {
   const applied = await _applyDeltasAtomic(deltas, `Allied Send: ${A.name} → ${B.name}`);
   if (!applied.ok) return { ok: false, error: applied.error };
 
-  const summary = `Allied Send: ${A.name} → ${B.name} (${_summarize(o)})${reason ? ` — ${reason}` : ""}`;
+  const summary = `Allied Send: ${A.name} → ${B.name} (${_summarize(o)})${reason ? ` — ${reason}` : ""}${viaSeat ? ` [via ${viaSeat}]` : ""}`;
   await _writeWarLogs(A, B, summary);
   await _recordSharing(A, B, { kind: "send", sentByA: o, sentByB: { marks: {} }, reason, summary });
 
@@ -376,10 +424,11 @@ async function share({ from, to, offer, reason } = {}) {
 }
 
 // Bilateral Trade: looks up mutual tier + friction, plans + applies.
-async function trade({ from, to, offer, ask, reason } = {}) {
+async function trade({ from, to, offer, ask, reason } = {}, viaSeat = null) {
   const A = _resolveActor(from);
   const B = _resolveActor(to);
   if (!A || !B) return { ok: false, error: "actor not found" };
+  if (!game.user?.isGM) return _relayToGm(RELAY_TRADE, { from: A.id, to: B.id, offer, ask, reason });
 
   const relApi = game?.bbttcc?.api?.factions?.relations;
   if (!relApi?.canTrade) return { ok: false, error: "relations API not loaded" };
@@ -397,7 +446,7 @@ async function trade({ from, to, offer, ask, reason } = {}) {
   const applied = await _applyDeltasAtomic(deltas, `Trade: ${A.name} ↔ ${B.name}`);
   if (!applied.ok) return { ok: false, error: `Trade apply failed: ${applied.error}` };
 
-  const summary = `Trade: ${A.name} ↔ ${B.name} — ${A.name} sent ${_summarize(_normResource(offer))}, received ${_summarize(_normResource(ask))} (mutual ${ct.mutualTier}, ${(friction*100)|0}% friction)${reason ? `; ${reason}` : ""}`;
+  const summary = `Trade: ${A.name} ↔ ${B.name} — ${A.name} sent ${_summarize(_normResource(offer))}, received ${_summarize(_normResource(ask))} (mutual ${ct.mutualTier}, ${(friction*100)|0}% friction)${reason ? `; ${reason}` : ""}${viaSeat ? ` [via ${viaSeat}]` : ""}`;
   await _writeWarLogs(A, B, summary);
   await _recordSharing(A, B, { kind: "trade", sentByA: _normResource(offer), sentByB: _normResource(ask), reason, summary });
 
@@ -458,6 +507,7 @@ function _attach() {
     root.sharing = { get: sharingGet };
     game.bbttcc.api.factions.sharing = root.sharing;   // T7 trace reader for advance-turn.tracks (2026-09-12)
     root.OP_KEYS = OP_KEYS.slice();
+    _registerRelay();   // GM-side handlers for player-seat share/trade
 
     // Install the post-exchange refresh once.
     if (!game.bbttcc.__exchangeRefreshHook) {

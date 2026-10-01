@@ -410,7 +410,25 @@
           return track.active[qid];
         };
 
+        // setFlag MERGES, so a key deleted on the local copy survives on the actor (a completed quest
+        // stayed in Active too; a restored next line kept its override; a reset kept its beats).
+        // Every local removal is noted with drop() and force-deleted before the merge — the same
+        // ForcedDeletion-then-setFlag pattern the campaign module uses. Only noted paths are deleted,
+        // so quests the engine added while a dialog was open are never touched.
+        const dropped = [];
+        const drop = (path) => { dropped.push(path); };
+        const bucketOf = () => track.active[qid] ? "active" : (track.completed[qid] ? "completed" : "archived");
         const persist = async () => {
+          try {
+            const live = faction.getFlag(MOD_FAC, "quests") || {};
+            const FD = foundry.data?.operators?.ForcedDeletion || null; const del = {};
+            for (const path of dropped) {
+              if (foundry.utils.hasProperty(track, path) || !foundry.utils.hasProperty(live, path)) continue;
+              if (FD) del[`flags.${MOD_FAC}.quests.${path}`] = new FD();
+              else { const i = path.lastIndexOf("."); del[`flags.${MOD_FAC}.quests.${path.slice(0, i)}.-=${path.slice(i + 1)}`] = null; }
+            }
+            if (Object.keys(del).length) await faction.update(del, { render: false });
+          } catch (eDel) { warn("deletion sync failed", eDel); }
           await faction.setFlag(MOD_FAC, "quests", track);
         };
 
@@ -470,7 +488,7 @@
                 callback: async (html2) => {
                   const val = String(html2.find("textarea[name='qnext']").val() || "").trim();
                   const row = ensureRow();
-                  if (!val || val === authored) { delete row.nextLine; }
+                  if (!val || val === authored) { delete row.nextLine; drop(`${bucketOf()}.${qid}.nextLine`); }
                   else row.nextLine = { text: val, stepKey: authoredKey, ts: Date.now(), by: game.user?.name || "GM" };
                   row.lastTouchedTs = Date.now();
                   await persist();
@@ -481,7 +499,7 @@
                 label: "Restore authored",
                 callback: async () => {
                   const row = ensureRow();
-                  delete row.nextLine;
+                  delete row.nextLine; drop(`${bucketOf()}.${qid}.nextLine`);
                   row.lastTouchedTs = Date.now();
                   await persist();
                   this.render(false);
@@ -501,8 +519,8 @@
           row.archivedTs = null;
           row.lastTouchedTs = Date.now();
           track.completed[qid] = row;
-          delete track.active[qid];
-          delete track.archived[qid];
+          delete track.active[qid]; drop(`active.${qid}`);
+          delete track.archived[qid]; drop(`archived.${qid}`);
           await persist();
           ui.notifications?.info?.(`Quest completed: ${qname}`);
           this.__state.tab = "completed";
@@ -516,8 +534,8 @@
           row.archivedTs = row.archivedTs || Date.now();
           row.lastTouchedTs = Date.now();
           track.archived[qid] = row;
-          delete track.active[qid];
-          delete track.completed[qid];
+          delete track.active[qid]; drop(`active.${qid}`);
+          delete track.completed[qid]; drop(`completed.${qid}`);
           await persist();
           ui.notifications?.info?.(`Quest archived: ${qname}`);
           this.__state.tab = "archived";
@@ -532,8 +550,8 @@
           row.completedTs = null;
           row.lastTouchedTs = Date.now();
           track.active[qid] = row;
-          delete track.completed[qid];
-          delete track.archived[qid];
+          delete track.completed[qid]; drop(`completed.${qid}`);
+          delete track.archived[qid]; drop(`archived.${qid}`);
           await persist();
           ui.notifications?.info?.(`Quest reactivated: ${qname}`);
           this.__state.tab = "active";
@@ -554,13 +572,15 @@
           row.archivedTs = null;
           row.lastTouchedTs = Date.now();
           row.questStep = 1;
+          // The row lands in Active; clear whatever beats the live Active row still carries.
+          for (const k of Object.keys(faction.getFlag(MOD_FAC, "quests")?.active?.[qid]?.progress?.beats || {})) drop(`active.${qid}.progress.beats.${k}`);
           row.progress = { beats: {} };
           row.history = Array.isArray(row.history) ? row.history : [];
           row.history.push({ ts: Date.now(), type: "reset", by: game.user?.name || "GM" });
 
           track.active[qid] = row;
-          delete track.completed[qid];
-          delete track.archived[qid];
+          delete track.completed[qid]; drop(`completed.${qid}`);
+          delete track.archived[qid]; drop(`archived.${qid}`);
 
           await persist();
           ui.notifications?.info?.(`Quest reset: ${qname}`);

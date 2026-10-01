@@ -43,8 +43,21 @@ const FLAG_SCOPE = MOD_ID;
 
 let _activeDamageSource = null;
 
+// Seat gap: the wrapper below only runs on the seat that CLICKS Apply. When a
+// player's damage to a GM-owned structure is relayed (system socket
+// "ft-applyDamage"), the GM seat applies it with no source in hand — so an armed
+// Catastrophic Entry was never consumed and the collapse had no breacher. The
+// player seat therefore announces its source to the GM (bbttcc-core gmExec,
+// acked BEFORE the click is delegated) and the GM holds it for a short window
+// as the fallback source for the relayed apply that follows.
+const SOURCE_RELAY = "structures.damageSource.announce";
+const RELAYED_SOURCE_TTL_MS = 8000;
+let _relayedDamageSource = null;   // { actor, ts } — GM seat only
+
 export function getActiveDamageSource() {
-  return _activeDamageSource;
+  if (_activeDamageSource) return _activeDamageSource;
+  if (_relayedDamageSource && (Date.now() - _relayedDamageSource.ts) <= RELAYED_SOURCE_TTL_MS) return _relayedDamageSource.actor;
+  return null;
 }
 
 function _setActiveDamageSource(actor) {
@@ -468,9 +481,14 @@ function installSourceCaptureWedge() {
       if (itemUuid) {
         const item = await (foundry.utils?.fromUuid ?? fromUuid)?.(itemUuid).catch(() => null);
         const src = item?.parent ?? null;
-        if (src?.documentName === "Actor") _setActiveDamageSource(src);
+        if (src?.documentName === "Actor") {
+          _setActiveDamageSource(src);
+          await _announceDamageSource(src);
+        }
       }
     } catch (_e) { /* swallow */ }
+    // A GM's own click never inherits a source a player announced earlier.
+    if (game.user?.isGM) _relayedDamageSource = null;
     try {
       return await original.call(this, btn);
     } finally {
@@ -480,11 +498,36 @@ function installSourceCaptureWedge() {
   console.log(TAG, "source-capture wedge installed on applyDamageFromButton");
 }
 
+// Player seat → GM: "the damage I am about to relay comes from this actor".
+// Awaited so the GM holds the source before the system's relay message leaves.
+async function _announceDamageSource(src) {
+  if (game.user?.isGM) return;
+  const gx = game.bbttcc?.api?.gmExec;
+  if (!gx?.call || !game.users?.some?.(u => u.isGM && u.active)) return;
+  try { await gx.call(SOURCE_RELAY, { sourceUuid: src.uuid }, { timeoutMs: 3000 }); }
+  catch (e) { console.warn(TAG, "damage-source announce failed (Catastrophic Entry will not apply to relayed damage)", e); }
+}
+function _registerSourceRelay() {
+  const gx = game.bbttcc?.api?.gmExec;
+  if (!gx?.register) return;
+  gx.register(SOURCE_RELAY, async (p, meta) => {
+    if (meta?.local) return { ok: true };   // GM clicks use the wrapper's own capture
+    let actor = null;
+    try { const d = await fromUuid(String(p?.sourceUuid || "")); actor = d?.actor ?? d ?? null; } catch (_e) {}
+    if (actor?.documentName !== "Actor") throw new Error("source actor not found");
+    const caller = game.users?.get(String(meta?.fromUserId || ""));
+    if (!(caller && actor.testUserPermission?.(caller, "OWNER"))) throw new Error(`${caller?.name || "caller"} does not own ${actor.name}`);
+    _relayedDamageSource = { actor, ts: Date.now() };
+    return { ok: true };
+  });
+}
+
 // ── Install ─────────────────────────────────────────────────────────────────
 
 Hooks.once("ready", () => {
   Hooks.on("createChatMessage", _onRuinCard);
   installSourceCaptureWedge();
+  _registerSourceRelay();
   console.log(TAG, "Bulwark hookups installed");
 
   // Expose for diagnostic + tests

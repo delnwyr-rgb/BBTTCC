@@ -6,6 +6,13 @@
  * permit spent: a parade is a floor with a direction — a fourth way off the floor), receipt THE MAESTRA'S TERMS on a style win, meters set
  * on every floor outcome (respect / tribute / uncontested), speakers on every Cadence beat, personas (the Maestra's was empty) + secrets.
  * Idempotent; backs up the campaigns setting. F5 after.
+ *
+ * REVIEW FIXES 2026-10-01 (GAME_REVIEW_2026_09_30, HIGH): cadence_parade (the quest closer: +10 culture to the coalition, the Maestra's
+ * Terms, Out-Danced removed, a raid owed) gated only on storyPhase ≥ 2 while carrying storyChain + priority high + the Maestra — the Director
+ * and any Maestra conversation could play it in Act 2 before the floor, the border show or the permit. It is now gated on its one route
+ * (GATE_PARADE: the viewing mound played + the Stillwater parade permit) and dialogueOffer:false. The mound's "Show Tempo the Parade Permit"
+ * choice still routes there (a route never consults inject.requires). Re-runs reconcile an already-seeded beat additively.
+ * Already-seeded worlds: tools/patch-template-review-fixes-2026-10-01.macro.js does the same repair in one run.
  */
 (async () => {
   const DRY_RUN = true;                       // <-- set false to apply
@@ -56,17 +63,20 @@
 
   const TAGS = "cadence story";
   const P2 = { flag: "storyPhase", gte: 2 };
-  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, receipts = null, meters = null, requires = null, timePoints = 0, priority = "background", memoryText = null, story = null, questId = Q, repeatable = false, extraFx = null, hexName = null } = {}) => ({
+  const beat = (id, label, description, { type = "dialog", speaker = null, choices = null, receipts = null, meters = null, requires = null, timePoints = 0, priority = "background", memoryText = null, story = null, questId = Q, repeatable = false, extraFx = null, hexName = null, offer = true } = {}) => ({
     id, label, type, timeScale: "scene", timePoints, questId, tags: TAGS, politicalTags: "",
     description, outcomes: { success: null, failure: null },
     inject: { cooldownTurns: 0, repeatable, oncePerHex: false, promptGM: "inherit", fallbackOnDecline: "inherit", allowMulti: "inherit", oncePerHexGlobal: "inherit", ...(requires ? { requires } : {}) },
     actors: [], refs: {}, playerFacingDialog: true, dialogPlayerFacing: true, playerFacingContent: true, showToPlayers: true,
     storyChain: KEY, priority, ...(speaker ? { speakerActorId: speaker } : {}), ...(hexName ? { hexName } : {}),
+    ...(offer === false ? { dialogueOffer: false } : {}),   // a routing-only node: never a conversation moment
     story: story || { quest: KEY }, ...(memoryText ? { memoryText } : {}),
     choices: choices || [{ label: "Continue", next: "", description: "", checkStat: "", checkDC: 0, failNext: "" }],
     worldEffects: { ...(receipts ? { receipts } : {}), ...(meters ? { meters } : {}), ...(extraFx || {}) }
   });
   const ch = (label, next = "", extra = {}) => ({ label, next, description: "", checkStat: "", checkDC: 0, failNext: "", ...extra });
+  // the parade is reached ONLY from the viewing mound's permit choice — keep in sync with tools/patch-template-review-fixes-2026-10-01.macro.js
+  const GATE_PARADE = [P2, { beatMark: "cadence_viewing_mound" }, { beatMark: "stillwater_parade_permit" }];
 
   const NEW = [
     beat("cadence_tempo_at_the_gate", "The Cadence — The Courier",
@@ -115,7 +125,7 @@
       ] }),
     beat("cadence_parade", "The Cadence — The Parade",
       "\"A parade,\" the Maestra says, holding the permit at arm's length like terms of surrender, \"is a floor with a direction.\" She accepts it as terms. The border performance ends that night and begins again at dawn as a route: the Cadence in front, speakers on carts, your own people walking behind because it is genuinely impossible not to, the hex Out-Danced for the last time and by its own consent. Somewhere along the route the sergeant who says she hates it is singing. The Maestra calls the floor at the far gate, formally, on cardstock, and presents the crew's respect, which is not a metaphor: one raid, of your choosing, with the Cadence on your side.",
-      { speaker: MAESTRA, priority: "high", timePoints: 1, requires: [P2], story: { quest: KEY, role: "closer", ending: "parade" },
+      { speaker: MAESTRA, priority: "high", timePoints: 1, requires: GATE_PARADE, offer: false, story: { quest: KEY, role: "closer", ending: "parade" },
         memoryText: "The Stewards answered the Cadence with a parade permit; the border performance became a route, and the Cadence's respect is owed.",
         meters: [{ key: "cadenceRespect", set: 1 }, { key: "cadenceUncontested", set: 0 }, { key: "cadenceTribute", set: 0 }],
         receipts: [{ label: "The Maestra's Terms", effectKey: "favorPlus2", acquisition: "earned", source: { name: "Maestra Velvetine Marr, on cardstock" }, truth: "One engagement, full crew, their side of the floor. Produced at any muster it is binding: the Cadence dances where this card says. Morale arrives like weather." }],
@@ -144,6 +154,9 @@
   edit("cadence_border_show", b => { if (TEMPO) b.speakerActorId = b.speakerActorId || TEMPO; addChoiceFirst(b, ch("Go up to the viewing mound.", "cadence_viewing_mound")); }, "Tempo speaks; the viewing mound");
   edit("cadence_cameo", b => { if (MAESTRA) b.speakerActorId = b.speakerActorId || MAESTRA; }, "the Maestra speaks");
   edit("cadence_cameo_spent", b => { setMeters(b, [{ key: "cadenceRespect", set: 0 }]); }, "respect spent");
+  // REVIEW FIXES 2026-10-01 — reconcile an already-seeded parade (adds missing conditions, never removes one)
+  const ensureReq = (b, conds) => { b.inject = b.inject || {}; const cur = Array.isArray(b.inject.requires) ? b.inject.requires.slice() : (b.inject.requires && typeof b.inject.requires === "object" ? [b.inject.requires] : []); const have = new Set(cur.map(c => JSON.stringify(c))); for (const c of conds) if (!have.has(JSON.stringify(c))) { cur.push(c); have.add(JSON.stringify(c)); } b.inject.requires = cur; };
+  edit("cadence_parade", b => { ensureReq(b, GATE_PARADE); if (b.dialogueOffer !== false) b.dialogueOffer = false; }, "gated on the mound + the permit; routing-only");
 
   // ── 3. story script ────────────────────────────────────────────────────────
   const storyApi = game.bbttcc?.api?.campaign?.story?.data;

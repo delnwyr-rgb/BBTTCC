@@ -26,6 +26,36 @@ import RfiItems from "./rfi-items.js";
 
 const HARVEST_PATH = "flags.fourththing.harvest";
 
+// A node lives on a Drawing / Tile / Token, which a PLAYER seat cannot update.
+// GM seats (and owners) write directly; everyone else relays the ONE thing a
+// gather may change — the node's charges, decrement only — to the GM seat via
+// the seat primitive (bbttcc-core gmExec), same shape as territory's
+// `territory.hexNode.charges`.
+const CHARGES_RELAY = "fourththing.harvest.charges";
+async function _writeNodeCharges(sourceDoc, charges) {
+  const gx = game.bbttcc?.api?.gmExec;
+  if (game.user?.isGM || sourceDoc.isOwner || !gx?.call) {
+    await sourceDoc.update({ [`${HARVEST_PATH}.charges`]: charges });
+    return;
+  }
+  await gx.call(CHARGES_RELAY, { uuid: sourceDoc.uuid, charges: Number(charges) });
+}
+Hooks.once("ready", () => {
+  const gx = game.bbttcc?.api?.gmExec;
+  if (!gx?.register) return;
+  gx.register(CHARGES_RELAY, async (p, meta) => {
+    const doc = await fromUuid(String(p?.uuid || ""));
+    if (!doc || !["Drawing", "Tile", "Token"].includes(doc.documentName)) throw new Error("not a harvest node document");
+    const h = foundry.utils.getProperty(doc, HARVEST_PATH);
+    if (!h?.materialKey) throw new Error("node has no harvest data");
+    const cur = Number(h.charges ?? 0), want = Number(p?.charges);
+    if (!Number.isFinite(want) || want < 0 || want >= cur) throw new Error(`charges may only decrement (${cur} → ${want} refused)`);
+    await doc.update({ [`${HARVEST_PATH}.charges`]: want });
+    console.log("Roll for Initiation | harvest node charges", `${h.materialName || h.materialKey}: ${cur} → ${want}`, `(for ${meta?.fromUserName || "?"})`);
+    return { ok: true, charges: want };
+  });
+});
+
 export const RfiHarvest = {
   /**
    * Walks the scene's Tiles and Tokens, returning every doc with a populated
@@ -229,9 +259,6 @@ export const RfiHarvest = {
       await yRoll.evaluate();
       yieldUnits = Math.max(1, Number(yRoll.total) || 1);
 
-      // Decrement node charges.
-      await sourceDoc.update({ [`${HARVEST_PATH}.charges`]: charges - 1 });
-
       // Deliver yield.
       let materialItemData;
       if (h.materialUuid) {
@@ -262,6 +289,14 @@ export const RfiHarvest = {
         };
       }
       var delivered = await RfiHarvest._deliver(actor, materialItemData, yieldUnits);
+
+      // Decrement node charges — AFTER the yield has landed, and never fatal:
+      // the receipt below must still post if the write (or its GM relay) fails.
+      try { await _writeNodeCharges(sourceDoc, charges - 1); }
+      catch (eC) {
+        console.warn("Roll for Initiation | harvest charge decrement failed", eC);
+        ui.notifications?.warn("Gathered, but the node's charges could not be updated — is a GM connected?");
+      }
     }
 
     await ChatMessage.create({

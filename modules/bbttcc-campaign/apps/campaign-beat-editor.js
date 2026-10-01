@@ -1064,6 +1064,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       { key: "op.diplomacy",   label: "OP: Diplomacy" },
       { key: "op.logistics",   label: "OP: Logistics" },
       { key: "op.cult",        label: "OP: Cult" },
+      { key: "op.culture",     label: "OP: Culture" },
       { key: "op.faith",       label: "OP: Faith" }
     ];
 
@@ -1075,6 +1076,14 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
     const skillStatOptions = [
       // GM adjudication (table resolved)
       { key: "gm", label: "GM Adjudication (pass/fail)" },
+
+      // fourththing faculties — the runtime roll path takes these directly
+      { key: "mind",     label: "Faculty: Mind" },
+      { key: "body",     label: "Faculty: Body" },
+      { key: "presence", label: "Faculty: Presence" },
+      { key: "soul",     label: "Faculty: Soul" },
+      { key: "violence", label: "Faculty: Violence" },
+      { key: "intrigue", label: "Faculty: Intrigue" },
 
       // Abilities
       ...abilityOptions,
@@ -1151,6 +1160,18 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
 
     const hasChoices = Array.isArray(this.beat.choices) && this.beat.choices.length > 0;
 
+    // Row-index snapshot for the choice harvesters (see _renderedChoiceAt).
+    this._renderedChoices = hasChoices ? this.beat.choices.slice() : [];
+
+    // A stored checkStat the dropdown has no option for (e.g. a fourththing
+    // skill like "occult") is emitted as a selected "(custom)" option so the
+    // select never falls back to "(No check)" and strips it on save.
+    const _knownStats = new Set(skillStatOptions.map(o => o.key));
+    const customCheckStats = this._renderedChoices.map(ch => {
+      const v = String(ch?.checkStat ?? "").trim();
+      return (v && !_knownStats.has(v)) ? v : "";
+    });
+
     const worldEffects = foundry.utils.deepClone(this.beat.worldEffects ?? {});
 
     // Unlock catalogs (sourced from raid.EFFECTS)
@@ -1177,6 +1198,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       storyDecl,   // Layer 2b story declaration view
       questOptions,
       skillStatOptions,
+      customCheckStats,
 
       inject,
       tagChips,
@@ -1502,12 +1524,19 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
 
       const _factionOptions = (selectedId) => {
         const sel = String(selectedId || "");
-        return factions.map(a => {
+        const opts = factions.map(a => {
           const id = String(a.id);
           const nm = foundry.utils.escapeHTML(a.name || a.id);
           const isSel = sel && id === sel;
           return `<option value="${id}" ${isSel ? "selected" : ""}>${nm}</option>`;
         }).join("");
+        // A stored side that is not a listed faction ("@coalition", an
+        // "Actor.<id>" uuid…) stays selected so the row is not blanked and dropped.
+        if (sel && !factions.some(a => String(a.id) === sel)) {
+          const v = foundry.utils.escapeHTML(sel);
+          return `<option value="${v}" selected>${v} (stored)</option>` + opts;
+        }
+        return opts;
       };
 
       // Rows are STORED in the world-mutation-engine shape:
@@ -1525,7 +1554,11 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
           bFactionId: String(r.targetFactionId ?? r.bFactionId ?? "").trim(),
           steps: Math.round(Number(r.step ?? r.steps ?? r.delta ?? 0) || 0),
           reciprocal: !!r.reciprocal,
-          note: String(r.reason ?? r.note ?? "").trim()
+          note: String(r.reason ?? r.note ?? "").trim(),
+          // setStatus rows ({source,target,setStatus}, no step) and any other
+          // stored fields ride along on the row so the harvester can keep them.
+          setStatus: (r.setStatus != null && String(r.setStatus).trim()) ? String(r.setStatus).trim() : "",
+          orig: r
         }));
 
       const rowHtml = (fx, idx) => {
@@ -1534,9 +1567,11 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
         const steps = Number(fx?.steps || 0);
         const reciprocal = !!fx?.reciprocal;
         const note = String(fx?.note || "");
+        const setStatus = String(fx?.setStatus || "");
+        const origAttr = fx?.orig ? foundry.utils.escapeHTML(JSON.stringify(fx.orig)) : "";
         const stepOpt = (v, label) => `<option value="${v}" ${steps===v ? "selected" : ""}>${label}</option>`;
         return `
-          <div class="bbttcc-relfx-row" data-index="${idx}">
+          <div class="bbttcc-relfx-row" data-index="${idx}" data-orig="${origAttr}">
             <div class="bbttcc-relfx-grid">
               <label class="bbttcc-relfx-field">
                 <div class="bbttcc-muted" data-help="relFactionA">Faction A</div>
@@ -1559,7 +1594,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
                 <select class="bbttcc-relfx-steps">
                   ${stepOpt(-2, "−2 (Hard shift)")}
                   ${stepOpt(-1, "−1 (Down)")}
-                  ${stepOpt(0, "0 (No change)")}
+                  ${stepOpt(0, setStatus ? `0 (sets status: ${foundry.utils.escapeHTML(setStatus)})` : "0 (No change)")}
                   ${stepOpt(1, "+1 (Up)")}
                   ${stepOpt(2, "+2 (Big up)")}
                 </select>
@@ -2215,7 +2250,17 @@ _ensureWorldModifiersUI(html) {
       }
 
       const curTarget = String(this.beat.targetHexUuid || "").trim();
-      if (curTarget) sel.value = curTarget;
+      if (curTarget) {
+        sel.value = curTarget;
+        // A stored target that is not in the list must survive Save.
+        if (sel.value !== curTarget) {
+          const oKeep = document.createElement("option");
+          oKeep.value = curTarget;
+          oKeep.textContent = "(stored) " + curTarget;
+          sel.appendChild(oKeep);
+          sel.value = curTarget;
+        }
+      }
 
       targetGroup.appendChild(sel);
 
@@ -2239,7 +2284,11 @@ _ensureWorldModifiersUI(html) {
         .concat((states.catalog || []).map(c => ({ key: "state_" + slug(c.name), label: c.name, desc: c.effect || "", modifiers: [c.name], group: "Generic states" })))
         .concat(Object.entries(states.unique || {}).map(([key, v]) => ({ key, label: v.label || key, desc: v.description || "", modifiers: Array.isArray(v.modifiers) ? v.modifiers : [v.label || key], group: "Unique states" })));
       // legacy rows (harmonized_grove written before the registry) map onto the registry key
-      const byKey = new Map(curMods.filter(Boolean).map(m => [String(m.key || ""), m]));
+      // One panel row binds to the FIRST stored row with its key; every other stored row (key not in the
+      // registry, or a second row with the same key on another hex) passes through untouched.
+      const origMods = curMods.slice();
+      const byKey = new Map();
+      for (const m of origMods) { const k = String((m && m.key) || ""); if (m && !byKey.has(k)) byKey.set(k, m); }
       const rows = [];
       const mkSelect = (opts) => { const el = document.createElement("select"); for (const [v, t] of opts) { const o = document.createElement("option"); o.value = v; o.textContent = t; el.appendChild(o); } el.style.borderRadius = "10px"; el.style.border = "1px solid rgba(148,163,184,0.22)"; el.style.background = "rgba(15,23,42,0.45)"; el.style.color = "#e5e7eb"; el.style.padding = "3px 6px"; return el; };
       let lastGroup = "";
@@ -2255,27 +2304,41 @@ _ensureWorldModifiersUI(html) {
         const syncRow = () => { const isAdd = op.value === "add"; dur.disabled = !isAdd; enLab.style.opacity = op.value ? "1" : "0.4"; dur.style.opacity = isAdd ? "1" : "0.4"; };
         syncRow();
         grid.appendChild(name); grid.appendChild(op); grid.appendChild(dur); grid.appendChild(enLab);
-        rows.push({ e, op, dur, en, syncRow });
+        rows.push({ e, op, dur, en, syncRow, existing });
       }
       wrap.appendChild(grid);
 
+      // Rebuilds from the rows as LOADED (origMods), overlaying only what the panel edits (op / enabled /
+      // duration), so hexName, channels, derived and anything else on a stored row round-trip.
+      let targetTouched = false;
       const syncWorldModifiers = () => {
         const t = String(sel.value || "").trim();
-        this.beat.targetHexUuid = t || null;
-        const mods = [];
-        for (const r of rows) {
-          r.syncRow();
-          if (!r.op.value) continue;
-          mods.push({ key: r.e.key, label: r.e.label, op: r.op.value, enabled: !!r.en.checked,
+        if (targetTouched) this.beat.targetHexUuid = t || null;
+        const bound = new Map();
+        for (const r of rows) { r.syncRow(); if (r.existing) bound.set(r.existing, r); }
+        const build = (r) => {
+          const ex = r.existing || {};
+          const row = { ...ex, key: r.e.key, label: ex.label || r.e.label, op: r.op.value, enabled: !!r.en.checked,
             durationTurns: r.op.value === "add" ? Math.max(0, _safeNum(r.dur.value, 0)) : 0,
-            targetHexUuid: (t || null), modifiers: r.e.modifiers.slice() });
+            modifiers: (Array.isArray(ex.modifiers) && ex.modifiers.length) ? ex.modifiers : r.e.modifiers.slice() };
+          // A row aimed by hexName keeps that aim; the Target Hex picker only steers rows without one.
+          if (!String(ex.hexName || "").trim() && (targetTouched || !r.existing)) row.targetHexUuid = (t || null);
+          return row;
+        };
+        const mods = [];
+        for (const m of origMods) {
+          const r = bound.get(m);
+          if (!r) { mods.push(m); continue; }       // passthrough
+          if (r.op.value) mods.push(build(r));      // "—" on a bound row removes it
         }
+        for (const r of rows) { if (!r.existing && r.op.value) mods.push(build(r)); }
         this.beat.worldEffects = this.beat.worldEffects || {};
         this.beat.worldEffects.worldModifiers = mods;
       };
-      wrap.addEventListener("change", () => syncWorldModifiers());
-      wrap.addEventListener("input", () => syncWorldModifiers());
-      syncWorldModifiers();
+      const onPanelEdit = (ev) => { if (ev && ev.target === sel) targetTouched = true; syncWorldModifiers(); };
+      wrap.addEventListener("change", onPanelEdit);
+      wrap.addEventListener("input", onPanelEdit);
+      // No write on first render: opening a beat must not rewrite its stored rows.
 
       // Insert in DOM
       if (unlockWrap && unlockWrap.parentElement === effectsPanel) {
@@ -2608,7 +2671,7 @@ _ensureWorldModifiersUI(html) {
               console.warn(TAG, "AudioHelper unavailable");
               return;
             }
-            const s = await AH.play({ src: src, volume: a.volume ?? 0.85, loop: !!a.loop }, { push: false });
+            const s = await AH.play({ src: src, volume: a.volume ?? 0.85, loop: !!a.loop }, false);
             this._audioPreviewSound = s || null;
           }
         } catch (e) {
@@ -3276,6 +3339,16 @@ _syncCoreFromForm() {
   }
 }
 
+  /**
+   * The stored choice behind form row `i`. Form rows are index-aligned with the
+   * array as it was RENDERED (snapshotted in getData), not with this.beat.choices,
+   * which a prior sync may already have compacted.
+   */
+  _renderedChoiceAt(i) {
+    const prev = Array.isArray(this._renderedChoices) ? this._renderedChoices[i] : null;
+    return (prev && typeof prev === "object") ? prev : {};
+  }
+
   _syncChoicesFromForm() {
     try {
       // Locate the active form in the rendered app
@@ -3321,7 +3394,9 @@ _syncCoreFromForm() {
         const checkDC = chCheckDCs[i] ?? 0;
         const failNext = chFailNexts[i] || "";
         if (!label && !next && !description && !checkStat && !failNext) continue;
-        choices.push({ label: label || `Choice ${i + 1}`, next, description, checkStat, checkDC, failNext });
+        // Start from the choice as rendered so fields the form does not show
+        // (requires, cooldownTurns, checkMode, politicalTags…) round-trip.
+        choices.push({ ...this._renderedChoiceAt(i), label: label || `Choice ${i + 1}`, next, description, checkStat, checkDC, failNext });
       }
 
       this.beat.choices = choices;
@@ -3496,10 +3571,18 @@ _syncCoreFromForm() {
         const steps = Math.floor(_safeNum($el.find(".bbttcc-relfx-steps").val(), 0));
         const reciprocal = !!$el.find(".bbttcc-relfx-recip").prop("checked");
         const note = String($el.find(".bbttcc-relfx-note").val() || "").trim();
-        if (forSave && (!a || !b || !steps)) continue; // drop incomplete rows and 0 steps on save only
-        rel.push({ sourceFactionId: a, targetFactionId: b, step: steps, reason: note, reciprocal });
+        // Start from the stored row (data-orig) so setStatus and any field the
+        // panel does not show round-trip; the legacy display-shape keys do not.
+        let orig = {};
+        try { orig = JSON.parse(el.dataset?.orig || "{}") || {}; } catch (_eOrig) { orig = {}; }
+        for (const k of ["aFactionId", "bFactionId", "steps", "note", "delta", "mirrored"]) delete orig[k];
+        const setStatus = (orig.setStatus != null && String(orig.setStatus).trim()) ? orig.setStatus : null;
+        if (forSave && (!a || !b || (!steps && !setStatus))) continue; // drop incomplete rows and no-op rows on save only
+        rel.push({ ...orig, sourceFactionId: a, targetFactionId: b, step: steps, reason: note, reciprocal });
         if (forSave && reciprocal) {
-          rel.push({ sourceFactionId: b, targetFactionId: a, step: steps, reason: note, mirrored: true });
+          const mirror = { sourceFactionId: b, targetFactionId: a, step: steps, reason: note, mirrored: true };
+          if (setStatus) mirror.setStatus = setStatus;
+          rel.push(mirror);
         }
       }
       we.relationshipEffects = rel;
@@ -3773,7 +3856,7 @@ _syncCoreFromForm() {
       const checkDC = chCheckDCs[i] ?? 0;
       const failNext = chFailNexts[i] || "";
       if (!label && !next && !description && !checkStat && !failNext) continue;
-      choices.push({ label: label || `Choice ${i + 1}`, next, description, checkStat, checkDC, failNext });
+      choices.push({ ...this._renderedChoiceAt(i), label: label || `Choice ${i + 1}`, next, description, checkStat, checkDC, failNext });
     }
     this.beat.choices = choices;
 
