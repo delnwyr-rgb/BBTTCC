@@ -17,7 +17,7 @@
  * Backs up the campaigns setting before writing. F5 afterwards, then re-run setup-town-hub for "softlanding" once the map exists.
  */
 (async () => {
-  const DRY_RUN = false;                       // <-- set false to apply
+  const DRY_RUN = true;                        // <-- set false to apply
   const NS = "bbttcc-campaign", MAL = "bbttcc-mal-voice";
   const Q = "quest_soft_landing", KEY = "soft_landing", METER = "softlandingGive", HEX = "Ynnermire.b", OLD_HEX = "Saltwake Reach a";
   const MARKER = "[SOFT-LANDING-V2-2026-09-25]";

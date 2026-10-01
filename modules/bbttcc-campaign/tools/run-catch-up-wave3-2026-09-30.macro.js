@@ -11,7 +11,7 @@
  * Re-running is safe — every step is idempotent. DRY-RUN counts on later steps read a little low (dry steps create no actors/beats).
  */
 (async () => {
-  const DRY_RUN = false;                    // <-- master switch: false = APPLY everything below, in order
+  const DRY_RUN = true;                     // <-- master switch: false = APPLY everything below, in order
   const CONTINUE_ON_ERROR = false;
   const AUTO_CONFIRM = true;
   const SUPPRESS_STEP_BACKUPS = true;

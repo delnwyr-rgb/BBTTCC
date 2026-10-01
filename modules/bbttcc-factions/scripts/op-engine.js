@@ -514,16 +514,50 @@ function _attach() {
   }
 }
 
+Hooks.once("init", () => {
+  try {
+    game.settings.register(MOD_ID, "opRelayStrict", {
+      name: "Strict OP relay",
+      hint: "When on, a player seat can only spend or credit marks on factions it owns. When off (default), such commits still apply and are whispered to the GM as an audit line — coalition awards and passenger travel charges rely on this.",
+      scope: "world", config: true, restricted: true, type: Boolean, default: false
+    });
+  } catch (e) { warn("opRelayStrict setting registration failed", e); }
+});
+
 Hooks.once("ready", async () => {
   _attach();
   // Phase 1 (2026-08-29): GM-side handler for seat-routed commits. The
   // handler re-enters commit() on a GM seat (isGM short-circuits the relay),
   // and stamps the requesting player into the context for provenance.
   try {
+    // Review 2026-10-01 (op-engine.js:505): the handler applied whatever factionId/deltas a player sent.
+    // Now: the faction must be a real faction actor and deltas must be finite numbers on the nine
+    // channels. A commit to a faction the seat does not own is still legitimate in this game (coalition
+    // awards, passenger travel charges, support-faction maneuver costs), so by default it is applied and
+    // whispered to the GM as an audit line; the GM setting "Strict OP relay" refuses it instead.
     game.bbttcc?.api?.gmExec?.register?.("op.commit", async (p, meta) => {
       const context = { ...((p && p.context) || {}) };
       if (meta && !meta.local && meta.fromUserName) context.viaSeat = meta.fromUserName;
-      return await commit(p?.factionId, (p && p.deltas) || {}, context);
+      const faction = game.actors?.get?.(String(p?.factionId || ""));
+      if (!faction || (faction.getFlag?.(MOD_ID, "isFaction") !== true && !faction.getFlag?.(MOD_ID, "opBank"))) return { ok: false, committed: false, error: "not a faction" };
+      const raw = (p && p.deltas) || {}, deltas = {};
+      for (const [k, v] of Object.entries(raw)) {
+        if (!OP_KEYS.includes(k)) return { ok: false, committed: false, error: `unknown OP channel "${k}"` };
+        const n = Number(v); if (!Number.isFinite(n)) return { ok: false, committed: false, error: `bad amount for ${k}` };
+        deltas[k] = n;
+      }
+      if (meta && !meta.local) {
+        const u = game.users?.get?.(meta.fromUserId);
+        let owns = false; try { owns = !!u?.isGM || !!faction.testUserPermission?.(u, "OWNER"); } catch (_e) {}
+        if (!owns) {
+          let strict = false; try { strict = !!game.settings.get(MOD_ID, "opRelayStrict"); } catch (_e) {}
+          const line = Object.entries(deltas).filter(([, n]) => n).map(([k, n]) => `${k} ${n > 0 ? "+" : ""}${n}`).join(", ");
+          const why = context.reason || context.context || context.source || "";
+          try { await ChatMessage.create({ whisper: game.users.filter(x => x.isGM).map(x => x.id), content: `<p><b>OP relay${strict ? " — REFUSED" : ""}:</b> ${foundry.utils.escapeHTML(meta.fromUserName || "a player")} → ${foundry.utils.escapeHTML(faction.name)} (not their faction): ${foundry.utils.escapeHTML(line || "no change")} marks${why ? ` · ${foundry.utils.escapeHTML(String(why))}` : ""}</p>` }); } catch (_e) {}
+          if (strict) return { ok: false, committed: false, error: "This faction is not yours (strict OP relay is on)." };
+        }
+      }
+      return await commit(faction.id, deltas, context);
     });
   } catch (eReg) { warn("gmExec op.commit registration failed", eReg); }
   // Run migration after API is wired so any side-effects of migration can use it.

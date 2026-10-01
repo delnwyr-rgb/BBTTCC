@@ -15,7 +15,7 @@
  * Backs up the campaigns setting before writing. F5 afterwards.
  */
 (async () => {
-  const DRY_RUN = false;                      // <-- set false to apply
+  const DRY_RUN = true;                       // <-- set false to apply
   const NS = "bbttcc-campaign", MAL = "bbttcc-mal-voice";
   const Q = "quest_chuckle_creek", KEY = "chuckle_creek", METER = "chucklecreekSeen";
   const MARKER = "[CHUCKLE-CREEK-V2-2026-09-22]";
